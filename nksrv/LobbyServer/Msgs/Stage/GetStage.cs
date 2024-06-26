@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Google.Rpc.Context.AttributeContext.Types;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace nksrv.LobbyServer.Msgs.Stage
 {
@@ -16,39 +18,42 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var user = GetUser();
 
             var response = new ResGetStageData();
-            response.Field = new NetFieldObjectData();
+            response.Field = CreateFieldInfo(user, req.Chapter);
+           
+           
+      
+            response.SquadData = "";
 
-            // locate chapter
+            response.Field.Stages.Clear();
+            WriteData(response);
+        }
+
+        public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter)
+        {
+            var f = new NetFieldObjectData();
             bool found = false;
-
-            retry:
             foreach (var item in user.FieldInfo)
             {
-                if (item.Key == req.Chapter)
+                if (item.Key == chapter)
                 {
                     found = true;
                     foreach (var stage in item.Value.CompletedStages)
                     {
-                        response.Field.Stages.Add(stage);
+                        f.Stages.Add(stage);
                     }
-                    response.HasChapterBossEntered = item.Value.BossEntered;
                     break;
                 }
             }
 
             if (!found)
             {
-                Console.WriteLine("chapter not found: " + req.Chapter);
+                Console.WriteLine("chapter not found: " + chapter);
 
-                user.FieldInfo.Add(req.Chapter, new FieldInfo());
-                goto retry;
+                user.FieldInfo.Add(chapter, new FieldInfo());
+                return CreateFieldInfo(user, chapter);
             }
-           
-      
-            response.SquadData = "";
 
-
-            WriteData(response);
+            return f;
         }
     }
 }

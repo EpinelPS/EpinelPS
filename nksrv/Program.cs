@@ -53,6 +53,7 @@ namespace nksrv
                 .WithModule(new ActionModule("/prdenv/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/account/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithModule(new ActionModule("/data/", HttpVerbs.Any, HandleDataEndpoint))
+                .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests));
 
             // Listen for state changes.

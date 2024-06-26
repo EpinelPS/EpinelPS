@@ -995,3 +995,25 @@ message ReqGetFieldTalkList {}
 message ResGetFieldTalkList {
 	repeated string fieldTalkList = 2;
 }
+
+message ReqSetTutorial {
+	int32 lastClearedTid = 2;
+}
+
+message ResSetTutorial {
+
+}
+
+enum SetNicknameResult {
+	NicknameOk = 0;
+	Inappropriate = 1;
+}
+
+message ReqSetNickname {
+	string nickname = 2;
+}
+message ResSetNickname {
+	SetNicknameResult result = 1;
+	string nickname = 2;
+	repeated NetUserCurrencyData currencies = 3;
+}

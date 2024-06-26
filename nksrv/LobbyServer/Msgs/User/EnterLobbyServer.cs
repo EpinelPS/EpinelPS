@@ -24,7 +24,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.User.Icon = 39900;
             response.User.LobbyJukebox = 2;
             response.ResetHour = 20;
-            response.Nickname = "USER11143417";
+            response.Nickname = user.Nickname;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000 ,MaxOverBattleTime = 12096000000000 };
             response.RepresentationTeam = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2};
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });

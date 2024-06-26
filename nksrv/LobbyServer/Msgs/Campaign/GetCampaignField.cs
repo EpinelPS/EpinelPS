@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.LobbyServer.Msgs.Stage;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             Console.WriteLine("Map ID: " + req.MapId);
 
             var response = new ResGetCampaignFieldData();
-            response.Field = new NetFieldObjectData();
+            response.Field = GetStage.CreateFieldInfo(user, 0); // TODO dont hardcode chapter
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
@@ -36,7 +37,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             response.Json = resultingJson;
 
-
+           
             WriteData(response);
         }
     }
