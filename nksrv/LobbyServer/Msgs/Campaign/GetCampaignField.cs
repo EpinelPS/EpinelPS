@@ -26,13 +26,15 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             string resultingJson;
             if (!user.MapJson.ContainsKey(req.MapId))
             {
-                resultingJson = "{\"_mapID\":\"" + req.MapId + "\",\"_triggerDataList\":[],\"_interactionActionTriggerDataList\":[],\"_interactionObjectDataList\":[],\"_questObjectDataList\":[],\"_togglePortalDataList\":[],\"_squadDataList\":[{\"UniqueKey\":\"a365d3ab-2961-4eb8-940b-f68629957b48\",\"IsValid\":true,\"TeamType\":1,\"Number\":1,\"Position\":{\"x\":-14.899999618530274,\"y\":0.08333173394203186,\"z\":-3.2200000286102297}}]}";
+                resultingJson = "";
                 user.MapJson.Add(req.MapId, resultingJson);
             }
             else
             {
                 resultingJson = user.MapJson[req.MapId];
             }
+
+            response.Json = resultingJson;
 
 
             WriteData(response);

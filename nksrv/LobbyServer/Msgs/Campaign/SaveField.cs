@@ -14,7 +14,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             var response = new ResGetFieldTalkList();
 
-            Console.WriteLine($"todo save {req.MapId} with {req.Json}");
+            Console.WriteLine($"save {req.MapId} with {req.Json}");
 
             if (!user.MapJson.ContainsKey(req.MapId))
             {
