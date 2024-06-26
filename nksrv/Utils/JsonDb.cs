@@ -24,6 +24,7 @@ namespace nksrv.Utils
         public string PlayerName = "";
         public ulong ID;
         public long RegisterTime;
+        public int LastStageCleared;
 
 
         // Game data

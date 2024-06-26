@@ -7,7 +7,7 @@ namespace nksrv.LobbyServer.Msgs.Badge
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqSyncBadge>();
+            var req = await ReadData<ReqSyncBadge>();
 
             var response = new ResSyncBadge();
             WriteData(response);

@@ -13,7 +13,7 @@ namespace nksrv.LobbyServer.Msgs.User
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqEnterLobbyServer>();
-
+            var user = GetUser();
 
             var response = new ResEnterLobbyServer();
             response.User = new NetUserData();
@@ -33,7 +33,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
             response.Currency.Add(new NetUserCurrencyData() { Type = 6100, Value = 2 });
-
+            response.LastClearedNormalMainStageId = user.LastStageCleared;
             //var tTeams = new NetUserTeamData();
 
             //var tTeam = new NetTeamData() { TeamNumber = 1 };

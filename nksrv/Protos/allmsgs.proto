@@ -946,3 +946,23 @@ message ReqListSupportCharacterUsedCount {
 message ResListSupportCharacterUsedCount {
 	repeated NetSupportCharacterUsedCount supportCharacterUsedCountList = 1;
 }
+
+message ReqGetTeamData {
+
+}
+
+message ResGetTeamData {
+	repeated NetUserTeamData typeTeams = 2;
+}
+
+message ReqGetSubQuestList{}
+
+message NetSubQuestData {
+	int32 subQuestId = 1;
+	int32 createdAt = 2;
+	bool isReceived = 3;
+}
+
+message ResGetSubQuestList {
+	repeated NetSubQuestData subquestList = 2;
+}

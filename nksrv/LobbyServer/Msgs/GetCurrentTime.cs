@@ -8,7 +8,7 @@ namespace nksrv.LobbyServer.Msgs
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetNow>();
+            var req = await ReadData<ReqGetNow>();
 
             var response = new ResGetNow();
             response.Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds();

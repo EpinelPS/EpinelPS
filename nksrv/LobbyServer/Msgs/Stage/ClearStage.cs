@@ -17,7 +17,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var response = new ResClearStage();
 
             // TOOD: save to user info
-            Console.WriteLine($"Stage " + req.StageId + " completed, result is "+req.BattleResult);
+            Console.WriteLine($"Stage " + req.StageId + " completed, result is " + req.BattleResult);
+
+            if (req.BattleResult == 1)
+            {
+                GetUser().LastStageCleared = req.StageId;
+                JsonDb.Save();
+            }
 
             WriteData(response);
         }
