@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IncludeHttpRuleProtos>true</IncludeHttpRuleProtos>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ASodium" Version="0.6.1" />
+		<PackageReference Include="EmbedIO" Version="3.5.2" />
+		<PackageReference Include="Google.Api.CommonProtos" Version="2.15.0" />
+		<PackageReference Include="Google.Protobuf.Tools" Version="3.27.1" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="PeterO.Cbor" Version="5.0.0-alpha1" />
+		<PackageReference Include="Sodium.Core" Version="1.4.0-preview.1" />
+		<PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="Protos\*.*" GrpcServices="Server" />
+	</ItemGroup>
+</Project>

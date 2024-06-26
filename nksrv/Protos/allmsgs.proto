@@ -1,0 +1,948 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "nksrv";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/Duration.proto";
+
+// Network structure definitions. Note that I have not included field names for anticheat strucures.
+
+
+message SentryDataResponse {
+  double samplingRate = 1;
+  double traceSamplingRate = 2;
+}
+
+message CheckVersionRequest {
+  string version = 1;
+}
+
+message CheckVersionResponse {
+  int32 availability = 1;
+}
+
+message ResGetServerInfo {
+	int32 worldId = 1;
+	string matchUrl = 2;
+}
+
+
+message NetMaintenanceWindow {
+	//Timestamp from = 1;
+	//Timestamp to = 2;
+}
+
+message MaintenanceNoticeResponse {
+	NetMaintenanceWindow window = 1;
+	bool isWhitelisted = 2;
+}
+
+message ResourceHostRequest {
+  string rversion = 1;
+}
+
+message ResourceHostResponse {
+  string version = 1;
+  string baseUrl = 2;
+  map<string, string> coreVersionMap = 3;
+  map<string, string> dataPackVersionMap = 4;
+}
+
+message StaticDataPackRequest {
+}
+
+message StaticDataPackResponse {
+	string url = 1;
+	int64 size = 2;
+	bytes sha256Sum = 3;
+	bytes salt1 = 4;
+	bytes salt2 = 5;
+	string version = 6;
+}
+
+enum BillingPlatform{
+	Unknown = 0;
+	Ios = 1;
+	Android = 2;
+	MidasBuy = 3;
+	Windows = 4;
+}
+enum TLogPlatform {
+	iOs = 0;
+	Androiding = 1;
+	Others = 2;
+	Pc = 5;
+	Cloud = 6;
+}	
+
+enum INTLEnvironment {
+	None = 0;
+	Hmt = 1;
+	Global = 2;
+}
+
+enum ResultOneofCase {
+	Nones = 0;
+	AuthSuccess = 1;
+	BanInfo = 2;
+	AuthError = 3;
+}
+enum AuthErrorCode {
+	Oks = 0;
+	Error = 1;
+	ExpiredToken = 2;
+}
+
+message NetBillingInfo
+{
+	BillingPlatform platform = 1;
+}
+
+message NetTLogDeviceInfo {
+	TLogPlatform plat = 1;
+	string systemSoftware = 2;
+	string systemHardware = 3;
+	string telecomOper = 4;
+	string network = 5;
+	int32 screenWidth = 6;
+	int32 screenHeight = 7;
+	int32 density = 8;
+	string cpuHardware_ = 9;
+	int32 memory = 10;
+	string glRender  = 11;
+	string glVersion = 12;
+	string deviceId = 13;
+	string language = 14;
+	string country = 15;
+	string systemLanguage = 16;
+	string clientVersion = 17;
+	string xwid = 18;
+}
+
+message NetDeviceInfo {
+	string clientVersion = 1;
+	string staticDataVersion = 2;
+	INTLEnvironment intlEnvironment = 3;
+}
+
+message ReqAuthIntl {
+	NetDeviceInfo deviceInfo = 1;
+	string openId = 2;
+	string token = 3;
+	int32 channelId = 4;
+	string os = 5;
+	NetBillingInfo billingInfo = 6;
+	NetTLogDeviceInfo logDeviceInfo = 7;
+}
+enum PurchaseRestriction {
+	Unknown2 = 0;
+	Child = 1;
+	Youth = 2;
+	Adult = 3;
+}
+message NetUserPurchaseRestriction {
+	PurchaseRestriction purchaseRestriction = 1;
+	int64 updatedAt = 2;
+}
+
+message NetAuthSuccess {
+	string authToken = 1;
+	string firstAuth = 2;
+	string centauriZoneId = 4;
+	NetUserPurchaseRestriction purchaseRestriction = 5;
+}
+
+message NetBanInfo {
+	string description = 1;
+	google.protobuf.Timestamp endAt = 3;
+	google.protobuf.Timestamp startAt = 4;
+	int64 banId = 5;
+}
+
+message NetAuthError {
+	AuthErrorCode errorCode = 1;
+}
+
+message AuthIntlResponse {
+	oneof ResultOneof {
+		NetAuthSuccess AuthSuccess = 1;
+		NetBanInfo BanInfo = 2;
+		NetAuthError AuthError = 3;
+    }
+}
+
+message ReqLogout {}
+message ResLogout {}
+
+message EnterServerRequest {
+	string AuthToken = 1;
+	bytes clientPublicKey = 2;
+}
+
+message NetFeatureDataInfo {
+	string featureName = 1;
+	bytes featureData = 2;
+	int32 dataLen = 3;
+	int32 crc = 4;
+	bool useFeatureData = 100;
+}
+
+message NetLegacyUserIdentifier {
+	int32 server = 1;
+	int64 usn = 2;
+}
+
+message EnterServerResponse {
+	string gameClientToken = 1;
+	bytes encryptionToken = 2;
+	NetFeatureDataInfo featureDataInfo = 3;
+	google.protobuf.Duration shouldRestartAfter = 4;
+	NetLegacyUserIdentifier identifier = 100;
+}
+
+message GetUserDataRequest {
+	bool IsSimple = 1;
+}
+message UserDataResponse {
+		
+}
+
+message ReqGetContentsOpenData {
+
+}
+
+message ResGetContentsOpenData {
+	int32 guildLevel = 2;
+	int64 maxGachaCount = 4;
+	int64 maxGachaPremiumCount = 5;
+	repeated int32 clearStageList = 6;
+	int32 tutorialGachaPlayCount = 7;
+	repeated int32 clearSimRoomChapterList = 8;
+}
+
+message ReqEnterLobbyServer {
+
+}
+
+message NetTutorialData {
+	int32 groupId = 1;
+	int32 lastClearedTid = 2;
+	int32 lastClearedVersion = 3;
+}
+
+message NetUserData {
+	int32 exp = 2;
+	int32 lv = 3;
+	int32 icon = 7;
+	bool iconPrism = 8;
+	int32 frame = 9;
+	string desc = 10;
+	int32 sendFriendshipCount = 11;
+	int32 receiveFriendshipCount = 12;
+	int32 arenaCount = 14;
+	string lastDialogId = 15;
+	int32 counselCount = 16;
+	int32 commanderRoomJukebox = 17;
+	int32 lobbyJukebox = 18;
+	int32 specialArenaCount = 19;
+	int32 costumeLv = 20;
+	int32 infraCoreExp = 21;
+	int32 infraCoreLv = 22;
+	repeated NetTutorialData tutorials = 24;
+	int64 guildLeaveAt = 25;
+	int32 outpostFastBattleCount = 26;
+}
+
+message NetUserCurrencyData {
+	int32 type = 1;
+	int64 value = 2;
+}
+
+message NetUserCharacterDefaultData {
+	int64 csn = 1;
+	int32 tid = 2;
+	int32 lv = 4;
+	int32 grade = 5;
+	int32 dispatchTid = 6;
+	int32 costumeId = 7;
+	int32 ultiSkillLv = 8;
+	int32 skill1Lv = 9;
+	int32 skill2Lv = 10;
+}
+
+message NetUserCharacterData {
+	NetUserCharacterDefaultData default = 1;
+	bool isSynchro = 2;
+	int64 artifact = 3;
+}
+
+message NetTeamSlot {
+	int32 slot = 1;
+	int64 value = 2;
+	int32 valueType = 3;
+} 
+
+message NetTeamData {
+	int32 teamNumber = 1;
+	repeated NetTeamSlot slots = 2;
+}
+
+message NetUserTeamData {
+	int32 type = 1;
+	int32 lastContentsTeamNumber = 2;
+	repeated NetTeamData teams = 3;
+}
+
+message NetUserItemData {
+	int64 isn = 1;
+	int32 tid = 2;
+	int32 count = 3;
+	int64 csn = 4;
+	int32 corporation = 5;
+	int32 lv = 6;
+	int32 exp = 7;
+	int32 position = 8;
+}
+
+message NetUserAttractiveData {
+	int32 nameCode = 1;
+	int32 lvl = 2;
+	int32 exp = 3;
+	bool isCounsel = 4;
+	repeated int32 completeCounsels = 5;
+	repeated int32 completeRewardLevels = 6;
+	bool isFavorites = 7;
+	int32 counseledCount = 8;
+}
+
+message NetWholeTeamSlot {
+	int32 slot = 1;
+	int32 tid = 2;
+	int32 lvl = 3;
+	int64 csn = 4;
+	int32 costumeId = 5;
+}
+
+message NetWholeUserTeamData {
+	int32 type = 1;
+	int32 teamNumber = 2;
+	int32 teamCombat = 3;
+	repeated NetWholeTeamSlot slots = 4;
+}
+
+message NetUserOutpostData {
+	int32 slotId = 1;
+	int32 buildingId = 2;
+	bool isDone = 3;
+	int64 startAt = 4;
+	int64 completeAt = 5;
+}
+
+message NetUserHarmonyCubeData {
+	int64 isn  = 1;
+	int32 tid = 2;
+	int32 lvl = 3;
+	repeated int64 csnList = 4;
+}
+
+message NetUserRecycleRoomData {
+	int32 tid = 1;
+	int32 lvl = 2;
+	int32 exp = 3;
+}
+
+enum OutpostBuffSourceType {
+	TacticAcademy = 0;
+	Subscription = 1;
+}
+
+message NetTimeRewardBuff {
+	int32 tid = 1;
+	int32 functionType = 2;
+	int64 valueType = 3;
+	OutpostBuffSourceType sourceType = 4;
+}
+
+message NetTimeReward {
+	int32 useId = 1;
+	int64 valuePerMinAfterBuff = 2;
+	int64 valuePerMinBeforeBuff = 3;
+	repeated NetTimeRewardBuff buffs = 4;
+}
+
+message NetOutpostBattleLevel {
+	bool isLevelUp = 1;
+	int32 level = 2;
+	int32 exp = 3;
+}
+
+message NetUserDispatchData {
+	int32 tid = 1;
+	int32 isRun = 2;
+	int64 startAt = 3;
+	int64 endAt = 4;
+}
+
+message NetEquipmentAwakeningOption {
+	int32 option1Id = 1;
+	bool option1Lock = 2;
+	int32 option2Id = 3;
+	bool option2Lock = 4;
+	int32 option3Id = 5;
+	bool option3Lock = 6;
+}
+
+message NetEquipmentAwakening {
+	int64 isn = 1;
+	NetEquipmentAwakeningOption option = 2;
+}
+
+message NetUserRedeemData {
+	int64 redeemId = 1;
+	int32 tid = 2;
+	int32 count = 3;
+	int64 deleteTime = 4;
+}
+
+message NetOutpostBattleTime {
+	int64 battleTime = 1;
+	int64 maxBattleTime = 2;
+	int64 overBattleTime = 3;
+	int64 maxOverBattleTime = 4;
+}
+
+message ResEnterLobbyServer {
+	string nickname = 2;
+	NetUserData user = 4;
+	repeated NetUserCurrencyData currency = 5;
+	repeated NetUserCharacterData character = 7;
+	repeated NetUserTeamData typeTeams = 8;
+	repeated NetUserItemData items = 9;
+	repeated NetUserAttractiveData attractives = 10;
+	int32 lastClearedNormalMainStageId = 14;
+	int32 lastClearedHardMainStageId = 15;
+	int32 lastClearedMod = 16;
+	int64 gsn = 18;
+	NetWholeUserTeamData representationTeam = 19;
+	repeated NetUserOutpostData outposts = 23;
+	int32 synchroLv = 24;
+	repeated NetUserHarmonyCubeData harmonyCubes = 25;
+	repeated NetUserRecycleRoomData recycle = 26;
+	repeated NetTimeReward timeRewardBuffs = 27;
+	repeated int32 clearLessons = 28;
+	string userGlobalOptions = 29;
+	NetOutpostBattleLevel outpostBattleLevel = 31;
+	int64 battleTime = 32;
+	int64 maxBattleTime = 33;
+	repeated int64 synchroStandardCharacters = 34;
+	int32 resetHour = 35;
+	repeated NetUserDispatchData dispatchList = 36;
+	repeated NetEquipmentAwakening awakening = 37;
+	repeated NetUserRedeemData redeems = 38;
+	NetOutpostBattleTime outpostBattleTime = 39;
+}
+
+message ReqGetMainQuestData {
+
+}
+
+message NetMainQuestData {
+	int32 tid = 1;
+	bool isReceived = 2;
+}
+
+message ResGetMainQuestData {
+	repeated NetMainQuestData mainQuestList = 2;
+}
+
+message ReqUserOnlineStateLog {
+
+}
+
+message ResUserOnlineStateLog {
+
+}
+
+// Outpost
+
+message ReqGetRecycleRoomData {
+
+}
+
+message ResGetRecycleRoomData {
+	repeated NetUserRecycleRoomData recycle = 2;
+}
+
+message ReqGetJukeboxRewardedData {}
+
+message ResGetJukeboxRewardedData {
+	repeated int32 jukeboxMissionTidList = 2;
+}
+
+message ReqGetNow {}
+
+message ResGetNow {
+	int64 tick = 1;
+	int32 resetHour = 2;
+	google.protobuf.Duration cheatShiftDuration = 3;
+}
+
+enum BadgeContents {
+	
+	BadgeNone = 0;
+	Mailbox = 2000;
+	MailboxMessage = 2001;
+	NikkeNew = 4000;
+	JukeboxTheme = 5006;
+	UserFrame = 6000;
+	UserIcon = 6001;
+	FriendNew = 8001;
+	FriendRequestNew = 8002;
+	FriendShipPointNew = 8003;
+	UnionRequestNew = 9000;
+	UnionEmblemNew = 9001;
+	UnionChangeGrade = 9004;
+	UnionGradeUp = 9005;
+	UnionWorldRaid = 9006;
+	UnionRaid = 9007;
+	BargainCostumeNew = 10000;
+	LiveWallpaper = 11004;
+	ContentsOpen = 12024;
+	LostSector = 13001;
+	HarmonyCubeNew = 13002;
+	CollectionCostumeLevelupEnabled = 14000;
+	CollectionCostumeNew = 14001;
+	InfraCore = 16000;
+	InfraCoreRewardExist = 16001;
+	Ranking = 17000;
+	LoginAttendanceReward = 19000;
+	EventFieldNew = 19001;
+	StoryEventHardContentsOpen = 19002;
+	ArchiveRecordNew = 19003;
+	ArchiveMessengerNew = 19004;
+	ArchiveMessengerFinish = 19005;
+	MiniGameBbqCutScene = 20101;
+	MiniGameDessertRushUnlock = 20111;
+	MiniGameTabTabMaidLevelUp = 20121;
+	MiniGameTabTabMaidNewNormalDifficulty = 20122;
+	MiniGameTabTabMaidNewHardDifficulty = 20123;
+	SimRoomNewDifficulty = 22001;
+	SimRoomRefreshed = 22002;
+	SoloRaidTicket = 23001;
+	InterceptTicket = 31000;
+	Notice = 32000;
+	SynchroDeviceNewSlot = 33001;
+	SynchroDeviceUpgrade = 33002;
+	DispatchBoardDone = 36001;
+	DispatchBoardRefreshed = 36002;
+	DispatchBoardRankUp = 36003;
+	InAppShopNewPackage = 40001;
+	InAppShopNewSubscriptionProduct = 40002;
+	WishlistContainsMaxGradeCore = 50001;
+}
+
+message NetBadge {
+	int64 SeqFieldNumber = 1;
+	bytes badgeGuid = 2;
+	BadgeContents badgeContent = 3;
+	string location = 4;
+}
+
+message NetUniqueBadge {
+	int64 SeqFieldNumber = 1;
+	bytes badgeGuid = 2;
+	BadgeContents badgeContent = 3;
+	string location = 4;
+}
+
+message ReqSyncBadge {
+	int64 lastBadgeSeq = 1;
+	repeated NetBadge newClientBadgeList = 2;
+	int64 lastUniqueBadgeSeq = 3;
+	repeated NetUniqueBadge newUniqueBadgeList = 4;
+}
+
+message ResSyncBadge {
+	repeated NetBadge badgeList = 2;
+	repeated NetUniqueBadge uniqueBadgeList = 4;
+}
+
+message ReqSyncTrigger {
+	int64 seq = 2;
+	bool isTrustedClientSeq = 3;
+}
+
+message NetTrigger {
+	int64 seq = 1;
+	int64 createdAt = 2;
+	int32 trigger = 3;
+	int32 conditionId = 4;
+	int64 userValue = 5;
+	bool reset = 6;
+}
+
+message ResSyncTrigger {
+	bool hasRemainData = 1;
+	repeated NetTrigger triggers = 2;
+	bool restart = 3;
+}
+
+message ReqGetMessages {
+	int64 seg = 2;
+}
+
+message NetMessage {
+	int64 seg = 1;
+	string conversationId = 2;
+	string messageId = 3;
+	int64 createdAt = 4;
+	int32 state = 5;
+}
+message NetPickedMessage {
+	google.protobuf.Timestamp createdAt = 1;
+	string conversationId = 2;
+}
+
+message ResGetMessages {
+	repeated NetMessage messages = 2;
+}
+
+message ReqGetPickedMessageList {
+
+}
+
+message ResGetPickedMessageList {
+	repeated NetPickedMessage data = 1;
+}
+
+message ReqPickTodayDailyMessage {
+	repeated int32 conditionTriggerIds = 1;
+}
+message ResPickTodayDailyMessage {}
+
+message ReqGetGachaData {}
+
+message NetUserGachaData {
+	int32 gachaType = 6;
+	int32 playCount = 7;
+}
+
+message NetGachaCustomData {
+	int32 type = 1;
+	int32 tid = 2;
+}
+
+message NetGachaEvent {
+	int32 gachaTypeId = 1;
+	int32 freeCount = 2;
+}
+
+message NetUserGachaDiscountData {
+	int32 gachaTypeId = 1;
+	int32 count = 2;
+}
+
+message ResGetGachaData {
+	repeated NetUserGachaData gacha = 2;
+	repeated NetGachaCustomData multipleCustom = 3;
+	repeated NetGachaEvent gachaEventData = 4;
+	repeated NetUserGachaDiscountData gachaDiscountData = 5;
+}
+
+message NetJupiterProductInfo {
+	string productId = 1;
+	string price = 2;
+	string currencyCode =3;
+	string currencySymbol = 4;
+	int64 microPrice = 5;
+}
+
+message ReqGetJupiterProductList {
+	repeated string productIdList = 1;
+}
+
+message ResGetJupiterProductList {
+	repeated NetJupiterProductInfo productInfoList = 1;
+}
+
+message ReqForcePickTodayRandomMessage {
+	int64 usn = 1;
+	repeated int32 conditionTriggerIds = 2; 
+}
+
+message ResForcePickTodayRandomMessage {
+
+}
+
+message NetCentauriPurchaseExtraData {
+	string productId = 1;
+	string billId = 2;
+	string chargeAmount = 3;
+}
+
+message ReqRefreshChargeCurrencyData {
+	NetCentauriPurchaseExtraData txCentauriExtra = 1;
+}
+
+message ResRefreshChargeCurrencyData {
+	NetUserCurrencyData chargeCash = 1;
+	NetUserCurrencyData freeCash = 2;
+}
+
+message NetAntiCheatBattleTLogAdditionalInfo {
+	string a = 1;
+	int64 b = 2;
+}
+
+message ReqDeleteBadge {
+	repeated int64 badgeSeqList = 1;
+}
+message ResDeleteBadge{}
+
+message ReqEnterStage {
+	int32 stageId = 2;
+	int32 teamNumber = 3;
+	NetAntiCheatBattleTLogAdditionalInfo antiCheatAdditionalInfo = 4;
+}
+message ResEnterStage {}
+
+message NetFieldStageData {
+	string positionId = 1;
+	int32 stageId = 2;
+}
+
+message NetFieldObject {
+	int64 actionAt = 1;
+	int32 type = 2;
+	string positionId = 3;
+	string json = 4;
+}
+
+message NetFieldObjectData {
+	repeated NetFieldStageData stages = 1;
+	repeated NetFieldObject objects = 2;
+}
+
+message ReqGetStageData {
+	int32 chapter = 2;
+	int32 mod = 3;
+}
+
+message ResGetStageData {
+	NetFieldObjectData field = 2;
+	bool hasChapterBossEntered = 3;
+	string squadData = 4;
+}
+
+message NetVector3 {
+	float x = 1;
+	float y = 2;
+	float z = 3;
+}
+
+message NetCampaignTeamPosition {
+	int32 teamNumber = 1;
+	int32 type = 2;
+	NetVector3 position = 3;
+}
+
+message ReqGetCampaignFieldData {
+	string mapId = 2;
+}
+
+message ResGetCampaignFieldData {
+	NetFieldObjectData field = 2;
+	NetUserTeamData team = 3;
+	NetCampaignTeamPosition teamPositions = 4;
+	string json = 5;
+}
+
+message ReqExistScenario {
+	repeated string scenarioGroupIds = 1;
+}
+
+message ResExistScenario {
+	repeated string existGroupIds = 1;
+}
+
+message ReqBattleReportData {
+	int32 waveId = 1;
+	bytes reportData3 = 2;
+}
+
+message ResBattleReportData {}
+
+
+message ReqAntibotRecvData {
+	bytes data = 1;
+}
+
+message ResAntibotRecvData {}
+
+message ReqSetScenarioComplete {
+	string scenarioId = 2;
+}
+
+message NetIncreaseExpData {
+	int64 csn = 1;
+	int32 nameCode = 2;
+	int32 beforeLv = 3;
+	int32 beforeExp = 4;
+	int32 currentLv = 5;
+	int32 currentExp = 6;
+	int32 gainExp = 7;
+	int32 increaseExp = 8;
+}
+
+message NetItemData{
+	int64 isn = 1;
+	int32 tid = 2;
+	int32 count = 3;
+	int32 corporation = 4;
+}
+
+message NetCurrencyData{
+	int32 type = 1;
+	int64 value = 2;
+	int64 finalValue = 3;
+}
+
+message NetCharacterData {
+	int64 csn = 1;
+	int32 tid = 2;
+	int32 pieceCount = 3;
+	int64 currencyValue = 4;
+}
+
+message NetProfileFrameData {
+	int32 frameTid = 1;
+	int32 triggerTid = 2;
+	google.protobuf.Timestamp acquiredAt = 3;
+}
+
+message NetPointData {
+	int32 tid = 1;
+	int64 value = 2;
+}
+
+message NetPassPointData{
+	int32 value = 1;
+	int32 finalValue = 2;
+}
+
+message NetAutoChargeData {
+	int32 autoChargeId = 1;
+	int32 finalValue = 2;
+	int32 value = 3;
+}
+
+message NetRedeemData {
+	int64 redeemId = 1;
+	int32 tid = 2;
+	int32 count = 3;
+	int64 deleteTime = 4;
+}
+
+message NetUserFavoriteItemData {
+	int32 favoriteItemId = 1;
+	int32 tid = 2;
+	int64 csn = 3;
+	int32 lv = 4;
+	int32 exp = 5;
+}
+
+message NetFavoriteItemData {
+	int32 favoriteItemId = 1;
+	int32 tid = 2;
+	int64 csn = 3;
+	int32 lv = 4;
+	int32 exp = 5;
+}
+
+message NetRewardData {
+	NetIncreaseExpData userExp = 1;
+	repeated NetItemData item = 2;
+	repeated NetCurrencyData currency = 3;
+	repeated NetCharacterData character = 4;
+	repeated NetProfileFrameData profileFrame = 6;
+	repeated NetIncreaseExpData characterAttractive = 7;
+	repeated int32 jukeboxBgm = 8;
+	repeated int32 memorial = 9;
+	repeated int32 livewallpaper = 10;
+	repeated int32 characterCostume = 11;
+	repeated NetPointData point = 12;
+	NetIncreaseExpData infraCoreExp = 13;
+	repeated NetUserCharacterDefaultData userCharacters = 14;
+	repeated NetUserItemData userItems = 15;
+	NetPassPointData passPoint = 16;
+	repeated NetAutoChargeData autoChargeList = 17;
+	repeated NetUserRedeemData userRedeems = 18;
+	repeated NetRedeemData redeem = 19;
+	repeated NetUserFavoriteItemData userFavoriteItems = 20;
+	NetFavoriteItemData favoriteItems = 21;
+	repeated int32 profileCardObjects = 22;
+}
+
+
+message ResSetScenarioComplete {
+	NetRewardData reward = 2;
+}
+
+message NetAntiCheatCharacter{
+
+}
+
+message NetAntiCheatMonster{}
+
+message NetAntiCheatBattleData {
+	int32 a = 1;
+	int32 b = 3;
+	int32 c = 4;
+	int32 d = 5;
+	int32 e = 6;
+	int32 f = 7;
+	int32 g = 8;
+	repeated NetAntiCheatCharacter h = 9;
+	repeated NetAntiCheatMonster i = 10;
+	bool b1 = 11;
+	int32 i2 = 12;
+}
+
+message ReqClearStage {
+	int32 stageId = 2;
+	int32 teamNumber = 3;
+	int32 battleResult = 4;
+
+}
+
+message ResClearStage {
+	NetRewardData reward = 2;
+	NetOutpostBattleLevel outpostBattle = 4;
+	NetRewardData userLevelUpReward = 5;
+	NetRewardData outpostBattleLevelReward = 6;
+	NetRewardData stageClearReward = 7;
+	NetRewardData scenarioReward = 8;
+}
+
+message ReqGetCharacterData {
+
+}
+
+message ResGetCharacterData {
+	repeated NetUserCharacterData character = 2;
+	repeated int64 synchroStandardCharacters = 3;
+}
+
+message NetSupportCharacterUsedCount {
+	int32 teamType = 1;
+	int32 supportCharacterId = 2;
+	int32 usedSupportCharacterCount = 3;
+}
+
+message ReqListSupportCharacterUsedCount {
+	repeated int32 teamTypeList = 1;
+}
+
+message ResListSupportCharacterUsedCount {
+	repeated NetSupportCharacterUsedCount supportCharacterUsedCountList = 1;
+}
