@@ -8,10 +8,10 @@ namespace nksrv.LobbyServer.Msgs.System
         protected override async Task HandleAsync()
         {
             var req = await ReadData<CheckVersionRequest>();
-            var r = new CheckVersionResponse();
-            r.Availability = 0;    // None = 0, Available = 1, Mandatory = 2
+            var response = new CheckVersionResponse();
+            response.Availability = 0;    // None = 0, Available = 1, Mandatory = 2
 
-            WriteData(r);
+            WriteData(response);
         }
     }
 }

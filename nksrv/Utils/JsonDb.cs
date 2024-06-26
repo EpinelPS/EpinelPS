@@ -16,6 +16,18 @@ namespace nksrv.Utils
         public long ExpirationTime;
         public ulong UserID;
     }
+    public class NetworkPosition
+    {
+        public float x;
+        public float y;
+        public float z;
+    }
+    public class FieldInfo
+    {
+        public List<NetFieldStageData> CompletedStages = new();
+        public bool BossEntered = false;
+        public NetworkPosition teamPosition = new();
+    }
     public class User
     {
         // User info
@@ -28,7 +40,9 @@ namespace nksrv.Utils
 
 
         // Game data
-        public List<string> CompletedScenarios = new List<string>();
+        public List<string> CompletedScenarios = new();
+        public Dictionary<int, FieldInfo> FieldInfo = new();
+        public Dictionary<string, string> MapJson = new();
     }
     public class CoreInfo
     {

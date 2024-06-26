@@ -753,7 +753,7 @@ message ReqGetCampaignFieldData {
 message ResGetCampaignFieldData {
 	NetFieldObjectData field = 2;
 	NetUserTeamData team = 3;
-	NetCampaignTeamPosition teamPositions = 4;
+	repeated NetCampaignTeamPosition teamPositions = 4;
 	string json = 5;
 }
 
@@ -965,4 +965,33 @@ message NetSubQuestData {
 
 message ResGetSubQuestList {
 	repeated NetSubQuestData subquestList = 2;
+}
+
+message ReqCheckStageClear {
+	repeated int32 stageIds = 1;
+}
+message ResCheckStageClear {
+	repeated int32 clearedStageIds = 2;
+}
+
+message ReqGetScenarioList {
+
+}
+message ResGetScenarioList {
+	repeated string scenarioList = 2;
+	repeated string bookmarkScenarioList = 3;
+}
+
+message ReqSaveCampaignField{
+	string mapId = 2;
+	string json = 3;
+}
+
+message ResSaveCampaignField{
+
+}
+
+message ReqGetFieldTalkList {}
+message ResGetFieldTalkList {
+	repeated string fieldTalkList = 2;
 }
