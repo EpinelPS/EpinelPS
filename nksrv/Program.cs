@@ -246,7 +246,8 @@ namespace nksrv
                 Logger.Info("Download " + fs);
 
                 // TODO: Ip might change
-                var requestUri = new Uri("https://43.132.66.200/prdenv/" + ctx.RequestedPath);
+                string @base = ctx.RequestedPath.StartsWith("/prdenv") ? "prdenv" : "media";
+                var requestUri = new Uri("https://43.132.66.200/" + @base + ctx.RequestedPath);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
                 using var response = await hs.SendAsync(request);
@@ -266,15 +267,30 @@ namespace nksrv
                     return;
                 }
             }
-
-            using (var fss = new FileStream(fs, FileMode.Open))
+            try
             {
-                using (var responseStream = ctx.OpenResponseStream())
+
+
+
+                using (var fss = new FileStream(fs, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    fss.CopyTo(responseStream);
-                    fss.Close();
+                    using (var responseStream = ctx.OpenResponseStream())
+                    {
+                        if (ctx.RequestedPath.EndsWith(".mp4"))
+                        {
+                            ctx.Response.ContentType = "video/mp4";
+                        }
+                        ctx.Response.ContentLength64 = fss.Length;
+                        fss.CopyTo(responseStream);
+                        fss.Close();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+          
         }
 
         private static void WriteData<T>(IHttpContext ctx, T data, bool encrypted = false) where T : IMessage, new()
