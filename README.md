@@ -27,7 +27,9 @@ NOTE: Make sure to undo these modifications (especially change back sodium.dll) 
 After doing the following steps, you can register an account in the launcher (enter anything into email verification code section), and play like normal.
 
 ## Progress
-Stage and story information is saved, as well as player nickname. Nothing else works though, such as lobby UI and rewards.
+Stage, character, and story information is saved, as well as player nickname. Lobby UI kind of works. Nothing else works though, such as rewards.
+
+TODO: Provide screenshots
 
 
 ## Contributing
