@@ -1144,3 +1144,75 @@ message ReqGetCharacterCostumeData {}
 message ResGetCharacterCostumeData {
 	repeated int32 costumeIds = 2;
 }
+
+message ReqGetInventoryData {}
+message ResGetInventoryData {
+	repeated NetUserItemData items = 2;
+	repeated NetUserHarmonyCubeData harmonyCubes = 3;
+	NetEquipmentAwakening awakenings = 4;
+	repeated int64 runAwakeningIsnList = 5;
+	repeated NetUserRedeemData userRedeems = 6;
+}
+
+message NetInAppShopData {
+	int32 id = 1;
+	int64 startDate = 2;
+	int64 endDate = 3;
+}
+message NetInAppShopBuyData {
+	int32 productType = 1;
+	int32 shopTid = 2;
+	int32 buyCount = 3;
+	int32 listTid = 4;
+}
+
+message ReqGetInAppShopData {}
+message ResGetInAppShopData {
+	repeated NetInAppShopData inAppShopDataList = 1;
+	repeated NetInAppShopBuyData buyDataList = 2;
+}
+
+message NetSchedule {
+	oneof ScheduleKindOneof {
+		int32 OnlyOnceFieldNumber = 1;
+		int32 DayOfWeekFieldNumber = 2;
+		int32 PeriodicFieldNumber = 4;
+		int32 AllTimeFieldNumber = 5;
+    }
+}
+
+message NetTowerData  {
+	int32 type = 1;
+	int32 floor = 2;
+	int32 remainCount = 3;
+	repeated NetSchedule schedules = 4;
+}
+message ReqGetTowerData {
+	
+}
+message ResGetTowerData {
+	repeated NetTowerData data = 2;
+}
+
+message ReqGetMemoryList {}
+message ResGetMemoryList {
+	repeated int32 memoryList = 2;
+	repeated int32 rewardableSeriesList = 3;
+}
+
+message NetSynchroSlot {
+	int32 slot = 1;
+	int64 csn = 2;
+	int64 availableRegisterAt = 3;
+}
+message NetUserSynchroData {
+	int32 synchroLv = 1;
+	int32 synchroMaxLv = 2;
+	bool isChanged = 3;
+	repeated NetUserCharacterData standardCharacters = 4;
+	repeated NetSynchroSlot Slots = 5;
+}
+
+message ReqGetSynchroData {
+	NetUserSynchroData synchro = 2;
+}

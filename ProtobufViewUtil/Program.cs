@@ -10,8 +10,8 @@ namespace ProtobufViewUtil
         {
             Console.WriteLine("Hello, World!");
 
-            ResGetStageData s = new ResGetStageData();
-            var inn = File.ReadAllBytes(@"C:\Users\Misha\Downloads\getstageinfo2");
+            ResGetMainQuestData s = new ResGetMainQuestData();
+            var inn = File.ReadAllBytes(@"C:\Users\Misha\Downloads\getmainquestdata-stage01complete");
             s.MergeFrom(inn);
             Console.WriteLine(s.ToString());
             var outt = s.ToByteArray();

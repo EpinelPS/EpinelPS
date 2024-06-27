@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using nksrv.LobbyServer;
 using Sodium;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
@@ -64,20 +65,10 @@ namespace nksrv.Utils
                    // File.WriteAllBytes("fullPkt-decr", ms.ToArray());
 
                     var unkVal1 = ms.ReadByte();
-                    var pktLen = ms.ReadByte() & 0x1f;
+                    var unkVal2 = ms.ReadByte();
+                    var sequenceNumber = ReadCborInteger(ms);
 
 
-                    var seqNumB = ms.ReadByte();
-                    var seqNum = seqNumB;
-                    if (seqNumB >= 24)
-                    {
-                        var b = ms.ReadByte();
-
-                        seqNum = BitConverter.ToUInt16(new byte[] { (byte)b, (byte)seqNumB }, 0);
-
-                        // todo support uint32
-                    }
-                   
                     var startPos = (int)ms.Position;
                     //Console.WriteLine("seg #: " + seqNum + ",actual:" + bytes.Length + "cntlen:" + ctx.Request.ContentLength64);
 
@@ -101,6 +92,69 @@ namespace nksrv.Utils
 
             await stream.CopyToAsync(buffer, 81920, ctx.CancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             return new PacketDecryptResponse() { Contents = buffer.ToArray() };
+        }
+
+        public static ulong ReadCborInteger(Stream stream)
+        {
+            // Read the initial byte
+            int initialByte = stream.ReadByte();
+            if (initialByte == -1)
+            {
+                throw new EndOfStreamException("Stream ended unexpectedly");
+            }
+
+            // Major type is the first 3 bits of the initial byte
+            int majorType = (initialByte >> 5) & 0x07;
+            // Additional info is the last 5 bits of the initial byte
+            int additionalInfo = initialByte & 0x1F;
+
+            if (majorType != 0)
+            {
+                //throw new InvalidDataException("Not a valid CBOR unsigned integer");
+            }
+
+            ulong value;
+            if (additionalInfo < 24)
+            {
+                value = (ulong)additionalInfo;
+            }
+            else if (additionalInfo == 24)
+            {
+                value = (ulong)stream.ReadByte();
+            }
+            else if (additionalInfo == 25)
+            {
+                Span<byte> buffer = stackalloc byte[2];
+                if (stream.Read(buffer) != 2)
+                {
+                    throw new EndOfStreamException("Stream ended unexpectedly");
+                }
+                value = BinaryPrimitives.ReadUInt16BigEndian(buffer);
+            }
+            else if (additionalInfo == 26)
+            {
+                Span<byte> buffer = stackalloc byte[4];
+                if (stream.Read(buffer) != 4)
+                {
+                    throw new EndOfStreamException("Stream ended unexpectedly");
+                }
+                value = BinaryPrimitives.ReadUInt32BigEndian(buffer);
+            }
+            else if (additionalInfo == 27)
+            {
+                Span<byte> buffer = stackalloc byte[8];
+                if (stream.Read(buffer) != 8)
+                {
+                    throw new EndOfStreamException("Stream ended unexpectedly");
+                }
+                value = BinaryPrimitives.ReadUInt64BigEndian(buffer);
+            }
+            else
+            {
+                throw new InvalidDataException("Invalid additional info for CBOR unsigned integer");
+            }
+
+            return value;
         }
 
         public static byte[] EncryptData(byte[] message, string authToken)

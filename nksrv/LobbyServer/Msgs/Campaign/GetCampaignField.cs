@@ -1,5 +1,6 @@
 ﻿using nksrv.LobbyServer.Msgs.Stage;
 using nksrv.Utils;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             Console.WriteLine("Map ID: " + req.MapId);
 
             var response = new ResGetCampaignFieldData();
-            response.Field = GetStage.CreateFieldInfo(user, 0); // TODO dont hardcode chapter
+            response.Field = GetStage.CreateFieldInfo(user, GetChapterFromMapId(req.MapId));
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
@@ -39,6 +40,20 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
            
             WriteData(response);
+        }
+
+        public static int GetChapterFromMapId(string mapId)
+        {
+            switch(mapId)
+            {
+                case "fcbg_cityforest_000":
+                    return 0;
+                case "fcbg_cityforest_003":
+                    return 1;
+                default:
+                    Logger.Warn("TODO: I don't know what chapter mapid " + mapId + " is");
+                    return 101;
+            }
         }
     }
 }
