@@ -246,7 +246,7 @@ namespace nksrv
                 Logger.Info("Download " + fs);
 
                 // TODO: Ip might change
-                string @base = ctx.RequestedPath.StartsWith("/prdenv") ? "prdenv" : "media";
+                string @base = ctx.Request.RawUrl.StartsWith("/prdenv") ? "prdenv" : "media";
                 var requestUri = new Uri("https://43.132.66.200/" + @base + ctx.RequestedPath);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
