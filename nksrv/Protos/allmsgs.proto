@@ -1172,12 +1172,32 @@ message ResGetInAppShopData {
 	repeated NetInAppShopBuyData buyDataList = 2;
 }
 
+message NetOnlyOnceSchedule {
+	int64 startAt = 1;
+	int64 endAt = 2;
+}
+message NetDayOfWeekSchedule {
+	int64 startTime = 1;
+	int64 duration = 2;
+	repeated int32 dayOfWeeks = 3;
+}
+
+message NetPeriodicSchedule {
+	int64 initialStartTime = 1;
+	int64 duration = 2;
+	int64 period = 3;
+}
+
+message NetAllTimeSchedule {
+
+}
+
 message NetSchedule {
 	oneof ScheduleKindOneof {
-		int32 OnlyOnceFieldNumber = 1;
-		int32 DayOfWeekFieldNumber = 2;
-		int32 PeriodicFieldNumber = 4;
-		int32 AllTimeFieldNumber = 5;
+		NetOnlyOnceSchedule OnlyOnce = 1;
+		NetDayOfWeekSchedule DayOfWeek = 2;
+		NetPeriodicSchedule Periodic = 3;
+		NetAllTimeSchedule AllTime = 4;
     }
 }
 
@@ -1215,4 +1235,283 @@ message NetUserSynchroData {
 
 message ReqGetSynchroData {
 	NetUserSynchroData synchro = 2;
+}
+
+message NetMonthlySubscriptionReward {
+	int32 tid = 1;
+	NetRewardData reward = 2;
+}
+message NetMonthlySubscriptionData {
+	int32 tid = 1;
+	int64 expiredAt = 2;
+}
+
+message ReqGetMonthlySubscriptionReward {}
+message ResGetMonthlySubscriptionReward {
+	repeated NetMonthlySubscriptionReward rewardList = 1;
+	repeated NetMonthlySubscriptionData dataList = 2;
+}
+
+message ReqGetAttractiveList {}
+message ResGetAttractiveList {
+	repeated NetUserAttractiveData attractives = 2;
+	int32 counselAvailableCount = 3;
+}
+
+message NetCustomPackageSetupData {
+	int32 customPackageShopTid = 1;
+	repeated int32 slotList = 2;
+}
+message ReqGetCustomPackageSetupData {
+	int32 inAppShopId = 1;
+}
+message ResGetCustomPackageSetupData {
+	repeated NetCustomPackageSetupData dataList = 1;
+}
+
+message ReqGachaGetAllShutdownFlags {}
+message ResGachaGetAllShutdownFlags {
+	repeated int32 unavailables = 1;
+}
+
+message ReqGetAchievementRewardedData {}
+message ResGetAchievementRewardedData {
+	repeated int32 ids = 2;
+}
+
+enum NetFeatureKind {
+ SimulationRoom = 0;
+ CooperationEvent = 1;
+ DailyEvent = 2;
+ Intercept = 3;
+ Attendance = 4;
+ Dice = 5;
+ UnionRaid_2 = 6;
+ StoryDungeonEvent = 7;
+ Tower = 8;
+ LostSector_2 = 9;
+ RookieArena = 10;
+ SpecialArena = 11;
+ Subscription_2 = 13;
+ ArchiveEventSystem = 14;
+ ViewShortCut = 1000;
+ PollEvent = 1001;
+ ComeBackUserEvent = 1002;
+ EventPass = 1003;
+ FieldHubEvent = 1004;
+ ShopEvent = 1005;
+ MissionEvent = 1006;
+ ChargeGachaEvent = 1007;
+ MiniGameSortOut = 1008;
+ CharacterSkillResetEvent = 1009;
+ EventQuest = 1010;
+ RewardUpEvent = 1011;
+ SdbattleEvent = 1012;
+ TextAdventure = 1013;
+ ChallengeModeEvent = 1014;
+ DailyFreeGachaEvent = 1015;
+ BoxGachaEvent = 1016;
+ DiceEvent = 1017;
+ Bbqtycoon = 1018;
+ Ce002MiniGame = 1019;
+ SoloRaid = 1020;
+}
+
+message NetFeatureFlag{
+	NetFeatureKind featureKind = 1;
+	bool isOpen = 2;
+}
+
+message ReqGetAllFeatureFlags {}
+message ResGetAllFeatureFlags {
+	repeated NetFeatureFlag flags = 1;
+}
+
+message ReqCampaignPackageGetAllShutdownFlags {
+
+}
+message ResCampaignPackageGetAllShutdownFlags {
+	repeated int32 unavailablePackageGroupIds = 1;
+}
+
+message NetSoloRaidPeriodData {
+	int64 visibleDate = 1;
+	int64 startDate = 2;
+	int64 endDate = 3;
+	int64 disableDate = 4;
+	int64 settleDate_ = 5;
+}
+
+message ReqGetSoloRaidPeriod {}
+message ResGetSoloRaidPeriod {
+	NetSoloRaidPeriodData period = 1;
+}
+
+message ReqGetArchiveRecord {
+
+}
+message ResGetArchiveRecord {
+	repeated int32 archiveRecordList = 1;
+	repeated int32 unlockedArchiveRecordList = 2;
+}
+
+message NetArenaBanInfo {
+	string description = 1;
+	google.protobuf.Timestamp startAt = 2;
+	google.protobuf.Timestamp endAt = 3;
+}
+
+message ReqGetArenaBanInfo {}
+message ResGetArenaBanInfo {
+	NetArenaBanInfo rookieArenaBanInfo = 1;
+	NetArenaBanInfo specialArenaBanInfo = 2;
+}
+
+message ReqProfileCardObjectList {}
+message ResProfileCardObjectList {
+	repeated int32 backgroundIds = 1;
+	repeated int32 stickerIds = 2;
+}
+
+message ReqGetMiniGameNKSV2Data {
+	int32 nKSId = 1;
+}
+
+message NetMiniGameNKSV2MissionProgress {
+	int64 seq = 1;
+	int32 nKSMissionId = 2;
+	int32 progress = 3;
+	google.protobuf.Timestamp createdAt = 4;
+	google.protobuf.Timestamp receivedAt = 5;
+}
+message ResGetMiniGameNKSV2Data {
+	string progressJson = 1;
+	repeated NetMiniGameNKSV2MissionProgress missionProgressList = 2;
+}
+
+message NetSelectableDispatchData {
+	int32 dispatchGroupId = 1;
+	int32 selectTid = 2;
+	int32 selectSlotId = 3;
+	bool isRun = 4;
+	int64 startAt = 5;
+	int64 endAt = 6;
+}
+
+message ReqGetDispatchList {
+
+}
+
+message ResGetDispatchList {
+	int32 dispatchResetCount = 2;
+	repeated NetUserDispatchData dispatchList = 3;
+	repeated NetSelectableDispatchData selectableDispatchList = 4;
+}
+
+message ReqGetSubscription {
+
+}
+
+message NetSubscriptionData {
+	int32 tid = 1;
+	google.protobuf.Timestamp beginAt = 2;
+	google.protobuf.Timestamp endAt = 3;
+}
+
+message ResGetSubscription {
+	repeated NetSubscriptionData activeSubscriptionList = 1;
+	bool hasSubscriptionHistory = 2;
+}
+
+message NetCampaignPackageReward {
+	int32 packageShopId = 1;
+	int32 packageGroupTableId = 2;
+}
+
+message ReqGetCampaignPackage {}
+message ResGetCampaignPackage {
+	repeated NetCampaignPackageReward alreadyRewards = 1;
+}
+
+message NetPopupPackageState{
+	int32 tid = 1;
+	bool isAppear = 2;
+	google.protobuf.Timestamp expiredAt = 3;
+	int32 groupId = 4;
+	bool isPurchased = 6;
+	int32 gradeUp = 7;
+}
+
+message ReqGetPopupPackageState {}
+message ResGetPopupPackageState{
+	repeated NetPopupPackageState dataList = 1;
+	repeated int32 appearedList = 2;
+}
+
+message ReqUpdateRankingServerReward {}
+message ResUpdateRankingServerReward {
+	bool hasNewReward = 1;
+}
+
+message ReqGetProfileFrame {}
+message ResGetProfileFrame {
+	repeated int32 frames = 2;
+}
+
+message NetWholeUserData {
+	int64 usn = 1;
+	int32 server = 2;
+	string nickname = 3;
+	int32 lv = 4;
+	int32 icon = 5;
+	bool iconPrism = 6;
+	int32 frame = 7;
+	int32 teamCombat = 8;
+	int64 lastActionAt = 9;
+	string guildName = 10;
+	bool isBot = 11;
+	int32 groupId = 12;
+}
+
+message NetUserFriendData {
+	int32 state = 1;
+	int32 type = 2;
+	NetWholeUserData user = 3;
+	bool isSend = 4;
+	int32 receiveState = 5;
+}
+
+message ReqGetFriendData {}
+message ResGetFriendData {
+	int32 sendFriendshipCount = 2;
+	int32 receiveFriendshipCount = 3;
+	repeated NetUserFriendData friends = 4;
+	repeated NetUserFriendData blocked = 5;
+}
+
+
+message NetWallpaperData {
+	int32 order = 1;
+	int32 type = 2;
+	int32 id = 3;
+}
+
+message ReqGetWallpaper {}
+message ResGetWallpaper {
+	repeated NetWallpaperData wallpaperList = 2;
+}
+
+message ReqGetCurrencyData {
+	repeated int32 currencies = 2;
+}
+message ResGetCurrencyData {
+	repeated NetUserCurrencyData currency = 2;
+}
+
+message ReqGetJupiterMarketingDetail {
+	string language = 1;
+}
+
+message ResGetJupiterMarketingDetail {
+	string marketingDetail = 1;
 }

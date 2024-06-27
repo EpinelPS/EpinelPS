@@ -15,12 +15,9 @@ namespace nksrv.Utils
         {
 
         }
-
+        static object lockObject = new object();
         public void Log(LogMessageReceivedEventArgs logEvent)
         {
-            var fg = Console.ForegroundColor;
-            Console.ForegroundColor = GetColorForMsg(logEvent);
-
             var msg = logEvent.Message;
             if (msg.StartsWith("["))
             {
@@ -28,12 +25,21 @@ namespace nksrv.Utils
             }
 
             // ignore telemtry server errors
-            if (!msg.StartsWith("POST /v2/dr/getsid: \"404 Not Found\""))
+            if (msg.StartsWith("POST /v2/dr/"))
             {
-                Console.WriteLine(msg);
+                return;
             }
 
-            Console.ForegroundColor = fg;
+            var newFG = GetColorForMsg(logEvent);
+
+            lock (lockObject)
+            {
+                var oldFG = Console.ForegroundColor;
+                Console.ForegroundColor = newFG;
+                Console.WriteLine(msg);
+                Console.ForegroundColor = oldFG;
+            }
+
         }
 
         private ConsoleColor GetColorForMsg(LogMessageReceivedEventArgs logEvent)

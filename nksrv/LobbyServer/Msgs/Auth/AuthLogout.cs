@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Auth
         {
             var req = await ReadData<ReqLogout>();
 
-            
+            JsonDb.Instance.GameClientTokens.Remove(UsedAuthToken);
             WriteData(new ResLogout());
         }
     }
