@@ -18,13 +18,12 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var user = GetUser();
 
             var response = new ResGetStageData();
-            response.Field = CreateFieldInfo(user, req.Chapter);
+            response.Field = CreateFieldInfo(user, req.Chapter-1);
            
            
       
             response.SquadData = "";
 
-            response.Field.Stages.Clear();
             WriteData(response);
         }
 

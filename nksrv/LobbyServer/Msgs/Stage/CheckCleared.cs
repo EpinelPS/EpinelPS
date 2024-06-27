@@ -16,12 +16,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             var response = new ResCheckStageClear();
             var user = GetUser();
+            Console.WriteLine("CheckClear len: " + req.StageIds.Count);
 
             foreach (var fields in user.FieldInfo)
             {
                 foreach (var stages in fields.Value.CompletedStages)
                 {
-                  //  response.ClearedStageIds.Add(stages.StageId);
+                    response.ClearedStageIds.Add(stages.StageId);
                 }
             }
 
