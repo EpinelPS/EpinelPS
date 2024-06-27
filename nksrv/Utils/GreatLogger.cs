@@ -13,7 +13,7 @@ namespace nksrv.Utils
 
         public void Dispose()
         {
-            
+
         }
 
         public void Log(LogMessageReceivedEventArgs logEvent)
@@ -26,7 +26,12 @@ namespace nksrv.Utils
             {
                 msg = msg.Substring(msg.IndexOf("]") + 2);
             }
-            Console.WriteLine(msg);
+
+            // ignore telemtry server errors
+            if (!msg.StartsWith("POST /v2/dr/getsid: \"404 Not Found\""))
+            {
+                Console.WriteLine(msg);
+            }
 
             Console.ForegroundColor = fg;
         }

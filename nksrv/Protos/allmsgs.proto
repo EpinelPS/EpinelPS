@@ -1063,3 +1063,84 @@ enum CurrencyType {
 	SimulationRoomPoint = 13000;
 	CharacterSkillReset_Ticket = 14000;
 }
+
+message NetEventData {
+	int32 id = 1;
+	int32 eventSystemType = 2;
+	int64 eventStartDate = 4;
+	int64 eventEndDate = 5;
+	int64 eventVisibleDate = 6;
+	int64 eventDisableDate = 7;
+	google.protobuf.Timestamp upcomingEventVisibleDate = 8;
+}
+
+message ReqGetEventList {
+
+}
+
+message ResGetEventList {
+	repeated NetEventData eventList = 2;
+}
+
+message NetEventWithJoinData  {
+	NetEventData eventData = 1;
+	int64 joinAt = 2;
+}
+
+message ReqEnterLobbyPing {}
+message ResEnterLobbyPing {}
+
+message ReqGetJoinedEvent {}
+message ResGetJoinedEvent {
+	repeated NetEventWithJoinData eventWithJoinData = 3;
+}
+
+message ReqGetWeeklyRewardedData {}
+
+message ResGetWeeklyRewardedData  {
+	repeated int32 ids = 2;
+}
+
+message ReqGetDailyRewardedData {}
+message ResGetDailyRewardedData {
+	repeated NetEventWithJoinData eventWithJoinData = 3;
+}
+
+message NetPassRankData {
+	int32 passRank = 1;
+	bool isNormalRewarded = 2;
+	bool isPremiumRewarded = 3;
+}
+
+message NetPassMissionData {
+	int32 passMissionId = 1;
+	bool isComplete = 2;
+}
+
+message NetPassInfo {
+	int32 passId = 1;
+	int32 passPoint = 2;
+	repeated NetPassRankData passRankList = 3;
+	repeated NetPassMissionData passMissionList = 4;
+	int32 passSkipCount = 6;
+	bool premiumActive = 7;
+}
+
+message ReqGetActivePassData {
+
+}
+
+message ResGetActivePassData {
+	NetPassInfo pass = 1;
+	bool passExist = 2;
+}
+
+message ReqGetActiveEventPassData {}
+message ResGetActiveEventPassData {
+	repeated NetPassInfo passList = 1;
+}
+
+message ReqGetCharacterCostumeData {}
+message ResGetCharacterCostumeData {
+	repeated int32 costumeIds = 2;
+}

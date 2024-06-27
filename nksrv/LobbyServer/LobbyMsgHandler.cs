@@ -32,6 +32,15 @@ namespace nksrv.LobbyServer
         public async Task HandleAsync(IHttpContext ctx)
         {
             this.ctx = ctx;
+            if (ctx.Request.Headers.AllKeys.Contains("Authorization"))
+            {
+                var token = ctx.Request.Headers["Authorization"];
+                if (token != null)
+                {
+                    UsedAuthToken = token;
+                }
+            }
+
             await HandleAsync();
         }
         public async Task HandleAsync(string authToken)

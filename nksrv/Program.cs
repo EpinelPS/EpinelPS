@@ -92,15 +92,27 @@ namespace nksrv
                 var bin = await item.ReadAsByteArrayAsync();
                 var res = await SendReqLocalAndReadResponseAsync(bin);
 
-                List<byte> ResponseWithBytes =
-                [
-                    .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
+                if (res != null)
+                {
+                    List<byte> ResponseWithBytes =
+[
+    .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
                     .. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                     .. Encoding.UTF8.GetBytes($"Content-Length: {res.Length}\r\n"),
                     .. Encoding.UTF8.GetBytes($"\r\n"),
                     .. res,
                 ];
-                response.AddRange(ResponseWithBytes.ToArray());
+                    response.AddRange(ResponseWithBytes.ToArray());
+                }
+                else
+                {
+                    List<byte> ResponseWithBytes =
+[                   .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
+                    //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
+                    .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
+                    .. Encoding.UTF8.GetBytes($"\r\n"),
+                ];
+                }
 
                 // add boundary, also include http newline if there is binary content
 
@@ -122,7 +134,7 @@ namespace nksrv
 
             return (pieces[0].Trim(), pieces[1].Trim());
         }
-        private static async Task<byte[]> SendReqLocalAndReadResponseAsync(byte[] bytes)
+        private static async Task<byte[]?> SendReqLocalAndReadResponseAsync(byte[] bytes)
         {
             int line = 0;
             var bodyStartStr = Encoding.UTF8.GetString(bytes);
@@ -183,7 +195,7 @@ namespace nksrv
             url = url.Replace("/v1", "");
 
             // find appropriate handler
-            Console.WriteLine("BATCH: /v1" + url);
+            Logger.Info("BATCH: /v1" + url);
 
             foreach (var item in LobbyHandler.Handlers)
             {
@@ -195,8 +207,8 @@ namespace nksrv
                     return item.Value.ReturnBytes;
                 }
             }
-            Console.WriteLine("HANDLER NOT FOUND: " + url);
-            throw new Exception("handler not found: " + url);
+            Logger.Error("HANDLER NOT FOUND: " + url);
+            return null;
         }
 
         private static byte[] ReadStream(Stream stream)

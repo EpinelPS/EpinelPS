@@ -1,4 +1,5 @@
 ﻿using nksrv.Utils;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +31,28 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 }
 
                 // TODO: figure out how stageid corresponds to chapter
-                user.FieldInfo[0].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
+                user.FieldInfo[GetChapterForStageId(req.StageId)].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
             }
 
             WriteData(response);
+        }
+
+        public static int GetChapterForStageId(int stageId)
+        {
+            if (6000001 <= stageId && stageId <= 6000003)
+            {
+                return 0;
+            }
+            else if (6001001 <= stageId && stageId <= 6001004)
+            {
+                return 1;
+            }
+            else
+            {
+                Logger.Error("Unknown stage id: " + stageId);
+                return 100;
+            }
         }
     }
 }
