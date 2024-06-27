@@ -18,6 +18,8 @@ After that, add the following to your C:\Windows\System32\hosts or /etc/hosts fi
 255.255.221.21 sentry.io
 ```
 
+Run generate_ssl_cert.sh in WSL or linux to generate SSL certificates. Make sure to trust myCA.pfx
+
 As Nikke encrypts packet data, you also need to replace C:\NIKKE\NIKKE\game\nikke_Data\Plugins\x86_64\sodium.dll from the one you built.
 
 NOTE: Make sure to undo these modifications (especially change back sodium.dll) to play on the offical servers. 

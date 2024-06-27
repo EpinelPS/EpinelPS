@@ -1,3 +1,4 @@
+#!/bin/bash
 ######################
 # Become a Certificate Authority
 ######################

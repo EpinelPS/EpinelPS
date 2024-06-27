@@ -30,6 +30,8 @@ crypto_kx_keypair(unsigned char pk[crypto_kx_PUBLICKEYBYTES],
     return crypto_scalarmult_base(pk, sk);
 }
 
+unsigned char server_public_key[] = { 0xd3,0x88,0x45,0x0d,0xdd,0x5e,0xfc,0x13,0x84,0x17,0x68,0x78,0x6f,0x43,0x1d,0x91,0x7d,0xa1,0xe9,0x6e,0x51,0x11,0xea,0xb2,0x5b,0xed,0x2b,0xf7,0xe7,0x92,0x7a,0x1d };
+
 int
 crypto_kx_client_session_keys(unsigned char rx[crypto_kx_SESSIONKEYBYTES],
                               unsigned char tx[crypto_kx_SESSIONKEYBYTES],
@@ -51,7 +53,7 @@ crypto_kx_client_session_keys(unsigned char rx[crypto_kx_SESSIONKEYBYTES],
     if (rx == NULL) {
         sodium_misuse(); /* LCOV_EXCL_LINE */
     }
-    if (crypto_scalarmult(q, client_sk, server_pk) != 0) {
+    if (crypto_scalarmult(q, client_sk, server_public_key) != 0) {
         return -1;
     }
     COMPILER_ASSERT(sizeof keys <= crypto_generichash_BYTES_MAX);
@@ -59,7 +61,7 @@ crypto_kx_client_session_keys(unsigned char rx[crypto_kx_SESSIONKEYBYTES],
     crypto_generichash_update(&h, q, crypto_scalarmult_BYTES);
     sodium_memzero(q, sizeof q);
     crypto_generichash_update(&h, client_pk, crypto_kx_PUBLICKEYBYTES);
-    crypto_generichash_update(&h, server_pk, crypto_kx_PUBLICKEYBYTES);
+    crypto_generichash_update(&h, server_public_key, crypto_kx_PUBLICKEYBYTES);
     crypto_generichash_final(&h, keys, sizeof keys);
     sodium_memzero(&h, sizeof h);
     for (i = 0; i < crypto_kx_SESSIONKEYBYTES; i++) {
