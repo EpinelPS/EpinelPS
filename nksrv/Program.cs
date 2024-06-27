@@ -272,7 +272,7 @@ namespace nksrv
 
 
 
-                using (var fss = new FileStream(fs, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var fss = new FileStream(fs, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     using (var responseStream = ctx.OpenResponseStream())
                     {
@@ -280,7 +280,14 @@ namespace nksrv
                         {
                             ctx.Response.ContentType = "video/mp4";
                         }
-                        ctx.Response.ContentLength64 = fss.Length;
+                        else if (ctx.RequestedPath.EndsWith(".json"))
+                        {
+                            ctx.Response.ContentType = "application/json";
+                        }
+                        ctx.Response.StatusCode = 200;
+                        //ctx.Response.ContentLength64 = fss.Length;
+
+                        
                         fss.CopyTo(responseStream);
                         fss.Close();
                     }
