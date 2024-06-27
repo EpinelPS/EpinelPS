@@ -2,7 +2,7 @@
 Private/local server for Nikke.
 
 ## Usage
-First, build and run nksrv project.
+First, build and run nksrv project. Next, open libsodium-1.0.18-RELEASE/libsodium.sln and build that as well. Ignore the failed tests as the encryption public key was hardcoded.
 
 After that, add the following to your C:\Windows\System32\hosts or /etc/hosts file to use the local server:
 
@@ -18,17 +18,17 @@ After that, add the following to your C:\Windows\System32\hosts or /etc/hosts fi
 255.255.221.21 sentry.io
 ```
 
-As Nikke encrypts packet data, you also need to replace C:\NIKKE\NIKKE\game\nikke_Data\Plugins\x86_64\sodium.dll. A patched version of this file can be obtained by contacting MishaProductions on Discord.
+As Nikke encrypts packet data, you also need to replace C:\NIKKE\NIKKE\game\nikke_Data\Plugins\x86_64\sodium.dll from the one you built.
+
+NOTE: Make sure to undo these modifications (especially change back sodium.dll) to play on the offical servers. 
 
 After doing the following steps, you can register an account in the launcher (enter anything into email verification code section), and play like normal.
 
 ## Progress
-Currently, stage data is not saved, only story completion is saved. There are also no rewards currently because those are given server side.
+Stage and story information is saved, as well as player nickname. Nothing else works though, such as lobby UI and rewards.
 
 
 ## Contributing
-You can help by providing information about what rewards are given when a stage is completed, etc. 
-
 Server code structure:
 
 nksrv/LobbyServer: Handles save data.
