@@ -25,27 +25,63 @@ namespace nksrv.LobbyServer.Msgs.User
             response.User.LobbyJukebox = 2;
             response.ResetHour = 20;
             response.Nickname = user.Nickname;
-            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000 ,MaxOverBattleTime = 12096000000000 };
-            response.RepresentationTeam = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2};
-            response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });
-            response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 2 });
-            response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
-            response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
-            response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
+            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
+
+            if (user.TeamData.Slots.Count == 0)
+            {
+                user.TeamData = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2 };
+                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 2 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
+                JsonDb.Save();
+            }
+            response.RepresentationTeam = user.TeamData;
 
             foreach (var item in user.Currency)
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
-          
-            response.LastClearedNormalMainStageId = user.LastStageCleared;
-            //var tTeams = new NetUserTeamData();
+            foreach (var item in user.Characters)
+            {
+                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid } });
+            }
 
-            //var tTeam = new NetTeamData() { TeamNumber = 1 };
-            //tTeam.Slots.Add(new NetTeamSlot() { Slot = 1, ValueType = 1, Value = 2 });
-            //tTeams.Teams.Add(tTeam);
-            //response.TypeTeams.Add(tTeams);
-           // response.Character.Add(new NetUserCharacterData() { Default = new NetUserCharacterDefaultData() { Tid = 1 } });
+            if (user.Characters.Count > 0)
+            {
+                var team1 = new NetUserTeamData();
+                team1.Type = 1;
+                team1.LastContentsTeamNumber = 1;
+
+                var team1Sub = new NetTeamData();
+                team1Sub.TeamNumber = 1;
+
+                // TODO: Save this properly. Right now return first 5 characters as a squad.
+                for (int i = 1; i < 6; i++)
+                {
+                    var character = user.Characters[i - 1];
+                    team1Sub.Slots.Add(new NetTeamSlot() { Slot = i, Value = character.Csn });
+                }
+                team1.Teams.Add(team1Sub);
+
+                response.TypeTeams.Add(team1);
+            }
+
+            // TODO: Save outpost data
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 1, BuildingId = 22401, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 4, BuildingId = 22701, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 5, BuildingId = 22801, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 6, BuildingId = 22901, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 7, BuildingId = 23001, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 3, BuildingId = 23101, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 2, BuildingId = 23201, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 9, BuildingId = 23301, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 8, BuildingId = 23401, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 10, BuildingId = 23501, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+            //response.Outposts.Add(new NetUserOutpostData() { SlotId = 38, BuildingId = 33601, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
+
+            response.LastClearedNormalMainStageId = user.LastStageCleared;
 
             WriteData(response);
         }

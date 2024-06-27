@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace nksrv.Utils
 {
@@ -16,17 +17,23 @@ namespace nksrv.Utils
         public long ExpirationTime;
         public ulong UserID;
     }
-    public class NetworkPosition
-    {
-        public float x;
-        public float y;
-        public float z;
-    }
     public class FieldInfo
     {
         public List<NetFieldStageData> CompletedStages = new();
-        public bool BossEntered = false;
-        public NetworkPosition teamPosition = new();
+    }
+
+    public class Character
+    {
+        // TODO
+        public int Csn = 0;
+        public int Tid = 0;
+        public int CostumeId = 0;
+
+        public int Level = 1;
+        public int UltimateLevel = 1;
+        public int Skill1Lvl = 1;
+        public int Skill2Lvl = 1;
+        public int Grade = 0;
     }
     
     public class User
@@ -46,8 +53,14 @@ namespace nksrv.Utils
         public Dictionary<int, FieldInfo> FieldInfo = new();
         public Dictionary<string, string> MapJson = new();
         public Dictionary<CurrencyType, long> Currency = new Dictionary<CurrencyType, long>() {
-            { CurrencyType.ContentStamina, 2}
+            { CurrencyType.ContentStamina, 2 },
+
+            { CurrencyType.Gold, 1 },
+              { CurrencyType.CharCorporationTicket, 23422 }
         };
+
+        public List<Character> Characters = new();
+        public NetWholeUserTeamData TeamData = new();
     }
     public class CoreInfo
     {

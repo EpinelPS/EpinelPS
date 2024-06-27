@@ -1515,3 +1515,23 @@ message ReqGetJupiterMarketingDetail {
 message ResGetJupiterMarketingDetail {
 	string marketingDetail = 1;
 }
+
+
+message NetProfileData {
+	// TODO
+}
+
+message ResGetProfileData {
+	int64 targetUsn = 2;
+}
+
+message ReqGetProfileData {
+	NetProfileData data = 2;
+}
+
+message ReqSetWallpaper {
+	repeated NetWallpaperData wallpaperList = 2;
+}
+message ResSetWallpaper {
+	
+}

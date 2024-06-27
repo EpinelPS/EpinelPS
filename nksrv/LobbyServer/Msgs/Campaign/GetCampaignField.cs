@@ -50,6 +50,8 @@ namespace nksrv.LobbyServer.Msgs.Campaign
                     return 0;
                 case "fcbg_cityforest_003":
                     return 1;
+                case "fcbg_cityforest_001":
+                    return 2;
                 default:
                     Logger.Warn("TODO: I don't know what chapter mapid " + mapId + " is");
                     return 101;

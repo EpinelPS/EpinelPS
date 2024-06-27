@@ -27,12 +27,33 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
                 if (user.FieldInfo.Count == 0)
                 {
-                    user.FieldInfo.Add(0, new FieldInfo() {  });
+                    user.FieldInfo.Add(0, new FieldInfo() { });
                 }
 
                 // TODO: figure out how stageid corresponds to chapter
                 user.FieldInfo[GetChapterForStageId(req.StageId)].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
+
+                if (req.StageId == 6000003)
+                {
+                    // TODO: Is this the right place to copy over default characters?
+                    // TODO: What is CSN and TID? Also need to add names for these
+                    // Note: CSN appears to be a character ID, still not sure what TID is
+                    user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
+                    user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
+                    user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
+                    user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
+                    user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
+
+                    user.TeamData.TeamNumber = 1;
+                    user.TeamData.TeamCombat = 1446; // TODO: Don't hardcode this
+                    user.TeamData.Slots.Clear();
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Lvl = 1});
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 2, Csn = 47273456, Tid = 330501, Lvl = 1 });
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
+                }
             }
 
             WriteData(response);

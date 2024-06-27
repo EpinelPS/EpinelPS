@@ -17,6 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Team
 
             // TODO: assume that team data did not change
             var resp = new ResGetTeamData();
+           // resp.TypeTeams.Add(new NetUserTeamData() { })
             //resp.TypeTeams
             WriteData(resp);
         }

@@ -11,13 +11,25 @@ namespace nksrv.LobbyServer.Msgs.User
             var user = GetUser();
 
             var response = new ResGetContentsOpenData();
+            bool includeFirst = true;
             foreach (var field in user.FieldInfo.Values)
             {
+                // only include first and last clears
+                int i = 0;
                 foreach (var stage in field.CompletedStages)
                 {
-                    response.ClearStageList.Add(stage.StageId);
+                    if (i == 0 && includeFirst)
+                    {
+                        response.ClearStageList.Add(stage.StageId);
+                        includeFirst = false;
+                    }
+                    else if (i == field.CompletedStages.Count - 1)
+                        response.ClearStageList.Add(stage.StageId);
+                    i++;
                 }
             }
+            response.MaxGachaCount = 10;
+            // todo tutorial playcount of gacha
 
             WriteData(response);
         }
