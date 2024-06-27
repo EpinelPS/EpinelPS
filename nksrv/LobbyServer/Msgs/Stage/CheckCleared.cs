@@ -21,7 +21,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
             {
                 foreach (var stages in fields.Value.CompletedStages)
                 {
-                    response.ClearedStageIds.Add(stages.StageId);
+                  //  response.ClearedStageIds.Add(stages.StageId);
                 }
             }
 

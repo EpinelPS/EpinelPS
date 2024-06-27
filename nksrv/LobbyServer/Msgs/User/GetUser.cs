@@ -12,10 +12,30 @@ namespace nksrv.LobbyServer.Msgs.User
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<GetUserDataRequest>();
+            var req = await ReadData<ReqGetUserData>();
 
             
-            var response = new UserDataResponse();
+            var response = new ResGetUserData();
+
+            var user = GetUser();
+
+            response.User = new NetUserData();
+            response.User.Lv = 1;
+            response.User.CommanderRoomJukebox = 5;
+            response.User.CostumeLv = 1;
+            response.User.Frame = 1;
+            response.User.Icon = 39900;
+            response.User.LobbyJukebox = 2;
+            response.ResetHour = 20;
+            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
+            response.IsSimple = req.IsSimple;
+
+            foreach (var item in user.Currency)
+            {
+                response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
+            }
+
+            response.LastClearedNormalMainStageId = user.LastStageCleared;
 
             WriteData(response);
         }

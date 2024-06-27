@@ -200,11 +200,28 @@ message EnterServerResponse {
 	NetLegacyUserIdentifier identifier = 100;
 }
 
-message GetUserDataRequest {
+message ReqGetUserData {
 	bool IsSimple = 1;
 }
-message UserDataResponse {
-		
+message ResGetUserData {
+	NetUserData user = 3;
+	repeated NetUserCurrencyData currency = 4;
+	int32 lastClearedNormalMainStageId = 8;
+	int32 lastClearedHardMainStageId = 9;
+	int32 lastClearedMod = 10;
+	int64 gsn = 12;
+	NetWholeUserTeamData representationTeam = 13;
+	int32 synchroLv = 14;
+	int32 costumeCount = 15;
+	repeated NetTimeReward timeRewardBuffs = 27;
+	repeated int32 clearLessons = 28;
+	NetOutpostBattleLevel outpostBattleLevel = 31;
+	int64 battleTime = 32;
+	int64 maxBattleTime = 33;
+	repeated int32 dispatchClearCountList = 34;
+	int32 resetHour = 35;
+	bool isSimple = 36;
+	NetOutpostBattleTime outpostBattleTime = 37;
 }
 
 message ReqGetContentsOpenData {
@@ -1016,4 +1033,33 @@ message ResSetNickname {
 	SetNicknameResult result = 1;
 	string nickname = 2;
 	repeated NetUserCurrencyData currencies = 3;
+}
+
+enum CurrencyType {
+	NoneCurrency = 0;
+	UserExp = 1;
+	ChargeCash = 98;
+	FreeCash = 99;
+	CharacterExp = 1000;
+	Gold = 2000;
+	CharacterExp2 = 3000;
+	Friendship_Point = 4000;
+	ArenaChip = 5000;
+	Char_Premium_Ticket = 5100;
+	Char_Customize_Ticket = 5200;
+	Char_Corporation_Ticket = 5300;
+	Arena_Ticket = 6001;
+	_2nd_Arena_Ticket = 6002;
+	InterceptTicket2 = 6003;
+	ContentStamina = 6100;
+	RecycleRoomPoint = 6200;
+	InfraCoreEnergy = 7000;
+	RaptureParts = 8000;
+	DissolutionPoint = 9000;
+	InApp = 9999;
+	GuildCoin = 10000;
+	SilverMileageTicket = 11000;
+	GoldMileageTicket = 12000;
+	SimulationRoomPoint = 13000;
+	CharacterSkillReset_Ticket = 14000;
 }

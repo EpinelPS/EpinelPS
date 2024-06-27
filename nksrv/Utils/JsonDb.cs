@@ -28,6 +28,7 @@ namespace nksrv.Utils
         public bool BossEntered = false;
         public NetworkPosition teamPosition = new();
     }
+    
     public class User
     {
         // User info
@@ -44,6 +45,9 @@ namespace nksrv.Utils
         public List<string> CompletedScenarios = new();
         public Dictionary<int, FieldInfo> FieldInfo = new();
         public Dictionary<string, string> MapJson = new();
+        public Dictionary<CurrencyType, long> Currency = new Dictionary<CurrencyType, long>() {
+            { CurrencyType.ContentStamina, 2}
+        };
     }
     public class CoreInfo
     {

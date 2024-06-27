@@ -32,7 +32,12 @@ namespace nksrv.LobbyServer.Msgs.User
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
             response.RepresentationTeam.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
-            response.Currency.Add(new NetUserCurrencyData() { Type = 6100, Value = 2 });
+
+            foreach (var item in user.Currency)
+            {
+                response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
+            }
+          
             response.LastClearedNormalMainStageId = user.LastStageCleared;
             //var tTeams = new NetUserTeamData();
 
