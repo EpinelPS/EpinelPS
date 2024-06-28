@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Character
 {
@@ -12,11 +7,14 @@ namespace nksrv.LobbyServer.Msgs.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetCharacterData>();
+            var req = await ReadData<ReqGetCharacterData>();
+            var user = GetUser();
 
             var response = new ResGetCharacterData();
-
-            // TODO implement
+            foreach (var item in user.Characters)
+            {
+                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid } });
+            }
 
             WriteData(response);
         }

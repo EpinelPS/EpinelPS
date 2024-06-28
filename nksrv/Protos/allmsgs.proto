@@ -1521,13 +1521,14 @@ message NetProfileData {
 	// TODO
 }
 
-message ResGetProfileData {
-	int64 targetUsn = 2;
-}
 
 message ReqGetProfileData {
+	int64 targetUsn = 2;
+}
+message ResGetProfileData {
 	NetProfileData data = 2;
 }
+
 
 message ReqSetWallpaper {
 	repeated NetWallpaperData wallpaperList = 2;
@@ -1552,4 +1553,23 @@ message ReqListInvitation {}
 message ResListInvitation {
 	ListInvitationError error = 1;
 	repeated NetInvitation invitationList = 2;
+}
+
+message ReqProceedMessage {
+	string messageId = 2;
+}
+message ResProceedMessage {
+	NetMessage message = 1;
+	NetRewardData reward = 2;
+}
+
+message ReqSetTeam {
+	int32 type = 2;
+	int32 contentsId = 3;
+	repeated NetTeamData teams = 4;
+}
+
+message ResSetTeam {
+	int32 type = 2;
+	repeated NetTeamData teams = 3;
 }
