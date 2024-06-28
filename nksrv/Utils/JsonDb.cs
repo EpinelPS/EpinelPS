@@ -54,9 +54,7 @@ namespace nksrv.Utils
         public Dictionary<string, string> MapJson = new();
         public Dictionary<CurrencyType, long> Currency = new Dictionary<CurrencyType, long>() {
             { CurrencyType.ContentStamina, 2 },
-
-            { CurrencyType.Gold, 1 },
-              { CurrencyType.CharPremiumTicket, 23422 }
+            { CurrencyType.CharPremiumTicket, 23422 }
         };
 
         public List<Character> Characters = new();

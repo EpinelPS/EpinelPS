@@ -1535,3 +1535,21 @@ message ReqSetWallpaper {
 message ResSetWallpaper {
 	
 }
+
+message NetInvitation  {
+	NetWholeUserData fromUser = 1;
+	int64 inviteTime = 2;
+	string partyId = 3;
+	int32 eventId = 4;
+}
+
+enum ListInvitationError {
+	LIST_INVITATION_ERROR_SUCCESS = 0;
+	LIST_INVITATION_ERROR_NOT_PERIOD_EVENT = 1;
+}
+
+message ReqListInvitation {}
+message ResListInvitation {
+	ListInvitationError error = 1;
+	repeated NetInvitation invitationList = 2;
+}

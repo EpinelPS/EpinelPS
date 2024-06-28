@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
 using Swan.Logging;
 using System;
 using System.Collections.Generic;
@@ -48,11 +49,53 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     user.TeamData.TeamNumber = 1;
                     user.TeamData.TeamCombat = 1446; // TODO: Don't hardcode this
                     user.TeamData.Slots.Clear();
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Lvl = 1});
+                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Lvl = 1 });
                     user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 2, Csn = 47273456, Tid = 330501, Lvl = 1 });
                     user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
                     user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
                     user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
+                }
+
+                // assign rewards
+                if (StageCompletionReward.RewardData.ContainsKey(req.StageId))
+                {
+                    var reward = StageCompletionReward.RewardData[req.StageId];
+
+                    Dictionary<CurrencyType, int> current = new Dictionary<CurrencyType, int>();
+
+                    // add all currencies that users has to current dictionary
+                    foreach (var currentReward in user.Currency)
+                    {
+                        if (!current.ContainsKey(currentReward.Key))
+                            current.Add(currentReward.Key, 0);
+
+                        current[currentReward.Key] = (int)currentReward.Value;
+                    }
+
+
+                    // add currency reward to response
+                    response.StageClearReward = new NetRewardData();
+                    foreach (var item in reward.Currency)
+                    {
+                        if (!current.ContainsKey((CurrencyType)item.Type))
+                            current.Add((CurrencyType)item.Type, 0);
+                        var val = current[(CurrencyType)item.Type];
+                        response.StageClearReward.Currency.Add(new NetCurrencyData() { Type = item.Type, Value = item.Value, FinalValue = val + item.Value });
+                    }
+
+                    // add currency reward to user info
+                    foreach (var item in reward.Currency)
+                    {
+                        if (!user.Currency.ContainsKey((CurrencyType)item.Type))
+                            user.Currency.Add((CurrencyType)item.Type, item.Value);
+                        else
+                            user.Currency[(CurrencyType)item.Type] += item.Value;
+                    }
+                    JsonDb.Save();
+                }
+                else
+                {
+                    Logger.Warn("TODO - Reward for stage ID " + req.StageId);
                 }
             }
 

@@ -34,9 +34,17 @@ namespace nksrv.LobbyServer.Msgs.User
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
+            response.RepresentationTeam = user.TeamData;
 
             response.LastClearedNormalMainStageId = user.LastStageCleared;
 
+            // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
+            foreach (var item in user.ClearedTutorials)
+            {
+                var groupId = int.Parse(item.ToString().Substring(0, 4));
+                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO
+                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
+            }
             WriteData(response);
         }
     }

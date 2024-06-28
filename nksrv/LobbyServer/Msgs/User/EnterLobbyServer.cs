@@ -15,6 +15,8 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqEnterLobbyServer>();
             var user = GetUser();
 
+            // NOTE: Keep this in sync with GetUser code
+
             var response = new ResEnterLobbyServer();
             response.User = new NetUserData();
             response.User.Lv = 1;

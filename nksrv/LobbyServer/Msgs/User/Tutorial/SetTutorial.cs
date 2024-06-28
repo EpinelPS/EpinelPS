@@ -16,6 +16,7 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
             var user = GetUser();
             if (!user.ClearedTutorials.Contains(req.LastClearedTid))
             user.ClearedTutorials.Add(req.LastClearedTid);
+            JsonDb.Save();
 
             var response = new ResSetTutorial();
             WriteData(response);
