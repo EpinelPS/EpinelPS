@@ -25,6 +25,8 @@ namespace nksrv.LobbyServer.Msgs.User
             response.User.LobbyJukebox = 2;
             response.ResetHour = 20;
             response.Nickname = user.Nickname;
+            response.SynchroLv = 1;
+            response.OutpostBattleLevel = new NetOutpostBattleLevel() { Level = 1 };
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
 
             if (user.TeamData.Slots.Count == 0)
@@ -82,6 +84,14 @@ namespace nksrv.LobbyServer.Msgs.User
             //response.Outposts.Add(new NetUserOutpostData() { SlotId = 38, BuildingId = 33601, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
 
             response.LastClearedNormalMainStageId = user.LastStageCleared;
+
+            // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
+            foreach (var item in user.ClearedTutorials)
+            {
+                var groupId = int.Parse(item.ToString().Substring(0, 4));
+                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO
+                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
+            }
 
             WriteData(response);
         }

@@ -56,11 +56,12 @@ namespace nksrv.Utils
             { CurrencyType.ContentStamina, 2 },
 
             { CurrencyType.Gold, 1 },
-              { CurrencyType.CharCorporationTicket, 23422 }
+              { CurrencyType.CharPremiumTicket, 23422 }
         };
 
         public List<Character> Characters = new();
         public NetWholeUserTeamData TeamData = new();
+        public List<int> ClearedTutorials = new();
     }
     public class CoreInfo
     {

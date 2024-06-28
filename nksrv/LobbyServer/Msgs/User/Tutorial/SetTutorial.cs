@@ -13,8 +13,10 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqSetTutorial>();
+            var user = GetUser();
+            if (!user.ClearedTutorials.Contains(req.LastClearedTid))
+            user.ClearedTutorials.Add(req.LastClearedTid);
 
-            Console.WriteLine("TODO - clear tutorial with tid: " + req.LastClearedTid);
             var response = new ResSetTutorial();
             WriteData(response);
         }
