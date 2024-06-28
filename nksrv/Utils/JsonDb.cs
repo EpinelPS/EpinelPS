@@ -13,13 +13,13 @@ namespace nksrv.Utils
 {
     public class AccessToken
     {
-        public string Token;
+        public string Token = "";
         public long ExpirationTime;
         public ulong UserID;
     }
     public class FieldInfo
     {
-        public List<NetFieldStageData> CompletedStages = new();
+        public List<NetFieldStageData> CompletedStages = [];
     }
 
     public class Character
@@ -49,26 +49,26 @@ namespace nksrv.Utils
 
 
         // Game data
-        public List<string> CompletedScenarios = new();
-        public Dictionary<int, FieldInfo> FieldInfo = new();
-        public Dictionary<string, string> MapJson = new();
-        public Dictionary<CurrencyType, long> Currency = new Dictionary<CurrencyType, long>() {
+        public List<string> CompletedScenarios = [];
+        public Dictionary<int, FieldInfo> FieldInfo = [];
+        public Dictionary<string, string> MapJson = [];
+        public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 },
             { CurrencyType.CharPremiumTicket, 23422 }
         };
 
-        public List<Character> Characters = new();
+        public List<Character> Characters = [];
         public NetWholeUserTeamData TeamData = new();
-        public List<int> ClearedTutorials = new();
+        public List<int> ClearedTutorials = [];
     }
     public class CoreInfo
     {
-        public List<User> Users = new List<User>();
+        public List<User> Users = [];
 
-        public List<AccessToken> LauncherAccessTokens = new List<AccessToken>();
+        public List<AccessToken> LauncherAccessTokens = [];
 
 
-        public Dictionary<string, GameClientInfo> GameClientTokens = new Dictionary<string, GameClientInfo>();
+        public Dictionary<string, GameClientInfo> GameClientTokens = [];
     }
     internal class JsonDb
     {

@@ -28,7 +28,7 @@ namespace nksrv.LobbyServer
             UserId = 0;
             ctx = null;
         }
-        
+
         public async Task HandleAsync(IHttpContext ctx)
         {
             this.ctx = ctx;
@@ -93,7 +93,7 @@ namespace nksrv.LobbyServer
         {
             if (ctx == null)
             {
-                T msg2 = new T();
+                T msg2 = new();
                 msg2.MergeFrom(Contents);
                 return msg2;
             }
@@ -102,16 +102,8 @@ namespace nksrv.LobbyServer
                 var bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
 
                 // return grpc IMessage from byte array with type T
-                T msg = default(T);
-                try
-                {
-                    msg = new T();
-                    msg.MergeFrom(bin.Contents);
-                }
-                catch
-                {
-                    ;
-                }
+                T msg = new();
+                msg.MergeFrom(bin.Contents);
 
                 UserId = bin.UserId;
                 UsedAuthToken = bin.UsedAuthToken;
@@ -122,9 +114,7 @@ namespace nksrv.LobbyServer
 
         public User GetUser()
         {
-            User? user = JsonDb.GetUser(UserId);
-            if (user == null) throw new Exception("null user");
-            return user;
+            return JsonDb.GetUser(UserId) ?? throw new Exception("null user");
         }
     }
 }

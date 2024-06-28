@@ -10,18 +10,15 @@ namespace nksrv.Utils
     public class GreatLogger : ILogger
     {
         public LogLevel LogLevel => LogLevel.Info;
-
-        public void Dispose()
-        {
-
-        }
-        static object lockObject = new object();
+        static readonly object lockObject = new();
         public void Log(LogMessageReceivedEventArgs logEvent)
         {
             var msg = logEvent.Message;
-            if (msg.StartsWith("["))
+
+            // strip out request id that embedio prints
+            if (msg.StartsWith('['))
             {
-                msg = msg.Substring(msg.IndexOf("]") + 2);
+                msg = msg[(msg.IndexOf("]") + 2)..];
             }
 
             // ignore telemtry server errors
@@ -42,31 +39,27 @@ namespace nksrv.Utils
 
         }
 
-        private ConsoleColor GetColorForMsg(LogMessageReceivedEventArgs logEvent)
+        private static ConsoleColor GetColorForMsg(LogMessageReceivedEventArgs logEvent)
         {
             if (logEvent.Message.Contains("404 Not Found"))
                 return ConsoleColor.Red;
             else if (logEvent.Message.Contains("200 OK"))
                 return ConsoleColor.DarkGreen;
-            switch (logEvent.MessageType)
+            return logEvent.MessageType switch
             {
-                case LogLevel.None:
-                    return ConsoleColor.White;
-                case LogLevel.Trace:
-                    return ConsoleColor.Gray;
-                case LogLevel.Debug:
-                    return ConsoleColor.Gray;
-                case LogLevel.Info:
-                    return ConsoleColor.Gray;
-                case LogLevel.Warning:
-                    return ConsoleColor.Yellow;
-                case LogLevel.Error:
-                    return ConsoleColor.Red;
-                case LogLevel.Fatal:
-                    return ConsoleColor.Red;
-                default:
-                    return ConsoleColor.White;
-            }
+                LogLevel.None => ConsoleColor.White,
+                LogLevel.Trace => ConsoleColor.Gray,
+                LogLevel.Debug => ConsoleColor.Gray,
+                LogLevel.Info => ConsoleColor.Gray,
+                LogLevel.Warning => ConsoleColor.Yellow,
+                LogLevel.Error => ConsoleColor.Red,
+                LogLevel.Fatal => ConsoleColor.Red,
+                _ => ConsoleColor.White,
+            };
+        }
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

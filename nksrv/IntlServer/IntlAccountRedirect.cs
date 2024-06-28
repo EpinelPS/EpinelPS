@@ -1,4 +1,5 @@
 ﻿using EmbedIO;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +20,14 @@ namespace nksrv.IntlServer
         protected override async Task HandleAsync()
         {
             Console.WriteLine("li-sg redirect in: " + Content);
-            HttpClientHandler handler = new HttpClientHandler()
+            HttpClientHandler handler = new()
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true,
                 AllowAutoRedirect = true // from gameassembly dll
             };
 
-            HttpClient client = new HttpClient(new LoggingHandler(handler));
+            HttpClient client = new(new LoggingHttpHandler(handler));
             client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("*/*"));//ACCEPT header

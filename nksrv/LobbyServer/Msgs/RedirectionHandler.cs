@@ -24,7 +24,7 @@ namespace nksrv.LobbyServer.Msgs
                 AllowAutoRedirect = true // from gameassembly dll
             };
 
-            HttpClient client = new HttpClient(new LoggingHandler(handler));
+            HttpClient client = new(new LoggingHttpHandler(handler));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream+protobuf"));
             client.BaseAddress = new Uri("https://global-lobby.nikke-kr.com");
             client.DefaultRequestVersion = HttpVersion.Version20;
@@ -47,38 +47,21 @@ namespace nksrv.LobbyServer.Msgs
             ctx.Response.OutputStream.Flush();
         }
 
-        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(IHttpContext ctx, bool decompress = false)
+        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(IHttpContext ctx)
         {
-            byte[] bin = Array.Empty<byte>();
-
             using MemoryStream buffer = new MemoryStream();
 
             var stream = ctx.Request.InputStream;
 
             var encoding = ctx.Request.Headers[HttpHeaderNames.ContentEncoding]?.Trim();
-
-            Stream decryptedStream;
-            switch (encoding)
+            Stream decryptedStream = encoding switch
             {
-                case CompressionMethodNames.Gzip:
-                    decryptedStream = new GZipStream(stream, CompressionMode.Decompress);
-                    break;
-                case CompressionMethodNames.Deflate:
-                    decryptedStream = new DeflateStream(stream, CompressionMode.Decompress);
-                    break;
-                case CompressionMethodNames.None:
-                case null:
-                    decryptedStream = stream;
-                    break;
-                case "gzip,enc":
-
-                    decryptedStream = stream;
-                    break;
-                default:
-                    throw HttpException.BadRequest($"Unsupported content encoding \"{encoding}\"");
-            }
-
-
+                CompressionMethodNames.Gzip => new GZipStream(stream, CompressionMode.Decompress),
+                CompressionMethodNames.Deflate => new DeflateStream(stream, CompressionMode.Decompress),
+                CompressionMethodNames.None or null => stream,
+                "gzip,enc" => stream,
+                _ => throw HttpException.BadRequest($"Unsupported content encoding \"{encoding}\""),
+            };
             await stream.CopyToAsync(buffer, 81920, ctx.CancellationToken).ConfigureAwait(continueOnCapturedContext: false);
             return new PacketDecryptResponse() { Contents = buffer.ToArray() };
         }

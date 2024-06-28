@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using EmbedIO;
+using nksrv.Utils;
 
 namespace nksrv.IntlServer
 {
@@ -19,14 +20,14 @@ namespace nksrv.IntlServer
         protected override async Task HandleAsync()
         {
             Console.WriteLine("AWS NA redirect in: " + Content);
-            HttpClientHandler handler = new HttpClientHandler()
+            HttpClientHandler handler = new()
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true,
                 AllowAutoRedirect = true // from gameassembly dll
             };
 
-            HttpClient client = new HttpClient(new LoggingHandler(handler));
+            HttpClient client = new(new LoggingHttpHandler(handler));
             client.DefaultRequestHeaders
                 .Accept
                 .Add(new MediaTypeWithQualityHeaderValue("*/*"));//ACCEPT header
@@ -36,7 +37,7 @@ namespace nksrv.IntlServer
 
             //  client.DefaultRequestHeaders.Remove("User-agent");
 
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://50.18.221.30" + ctx.Request.RawUrl);
+            HttpRequestMessage request = new(HttpMethod.Post, "https://50.18.221.30" + ctx.Request.RawUrl);
             request.Version = HttpVersion.Version11;
             request.Headers.TryAddWithoutValidation("Host", "aws-na.intlgame.com");
 

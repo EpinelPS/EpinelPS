@@ -15,11 +15,11 @@ namespace nksrv.Utils
 {
     public class PacketDecryption
     {
-        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(IHttpContext ctx, bool decompress = false)
+        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(IHttpContext ctx)
         {
-            byte[] bin = Array.Empty<byte>();
+            byte[] bin = [];
 
-            using MemoryStream buffer = new MemoryStream();
+            using MemoryStream buffer = new();
 
             var stream = ctx.Request.InputStream;
 
@@ -46,20 +46,15 @@ namespace nksrv.Utils
                     var decryptionToken = CBorReadString(stream);
                     var nonce = CBorReadByteString(stream);
 
-                    MemoryStream encryptedBytes = new MemoryStream();
+                    MemoryStream encryptedBytes = new();
                     stream.CopyTo(encryptedBytes);
 
                     var bytes = encryptedBytes.ToArray();
 
-                    var key = LobbyHandler.GetInfo(decryptionToken);
-                    if (key == null)
-                    {
-                        throw HttpException.BadRequest("Invalid decryption token");
-                    }
-
+                    var key = LobbyHandler.GetInfo(decryptionToken) ?? throw HttpException.BadRequest("Invalid decryption token");
                     var additionalData = GenerateAdditionalData(decryptionToken, false);
 
-                    var x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, additionalData.ToArray());
+                    var x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
 
                     var ms = new MemoryStream(x);
                    // File.WriteAllBytes("fullPkt-decr", ms.ToArray());
@@ -78,7 +73,7 @@ namespace nksrv.Utils
                         //File.WriteAllBytes("contentsgzip", contents);
                         // gzip compression is used
                         using Stream csStream = new GZipStream(new MemoryStream(contents), CompressionMode.Decompress);
-                        using MemoryStream decoded = new MemoryStream();
+                        using MemoryStream decoded = new();
                         csStream.CopyTo(decoded);
 
                         contents = decoded.ToArray();
@@ -159,13 +154,8 @@ namespace nksrv.Utils
 
         public static byte[] EncryptData(byte[] message, string authToken)
         {
-            var key = LobbyHandler.GetInfo(authToken);
-            if (key == null)
-            {
-                throw HttpException.BadRequest("Invalid decryption token");
-            }
-
-            MemoryStream m = new MemoryStream();
+            var key = LobbyHandler.GetInfo(authToken) ?? throw HttpException.BadRequest("Invalid decryption token");
+            MemoryStream m = new();
 
             m.WriteByte(89); // cbor ushort
 
@@ -205,13 +195,13 @@ namespace nksrv.Utils
             var additionalData = GenerateAdditionalData(authToken, true);
 
             // prep payload
-            MemoryStream msm = new MemoryStream();
+            MemoryStream msm = new();
             msm.WriteByte(88);
             msm.WriteByte(0);
 
             msm.Write(message);
 
-            var encryptedBytes = SecretAeadXChaCha20Poly1305.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, additionalData.ToArray());
+            var encryptedBytes = SecretAeadXChaCha20Poly1305.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, [.. additionalData]);
 
             // write encrypted data
             m.Write(encryptedBytes);
@@ -293,16 +283,18 @@ namespace nksrv.Utils
         {
             var b = s.ReadByte();
             var type = b & 0x1f;
-            var res = new CBorItem();
-            res.MajorType = (b >> 5) & 7;
+            CBorItem res = new()
+            {
+                MajorType = (b >> 5) & 7
+            };
             switch (type)
             {
                 case 24:
                     // byte
-                    res.ByteValue = new byte[] { (byte)s.ReadByte() };
+                    res.ByteValue = [(byte)s.ReadByte()];
                     res.type = CBorItemType.Byte;
 
-                    res.FullValue = (int)res.ByteValue[0];
+                    res.FullValue = res.ByteValue[0];
                     break;
                 case 25:
                     byte[] arr = new byte[2];
@@ -331,9 +323,7 @@ namespace nksrv.Utils
             while (i != buf.Length)
             {
                 if (i > buf.Length)
-                    throw new ArgumentOutOfRangeException();
-
-                var pos = buf.Length - i;
+                    throw new ArgumentOutOfRangeException(nameof(buf));
                 var read = s.Read(buf, i, buf.Length - i);
                 if (read == 0)
                     break;
@@ -349,13 +339,13 @@ namespace nksrv.Utils
     public class PacketDecryptResponse
     {
         public ulong UserId;
-        public string UsedAuthToken;
-        public byte[] Contents;
+        public string UsedAuthToken = "";
+        public byte[] Contents = [];
     }
     public class CBorItem
     {
         public CBorItemType type;
-        public byte[] ByteValue;
+        public byte[] ByteValue = [];
         public ushort UShortValue;
         public int MajorType;
 
