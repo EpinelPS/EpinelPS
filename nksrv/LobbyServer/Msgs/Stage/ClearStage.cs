@@ -87,19 +87,16 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
         private static void DoQuestSpecificUserOperations(Utils.User user, int clearedStageId)
         {
-            if (clearedStageId == 6000001)
-            {
-                user.SetQuest(2, true);
-            }
-            else if (clearedStageId == 6000002)
-            {
-                user.SetQuest(3, true);
-            }
-            else if (clearedStageId == 6000003)
+            var quest = StaticDataParser.Instance.GetMainQuestForStageClearCondition(clearedStageId);
+            if (quest == null) throw new Exception("quest not found for stage: " + clearedStageId);
+            user.SetQuest(quest.id, true);
+            user.SetQuest(quest.next_main_quest_id, false);
+
+            if (clearedStageId == 6000003)
             {
                 // TODO: Is this the right place to copy over default characters?
                 // TODO: What is CSN and TID? Also need to add names for these
-                // Note: CSN appears to be a character ID, still not sure what TID is
+                // Note: TID is table index, not sure what CSN is
                 user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
                 user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
                 user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
@@ -114,24 +111,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
-
-                user.SetQuest(4, true);
-            }
-            else if (clearedStageId == 6001001)
-            {
-                user.SetQuest(5, true);
-            }
-            else if (clearedStageId == 6001003)
-            {
-                user.SetQuest(6, true);
-            }
-            else if (clearedStageId == 6001004)
-            {
-                user.SetQuest(7, true);
-            }
-            else if (clearedStageId == 6002001)
-            {
-                user.SetQuest(13, true);
             }
         }
         public static int GetChapterForStageId(int stageId)

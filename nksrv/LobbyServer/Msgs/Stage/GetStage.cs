@@ -28,26 +28,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
             WriteData(response);
         }
 
-        public static NetFieldObjectData CreateFieldInfoWithAllStages(int chapter)
-        {
-            var f = new NetFieldObjectData();
-           switch(chapter)
-            {
-                case 1:
-                    f.Stages.Add(new NetFieldStageData() { StageId = 6001001 });
-                    f.Stages.Add(new NetFieldStageData() { StageId = 6001002 });
-                    f.Stages.Add(new NetFieldStageData() { StageId = 6001003 });
-                    f.Stages.Add(new NetFieldStageData() { StageId = 6001004 });
-
-                    // Objects are collected i think
-                    break;
-                default:
-                    Logger.Error("ERROR: CreateFieldInfoWithAllStages: TODO chapter " + chapter);
-                    break;
-            }
-            return f;
-        }
-
         public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter)
         {
             var f = new NetFieldObjectData();

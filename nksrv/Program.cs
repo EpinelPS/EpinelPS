@@ -19,18 +19,30 @@ using System.Net.Sockets;
 using Newtonsoft.Json.Linq;
 using Swan;
 using Google.Api;
+using nksrv.StaticInfo;
 
 namespace nksrv
 {
     internal class Program
     {
-        private static readonly HttpClient AssetDownloader = new();
+        public static readonly HttpClient AssetDownloader = new();
         static async Task Main()
         {
             Logger.UnregisterLogger<ConsoleLogger>();
             Logger.RegisterLogger(new GreatLogger());
+            Logger.Info("Initializing database");
             JsonDb.Save();
+
+            Logger.Info("Load static data");
+            await StaticDataParser.Load();
+
+            Logger.Info("Parse static data");
+            await StaticDataParser.Instance.Parse();
+
+            Logger.Info("Initialize handlers");
             LobbyHandler.Init();
+
+            Logger.Info("Start server");
 
             // Start Webserver
             using var server = CreateWebServer();
@@ -55,7 +67,7 @@ namespace nksrv
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests));
 
             // Listen for state changes.
-            server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
+            //server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
 
             return server;
         }
@@ -137,13 +149,17 @@ namespace nksrv
                 ctx.Response.StatusCode = 404;
             }
         }
+        public static string GetCachePathForPath(string path)
+        {
+            return AppDomain.CurrentDomain.BaseDirectory + "cache" + path;
+        }
         private static async Task HandleAsset(IHttpContext ctx)
         {
-            string targetFile = AppDomain.CurrentDomain.BaseDirectory + "cache" + ctx.RequestedPath;
+            string targetFile = GetCachePathForPath(ctx.Request.RawUrl);
             var targetDir = Path.GetDirectoryName(targetFile);
             if (targetDir == null)
             {
-                Logger.Error($"ERROR: Directory name cannot be null for request " + ctx.RequestedPath + ", file path is " + targetFile);
+                Logger.Error($"ERROR: Directory name cannot be null for request " + ctx.Request.RawUrl + ", file path is " + targetFile);
                 return;
             }
             Directory.CreateDirectory(targetDir);

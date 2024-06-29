@@ -1614,3 +1614,20 @@ message ReqFinMainQuest {
 
 message ResFinMainQuest {
 }
+
+
+enum SimRoomStatus {
+	SimroomStatus_Ready = 0;
+	SimroomStatus_Progress = 1;
+}
+message ReqGetSimRoom {
+
+}
+message ResGetSimRoom {
+	SimRoomStatus status = 1;
+	int32 currentDifficulty = 2;
+	int64 nextRenewAt = 3;
+	//repeated NetSimRoomClearInfo clearInfos = 4;
+	//repeated NetSimRoomEvent events = 5;
+
+}
