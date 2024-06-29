@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.User
 {
-    [PacketPath("/User/SetWallpaper")]
-    public class SetWallpaper : LobbyMsgHandler
+    [PacketPath("/user/setprofileicon")]
+    public class SetProfileIcon : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetWallpaper>();
-            var response = new ResSetWallpaper();
+            var req = await ReadData<ReqSetProfileIcon>();
             var user = GetUser();
-            user.WallpaperList = req.WallpaperList.ToArray();
-
+            user.ProfileIconId = req.Icon;
+            user.ProfileIconIsPrism = req.IsPrism;
+            JsonDb.Save();
+            var response = new ResSetProfileIcon();
             WriteData(response);
         }
     }

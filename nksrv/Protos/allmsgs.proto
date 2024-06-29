@@ -1518,7 +1518,34 @@ message ResGetJupiterMarketingDetail {
 
 
 message NetProfileData {
-	// TODO
+	string desc = 1;
+	int64 lastActionAt = 2;
+	int32 exp = 3;
+	int32 lastCampaignNormalStageId = 4;
+	int32 lastCampaignHardStageId = 5;
+	int32 lastTribeTowerFloor = 6;
+	NetWholeUserData user = 7;
+	/*repeated NetProfileTeamSlot profileTeam = 8;
+	NetSimpleGuildData guild = 9;
+	NetCharacterCount characterCount = 10;
+	repeated NetUserRecycleRoomData recycle = 11;
+	int32 synchroLv = 12;
+	int32 synchroSlotCount = 13;
+	in32 infraCoreLv = 14;
+	int32 lastTacticAcademyClass = 15;
+	int32 lastTacticAcademyLesson = 16;
+	repeated NetMemorialCount memorialCount = 17;
+	int32 jukeboxCount = 18;
+	int32 costumeLv = 19;
+	int32 outpostOpenState = 20;
+	int32 costumeCount = 22;
+	string language = 23;
+	NetProfileFrameHistoryType profileFrameHistory = 24;
+	repeated NetProfileFrameData profileFrames = 25;
+	repeated NetProfileRepresentativeFrame representativeProfileFrames = 26;
+	repeated int32 recentAcquireFilterTypes = 27;
+	int32 simRoomOverclockHighScoreLevel = 28;
+	repeated NetProfileSimRoomOverclockHighScoreData simRoomOverclockHighScoreData = 29;*/
 }
 
 
@@ -1572,4 +1599,18 @@ message ReqSetTeam {
 message ResSetTeam {
 	int32 type = 2;
 	repeated NetTeamData teams = 3;
+}
+
+message ReqSetProfileIcon {
+	int32 icon = 2;
+	bool isPrism = 3;
+}
+message ResSetProfileIcon {
+}
+
+message ReqFinMainQuest {
+	int32 tid = 2;
+}
+
+message ResFinMainQuest {
 }

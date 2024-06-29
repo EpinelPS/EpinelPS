@@ -34,6 +34,8 @@ namespace nksrv.Utils
                 var oldFG = Console.ForegroundColor;
                 Console.ForegroundColor = newFG;
                 Console.WriteLine(msg);
+                if (logEvent.Exception != null)
+                    Console.WriteLine(logEvent.Exception);
                 Console.ForegroundColor = oldFG;
             }
 

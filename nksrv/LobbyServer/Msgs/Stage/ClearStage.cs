@@ -31,30 +31,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     user.FieldInfo.Add(0, new FieldInfo() { });
                 }
 
+                DoQuestSpecificUserOperations(user, req.StageId);
+
                 // TODO: figure out how stageid corresponds to chapter
                 user.FieldInfo[GetChapterForStageId(req.StageId)].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
 
-                if (req.StageId == 6000003)
-                {
-                    // TODO: Is this the right place to copy over default characters?
-                    // TODO: What is CSN and TID? Also need to add names for these
-                    // Note: CSN appears to be a character ID, still not sure what TID is
-                    user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
-                    user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
-                    user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
-                    user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
-                    user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
 
-                    user.TeamData.TeamNumber = 1;
-                    user.TeamData.TeamCombat = 1446; // TODO: Don't hardcode this
-                    user.TeamData.Slots.Clear();
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Lvl = 1 });
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 2, Csn = 47273456, Tid = 330501, Lvl = 1 });
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
-                    user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
-                }
 
                 // assign rewards
                 if (StageCompletionReward.RewardData.ContainsKey(req.StageId))
@@ -102,6 +85,55 @@ namespace nksrv.LobbyServer.Msgs.Stage
             WriteData(response);
         }
 
+        private static void DoQuestSpecificUserOperations(Utils.User user, int clearedStageId)
+        {
+            if (clearedStageId == 6000001)
+            {
+                user.SetQuest(2, true);
+            }
+            else if (clearedStageId == 6000002)
+            {
+                user.SetQuest(3, true);
+            }
+            else if (clearedStageId == 6000003)
+            {
+                // TODO: Is this the right place to copy over default characters?
+                // TODO: What is CSN and TID? Also need to add names for these
+                // Note: CSN appears to be a character ID, still not sure what TID is
+                user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
+                user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
+
+                user.TeamData.TeamNumber = 1;
+                user.TeamData.TeamCombat = 1446; // TODO: Don't hardcode this
+                user.TeamData.Slots.Clear();
+                user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Lvl = 1 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 2, Csn = 47273456, Tid = 330501, Lvl = 1 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
+                user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
+
+                user.SetQuest(4, true);
+            }
+            else if (clearedStageId == 6001001)
+            {
+                user.SetQuest(5, true);
+            }
+            else if (clearedStageId == 6001003)
+            {
+                user.SetQuest(6, true);
+            }
+            else if (clearedStageId == 6001004)
+            {
+                user.SetQuest(7, true);
+            }
+            else if (clearedStageId == 6002001)
+            {
+                user.SetQuest(13, true);
+            }
+        }
         public static int GetChapterForStageId(int stageId)
         {
             if (6000001 <= stageId && stageId <= 6000003)

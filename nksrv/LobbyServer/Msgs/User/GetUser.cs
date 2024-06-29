@@ -24,7 +24,8 @@ namespace nksrv.LobbyServer.Msgs.User
             response.User.CommanderRoomJukebox = 5;
             response.User.CostumeLv = 1;
             response.User.Frame = 1;
-            response.User.Icon = 39900;
+            response.User.Icon = user.ProfileIconId;
+            response.User.IconPrism = user.ProfileIconIsPrism;
             response.User.LobbyJukebox = 2;
             response.ResetHour = 20;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };

@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
             var req = await ReadData<ReqSetTutorial>();
             var user = GetUser();
             if (!user.ClearedTutorials.Contains(req.LastClearedTid))
-            user.ClearedTutorials.Add(req.LastClearedTid);
+                user.ClearedTutorials.Add(req.LastClearedTid);
             JsonDb.Save();
 
             var response = new ResSetTutorial();

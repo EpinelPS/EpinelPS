@@ -24,6 +24,18 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
+            if (user.LastStageCleared >= 6000003)
+            {
+                var team = new NetTeamData() { TeamNumber = 1 };
+                team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
+                team.Slots.Add(new NetTeamSlot() { Slot = 2, Value = 47263456 });
+                team.Slots.Add(new NetTeamSlot() { Slot = 3, Value = 47263457 });
+                team.Slots.Add(new NetTeamSlot() { Slot = 4, Value = 47263458 });
+                team.Slots.Add(new NetTeamSlot() { Slot = 5, Value = 47263459 });
+                response.Team.Teams.Add(team);
+
+                response.TeamPositions.Add(new NetCampaignTeamPosition() { TeamNumber = 1, Type = 1, Position = new NetVector3() { } });
+            }
 
             string resultingJson;
             if (!user.MapJson.ContainsKey(req.MapId))
@@ -38,13 +50,13 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             response.Json = resultingJson;
 
-           
+
             WriteData(response);
         }
 
         public static int GetChapterFromMapId(string mapId)
         {
-            switch(mapId)
+            switch (mapId)
             {
                 case "fcbg_cityforest_000":
                     return 0;

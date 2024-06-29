@@ -1,4 +1,5 @@
 ﻿using nksrv.Utils;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,21 @@ namespace nksrv.LobbyServer.Msgs.User
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetProfileData>();
-
+            var user = GetUser();
             var response = new ResGetProfileData();
-
-            Console.WriteLine(req.TargetUsn);
             response.Data = new NetProfileData();
+            Console.WriteLine("GET USER PROFILE NOT IMPLEMENTED: " + req.TargetUsn);
+            if (user.ID == (ulong)req.TargetUsn)
+            {
+                response.Data.User = new NetWholeUserData();
+                response.Data.User.Icon = user.ProfileIconId;
+                response.Data.User.IconPrism = user.ProfileIconIsPrism;
+            }
+            else
+            {
+                Logger.Warn("Unknown User ID: " + req.TargetUsn);
+            }
+         
             WriteData(response);
         }
     }

@@ -12,9 +12,10 @@ namespace nksrv.LobbyServer.Msgs.Mission
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ResGetAchievementRewardedData>();
+            var req = await ReadData<ReqGetAchievementRewardedData>();
 
-            var response = new ReqGetAchievementRewardedData();
+            var response = new ResGetAchievementRewardedData();
+
             // TODO
             WriteData(response);
         }

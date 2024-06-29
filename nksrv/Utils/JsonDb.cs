@@ -35,7 +35,13 @@ namespace nksrv.Utils
         public int Skill2Lvl = 1;
         public int Grade = 0;
     }
-    
+    public class MainQuestData
+    {
+        public int TableId = 0;
+        public bool IsReceieved = false;
+    }
+
+
     public class User
     {
         // User info
@@ -46,6 +52,8 @@ namespace nksrv.Utils
         public long RegisterTime;
         public int LastStageCleared;
         public string Nickname = "SomePLayer";
+        public int ProfileIconId = 39900;
+        public bool ProfileIconIsPrism = false;
 
 
         // Game data
@@ -60,6 +68,29 @@ namespace nksrv.Utils
         public List<Character> Characters = [];
         public NetWholeUserTeamData TeamData = new();
         public List<int> ClearedTutorials = [];
+        public NetWallpaperData[] WallpaperList = [];
+        public Dictionary<int, bool> MainQuestData = new()
+        {
+            {1, false }
+        };
+
+        public void SetQuest(int tid, bool recieved)
+        {
+            if (MainQuestData.ContainsKey(tid))
+            {
+                MainQuestData[tid] = recieved;
+                return;
+            }
+            else
+            {
+                MainQuestData.Add(tid, recieved);
+            }
+        }
+
+        public void RmQuest(int tid)
+        {
+            MainQuestData.Remove(tid);
+        }
     }
     public class CoreInfo
     {

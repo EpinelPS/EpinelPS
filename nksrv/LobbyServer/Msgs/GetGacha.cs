@@ -16,7 +16,6 @@ namespace nksrv.LobbyServer.Msgs
             var req = ReadData<ReqGetGachaData>();
 
             var response = new ResGetGachaData();
-
             WriteData(response);
         }
     }
