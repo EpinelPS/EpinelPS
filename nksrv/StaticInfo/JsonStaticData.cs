@@ -16,4 +16,11 @@ namespace nksrv.StaticInfo
         public int reward_id = 0;
         public int target_chapter_id;
     }
+    public class CampaignStageRecord
+    {
+        public int id;
+        public int chapter_id;
+        public string stage_category = "";
+        public int reward_id = 0;
+    }
 }

@@ -24,6 +24,9 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             if (req.BattleResult == 1)
             {
+                var clearedStage = StaticDataParser.Instance.GetStageData(req.StageId);
+                if (clearedStage == null) throw new Exception("cleared stage cannot be null");
+
                 user.LastStageCleared = req.StageId;
 
                 if (user.FieldInfo.Count == 0)
@@ -34,7 +37,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 DoQuestSpecificUserOperations(user, req.StageId);
 
                 // TODO: figure out how stageid corresponds to chapter
-                user.FieldInfo[GetChapterForStageId(req.StageId)].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
+                user.FieldInfo[clearedStage.chapter_id - 1].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
 
 
@@ -110,22 +113,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Lvl = 1 });
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Lvl = 1 });
                 user.TeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Lvl = 1 });
-            }
-        }
-        public static int GetChapterForStageId(int stageId)
-        {
-            if (6000001 <= stageId && stageId <= 6000003)
-            {
-                return 0;
-            }
-            else if (6001001 <= stageId && stageId <= 6001004)
-            {
-                return 1;
-            }
-            else
-            {
-                Logger.Error("Unknown stage id: " + stageId);
-                return 100;
             }
         }
     }

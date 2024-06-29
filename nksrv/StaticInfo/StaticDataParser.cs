@@ -43,6 +43,7 @@ namespace nksrv.StaticInfo
         private MemoryStream ZipStream;
         private JArray questDataRecords;
         private JArray stageDataRecords;
+        private JArray rewardDataRecords;
 
         public StaticDataParser(string filePath)
         {
@@ -200,23 +201,32 @@ namespace nksrv.StaticInfo
         {
             var mainQuestData = MainZip.GetEntry("MainQuestTable.json");
             var campaignStageData = MainZip.GetEntry("CampaignStageTable.json");
+            var rewardDataEntry = MainZip.GetEntry("RewardTable.json");
+            
 
             if (mainQuestData == null) throw new Exception("MainQuestTable.json does not exist in static data");
             if (campaignStageData == null) throw new Exception("CampaignStageTable.json does not exist in static data");
+            if (rewardDataEntry == null) throw new Exception("RewardTable.json does not exist in static data");
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
 
-            using StreamReader campaignStageDataReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
+            using StreamReader campaignStageDataReader = new StreamReader(MainZip.GetInputStream(campaignStageData));
             var campaignStageDataString = await campaignStageDataReader.ReadToEndAsync();
+
+            using StreamReader rewardDataReader = new StreamReader(MainZip.GetInputStream(rewardDataEntry));
+            var rewardJsonString = await rewardDataReader.ReadToEndAsync();
 
             var questdata = JObject.Parse(mainQuestDataString);
             var stagedata = JObject.Parse(campaignStageDataString);
+            var rewardData = JObject.Parse(rewardJsonString);
 
             questDataRecords = (JArray?)questdata["records"];
             stageDataRecords = (JArray?)stagedata["records"];
+            rewardDataRecords = (JArray?)rewardData["records"];
             if (questDataRecords == null) throw new Exception("MainQuestTable.json does not contain records array");
             if (stageDataRecords == null) throw new Exception("CampaignStageTable.json does not contain records array");
+            if (rewardDataRecords == null) throw new Exception("CampaignChapterTable.json does not contain records array");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -249,6 +259,24 @@ namespace nksrv.StaticInfo
                 {
                     MainQuestCompletionData? data = JsonConvert.DeserializeObject<MainQuestCompletionData>(item.ToString());
                     if (data == null) throw new Exception("failed to deserialize main quest data item");
+                    return data;
+                }
+            }
+
+            return null;
+        }
+        public CampaignStageRecord? GetStageData(int stage)
+        {
+            foreach (JObject item in stageDataRecords)
+            {
+                var id = item["id"];
+                if (id == null) throw new Exception("expected id field in campaign data");
+
+                int value = id.ToObject<int>();
+                if (value == stage)
+                {
+                    CampaignStageRecord? data = JsonConvert.DeserializeObject<CampaignStageRecord>(item.ToString());
+                    if (data == null) throw new Exception("failed to deserialize stage data");
                     return data;
                 }
             }

@@ -1,0 +1,26 @@
+﻿using nksrv.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace nksrv.LobbyServer.Msgs.Gacha
+{
+    [PacketPath("/gacha/event/check")]
+    public class CheckGachaDailyEvent : LobbyMsgHandler
+    {
+        protected override async Task HandleAsync()
+        {
+            var req = ReadData<ReqCheckDailyFreeGacha>();
+
+            var response = new ResCheckDailyFreeGacha();
+
+            // TODO implement
+            response.FreeCount = 1000;
+            response.EventData = new NetEventData() { Id = 1 };
+
+            WriteData(response);
+        }
+    }
+}

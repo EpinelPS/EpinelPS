@@ -1631,3 +1631,36 @@ message ResGetSimRoom {
 	//repeated NetSimRoomEvent events = 5;
 
 }
+
+message ReqCheckDailyFreeGacha {
+	int32 gachaId = 1;
+}
+
+message ResCheckDailyFreeGacha {
+	NetEventData eventData = 1;
+	int32 freeCount = 2;
+}
+
+message ReqExecuteGacha {
+	int32 tid = 2;
+	int32 currencyType = 3;
+	int32 count = 4;
+	bool isDiscount = 5;
+}
+
+message NetGachaEntityData {
+	int32 tid = 1;
+	int32 sn = 2;
+	int32 type = 3;
+	int32 corporation = 4;
+	int32 pieceCount = 5;
+	int32 currencyValue = 6;
+}
+
+message ResExecuteGacha {
+	repeated NetGachaEntityData gacha = 2;
+	repeated NetUserCurrencyData currencies = 3;
+	repeated NetUserCharacterDefaultData characters = 6;
+	repeated NetUserItemData items = 5;
+	NetRewardData reward = 9;
+}
