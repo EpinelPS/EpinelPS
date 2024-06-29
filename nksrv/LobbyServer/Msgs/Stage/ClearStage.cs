@@ -91,8 +91,8 @@ namespace nksrv.LobbyServer.Msgs.Stage
         private static void DoQuestSpecificUserOperations(Utils.User user, int clearedStageId)
         {
             var quest = StaticDataParser.Instance.GetMainQuestForStageClearCondition(clearedStageId);
-            if (quest == null) throw new Exception("quest not found for stage: " + clearedStageId);
-            user.SetQuest(quest.id, true);
+            if (quest != null)
+                user.SetQuest(quest.id, true);
 
             if (clearedStageId == 6000003)
             {
