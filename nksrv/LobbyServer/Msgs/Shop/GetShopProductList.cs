@@ -5,17 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace nksrv.LobbyServer.Msgs.User
+namespace nksrv.LobbyServer.Msgs.Shop
 {
-    [PacketPath("/User/GetProfileFrame")]
-    public class GetProfileFrame : LobbyMsgHandler
+    [PacketPath("/shop/productlist")]
+    public class GetShopProductList : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetProfileFrame>();
-            var response = new ResGetProfileFrame();
-
-           
+            var req = await ReadData<ReqShopProductList>();
+            var response = new ResShopProductList();
+          
             WriteData(response);
         }
     }

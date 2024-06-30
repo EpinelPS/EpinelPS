@@ -16,6 +16,9 @@ namespace nksrv.LobbyServer.Msgs.Gacha
 
             var response = new ResExecuteGacha();
 
+            // TODO: Pick random character that player does not have unless it supports limit break.
+            // TODO: Write character to user info.
+
             // TODO implement
             response.Reward = new NetRewardData();
             for (int i = 0; i < 10; i++)

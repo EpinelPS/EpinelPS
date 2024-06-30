@@ -27,7 +27,8 @@ NOTE: Make sure to undo these modifications (especially change back sodium.dll) 
 After doing the following steps, you can register an account in the launcher (enter anything into email verification code section), and play like normal.
 
 ## Progress
-Stage, character, and story information is saved, as well as player nickname. Lobby UI kind of works. Nothing else works though, such as rewards.
+Stage, character, and story information is saved and works, as well as player nickname.
+TODO: Gacha system, reward system, xp system, sim room, outpost, etc
 
 TODO: Provide screenshots
 

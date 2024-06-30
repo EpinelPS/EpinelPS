@@ -19,14 +19,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             var user = GetUser();
 
-            response.User = new NetUserData();
-            response.User.Lv = 1;
-            response.User.CommanderRoomJukebox = 5;
-            response.User.CostumeLv = 1;
-            response.User.Frame = 1;
-            response.User.Icon = user.ProfileIconId;
-            response.User.IconPrism = user.ProfileIconIsPrism;
-            response.User.LobbyJukebox = 2;
+            response.User = LobbyHandler.CreateNetUserDataFromUser(user);
             response.ResetHour = 20;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
             response.IsSimple = req.IsSimple;
@@ -35,9 +28,9 @@ namespace nksrv.LobbyServer.Msgs.User
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
-            response.RepresentationTeam = user.TeamData;
+            response.RepresentationTeam = user.RepresentationTeamData;
 
-            response.LastClearedNormalMainStageId = user.LastStageCleared;
+            response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
             foreach (var item in user.ClearedTutorials)

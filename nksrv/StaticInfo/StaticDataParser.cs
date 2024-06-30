@@ -44,7 +44,7 @@ namespace nksrv.StaticInfo
         private JArray questDataRecords;
         private JArray stageDataRecords;
         private JArray rewardDataRecords;
-
+        private JArray userExpDataRecords;
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
@@ -202,11 +202,13 @@ namespace nksrv.StaticInfo
             var mainQuestData = MainZip.GetEntry("MainQuestTable.json");
             var campaignStageData = MainZip.GetEntry("CampaignStageTable.json");
             var rewardDataEntry = MainZip.GetEntry("RewardTable.json");
-            
+            var userExpTable = MainZip.GetEntry("UserExpTable.json");
+
 
             if (mainQuestData == null) throw new Exception("MainQuestTable.json does not exist in static data");
             if (campaignStageData == null) throw new Exception("CampaignStageTable.json does not exist in static data");
             if (rewardDataEntry == null) throw new Exception("RewardTable.json does not exist in static data");
+            if (userExpTable == null) throw new Exception("UserExpTable.json does not exist in static data");
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
@@ -217,16 +219,23 @@ namespace nksrv.StaticInfo
             using StreamReader rewardDataReader = new StreamReader(MainZip.GetInputStream(rewardDataEntry));
             var rewardJsonString = await rewardDataReader.ReadToEndAsync();
 
+            using StreamReader userExpTableReader = new StreamReader(MainZip.GetInputStream(userExpTable));
+            var userExpTableString = await userExpTableReader.ReadToEndAsync();
+
             var questdata = JObject.Parse(mainQuestDataString);
             var stagedata = JObject.Parse(campaignStageDataString);
             var rewardData = JObject.Parse(rewardJsonString);
+            var userExpTableData = JObject.Parse(userExpTableString);
 
             questDataRecords = (JArray?)questdata["records"];
             stageDataRecords = (JArray?)stagedata["records"];
             rewardDataRecords = (JArray?)rewardData["records"];
+            userExpDataRecords = (JArray?)userExpTableData["records"];
+
             if (questDataRecords == null) throw new Exception("MainQuestTable.json does not contain records array");
             if (stageDataRecords == null) throw new Exception("CampaignStageTable.json does not contain records array");
             if (rewardDataRecords == null) throw new Exception("CampaignChapterTable.json does not contain records array");
+            if (userExpDataRecords == null) throw new Exception("UserExpTable.json does not contain records array");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -282,6 +291,56 @@ namespace nksrv.StaticInfo
             }
 
             return null;
+        }
+
+        public RewardTableRecord? GetRewardTableEntry(int rewardId)
+        {
+            foreach (JObject item in rewardDataRecords)
+            {
+                var id = item["id"];
+                if (id == null) throw new Exception("expected id field in reward data");
+
+                int value = id.ToObject<int>();
+                if (value == rewardId)
+                {
+                    RewardTableRecord? data = JsonConvert.DeserializeObject<RewardTableRecord>(item.ToString());
+                    if (data == null) throw new Exception("failed to deserialize reward data");
+                    return data;
+                }
+            }
+
+            return null;
+        }
+
+        public int GetUserLevelFromUserExp(int targetExp)
+        {
+            int prevLevel = 0;
+            int prevValue = 0;
+            for (int i = 0; i < userExpDataRecords.Count; i++)
+            {
+                var item = userExpDataRecords[i];
+
+                var level = item["level"];
+                if (level == null) throw new Exception("expected level field in user exp table data");
+
+                int levelValue = level.ToObject<int>();
+
+                var exp = item["exp"];
+                if (exp == null) throw new Exception("expected exp field in user exp table data");
+
+                int expValue = exp.ToObject<int>();
+                
+                if (prevValue < targetExp)
+                {
+                    prevLevel = levelValue;
+                    prevValue = expValue;
+                }
+                else
+                {
+                    return prevLevel;
+                }
+            }
+            return -1;
         }
     }
 }

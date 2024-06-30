@@ -57,7 +57,6 @@ namespace nksrv.Utils
                     var x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
 
                     var ms = new MemoryStream(x);
-                   // File.WriteAllBytes("fullPkt-decr", ms.ToArray());
 
                     var unkVal1 = ms.ReadByte();
                     var unkVal2 = ms.ReadByte();
@@ -65,7 +64,6 @@ namespace nksrv.Utils
 
 
                     var startPos = (int)ms.Position;
-                    //Console.WriteLine("seg #: " + seqNum + ",actual:" + bytes.Length + "cntlen:" + ctx.Request.ContentLength64);
 
                     var contents = x.Skip(startPos).ToArray();
                     if (contents.Length != 0 && contents[0] == 31)

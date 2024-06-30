@@ -3,6 +3,7 @@ using EmbedIO;
 using Google.Protobuf;
 using nksrv.Utils;
 using Swan.Logging;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace nksrv.LobbyServer
 {
@@ -104,6 +105,47 @@ namespace nksrv.LobbyServer
         public static void Init()
         {
             // By calling this function, we force .NET to initialize handler dictanary to catch errors early on.
+        }
+
+        public static NetUserData CreateNetUserDataFromUser(User user)
+        {
+            NetUserData ret = new()
+            {
+                Lv = 1,
+                CommanderRoomJukebox = 5,
+                CostumeLv = 1,
+                Frame = 1,
+                Icon = user.ProfileIconId,
+                IconPrism = user.ProfileIconIsPrism,
+                LobbyJukebox = 2,
+                InfraCoreExp = user.InfraCoreExp,
+                InfraCoreLv = user.InfraCoreLvl,
+            };
+
+
+            // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
+            foreach (var item in user.ClearedTutorials)
+            {
+                var groupId = int.Parse(item.ToString().Substring(0, 4));
+                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO: Read from static data
+                ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
+            }
+
+            return ret;
+        }
+        public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
+        {
+            var ret = new NetWholeUserData()
+            {
+                Lv = 1,
+                Frame = 1,
+                Icon = user.ProfileIconId,
+                IconPrism = user.ProfileIconIsPrism,
+                Nickname = user.Nickname,
+                Usn = (long)user.ID
+            };
+
+            return ret;
         }
     }
 

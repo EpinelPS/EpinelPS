@@ -41,6 +41,12 @@ namespace nksrv.Utils
         public bool IsReceieved = false;
     }
 
+    public class UserPointData
+    {
+        public int UserLevel = 1;
+        public int ExperiencePoint = 0;
+    }
+
 
     public class User
     {
@@ -50,11 +56,11 @@ namespace nksrv.Utils
         public string PlayerName = "";
         public ulong ID;
         public long RegisterTime;
-        public int LastStageCleared;
-        public string Nickname = "SomePLayer";
+        public int LastNormalStageCleared;
+        public int LastHardStageCleared;
+        public string Nickname = "SomePlayer";
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
-
 
         // Game data
         public List<string> CompletedScenarios = [];
@@ -62,17 +68,21 @@ namespace nksrv.Utils
         public Dictionary<string, string> MapJson = [];
         public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 },
-            { CurrencyType.CharPremiumTicket, 23422 }
+            { CurrencyType.CharPremiumTicket, 999999 }
         };
 
         public List<Character> Characters = [];
-        public NetWholeUserTeamData TeamData = new();
+        public NetWholeUserTeamData RepresentationTeamData = new();
         public List<int> ClearedTutorials = [];
         public NetWallpaperData[] WallpaperList = [];
+        public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
         public Dictionary<int, bool> MainQuestData = new()
         {
             {1, false }
         };
+        public int InfraCoreExp = 0;
+        public int InfraCoreLvl = 1;
+        public UserPointData userPointData = new();
 
         public void SetQuest(int tid, bool recieved)
         {
@@ -85,11 +95,6 @@ namespace nksrv.Utils
             {
                 MainQuestData.Add(tid, recieved);
             }
-        }
-
-        public void RmQuest(int tid)
-        {
-            MainQuestData.Remove(tid);
         }
     }
     public class CoreInfo

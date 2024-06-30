@@ -20,9 +20,7 @@ namespace nksrv.LobbyServer.Msgs.User
             Console.WriteLine("GET USER PROFILE NOT IMPLEMENTED: " + req.TargetUsn);
             if (user.ID == (ulong)req.TargetUsn)
             {
-                response.Data.User = new NetWholeUserData();
-                response.Data.User.Icon = user.ProfileIconId;
-                response.Data.User.IconPrism = user.ProfileIconIsPrism;
+                response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
             }
             else
             {

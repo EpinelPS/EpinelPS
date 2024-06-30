@@ -23,4 +23,23 @@ namespace nksrv.StaticInfo
         public string stage_category = "";
         public int reward_id = 0;
     }
+    public class RewardTableRecord
+    {
+        public int id;
+        public int user_exp;
+        public int character_exp;
+        public RewardEntry[]? rewards;
+    }
+    public class RewardEntry
+    {
+        /// <summary>
+        /// example: 1000000
+        /// </summary>
+        public int reward_percent;
+        public string percent_display_type = "";
+        public string reward_type = "";
+        public int reward_id;
+        public int reward_value;
+    }
+    
 }

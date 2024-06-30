@@ -18,31 +18,25 @@ namespace nksrv.LobbyServer.Msgs.User
             // NOTE: Keep this in sync with GetUser code
 
             var response = new ResEnterLobbyServer();
-            response.User = new NetUserData();
-            response.User.Lv = 1;
-            response.User.CommanderRoomJukebox = 5;
-            response.User.CostumeLv = 1;
-            response.User.Frame = 1;
-            response.User.Icon = user.ProfileIconId;
-            response.User.IconPrism = user.ProfileIconIsPrism;
-            response.User.LobbyJukebox = 2;
+            response.User = LobbyHandler.CreateNetUserDataFromUser(user);
             response.ResetHour = 20;
             response.Nickname = user.Nickname;
             response.SynchroLv = 1;
             response.OutpostBattleLevel = new NetOutpostBattleLevel() { Level = 1 };
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
 
-            if (user.TeamData.Slots.Count == 0)
+            // Add default slot data
+            if (user.RepresentationTeamData.Slots.Count == 0)
             {
-                user.TeamData = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2 };
-                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });
-                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 2 });
-                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
-                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
-                user.TeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
+                user.RepresentationTeamData = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2 };
+                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });
+                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 2 });
+                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
+                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
+                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
                 JsonDb.Save();
             }
-            response.RepresentationTeam = user.TeamData;
+            response.RepresentationTeam = user.RepresentationTeamData;
 
             foreach (var item in user.Currency)
             {
@@ -53,24 +47,11 @@ namespace nksrv.LobbyServer.Msgs.User
                 response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
             }
 
+            // Add squad data if there are characters
             if (user.Characters.Count > 0)
             {
-                var team1 = new NetUserTeamData();
-                team1.Type = 1;
-                team1.LastContentsTeamNumber = 1;
-
-                var team1Sub = new NetTeamData();
-                team1Sub.TeamNumber = 1;
-
-                // TODO: Save this properly. Right now return first 5 characters as a squad.
-                for (int i = 1; i < 6; i++)
-                {
-                    var character = user.Characters[i - 1];
-                    team1Sub.Slots.Add(new NetTeamSlot() { Slot = i, Value = character.Csn });
-                }
-                team1.Teams.Add(team1Sub);
-
-                response.TypeTeams.Add(team1);
+                foreach (var teamInfo in user.UserTeams)
+                    response.TypeTeams.Add(teamInfo.Value);
             }
 
             // TODO: Save outpost data
@@ -86,15 +67,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.Outposts.Add(new NetUserOutpostData() { SlotId = 10, BuildingId = 23501, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
             response.Outposts.Add(new NetUserOutpostData() { SlotId = 38, BuildingId = 33601, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
 
-            response.LastClearedNormalMainStageId = user.LastStageCleared;
-
-            // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-            foreach (var item in user.ClearedTutorials)
-            {
-                var groupId = int.Parse(item.ToString().Substring(0, 4));
-                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO
-                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
-            }
+            response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
             WriteData(response);
         }

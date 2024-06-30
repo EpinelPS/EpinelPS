@@ -1664,3 +1664,12 @@ message ResExecuteGacha {
 	repeated NetUserItemData items = 5;
 	NetRewardData reward = 9;
 }
+
+message NetShopProductData  {
+
+}
+
+message ReqShopProductList{}
+message ResShopProductList {
+	repeated NetShopProductData shops = 2;
+}

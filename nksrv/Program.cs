@@ -33,18 +33,17 @@ namespace nksrv
             Logger.Info("Initializing database");
             JsonDb.Save();
 
-            Logger.Info("Load static data");
+            Logger.Info("Loading static data");
             await StaticDataParser.Load();
 
-            Logger.Info("Parse static data");
+            Logger.Info("Parsing static data");
             await StaticDataParser.Instance.Parse();
 
             Logger.Info("Initialize handlers");
             LobbyHandler.Init();
 
-            Logger.Info("Start server");
+            Logger.Info("Starting server");
 
-            // Start Webserver
             using var server = CreateWebServer();
             await server.RunAsync();
         }

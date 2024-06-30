@@ -24,7 +24,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
-            if (user.LastStageCleared >= 6000003)
+            if (user.LastNormalStageCleared >= 6000003)
             {
                 var team = new NetTeamData() { TeamNumber = 1 };
                 team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
