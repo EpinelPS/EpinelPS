@@ -83,6 +83,10 @@ namespace nksrv.Utils
         public int InfraCoreExp = 0;
         public int InfraCoreLvl = 1;
         public UserPointData userPointData = new();
+        public DateTime LastLogin = DateTime.UtcNow;
+        public DateTime BattleTime = DateTime.UtcNow;
+
+        public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
 
         public void SetQuest(int tid, bool recieved)
         {

@@ -1673,3 +1673,82 @@ message ReqShopProductList{}
 message ResShopProductList {
 	repeated NetShopProductData shops = 2;
 }
+
+enum NetJukeboxLocation {
+	NetJukeboxLocation_CommanderRoom = 0;
+	NetJukeboxLocation_Lobby = 1;
+}
+
+enum NetJukeboxBgmType {
+	NetJukeboxBgmType_JukeboxTableId = 0;
+	NetJukeboxBgmType_JukeboxPlaylist = 1;
+	NetJukeboxBgmType_JukeboxFavorite = 2;
+}
+
+message NetJukeboxPlaylistSong {
+	int32 order = 1;
+	int32 jukeboxTableId = 2;
+}
+
+message NetJukeboxPlaylist {
+	int64 jukeboxPlaylistUid = 1;
+	string title = 2;
+	repeated NetJukeboxPlaylistSong songs = 3;
+}
+
+message NetJukeboxFavorite {
+	repeated NetJukeboxPlaylistSong songs = 1;
+}
+
+message NetJukeboxBgm {
+	NetJukeboxLocation location = 1;
+	NetJukeboxBgmType type = 2;
+	oneof jukeboxBgm {
+		int32 JukeboxTableId = 3;
+		NetJukeboxPlaylist JukeboxPlaylist = 4;
+		NetJukeboxFavorite JukeboxFavorite = 5;
+    }
+	bool IsShuffle = 6;
+}
+
+message NetUserJukeboxData {
+	int32 selectTid = 1;
+	repeated int32 list = 2;
+}
+message NetUserJukeboxDataV2 {
+	NetJukeboxBgm commandBgm = 1;
+	repeated int32 jukeboxTableIds = 2;
+}
+
+message ReqGetOutpostData {}
+message ResGetOutpostData {
+	int32 skinGroupId = 2;
+	repeated NetUserOutpostData data = 3;
+	int64 battleTime = 4;
+	int64 maxBattleTime = 5;
+	repeated int32 conditionTriggerTidList = 6;
+	repeated int32 dispatchClearCountList = 7;
+	NetUserJukeboxData jukebox = 8;
+	repeated NetTimeReward timeRewardBuffs = 9;
+	NetOutpostBattleLevel outpostBattleLevel = 10;
+	bool isDispatchRefreshed = 11;
+	NetOutpostBattleTime outpostBattleTime = 12;
+	NetUserJukeboxDataV2 commanderBgm = 13;
+}
+
+
+message ReqCheckReceiveInfraCoreReward {}
+message ResCheckReceiveInfraCoreReward {
+	bool isReceived = 2;
+}
+
+message ReqShowOutpostBattleReward {}
+message ResShowOutpostBattleReward {
+	int64 battleTime = 1;
+	int64 maxBattleTime = 2;
+	int32 fastBattleCount = 3;
+	NetRewardData reward = 5;
+	repeated NetTimeReward timeRewardBuffs = 6;
+	NetOutpostBattleLevel outpostBattleLevel = 7;
+	NetOutpostBattleTime outpostBattleTime = 8;
+}

@@ -77,7 +77,8 @@ namespace nksrv.LobbyServer.Msgs.Stage
             {
                 if (item.reward_id != 0)
                 {
-                    if (item.reward_type == "Currency")
+                    if (string.IsNullOrEmpty(item.reward_type)) { }
+                    else if (item.reward_type == "Currency")
                     {
                         Dictionary<CurrencyType, int> current = new Dictionary<CurrencyType, int>();
 

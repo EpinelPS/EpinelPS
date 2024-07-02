@@ -15,6 +15,9 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqEnterLobbyServer>();
             var user = GetUser();
 
+            var battleTime = DateTime.UtcNow - user.BattleTime;
+            var battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
+
             // NOTE: Keep this in sync with GetUser code
 
             var response = new ResEnterLobbyServer();
@@ -22,8 +25,8 @@ namespace nksrv.LobbyServer.Msgs.User
             response.ResetHour = 20;
             response.Nickname = user.Nickname;
             response.SynchroLv = 1;
-            response.OutpostBattleLevel = new NetOutpostBattleLevel() { Level = 1 };
-            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000 };
+            response.OutpostBattleLevel = user.OutpostBattleLevel;
+            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
 
             // Add default slot data
             if (user.RepresentationTeamData.Slots.Count == 0)

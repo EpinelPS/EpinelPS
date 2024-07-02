@@ -45,6 +45,7 @@ namespace nksrv.StaticInfo
         private JArray stageDataRecords;
         private JArray rewardDataRecords;
         private JArray userExpDataRecords;
+        private JArray chapterCampaignData;
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
@@ -203,12 +204,13 @@ namespace nksrv.StaticInfo
             var campaignStageData = MainZip.GetEntry("CampaignStageTable.json");
             var rewardDataEntry = MainZip.GetEntry("RewardTable.json");
             var userExpTable = MainZip.GetEntry("UserExpTable.json");
-
+            var chapterCampaignEntry = MainZip.GetEntry("CampaignChapterTable.json");
 
             if (mainQuestData == null) throw new Exception("MainQuestTable.json does not exist in static data");
             if (campaignStageData == null) throw new Exception("CampaignStageTable.json does not exist in static data");
             if (rewardDataEntry == null) throw new Exception("RewardTable.json does not exist in static data");
             if (userExpTable == null) throw new Exception("UserExpTable.json does not exist in static data");
+            if (chapterCampaignEntry == null) throw new Exception("CampaignChapterTable.json does not exist in static data");
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
@@ -222,20 +224,26 @@ namespace nksrv.StaticInfo
             using StreamReader userExpTableReader = new StreamReader(MainZip.GetInputStream(userExpTable));
             var userExpTableString = await userExpTableReader.ReadToEndAsync();
 
+            using StreamReader chapterCampaignReader = new StreamReader(MainZip.GetInputStream(chapterCampaignEntry));
+            var chapterCampaignString = await chapterCampaignReader.ReadToEndAsync();
+
             var questdata = JObject.Parse(mainQuestDataString);
             var stagedata = JObject.Parse(campaignStageDataString);
             var rewardData = JObject.Parse(rewardJsonString);
             var userExpTableData = JObject.Parse(userExpTableString);
+            var chapterCampaignData = JObject.Parse(chapterCampaignString);
 
             questDataRecords = (JArray?)questdata["records"];
             stageDataRecords = (JArray?)stagedata["records"];
             rewardDataRecords = (JArray?)rewardData["records"];
             userExpDataRecords = (JArray?)userExpTableData["records"];
+            this.chapterCampaignData = (JArray?)chapterCampaignData["records"];
 
             if (questDataRecords == null) throw new Exception("MainQuestTable.json does not contain records array");
             if (stageDataRecords == null) throw new Exception("CampaignStageTable.json does not contain records array");
-            if (rewardDataRecords == null) throw new Exception("CampaignChapterTable.json does not contain records array");
+            if (rewardDataRecords == null) throw new Exception("RewardTable.json does not contain records array");
             if (userExpDataRecords == null) throw new Exception("UserExpTable.json does not contain records array");
+            if (this.chapterCampaignData == null) throw new Exception("CampaignChapterTable.json does not contain records array");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -292,7 +300,6 @@ namespace nksrv.StaticInfo
 
             return null;
         }
-
         public RewardTableRecord? GetRewardTableEntry(int rewardId)
         {
             foreach (JObject item in rewardDataRecords)
@@ -311,7 +318,6 @@ namespace nksrv.StaticInfo
 
             return null;
         }
-
         public int GetUserLevelFromUserExp(int targetExp)
         {
             int prevLevel = 0;
@@ -340,6 +346,31 @@ namespace nksrv.StaticInfo
                     return prevLevel;
                 }
             }
+            return -1;
+        }
+        public int GetNormalChapterNumberFromFieldName(string field)
+        {
+            foreach (JObject item in chapterCampaignData)
+            {
+                var id = item["field_id"];
+                if (id == null)
+                {
+                    throw new Exception("expected id field in reward data");
+                }
+
+                string value = id.ToObject<string>();
+                if (value == field)
+                {
+                    var chapter = item["chapter"];
+                    if (chapter == null)
+                    {
+                        throw new Exception("expected id field in reward data");
+                    }
+
+                    return chapter.ToObject<int>();
+                }
+            }
+
             return -1;
         }
     }
