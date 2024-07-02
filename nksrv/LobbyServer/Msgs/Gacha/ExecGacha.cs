@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace nksrv.LobbyServer.Msgs.Gacha
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqExecuteGacha>();
+            var user = GetUser();
 
             var response = new ResExecuteGacha();
 
@@ -21,12 +23,16 @@ namespace nksrv.LobbyServer.Msgs.Gacha
 
             // TODO implement
             response.Reward = new NetRewardData();
-            for (int i = 0; i < 10; i++)
+            foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
             {
-                response.Gacha.Add(new NetGachaEntityData() { Corporation = 0, PieceCount = 1, CurrencyValue = 5, Sn = 130201, Tid = 2500601, Type = 1 });
+                response.Gacha.Add(new NetGachaEntityData() { Corporation = 0, PieceCount = 1, CurrencyValue = 5, Sn = 130201, Tid = c, Type = 1 });
+
+                user.Characters.Add(new Utils.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl= 1, Tid = c, UltimateLevel = 1 });
+
               //  response.Characters.Add(new NetUserCharacterDefaultData() { Lv = 1, Skill1Lv = 1, Grade = 0, Csn = 1, Tid = 130201 });
 
             }
+            JsonDb.Save();
            
 
             WriteData(response);

@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,12 @@ namespace nksrv.LobbyServer.Msgs.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetCharacterCostumeData>();
+            var req = await ReadData<ReqGetCharacterCostumeData>();
 
             var response = new ResGetCharacterCostumeData();
 
-            // TODO implement
+            // return all
+            response.CostumeIds.AddRange(StaticDataParser.Instance.GetAllCostumes());
 
             WriteData(response);
         }

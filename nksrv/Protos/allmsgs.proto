@@ -1752,3 +1752,9 @@ message ResShowOutpostBattleReward {
 	NetOutpostBattleLevel outpostBattleLevel = 7;
 	NetOutpostBattleTime outpostBattleTime = 8;
 }
+
+message ReqSetCharacterCostume {
+	int64 csn = 2;
+	int32 costumeId = 3;
+}
+message ResSetCharacterCostume {}

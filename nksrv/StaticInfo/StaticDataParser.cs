@@ -46,6 +46,8 @@ namespace nksrv.StaticInfo
         private JArray rewardDataRecords;
         private JArray userExpDataRecords;
         private JArray chapterCampaignData;
+        private JArray characterCostumeTable;
+        private JArray characterTable;
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
@@ -198,52 +200,33 @@ namespace nksrv.StaticInfo
             Instance = new(targetFile);
         }
         #endregion
-        public async Task Parse()
-        {
-            var mainQuestData = MainZip.GetEntry("MainQuestTable.json");
-            var campaignStageData = MainZip.GetEntry("CampaignStageTable.json");
-            var rewardDataEntry = MainZip.GetEntry("RewardTable.json");
-            var userExpTable = MainZip.GetEntry("UserExpTable.json");
-            var chapterCampaignEntry = MainZip.GetEntry("CampaignChapterTable.json");
 
-            if (mainQuestData == null) throw new Exception("MainQuestTable.json does not exist in static data");
-            if (campaignStageData == null) throw new Exception("CampaignStageTable.json does not exist in static data");
-            if (rewardDataEntry == null) throw new Exception("RewardTable.json does not exist in static data");
-            if (userExpTable == null) throw new Exception("UserExpTable.json does not exist in static data");
-            if (chapterCampaignEntry == null) throw new Exception("CampaignChapterTable.json does not exist in static data");
+        private async Task<JArray> LoadZip(string entry)
+        {
+            var mainQuestData = MainZip.GetEntry(entry);
+            if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
 
-            using StreamReader campaignStageDataReader = new StreamReader(MainZip.GetInputStream(campaignStageData));
-            var campaignStageDataString = await campaignStageDataReader.ReadToEndAsync();
-
-            using StreamReader rewardDataReader = new StreamReader(MainZip.GetInputStream(rewardDataEntry));
-            var rewardJsonString = await rewardDataReader.ReadToEndAsync();
-
-            using StreamReader userExpTableReader = new StreamReader(MainZip.GetInputStream(userExpTable));
-            var userExpTableString = await userExpTableReader.ReadToEndAsync();
-
-            using StreamReader chapterCampaignReader = new StreamReader(MainZip.GetInputStream(chapterCampaignEntry));
-            var chapterCampaignString = await chapterCampaignReader.ReadToEndAsync();
 
             var questdata = JObject.Parse(mainQuestDataString);
-            var stagedata = JObject.Parse(campaignStageDataString);
-            var rewardData = JObject.Parse(rewardJsonString);
-            var userExpTableData = JObject.Parse(userExpTableString);
-            var chapterCampaignData = JObject.Parse(chapterCampaignString);
+            if (questdata == null) throw new Exception("failed to parse " + entry);
 
-            questDataRecords = (JArray?)questdata["records"];
-            stageDataRecords = (JArray?)stagedata["records"];
-            rewardDataRecords = (JArray?)rewardData["records"];
-            userExpDataRecords = (JArray?)userExpTableData["records"];
-            this.chapterCampaignData = (JArray?)chapterCampaignData["records"];
+            var records = (JArray?)questdata["records"];
+            if (records == null ) throw new Exception(entry + " is missing records element");
 
-            if (questDataRecords == null) throw new Exception("MainQuestTable.json does not contain records array");
-            if (stageDataRecords == null) throw new Exception("CampaignStageTable.json does not contain records array");
-            if (rewardDataRecords == null) throw new Exception("RewardTable.json does not contain records array");
-            if (userExpDataRecords == null) throw new Exception("UserExpTable.json does not contain records array");
-            if (this.chapterCampaignData == null) throw new Exception("CampaignChapterTable.json does not contain records array");
+            return records;
+        }
+        public async Task Parse()
+        {
+            questDataRecords = await LoadZip("MainQuestTable.json");
+            stageDataRecords = await LoadZip("CampaignStageTable.json");
+            rewardDataRecords = await LoadZip("RewardTable.json");
+            userExpDataRecords = await LoadZip("UserExpTable.json");
+            chapterCampaignData = await LoadZip("CampaignChapterTable.json");
+            characterCostumeTable = await LoadZip("CharacterCostumeTable.json");
+            characterTable = await LoadZip("CharacterTable.json");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -335,7 +318,7 @@ namespace nksrv.StaticInfo
                 if (exp == null) throw new Exception("expected exp field in user exp table data");
 
                 int expValue = exp.ToObject<int>();
-                
+
                 if (prevValue < targetExp)
                 {
                     prevLevel = levelValue;
@@ -372,6 +355,29 @@ namespace nksrv.StaticInfo
             }
 
             return -1;
+        }
+
+        public IEnumerable<int> GetAllCharacterTids()
+        {
+            foreach (JObject item in characterTable)
+            {
+                var id = item["id"];
+                if (id == null) throw new Exception("expected id field in reward data");
+
+                int value = id.ToObject<int>();
+                yield return value;
+            }
+        }
+        public IEnumerable<int> GetAllCostumes()
+        {
+            foreach (JObject item in characterCostumeTable)
+            {
+                var id = item["id"];
+                if (id == null) throw new Exception("expected id field in reward data");
+
+                int value = id.ToObject<int>();
+                yield return value;
+            }
         }
     }
 }
