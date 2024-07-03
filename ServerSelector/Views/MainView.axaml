@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ServerSelector.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="170"
+             x:Class="ServerSelector.Views.MainView"
+             x:DataType="vm:MainViewModel"
+			 >
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+	<StackPanel>
+		<WrapPanel Margin="5">
+			<TextBlock VerticalAlignment="Center" Margin="5">Game path: </TextBlock>
+			<TextBox x:Name="txtGamePath">C:\NIKKE\NIKKE\game</TextBox>
+		</WrapPanel>
+
+		<WrapPanel Margin="5">
+			<TextBlock VerticalAlignment="Center" Margin="5">Launcher path: </TextBlock>
+			<TextBox x:Name="txtLauncherPath">C:\NIKKE\Launcher</TextBox>
+		</WrapPanel>
+
+
+		<WrapPanel Margin="5">
+			<TextBlock VerticalAlignment="Center" Margin="5">Server: </TextBlock>
+
+			<ComboBox SelectedIndex="0" x:Name="CmbServerSelection">
+				<ComboBox.Items>
+					<ComboBoxItem>Official</ComboBoxItem>
+					<ComboBoxItem>Local</ComboBoxItem>
+				</ComboBox.Items>
+			</ComboBox>
+		</WrapPanel>
+
+		<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click">Save</Button>
+	
+	</StackPanel>
+</UserControl>

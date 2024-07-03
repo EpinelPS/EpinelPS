@@ -49,7 +49,7 @@ namespace nksrv
         }
         private static WebServer CreateWebServer()
         {
-            var cert = new X509Certificate2(new X509Certificate(@"C:\Users\Misha\nkcert\site.pfx"));
+            var cert = new X509Certificate2(new X509Certificate(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx"));
 
             var server = new WebServer(o => o
                     .WithUrlPrefixes("https://*:443", "http://*:80")
