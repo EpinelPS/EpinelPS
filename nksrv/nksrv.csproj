@@ -24,4 +24,10 @@
 	<ItemGroup>
 		<Protobuf Include="Protos\*.*" GrpcServices="Server" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="site.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
