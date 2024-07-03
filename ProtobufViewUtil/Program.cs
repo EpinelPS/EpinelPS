@@ -10,9 +10,12 @@ namespace ProtobufViewUtil
         {
             Console.WriteLine("Hello, World!");
 
-            ResGetMainQuestData s = new ResGetMainQuestData();
-            var inn = File.ReadAllBytes(@"C:\Users\Misha\Downloads\getmainquestdata-ch1complete2");
+            StaticDataPackResponse s = new StaticDataPackResponse();
+            var inn = File.ReadAllBytes(@"C:\Users\Misha\Downloads\staticdatanew");
             s.MergeFrom(inn);
+            Console.WriteLine("salt1: " + Convert.ToBase64String(s.Salt1.ToArray()));
+            Console.WriteLine("salt2: " + Convert.ToBase64String(s.Salt2.ToArray()));
+            Console.WriteLine("sha: " + Convert.ToBase64String(s.Sha256Sum.ToArray()));
             Console.WriteLine(s.ToString());
             var outt = s.ToByteArray();
             

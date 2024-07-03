@@ -142,7 +142,9 @@ namespace nksrv.LobbyServer
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
                 Nickname = user.Nickname,
-                Usn = (long)user.ID
+                Usn = (long)user.ID,
+                LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                
             };
 
             return ret;

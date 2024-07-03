@@ -21,6 +21,7 @@ namespace nksrv.LobbyServer.Msgs.User
             if (user.ID == (ulong)req.TargetUsn)
             {
                 response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
+                response.Data.LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             }
             else
             {

@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var req = await ReadData<ResourceHostRequest>();
 
             var r = new ResourceHostResponse();
-            r.BaseUrl = "https://cloud.nikke-kr.com/prdenv/121-b0630db21d/{Platform}";
+            r.BaseUrl = "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}";
             
             WriteData(r);
         }

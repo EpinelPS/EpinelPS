@@ -219,8 +219,8 @@ namespace nksrv
   ""Config"": [
     {
       ""VersionRange"": {
-        ""From"": ""121.8.9"",
-        ""To"": ""121.10.2"",
+        ""From"": ""122.8.19"",
+        ""To"": ""122.8.20"",
         ""PackageName"": ""com.proximabeta.nikke""
       },
       ""Route"": [
@@ -263,8 +263,8 @@ namespace nksrv
     },
     {
       ""VersionRange"": {
-        ""From"": ""121.8.9"",
-        ""To"": ""121.10.2"",
+        ""From"": ""121.8.19"",
+        ""To"": ""122.8.20"",
         ""PackageName"": ""com.gamamobi.nikke""
       },
       ""Route"": [

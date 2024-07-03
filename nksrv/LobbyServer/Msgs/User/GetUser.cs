@@ -40,6 +40,8 @@ namespace nksrv.LobbyServer.Msgs.User
                 int tutorialVersion = item == 1020101 ? 1 : 0; // TODO
                 response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
             }
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 8989001, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 8989001, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
             WriteData(response);
         }
     }

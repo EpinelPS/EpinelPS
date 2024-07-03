@@ -222,6 +222,8 @@ message ResGetUserData {
 	int32 resetHour = 35;
 	bool isSimple = 36;
 	NetOutpostBattleTime outpostBattleTime = 37;
+	NetJukeboxBgm lobbyJukeboxBgm = 38;
+	NetJukeboxBgm commanderRoomJukeboxBgm = 39;
 }
 
 message ReqGetContentsOpenData {
@@ -457,6 +459,8 @@ message ResEnterLobbyServer {
 	repeated NetEquipmentAwakening awakening = 37;
 	repeated NetUserRedeemData redeems = 38;
 	NetOutpostBattleTime outpostBattleTime = 39;
+	NetJukeboxBgm lobbyJukeboxBgm = 40;
+	NetJukeboxBgm commanderRoomJukeboxBgm = 41;
 }
 
 message ReqGetMainQuestData {
@@ -1758,3 +1762,42 @@ message ReqSetCharacterCostume {
 	int32 costumeId = 3;
 }
 message ResSetCharacterCostume {}
+
+message NetUserTitle {
+	int32 userTitleId = 1;
+	bool isNew = 2;
+}
+
+message ReqGetUserTitleList {}
+message ResGetUserTitleList{
+	repeated NetUserTitle userTitleList = 1;
+}
+
+message ReqGetUserTitleCounterList{}
+message ResGetUserTitleCounterList{
+	int32 condition = 1;
+	int32 subCondition = 2;
+	int32 count = 3;
+}
+
+message ReqProfileCardDecorationLayout {
+	int64 targetUsn = 1;
+}
+
+message StickerPlacement {
+	int32 stickerId = 1;
+	int32 layer = 2;
+	float normalizedX = 3;
+	float normalizedY = 4;
+	float rotationRadian = 5;
+	float scale = 6;
+}
+
+message ProfileCardDecorationLayout {
+	bool showCharacterSpine = 1;
+	int32 backgroundId = 2;
+	repeated StickerPlacement stickerPlacements = 3;
+}
+message ResProfileCardDecorationLayout {
+	ProfileCardDecorationLayout layout = 1;
+}

@@ -21,12 +21,12 @@ namespace nksrv.StaticInfo
     public class StaticDataParser
     {
         // Extracted from staticinfo api call
-        public const string StaticDataUrl = "https://cloud.nikke-kr.com/prdenv/121-c5e64b1a1b/staticdata/data/qa-240620-05b-p1/307748/StaticData.pack";
-        public const string Version = "data/qa-240620-05b-p1/307748";
-        public const int Size = 11575712;
-        public static byte[] Sha256Sum = Convert.FromBase64String("PBcDa3PoHR2MJQ+4Xc3/FUSgkqx2gY25MBJ0ih9FMsM=");
-        public static byte[] Salt1 = Convert.FromBase64String("WqyrQ8MGtzwHN3AGPkqVKyjdfWZjBJXw9K7nGblv/SA=");
-        public static byte[] Salt2 = Convert.FromBase64String("6Gf2jEvAX2mt5OWIxIU5uDdbjKtIc+VgTjKKSLuYnsI=");
+        public const string StaticDataUrl = "https://cloud.nikke-kr.com/prdenv/122-c8cee37754/staticdata/data/qa-240704-07b/311489/StaticData.pack";
+        public const string Version = "data/qa-240704-07b/311489";
+        public const int Size = 11799600;
+        public static byte[] Sha256Sum = Convert.FromBase64String("IkQKRnt2ue9ET5HCJo4JTK8M6XIi86iLGwl7thZFNMs=");
+        public static byte[] Salt1 = Convert.FromBase64String("O5IyNKavbnmnEVqj2CZDLyORctcGFgYKx839PudpDNo=");
+        public static byte[] Salt2 = Convert.FromBase64String("/870A4CG4n3gAGnHNRS4zdo3wBry8CISud+41MVA8sA=");
 
         // These fields were extracted from the game.
         public static byte[] PresharedKey = [0xCB, 0xC2, 0x1C, 0x6F, 0xF3, 0xF5, 0x07, 0xF5, 0x05, 0xBA, 0xCA, 0xD4, 0x98, 0x28, 0x84, 0x1F, 0xF0, 0xD1, 0x38, 0xC7, 0x61, 0xDF, 0xD6, 0xE6, 0x64, 0x9A, 0x85, 0x13, 0x3E, 0x1A, 0x6A, 0x0C, 0x68, 0x0E, 0x2B, 0xC4, 0xDF, 0x72, 0xF8, 0xC6, 0x55, 0xE4, 0x7B, 0x14, 0x36, 0x18, 0x3B, 0xA7, 0xD1, 0x20, 0x81, 0x22, 0xD1, 0xA9, 0x18, 0x84, 0x65, 0x13, 0x0B, 0xED, 0xA3, 0x00, 0xE5, 0xD9];
@@ -113,6 +113,10 @@ namespace nksrv.StaticInfo
 
             ZipStream = new MemoryStream();
             AesCtrTransform(decryptionKey2, iv2, dataMs, ZipStream);
+
+            File.WriteAllBytes("decryptednew.zip", ZipStream.ToArray());
+            ZipStream.Position = 0;
+
             MainZip = new ZipFile(ZipStream, false);
         }
 
