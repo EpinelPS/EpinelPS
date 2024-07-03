@@ -27,10 +27,10 @@ After that, add the following to your C:\Windows\System32\hosts or /etc/hosts fi
 
 Run generate_ssl_cert.sh in WSL or linux to generate SSL certificates. Make sure to trust myCA.pfx. Append the following (with your CA cert pem that you generated) to Launcher/intl_service/cacert.pem and NIKKE/game/nikke_Data/Plugins/cacert.pem
 
-Good SSL CA
+```Good SSL CA
 ===============================
 <ca cert>
-
+```
 As Nikke encrypts packet data, you also need to replace C:\NIKKE\NIKKE\game\nikke_Data\Plugins\x86_64\sodium.dll from the one you built.
 
 NOTE: Make sure to undo these modifications (especially change back sodium.dll) to play on the offical servers. 
