@@ -15,10 +15,10 @@ Stage, character, and story information is saved and works, as well as player ni
 TODO: reward system (works but does not show in UI), xp system, sim room, outpost, etc
 TODO: Create a launcher replacement
 
-![image (2) (Custom)](https://github.com/MishaProductions/nikke-server/assets/106913236/75330e0d-ddb5-4d29-b7dd-ab6662306494)
-![image](https://github.com/MishaProductions/nikke-server/assets/106913236/15b5ea93-bcd1-44b7-81b9-a10d053b7af8)
-![image](https://github.com/MishaProductions/nikke-server/assets/106913236/70ab4668-70b8-4e2c-bf1b-c84974f5e8ee)
-![image](https://github.com/MishaProductions/nikke-server/assets/106913236/c6a89fd4-9568-48c2-b4f9-d73807d4043e)
+<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/75330e0d-ddb5-4d29-b7dd-ab6662306494" width="480" height="270">
+<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/15b5ea93-bcd1-44b7-81b9-a10d053b7af8" width="480" height="270">
+<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/70ab4668-70b8-4e2c-bf1b-c84974f5e8ee" width="480" height="270">
+<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/c6a89fd4-9568-48c2-b4f9-d73807d4043e" width="480" height="270">
 
 
 ## Contributing
