@@ -34,12 +34,19 @@ namespace ServerSelector
                 var txt = File.ReadAllText(hostsFilePath);
 
                 // remove stuff
+                try
+                {
 
-                int startIdx = txt.IndexOf("127.0.0.1 cloud.nikke-kr.com");
-                int endIdx = txt.IndexOf("y.io") + 3;
-                txt = txt.Substring(0, startIdx) + txt.Substring(endIdx);
+                    int startIdx = txt.IndexOf("127.0.0.1 cloud.nikke-kr.com");
+                    int endIdx = txt.IndexOf("y.io") + 3;
+                    txt = txt.Substring(0, startIdx) + txt.Substring(endIdx);
 
-                File.WriteAllText(hostsFilePath, txt);
+                    File.WriteAllText(hostsFilePath, txt);
+                }
+                catch
+                {
+
+                }
 
 
                 // remove cert
@@ -54,6 +61,12 @@ namespace ServerSelector
                     throw new Exception("sodium backup does not exist");
                 }
                 File.Copy(sodiumBackup, gameSodium, true);
+
+                var certList1 = File.ReadAllText(launcherCertList);
+                File.WriteAllText(launcherCertList, certList1.Substring(0, certList1.IndexOf("Good SSL Ca")));
+
+                var certList2 = File.ReadAllText(gameCertList);
+                File.WriteAllText(gameCertList, certList2.Substring(0, certList2.IndexOf("Good SSL Ca")));
             }
             else
             {
