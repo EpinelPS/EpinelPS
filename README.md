@@ -7,7 +7,7 @@ Download the latest release/GitHub actions build, and run ServerSelector.Desktop
 You should be able to register an new account in the launcher (you can enter any email verification code).
 
 If the game does not get past the title screen, open an issue and send %appdata%\..\LocalLow\com.proximabeta\NIKKE\player.log file.
-![image](https://github.com/MishaProductions/nikke-server/assets/106913236/b01194ef-aec5-4de9-b982-1253757655f8)
+<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/b01194ef-aec5-4de9-b982-1253757655f8" width="192" height="108">
 
 
 ## Progress
