@@ -6,6 +6,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IncludeHttpRuleProtos>true</IncludeHttpRuleProtos>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
 	</PropertyGroup>
 
 	<ItemGroup>
