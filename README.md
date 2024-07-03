@@ -2,6 +2,13 @@
 Private/local server for Nikke. NOTE: This project is in a very early state.
 
 ## Usage
+Download the latest release/GitHub actions build, and run ServerSelector.Desktop.exe as administrator (to modify DNS hosts file and install a CA cert). Make sure to close the game and launcher first. Select Local server, and then click save.
+
+You should be able to register an new account in the launcher (you can enter any email verification code).
+
+If the game does not get past the title screen, open an issue and send %appdata%\..\LocalLow\com.proximabeta\NIKKE\player.log file.
+
+## Manual installation
 First, build and run nksrv project. Next, open libsodium-1.0.18-RELEASE/libsodium.sln and build that as well. Ignore the failed tests as the encryption public key was hardcoded.
 
 After that, add the following to your C:\Windows\System32\hosts or /etc/hosts file to use the local server:
