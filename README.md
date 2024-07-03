@@ -8,6 +8,25 @@ You should be able to register an new account in the launcher (you can enter any
 
 If the game does not get past the title screen, open an issue and send %appdata%\..\LocalLow\com.proximabeta\NIKKE\player.log file.
 
+## Progress
+Stage, character, and story information is saved and works, as well as player nickname.
+TODO: Gacha system, reward system (works but does not show in UI), xp system, sim room, outpost, etc
+TODO: Create a custom launcher that allows switching between offical/local server easily.
+
+TODO: Provide screenshots
+
+
+## Contributing
+Server code structure:
+
+nksrv/LobbyServer: Handles save data.
+
+nksrv/IntlServer: Provides Launcher APIs and authentication
+
+nksrv/Protos: Google protobuf definition files
+
+DataFixupUtil: Utility to parse packets from server/client
+
 ## Manual installation
 First, build and run nksrv project. Next, open libsodium-1.0.18-RELEASE/libsodium.sln and build that as well. Ignore the failed tests as the encryption public key was hardcoded.
 
@@ -37,22 +56,3 @@ As Nikke encrypts packet data, you also need to replace C:\NIKKE\NIKKE\game\nikk
 NOTE: Make sure to undo these modifications (especially change back sodium.dll) to play on the offical servers. 
 
 After doing the following steps, you can register an account in the launcher (enter anything into email verification code section), and play like normal.
-
-## Progress
-Stage, character, and story information is saved and works, as well as player nickname.
-TODO: Gacha system, reward system (works but does not show in UI), xp system, sim room, outpost, etc
-TODO: Create a custom launcher that allows switching between offical/local server easily.
-
-TODO: Provide screenshots
-
-
-## Contributing
-Server code structure:
-
-nksrv/LobbyServer: Handles save data.
-
-nksrv/IntlServer: Provides Launcher APIs and authentication
-
-nksrv/Protos: Google protobuf definition files
-
-DataFixupUtil: Utility to parse packets from server/client
