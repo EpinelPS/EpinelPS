@@ -1,5 +1,5 @@
 # nikke-server
-Private/local server for Nikke.
+Private/local server for Nikke. NOTE: This project is in a very early state.
 
 ## Usage
 First, build and run nksrv project. Next, open libsodium-1.0.18-RELEASE/libsodium.sln and build that as well. Ignore the failed tests as the encryption public key was hardcoded.
@@ -32,7 +32,8 @@ After doing the following steps, you can register an account in the launcher (en
 
 ## Progress
 Stage, character, and story information is saved and works, as well as player nickname.
-TODO: Gacha system, reward system, xp system, sim room, outpost, etc
+TODO: Gacha system, reward system (works but does not show in UI), xp system, sim room, outpost, etc
+TODO: Create a custom launcher that allows switching between offical/local server easily.
 
 TODO: Provide screenshots
 
@@ -41,6 +42,9 @@ TODO: Provide screenshots
 Server code structure:
 
 nksrv/LobbyServer: Handles save data.
+
 nksrv/IntlServer: Provides Launcher APIs and authentication
+
 nksrv/Protos: Google protobuf definition files
+
 DataFixupUtil: Utility to parse packets from server/client
