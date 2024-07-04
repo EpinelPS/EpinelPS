@@ -19,4 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ServerSelector\ServerSelector.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="sodium.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
