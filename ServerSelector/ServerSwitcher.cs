@@ -76,6 +76,7 @@ namespace ServerSelector
 127.0.0.1 aws-na-dr.intlgame.com
 127.0.0.1 sg-vas.intlgame.com
 127.0.0.1 aws-na.intlgame.com
+127.0.0.1 na-community.playerinfinite.com
 127.0.0.1 common-web.intlgame.com
 127.0.0.1 li-sg.intlgame.com
 127.0.0.1 data-aws-na.intlgame.com

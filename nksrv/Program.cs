@@ -63,13 +63,37 @@ namespace nksrv
                 .WithModule(new ActionModule("/account/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithModule(new ActionModule("/data/", HttpVerbs.Any, HandleDataEndpoint))
                 .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
-                .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests));
+                .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
+                .WithModule(new ActionModule("/nikke_launcher", HttpVerbs.Any, HandleLauncherUI));
 
             // Listen for state changes.
             //server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
 
             return server;
         }
+
+        private static async Task HandleLauncherUI(IHttpContext ctx)
+        {
+            await ctx.SendStringAsync(@"<!DOCTYPE html>
+<html>
+<head>
+<title>Private Nikke Server Launcher</title>
+<style>
+* {
+color:white;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+</style>
+</head>
+<body>
+<h1>What's new in Nikke Private Server<h1>
+<p>This is the inital release, only story mode works except that you can't collect items and a few other things don't work.</p>
+<p>In order to level up characters, you manually have to edit db.json</p>
+</body>
+</html>
+", "text/html", Encoding.UTF8);
+        }
+
         private static async Task HandleBatchRequests(IHttpContext ctx)
         {
             var theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
