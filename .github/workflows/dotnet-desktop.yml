@@ -44,7 +44,7 @@ jobs:
       run: dotnet publish nksrv
 
     - name: prepare publish directory
-      run: md ${GITHUB_WORKSPACE}/out/ && xcopy ${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\ ${GITHUB_WORKSPACE}\out\ && xcopy ${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\ ${GITHUB_WORKSPACE}\out\
+      run: md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish" "${GITHUB_WORKSPACE}\out" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
   
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
