@@ -452,3 +452,7 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Allow pregenerated ssl cert
+!nksrv/site.pfx
+!ServerSelector/myCA.pfx

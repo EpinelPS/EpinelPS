@@ -47,5 +47,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: MSIX Package
-        path: ${GITHUB_WORKSPACE}/out/
+        name: Server and Server selector
+        path: ${{ github.workspace }}/out/
