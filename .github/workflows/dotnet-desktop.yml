@@ -42,7 +42,7 @@ jobs:
       run: dotnet publish nksrv
 
     - name: Copy to output
-      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy "${{ github.workspace }}\nksrv\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\"
+      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy "${{ github.workspace }}\nksrv\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\"  && xcopy "${{ github.workspace }}\ServerSelector.Desktop\sodium.dll" "${{ github.workspace }}\out\sodium.dll"
   
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
