@@ -14,7 +14,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
         {
             var req = await ReadData<ReqGetJupiterMarketingDetail>();
             var response = new ResGetJupiterMarketingDetail();
-            response.MarketingDetail = "Do Not Buy Our Junk Today";
+            response.MarketingDetail = "{}";
 
             WriteData(response);
         }
