@@ -13,9 +13,12 @@ namespace nksrv.LobbyServer.Msgs
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetGachaData>();
+            var req = await ReadData<ReqGetGachaData>();
+            var user = GetUser();
 
             var response = new ResGetGachaData();
+            if (user.GachaTutorialPlayCount > 0)
+                response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
             WriteData(response);
         }
     }

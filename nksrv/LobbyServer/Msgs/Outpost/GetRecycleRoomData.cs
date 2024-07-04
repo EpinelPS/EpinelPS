@@ -7,7 +7,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetRecycleRoomData>();
+            var req = await ReadData<ReqGetRecycleRoomData>();
 
             // TODO: save these things
             var response = new ResGetRecycleRoomData();

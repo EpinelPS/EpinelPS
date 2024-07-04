@@ -27,8 +27,8 @@ namespace nksrv.LobbyServer.Msgs.User
             response.SynchroLv = 1;
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 10, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 10, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
 
             // Add default slot data
             if (user.RepresentationTeamData.Slots.Count == 0)
@@ -51,6 +51,11 @@ namespace nksrv.LobbyServer.Msgs.User
             {
                 response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
             }
+            foreach (var item in user.Items)
+            {
+                response.Items.Add(new NetUserItemData() { Count = 1, Tid = item.ItemType});
+            }
+
 
             // Add squad data if there are characters
             if (user.Characters.Count > 0)

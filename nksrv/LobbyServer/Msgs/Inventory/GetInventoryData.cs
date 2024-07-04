@@ -12,9 +12,14 @@ namespace nksrv.LobbyServer.Msgs.Inventory
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetInventoryData>();
+            var req = await ReadData<ReqGetInventoryData>();
+            var user = GetUser();
 
             var response = new ResGetInventoryData();
+            foreach (var item in user.Items)
+            {
+                response.Items.Add(new NetUserItemData() { Tid = item.ItemType, Count = 1 });
+            }
 
             // TODO implement
 
