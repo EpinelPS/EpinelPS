@@ -1520,6 +1520,56 @@ message ResGetJupiterMarketingDetail {
 	string marketingDetail = 1;
 }
 
+message NetProfileTeamSlot {
+	NetUserCharacterDefaultData Default = 1;
+	repeated NetUserItemData Eqquipment = 2;
+	NetUserItemData Artifact = 3;
+	bool IsSynchro = 4;
+	int32 AttractiveLv = 5;
+	int32 Slot = 6;
+	repeated NetEquipmentAwakening Awakenings = 7;
+	NetUserFavoriteItemData FavoriteItem = 8;
+}
+
+message NetSimpleGuildData {
+	int64 gsn = 1;
+	string Name = 2;
+	int32 Emblem = 3;
+	int32 Grade = 4;
+	int32 ActivityPoint = 5;
+	int32 MemberCount = 6;
+	int32 ActivityPointDaily = 7;
+	int32 ActivityPointRecent = 8;
+	bool IsBot = 9;
+	int32 UnionRaidTier = 10;
+	int32 UnionRaidTierNumber = 11;
+}
+
+message NetCharacterCount {
+	int32 CorporationType = 1;
+	int32 Count = 2;
+}
+
+message NetMemorialCount {
+	int32 MemorialSeriesId = 1;
+	int32 Count = 2;
+}
+
+enum NetProfileFrameHistoryType {
+	NetProfileFrameHistoryType_RecentAcquire = 0;
+	NetProfileFrameHistoryType_Representative = 1;
+}
+
+message NetProfileRepresentativeFrame {
+	int32 Slot = 1;
+	int32 FrameTableId = 2;
+}
+
+message NetProfileSimRoomOverclockHighScoreData {
+	int32 Season = 1;
+	repeated int32 OptionList = 2;
+	int32 OptionLevel = 3;
+}
 
 message NetProfileData {
 	string desc = 1;
@@ -1529,13 +1579,13 @@ message NetProfileData {
 	int32 lastCampaignHardStageId = 5;
 	int32 lastTribeTowerFloor = 6;
 	NetWholeUserData user = 7;
-	/*repeated NetProfileTeamSlot profileTeam = 8;
+	repeated NetProfileTeamSlot profileTeam = 8;
 	NetSimpleGuildData guild = 9;
 	NetCharacterCount characterCount = 10;
 	repeated NetUserRecycleRoomData recycle = 11;
 	int32 synchroLv = 12;
 	int32 synchroSlotCount = 13;
-	in32 infraCoreLv = 14;
+	int32 infraCoreLv = 14;
 	int32 lastTacticAcademyClass = 15;
 	int32 lastTacticAcademyLesson = 16;
 	repeated NetMemorialCount memorialCount = 17;
@@ -1549,7 +1599,7 @@ message NetProfileData {
 	repeated NetProfileRepresentativeFrame representativeProfileFrames = 26;
 	repeated int32 recentAcquireFilterTypes = 27;
 	int32 simRoomOverclockHighScoreLevel = 28;
-	repeated NetProfileSimRoomOverclockHighScoreData simRoomOverclockHighScoreData = 29;*/
+	repeated NetProfileSimRoomOverclockHighScoreData simRoomOverclockHighScoreData = 29;
 }
 
 
@@ -1800,4 +1850,9 @@ message ProfileCardDecorationLayout {
 }
 message ResProfileCardDecorationLayout {
 	ProfileCardDecorationLayout layout = 1;
+}
+
+message ReqGetWallpaperInventory {}
+message ResGetWallpaperInventory {
+	repeated int32 livewallpaperIds = 2;
 }
