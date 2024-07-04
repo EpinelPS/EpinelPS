@@ -1,4 +1,4 @@
-name: .NET Core Desktop
+name: Build and publish server
 
 on:
   push:
@@ -24,29 +24,27 @@ jobs:
         fetch-depth: 0
 
     # Install the .NET Core workload
-    - name: Install .NET Core
+    - name: Install .NET 8
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
+    - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
+    - name: Restore packages
       run: dotnet restore
       
-    - name: Publish Server Selector
+    - name: Publish Server Selector GUI
       run: dotnet publish ServerSelector.Desktop
 
-    - name: Publish nksrv
+    - name: Publish Server
       run: dotnet publish nksrv
 
-    - name: prepare publish directory
-      run: md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish" "${GITHUB_WORKSPACE}\out" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
+    - name: Copy to output
+      run: md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
   
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
