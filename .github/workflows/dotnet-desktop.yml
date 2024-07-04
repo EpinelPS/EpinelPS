@@ -1,10 +1,9 @@
 name: Build and publish server
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
 
@@ -43,10 +42,10 @@ jobs:
       run: dotnet publish nksrv
 
     - name: Copy to output
-      run: md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
+      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy "${{ github.workspace }}\nksrv\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\"
   
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: MSIX Package
-        path: ${GITHUB_WORKSPACE}/out/
+        name: Server and Server selector
+        path: ${{ github.workspace }}/out/
