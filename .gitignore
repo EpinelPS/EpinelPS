@@ -456,3 +456,4 @@ $RECYCLE.BIN/
 # Allow pregenerated ssl cert
 !nksrv/site.pfx
 !ServerSelector/myCA.pfx
+!ServerSelector/sodium.dll

@@ -19,19 +19,24 @@ namespace nksrv.LobbyServer.Msgs.Gacha
             var response = new ResExecuteGacha();
 
             // TODO: Pick random character that player does not have unless it supports limit break.
-            // TODO: Write character to user info.
 
-            // TODO implement
+            // TODO implement reward
             response.Reward = new NetRewardData();
-            foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
+
+            if (user.GachaTutorialPlayCount == 0)
             {
-                response.Gacha.Add(new NetGachaEntityData() { Corporation = 0, PieceCount = 1, CurrencyValue = 5, Sn = 130201, Tid = c, Type = 1 });
+                foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
+                {
+                    response.Gacha.Add(new NetGachaEntityData() { Corporation = 0, PieceCount = 1, CurrencyValue = 5, Sn = 130201, Tid = c, Type = 1 });
 
-                user.Characters.Add(new Utils.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl= 1, Tid = c, UltimateLevel = 1 });
+                    user.Characters.Add(new Utils.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl = 1, Tid = c, UltimateLevel = 1 });
 
-              //  response.Characters.Add(new NetUserCharacterDefaultData() { Lv = 1, Skill1Lv = 1, Grade = 0, Csn = 1, Tid = 130201 });
+                    //  response.Characters.Add(new NetUserCharacterDefaultData() { Lv = 1, Skill1Lv = 1, Grade = 0, Csn = 1, Tid = 130201 });
 
+                }
+                user.GachaTutorialPlayCount++;
             }
+
             JsonDb.Save();
            
 

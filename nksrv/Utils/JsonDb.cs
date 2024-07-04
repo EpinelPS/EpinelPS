@@ -87,6 +87,7 @@ namespace nksrv.Utils
         public DateTime BattleTime = DateTime.UtcNow;
 
         public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
+        public int GachaTutorialPlayCount = 0;
 
         public void SetQuest(int tid, bool recieved)
         {
@@ -107,14 +108,13 @@ namespace nksrv.Utils
 
         public List<AccessToken> LauncherAccessTokens = [];
 
-
         public Dictionary<string, GameClientInfo> GameClientTokens = [];
     }
     internal class JsonDb
     {
         public static CoreInfo Instance { get; internal set; }
         public static byte[] ServerPrivateKey = Convert.FromBase64String("FSUY8Ohd942n5LWAfxn6slK3YGwc8OqmyJoJup9nNos=");
-        public static byte[] ServerPublicKey = Convert.FromBase64String("04hFDd1e/BOEF2h4b0MdkX2h6W5REeqyW+0r9+eSeh0=");
+        public static byte[] ServerPublicKey = Convert.FromBase64String("04hFDd1e/BOEF2h4b0MdkX2h6W5REeqyW+0r9+eSeh0="); // Note: change this in sodium
 
         static JsonDb()
         {

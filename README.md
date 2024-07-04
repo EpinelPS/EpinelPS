@@ -1,5 +1,5 @@
 # nikke-server
-Private/local server for Nikke. NOTE: This project is in a very early state.
+Private/local server for Nikke. NOTE: This project is in a very early state so many features in the game do not work.
 
 ## Usage
 Download the latest release/GitHub actions build, and run ServerSelector.Desktop.exe as administrator (to modify DNS hosts file and install a CA cert). Make sure to close the game and launcher first. Select Local server, and then click save.
@@ -10,7 +10,7 @@ You should be able to register an new account in the launcher (you can enter any
 
 If the game does not get past the title screen, open an issue and send %appdata%\..\LocalLow\com.proximabeta\NIKKE\player.log file.
 
-
+Note that this was tested with the latest version (122.8.20c)
 
 ## Progress
 Stage, character, and story information is saved and works, as well as player nickname.

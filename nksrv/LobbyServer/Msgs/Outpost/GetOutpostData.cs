@@ -22,7 +22,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             var response = new ResGetOutpostData
             {
                 OutpostBattleLevel = new NetOutpostBattleLevel() { Level = 1 },
-                CommanderBgm = new NetUserJukeboxDataV2(),
+                CommanderBgm = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = 3012 } },
                 BattleTime = 864000000000, Jukebox = new(), MaxBattleTime = 864000000000
             };
 

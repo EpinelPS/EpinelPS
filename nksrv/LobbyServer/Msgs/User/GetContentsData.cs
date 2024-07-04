@@ -30,6 +30,7 @@ namespace nksrv.LobbyServer.Msgs.User
             }
             response.MaxGachaCount = 10;
             // todo tutorial playcount of gacha
+            response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
 
             WriteData(response);
         }

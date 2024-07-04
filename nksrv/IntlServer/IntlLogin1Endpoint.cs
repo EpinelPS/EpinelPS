@@ -25,6 +25,8 @@ namespace nksrv.IntlServer
                     if (item.Username == ep.account && item.Password == ep.password)
                     {
                         var tok = IntlHandler.CreateLauncherTokenForUser(item);
+                        item.LastLogin = DateTime.UtcNow;
+                        JsonDb.Save();
                         WriteJsonString("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":true,\"msg\":\"Success\",\"register_time\":" + item.RegisterTime + ",\"ret\":0,\"seq\":\"" + Seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + item.ID + "\"}");
 
                         return;
