@@ -20,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Shop
                 var response = new ResGetJupiterProductList();
                 foreach (var item in x.ProductIdList)
                 {
-                    response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 212, Price = "22", ProductId = item });
+                    response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 0, Price = "0", ProductId = item });
                 }
                 WriteData(response);
             }

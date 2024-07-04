@@ -47,6 +47,10 @@ namespace nksrv.Utils
         public int ExperiencePoint = 0;
     }
 
+    public class ItemData
+    {
+        public int ItemType;
+    }
 
     public class User
     {
@@ -71,6 +75,7 @@ namespace nksrv.Utils
             { CurrencyType.CharPremiumTicket, 999999 }
         };
 
+        public List<ItemData> Items = new();
         public List<Character> Characters = [];
         public NetWholeUserTeamData RepresentationTeamData = new();
         public List<int> ClearedTutorials = [];

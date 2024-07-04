@@ -27,7 +27,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 var clearedStage = StaticDataParser.Instance.GetStageData(req.StageId);
                 if (clearedStage == null) throw new Exception("cleared stage cannot be null");
 
-                user.LastNormalStageCleared = req.StageId;
 
                 if (user.FieldInfo.Count == 0)
                 {
@@ -37,11 +36,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 DoQuestSpecificUserOperations(user, req.StageId);
                 var rewardData = StaticDataParser.Instance.GetRewardTableEntry(clearedStage.reward_id);
 
-                user.FieldInfo[clearedStage.chapter_id - 1].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 if (rewardData != null)
-                    response.Reward = RegisterRewardsForUser(user, rewardData);
+                    response.StageClearReward = RegisterRewardsForUser(user, rewardData);
                 else
                     Logger.Warn("rewardId is null for stage " + req.StageId);
+
+                user.LastNormalStageCleared = req.StageId;
+                user.FieldInfo[clearedStage.chapter_id - 1].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
             }
 
@@ -55,56 +56,83 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             if (rewardData.user_exp != 0)
             {
-                var newXp = rewardData.character_exp + user.userPointData.ExperiencePoint;
+                var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
                 var newLevel = StaticDataParser.Instance.GetUserLevelFromUserExp(newXp);
                 if (newLevel == -1)
                 {
                     Logger.Warn("Unknown user level value for xp " + newXp);
                 }
-                //ret.UserExp = new NetIncreaseExpData()
-                //{
-                //    BeforeExp = user.userPointData.ExperiencePoint,
-                //    BeforeLv = user.userPointData.UserLevel,
-                //    IncreaseExp = rewardData.character_exp,
-                //    CurrentExp = rewardData.character_exp + newXp,
-                //    CurrentLv = newLevel,
-                //    GainExp = rewardData.character_exp
-                //};
-                user.userPointData.ExperiencePoint += rewardData.character_exp;
+                // TODO: what is the difference between IncreaseExp and GainExp
+                // NOTE: Current Exp/Lv refers to after XP was added.
+
+                ret.UserExp = new NetIncreaseExpData()
+                {
+                    BeforeExp = user.userPointData.ExperiencePoint,
+                    BeforeLv = user.userPointData.UserLevel,
+
+                    IncreaseExp = rewardData.user_exp,
+                    CurrentExp = newXp,
+                    CurrentLv = newLevel,
+
+                    GainExp = rewardData.user_exp,
+                    Csn = 123,
+                };
+                user.userPointData.ExperiencePoint = newXp;
+
+                if (newLevel > user.userPointData.UserLevel)
+                {
+                    // TODO: Commander Level up reward
+                }
+                user.userPointData.UserLevel = newLevel;
             }
 
             foreach (var item in rewardData.rewards)
             {
                 if (item.reward_id != 0)
                 {
-                    if (string.IsNullOrEmpty(item.reward_type)) { }
+                    if (string.IsNullOrEmpty(item.reward_type) || string.IsNullOrWhiteSpace(item.reward_type)) { }
                     else if (item.reward_type == "Currency")
                     {
-                        Dictionary<CurrencyType, int> current = new Dictionary<CurrencyType, int>();
-
-                        // add all currencies that users has to current dictionary
+                        bool found = false;
                         foreach (var currentReward in user.Currency)
                         {
-                            if (!current.ContainsKey(currentReward.Key))
-                                current.Add(currentReward.Key, 0);
+                            if (currentReward.Key == (CurrencyType)item.reward_id)
+                            {
+                                user.Currency[currentReward.Key] += item.reward_value;
 
-                            current[currentReward.Key] = (int)currentReward.Value;
+                                ret.Currency.Add(new NetCurrencyData()
+                                {
+                                    FinalValue = user.Currency[currentReward.Key],
+                                    Value = item.reward_value,
+                                    Type = item.reward_id
+                                });
+                                found = true;
+                                break;
+                            }
                         }
 
-                        // add currency reward to response
-                        CurrencyType t = (CurrencyType)item.reward_id;
-                        int val = item.reward_value;
-                        if (!current.ContainsKey(t))
-                            current.Add(t, 0);
-                        var val2 = current[t];
-                        ret.Currency.Add(new NetCurrencyData() { Type = (int)t, Value = val, FinalValue = val2 + val });
-
-
-                        // add currency reward to user info
-                        if (!user.Currency.ContainsKey(t))
-                            user.Currency.Add(t, val);
-                        else
-                            user.Currency[t] += val;
+                        if (!found)
+                        {
+                            user.Currency.Add((CurrencyType)item.reward_id, item.reward_value);
+                            ret.Currency.Add(new NetCurrencyData()
+                            {
+                                FinalValue = item.reward_value,
+                                Value = item.reward_value,
+                                Type = item.reward_id
+                            });
+                        }
+                    }
+                    else if (item.reward_type == "Item")
+                    {
+                        for (int i = 0; i < item.reward_value; i++)
+                        {
+                            user.Items.Add(new ItemData() { ItemType = item.reward_id });
+                            ret.Item.Add(new NetItemData()
+                            {
+                                Count = 1,
+                                Tid = item.reward_id
+                            });
+                        }      
                     }
                 }
                 else
@@ -133,6 +161,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 team1.Type = 1;
                 team1.LastContentsTeamNumber = 1;
 
+
+                user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
+                user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
+                user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
+
                 var team1Sub = new NetTeamData();
                 team1Sub.TeamNumber = 1;
                 for (int i = 1; i < 6; i++)
@@ -143,11 +178,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 team1.Teams.Add(team1Sub);
                 user.UserTeams.Add(1, team1);
 
-                user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
-                user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
 
                 user.RepresentationTeamData.TeamNumber = 1;
                 user.RepresentationTeamData.TeamCombat = 1446; // TODO: Don't hardcode this

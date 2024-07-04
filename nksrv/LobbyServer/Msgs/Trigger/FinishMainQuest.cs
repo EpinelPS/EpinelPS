@@ -21,9 +21,6 @@ namespace nksrv.LobbyServer.Msgs.Trigger
             var completedQuest = StaticDataParser.Instance.GetMainQuestByTableId(req.Tid);
             if (completedQuest == null) throw new Exception("Quest not found");
 
-            // set next quest as available
-            user.SetQuest(completedQuest.next_main_quest_id, true);
-
             JsonDb.Save();
             var response = new ResFinMainQuest();
             WriteData(response);

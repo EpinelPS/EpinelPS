@@ -1856,3 +1856,14 @@ message ReqGetWallpaperInventory {}
 message ResGetWallpaperInventory {
 	repeated int32 livewallpaperIds = 2;
 }
+
+message NetInAppShopReceivableProductData {
+	string ProductId = 1;
+	string Token = 2;
+	int32 SubTid = 3;
+}
+
+message ReqGetInAppShopReceivableProductList {}
+message ResGetInAppShopReceivableProductList {
+	repeated NetInAppShopReceivableProductData Data = 1;
+}
