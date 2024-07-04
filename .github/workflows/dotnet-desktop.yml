@@ -43,7 +43,7 @@ jobs:
       run: dotnet publish nksrv
 
     - name: Copy to output
-      run: md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
+      run: echo ${GITHUB_WORKSPACE} && md ${GITHUB_WORKSPACE}/out/ && xcopy "${GITHUB_WORKSPACE}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\" && xcopy "${GITHUB_WORKSPACE}\nksrv\bin\Release\net8.0\win-x64\publish\" "${GITHUB_WORKSPACE}\out\"
   
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
