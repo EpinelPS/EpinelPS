@@ -36,7 +36,7 @@ namespace DataFixupUtil
                     var startPos = (int)ms.Position;
 
                     var contents = FileContents.Skip(startPos).ToArray();
-                    if (contents.Length != 0 && contents[0] == 31)
+                    if (contents.Length > 2 && contents[0] == 0x1f && contents[1] == 0x8b)
                     {
                         // gzip compression is used
                         using Stream csStream = new GZipStream(new MemoryStream(contents), CompressionMode.Decompress);

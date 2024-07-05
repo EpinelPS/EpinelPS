@@ -156,7 +156,6 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
 
             var responseBytes = response.ToArray();
-            File.WriteAllBytes("batch-response", responseBytes);
             ctx.Response.ContentType = "multipart/mixed; boundary=\"f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\"";
             ctx.Response.OutputStream.Write(responseBytes);
         }
@@ -373,8 +372,6 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             else
             {
-                // not empty body, TODO
-                File.WriteAllBytes("notemptybody", bytes);
                 body = bytes.Skip(currentByte).ToArray();
             }
 

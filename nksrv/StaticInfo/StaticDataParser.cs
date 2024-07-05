@@ -114,7 +114,6 @@ namespace nksrv.StaticInfo
             ZipStream = new MemoryStream();
             AesCtrTransform(decryptionKey2, iv2, dataMs, ZipStream);
 
-            File.WriteAllBytes("decryptednew.zip", ZipStream.ToArray());
             ZipStream.Position = 0;
 
             MainZip = new ZipFile(ZipStream, false);

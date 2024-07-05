@@ -1867,3 +1867,9 @@ message ReqGetInAppShopReceivableProductList {}
 message ResGetInAppShopReceivableProductList {
 	repeated NetInAppShopReceivableProductData Data = 1;
 }
+
+message ReqWearEquipment {
+	int64 Isn = 2;
+	int64 Csn = 3;
+}
+message ResWearEquipment {}

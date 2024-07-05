@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.SynchroLv = 1;
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 5, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
             response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
 
             // Add default slot data
