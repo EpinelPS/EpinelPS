@@ -19,7 +19,8 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var user = GetUser();
 
             var response = new ResGetStageData();
-            response.Field = CreateFieldInfo(user, req.Chapter - 1);
+            
+            response.Field = CreateFieldInfo(user, req.Chapter - 1, req.Mod == 0 ? "Normal" : "Hard");
 
             response.HasChapterBossEntered = true;
 
@@ -28,13 +29,14 @@ namespace nksrv.LobbyServer.Msgs.Stage
             WriteData(response);
         }
 
-        public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter)
+        public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter, string mod)
         {
             var f = new NetFieldObjectData();
             bool found = false;
+            string key = chapter + "_" + mod;
             foreach (var item in user.FieldInfo)
             {
-                if (item.Key == chapter)
+                if (item.Key == key)
                 {
                     found = true;
                     foreach (var stage in item.Value.CompletedStages)
@@ -47,10 +49,10 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             if (!found)
             {
-                Console.WriteLine("chapter not found: " + chapter);
+                Console.WriteLine("chapter not found: " + key);
 
-                user.FieldInfo.Add(chapter, new FieldInfo());
-                return CreateFieldInfo(user, chapter);
+                user.FieldInfo.Add(key, new FieldInfo());
+                return CreateFieldInfo(user, chapter, mod);
             }
 
             return f;

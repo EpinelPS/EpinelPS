@@ -30,7 +30,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
                 if (user.FieldInfo.Count == 0)
                 {
-                    user.FieldInfo.Add(0, new FieldInfo() { });
+                    user.FieldInfo.Add("0_" + clearedStage.chapter_mod, new FieldInfo() { });
                 }
 
                 DoQuestSpecificUserOperations(user, req.StageId);
@@ -41,8 +41,32 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 else
                     Logger.Warn("rewardId is null for stage " + req.StageId);
 
-                user.LastNormalStageCleared = req.StageId;
-                user.FieldInfo[clearedStage.chapter_id - 1].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
+
+                if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss")
+                {
+                    if (clearedStage.chapter_mod == "Hard")
+                    {
+                        user.LastHardStageCleared = req.StageId;
+                    }
+                    else if (clearedStage.chapter_mod == "Normal")
+                    {
+                        user.LastNormalStageCleared = req.StageId;
+                    }
+                    else
+                    {
+                        Logger.Warn("Unknown chapter mod " + clearedStage.chapter_mod);
+                    }
+                }
+                else if (clearedStage.stage_category == "Extra")
+                {
+
+                }
+                else
+                {
+                    Logger.Warn("Unknown stage category " + clearedStage.stage_category);
+                }
+
+                user.FieldInfo[(clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
                 JsonDb.Save();
             }
 
@@ -132,7 +156,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
                                 Count = 1,
                                 Tid = item.reward_id
                             });
-                        }      
+                        }
                     }
                 }
                 else

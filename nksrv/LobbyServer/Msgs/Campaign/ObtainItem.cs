@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,16 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             var response = new ResObtainCampaignItem();
 
+            var chapter = StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
+            var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
+            var key = chapter + "_" + mod;
+            var field = user.FieldInfo[key];
+
             // TODO
             response.Reward = new();
+            
+           
+
 
             WriteData(response);
         }

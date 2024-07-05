@@ -17,11 +17,11 @@ namespace nksrv.LobbyServer.Msgs.Campaign
         {
             var req = await ReadData<ReqGetCampaignFieldData>();
             var user = GetUser();
-
+           
             Console.WriteLine("Map ID: " + req.MapId);
 
             var response = new ResGetCampaignFieldData();
-            response.Field = GetStage.CreateFieldInfo(user, StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId));
+            response.Field = GetStage.CreateFieldInfo(user, StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId), req.MapId.Contains("hard") ? "Hard" : "Normal");
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
@@ -50,7 +50,6 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             }
 
             response.Json = resultingJson;
-
 
             WriteData(response);
         }

@@ -69,7 +69,7 @@ namespace nksrv.Utils
 
         // Game data
         public List<string> CompletedScenarios = [];
-        public Dictionary<int, FieldInfo> FieldInfo = [];
+        public Dictionary<string, FieldInfo> FieldInfo = [];
         public Dictionary<string, string> MapJson = [];
         public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 },
@@ -110,6 +110,7 @@ namespace nksrv.Utils
     }
     public class CoreInfo
     {
+        public int DbVersion = 0;
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
@@ -137,6 +138,28 @@ namespace nksrv.Utils
             if (j != null)
             {
                 Instance = j;
+
+                if (Instance.DbVersion == 0)
+                {
+                    Instance.DbVersion = 1;
+                    // In older versions, field info key used chapter number, but now difficultly is appened.
+                    Console.WriteLine("Starting database update...");
+
+                    foreach (var user in Instance.Users)
+                    {
+                        foreach (var f in user.FieldInfo.ToList())
+                        {
+                            var isNumeric = int.TryParse(f.Key, out int n);
+                            if (isNumeric)
+                            {
+                                var val = f.Value;
+                                user.FieldInfo.Remove(f.Key);
+                                user.FieldInfo.Add(n + "_Normal", val);
+                            }
+                        }
+                    }
+                    Console.WriteLine("Database update completed");
+                }
                 Save();
             }
             else
