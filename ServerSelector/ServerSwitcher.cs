@@ -73,6 +73,11 @@ namespace ServerSelector
                 // add to hosts file
                 string hosts = @"127.0.0.1 cloud.nikke-kr.com
 127.0.0.1 global-lobby.nikke-kr.com
+127.0.0.1 jp-lobby.nikke-kr.com
+127.0.0.1 us-lobby.nikke-kr.com
+127.0.0.1 kr-lobby.nikke-kr.com
+127.0.0.1 sea-lobby.nikke-kr.com
+127.0.0.1 hmt-lobby.nikke-kr.com
 127.0.0.1 aws-na-dr.intlgame.com
 127.0.0.1 sg-vas.intlgame.com
 127.0.0.1 aws-na.intlgame.com
