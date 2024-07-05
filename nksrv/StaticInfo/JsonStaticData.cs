@@ -41,5 +41,15 @@ namespace nksrv.StaticInfo
         public int reward_id;
         public int reward_value;
     }
-    
+
+
+    public class ClearedTutorialData
+    {
+        public int id;
+        public int VersionGroup = 0;
+        public int GroupId;
+        public int ClearedStageId;
+        public int NextId;
+        public bool SaveTutorial;
+    }
 }

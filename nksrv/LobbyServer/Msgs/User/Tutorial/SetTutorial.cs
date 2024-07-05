@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,12 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
         {
             var req = await ReadData<ReqSetTutorial>();
             var user = GetUser();
-            if (!user.ClearedTutorials.Contains(req.LastClearedTid))
-                user.ClearedTutorials.Add(req.LastClearedTid);
+
+            if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
+            {
+                var cleared = StaticDataParser.Instance.GetTutorialDataById(req.LastClearedTid);
+                user.ClearedTutorialData.Add(req.LastClearedTid, cleared);
+            }
             JsonDb.Save();
 
             var response = new ResSetTutorial();

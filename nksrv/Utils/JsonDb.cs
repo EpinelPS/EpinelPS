@@ -1,6 +1,7 @@
 ﻿using ASodium;
 using Newtonsoft.Json;
 using nksrv.LobbyServer;
+using nksrv.StaticInfo;
 using Swan.Logging;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace nksrv.Utils
         public List<ItemData> Items = new();
         public List<Character> Characters = [];
         public NetWholeUserTeamData RepresentationTeamData = new();
-        public List<int> ClearedTutorials = [];
+        public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
         public NetWallpaperData[] WallpaperList = [];
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
         public Dictionary<int, bool> MainQuestData = new()

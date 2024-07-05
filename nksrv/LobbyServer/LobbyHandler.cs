@@ -123,12 +123,13 @@ namespace nksrv.LobbyServer
             };
 
 
-            // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-            foreach (var item in user.ClearedTutorials)
+            // Restore completed tutorials.
+            foreach (var item in user.ClearedTutorialData)
             {
-                var groupId = int.Parse(item.ToString().Substring(0, 4));
-                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO: Read from static data
-                ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
+                int groupId = item.Value.GroupId;
+                int version = item.Value.VersionGroup;
+
+                ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = groupId, LastClearedVersion = version });
             }
 
             return ret;

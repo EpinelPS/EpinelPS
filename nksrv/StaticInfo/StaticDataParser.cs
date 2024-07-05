@@ -48,6 +48,7 @@ namespace nksrv.StaticInfo
         private JArray chapterCampaignData;
         private JArray characterCostumeTable;
         private JArray characterTable;
+        private JArray tutorialTable;
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
@@ -230,6 +231,7 @@ namespace nksrv.StaticInfo
             chapterCampaignData = await LoadZip("CampaignChapterTable.json");
             characterCostumeTable = await LoadZip("CharacterCostumeTable.json");
             characterTable = await LoadZip("CharacterTable.json");
+            tutorialTable = await LoadZip("ContentsTutorialTable.json");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -381,6 +383,28 @@ namespace nksrv.StaticInfo
                 int value = id.ToObject<int>();
                 yield return value;
             }
+        }
+
+        internal ClearedTutorialData GetTutorialDataById(int TableId)
+        {
+            foreach (JObject item in tutorialTable)
+            {
+                var id = item["id"];
+                if (id == null)
+                {
+                    throw new Exception("expected id field in reward data");
+                }
+
+                int idValue = id.ToObject<int>();
+                if (idValue == TableId)
+                {
+                    ClearedTutorialData? data = JsonConvert.DeserializeObject<ClearedTutorialData>(item.ToString());
+                    if (data == null) throw new Exception("failed to deserialize reward data");
+                    return data;
+                }
+            }
+
+            throw new Exception("tutorial not found: " + TableId);
         }
     }
 }

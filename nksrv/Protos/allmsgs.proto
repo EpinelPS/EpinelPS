@@ -1873,3 +1873,18 @@ message ReqWearEquipment {
 	int64 Csn = 3;
 }
 message ResWearEquipment {}
+
+message NetCampaignFieldObject {
+	string PositionID = 1;
+	int32 Type = 2;
+	repeated NetCampaignTeamPosition TeamPositions = 3;
+	string Json = 4;
+}
+
+message ReqObtainCampaignItem {
+	string MapId = 2;
+	NetCampaignFieldObject FieldObject = 3;
+}
+message ResObtainCampaignItem {
+	NetRewardData Reward = 2;
+}

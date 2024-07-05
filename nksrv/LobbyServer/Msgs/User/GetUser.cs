@@ -34,12 +34,14 @@ namespace nksrv.LobbyServer.Msgs.User
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-            foreach (var item in user.ClearedTutorials)
+            foreach (var item in user.ClearedTutorialData)
             {
-                var groupId = int.Parse(item.ToString().Substring(0, 4));
-                int tutorialVersion = item == 1020101 ? 1 : 0; // TODO
-                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item, LastClearedVersion = tutorialVersion });
+                int groupId = item.Value.GroupId;
+                int version = item.Value.VersionGroup;
+
+                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = groupId, LastClearedVersion = version });
             }
+
             response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
             response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
           
