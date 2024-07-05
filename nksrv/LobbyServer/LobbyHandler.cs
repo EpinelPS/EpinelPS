@@ -129,7 +129,7 @@ namespace nksrv.LobbyServer
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;
 
-                ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = groupId, LastClearedVersion = version });
+                ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
             }
 
             return ret;

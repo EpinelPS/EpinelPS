@@ -39,7 +39,7 @@ namespace nksrv.LobbyServer.Msgs.User
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;
 
-                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = groupId, LastClearedVersion = version });
+                response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
             }
 
             response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };

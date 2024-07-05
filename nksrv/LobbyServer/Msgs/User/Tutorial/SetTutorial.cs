@@ -19,6 +19,7 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
             if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
             {
                 var cleared = StaticDataParser.Instance.GetTutorialDataById(req.LastClearedTid);
+                cleared.id = req.LastClearedTid;
                 user.ClearedTutorialData.Add(req.LastClearedTid, cleared);
             }
             JsonDb.Save();

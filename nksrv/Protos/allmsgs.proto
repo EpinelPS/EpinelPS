@@ -1677,13 +1677,100 @@ enum SimRoomStatus {
 message ReqGetSimRoom {
 
 }
+
+message NetSimRoomClearInfo {
+	int32 Difficulty = 1;
+	int32 Chapter = 2;
+}
+
+enum SimRoomBattleEventProgress {
+	NotCleared = 0;
+	RewardWaiting = 1;
+	RewardReceived = 2;
+}
+
+message NetSimRoomBattleEvent {
+	int32 Id = 1;
+	repeated int32 BuffOptions = 2;
+	SimRoomBattleEventProgress progress = 3;
+	int32 RemainingTargetHealth = 4;
+	int32 BuffPreviewId = 5;
+}
+
+message NetSimRoomEventLocationInfo {
+	int32 Chapter = 1;
+	int32 Stage = 2;
+	int32 Order = 3;
+}
+
+message NetSimRoomEvent {
+	NetSimRoomEventLocationInfo location = 1;
+	bool IsSelected  = 2;
+	oneof eventCase {
+		NetSimRoomBattleEvent Battle = 3;
+		NetSimRoomSelectionEvent Selection = 4;
+	}
+}
+
+message NetSimRoomSelectionGroupElement {
+	int32 SelectionNumber = 2;
+	int32 Id = 3;
+	bool IsDone = 4;
+	int32 RandomBuff = 5;
+}
+
+message NetSimRoomSelectionEvent {
+	int32 Id = 1;
+	int32 SelectedNumber = 2;
+	NetSimRoomSelectionGroupElement Group = 3;
+}
+
+message NetSimRoomCharacterHp {
+	int64 Csn = 1;
+	int32 HP = 2;
+}
+
+message NetSimRoomOverclockHighScoreData {
+	int32 Season = 1;
+	int32 SubSeason = 2;
+	repeated int32 OptionList = 3;
+	int32 OptionLevel = 4;
+	google.protobuf.Timestamp CreatedAt = 5;
+}
+
+message NetSimRoomOverclockOptionSettingData {
+	int32 Season = 1;
+	repeated int32 OptionList = 2;
+}
+
+message NetSimRoomOverclockSeasonData {
+	bool isSeasonOpen = 1;
+	int32 Season = 2;
+	int32 SubSeason = 3;
+	google.protobuf.Timestamp SeasonStartDate = 4;
+	google.protobuf.Timestamp SeasonEndDate = 5;
+	int32 SeasonWeekCount = 6;
+}
+
+message NetSimRoomOverclockData {
+	NetSimRoomOverclockHighScoreData CurrentSeasonHighScore = 4;
+	NetSimRoomOverclockHighScoreData CurrentSubSeasonHighScore = 5;
+	NetSimRoomOverclockOptionSettingData LatestOption = 6;
+	NetSimRoomOverclockSeasonData CurrentSeasonData = 7;
+}
+
 message ResGetSimRoom {
 	SimRoomStatus status = 1;
 	int32 currentDifficulty = 2;
 	int64 nextRenewAt = 3;
-	//repeated NetSimRoomClearInfo clearInfos = 4;
-	//repeated NetSimRoomEvent events = 5;
-
+	repeated NetSimRoomClearInfo clearInfos = 4;
+	repeated NetSimRoomEvent events = 5;
+	repeated NetSimRoomCharacterHp RemainingHps = 6;
+	repeated int32 Buffs = 8;
+	repeated int32 LegacyBuffs = 9;
+	repeated int32 OverclockOptionList = 10;
+	NetSimRoomOverclockData OverclockData = 11;
+	google.protobuf.Timestamp NextLegacyBuffResetDate = 12;
 }
 
 message ReqCheckDailyFreeGacha {
