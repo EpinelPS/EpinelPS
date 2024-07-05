@@ -42,7 +42,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     Logger.Warn("rewardId is null for stage " + req.StageId);
 
 
-                if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss")
+                if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
                 {
                     if (clearedStage.chapter_mod == "Hard")
                     {
