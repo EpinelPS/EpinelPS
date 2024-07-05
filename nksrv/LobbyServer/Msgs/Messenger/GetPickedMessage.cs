@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetPickedMessageList>();
+            var req = await ReadData<ReqGetPickedMessageList>();
 
             // TODO: get proper response
             var response = new ResGetPickedMessageList();

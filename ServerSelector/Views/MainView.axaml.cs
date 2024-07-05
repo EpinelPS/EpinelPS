@@ -15,6 +15,12 @@ public partial class MainView : UserControl
 
     private void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
+        if (string.IsNullOrEmpty(txtGamePath.Text) || string.IsNullOrEmpty(txtLauncherPath.Text))
+        {
+            ShowWarningMsg("Game path / launcher path is empty", "Error");
+            return;
+        }
+
         try
         {
             ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text);

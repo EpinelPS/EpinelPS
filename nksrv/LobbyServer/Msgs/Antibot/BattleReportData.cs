@@ -12,11 +12,10 @@ namespace nksrv.LobbyServer.Msgs.Antibot
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqBattleReportData>();
-
-            // I don't really care about reimplementing the server side anticheat, so return
-
+            var req = await ReadData<ReqBattleReportData>();
             var response = new ResBattleReportData();
+
+            // this is responsible for server side anticheat
 
             WriteData(response);
         }

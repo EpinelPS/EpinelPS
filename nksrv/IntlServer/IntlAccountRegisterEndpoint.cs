@@ -30,7 +30,7 @@ namespace nksrv.IntlServer
                 {
                     if (item.Username == ep.account)
                     {
-                        WriteJsonString("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
+                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
                         return;
                     }
                 }
@@ -51,7 +51,7 @@ namespace nksrv.IntlServer
                 JsonDb.Instance.Users.Add(user);
 
                 var tok = IntlHandler.CreateLauncherTokenForUser(user);
-                WriteJsonString("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seg + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}");
+                await WriteJsonStringAsync("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seg + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}");
             }
             else
             {
@@ -61,17 +61,17 @@ namespace nksrv.IntlServer
 
         public class RegisterEPReq
         {
-            public DeviceInfo device_info { get; set; }
-            public string verify_code { get; set; }
-            public string account { get; set; }
+            public DeviceInfo device_info { get; set; } = new();
+            public string verify_code { get; set; } = "";
+            public string account { get; set; } = "";
             public int account_type { get; set; }
-            public string phone_area_code { get; set; }
-            public string password { get; set; }
-            public string user_name { get; set; }
-            public string birthday { get; set; }
-            public string region { get; set; }
-            public string user_lang_type { get; set; }
-            public string extra_json { get; set; }
+            public string phone_area_code { get; set; } = "";
+            public string password { get; set; } = "";
+            public string user_name { get; set; } = "";
+            public string birthday { get; set; } = "";
+            public string region { get; set; } = "";
+            public string user_lang_type { get; set; } = "";
+            public string extra_json { get; set; } = "";
         }
     }
 }

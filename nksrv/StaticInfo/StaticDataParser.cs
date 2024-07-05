@@ -175,12 +175,13 @@ namespace nksrv.StaticInfo
         {
             string targetFile = Program.GetCachePathForPath(StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
             var targetDir = Path.GetDirectoryName(targetFile);
+            if (targetDir == null) throw new Exception("directory name is null for path " + targetDir);
 
             Directory.CreateDirectory(targetDir);
 
             if (!File.Exists(targetFile))
             {
-                // TODO: Ip might change
+                // TODO: IP might change
                 var requestUri = new Uri("https://43.132.66.200/" + StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
@@ -346,7 +347,7 @@ namespace nksrv.StaticInfo
                     throw new Exception("expected id field in reward data");
                 }
 
-                string value = id.ToObject<string>();
+                string? value = id.ToObject<string>();
                 if (value == field)
                 {
                     var chapter = item["chapter"];

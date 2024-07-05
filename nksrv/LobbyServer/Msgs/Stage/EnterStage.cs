@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqEnterStage>();
+            var req = await ReadData<ReqEnterStage>();
 
             var response = new ResEnterStage();
 

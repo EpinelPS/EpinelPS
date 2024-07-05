@@ -7,7 +7,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetJukeboxRewardedData>();
+            var req = await ReadData<ReqGetJukeboxRewardedData>();
 
             // TODO: save these things
             var response = new ResGetJukeboxRewardedData();

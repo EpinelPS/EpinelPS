@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Badge
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqDeleteBadge>();
+            var req = await ReadData<ReqDeleteBadge>();
 
             var response = new ResDeleteBadge();
 

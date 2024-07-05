@@ -22,7 +22,6 @@ namespace nksrv.IntlServer
             {"/profile/query_account_info", new IntlQueryAccountInfo() }, // /account/register
             {"/conf/get_conf", new IntlReturnJsonHandler(GetConfResp) }, // /v2/conf/get_conf
             {"/minorcer/get_status", new IntlReturnJsonHandler(MinorcerResp) }, // /v2/minorcer/get_status
-            {"/minorcer/set_all_status", new IntlMinocerSetStatus() }, // /v2/minorcer/set_all_status
             {"/profile/set_protocol", new IntlReturnJsonHandler(SetProtocolResp) },
             {"/profile/userinfo", new IntlGetProfileInfo() },
             {"/getuserinfo", new IntlGetAccountInfo() },
@@ -40,16 +39,6 @@ namespace nksrv.IntlServer
         public const string AquireConfigResp = "{\"ret\":23111202,\"msg\":\"no matched config error( [match logic]no match )\",\"rule_id\":\"\",\"resource_list\":\"\",\"sdk_enable\":0,\"sdk_debug_enable\":0,\"report_log_enable\":0,\"log_level\":0,\"inner_seq\":\"((SEGID))\",\"ab_test\":{\"id\":\"\",\"group\":\"\"},\"seq\":\"((SEGID))\"}";
         public static async Task Handle(IHttpContext context)
         {
-
-            //if (context.Request.RawUrl.StartsWith("/v2/"))
-            //{
-            //    await new IntlAwsNaRedirect().HandleAsync(context);
-            //}
-            //else if (context.Request.RawUrl.StartsWith("/account/"))
-            //{
-            //    await new IntlAccountRedirect().HandleAsync(context);
-            //}
-            //return;
             IntlMsgHandler? handler = null;
             foreach (var item in Handlers)
             {
@@ -62,7 +51,6 @@ namespace nksrv.IntlServer
             if (handler == null)
             {
                 context.Response.StatusCode = 404;
-               // Logger.Error("Launcher Endpoint - Not Found: " + context.RequestedPath);
             }
             else
             {
@@ -81,5 +69,4 @@ namespace nksrv.IntlServer
             return token;
         }
     }
-
 }

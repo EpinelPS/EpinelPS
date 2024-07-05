@@ -30,13 +30,13 @@ namespace nksrv.IntlServer
                 {
                     if (item.Username == ep.account)
                     {
-                        WriteJsonString("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
+                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
                         return;
                     }
                 }
 
                 // pretend that we sent the code
-                WriteJsonString("{\"expire_time\":898,\"msg\":\"Success\",\"ret\":0,\"seq\":\"" + seg + "\"}");
+                await WriteJsonStringAsync("{\"expire_time\":898,\"msg\":\"Success\",\"ret\":0,\"seq\":\"" + seg + "\"}");
             }
             else
             {
@@ -46,11 +46,11 @@ namespace nksrv.IntlServer
 
         public class SendCodeRequest
         {
-            public DeviceInfo device_info { get; set; }
-            public string extra_json { get; set; }
-            public string account { get; set; }
+            public DeviceInfo device_info { get; set; } = new();
+            public string extra_json { get; set; } = "";
+            public string account { get; set; } = "";
             public int account_type { get; set; }
-            public string phone_area_code { get; set; }
+            public string phone_area_code { get; set; } = "";
             public int code_type { get; set; }
             public int support_captcha { get; set; }
         }

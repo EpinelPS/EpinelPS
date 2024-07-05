@@ -51,7 +51,7 @@ namespace nksrv.IntlServer
 
             var result = await client.SendAsync(request);
             var s = await result.Content.ReadAsStringAsync();
-            WriteJsonString(s);
+            await WriteJsonStringAsync(s);
             Console.WriteLine("li-sg redirect out: " + s);
         }
     }

@@ -42,6 +42,7 @@ namespace nksrv.IntlServer
 
                 if (string.IsNullOrEmpty(tokToCheck))
                     throw new Exception("missing auth token");
+
                 if (x != null)
                 {
                     foreach (var tok in JsonDb.Instance.LauncherAccessTokens)
@@ -59,13 +60,13 @@ namespace nksrv.IntlServer
 
                     if (User == null)
                     {
-                        WriteJsonString("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
+                        await WriteJsonStringAsync("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
                         return;
                     }
                 }
                 else
                 {
-                    WriteJsonString("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
+                    await WriteJsonStringAsync("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
                     return;
                 }
             }
@@ -74,40 +75,40 @@ namespace nksrv.IntlServer
         }
         protected abstract Task HandleAsync();
 
-        protected void WriteJsonString(string data)
+        protected async Task WriteJsonStringAsync(string data)
         {
-            // check if we are sending valid json
-            JObject.Parse(data);
-
-            var bt = Encoding.UTF8.GetBytes(data);
-            ctx.Response.ContentEncoding = null;
-            ctx.Response.ContentType = "application/json";
-            ctx.Response.ContentLength64 = bt.Length;
-            ctx.Response.OutputStream.Write(bt, 0, bt.Length);
-            ctx.Response.OutputStream.Flush();
+            if (ctx != null)
+            {
+                var bt = Encoding.UTF8.GetBytes(data);
+                ctx.Response.ContentEncoding = null;
+                ctx.Response.ContentType = "application/json";
+                ctx.Response.ContentLength64 = bt.Length;
+                await ctx.Response.OutputStream.WriteAsync(bt, 0, bt.Length, ctx.CancellationToken);
+                await ctx.Response.OutputStream.FlushAsync();
+            }
         }
         public class ChannelInfo
         {
-            public string openid { get; set; }
-            public string token { get; set; }
+            public string openid { get; set; } = "";
+            public string token { get; set; } = "";
             public int account_type { get; set; }
-            public string account { get; set; }
-            public string phone_area_code { get; set; }
+            public string account { get; set; } = "";
+            public string phone_area_code { get; set; } = "";
             public int account_plat_type { get; set; }
-            public string lang_type { get; set; }
+            public string lang_type { get; set; } = "";
             public bool is_login { get; set; }
-            public string account_uid { get; set; }
-            public string account_token { get; set; }
+            public string account_uid { get; set; } = "";
+            public string account_token { get; set; } = "";
         }
         public class AuthPkt
         {
-            public ChannelInfo channel_info { get; set; }
+            public ChannelInfo channel_info { get; set; } = new();
         }
         public class AuthPkt2
         {
-            public string token;
-            public string openid;
-            public string account_token;
+            public string token = "";
+            public string openid = "";
+            public string account_token = "";
         }
     }
 }

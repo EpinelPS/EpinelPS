@@ -12,12 +12,12 @@ namespace nksrv.LobbyServer.Msgs.Gacha
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqCheckDailyFreeGacha>();
+            var req = await ReadData<ReqCheckDailyFreeGacha>();
 
             var response = new ResCheckDailyFreeGacha();
 
             // TODO implement
-            response.FreeCount = 1000;
+            response.FreeCount = 0;
             response.EventData = new NetEventData() { Id = 1 };
 
             WriteData(response);

@@ -27,7 +27,7 @@ namespace nksrv.IntlServer
                         var tok = IntlHandler.CreateLauncherTokenForUser(item);
                         item.LastLogin = DateTime.UtcNow;
                         JsonDb.Save();
-                        WriteJsonString("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":true,\"msg\":\"Success\",\"register_time\":" + item.RegisterTime + ",\"ret\":0,\"seq\":\"" + Seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + item.ID + "\"}");
+                        await WriteJsonStringAsync("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":true,\"msg\":\"Success\",\"register_time\":" + item.RegisterTime + ",\"ret\":0,\"seq\":\"" + Seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + item.ID + "\"}");
 
                         return;
                     }
@@ -35,7 +35,7 @@ namespace nksrv.IntlServer
 
                 string? seg = ctx.GetRequestQueryData().Get("seq");
 
-                WriteJsonString("{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"" + seg + "\"}");
+                await WriteJsonStringAsync("{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"" + seg + "\"}");
             }
             else
             {
@@ -45,12 +45,12 @@ namespace nksrv.IntlServer
 
         public class LoginEndpoint2Req
         {
-            public DeviceInfo device_info { get; set; }
-            public string extra_json { get; set; }
-            public string account { get; set; }
+            public DeviceInfo device_info { get; set; } = new();
+            public string extra_json { get; set; } = "";
+            public string account { get; set; } = "";
             public int account_type { get; set; }
-            public string password { get; set; }
-            public string phone_area_code { get; set; }
+            public string password { get; set; } = "";
+            public string phone_area_code { get; set; } = "";
             public int support_captcha { get; set; }
         }
     }

@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqForcePickTodayRandomMessage>();
+            var req = await ReadData<ReqForcePickTodayRandomMessage>();
 
             // TODO: get proper response
             var response = new ResForcePickTodayRandomMessage();

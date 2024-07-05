@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Mission.Rewards
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetDailyRewardedData>();
+            var req = await ReadData<ReqGetDailyRewardedData>();
 
             // TODO: implement
             var response = new ResGetDailyRewardedData();

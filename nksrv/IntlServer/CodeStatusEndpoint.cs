@@ -15,11 +15,8 @@ namespace nksrv.IntlServer
 
         protected override async Task HandleAsync()
         {
-
             // pretend that any code is valid
-
-            WriteJsonString("{\"expire_time\":759,\"msg\":\"Success\",\"ret\":0,\"seq\":\""+Seq+"\"}");
-
+            await WriteJsonStringAsync("{\"expire_time\":759,\"msg\":\"Success\",\"ret\":0,\"seq\":\""+Seq+"\"}");
         }
     }
 }
