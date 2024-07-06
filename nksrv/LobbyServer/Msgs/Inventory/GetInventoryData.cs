@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
             var response = new ResGetInventoryData();
             foreach (var item in user.Items)
             {
-                response.Items.Add(new NetUserItemData() { Tid = item.ItemType, Count = 1 });
+                response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position });
             }
 
             // TODO implement

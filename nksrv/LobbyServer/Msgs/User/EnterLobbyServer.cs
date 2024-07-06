@@ -53,7 +53,7 @@ namespace nksrv.LobbyServer.Msgs.User
             }
             foreach (var item in user.Items)
             {
-                response.Items.Add(new NetUserItemData() { Count = 1, Tid = item.ItemType});
+                response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position});
             }
 
 

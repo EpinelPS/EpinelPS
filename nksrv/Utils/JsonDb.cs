@@ -21,6 +21,7 @@ namespace nksrv.Utils
     public class FieldInfo
     {
         public List<NetFieldStageData> CompletedStages = [];
+        public List<NetFieldObject> CompletedObjects = [];
     }
 
     public class Character
@@ -51,6 +52,17 @@ namespace nksrv.Utils
     public class ItemData
     {
         public int ItemType;
+        public long Csn;
+        public int Count;
+        public int Level;
+        public int Exp;
+        public int Position;
+        public int Corp;
+        public long Isn;
+    }
+    public class EventData
+    {
+        public List<string> CompletedScenarios = new();
     }
 
     public class User
@@ -94,6 +106,9 @@ namespace nksrv.Utils
 
         public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
         public int GachaTutorialPlayCount = 0;
+
+        // Event data
+        public Dictionary<int, EventData> EventInfo = new();
 
         public void SetQuest(int tid, bool recieved)
         {

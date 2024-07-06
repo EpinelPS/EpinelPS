@@ -43,6 +43,10 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     {
                         f.Stages.Add(stage);
                     }
+                    foreach (var obj in item.Value.CompletedObjects)
+                    {
+                        f.Objects.Add(obj);
+                    }
                     break;
                 }
             }

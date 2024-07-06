@@ -89,7 +89,7 @@ namespace nksrv.LobbyServer.Msgs.Event
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
-                EventSystemType = 2
+                EventSystemType = 22
             });
 
             // Aegis the Diver event

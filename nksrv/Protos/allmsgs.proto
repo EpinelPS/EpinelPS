@@ -2066,3 +2066,52 @@ message ReqExistScenarioBookmark {
 message ResExistScenarioBookmark {
 	repeated string existingBookmarkList = 1;
 }
+
+message ReqGetEventScenarioData {
+	int32 EventID = 2;
+}
+message ResGetEventScenarioData {
+	repeated string scenarioIdList = 1;
+	repeated string bookmarkScenarioList = 2;
+}
+
+message ReqSetEventScenarioComplete {
+	int32 EventID = 2;
+	string ScenarioId = 3;
+	int32 DialogType = 4;
+}
+message ResSetEventScenarioComplete {
+	NetRewardData Reward = 1;
+}
+
+message ReqEnterEventField {
+	string MapId = 1;
+	repeated int32 ProgressEventGroupIdList = 2;
+	int32 EventFieldId = 3;
+}
+message NetUserAutoChargeData {
+	int32 AutoChargeId = 1;
+	int32 Value = 2;
+}
+
+message NetNonResettableFieldObject {
+	string PositionId = 1;
+	int32 Type = 2;
+	string Json = 3;
+}
+
+message ResEnterEventField {
+	NetUserTeamData team = 2;
+	repeated NetCampaignTeamPosition TeamPositions = 3;
+	string json = 4;
+	repeated int32 userEventIdList = 5;
+	repeated NetUserAutoChargeData autoChargeDataList = 6;
+	repeated NetNonResettableFieldObject NonResettableFieldObjects = 7;
+}
+
+message ReqSaveCampaignFieldObject {
+	string mapId = 2;
+	NetCampaignFieldObject fieldObject = 3;
+}
+message ResSaveCampaignFieldObject {
+}

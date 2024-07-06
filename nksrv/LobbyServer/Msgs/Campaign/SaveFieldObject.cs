@@ -8,24 +8,27 @@ using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Campaign
 {
-    [PacketPath("/campaign/obtain/item")]
-    public class ObtainItem : LobbyMsgHandler
+    [PacketPath("/campaign/savefieldobject")]
+    public class SaveFieldObject : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainCampaignItem>();
+            var req = await ReadData<ReqSaveCampaignFieldObject>();
             var user = GetUser();
 
-            var response = new ResObtainCampaignItem();
+            Console.WriteLine("Map ID: " + req.MapId);
+
+            var response = new ResSaveCampaignFieldObject();
+
+            Console.WriteLine($"save {req.MapId} with {req.FieldObject.PositionID}");
 
             var chapter = StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
             var key = chapter + "_" + mod;
             var field = user.FieldInfo[key];
 
-            // TODO
-            response.Reward = new();
-            
+            field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionID, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
+            JsonDb.Save();
 
 
             WriteData(response);
