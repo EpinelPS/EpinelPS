@@ -148,20 +148,18 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     }
                     else if (item.reward_type == "Item")
                     {
-                        for (int i = 0; i < item.reward_value; i++)
+                        user.Items.Add(new ItemData() { ItemType = item.reward_id });
+                        ret.Item.Add(new NetItemData()
                         {
-                            user.Items.Add(new ItemData() { ItemType = item.reward_id });
-                            ret.Item.Add(new NetItemData()
-                            {
-                                Count = 1,
-                                Tid = item.reward_id
-                            });
-                        }
+                            Count = item.reward_value,
+                            Tid = item.reward_id,
+                            Isn = 123
+                        });
                     }
-                }
-                else
-                {
-                    Logger.Warn("TODO: Reward type " + item.reward_type);
+                    else
+                    {
+                        Logger.Warn("TODO: Reward type " + item.reward_type);
+                    }
                 }
             }
 

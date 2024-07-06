@@ -285,7 +285,7 @@ message NetUserCharacterDefaultData {
 	int32 dispatchTid = 6;
 	int32 costumeId = 7;
 	int32 ultiSkillLv = 8;
-	int32 skill1Lv = 9;
+	int32 skill1Lv = 9;	
 	int32 skill2Lv = 10;
 }
 
@@ -1319,6 +1319,7 @@ enum NetFeatureKind {
  Bbqtycoon = 1018;
  Ce002MiniGame = 1019;
  SoloRaid = 1020;
+ MiniGameDD = 1021;
 }
 
 message NetFeatureFlag{
@@ -1974,4 +1975,25 @@ message ReqObtainCampaignItem {
 }
 message ResObtainCampaignItem {
 	NetRewardData Reward = 2;
+}
+
+message NetMiniGameDaveTriggerData {
+	int32 trigger = 1;
+	int32 conditionId = 2;
+	int64 userValue = 3;
+	int64 updatedAt = 4;
+}
+message ReqGetAllMiniGameDaveTriggers {
+	int32 EventId = 1;
+}
+message ResGetAllMiniGameDaveTriggers {
+	repeated NetMiniGameDaveTriggerData triggers = 1;
+}
+
+message ReqGetFeatureFlag {
+	NetFeatureKind featureKind = 1;
+}
+
+message ResGetFeatureFlag {
+	bool IsOpen = 1;
 }
