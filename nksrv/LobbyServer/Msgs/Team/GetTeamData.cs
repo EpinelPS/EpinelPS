@@ -24,6 +24,7 @@ namespace nksrv.LobbyServer.Msgs.Team
                 foreach (var item in user.UserTeams)
                 {
                     response.TypeTeams.Add(item.Value);
+                    
                 }
             }
             WriteData(response);

@@ -21,13 +21,18 @@ namespace nksrv.LobbyServer.Msgs.User
             if (user.ID == (ulong)req.TargetUsn)
             {
                 response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
-                response.Data.LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                response.Data.LastActionAt = DateTimeOffset.UtcNow.Ticks;
+                response.Data.CharacterCount = new() { Count = user.Characters.Count };
+                response.Data.InfraCoreLv = user.InfraCoreLvl;
+                response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
+                response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
+                response.Data.OutpostOpenState = user.MainQuestData.ContainsKey(25);
             }
             else
             {
                 Logger.Warn("Unknown User ID: " + req.TargetUsn);
             }
-         
+
             WriteData(response);
         }
     }

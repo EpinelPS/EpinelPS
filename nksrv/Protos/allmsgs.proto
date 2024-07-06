@@ -1592,7 +1592,7 @@ message NetProfileData {
 	repeated NetMemorialCount memorialCount = 17;
 	int32 jukeboxCount = 18;
 	int32 costumeLv = 19;
-	int32 outpostOpenState = 20;
+	bool outpostOpenState = 21;
 	int32 costumeCount = 22;
 	string language = 23;
 	NetProfileFrameHistoryType profileFrameHistory = 24;

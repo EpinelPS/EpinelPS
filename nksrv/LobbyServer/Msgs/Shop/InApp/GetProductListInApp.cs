@@ -15,6 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
             var x = await ReadData<ReqGetInAppShopData>();
 
             var response = new ResGetInAppShopData();
+
             // TODO
 
             WriteData(response);

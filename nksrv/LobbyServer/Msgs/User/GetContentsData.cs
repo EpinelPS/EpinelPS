@@ -10,22 +10,17 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqGetContentsOpenData>();
             var user = GetUser();
 
+            // this request returns a list of "special" stages that mark when something is unlocked, ex: the shop or interception
+
+            List<int> specialStages = [6003003, 6002008, 6002016, 6005003, 6003021, 6011018, 6007021, 6004018, 6005013, 6003009, 6003012, 6009017, 6016039, 6001004, 6000003, 6000001, 6002001, 6004023, 6005026, 6020050, 6006004, 6006023];
+
             var response = new ResGetContentsOpenData();
-            bool includeFirst = true;
             foreach (var field in user.FieldInfo.Values)
             {
-                // only include first and last clears
-                int i = 0;
                 foreach (var stage in field.CompletedStages)
                 {
-                    if (i == 0 && includeFirst)
-                    {
+                    if (specialStages.Contains(stage.StageId))
                         response.ClearStageList.Add(stage.StageId);
-                        includeFirst = false;
-                    }
-                    else if (i == field.CompletedStages.Count - 1)
-                        response.ClearStageList.Add(stage.StageId);
-                    i++;
                 }
             }
             response.MaxGachaCount = 10;

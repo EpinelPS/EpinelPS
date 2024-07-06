@@ -3,7 +3,6 @@ using EmbedIO;
 using Google.Protobuf;
 using nksrv.Utils;
 using Swan.Logging;
-using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace nksrv.LobbyServer
 {
@@ -105,7 +104,8 @@ namespace nksrv.LobbyServer
         {
             NetUserData ret = new()
             {
-                Lv = 1,
+                Lv = user.userPointData.UserLevel,
+                Exp = user.userPointData.ExperiencePoint,
                 CommanderRoomJukebox = 5,
                 CostumeLv = 1,
                 Frame = 1,
@@ -114,6 +114,7 @@ namespace nksrv.LobbyServer
                 LobbyJukebox = 2,
                 InfraCoreExp = user.InfraCoreExp,
                 InfraCoreLv = user.InfraCoreLvl,
+                
             };
 
 
@@ -132,14 +133,14 @@ namespace nksrv.LobbyServer
         {
             var ret = new NetWholeUserData()
             {
-                Lv = 1,
+                Lv = user.userPointData.UserLevel,
                 Frame = 1,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
                 Nickname = user.Nickname,
                 Usn = (long)user.ID,
-                LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                
+                LastActionAt = DateTimeOffset.UtcNow.Ticks,
+
             };
 
             return ret;
