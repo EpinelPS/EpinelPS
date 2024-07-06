@@ -63,6 +63,7 @@ namespace nksrv
                 .WithModule(new ActionModule("/account/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithModule(new ActionModule("/data/", HttpVerbs.Any, HandleDataEndpoint))
                 .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
+                .WithModule(new ActionModule("/PC/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
                 .WithModule(new ActionModule("/nikke_launcher", HttpVerbs.Any, HandleLauncherUI));
 
@@ -192,16 +193,22 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
                 // TODO: Ip might change
                 string @base = ctx.Request.RawUrl.StartsWith("/prdenv") ? "prdenv" : "media";
+                if (ctx.Request.RawUrl.StartsWith("/PC"))
+                    @base = "PC";
+
                 var requestUri = new Uri("https://43.132.66.200/" + @base + ctx.RequestedPath);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
                 using var response = await AssetDownloader.SendAsync(request);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    using var fss = new FileStream(targetFile, FileMode.CreateNew);
-                    await response.Content.CopyToAsync(fss, ctx.CancellationToken);
+                    if (!File.Exists(targetFile))
+                    {
+                        using var fss = new FileStream(targetFile, FileMode.CreateNew);
+                        await response.Content.CopyToAsync(fss, ctx.CancellationToken);
 
-                    fss.Close();
+                        fss.Close();
+                    }
                 }
                 else
                 {
