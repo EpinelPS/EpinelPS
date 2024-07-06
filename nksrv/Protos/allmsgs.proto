@@ -1997,3 +1997,72 @@ message ReqGetFeatureFlag {
 message ResGetFeatureFlag {
 	bool IsOpen = 1;
 }
+
+message NetIslandAdventureMissionProgress {
+	int64 MissionUid = 1;
+	int32 MissionTid = 2;
+	int32 Progress = 3;
+	google.protobuf.Timestamp CreatedAt = 4;
+	google.protobuf.Timestamp ReceivedAt = 5;
+}
+message ReqGetIslandAdventureMissionProgress {
+	int32 eventId = 1;
+}
+message ResGetIslandAdventureMissionProgress {
+	repeated NetIslandAdventureMissionProgress MissionProgressList = 1;
+}
+
+message NetEventMissionClearData {
+	int32 EventId = 1;
+	int32 EventMissionId = 2;
+	int64 CreatedAt = 3;
+}
+
+message ReqGetEventMissionClear {
+	int32 eventId = 1;
+}
+message ResGetEventMissionClear {
+	repeated NetEventMissionClearData EventMissionClearList = 2;
+}
+
+message ReqGetIslandAdventureFishingStepUpRewardStatus {
+	int32 EventId = 1;
+}
+message ResGetIslandAdventureFishingStepUpRewardStatus {
+	repeated int32 fishAccumulatedScore = 1;
+	repeated int32 fishStepUpRewardedStep = 2;
+}
+
+message ReqGetIslandAdventurePhotoStepUpRewardStatus {
+	int32 EventId = 1;
+}
+message ResGetIslandAdventurePhotoStepUpRewardStatus {
+	int32 photoAccumulatedScore = 1;
+	repeated int32 PhotoStepUpRewardedStep = 2;
+}
+
+message ReqGetPlaySodaChallengeModeInfo {
+	int32 EventId = 1;
+}
+
+message NetPlaySodaEachGameInfo{
+	int32 challengeStageId = 1;
+	int32 userRank = 2;
+	int32 userMaxScoreInUnion = 3;
+	int64 accumulatedScore = 4;
+	bool canReceivePointReward = 5;
+	bool isInGuild = 6;
+	int32 lastRewardStep = 7;
+}
+message ResGetPlaySodaChallengeModeInfo {
+	bool hasReceivedDailyReward = 1;
+	repeated NetPlaySodaEachGameInfo playSodaEachGameInfoList = 2;
+	NetWholeUserData wholeUser = 3;
+}
+
+message ReqExistScenarioBookmark {
+	repeated string bookmarkList = 1;
+}
+message ResExistScenarioBookmark {
+	repeated string existingBookmarkList = 1;
+}
