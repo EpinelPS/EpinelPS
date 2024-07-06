@@ -21,7 +21,15 @@ Stage, character, outpost and story information is saved and works, as well as p
 <img src="https://github.com/MishaProductions/nikke-server/assets/106913236/c6a89fd4-9568-48c2-b4f9-d73807d4043e" width="480" height="270">
 
 ## TODO: 
+ - [X] Normal campaign
+ - [X] Lobby
+ - [X] Save team info
+ - [X] Profile UI
+ - [X] Open Archives UI
+ - [ ] Outpost jukebox / relics saving
+ - [ ] Field obtain object
  - [ ] Admin panel
+ - [ ] Test hard stage support
  - [ ] Event system
  - [ ] Download all game assets ahead of time
  - [ ] Fix inventory / gear
