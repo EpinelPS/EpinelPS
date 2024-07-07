@@ -148,12 +148,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
                     }
                     else if (item.reward_type == "Item")
                     {
-                        user.Items.Add(new ItemData() { ItemType = item.reward_id });
+                        var id = user.GenerateUniqueItemId();
+                        user.Items.Add(new ItemData() { ItemType = item.reward_id, Isn = id, Level = 1, Exp = 0, Count = 1 });
                         ret.Item.Add(new NetItemData()
                         {
                             Count = item.reward_value,
                             Tid = item.reward_id,
-                            Isn = 123
+                            Isn = id
                         });
                     }
                     else

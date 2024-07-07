@@ -1237,7 +1237,8 @@ message NetUserSynchroData {
 	repeated NetSynchroSlot Slots = 5;
 }
 
-message ReqGetSynchroData {
+message ReqGetSynchroData {}
+message ResGetSynchroData {
 	NetUserSynchroData synchro = 2;
 }
 
@@ -1960,7 +1961,9 @@ message ReqWearEquipment {
 	int64 Isn = 2;
 	int64 Csn = 3;
 }
-message ResWearEquipment {}
+message ResWearEquipment {
+	repeated NetUserItemData items = 3;
+}
 
 message NetCampaignFieldObject {
 	string PositionID = 1;
@@ -2114,4 +2117,57 @@ message ReqSaveCampaignFieldObject {
 	NetCampaignFieldObject fieldObject = 3;
 }
 message ResSaveCampaignFieldObject {
+}
+
+message ReqCharacterLevelUp {
+	int64 Csn = 2;
+	int32 Level = 3;
+}
+
+message ResCharacterLevelUp {
+	NetUserCharacterDefaultData Character = 4;
+	repeated NetUserCurrencyData Currencies = 3;
+	int32 SynchroLv = 5;
+	repeated int64 SynchroStandardCharacters = 6;
+}
+
+message NetMailRewardItem {
+	int32 RewardType = 1;
+	int32 RewardID = 2;
+	int32 RewardValue = 3;
+	int64 ExpiredAt = 4;
+}
+
+message LocaleableText {
+	bool IsPlain = 1;
+	string String = 2;
+	repeated string Args = 3;
+}
+
+message NetUserMailData {
+	int64 Msn = 1;
+	int32 Sender = 2;
+	int32 Type = 3;
+	int32 State = 4;
+	LocaleableText Title = 5;
+	LocaleableText Text = 6;
+	int64 CreatedAt = 7;
+	string Nickname = 9;
+	repeated string appNoticeId = 10;
+	bool HasReward = 11;
+	repeated NetMailRewardItem items = 12;
+	int32 Period = 13;
+}
+
+message ReqGetMailData {}
+message ResGetMailData {
+	repeated NetUserMailData mail = 2;
+}
+
+message ReqReadMail {
+	int64 Msn = 1;
+	int32 Type = 2;
+}
+message ResReadMail {
+
 }

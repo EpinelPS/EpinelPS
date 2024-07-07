@@ -122,6 +122,18 @@ namespace nksrv.Utils
                 MainQuestData.Add(tid, recieved);
             }
         }
+
+        public int GenerateUniqueItemId()
+        {
+            var num = Rng.RandomId();
+
+            while (Items.Any(x => x.Isn == num))
+            {
+                num = Rng.RandomId();
+            }
+
+            return num;
+        }
     }
     public class CoreInfo
     {

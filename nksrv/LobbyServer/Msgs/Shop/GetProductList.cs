@@ -20,14 +20,13 @@ namespace nksrv.LobbyServer.Msgs.Shop
                 var response = new ResGetJupiterProductList();
                 foreach (var item in x.ProductIdList)
                 {
-                    response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 0, Price = "0", ProductId = item });
+                    response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 0, Price = "1", ProductId = item });
                 }
                 WriteData(response);
             }
             catch(Exception ex)
             {
                 Logger.Error("Error while handling GetProductList request. Have you replaced sodium library?" + ex);
-                ;
             }
         }
     }

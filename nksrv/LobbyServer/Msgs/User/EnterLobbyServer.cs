@@ -56,6 +56,13 @@ namespace nksrv.LobbyServer.Msgs.User
                 response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position});
             }
 
+            var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+            response.SynchroLv = highestLevelCharacters.Last().Level;
+            foreach (var item in highestLevelCharacters)
+            {
+            response.SynchroStandardCharacters.Add(item.Csn);
+
+            }
 
             // Add squad data if there are characters
             if (user.Characters.Count > 0)
