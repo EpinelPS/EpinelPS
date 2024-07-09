@@ -16,7 +16,7 @@ namespace ServerSelector
             return !hostsFile.Contains("cloud.nikke-kr.com");
         }
 
-        public static void SaveCfg(bool useOffical, string gamePath, string launcherPath)
+        public static void SaveCfg(bool useOffical, string gamePath, string launcherPath, string ip)
         {
             string sodiumLib = AppDomain.CurrentDomain.BaseDirectory + "sodium.dll";
             string gameSodium = gamePath + "/nikke_Data/Plugins/x86_64/sodium.dll";
@@ -37,8 +37,20 @@ namespace ServerSelector
                 try
                 {
 
-                    int startIdx = txt.IndexOf("127.0.0.1 cloud.nikke-kr.com");
-                    int endIdx = txt.IndexOf("y.io") + 3;
+                    int startIdx = txt.IndexOf("cloud.nikke-kr.com");
+
+                    // find new line character before start index
+                    for (int i = startIdx - 1; i >= 0; i--)
+                    {
+                        var c = txt[i];
+                        if (c == '\n')
+                        {
+                            startIdx = i + 1;
+                            break;
+                        }
+                    }
+
+                    int endIdx = txt.IndexOf("y.io") + 4;
                     txt = txt.Substring(0, startIdx) + txt.Substring(endIdx);
 
                     File.WriteAllText(hostsFilePath, txt);
@@ -71,25 +83,26 @@ namespace ServerSelector
             else
             {
                 // add to hosts file
-                string hosts = @"127.0.0.1 cloud.nikke-kr.com
-127.0.0.1 global-lobby.nikke-kr.com
-127.0.0.1 jp-lobby.nikke-kr.com
-127.0.0.1 us-lobby.nikke-kr.com
-127.0.0.1 kr-lobby.nikke-kr.com
-127.0.0.1 sea-lobby.nikke-kr.com
-127.0.0.1 hmt-lobby.nikke-kr.com
-127.0.0.1 aws-na-dr.intlgame.com
-127.0.0.1 sg-vas.intlgame.com
-127.0.0.1 aws-na.intlgame.com
-127.0.0.1 na-community.playerinfinite.com
-127.0.0.1 common-web.intlgame.com
-127.0.0.1 li-sg.intlgame.com
-127.0.0.1 data-aws-na.intlgame.com
+                string hosts = $@"{ip} cloud.nikke-kr.com
+{ip} global-lobby.nikke-kr.com
+{ip} jp-lobby.nikke-kr.com
+{ip} us-lobby.nikke-kr.com
+{ip} kr-lobby.nikke-kr.com
+{ip} sea-lobby.nikke-kr.com
+{ip} hmt-lobby.nikke-kr.com
+{ip} aws-na-dr.intlgame.com
+{ip} sg-vas.intlgame.com
+{ip} aws-na.intlgame.com
+{ip} na-community.playerinfinite.com
+{ip} common-web.intlgame.com
+{ip} li-sg.intlgame.com
+{ip} data-aws-na.intlgame.com
 255.255.221.21 sentry.io";
 
                 if (!File.ReadAllText(hostsFilePath).Contains("global-lobby.nikke-kr.com"))
                 {
                     using StreamWriter w = File.AppendText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
+                    w.WriteLine();
                     w.WriteLine(hosts);
                 }
 

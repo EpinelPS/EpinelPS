@@ -3,40 +3,56 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:ServerSelector.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="170"
+             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="200"
              x:Class="ServerSelector.Views.MainView"
              x:DataType="vm:MainViewModel"
 			 >
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+		<vm:MainViewModel />
+	</Design.DataContext>
 
-	<StackPanel>
-		<WrapPanel Margin="5">
-			<TextBlock VerticalAlignment="Center" Margin="5">Game path: </TextBlock>
-			<TextBox x:Name="txtGamePath">C:\NIKKE\NIKKE\game</TextBox>
-		</WrapPanel>
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
 
-		<WrapPanel Margin="5">
-			<TextBlock VerticalAlignment="Center" Margin="5">Launcher path: </TextBlock>
-			<TextBox x:Name="txtLauncherPath">C:\NIKKE\Launcher</TextBox>
-		</WrapPanel>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="5"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="5"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="5"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="5"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+		</Grid.RowDefinitions>
 
 
-		<WrapPanel Margin="5">
-			<TextBlock VerticalAlignment="Center" Margin="5">Server: </TextBlock>
+		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
+		<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1">C:\NIKKE\NIKKE\game</TextBox>
 
-			<ComboBox SelectedIndex="0" x:Name="CmbServerSelection">
-				<ComboBox.Items>
-					<ComboBoxItem>Official</ComboBoxItem>
-					<ComboBoxItem>Local</ComboBoxItem>
-				</ComboBox.Items>
-			</ComboBox>
-		</WrapPanel>
+		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0">Launcher path: </TextBlock>
+		<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1">C:\NIKKE\Launcher</TextBox>
 
-		<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click">Save</Button>
+
+		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
+
+		<ComboBox SelectedIndex="0" x:Name="CmbServerSelection" Grid.Row="4" Grid.Column="1" SelectionChanged="CmbServerSelection_SelectionChanged">
+			<ComboBox.Items>
+				<ComboBoxItem>Official</ComboBoxItem>
+				<ComboBoxItem>Local</ComboBoxItem>
+			</ComboBox.Items>
+		</ComboBox>
+
+		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0">IP: </TextBlock>
+		<TextBox x:Name="TxtIpAddress" Grid.Row="6" Grid.Column="1">127.0.0.1</TextBox>
+
 	
-	</StackPanel>
+		<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="8" Grid.Column="1">Save</Button>
+
+	</Grid>
 </UserControl>

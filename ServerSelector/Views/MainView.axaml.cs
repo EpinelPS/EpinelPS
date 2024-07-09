@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
@@ -11,6 +12,8 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
         CmbServerSelection.SelectedIndex = ServerSwitcher.IsUsingOfficalServer() ? 0 : 1;
+
+        TxtIpAddress.IsEnabled = !ServerSwitcher.IsUsingOfficalServer();
     }
 
     private void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -21,14 +24,29 @@ public partial class MainView : UserControl
             return;
         }
 
+        if (CmbServerSelection.SelectedIndex == 1)
+        {
+            if (!IPAddress.TryParse(TxtIpAddress.Text, out _))
+            {
+                ShowWarningMsg("Invalid IP address. The entered IP address should be IPv4 or IPv6.", "Error");
+                return;
+            }
+        }
+
         try
         {
-            ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text);
+            ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text, TxtIpAddress.Text);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ShowWarningMsg("Failed to save configuration: " + ex.ToString(), "Error");
         }
+    }
+
+    private void CmbServerSelection_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (CmbServerSelection != null)
+            TxtIpAddress.IsEnabled = CmbServerSelection.SelectedIndex == 1;
     }
 
     // for some stupid reason avalonia does not support message boxes.

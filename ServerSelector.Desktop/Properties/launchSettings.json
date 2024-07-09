@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ServerSelector.Desktop": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
