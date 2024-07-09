@@ -21,12 +21,12 @@ namespace nksrv.StaticInfo
     public class StaticDataParser
     {
         // Extracted from staticinfo api call
-        public const string StaticDataUrl = "https://cloud.nikke-kr.com/prdenv/122-c8cee37754/staticdata/data/qa-240704-07b/311489/StaticData.pack";
-        public const string Version = "data/qa-240704-07b/311489";
-        public const int Size = 11799600;
-        public static byte[] Sha256Sum = Convert.FromBase64String("IkQKRnt2ue9ET5HCJo4JTK8M6XIi86iLGwl7thZFNMs=");
-        public static byte[] Salt1 = Convert.FromBase64String("O5IyNKavbnmnEVqj2CZDLyORctcGFgYKx839PudpDNo=");
-        public static byte[] Salt2 = Convert.FromBase64String("/870A4CG4n3gAGnHNRS4zdo3wBry8CISud+41MVA8sA=");
+        public const string StaticDataUrl = "https://cloud.nikke-kr.com/prdenv/122-c8cee37754/staticdata/data/qa-240704-07b/312528/StaticData.pack";
+        public const string Version = "data/qa-240704-07b/312528";
+        public const int Size = 11799792;
+        public static byte[] Sha256Sum = Convert.FromBase64String("Wzy+AcGutLR6z1yM7lp+UpFkNuErf56Aj6e9taGH8j4=");
+        public static byte[] Salt1 = Convert.FromBase64String("vZ3Nv6JwfaZJpHwmUc0kyV7Q3Yzm8ysPhyVE0R0GVTc=");
+        public static byte[] Salt2 = Convert.FromBase64String("L29mjnvnlktQ1vLq+E56FkRECojiaHx9UmWzsurBfIU=");
 
         // These fields were extracted from the game.
         public static byte[] PresharedKey = [0xCB, 0xC2, 0x1C, 0x6F, 0xF3, 0xF5, 0x07, 0xF5, 0x05, 0xBA, 0xCA, 0xD4, 0x98, 0x28, 0x84, 0x1F, 0xF0, 0xD1, 0x38, 0xC7, 0x61, 0xDF, 0xD6, 0xE6, 0x64, 0x9A, 0x85, 0x13, 0x3E, 0x1A, 0x6A, 0x0C, 0x68, 0x0E, 0x2B, 0xC4, 0xDF, 0x72, 0xF8, 0xC6, 0x55, 0xE4, 0x7B, 0x14, 0x36, 0x18, 0x3B, 0xA7, 0xD1, 0x20, 0x81, 0x22, 0xD1, 0xA9, 0x18, 0x84, 0x65, 0x13, 0x0B, 0xED, 0xA3, 0x00, 0xE5, 0xD9];
@@ -182,7 +182,7 @@ namespace nksrv.StaticInfo
             if (!File.Exists(targetFile))
             {
                 // TODO: IP might change
-                var requestUri = new Uri("https://43.132.66.200/" + StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
+                var requestUri = new Uri("https://35.190.17.65/" + StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
 

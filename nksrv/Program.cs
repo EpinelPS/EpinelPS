@@ -191,12 +191,12 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             {
                 Logger.Info("Download " + targetFile);
 
-                // TODO: Ip might change
+                // TODO: Ip might change for cloud.nikke-kr.com
                 string @base = ctx.Request.RawUrl.StartsWith("/prdenv") ? "prdenv" : "media";
                 if (ctx.Request.RawUrl.StartsWith("/PC"))
                     @base = "PC";
 
-                var requestUri = new Uri("https://43.132.66.200/" + @base + ctx.RequestedPath);
+                var requestUri = new Uri("https://35.190.17.65/" + @base + ctx.RequestedPath);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
                 using var response = await AssetDownloader.SendAsync(request);
