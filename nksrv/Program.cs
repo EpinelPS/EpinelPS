@@ -25,7 +25,7 @@ namespace nksrv
 {
     internal class Program
     {
-        public static readonly HttpClient AssetDownloader = new();
+        public static readonly HttpClient AssetDownloader = new(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All});
         static async Task Main()
         {
             Logger.UnregisterLogger<ConsoleLogger>();
