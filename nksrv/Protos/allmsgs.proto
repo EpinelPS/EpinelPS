@@ -2171,3 +2171,28 @@ message ReqReadMail {
 message ResReadMail {
 
 }
+
+message ReqClearEquipment {
+	int64 isn = 2;
+	int64 csn = 3;
+}
+
+message ResClearEquipment {
+	NetUserItemData item = 4;
+}
+
+message ReqWearEquipmentList {
+	int64 Csn = 2;
+	repeated int64 IsnList = 3;
+}
+message ResWearEquipmentList {
+	repeated NetUserItemData Items = 3;
+}
+
+message ReqAllClearEquipment {
+	int64 Csn = 2;
+}
+message ResAllClearEquipment {
+	int64 Csn = 2;
+	repeated NetUserItemData Items = 3;
+}

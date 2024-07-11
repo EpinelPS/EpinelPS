@@ -26,13 +26,13 @@ Stage, character, outpost and story information is saved and works, as well as p
  - [X] Save team info
  - [X] Profile UI
  - [X] Open Archives UI
+ - [X] Inventory system
  - [ ] Outpost jukebox / relics saving
  - [ ] Field obtain object
  - [ ] Admin panel
  - [ ] Test hard stage support
  - [ ] Event system
  - [ ] Download all game assets ahead of time
- - [ ] Fix inventory / gear
  - [ ] Level up/skill level up support
  - [ ] Basic friend list support / allow using other servers except 127.0.0.1
  - [ ] Aegis Diver minigame, MOG minigame, etc

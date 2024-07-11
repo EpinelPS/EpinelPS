@@ -7,34 +7,29 @@ using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Inventory
 {
-    [PacketPath("/inventory/wearequipment")]
-    public class WearEquipment : LobbyMsgHandler
+    [PacketPath("/inventory/allclearequipment")]
+    public class ClearAllEquipment : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqWearEquipment>();
+            var req = await ReadData<ReqAllClearEquipment>();
             var user = GetUser();
 
-            var response = new ResWearEquipment();
-
-            foreach (var item in user.Items.ToArray())
-            {
-                if (item.Isn == req.Isn)
-                {
-                    // update character id
-                    item.Csn = req.Csn;
-                }
-            }
-
+            var response = new ResAllClearEquipment();
+            response.Csn = req.Csn;
 
             foreach (var item in user.Items.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {
+                    // update character id
+                    item.Csn = 0;
+
                     response.Items.Add(NetUtils.ToNet(item));
                 }
             }
             JsonDb.Save();
+
             WriteData(response);
         }
     }

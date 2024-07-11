@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.LobbyServer.Msgs.User;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,34 +8,29 @@ using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Inventory
 {
-    [PacketPath("/inventory/wearequipment")]
-    public class WearEquipment : LobbyMsgHandler
+    [PacketPath("/inventory/clearequipment")]
+    public class ClearEquipment : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqWearEquipment>();
+            var req = await ReadData<ReqClearEquipment>();
             var user = GetUser();
 
-            var response = new ResWearEquipment();
+            var response = new ResClearEquipment();
 
             foreach (var item in user.Items.ToArray())
             {
                 if (item.Isn == req.Isn)
                 {
                     // update character id
-                    item.Csn = req.Csn;
+                    item.Csn = 0;
+
+                    response.Item = NetUtils.ToNet(item);
                 }
             }
 
-
-            foreach (var item in user.Items.ToArray())
-            {
-                if (item.Csn == req.Csn)
-                {
-                    response.Items.Add(NetUtils.ToNet(item));
-                }
-            }
             JsonDb.Save();
+
             WriteData(response);
         }
     }
