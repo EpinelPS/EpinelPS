@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var response = new ResGetFieldTalkList();
             // TODO
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

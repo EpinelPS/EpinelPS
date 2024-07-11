@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             // TODO: save these things
             var response = new ResGetJukeboxRewardedData();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

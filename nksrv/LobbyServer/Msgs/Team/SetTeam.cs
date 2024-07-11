@@ -34,7 +34,7 @@ namespace nksrv.LobbyServer.Msgs.Team
             }
             JsonDb.Save();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

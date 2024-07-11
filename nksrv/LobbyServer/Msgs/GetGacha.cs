@@ -19,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs
             var response = new ResGetGachaData();
             if (user.GachaTutorialPlayCount > 0)
                 response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace nksrv.LobbyServer.Msgs.Character
             response.Synchro.SynchroLv = highestLevelCharacters.Last().Level;
 
             // TODO: Validate response from real server and pull info from user info
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

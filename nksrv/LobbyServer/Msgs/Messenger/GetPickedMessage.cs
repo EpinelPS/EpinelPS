@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: get proper response
             var response = new ResGetPickedMessageList();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

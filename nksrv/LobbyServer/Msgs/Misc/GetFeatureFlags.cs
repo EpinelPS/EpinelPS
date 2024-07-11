@@ -19,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var r = new ResGetFeatureFlag();
             r.IsOpen = true;
 
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

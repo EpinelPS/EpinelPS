@@ -19,8 +19,8 @@ namespace nksrv.LobbyServer.Msgs.User
             var response = new ResSetNickname();
             response.Result = SetNicknameResult.NicknameOk;
             response.Nickname = req.Nickname;
-                
-            WriteData(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

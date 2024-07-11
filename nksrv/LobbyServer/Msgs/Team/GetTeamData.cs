@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Team
                     
                 }
             }
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Badge
 
             var response = new ResDeleteBadge();
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

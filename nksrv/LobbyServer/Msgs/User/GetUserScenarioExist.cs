@@ -34,7 +34,8 @@ namespace nksrv.LobbyServer.Msgs.User
                     }
                 }
             }
-            WriteData(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

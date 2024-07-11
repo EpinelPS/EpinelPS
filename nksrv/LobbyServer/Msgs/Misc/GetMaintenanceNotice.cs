@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
         {
             var r = new MaintenanceNoticeResponse();
 
-            WriteData(r);
+            await WriteDataAsync(r);
         }
     }
 }

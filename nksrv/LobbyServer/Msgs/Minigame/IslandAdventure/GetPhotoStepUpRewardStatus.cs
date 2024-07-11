@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Minigame.IslandAdventure
 
             var response = new ResGetIslandAdventurePhotoStepUpRewardStatus();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

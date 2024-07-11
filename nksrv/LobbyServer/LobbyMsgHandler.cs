@@ -59,7 +59,7 @@ namespace nksrv.LobbyServer
 
         protected abstract Task HandleAsync();
 
-        protected void WriteData<T>(T data) where T : IMessage, new()
+        protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
         {
             if (ctx == null)
             {
@@ -85,7 +85,7 @@ namespace nksrv.LobbyServer
                 {
                     ctx.Response.Headers.Set(System.Net.HttpRequestHeader.ContentEncoding, "gzip,enc");
                     var enc = PacketDecryption.EncryptData(((MemoryStream)responseBytes).ToArray(), UsedAuthToken);
-                    ctx.Response.OutputStream.Write(enc, 0, enc.Length);
+                    await ctx.Response.OutputStream.WriteAsync(enc, ctx.CancellationToken);
                 }
             }
         }

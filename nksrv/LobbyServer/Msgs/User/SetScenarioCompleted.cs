@@ -29,7 +29,7 @@ namespace nksrv.LobbyServer.Msgs.User
             user.CompletedScenarios.Add(req.ScenarioId);
             JsonDb.Save();
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

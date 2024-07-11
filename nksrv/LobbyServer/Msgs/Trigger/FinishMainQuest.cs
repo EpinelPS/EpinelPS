@@ -23,7 +23,7 @@ namespace nksrv.LobbyServer.Msgs.Trigger
 
             JsonDb.Save();
             var response = new ResFinMainQuest();
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

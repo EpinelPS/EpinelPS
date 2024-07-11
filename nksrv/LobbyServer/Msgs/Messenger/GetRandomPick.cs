@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: get proper response
             var response = new ResForcePickTodayRandomMessage();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

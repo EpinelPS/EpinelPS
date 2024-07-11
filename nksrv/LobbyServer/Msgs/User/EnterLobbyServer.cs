@@ -85,7 +85,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

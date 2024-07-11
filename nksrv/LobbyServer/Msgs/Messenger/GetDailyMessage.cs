@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: save these things
             var response = new ResPickTodayDailyMessage();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

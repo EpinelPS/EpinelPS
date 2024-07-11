@@ -19,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             r.MatchUrl = "https://global-match.nikke-kr.com";
             r.WorldId = 84;
 
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

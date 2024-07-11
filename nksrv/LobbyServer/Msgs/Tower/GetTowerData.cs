@@ -36,7 +36,7 @@ namespace nksrv.LobbyServer.Msgs.Tower
             response.Data.Add(t3);
             response.Data.Add(t4);
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

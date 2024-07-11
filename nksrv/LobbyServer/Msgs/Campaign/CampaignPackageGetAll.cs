@@ -16,7 +16,8 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             var response = new ResCampaignPackageGetAllShutdownFlags();
             // TODO
-            WriteData(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

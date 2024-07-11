@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Character
 
             var response = new ResSetCharacterCostume();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

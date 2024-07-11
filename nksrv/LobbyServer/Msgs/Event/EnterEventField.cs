@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.Event
 
             // TOOD
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

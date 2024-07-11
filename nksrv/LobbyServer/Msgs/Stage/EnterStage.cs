@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             var response = new ResEnterStage();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

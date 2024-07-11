@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.Pass
 
             // TODO: Support events
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

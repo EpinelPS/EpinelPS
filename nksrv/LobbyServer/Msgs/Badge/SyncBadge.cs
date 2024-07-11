@@ -10,7 +10,7 @@ namespace nksrv.LobbyServer.Msgs.Badge
             var req = await ReadData<ReqSyncBadge>();
 
             var response = new ResSyncBadge();
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

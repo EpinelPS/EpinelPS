@@ -22,7 +22,7 @@ namespace nksrv.LobbyServer.Msgs.Shop
                 {
                     response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 0, Price = "1", ProductId = item });
                 }
-                WriteData(response);
+              await  WriteDataAsync(response);
             }
             catch(Exception ex)
             {

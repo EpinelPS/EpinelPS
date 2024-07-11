@@ -21,7 +21,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             var response = new ResShowOutpostBattleReward();
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

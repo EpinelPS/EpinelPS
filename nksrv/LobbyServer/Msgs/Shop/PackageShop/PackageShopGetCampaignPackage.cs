@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.PackageShop
             var response = new ResGetCampaignPackage();
 
             // TODO: Validate response from real server and pull info from user info
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

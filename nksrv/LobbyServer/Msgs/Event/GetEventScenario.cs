@@ -26,7 +26,7 @@ namespace nksrv.LobbyServer.Msgs.Event
                 user.EventInfo.Add(req.EventID, new EventData());
             }
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

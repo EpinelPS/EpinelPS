@@ -51,7 +51,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             response.Json = resultingJson;
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

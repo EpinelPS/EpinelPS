@@ -30,7 +30,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
             }
             JsonDb.Save();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

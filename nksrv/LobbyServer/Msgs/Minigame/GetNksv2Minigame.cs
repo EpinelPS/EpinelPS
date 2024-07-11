@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Minigame
 
             var response = new ResGetMiniGameNKSV2Data();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

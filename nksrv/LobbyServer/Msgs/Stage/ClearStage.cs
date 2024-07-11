@@ -70,7 +70,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 JsonDb.Save();
             }
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
 
         private NetRewardData RegisterRewardsForUser(Utils.User user, RewardTableRecord rewardData)

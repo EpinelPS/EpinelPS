@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
 
             // TODO
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

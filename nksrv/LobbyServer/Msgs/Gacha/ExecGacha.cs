@@ -40,7 +40,7 @@ namespace nksrv.LobbyServer.Msgs.Gacha
             JsonDb.Save();
            
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

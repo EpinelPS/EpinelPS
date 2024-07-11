@@ -30,8 +30,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionID, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
             JsonDb.Save();
 
-
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

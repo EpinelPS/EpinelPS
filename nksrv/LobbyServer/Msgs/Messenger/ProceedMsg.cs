@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: save these things
             var response = new ResProceedMessage();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

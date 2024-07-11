@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Shop
             var req = await ReadData<ReqShopProductList>();
             var response = new ResShopProductList();
           
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

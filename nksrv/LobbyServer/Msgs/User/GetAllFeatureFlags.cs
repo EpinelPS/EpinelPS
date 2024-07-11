@@ -51,7 +51,7 @@ namespace nksrv.LobbyServer.Msgs.User
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.Ce002MiniGame, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.SoloRaid, IsOpen = true },
                 ]);
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

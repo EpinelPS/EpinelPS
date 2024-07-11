@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
             var response = new ResGetCustomPackageSetupData();
 
             // TODO: Validate response from real server and pull info from user info
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

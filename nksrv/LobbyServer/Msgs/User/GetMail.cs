@@ -30,7 +30,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             r.Mail[0].Items.Add(new NetMailRewardItem() { ExpiredAt = DateTime.UtcNow.AddYears(10).ToUnixEpochDate(), RewardID = 1, RewardType = (int)CurrencyType.ChargeCash, RewardValue = 100000 });
 
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

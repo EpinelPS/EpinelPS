@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var response = new ResGetWallpaper();
             response.WallpaperList.AddRange(GetUser().WallpaperList);
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

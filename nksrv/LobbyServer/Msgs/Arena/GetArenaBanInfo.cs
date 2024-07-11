@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Arena
 
             var response = new ResGetArenaBanInfo();
             // TODO
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

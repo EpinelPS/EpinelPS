@@ -26,7 +26,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             response.SquadData = "";
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
 
         public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter, string mod)

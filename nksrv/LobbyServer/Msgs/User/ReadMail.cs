@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             var r = new ResReadMail();
             //TODO
-            WriteData(r);
+            await WriteDataAsync(r);
         }
     }
 }

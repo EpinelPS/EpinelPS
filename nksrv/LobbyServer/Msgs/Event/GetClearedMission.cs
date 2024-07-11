@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Event
 
             var response = new ResGetEventMissionClear();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

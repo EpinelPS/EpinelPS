@@ -18,7 +18,8 @@ namespace nksrv.LobbyServer.Msgs.User
             user.ProfileIconIsPrism = req.IsPrism;
             JsonDb.Save();
             var response = new ResSetProfileIcon();
-            WriteData(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

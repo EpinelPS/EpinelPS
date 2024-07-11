@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
                 response.Unavailables.Add(3);
 
            // TODO: Validate response from real server and pull info from user info
-           WriteData(response);
+         await  WriteDataAsync(response);
         }
     }
 }

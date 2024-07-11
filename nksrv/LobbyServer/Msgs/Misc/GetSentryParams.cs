@@ -14,7 +14,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
         {
             var r = new SentryDataResponse();
             // TODO check proper response from real server
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

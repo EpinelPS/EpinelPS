@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Minigame.PlaySoda
 
             var response = new ResGetPlaySodaChallengeModeInfo();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

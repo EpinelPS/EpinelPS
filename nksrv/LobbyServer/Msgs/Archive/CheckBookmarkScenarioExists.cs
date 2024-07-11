@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Archive
 
             var response = new ResExistScenarioBookmark();
             // TODO
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace nksrv.LobbyServer.Msgs.Event
                 JoinAt = 0
             });
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

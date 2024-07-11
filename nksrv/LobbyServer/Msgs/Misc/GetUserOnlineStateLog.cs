@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
 
 
             var response = new ResUserOnlineStateLog();
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

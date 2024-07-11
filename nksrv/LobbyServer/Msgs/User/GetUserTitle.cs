@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             var r = new ResGetUserTitleList();
 
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

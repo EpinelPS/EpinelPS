@@ -24,7 +24,7 @@ namespace nksrv.LobbyServer.Msgs.User
                 response.ScenarioList.Add(item);
             }
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

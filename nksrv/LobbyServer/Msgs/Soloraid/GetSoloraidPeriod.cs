@@ -20,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Soloraid
                 
             };
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Mission.Rewards
             // TODO: implement
             var response = new ResGetWeeklyRewardedData();
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

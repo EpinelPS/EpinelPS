@@ -33,7 +33,7 @@ namespace nksrv.LobbyServer.Msgs.User
                 Logger.Warn("Unknown User ID: " + req.TargetUsn);
             }
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             response.Data.Add(new NetUserOutpostData() { SlotId = 38, BuildingId = 33601, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
 
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

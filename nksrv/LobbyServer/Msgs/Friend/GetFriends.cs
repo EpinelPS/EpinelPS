@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Friend
             var response = new ResGetFriendData();
 
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

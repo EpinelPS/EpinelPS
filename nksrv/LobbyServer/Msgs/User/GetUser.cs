@@ -45,7 +45,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
             response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
           
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

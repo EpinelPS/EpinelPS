@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.Antibot
 
             var response = new ResAntibotRecvData();
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

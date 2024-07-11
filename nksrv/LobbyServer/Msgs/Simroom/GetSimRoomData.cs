@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Simroom
                 },
                NextLegacyBuffResetDate = Timestamp.FromDateTimeOffset(DateTime.UtcNow.AddDays(7)) };
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

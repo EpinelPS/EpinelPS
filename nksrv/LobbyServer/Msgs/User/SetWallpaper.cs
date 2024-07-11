@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var user = GetUser();
             user.WallpaperList = req.WallpaperList.ToArray();
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

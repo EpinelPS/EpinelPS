@@ -20,13 +20,13 @@ namespace nksrv.LobbyServer.Msgs.Wallet
             {
                 Console.WriteLine("Request currency " + (CurrencyType)item);
             }
-            
+
             foreach (var currency in user.Currency)
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
             }
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

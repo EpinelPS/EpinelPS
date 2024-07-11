@@ -18,7 +18,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
 
             // TODO
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

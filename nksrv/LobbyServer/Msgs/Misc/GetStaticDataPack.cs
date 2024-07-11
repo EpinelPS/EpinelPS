@@ -21,7 +21,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             r.Salt1 = ByteString.CopyFrom(StaticDataParser.Salt1);
             r.Salt2 = ByteString.CopyFrom(StaticDataParser.Salt2);
 
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

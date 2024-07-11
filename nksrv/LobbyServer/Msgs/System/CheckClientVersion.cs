@@ -11,7 +11,7 @@ namespace nksrv.LobbyServer.Msgs.System
             var response = new CheckVersionResponse();
             response.Availability = 0;    // None = 0, Available = 1, Mandatory = 2
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

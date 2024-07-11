@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Minigame.Dave
 
             var response = new ResGetAllMiniGameDaveTriggers();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

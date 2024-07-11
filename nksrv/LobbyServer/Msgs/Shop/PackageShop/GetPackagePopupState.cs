@@ -10,7 +10,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.PackageShop
             var req = await ReadData<ReqGetPopupPackageState>();
 
             var response = new ResGetPopupPackageState();
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

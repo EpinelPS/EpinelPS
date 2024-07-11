@@ -102,7 +102,7 @@ namespace nksrv.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs.Team
             {
                 Console.WriteLine("support character used: " + item);
             }
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Mission
             var response = new ResGetAchievementRewardedData();
 
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

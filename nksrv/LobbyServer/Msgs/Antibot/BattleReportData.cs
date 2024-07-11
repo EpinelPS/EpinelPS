@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Antibot
 
             // this is responsible for server side anticheat
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

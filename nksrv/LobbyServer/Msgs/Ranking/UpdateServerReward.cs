@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Ranking
             var response = new ResUpdateRankingServerReward();
 
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

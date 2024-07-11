@@ -20,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Character
             // return all
             response.CostumeIds.AddRange(StaticDataParser.Instance.GetAllCostumes());
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

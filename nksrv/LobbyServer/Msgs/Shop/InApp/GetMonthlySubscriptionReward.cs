@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
             var response = new ResGetMonthlySubscriptionReward();
 
             // TODO: Validate response from real server
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

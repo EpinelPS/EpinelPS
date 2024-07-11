@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Wallet
                     response.ChargeCash.Value = item.Value;
                 }
             }
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

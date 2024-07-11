@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var r = new ResourceHostResponse();
             r.BaseUrl = "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}";
             
-            WriteData(r);
+          await  WriteDataAsync(r);
         }
     }
 }

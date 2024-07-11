@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             var response = new ResProfileCardObjectList();
             // TODO
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

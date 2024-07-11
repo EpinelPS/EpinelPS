@@ -16,9 +16,9 @@ namespace nksrv.LobbyServer.Msgs.Character
 
             var response = new ResGetAttractiveList();
             response.CounselAvailableCount = 3; // TODO
-         
+
             // TODO: Validate response from real server and pull info from user info
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

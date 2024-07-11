@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Shop.InApp
             var response = new ResGetJupiterMarketingDetail();
             response.MarketingDetail = "{}";
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

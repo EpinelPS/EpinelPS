@@ -36,8 +36,9 @@ namespace nksrv.LobbyServer.Msgs.Auth
             response.FeatureDataInfo = new NetFeatureDataInfo() { UseFeatureData = true };
             response.Identifier = new NetLegacyUserIdentifier() { Server = 21769, Usn = (long)user.ID };
             response.ShouldRestartAfter = Duration.FromTimeSpan(TimeSpan.FromSeconds(86400));
+
             response.EncryptionToken = ByteString.CopyFromUtf8(rsp.ClientAuthToken);
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

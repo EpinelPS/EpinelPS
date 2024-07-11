@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Character
                 response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
             }
 
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }

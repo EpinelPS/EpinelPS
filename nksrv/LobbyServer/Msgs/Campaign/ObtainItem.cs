@@ -25,10 +25,10 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             // TODO
             response.Reward = new();
-            
 
 
-            WriteData(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

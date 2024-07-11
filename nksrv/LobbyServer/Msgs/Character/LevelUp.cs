@@ -50,7 +50,7 @@ namespace nksrv.LobbyServer.Msgs.Character
 
          
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

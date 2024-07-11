@@ -31,7 +31,7 @@ namespace nksrv.LobbyServer.Msgs.Event
 
             // TODO reward
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

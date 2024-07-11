@@ -23,7 +23,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
 
             // TODO implement
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

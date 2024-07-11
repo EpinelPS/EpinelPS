@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Trigger
                 response.MainQuestList.Add(new NetMainQuestData() { IsReceived = item.Value, Tid = item.Key });
             }
      
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

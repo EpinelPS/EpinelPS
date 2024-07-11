@@ -20,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Gacha
             response.FreeCount = 0;
             response.EventData = new NetEventData() { Id = 1 };
 
-            WriteData(response);
+          await  WriteDataAsync(response);
         }
     }
 }

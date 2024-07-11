@@ -25,7 +25,7 @@ namespace nksrv.LobbyServer.Msgs.User.Tutorial
             JsonDb.Save();
 
             var response = new ResSetTutorial();
-            WriteData(response);
+            await WriteDataAsync(response);
         }
     }
 }
