@@ -16,7 +16,24 @@ namespace nksrv.LobbyServer.Msgs.Inventory
             var user = GetUser();
 
             var response = new ResWearEquipment();
-            // TODO implement
+
+            foreach (var item in user.Items.ToArray())
+            {
+                if (item.Isn == req.Isn)
+                {
+                    // update character id
+                    item.Csn = req.Csn;
+                }
+            }
+
+
+            foreach (var item in user.Items.ToArray())
+            {
+                if (item.Csn == req.Csn)
+                {
+                    response.Items.Add(NetUtils.ToNet(item));
+                }
+            }
 
             WriteData(response);
         }
