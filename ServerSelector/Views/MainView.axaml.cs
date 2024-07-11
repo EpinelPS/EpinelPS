@@ -32,6 +32,7 @@ public partial class MainView : UserControl
                 return;
             }
         }
+        if (TxtIpAddress.Text == null) TxtIpAddress.Text = "";
 
         try
         {

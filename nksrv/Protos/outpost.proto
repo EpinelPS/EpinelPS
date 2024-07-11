@@ -1,6 +1,0 @@
-﻿syntax = "proto3";
-
-option csharp_namespace = "nksrv";
-
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/Duration.proto";

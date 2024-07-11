@@ -28,8 +28,8 @@ message ResGetServerInfo {
 
 
 message NetMaintenanceWindow {
-	//Timestamp from = 1;
-	//Timestamp to = 2;
+	google.protobuf.Timestamp from = 1;
+	google.protobuf.Timestamp to = 2;
 }
 
 message MaintenanceNoticeResponse {

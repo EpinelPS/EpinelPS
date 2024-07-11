@@ -49,9 +49,31 @@ namespace nksrv.StaticInfo
         private JArray characterCostumeTable;
         private JArray characterTable;
         private JArray tutorialTable;
+
+        static StaticDataParser()
+        {
+            Logger.Info("Loading static data");
+            Load().Wait();
+            if (Instance == null) throw new Exception("static data load fail");
+
+            Logger.Info("Parsing static data");
+            Instance.Parse().Wait();
+        }
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
+
+            // disable warnings
+            questDataRecords = new();
+            stageDataRecords = new();
+            rewardDataRecords = new();
+            userExpDataRecords = new();
+            chapterCampaignData = new();
+            characterCostumeTable = new();
+            characterTable = new();
+            ZipStream = new();
+            tutorialTable = new();
+
             DecryptStaticDataAndLoadZip(filePath);
             if (MainZip == null) throw new Exception("failed to read zip file");
         }
@@ -173,34 +195,8 @@ namespace nksrv.StaticInfo
         }
         public static async Task Load()
         {
-            string targetFile = Program.GetCachePathForPath(StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
-            var targetDir = Path.GetDirectoryName(targetFile);
-            if (targetDir == null) throw new Exception("directory name is null for path " + targetDir);
-
-            Directory.CreateDirectory(targetDir);
-
-            if (!File.Exists(targetFile))
-            {
-                // TODO: IP might change
-                var requestUri = new Uri("https://35.190.17.65/" + StaticDataUrl.Replace("https://cloud.nikke-kr.com", ""));
-                using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-                request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
-
-                Logger.Info("Downloading static game data from server. Please wait.");
-                using var response = await Program.AssetDownloader.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    using var fss = new FileStream(targetFile, FileMode.CreateNew);
-                    await response.Content.CopyToAsync(fss);
-
-                    fss.Close();
-                }
-                else
-                {
-                    throw new Exception("Failed to download static game data");
-                }
-            }
-
+            var targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(StaticDataUrl, CancellationToken.None);
+            if (targetFile == null) throw new Exception("static data download fail");
 
             Instance = new(targetFile);
         }

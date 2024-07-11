@@ -25,7 +25,6 @@ namespace nksrv
 {
     internal class Program
     {
-        public static readonly HttpClient AssetDownloader = new(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All});
         static async Task Main()
         {
             Logger.UnregisterLogger<ConsoleLogger>();
@@ -33,11 +32,7 @@ namespace nksrv
             Logger.Info("Initializing database");
             JsonDb.Save();
 
-            Logger.Info("Loading static data");
-            await StaticDataParser.Load();
-
-            Logger.Info("Parsing static data");
-            await StaticDataParser.Instance.Parse();
+            StaticDataParser.Instance.GetAllCostumes(); // force static data to be loaded
 
             Logger.Info("Initialize handlers");
             LobbyHandler.Init();
@@ -178,45 +173,15 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         private static async Task HandleAsset(IHttpContext ctx)
         {
-            string targetFile = GetCachePathForPath(ctx.Request.RawUrl);
-            var targetDir = Path.GetDirectoryName(targetFile);
-            if (targetDir == null)
+            string? targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(ctx.Request.RawUrl, ctx.CancellationToken);
+
+            if (targetFile == null)
             {
-                Logger.Error($"ERROR: Directory name cannot be null for request " + ctx.Request.RawUrl + ", file path is " + targetFile);
+                Logger.Error("Download failed: " + ctx.RequestedPath);
+                ctx.Response.StatusCode = 404;
                 return;
             }
-            Directory.CreateDirectory(targetDir);
 
-            if (!File.Exists(targetFile))
-            {
-                Logger.Info("Download " + targetFile);
-
-                // TODO: Ip might change for cloud.nikke-kr.com
-                string @base = ctx.Request.RawUrl.StartsWith("/prdenv") ? "prdenv" : "media";
-                if (ctx.Request.RawUrl.StartsWith("/PC"))
-                    @base = "PC";
-
-                var requestUri = new Uri("https://35.190.17.65/" + @base + ctx.RequestedPath);
-                using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
-                request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
-                using var response = await AssetDownloader.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    if (!File.Exists(targetFile))
-                    {
-                        using var fss = new FileStream(targetFile, FileMode.CreateNew);
-                        await response.Content.CopyToAsync(fss, ctx.CancellationToken);
-
-                        fss.Close();
-                    }
-                }
-                else
-                {
-                    Logger.Error("FAILED TO DOWNLOAD FILE: " + ctx.RequestedPath);
-                    ctx.Response.StatusCode = 404;
-                    return;
-                }
-            }
             try
             {
                 using var fss = new FileStream(targetFile, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -230,7 +195,7 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     ctx.Response.ContentType = "application/json";
                 }
                 ctx.Response.StatusCode = 200;
-                //ctx.Response.ContentLength64 = fss.Length; // TODO: This causes chrome to download content very slowl
+                //ctx.Response.ContentLength64 = fss.Length; // TODO: This causes chrome to download content very slowly
 
                 await fss.CopyToAsync(responseStream, ctx.CancellationToken);
                 fss.Close();
