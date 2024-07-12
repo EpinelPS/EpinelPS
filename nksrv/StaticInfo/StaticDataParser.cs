@@ -154,8 +154,6 @@ namespace nksrv.StaticInfo
             AesCtrTransform(decryptionKey2, iv2, dataMs, ZipStream);
 
             ZipStream.Position = 0;
-            File.WriteAllBytes("descrpytredlatest.zip", ZipStream.ToArray());
-            ZipStream.Position = 0;
 
             MainZip = new ZipFile(ZipStream, false);
         }
