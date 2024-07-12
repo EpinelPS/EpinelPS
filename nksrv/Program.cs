@@ -169,7 +169,7 @@ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         public static string GetCachePathForPath(string path)
         {
-            return AppDomain.CurrentDomain.BaseDirectory + "cache" + path;
+            return AppDomain.CurrentDomain.BaseDirectory + "cache/" + path;
         }
         private static async Task HandleAsset(IHttpContext ctx)
         {

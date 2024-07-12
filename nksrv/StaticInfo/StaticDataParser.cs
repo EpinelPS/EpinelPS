@@ -38,7 +38,19 @@ namespace nksrv.StaticInfo
         };
 
         // Fields
-        public static StaticDataParser Instance;
+        private static StaticDataParser? _instance;
+        public static StaticDataParser Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = BuildAsync().Result;
+                }
+
+                return _instance;
+            }
+        }
         private ZipFile MainZip;
         private MemoryStream ZipStream;
         private JArray questDataRecords;
@@ -50,15 +62,16 @@ namespace nksrv.StaticInfo
         private JArray characterTable;
         private JArray tutorialTable;
 
-        static StaticDataParser()
+        static async Task<StaticDataParser> BuildAsync()
         {
             Logger.Info("Loading static data");
-            Load().Wait();
-            if (Instance == null) throw new Exception("static data load fail");
+            await Load();
 
             Logger.Info("Parsing static data");
-            Instance.Parse().Wait();
+            await Instance.Parse();
+            return Instance;
         }
+
         public StaticDataParser(string filePath)
         {
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
@@ -198,7 +211,7 @@ namespace nksrv.StaticInfo
             var targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(StaticDataUrl, CancellationToken.None);
             if (targetFile == null) throw new Exception("static data download fail");
 
-            Instance = new(targetFile);
+            _instance = new(targetFile);
         }
         #endregion
 

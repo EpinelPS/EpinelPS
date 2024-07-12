@@ -13,7 +13,7 @@ namespace nksrv.Utils
         public static readonly HttpClient AssetDownloader = new(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All });
         public static async Task<string?> DownloadOrGetFileAsync(string url, CancellationToken cancellationToken)
         {
-            var rawUrl = url.Replace("https://cloud.nikke-kr.com", "");
+            var rawUrl = url.Replace("https://cloud.nikke-kr.com/", "");
             string targetFile = Program.GetCachePathForPath(rawUrl);
             var targetDir = Path.GetDirectoryName(targetFile);
             if (targetDir == null)
@@ -27,12 +27,9 @@ namespace nksrv.Utils
             {
                 Logger.Info("Download " + targetFile);
 
-                // TODO: Ip might change for cloud.nikke-kr.com
-                string @base = rawUrl.StartsWith("/prdenv") ? "prdenv" : "media";
-                if (rawUrl.StartsWith("/PC"))
-                    @base = "PC";
 
-                var requestUri = new Uri("https://35.190.17.65/" + @base + rawUrl);
+
+                var requestUri = new Uri("https://35.190.17.65/" + rawUrl);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
                 using var response = await AssetDownloader.SendAsync(request);
