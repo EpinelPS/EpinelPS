@@ -15,9 +15,9 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var req = await ReadData<ResourceHostRequest>();
 
             var r = new ResourceHostResponse();
-            r.BaseUrl = "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}";
-            
-          await  WriteDataAsync(r);
+            r.BaseUrl = GameConfig.Root.ResourceBaseURL;
+
+            await WriteDataAsync(r);
         }
     }
 }

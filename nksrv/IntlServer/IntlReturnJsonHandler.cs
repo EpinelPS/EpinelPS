@@ -20,10 +20,7 @@ namespace nksrv.IntlServer
 
         protected override async Task HandleAsync()
         {
-            var str = await ctx.GetRequestBodyAsStringAsync();
-
-            string? seg = ctx.GetRequestQueryData().Get("seq");
-            await WriteJsonStringAsync(JsonToReturn.Replace("((SEGID))", seg));
+            await WriteJsonStringAsync(JsonToReturn.Replace("((SEGID))", Seq));
         }
     }
 }

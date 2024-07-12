@@ -22,21 +22,19 @@ namespace nksrv.IntlServer
             SendCodeRequest? ep = JsonConvert.DeserializeObject<SendCodeRequest>(Content);
             if (ep != null)
             {
-                string? seg = ctx.GetRequestQueryData().Get("seq");
-
                 // check if the account already exists
 
                 foreach (var item in JsonDb.Instance.Users)
                 {
                     if (item.Username == ep.account)
                     {
-                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
+                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + Seq + "\"}");
                         return;
                     }
                 }
 
                 // pretend that we sent the code
-                await WriteJsonStringAsync("{\"expire_time\":898,\"msg\":\"Success\",\"ret\":0,\"seq\":\"" + seg + "\"}");
+                await WriteJsonStringAsync("{\"expire_time\":898,\"msg\":\"Success\",\"ret\":0,\"seq\":\"" + Seq + "\"}");
             }
             else
             {

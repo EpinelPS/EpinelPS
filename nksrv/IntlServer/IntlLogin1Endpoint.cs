@@ -33,9 +33,7 @@ namespace nksrv.IntlServer
                     }
                 }
 
-                string? seg = ctx.GetRequestQueryData().Get("seq");
-
-                await WriteJsonStringAsync("{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"" + seg + "\"}");
+                await WriteJsonStringAsync("{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"" + Seq + "\"}");
             }
             else
             {

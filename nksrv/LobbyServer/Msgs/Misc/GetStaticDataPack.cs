@@ -12,16 +12,14 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var req = await ReadData<StaticDataPackRequest>();
 
             var r = new StaticDataPackResponse();
-            r.Url = StaticDataParser.StaticDataUrl;
-            r.Version = StaticDataParser.Version;
-            r.Size = StaticDataParser.Size;
+            r.Url = GameConfig.Root.StaticData.Url;
+            r.Version = GameConfig.Root.StaticData.Version;
+            r.Size = StaticDataParser.Instance.Size;
+            r.Sha256Sum = ByteString.CopyFrom(StaticDataParser.Instance.Sha256Hash);
+            r.Salt1 = ByteString.CopyFrom(Convert.FromBase64String(GameConfig.Root.StaticData.Salt1));
+            r.Salt2 = ByteString.CopyFrom(Convert.FromBase64String(GameConfig.Root.StaticData.Salt2));
 
-            // TODO: Read the file and compute these values
-            r.Sha256Sum = ByteString.CopyFrom(StaticDataParser.Sha256Sum);
-            r.Salt1 = ByteString.CopyFrom(StaticDataParser.Salt1);
-            r.Salt2 = ByteString.CopyFrom(StaticDataParser.Salt2);
-
-          await  WriteDataAsync(r);
+            await WriteDataAsync(r);
         }
     }
 }

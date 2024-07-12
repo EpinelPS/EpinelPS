@@ -12,17 +12,17 @@ namespace nksrv.IntlServer
 {
     public abstract class IntlMsgHandler
     {
-        protected IHttpContext ctx;
+        protected IHttpContext? ctx;
         protected string Content = "";
         protected User? User;
-        protected string? Seq;
+        protected string Seq = "";
         protected AccessToken? UsedToken;
         public abstract bool RequiresAuth { get; }
         public async Task HandleAsync(IHttpContext ctx)
         {
             this.ctx = ctx;
             Content = await ctx.GetRequestBodyAsStringAsync();
-            Seq = ctx.GetRequestQueryData().Get("seq");
+            Seq = ctx.GetRequestQueryData().Get("seq") ?? "";
             if (RequiresAuth)
             {
                 var x = JsonConvert.DeserializeObject<AuthPkt>(Content);
@@ -74,7 +74,6 @@ namespace nksrv.IntlServer
             await HandleAsync();
         }
         protected abstract Task HandleAsync();
-
         protected async Task WriteJsonStringAsync(string data)
         {
             if (ctx != null)
@@ -83,10 +82,11 @@ namespace nksrv.IntlServer
                 ctx.Response.ContentEncoding = null;
                 ctx.Response.ContentType = "application/json";
                 ctx.Response.ContentLength64 = bt.Length;
-                await ctx.Response.OutputStream.WriteAsync(bt, 0, bt.Length, ctx.CancellationToken);
+                await ctx.Response.OutputStream.WriteAsync(bt, ctx.CancellationToken);
                 await ctx.Response.OutputStream.FlushAsync();
             }
         }
+
         public class ChannelInfo
         {
             public string openid { get; set; } = "";

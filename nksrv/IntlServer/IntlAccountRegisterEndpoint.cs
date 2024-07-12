@@ -19,18 +19,15 @@ namespace nksrv.IntlServer
 
         protected override async Task HandleAsync()
         {
-
             RegisterEPReq? ep = JsonConvert.DeserializeObject<RegisterEPReq>(Content);
             if (ep != null)
             {
-                string? seg = ctx.GetRequestQueryData().Get("seq");
-
                 // check if the account already exists
                 foreach (var item in JsonDb.Instance.Users)
                 {
                     if (item.Username == ep.account)
                     {
-                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seg + "\"}");
+                        await WriteJsonStringAsync("{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + Seq + "\"}");
                         return;
                     }
                 }
@@ -51,7 +48,7 @@ namespace nksrv.IntlServer
                 JsonDb.Instance.Users.Add(user);
 
                 var tok = IntlHandler.CreateLauncherTokenForUser(user);
-                await WriteJsonStringAsync("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seg + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}");
+                await WriteJsonStringAsync("{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + Seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}");
             }
             else
             {

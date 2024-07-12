@@ -1,0 +1,12 @@
+﻿{
+  // Extracted from POST https://global-lobby.nikke-kr.com/v1/staticdatapack
+  "StaticData": {
+    "Url": "https://cloud.nikke-kr.com/prdenv/122-c8cee37754/staticdata/data/qa-240704-07b/313275/StaticData.pack",
+    "Version": "data/qa-240704-07b/313275",
+    "Salt1": "7OpvuafRK67Rf0X2VJrzIAqZ0CBPbY4IWWdtbQ3LyV8=",
+    "Salt2": "zR7nPjsRCPUfN9BViVkk5R/KOCkVimb8VSE+yOqey+g="
+  },
+
+  // Extracted from POST https://global-lobby.nikke-kr.com/v1/resourcehosts2
+  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}"
+}

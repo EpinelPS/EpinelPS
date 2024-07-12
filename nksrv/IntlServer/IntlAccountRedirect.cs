@@ -19,6 +19,7 @@ namespace nksrv.IntlServer
 
         protected override async Task HandleAsync()
         {
+            if (ctx == null) throw new Exception("ctx cannot be null");
             Console.WriteLine("li-sg redirect in: " + Content);
             HttpClientHandler handler = new()
             {

@@ -45,6 +45,7 @@ namespace nksrv.Utils
                 }
                 else
                 {
+                    Logger.Error("Failed to download " + url + " with status code " + response.StatusCode);
                     return null;
                 }
             }
