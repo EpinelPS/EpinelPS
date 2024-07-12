@@ -54,6 +54,7 @@ namespace nksrv.StaticInfo
         private JArray characterCostumeTable;
         private JArray characterTable;
         private JArray tutorialTable;
+        private JArray itemEquipTable;
 
         public byte[] Sha256Hash;
         public int Size;
@@ -83,7 +84,7 @@ namespace nksrv.StaticInfo
             characterTable = new();
             ZipStream = new();
             tutorialTable = new();
-
+            itemEquipTable = new();
 
             var rawBytes = File.ReadAllBytes(filePath);
             Sha256Hash = SHA256.HashData(rawBytes);
@@ -153,12 +154,13 @@ namespace nksrv.StaticInfo
             AesCtrTransform(decryptionKey2, iv2, dataMs, ZipStream);
 
             ZipStream.Position = 0;
+            File.WriteAllBytes("descrpytredlatest.zip", ZipStream.ToArray());
+            ZipStream.Position = 0;
 
             MainZip = new ZipFile(ZipStream, false);
         }
 
-        public static void AesCtrTransform(
-    byte[] key, byte[] salt, Stream inputStream, Stream outputStream)
+        public static void AesCtrTransform(byte[] key, byte[] salt, Stream inputStream, Stream outputStream)
         {
             SymmetricAlgorithm aes = Aes.Create();
             aes.Mode = CipherMode.ECB;
@@ -244,6 +246,7 @@ namespace nksrv.StaticInfo
             characterCostumeTable = await LoadZip("CharacterCostumeTable.json");
             characterTable = await LoadZip("CharacterTable.json");
             tutorialTable = await LoadZip("ContentsTutorialTable.json");
+            itemEquipTable = await LoadZip("ItemEquipTable.json");
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -417,6 +420,29 @@ namespace nksrv.StaticInfo
             }
 
             throw new Exception("tutorial not found: " + TableId);
+        }
+
+        public string? GetItemSubType(int itemType)
+        {
+            foreach (JObject item in itemEquipTable)
+            {
+                var id = item["id"];
+                if (id == null) throw new Exception("expected id field in reward data");
+
+                int? idValue = id.ToObject<int>();
+                if (idValue == itemType)
+                {
+                    var subtype = item["item_sub_type"];
+                    if (subtype == null)
+                    {
+                        throw new Exception("expected item_sub_type field in item equip data");
+                    }
+
+                    return subtype.ToObject<string>();
+                }
+            }
+
+            return null;
         }
     }
 }

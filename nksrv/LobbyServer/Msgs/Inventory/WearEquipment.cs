@@ -23,6 +23,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                 {
                     // update character id
                     item.Csn = req.Csn;
+                    item.Position = NetUtils.GetItemPos(user, item.Isn);
                 }
             }
 

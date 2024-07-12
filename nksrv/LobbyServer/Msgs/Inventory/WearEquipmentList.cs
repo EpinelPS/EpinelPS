@@ -24,7 +24,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                     if (item2 == item.Isn)
                     {
                         item.Csn = req.Csn;
-
+                        item.Position = NetUtils.GetItemPos(user, item.Isn);
                         response.Items.Add(NetUtils.ToNet(item));
                     }
                 }

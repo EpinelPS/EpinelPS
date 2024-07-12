@@ -47,13 +47,15 @@ namespace nksrv.LobbyServer.Msgs.User
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
+
             foreach (var item in user.Characters)
             {
                 response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
             }
-            foreach (var item in user.Items)
+
+            foreach (var item in NetUtils.GetUserItems(user))
             {
-                response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position });
+                response.Items.Add(item);
             }
 
             // Add squad data if there are characters
@@ -85,7 +87,7 @@ namespace nksrv.LobbyServer.Msgs.User
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

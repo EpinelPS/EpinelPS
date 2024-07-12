@@ -137,7 +137,7 @@ namespace nksrv.Utils
     }
     public class CoreInfo
     {
-        public int DbVersion = 0;
+        public int DbVersion = 2;
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
@@ -183,6 +183,20 @@ namespace nksrv.Utils
                                 user.FieldInfo.Remove(f.Key);
                                 user.FieldInfo.Add(n + "_Normal", val);
                             }
+                        }
+                    }
+                    Console.WriteLine("Database update completed");
+                }
+                else if (Instance.DbVersion == 1)
+                {
+                    Console.WriteLine("Starting database update...");
+                    // there was a bug where equipment position was not saved, so remove all items from each characters
+                    Instance.DbVersion = 2;
+                    foreach (var user in Instance.Users)
+                    {
+                        foreach (var f in user.Items.ToList())
+                        {
+                            f.Csn = 0;
                         }
                     }
                     Console.WriteLine("Database update completed");

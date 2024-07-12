@@ -32,7 +32,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.RepresentationTeam = user.RepresentationTeamData;
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
-
+            
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
             foreach (var item in user.ClearedTutorialData)
             {
