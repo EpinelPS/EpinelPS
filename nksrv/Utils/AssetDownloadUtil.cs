@@ -1,4 +1,5 @@
-﻿using Swan.Logging;
+﻿using DnsClient;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace nksrv.Utils
     public class AssetDownloadUtil
     {
         public static readonly HttpClient AssetDownloader = new(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All });
+
+        private static string? CloudIp = null;
         public static async Task<string?> DownloadOrGetFileAsync(string url, CancellationToken cancellationToken)
         {
             var rawUrl = url.Replace("https://cloud.nikke-kr.com/", "");
@@ -27,9 +30,12 @@ namespace nksrv.Utils
             {
                 Logger.Info("Download " + targetFile);
 
+                if (CloudIp == null)
+                {
+                    CloudIp = await GetCloudIpAsync();
+                }
 
-
-                var requestUri = new Uri("https://35.190.17.65/" + rawUrl);
+                var requestUri = new Uri("https://" + CloudIp + "/" + rawUrl);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
                 using var response = await AssetDownloader.SendAsync(request);
@@ -51,6 +57,17 @@ namespace nksrv.Utils
             }
 
             return targetFile;
+        }
+
+        private static async Task<string> GetCloudIpAsync()
+        {
+            var lookup = new LookupClient();
+            var result = await lookup.QueryAsync("cloud.nikke-kr.com", QueryType.A);
+
+            var record = result.Answers.ARecords().FirstOrDefault();
+            var ip = record?.Address;
+
+            return ip.ToString();
         }
     }
 }
