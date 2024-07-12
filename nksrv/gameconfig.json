@@ -1,4 +1,5 @@
 ﻿{
+  // Asset Urls for game version 122.8.20f
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/staticdatapack
   "StaticData": {
     "Url": "https://cloud.nikke-kr.com/prdenv/122-c8cee37754/staticdata/data/qa-240704-07b/313275/StaticData.pack",
