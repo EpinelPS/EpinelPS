@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using System;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
@@ -24,6 +25,30 @@ public partial class MainView : UserControl
             return;
         }
 
+        if (!Directory.Exists(txtGamePath.Text))
+        {
+            ShowWarningMsg("Game path folder does not exist", "Error");
+            return;
+        }
+
+        if (!Directory.Exists(txtLauncherPath.Text))
+        {
+            ShowWarningMsg("Launcher folder does not exist", "Error");
+            return;
+        }
+
+        if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
+        {
+            ShowWarningMsg("Launcher path is invalid. Make sure that nikke_launcher.exe exists in the launcher folder", "Error");
+            return;
+        }
+
+        if (!File.Exists(Path.Combine(txtGamePath.Text, "nikke.exe")))
+        {
+            ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the launcher folder", "Error");
+            return;
+        }
+
         if (CmbServerSelection.SelectedIndex == 1)
         {
             if (!IPAddress.TryParse(TxtIpAddress.Text, out _))
@@ -33,6 +58,7 @@ public partial class MainView : UserControl
             }
         }
         if (TxtIpAddress.Text == null) TxtIpAddress.Text = "";
+
 
         try
         {
