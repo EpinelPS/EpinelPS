@@ -319,7 +319,13 @@ namespace nksrv.StaticInfo
 
             return null;
         }
-        public int GetUserLevelFromUserExp(int targetExp)
+        /// <summary>
+        /// Returns the level and its minimum value for XP value
+        /// </summary>
+        /// <param name="targetExp"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public (int, int) GetUserLevelFromUserExp(int targetExp)
         {
             int prevLevel = 0;
             int prevValue = 0;
@@ -344,10 +350,10 @@ namespace nksrv.StaticInfo
                 }
                 else
                 {
-                    return prevLevel;
+                    return (prevLevel, prevValue);
                 }
             }
-            return -1;
+            return (-1, -1);
         }
         public int GetNormalChapterNumberFromFieldName(string field)
         {
