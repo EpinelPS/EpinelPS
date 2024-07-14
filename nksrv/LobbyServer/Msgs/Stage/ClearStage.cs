@@ -19,9 +19,9 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var response = new ResClearStage();
             var user = GetUser();
 
-            // TOOD: save to user info
             Console.WriteLine($"Stage " + req.StageId + " completed, result is " + req.BattleResult);
 
+            // TODO: check if user has already cleared this stage
             if (req.BattleResult == 1)
             {
                 var clearedStage = StaticDataParser.Instance.GetStageData(req.StageId);
@@ -70,7 +70,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 JsonDb.Save();
             }
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
 
         private NetRewardData RegisterRewardsForUser(Utils.User user, RewardTableRecord rewardData)
@@ -81,11 +81,28 @@ namespace nksrv.LobbyServer.Msgs.Stage
             if (rewardData.user_exp != 0)
             {
                 var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
-                var newLevel = StaticDataParser.Instance.GetUserLevelFromUserExp(newXp);
+
+                var oldXpData = StaticDataParser.Instance.GetUserLevelFromUserExp(user.userPointData.ExperiencePoint);
+                var xpData = StaticDataParser.Instance.GetUserLevelFromUserExp(newXp);
+                var newLevel = xpData.Item1;
+
                 if (newLevel == -1)
                 {
                     Logger.Warn("Unknown user level value for xp " + newXp);
                 }
+
+
+
+                if (newLevel > user.userPointData.UserLevel)
+                {
+                    newXp -= oldXpData.Item2;
+                    if (user.Currency.ContainsKey(CurrencyType.FreeCash))
+                        user.Currency[CurrencyType.FreeCash] += 30;
+                    else
+                        user.Currency.Add(CurrencyType.FreeCash, 30);
+                }
+
+
                 // TODO: what is the difference between IncreaseExp and GainExp
                 // NOTE: Current Exp/Lv refers to after XP was added.
 
@@ -103,10 +120,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 };
                 user.userPointData.ExperiencePoint = newXp;
 
-                if (newLevel > user.userPointData.UserLevel)
-                {
-                    // TODO: Commander Level up reward
-                }
                 user.userPointData.UserLevel = newLevel;
             }
 

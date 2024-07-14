@@ -53,8 +53,6 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             if (!found)
             {
-                Console.WriteLine("chapter not found: " + key);
-
                 user.FieldInfo.Add(key, new FieldInfo());
                 return CreateFieldInfo(user, chapter, mod);
             }
