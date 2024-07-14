@@ -78,6 +78,7 @@ namespace nksrv.Utils
         public string Nickname = "SomePlayer";
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
+        public bool IsAdmin = false;
 
         // Game data
         public List<string> CompletedScenarios = [];

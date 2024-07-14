@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using Swan;
 using Google.Api;
 using nksrv.StaticInfo;
+using EmbedIO.WebApi;
 
 namespace nksrv
 {
@@ -60,7 +61,10 @@ namespace nksrv
                 .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/PC/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
-                .WithModule(new ActionModule("/nikke_launcher", HttpVerbs.Any, HandleLauncherUI));
+                .WithStaticFolder("/nikke_launcher", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "launcher"), true)
+                .WithStaticFolder("/admin/assets/", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "assets"), true)
+                .WithModule(new ActionModule("/admin", HttpVerbs.Any, HandleAdminRequest))
+                .WithWebApi("/adminapi", m => m.WithController(typeof(AdminApiController)));
 
             // Listen for state changes.
             //server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
@@ -68,28 +72,59 @@ namespace nksrv
             return server;
         }
 
-        private static async Task HandleLauncherUI(IHttpContext ctx)
+        private static async Task HandleAdminRequest(IHttpContext context)
         {
-            await ctx.SendStringAsync(@"<!DOCTYPE html>
-<html>
-<head>
-<title>Private Nikke Server Launcher</title>
-<style>
-* {
-color:white;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-</style>
-</head>
-<body>
-<h1>What's new in Nikke Private Server<h1>
-<p>This is the inital release, only story mode works except that you can't collect items and a few other things don't work.</p>
-<p>In order to level up characters, you manually have to edit db.json</p>
-</body>
-</html>
-", "text/html", Encoding.UTF8);
+            //check if user is logged in
+            if (context.Request.Cookies["token"] == null && context.Request.Url.PathAndQuery != "/api/login")
+            {
+                context.Redirect("/adminapi/login");
+                return;
+            }
+
+            //Check if authenticated correctly
+            User? currentUser = null;
+            if (context.Request.Url.PathAndQuery != "/api/login")
+            {
+                //verify token
+                foreach (var item in AdminApiController.AdminAuthTokens)
+                {
+                    if (item.Key == context.Request.Cookies["token"].Value)
+                    {
+                        currentUser = item.Value;
+                    }
+                }
+            }
+            if (currentUser == null)
+            {
+                context.Redirect("/adminapi/login");
+                return;
+            }
+
+            if (context.Request.Url.PathAndQuery == "/admin/")
+            {
+                context.Redirect("/admin/dashboard");
+            }
+            else if (context.Request.Url.PathAndQuery == "/admin/dashboard")
+            {
+                await context.SendStringAsync(ProcessAdminPage("dashbrd.html", currentUser), "text/html", Encoding.Unicode);
+            }
+            else
+            {
+                context.Response.StatusCode = 404;
+                await context.SendStringAsync("404 not found", "text/html", Encoding.Unicode);
+            }
         }
 
+        private static string ProcessAdminPage(string pg, User? currentUser)
+        {
+            var pgContent = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", pg));
+            var nav = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "nav.html"));
+
+            //navbar
+            pgContent = pgContent.Replace("{{navbar}}", nav);
+
+            return pgContent;
+        }
         private static async Task HandleBatchRequests(IHttpContext ctx)
         {
             var theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
