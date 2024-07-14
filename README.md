@@ -25,6 +25,10 @@ If the game does not get past the title screen, open an issue and send %appdata%
 
 Note that this was tested with the latest version (122.8.20c)
 
+To access the admin panel, go to https://127.0.0.1/admin/ and sign in. Note that IsAdmin needs to be true for the user account. Note that this interface does not have anything yet.
+
+To skip stages, a basic command line interface is implemented.
+
 ## Progress
 Stage, character, outpost and story information is saved and works, as well as player nickname.
 

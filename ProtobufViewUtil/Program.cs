@@ -10,8 +10,8 @@ namespace ProtobufViewUtil
         {
             Console.WriteLine("Hello, World!");
 
-            ResGetOutpostData s = new ResGetOutpostData();
-            var inn = File.ReadAllBytes(@"C:\Users\Misha\Downloads\getoutpostdatach2done");
+            StaticDataPackResponse s = new StaticDataPackResponse();
+            var inn = File.ReadAllBytes(@"C:\Users\Misha\Desktop\response");
             s.MergeFrom(inn);
             Console.WriteLine(s.ToString());
             var outt = s.ToByteArray();

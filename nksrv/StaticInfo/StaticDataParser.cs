@@ -448,5 +448,22 @@ namespace nksrv.StaticInfo
 
             return null;
         }
+
+        internal IEnumerable<int> GetStageIdsForChapter(int chapterNumber, bool normal)
+        {
+            string mod = normal ? "Normal" : "Hard";
+            foreach (JObject item in stageDataRecords)
+            {
+                CampaignStageRecord? data = JsonConvert.DeserializeObject<CampaignStageRecord>(item.ToString());
+                if (data == null) throw new Exception("failed to deserialize stage data");
+
+                int chVal = data.chapter_id - 1;
+
+                if (chapterNumber == chVal && data.chapter_mod == mod && data.stage_type == "Main")
+                {
+                    yield return data.id;
+                }
+            }
+        }
     }
 }

@@ -2196,3 +2196,105 @@ message ResAllClearEquipment {
 	int64 Csn = 2;
 	repeated NetUserItemData Items = 3;
 }
+
+message NetFavoriteItemLibraryElement {
+	int32 Tid = 1;
+	int64 ReceivedAt = 2;
+}
+
+message ReqGetFavoriteItemLibrary {
+
+}
+message ResGetFavoriteItemLibrary {
+	repeated NetFavoriteItemLibraryElement FavoriteItemLibrary = 1;
+}
+
+
+message ReqListFavoriteItem {
+
+}
+message ResListFavoriteItem {
+	repeated NetUserFavoriteItemData FavoriteItems = 1;
+}
+
+message NetUserFavoriteItemQuestData {
+	int32 QuestId = 1;
+	bool Clear = 2;
+	bool Received = 3;
+}
+message ReqListFavoriteItemQuest {
+
+}
+message ResListFavoriteItemQuest {
+	repeated NetUserFavoriteItemQuestData FavoriteItemQuests = 1;
+}
+
+message NetUserLostSectorData {
+	int32 SectorId = 1;
+	int32 RewardCount = 2;
+	bool IsFinalReward = 3;
+	bool IsPlaying = 4;
+	bool IsOpen = 5;
+	int32 CurrentClearStageCount = 6;
+	int32 MaxClearStageCount = 7;
+	bool IsPerfectReward = 8;
+}
+message ReqGetLostSectorData {
+
+}
+message ResGetLostSectorData {
+	repeated NetUserLostSectorData LostSector = 2;
+	int32 LastEnterSectorId = 3;
+	repeated NetFieldStageData ClearedStages = 4;
+}
+
+message NetSideStoryStageData {
+	int32 SideStoryStageId = 1;
+	google.protobuf.Timestamp ClearedAt = 2;
+}
+
+message ReqListSideStory {}
+message ResListSideStory {
+	repeated NetSideStoryStageData SideStoryStageDataList = 1;
+}
+
+enum LiberateMissionState {
+	LiberateMissionState_Running = 0;
+	LiberateMissionState_Rewarded = 1;
+	LiberateMissionState_Closed = 2;
+}
+
+message NetLiberateMissionData {
+	int64 Id = 1;
+	int32 MissionTid = 2;
+	int32 LiberateCharacterId = 3;
+	LiberateMissionState MissionState = 4;
+	int64 CreatedAt = 6;
+	int64 TriggerStartAt = 7;
+	int64 TriggerEndAt = 8;
+	optional int64 ReceivedAt = 9;
+}
+
+message NetLiberateData {
+	int32 CharacterId = 2;
+	int32 StepId = 3;
+	int32 ProgressPoint = 4;
+	repeated NetLiberateMissionData MissionData = 5;
+	int32 RewardedCount = 6;
+	bool IsCompleted = 7;
+}
+
+message ReqGetLiberateData {}
+message ResGetLiberateData {
+	repeated int32 OpenLiberateTypeIdList = 2;
+	NetLiberateData LiberateData = 3;
+}
+
+message ReqShowSpecialArenaReward {}
+message ResShowSpecialArenaReward {
+	NetRewardData reward = 4;
+	/*SpecialArenaContentsState SpecialArenaContentsState = 5;
+	NetSpecialArenaRewardHistory History = 6;*/
+	bool IsBan = 7;
+	NetArenaBanInfo BanInfo = 8;
+}

@@ -26,6 +26,7 @@ namespace nksrv.StaticInfo
         /// Can be Normal or Hard
         /// </summary>
         public string chapter_mod = "";
+        public string stage_type = "";
     }
     public class RewardTableRecord
     {

@@ -21,6 +21,7 @@ using Swan;
 using Google.Api;
 using nksrv.StaticInfo;
 using EmbedIO.WebApi;
+using nksrv.LobbyServer.Msgs.Stage;
 
 namespace nksrv
 {
@@ -39,9 +40,195 @@ namespace nksrv
             LobbyHandler.Init();
 
             Logger.Info("Starting server");
+            new Thread(() =>
+            {
+                var server = CreateWebServer();
+                server.RunAsync();
+            }).Start();
 
-            using var server = CreateWebServer();
-            await server.RunAsync();
+            // cli interface
+
+            ulong selectedUser = 0;
+            string prompt = "# ";
+            while (true)
+            {
+                Console.Write(prompt);
+
+                var input = Console.ReadLine();
+                var args = input.Split(' ');
+                if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+                {
+
+                }
+                else if (input == "?" || input == "help")
+                {
+                    Console.WriteLine("Nikke Private Server CLI interface");
+                    Console.WriteLine();
+                    Console.WriteLine("Commands:");
+                    Console.WriteLine("  help - show this help");
+                    Console.WriteLine("  ls /users - show all users");
+                    Console.WriteLine("  cd (user id) - select user by id");
+                    Console.WriteLine("  rmuser - delete selected user");
+                    Console.WriteLine("  ban - ban selected user from game");
+                    Console.WriteLine("  unban - unban selected user from game");
+                    Console.WriteLine("  exit - exit server application");
+                    Console.WriteLine("  completestage (chapter num)-(stage number) - complete selected stage and get rewards (and all previous ones). Example completestage 15-1. Note that the exact stage number cleared may not be exact.");
+                }
+                else if (input == "ls /users")
+                {
+                    Console.WriteLine("Id,Username,Nickname");
+                    foreach (var item in JsonDb.Instance.Users)
+                    {
+                        Console.WriteLine($"{item.ID},{item.Username},{item.Nickname}");
+                    }
+                }
+                else if (input.StartsWith("cd"))
+                {
+                    if (args.Length == 2)
+                    {
+                        if (ulong.TryParse(args[1], out ulong id))
+                        {
+                            // check if user id exists
+                            var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+                            if (user != null)
+                            {
+                                selectedUser = user.ID;
+                                Console.WriteLine("Selected user: " + user.Username);
+                                prompt = "/users/" + user.Username + "# ";
+                            }
+                            else
+                            {
+                                Console.WriteLine("User not found");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Argument #1 should be a number");
+                            Console.WriteLine("Usage: chroot (user id)");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect number of arguments for chroot");
+                        Console.WriteLine("Usage: chroot (user id)");
+                    }
+                }
+                else if (input.StartsWith("rmuser"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            Console.Write("Are you sure you want to delete user " + user.Username + "? (y/n) ");
+                            var confirm = Console.ReadLine();
+                            if (confirm == "y")
+                            {
+                                JsonDb.Instance.Users.Remove(user);
+                                JsonDb.Save();
+                                Console.WriteLine("User deleted");
+                                selectedUser = 0;
+                                prompt = "# ";
+                            }
+                            else
+                            {
+                                Console.WriteLine("User not deleted");
+                            }
+                        }
+                    }
+                }
+                else if (input.StartsWith("completestage"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            if (args.Length == 2)
+                            {
+                                var input2 = args[1];
+                                try
+                                {
+                                    var chapter = int.TryParse(input2.Split('-')[0], out int chapterNumber);
+                                    var stage = int.TryParse(input2.Split('-')[1], out int stageNumber);
+
+                                    if (chapter && stage)
+                                    {
+                                        for (int i = 0; i < chapterNumber + 1; i++)
+                                        {
+                                            var stages = StaticDataParser.Instance.GetStageIdsForChapter(i, true);
+                                            int target = 1;
+                                            foreach (var item in stages)
+                                            {
+                                                if (!user.IsStageCompleted(item, true))
+                                                {
+                                                    Console.WriteLine("Completing stage " + item);
+                                                    ClearStage.CompleteStage(user, item);
+                                                }
+
+                                                if (i == chapterNumber && target == stageNumber)
+                                                {
+                                                    break;
+                                                }
+
+                                                target++;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("chapter and stage number must be a 32 bit integer");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("exception:" + ex.ToString());
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("invalid argument length, must be 1");
+                            }
+                        }
+                    }
+                }
+                else if (input == "exit")
+                {
+                    Environment.Exit(0);
+                }
+                else if (input == "ban")
+                {
+                    Console.WriteLine("Not implemented");
+                }
+                else if (input == "unban")
+                {
+                    Console.WriteLine("Not implemented");
+                }
+                else
+                {
+                    Console.WriteLine("Unknown command");
+                }
+            }
         }
         private static WebServer CreateWebServer()
         {

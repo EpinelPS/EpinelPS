@@ -1,6 +1,7 @@
 ﻿using ASodium;
 using Newtonsoft.Json;
 using nksrv.LobbyServer;
+using nksrv.LobbyServer.Msgs.Stage;
 using nksrv.StaticInfo;
 using Swan.Logging;
 using System;
@@ -134,6 +135,24 @@ namespace nksrv.Utils
             }
 
             return num;
+        }
+
+        public bool IsStageCompleted(int id, bool isNorm)
+        {
+            foreach (var item in FieldInfo)
+            {
+                if (item.Key.Contains("hard") && isNorm) continue;
+                if (item.Key.Contains("normal") && !isNorm) continue;
+                foreach (var s in item.Value.CompletedStages)
+                {
+                    if (s.StageId == id)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
     public class CoreInfo

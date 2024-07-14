@@ -24,56 +24,68 @@ namespace nksrv.LobbyServer.Msgs.Stage
             // TODO: check if user has already cleared this stage
             if (req.BattleResult == 1)
             {
-                var clearedStage = StaticDataParser.Instance.GetStageData(req.StageId);
-                if (clearedStage == null) throw new Exception("cleared stage cannot be null");
-
-
-                if (user.FieldInfo.Count == 0)
-                {
-                    user.FieldInfo.Add("0_" + clearedStage.chapter_mod, new FieldInfo() { });
-                }
-
-                DoQuestSpecificUserOperations(user, req.StageId);
-                var rewardData = StaticDataParser.Instance.GetRewardTableEntry(clearedStage.reward_id);
-
-                if (rewardData != null)
-                    response.StageClearReward = RegisterRewardsForUser(user, rewardData);
-                else
-                    Logger.Warn("rewardId is null for stage " + req.StageId);
-
-
-                if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
-                {
-                    if (clearedStage.chapter_mod == "Hard")
-                    {
-                        user.LastHardStageCleared = req.StageId;
-                    }
-                    else if (clearedStage.chapter_mod == "Normal")
-                    {
-                        user.LastNormalStageCleared = req.StageId;
-                    }
-                    else
-                    {
-                        Logger.Warn("Unknown chapter mod " + clearedStage.chapter_mod);
-                    }
-                }
-                else if (clearedStage.stage_category == "Extra")
-                {
-
-                }
-                else
-                {
-                    Logger.Warn("Unknown stage category " + clearedStage.stage_category);
-                }
-
-                user.FieldInfo[(clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod].CompletedStages.Add(new NetFieldStageData() { StageId = req.StageId });
-                JsonDb.Save();
+                response = CompleteStage(user, req.StageId);
             }
 
             await WriteDataAsync(response);
         }
 
-        private NetRewardData RegisterRewardsForUser(Utils.User user, RewardTableRecord rewardData)
+
+        public static ResClearStage CompleteStage(Utils.User user, int StageId)
+        {
+            var response = new ResClearStage();
+            var clearedStage = StaticDataParser.Instance.GetStageData(StageId);
+            if (clearedStage == null) throw new Exception("cleared stage cannot be null");
+
+
+            if (user.FieldInfo.Count == 0)
+            {
+                user.FieldInfo.Add("0_" + clearedStage.chapter_mod, new FieldInfo() { });
+            }
+
+            DoQuestSpecificUserOperations(user, StageId);
+            var rewardData = StaticDataParser.Instance.GetRewardTableEntry(clearedStage.reward_id);
+
+            if (rewardData != null)
+                response.StageClearReward = RegisterRewardsForUser(user, rewardData);
+            else
+                Logger.Warn("rewardId is null for stage " + StageId);
+
+
+            if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
+            {
+                if (clearedStage.chapter_mod == "Hard")
+                {
+                    user.LastHardStageCleared = StageId;
+                }
+                else if (clearedStage.chapter_mod == "Normal")
+                {
+                    user.LastNormalStageCleared = StageId;
+                }
+                else
+                {
+                    Logger.Warn("Unknown chapter mod " + clearedStage.chapter_mod);
+                }
+            }
+            else if (clearedStage.stage_category == "Extra")
+            {
+
+            }
+            else
+            {
+                Logger.Warn("Unknown stage category " + clearedStage.stage_category);
+            }
+
+            var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
+            if (!user.FieldInfo.ContainsKey(key))
+                user.FieldInfo.Add(key, new FieldInfo());
+
+            user.FieldInfo[key].CompletedStages.Add(new NetFieldStageData() { StageId = StageId });
+            JsonDb.Save();
+            return response;
+        }
+
+        private static NetRewardData RegisterRewardsForUser(Utils.User user, RewardTableRecord rewardData)
         {
             NetRewardData ret = new();
             if (rewardData.rewards == null) return ret;
