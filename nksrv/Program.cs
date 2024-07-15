@@ -235,7 +235,7 @@ namespace nksrv
             var cert = new X509Certificate2(new X509Certificate(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx"));
 
             var server = new WebServer(o => o
-                    .WithUrlPrefixes("https://*:443", "http://*:80")
+                    .WithUrlPrefixes("https://*:443")
                     .WithMode(HttpListenerMode.EmbedIO).WithAutoLoadCertificate().WithCertificate(cert))
                 // First, we will configure our web server by adding Modules.
                 .WithLocalSessionManager()
