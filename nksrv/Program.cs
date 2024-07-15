@@ -29,25 +29,38 @@ namespace nksrv
     {
         static async Task Main()
         {
-            Logger.UnregisterLogger<ConsoleLogger>();
-            Logger.RegisterLogger(new GreatLogger());
-            Logger.Info("Initializing database");
-            JsonDb.Save();
-
-            StaticDataParser.Instance.GetAllCostumes(); // force static data to be loaded
-
-            Logger.Info("Initialize handlers");
-            LobbyHandler.Init();
-
-            Logger.Info("Starting server");
-            new Thread(() =>
+            try
             {
-                var server = CreateWebServer();
-                server.RunAsync();
-            }).Start();
+                Logger.UnregisterLogger<ConsoleLogger>();
+                Logger.RegisterLogger(new GreatLogger());
+                Logger.Info("Initializing database");
+                JsonDb.Save();
 
-            // cli interface
+                StaticDataParser.Instance.GetAllCostumes(); // force static data to be loaded
 
+                Logger.Info("Initialize handlers");
+                LobbyHandler.Init();
+
+                Logger.Info("Starting server");
+                new Thread(() =>
+                {
+                    var server = CreateWebServer();
+                    server.RunAsync();
+                }).Start();
+
+                CliLoop();
+            }
+            catch(Exception ex)
+            {
+                Logger.Error("Fatal error:");
+                Logger.Error(ex.ToString());
+                Logger.Error("Press any key to exit");
+                Console.ReadKey();
+            }
+        }
+
+        private static void CliLoop()
+        {
             ulong selectedUser = 0;
             string prompt = "# ";
             while (true)
