@@ -67,7 +67,7 @@ namespace nksrv.StaticInfo
         /// <summary>
         /// can be CharacterLevel or SynchroLevel
         /// </summary>
-        public string type = ""; 
+        public string type = "";
         /// <summary>
         /// amount of credits required
         /// </summary>
@@ -80,5 +80,13 @@ namespace nksrv.StaticInfo
         /// amount of core dust required
         /// </summary>
         public int character_exp2 = 0;
+    }
+
+    public class TacticAcademyLessonRecord
+    {
+        public CurrencyType CurrencyId;
+        public int CurrencyValue;
+        public int Id;
+        public int GroupId;
     }
 }

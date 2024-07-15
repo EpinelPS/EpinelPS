@@ -1,0 +1,22 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "nksrv.Net";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/Duration.proto";
+import "Protos/allmsgs.proto";
+
+// Get Tactic Academy data
+message GetTacticAcademyDataRequest {}
+message GetTacticAcademyDataResponse {
+	repeated int32 CompletedLessons = 2;
+}
+
+// Clear Tactic Academy lesson
+message TacticAcademyClearLessonRequest {
+	int32 LessonId = 2;
+}
+message TacticAcademyClearLessonResponse {
+	int32 LessonId = 2;
+	repeated NetUserCurrencyData RemainingCurrency = 4;
+}

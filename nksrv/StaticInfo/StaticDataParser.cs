@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Swan.Parsers;
 using Newtonsoft.Json;
 using System.Drawing;
+using Google.Protobuf.WellKnownTypes;
 
 namespace nksrv.StaticInfo
 {
@@ -56,6 +57,7 @@ namespace nksrv.StaticInfo
         private JArray tutorialTable;
         private JArray itemEquipTable;
         private Dictionary<int, CharacterLevelData> LevelData = [];
+        private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
 
         public byte[] Sha256Hash;
         public int Size;
@@ -255,6 +257,29 @@ namespace nksrv.StaticInfo
                     LevelData.Add(obj.level, obj);
                 else
                     Logger.Warn("failed to read character level table entry");
+            }
+
+            var tacticLessonTable = await LoadZip("TacticAcademyFunctionTable.json");
+
+            foreach (JToken item in tacticLessonTable)
+            {
+                var idRaw = item["id"];
+                var groupidRaw = item["group_id"];
+                var currencyIdRaw = item["currency_id"];
+                var currencyValueRaw = item["currency_value"];
+
+                if (idRaw == null) throw new InvalidDataException();
+                if (groupidRaw == null) throw new InvalidDataException();
+                if (currencyIdRaw == null) throw new InvalidDataException();
+                if (currencyValueRaw == null) throw new InvalidDataException();
+
+                var id = idRaw.ToObject<int>();
+                var currencyId = currencyIdRaw.ToObject<int>();
+                var currencyValue = currencyValueRaw.ToObject<int>();
+                var groupid = groupidRaw.ToObject<int>();
+
+                var fullId = int.Parse(groupid.ToString() + id.ToString());
+                TacticAcademyLessons.Add(id, new TacticAcademyLessonRecord() { CurrencyId = (CurrencyType)currencyId, CurrencyValue = currencyValue, GroupId = groupid, Id = id });
             }
         }
 
@@ -480,6 +505,11 @@ namespace nksrv.StaticInfo
         public Dictionary<int, CharacterLevelData> GetCharacterLevelUpData()
         {
             return LevelData;
+        }
+
+        public TacticAcademyLessonRecord GetTacticAcademyLesson(int lessonId)
+        {
+            return TacticAcademyLessons[lessonId];
         }
     }
 }

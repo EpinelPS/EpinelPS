@@ -109,6 +109,7 @@ namespace nksrv.Utils
 
         public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
         public int GachaTutorialPlayCount = 0;
+        public List<int> CompletedTacticAcademyLessons = [];
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
