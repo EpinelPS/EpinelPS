@@ -18,11 +18,13 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var user = GetUser();
             Console.WriteLine("CheckClear len: " + req.StageIds.Count);
 
-            foreach (var fields in user.FieldInfo)
+            // TODO: is this correct
+
+            foreach (var fields in user.FieldInfoNew)
             {
                 foreach (var stages in fields.Value.CompletedStages)
                 {
-                    response.ClearedStageIds.Add(stages.StageId);
+                    response.ClearedStageIds.Add(stages);
                 }
             }
 

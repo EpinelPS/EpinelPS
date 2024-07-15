@@ -21,7 +21,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             var chapter = StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
             var key = chapter + "_" + mod;
-            var field = user.FieldInfo[key];
+            var field = user.FieldInfoNew[key];
 
             // TODO
             response.Reward = new();

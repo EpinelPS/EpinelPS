@@ -25,7 +25,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             var chapter = StaticDataParser.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
             var key = chapter + "_" + mod;
-            var field = user.FieldInfo[key];
+            var field = user.FieldInfoNew[key];
 
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionID, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
             JsonDb.Save();

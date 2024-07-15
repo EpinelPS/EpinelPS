@@ -27,14 +27,14 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var f = new NetFieldObjectData();
             bool found = false;
             string key = chapter + "_" + mod;
-            foreach (var item in user.FieldInfo)
+            foreach (var item in user.FieldInfoNew)
             {
                 if (item.Key == key)
                 {
                     found = true;
                     foreach (var stage in item.Value.CompletedStages)
                     {
-                        f.Stages.Add(stage);
+                        f.Stages.Add(new NetFieldStageData() { StageId = stage });
                     }
                     foreach (var obj in item.Value.CompletedObjects)
                     {
@@ -46,7 +46,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             if (!found)
             {
-                user.FieldInfo.Add(key, new FieldInfo());
+                user.FieldInfoNew.Add(key, new FieldInfoNew());
                 return CreateFieldInfo(user, chapter, mod);
             }
 

@@ -39,9 +39,9 @@ namespace nksrv.LobbyServer.Msgs.Stage
             if (clearedStage == null) throw new Exception("cleared stage cannot be null");
 
 
-            if (user.FieldInfo.Count == 0)
+            if (user.FieldInfoNew.Count == 0)
             {
-                user.FieldInfo.Add("0_" + clearedStage.chapter_mod, new FieldInfo() { });
+                user.FieldInfoNew.Add("0_" + clearedStage.chapter_mod, new FieldInfoNew() { });
             }
 
             DoQuestSpecificUserOperations(user, StageId);
@@ -78,10 +78,10 @@ namespace nksrv.LobbyServer.Msgs.Stage
             }
 
             var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
-            if (!user.FieldInfo.ContainsKey(key))
-                user.FieldInfo.Add(key, new FieldInfo());
+            if (!user.FieldInfoNew.ContainsKey(key))
+                user.FieldInfoNew.Add(key, new FieldInfoNew());
 
-            user.FieldInfo[key].CompletedStages.Add(new NetFieldStageData() { StageId = StageId });
+            user.FieldInfoNew[key].CompletedStages.Add(StageId);
             JsonDb.Save();
             return response;
         }

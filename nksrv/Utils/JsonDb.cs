@@ -18,6 +18,12 @@ namespace nksrv.Utils
         public List<NetFieldObject> CompletedObjects = [];
     }
 
+    public class FieldInfoNew
+    {
+        public List<int> CompletedStages = [];
+        public List<NetFieldObject> CompletedObjects = [];
+    }
+
     public class Character
     {
         // TODO
@@ -76,7 +82,9 @@ namespace nksrv.Utils
 
         // Game data
         public List<string> CompletedScenarios = [];
-        public Dictionary<string, FieldInfo> FieldInfo = [];
+        public Dictionary<string, FieldInfo> FieldInfo = []; // here for backwards compatibility
+
+        public Dictionary<string, FieldInfoNew> FieldInfoNew = [];
         public Dictionary<string, string> MapJson = [];
         public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 },
@@ -132,16 +140,13 @@ namespace nksrv.Utils
 
         public bool IsStageCompleted(int id, bool isNorm)
         {
-            foreach (var item in FieldInfo)
+            foreach (var item in FieldInfoNew)
             {
                 if (item.Key.Contains("hard") && isNorm) continue;
                 if (item.Key.Contains("normal") && !isNorm) continue;
-                foreach (var s in item.Value.CompletedStages)
+                if (item.Value.CompletedStages.Contains(id))
                 {
-                    if (s.StageId == id)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -150,7 +155,7 @@ namespace nksrv.Utils
     }
     public class CoreInfo
     {
-        public int DbVersion = 2;
+        public int DbVersion = 3;
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
@@ -185,14 +190,14 @@ namespace nksrv.Utils
 
                     foreach (var user in Instance.Users)
                     {
-                        foreach (var f in user.FieldInfo.ToList())
+                        foreach (var f in user.FieldInfoNew.ToList())
                         {
                             var isNumeric = int.TryParse(f.Key, out int n);
                             if (isNumeric)
                             {
                                 var val = f.Value;
-                                user.FieldInfo.Remove(f.Key);
-                                user.FieldInfo.Add(n + "_Normal", val);
+                                user.FieldInfoNew.Remove(f.Key);
+                                user.FieldInfoNew.Add(n + "_Normal", val);
                             }
                         }
                     }
@@ -209,6 +214,26 @@ namespace nksrv.Utils
                         {
                             f.Csn = 0;
                         }
+                    }
+                    Console.WriteLine("Database update completed");
+                }
+                else if (Instance.DbVersion == 2)
+                {
+                    Console.WriteLine("Starting database update...");
+                    // I used to use a class for FieldInfo cleared stages, but now int list is used
+                    Instance.DbVersion = 3;
+                    foreach (var user in Instance.Users)
+                    {
+                        foreach (var f in user.FieldInfo)
+                        {
+                            var newField = new FieldInfoNew();
+                            foreach (var stage in f.Value.CompletedStages)
+                            {
+                                newField.CompletedStages.Add(stage.StageId);
+                            }
+                            user.FieldInfoNew.Add(f.Key, newField);
+                        }
+                        user.FieldInfo.Clear();
                     }
                     Console.WriteLine("Database update completed");
                 }
