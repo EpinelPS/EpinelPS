@@ -171,8 +171,6 @@ namespace nksrv.Utils
                 Instance = new CoreInfo();
                 Save();
             }
-            Logger.Info("Loaded db");
-
 
             var j = JsonConvert.DeserializeObject<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
             if (j != null)
@@ -215,12 +213,32 @@ namespace nksrv.Utils
                     Console.WriteLine("Database update completed");
                 }
                 Save();
+
+                ValidateDb();
+                Logger.Info("Loaded db");
             }
             else
             {
                 throw new Exception("Failed to read configuration json file");
             }
         }
+
+        private static void ValidateDb()
+        {
+            // check if character level is valid
+            foreach (var item in Instance.Users)
+            {
+                foreach (var c in item.Characters)
+                {
+                    if (c.Level > 1000)
+                    {
+                        Logger.Warn($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
+                        c.Level = 1000;
+                    }
+                }
+            }
+        }
+
         public static User? GetUser(ulong id)
         {
             return Instance.Users.Where(x => x.ID == id).FirstOrDefault();
