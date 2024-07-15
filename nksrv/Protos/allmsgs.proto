@@ -5,61 +5,6 @@ option csharp_namespace = "nksrv";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/Duration.proto";
 
-// Network structure definitions. Note that I have not included field names for anticheat strucures.
-
-
-message SentryDataResponse {
-  double samplingRate = 1;
-  double traceSamplingRate = 2;
-}
-
-message CheckVersionRequest {
-  string version = 1;
-}
-
-message CheckVersionResponse {
-  int32 availability = 1;
-}
-
-message ResGetServerInfo {
-	int32 worldId = 1;
-	string matchUrl = 2;
-}
-
-
-message NetMaintenanceWindow {
-	google.protobuf.Timestamp from = 1;
-	google.protobuf.Timestamp to = 2;
-}
-
-message MaintenanceNoticeResponse {
-	NetMaintenanceWindow window = 1;
-	bool isWhitelisted = 2;
-}
-
-message ResourceHostRequest {
-  string rversion = 1;
-}
-
-message ResourceHostResponse {
-  string version = 1;
-  string baseUrl = 2;
-  map<string, string> coreVersionMap = 3;
-  map<string, string> dataPackVersionMap = 4;
-}
-
-message StaticDataPackRequest {
-}
-
-message StaticDataPackResponse {
-	string url = 1;
-	int64 size = 2;
-	bytes sha256Sum = 3;
-	bytes salt1 = 4;
-	bytes salt2 = 5;
-	string version = 6;
-}
-
 enum BillingPlatform{
 	Unknown = 0;
 	Ios = 1;

@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.Net;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.System
 {
@@ -9,9 +10,9 @@ namespace nksrv.LobbyServer.Msgs.System
         {
             var req = await ReadData<CheckVersionRequest>();
             var response = new CheckVersionResponse();
-            response.Availability = 0;    // None = 0, Available = 1, Mandatory = 2
+            response.VersionStatus = 0;
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

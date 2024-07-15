@@ -1,4 +1,5 @@
-﻿using nksrv.StaticInfo;
+﻿using nksrv.Net;
+using nksrv.StaticInfo;
 using nksrv.Utils;
 using Swan.Logging;
 using System;

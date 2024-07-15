@@ -1,12 +1,5 @@
-﻿using nksrv.Utils;
-using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Google.Rpc.Context.AttributeContext.Types;
-using static System.Net.Mime.MediaTypeNames;
+﻿using nksrv.Net;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Stage
 {

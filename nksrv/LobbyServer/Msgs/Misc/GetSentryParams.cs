@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.Net;
+using nksrv.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,9 @@ namespace nksrv.LobbyServer.Msgs.Misc
         protected override async Task HandleAsync()
         {
             var r = new SentryDataResponse();
-            // TODO check proper response from real server
-          await  WriteDataAsync(r);
+            // TODO: figure out a way to disable sentry so that Shift Up devs wouldn't be annoyed by this server
+
+            await WriteDataAsync(r);
         }
     }
 }

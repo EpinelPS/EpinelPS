@@ -1,10 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using nksrv.Utils;
+using nksrv.Net;
 
 namespace nksrv.LobbyServer.Msgs.Misc
 {
@@ -13,7 +8,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
     {
         protected override async Task HandleAsync()
         {
-            var r = new ResGetServerInfo();
+            var r = new GetServerInfoResponse();
 
             // todo: reimplement this as well
             r.MatchUrl = "https://global-match.nikke-kr.com";
