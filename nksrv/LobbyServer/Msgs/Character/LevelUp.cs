@@ -1,4 +1,6 @@
-﻿using nksrv.Utils;
+﻿using nksrv.StaticInfo;
+using nksrv.Utils;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +17,40 @@ namespace nksrv.LobbyServer.Msgs.Character
             var req = await ReadData<ReqCharacterLevelUp>();
             var user = GetUser();
             var response = new ResCharacterLevelUp();
+            var data = StaticDataParser.Instance.GetCharacterLevelUpData();
 
             foreach (var item in user.Characters.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {
-                    item.Level = req.Level;
-                    // TODO: subtract currency
+                    // item.Level = req.Level;
 
+                    int requiredCredit = 0;
+                    int requiredBattleData = 0;
+                    int requiredCoreDust = 0;
+                    for (int i = item.Level; i < req.Level; i++)
+                    {
+                        var levelUpData = data[i];
+                        requiredCredit += levelUpData.gold;
+                        requiredBattleData += levelUpData.character_exp;
+                        requiredCoreDust += levelUpData.character_exp2;
+                    }
+
+                    if (user.CanSubtractCurrency(CurrencyType.Gold, requiredCredit) &&
+                        user.CanSubtractCurrency(CurrencyType.CharacterExp, requiredBattleData) &&
+                        user.CanSubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust))
+                    {
+                        user.SubtractCurrency(CurrencyType.Gold, requiredCredit);
+                        user.SubtractCurrency(CurrencyType.CharacterExp, requiredBattleData);
+                        user.SubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
+                        item.Level = req.Level;
+                    }
+                    else
+                    {
+                        // TOOD: log this
+                        Logger.Error("ERROR: Not enough currency for upgrade");
+                        return;
+                    }
 
                     response.Character = new() { 
                         CostumeId = item.CostumeId, 
@@ -41,6 +69,11 @@ namespace nksrv.LobbyServer.Msgs.Character
                     foreach (var c in highestLevelCharacters)
                     {
                         response.SynchroStandardCharacters.Add(c.Tid);
+                    }
+
+                    foreach (var currency in user.Currency)
+                    {
+                        response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
                     }
 
                     break;

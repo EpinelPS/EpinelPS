@@ -57,4 +57,28 @@ namespace nksrv.StaticInfo
         public int NextId;
         public bool SaveTutorial;
     }
+
+    public class CharacterLevelData
+    {
+        /// <summary>
+        /// level
+        /// </summary>
+        public int level;
+        /// <summary>
+        /// can be CharacterLevel or SynchroLevel
+        /// </summary>
+        public string type = ""; 
+        /// <summary>
+        /// amount of credits required
+        /// </summary>
+        public int gold = 0;
+        /// <summary>
+        /// amount of battle data required
+        /// </summary>
+        public int character_exp = 0;
+        /// <summary>
+        /// amount of core dust required
+        /// </summary>
+        public int character_exp2 = 0;
+    }
 }

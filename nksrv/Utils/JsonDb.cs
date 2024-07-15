@@ -152,6 +152,47 @@ namespace nksrv.Utils
 
             return false;
         }
+
+        public long GetCurrencyVal(CurrencyType type)
+        {
+            if (Currency.ContainsKey(type))
+                return Currency[type];
+            else
+            {
+                Currency.Add(type, 0);
+                return 0;
+            }
+        }
+        public void AddCurrency(CurrencyType type, long val)
+        {
+            if (Currency.ContainsKey(type)) Currency[type] += val;
+            else Currency.Add(type, val);
+        }
+        public bool SubtractCurrency(CurrencyType type, long val)
+        {
+            if (Currency.ContainsKey(type)) Currency[type] -= val;
+            else return false;
+
+            if (Currency[type] < 0)
+            {
+                Currency[type] += val;
+                return false;
+            }
+            return true;
+        }
+        public bool CanSubtractCurrency(CurrencyType type, long val)
+        {
+            if (Currency.ContainsKey(type))
+            {
+                if (Currency[type] >= val) return true;
+                else return false;
+            }
+            else
+            {
+                if (val == 0) return true;
+                else return false;
+            }
+        }
     }
     public class CoreInfo
     {

@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.User
             // todo tutorial playcount of gacha
             response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

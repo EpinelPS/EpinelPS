@@ -55,6 +55,7 @@ namespace nksrv.StaticInfo
         private JArray characterTable;
         private JArray tutorialTable;
         private JArray itemEquipTable;
+        private Dictionary<int, CharacterLevelData> LevelData = [];
 
         public byte[] Sha256Hash;
         public int Size;
@@ -230,7 +231,7 @@ namespace nksrv.StaticInfo
             if (questdata == null) throw new Exception("failed to parse " + entry);
 
             var records = (JArray?)questdata["records"];
-            if (records == null ) throw new Exception(entry + " is missing records element");
+            if (records == null) throw new Exception(entry + " is missing records element");
 
             return records;
         }
@@ -245,6 +246,16 @@ namespace nksrv.StaticInfo
             characterTable = await LoadZip("CharacterTable.json");
             tutorialTable = await LoadZip("ContentsTutorialTable.json");
             itemEquipTable = await LoadZip("ItemEquipTable.json");
+            var characterLevelTable = await LoadZip("CharacterLevelTable.json");
+
+            foreach (JToken item in characterLevelTable)
+            {
+                var obj = item.ToObject<CharacterLevelData>();
+                if (obj != null)
+                    LevelData.Add(obj.level, obj);
+                else
+                    Logger.Warn("failed to read character level table entry");
+            }
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
@@ -257,7 +268,7 @@ namespace nksrv.StaticInfo
                 int value = id.ToObject<int>();
                 if (value == stage)
                 {
-                    MainQuestCompletionData? data = JsonConvert.DeserializeObject<MainQuestCompletionData>(item.ToString());
+                    MainQuestCompletionData? data = item.ToObject<MainQuestCompletionData>();
                     if (data == null) throw new Exception("failed to deserialize main quest data item");
                     return data;
                 }
@@ -275,7 +286,7 @@ namespace nksrv.StaticInfo
                 int value = id.ToObject<int>();
                 if (value == tid)
                 {
-                    MainQuestCompletionData? data = JsonConvert.DeserializeObject<MainQuestCompletionData>(item.ToString());
+                    MainQuestCompletionData? data = item.ToObject<MainQuestCompletionData>();
                     if (data == null) throw new Exception("failed to deserialize main quest data item");
                     return data;
                 }
@@ -417,7 +428,7 @@ namespace nksrv.StaticInfo
                 int idValue = id.ToObject<int>();
                 if (idValue == TableId)
                 {
-                    ClearedTutorialData? data = JsonConvert.DeserializeObject<ClearedTutorialData>(item.ToString());
+                    ClearedTutorialData? data = item.ToObject<ClearedTutorialData>();
                     if (data == null) throw new Exception("failed to deserialize reward data");
                     return data;
                 }
@@ -454,7 +465,7 @@ namespace nksrv.StaticInfo
             string mod = normal ? "Normal" : "Hard";
             foreach (JObject item in stageDataRecords)
             {
-                CampaignStageRecord? data = JsonConvert.DeserializeObject<CampaignStageRecord>(item.ToString());
+                CampaignStageRecord? data = item.ToObject<CampaignStageRecord>();
                 if (data == null) throw new Exception("failed to deserialize stage data");
 
                 int chVal = data.chapter_id - 1;
@@ -464,6 +475,11 @@ namespace nksrv.StaticInfo
                     yield return data.id;
                 }
             }
+        }
+
+        public Dictionary<int, CharacterLevelData> GetCharacterLevelUpData()
+        {
+            return LevelData;
         }
     }
 }
