@@ -12,7 +12,11 @@
 [![Discord](https://img.shields.io/discord/1261717212448952450?style=flat-square)](https://discord.gg/Ztt6Y9vQjF)
 
 </div>
-Private/local server for Nikke. NOTE: This project is in a very early state so many features in the game do not work. Discord server: https://discord.gg/Ztt6Y9vQjF
+Private/local server for Nikke. Discord server: https://discord.gg/Ztt6Y9vQjF
+
+
+> [!WARNING]
+> This project is in a very early state so many functions in the game do not work.
 
 ## Usage
 Download the latest release/GitHub actions build, and run ServerSelector.Desktop.exe as administrator (to modify DNS hosts file and install a CA cert). Make sure to close the game and launcher first. Select Local server, and then click save. After that, start nksrv.exe to start the actual server.
@@ -32,7 +36,8 @@ To skip stages, a basic command line interface is implemented.
 ## Progress
 Stage, character, outpost and story information is saved and works, as well as player nickname.
 
-<img src="https://github.com/MishaProductions/nikke-server/assets/106913236/75330e0d-ddb5-4d29-b7dd-ab6662306494" width="480" height="270">
+<img src="https://github.com/user-attachments/assets/16d72494-27ce-4af5-9551-2c25940b0704" width="480" height="270">
+
 <img src="https://github.com/MishaProductions/nikke-server/assets/106913236/15b5ea93-bcd1-44b7-81b9-a10d053b7af8" width="480" height="270">
 <img src="https://github.com/MishaProductions/nikke-server/assets/106913236/70ab4668-70b8-4e2c-bf1b-c84974f5e8ee" width="480" height="270">
 <img src="https://github.com/MishaProductions/nikke-server/assets/106913236/c6a89fd4-9568-48c2-b4f9-d73807d4043e" width="480" height="270">
