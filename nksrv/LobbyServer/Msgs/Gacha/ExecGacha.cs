@@ -27,21 +27,18 @@ namespace nksrv.LobbyServer.Msgs.Gacha
             {
                 foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
                 {
-                    response.Gacha.Add(new NetGachaEntityData() { Corporation = 0, PieceCount = 1, CurrencyValue = 5, Sn = c, Tid = c, Type = 1 });
-                    
-                  //  response.Characters.Add(new NetUserCharacterDefaultData() { CostumeId = 0, Csn = c, Grade = 0, Lv = 1, Skill1Lv = 1, Skill2Lv = 1, Tid = c, UltiSkillLv = 1 });
-                   // user.Characters.Add(new Utils.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl = 1, Tid = c, UltimateLevel = 1 });
+                    response.Gacha.Add(new NetGachaEntityData() { Corporation = 1, PieceCount = 1, CurrencyValue = 5, Sn = c, Tid = c, Type = 1 });
 
-                    //  response.Characters.Add(new NetUserCharacterDefaultData() { Lv = 1, Skill1Lv = 1, Grade = 0, Csn = 1, Tid = 130201 });
-
+                    response.Characters.Add(new NetUserCharacterDefaultData() { CostumeId = 0, Csn = c, Grade = 0, Lv = 1, Skill1Lv = 1, Skill2Lv = 1, Tid = c, UltiSkillLv = 1 });
+                    user.Characters.Add(new Utils.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl = 1, Tid = c, UltimateLevel = 1 });
                 }
-             //   user.GachaTutorialPlayCount++;
+                user.GachaTutorialPlayCount++;
             }
 
             JsonDb.Save();
-           
 
-          await  WriteDataAsync(response);
+
+            await WriteDataAsync(response);
         }
     }
 }
