@@ -26,12 +26,13 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                     item.Csn = 0;
 
                     response.Item = NetUtils.ToNet(item);
+                    break;
                 }
             }
 
             JsonDb.Save();
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

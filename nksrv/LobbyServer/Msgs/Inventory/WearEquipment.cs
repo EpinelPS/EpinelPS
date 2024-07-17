@@ -24,6 +24,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                     // update character id
                     item.Csn = req.Csn;
                     item.Position = NetUtils.GetItemPos(user, item.Isn);
+                    break;
                 }
             }
 
@@ -33,6 +34,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                 if (item.Csn == req.Csn)
                 {
                     response.Items.Add(NetUtils.ToNet(item));
+                    break;
                 }
             }
             JsonDb.Save();

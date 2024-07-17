@@ -20,3 +20,13 @@ message TacticAcademyClearLessonResponse {
 	int32 LessonId = 2;
 	repeated NetUserCurrencyData RemainingCurrency = 4;
 }
+
+// Battle reward / wipeout
+message DoWipeOutRequest {
+
+}
+message DoWipeOutResponse {
+	int32 WipeoutCount = 2;
+	NetRewardData Reward = 3;
+	repeated NetUserCurrencyData Currency = 4;
+}

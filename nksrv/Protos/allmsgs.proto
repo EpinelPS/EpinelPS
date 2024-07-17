@@ -1052,7 +1052,7 @@ message ResGetWeeklyRewardedData  {
 
 message ReqGetDailyRewardedData {}
 message ResGetDailyRewardedData {
-	repeated NetEventWithJoinData eventWithJoinData = 3;
+	repeated int32 ids = 3;
 }
 
 message NetPassRankData {

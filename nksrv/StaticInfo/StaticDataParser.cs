@@ -56,6 +56,7 @@ namespace nksrv.StaticInfo
         private JArray characterTable;
         private JArray tutorialTable;
         private JArray itemEquipTable;
+        private Dictionary<string, JArray> FieldMapData = [];
         private Dictionary<int, CharacterLevelData> LevelData = [];
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
 
@@ -281,6 +282,7 @@ namespace nksrv.StaticInfo
                 var fullId = int.Parse(groupid.ToString() + id.ToString());
                 TacticAcademyLessons.Add(id, new TacticAcademyLessonRecord() { CurrencyId = (CurrencyType)currencyId, CurrencyValue = currencyValue, GroupId = groupid, Id = id });
             }
+
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)

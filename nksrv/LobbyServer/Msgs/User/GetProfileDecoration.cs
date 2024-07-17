@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var r = new ResProfileCardDecorationLayout();
             r.Layout = new ProfileCardDecorationLayout();
             r.Layout.BackgroundId = 101002;
-          await  WriteDataAsync(r);
+            await WriteDataAsync(r);
         }
     }
 }

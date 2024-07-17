@@ -25,7 +25,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
 
             // TODO
             response.Reward = new();
-
+         
 
 
             await WriteDataAsync(response);

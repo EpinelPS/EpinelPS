@@ -15,8 +15,9 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqGetUserTitleList>();
 
             var r = new ResGetUserTitleList();
+            r.UserTitleList.Add(new NetUserTitle() { UserTitleId = 1 });
 
-          await  WriteDataAsync(r);
+            await WriteDataAsync(r);
         }
     }
 }

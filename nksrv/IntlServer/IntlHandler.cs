@@ -60,7 +60,8 @@ namespace nksrv.IntlServer
 
         public static AccessToken CreateLauncherTokenForUser(User user)
         {
-            AccessToken token = new() { ExpirationTime = DateTimeOffset.UtcNow.AddDays(1).ToUnixTimeSeconds() };
+            // TODO: implement access token expiration
+            AccessToken token = new() { ExpirationTime = DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds() };
             token.Token = Rng.RandomString(64);
             token.UserID = user.ID;
             JsonDb.Instance.LauncherAccessTokens.Add(token);

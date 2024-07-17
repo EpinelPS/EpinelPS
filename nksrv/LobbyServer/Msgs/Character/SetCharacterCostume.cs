@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Character
 
             foreach (var item in user.Characters)
             {
-                if(item.Csn == req.Csn)
+                if (item.Csn == req.Csn)
                 {
                     item.CostumeId = req.CostumeId;
                     break;
@@ -27,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Character
 
             var response = new ResSetCharacterCostume();
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

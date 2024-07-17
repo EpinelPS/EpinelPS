@@ -20,10 +20,9 @@ namespace nksrv.LobbyServer.Msgs.Inventory
             {
                 response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position });
             }
+            // TODO: HarmonyCubes, RunAwakeningIsnList, UserRedeems
 
-            // TODO implement
-
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

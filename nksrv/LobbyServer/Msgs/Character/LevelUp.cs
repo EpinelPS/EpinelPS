@@ -23,8 +23,6 @@ namespace nksrv.LobbyServer.Msgs.Character
             {
                 if (item.Csn == req.Csn)
                 {
-                    // item.Level = req.Level;
-
                     int requiredCredit = 0;
                     int requiredBattleData = 0;
                     int requiredCoreDust = 0;
@@ -52,8 +50,9 @@ namespace nksrv.LobbyServer.Msgs.Character
                         return;
                     }
 
-                    response.Character = new() { 
-                        CostumeId = item.CostumeId, 
+                    response.Character = new()
+                    {
+                        CostumeId = item.CostumeId,
                         Csn = item.Csn,
                         Lv = item.Level,
                         Skill1Lv = item.Skill1Lvl,
@@ -81,9 +80,7 @@ namespace nksrv.LobbyServer.Msgs.Character
             }
             JsonDb.Save();
 
-         
-
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

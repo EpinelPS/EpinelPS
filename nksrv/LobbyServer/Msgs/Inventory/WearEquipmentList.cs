@@ -17,9 +17,9 @@ namespace nksrv.LobbyServer.Msgs.Inventory
 
             var response = new ResWearEquipmentList();
 
-            foreach (var item in user.Items.ToArray())
+            foreach (var item2 in req.IsnList)
             {
-                foreach (var item2 in req.IsnList)
+                foreach (var item in user.Items.ToArray())
                 {
                     if (item2 == item.Isn)
                     {
