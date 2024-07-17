@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using nksrv.Utils;
+using Swan.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,12 +61,14 @@ namespace nksrv.IntlServer
 
                     if (User == null)
                     {
+                        Logger.Warn("Unknown auth token");
                         await WriteJsonStringAsync("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
                         return;
                     }
                 }
                 else
                 {
+                    Logger.Warn("Failed to parse auth data");
                     await WriteJsonStringAsync("{\"msg\":\"expired verify_code!\",\"ret\":2022,\"seq\":\"" + Seq + "\"}\r\n");
                     return;
                 }
