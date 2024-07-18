@@ -13,10 +13,11 @@ namespace nksrv.LobbyServer.Msgs.Misc
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqUserOnlineStateLog>();
-
+            var user = GetUser();
 
             var response = new ResUserOnlineStateLog();
-          await  WriteDataAsync(response);
+            user.LastLogin = DateTime.UtcNow;
+            await WriteDataAsync(response);
         }
     }
 }
