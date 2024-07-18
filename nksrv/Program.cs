@@ -196,7 +196,7 @@ namespace nksrv
                                                 if (!user.IsStageCompleted(item, true))
                                                 {
                                                     Console.WriteLine("Completing stage " + item);
-                                                    ClearStage.CompleteStage(user, item);
+                                                    ClearStage.CompleteStage(user, item, true);
                                                 }
 
                                                 if (i == chapterNumber && target == stageNumber)

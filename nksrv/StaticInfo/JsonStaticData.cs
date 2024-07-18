@@ -27,6 +27,8 @@ namespace nksrv.StaticInfo
         /// </summary>
         public string chapter_mod = "";
         public string stage_type = "";
+        public string enter_scenario = "";
+        public string exit_scenario = "";
     }
     public class RewardTableRecord
     {

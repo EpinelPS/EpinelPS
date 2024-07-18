@@ -1,12 +1,6 @@
-﻿using nksrv.Net;
-using nksrv.StaticInfo;
+﻿using nksrv.StaticInfo;
 using nksrv.Utils;
 using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Stage
 {
@@ -32,7 +26,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
         }
 
 
-        public static ResClearStage CompleteStage(Utils.User user, int StageId)
+        public static ResClearStage CompleteStage(Utils.User user, int StageId, bool forceCompleteScenarios = false)
         {
             var response = new ResClearStage();
             var clearedStage = StaticDataParser.Instance.GetStageData(StageId);
@@ -46,6 +40,19 @@ namespace nksrv.LobbyServer.Msgs.Stage
 
             DoQuestSpecificUserOperations(user, StageId);
             var rewardData = StaticDataParser.Instance.GetRewardTableEntry(clearedStage.reward_id);
+
+
+            if (forceCompleteScenarios)
+            {
+                if (!user.CompletedScenarios.Contains(clearedStage.enter_scenario) && !string.IsNullOrEmpty(clearedStage.enter_scenario) && !string.IsNullOrWhiteSpace(clearedStage.enter_scenario))
+                {
+                    user.CompletedScenarios.Add(clearedStage.enter_scenario);
+                }
+                if (!user.CompletedScenarios.Contains(clearedStage.exit_scenario) && !string.IsNullOrEmpty(clearedStage.exit_scenario) && !string.IsNullOrWhiteSpace(clearedStage.exit_scenario))
+                {
+                    user.CompletedScenarios.Add(clearedStage.exit_scenario);
+                }
+            }
 
             if (rewardData != null)
                 response.StageClearReward = RegisterRewardsForUser(user, rewardData);
@@ -77,6 +84,26 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 Logger.Warn("Unknown stage category " + clearedStage.stage_category);
             }
 
+            if (clearedStage.stage_type != "Sub")
+            {
+                // add outpost reward level if unlocked
+                if (user.IsStageCompleted(6002016, true))
+                {
+                    user.OutpostBattleLevel.Exp++;
+                    if (user.OutpostBattleLevel.Exp >= 5)
+                    {
+                        user.OutpostBattleLevel.Exp = 0;
+                        user.OutpostBattleLevel.Level++;
+                        response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = true, Exp = 0, Level = user.OutpostBattleLevel.Level };
+                        user.AddCurrency(CurrencyType.FreeCash, 100); // todo is reward the same for all level upgrades
+                    }
+                    else
+                    {
+                        response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = false, Exp = user.OutpostBattleLevel.Exp, Level = user.OutpostBattleLevel.Level };
+                    }
+                }
+            }
+
             var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
             if (!user.FieldInfoNew.ContainsKey(key))
                 user.FieldInfoNew.Add(key, new FieldInfoNew());
@@ -96,23 +123,25 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
 
                 var oldXpData = StaticDataParser.Instance.GetUserLevelFromUserExp(user.userPointData.ExperiencePoint);
-                var xpData = StaticDataParser.Instance.GetUserLevelFromUserExp(newXp);
-                var newLevel = xpData.Item1;
+                var newLevelExp = StaticDataParser.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel + 1);
+                var newLevel = user.userPointData.UserLevel;
 
-                if (newLevel == -1)
+                if (newLevelExp == -1)
                 {
                     Logger.Warn("Unknown user level value for xp " + newXp);
                 }
 
 
-
-                if (newLevel > user.userPointData.UserLevel)
+                while (newXp >= newLevelExp)
                 {
+                    newLevel++;
                     newXp -= oldXpData.Item2;
                     if (user.Currency.ContainsKey(CurrencyType.FreeCash))
                         user.Currency[CurrencyType.FreeCash] += 30;
                     else
                         user.Currency.Add(CurrencyType.FreeCash, 30);
+
+                    newLevelExp = StaticDataParser.Instance.GetUserMinXpForLevel(newLevel + 1);
                 }
 
 
