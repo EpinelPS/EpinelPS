@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.User
 {
@@ -15,8 +10,8 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqGetProfileFrame>();
             var response = new ResGetProfileFrame();
 
-           
-          await  WriteDataAsync(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

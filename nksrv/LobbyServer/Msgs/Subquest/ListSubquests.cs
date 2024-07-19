@@ -13,7 +13,7 @@ namespace nksrv.LobbyServer.Msgs.Subquest
 
             // TOOD
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

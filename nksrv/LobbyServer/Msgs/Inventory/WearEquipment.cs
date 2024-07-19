@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Inventory
 {
@@ -38,7 +33,7 @@ namespace nksrv.LobbyServer.Msgs.Inventory
                 }
             }
             JsonDb.Save();
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

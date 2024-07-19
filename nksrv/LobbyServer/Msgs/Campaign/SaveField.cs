@@ -20,7 +20,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
             }
             else
             {
-               user.MapJson[req.MapId] = req.Json;
+                user.MapJson[req.MapId] = req.Json;
             }
 
             await WriteDataAsync(response);

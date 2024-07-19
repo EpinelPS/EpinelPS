@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Team
 {
@@ -15,11 +10,13 @@ namespace nksrv.LobbyServer.Msgs.Team
             var req = await ReadData<ReqListSupportCharacterUsedCount>();
 
             var response = new ResListSupportCharacterUsedCount();
+
+            // TODO: Limit temportary participation
             foreach (var item in req.TeamTypeList)
             {
                 Console.WriteLine("support character used: " + item);
             }
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

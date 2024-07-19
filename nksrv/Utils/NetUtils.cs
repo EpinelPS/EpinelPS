@@ -1,5 +1,4 @@
-﻿using nksrv.Net;
-using nksrv.StaticInfo;
+﻿using nksrv.StaticInfo;
 using Swan.Logging;
 
 namespace nksrv.Utils
@@ -56,7 +55,7 @@ namespace nksrv.Utils
                 if (item.Isn == isn)
                 {
                     var subType = StaticDataParser.Instance.GetItemSubType(item.ItemType);
-                    switch(subType)
+                    switch (subType)
                     {
                         case "Module_A":
                             return 0;

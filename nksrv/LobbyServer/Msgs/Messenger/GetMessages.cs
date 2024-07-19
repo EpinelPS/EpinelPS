@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Messenger
 {
@@ -17,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: save these things
             var response = new ResGetMessages();
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

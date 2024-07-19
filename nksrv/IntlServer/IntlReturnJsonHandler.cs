@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmbedIO;
-using Swan;
-
-namespace nksrv.IntlServer
+﻿namespace nksrv.IntlServer
 {
     public class IntlReturnJsonHandler : IntlMsgHandler
     {

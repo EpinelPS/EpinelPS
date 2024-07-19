@@ -11,7 +11,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
 
             var response = new ResEnterLobbyPing();
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

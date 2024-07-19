@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Minigame.IslandAdventure
 {
@@ -16,7 +11,7 @@ namespace nksrv.LobbyServer.Msgs.Minigame.IslandAdventure
 
             var response = new ResGetIslandAdventureMissionProgress();
             // TODO
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

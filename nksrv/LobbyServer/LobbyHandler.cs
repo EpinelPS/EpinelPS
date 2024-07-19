@@ -1,7 +1,6 @@
 ﻿using ASodium;
 using EmbedIO;
 using Google.Protobuf;
-using nksrv.Net;
 using nksrv.Utils;
 using Swan.Logging;
 
@@ -115,7 +114,7 @@ namespace nksrv.LobbyServer
                 LobbyJukebox = 2,
                 InfraCoreExp = user.InfraCoreExp,
                 InfraCoreLv = user.InfraCoreLvl,
-                
+
             };
 
 

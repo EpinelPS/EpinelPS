@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Outpost
 {
@@ -23,7 +18,10 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             {
                 OutpostBattleLevel = new NetOutpostBattleLevel() { Level = 1 },
                 CommanderBgm = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = 5 } },
-                BattleTime = 864000000000, Jukebox = new(), MaxBattleTime = 864000000000, SkinGroupId = 1000
+                BattleTime = 864000000000,
+                Jukebox = new(),
+                MaxBattleTime = 864000000000,
+                SkinGroupId = 1000
             };
 
             response.OutpostBattleLevel = user.OutpostBattleLevel;
@@ -41,7 +39,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             response.Data.Add(new NetUserOutpostData() { SlotId = 38, BuildingId = 33601, IsDone = true, StartAt = 638549982076760660, CompleteAt = 638549982076760660 });
 
             // TODO
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.PartyMatch
 
             var response = new ResListInvitation();
             // TODO
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

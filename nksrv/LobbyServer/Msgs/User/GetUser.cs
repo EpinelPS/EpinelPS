@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.User
 {
@@ -32,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.RepresentationTeam = user.RepresentationTeamData;
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
-            
+
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
             foreach (var item in user.ClearedTutorialData)
             {
@@ -44,8 +39,8 @@ namespace nksrv.LobbyServer.Msgs.User
 
             response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
             response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
-          
-          await  WriteDataAsync(response);
+
+            await WriteDataAsync(response);
         }
     }
 }

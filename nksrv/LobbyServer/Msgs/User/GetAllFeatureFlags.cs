@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.User
 {
@@ -51,7 +46,7 @@ namespace nksrv.LobbyServer.Msgs.User
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.Ce002MiniGame, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.SoloRaid, IsOpen = true },
                 ]);
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

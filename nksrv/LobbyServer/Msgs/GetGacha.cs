@@ -1,10 +1,4 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs
 {
@@ -19,7 +13,7 @@ namespace nksrv.LobbyServer.Msgs
             var response = new ResGetGachaData();
             if (user.GachaTutorialPlayCount > 0)
                 response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

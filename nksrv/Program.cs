@@ -1,27 +1,15 @@
 ﻿using EmbedIO;
 using EmbedIO.Actions;
-using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
+using EmbedIO.WebApi;
 using nksrv.IntlServer;
 using nksrv.LobbyServer;
+using nksrv.LobbyServer.Msgs.Stage;
+using nksrv.StaticInfo;
 using nksrv.Utils;
 using Swan.Logging;
-using System.IO;
-using System.IO.Compression;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Net.Http.Formatting;
-using System.Net.Security;
-using Swan.Parsers;
-using System.Net.Sockets;
-using Newtonsoft.Json.Linq;
-using Swan;
-using Google.Api;
-using nksrv.StaticInfo;
-using EmbedIO.WebApi;
-using nksrv.LobbyServer.Msgs.Stage;
 
 namespace nksrv
 {
@@ -50,7 +38,7 @@ namespace nksrv
 
                 CliLoop();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Error("Fatal error:");
                 Logger.Error(ex.ToString());

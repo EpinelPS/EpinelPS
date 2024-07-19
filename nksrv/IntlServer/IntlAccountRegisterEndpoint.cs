@@ -1,15 +1,8 @@
 ﻿using EmbedIO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using static nksrv.IntlServer.IntlLogin2Endpoint;
 using Newtonsoft.Json;
-using static nksrv.IntlServer.IntlLogin1Endpoint;
 using nksrv.Utils;
+using System.Net;
+using static nksrv.IntlServer.IntlLogin2Endpoint;
 
 namespace nksrv.IntlServer
 {
@@ -43,7 +36,7 @@ namespace nksrv.IntlServer
                     }
                 }
 
-                var user = new User() { ID = uid, Password = ep.password, RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(), Username = ep.account, PlayerName = "Player_"+Rng.RandomString(8) };
+                var user = new User() { ID = uid, Password = ep.password, RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(), Username = ep.account, PlayerName = "Player_" + Rng.RandomString(8) };
 
                 JsonDb.Instance.Users.Add(user);
 

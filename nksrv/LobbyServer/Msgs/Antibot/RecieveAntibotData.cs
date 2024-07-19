@@ -1,5 +1,4 @@
-﻿using nksrv.Net;
-using nksrv.Utils;
+﻿using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Antibot
 {

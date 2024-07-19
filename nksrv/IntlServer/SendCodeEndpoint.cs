@@ -1,14 +1,7 @@
 ﻿using EmbedIO;
 using Newtonsoft.Json;
 using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using static nksrv.IntlServer.IntlLogin1Endpoint;
 using static nksrv.IntlServer.IntlLogin2Endpoint;
 
 namespace nksrv.IntlServer

@@ -1,10 +1,5 @@
 ﻿using nksrv.Net;
 using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Outpost
 {
@@ -18,7 +13,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
 
             var response = new GetTacticAcademyDataResponse();
             response.CompletedLessons.AddRange(user.CompletedTacticAcademyLessons);
-            
+
             await WriteDataAsync(response);
         }
     }

@@ -10,7 +10,7 @@ namespace nksrv.LobbyServer.Msgs.Trigger
             var req = ReadData<ReqSyncTrigger>();
 
             var response = new ResSyncTrigger();
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

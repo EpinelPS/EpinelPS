@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Soloraid
 {
@@ -17,10 +12,10 @@ namespace nksrv.LobbyServer.Msgs.Soloraid
             var response = new ResGetSoloRaidPeriod();
             response.Period = new NetSoloRaidPeriodData
             {
-                
+
             };
             // TODO
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

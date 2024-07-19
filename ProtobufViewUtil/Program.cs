@@ -1,8 +1,4 @@
-﻿using Google.Protobuf;
-using nksrv;
-using System.Diagnostics;
-
-namespace ProtobufViewUtil
+﻿namespace ProtobufViewUtil
 {
     internal class Program
     {
@@ -15,7 +11,7 @@ namespace ProtobufViewUtil
             s.MergeFrom(inn);
             Console.WriteLine(s.ToString());
             var outt = s.ToByteArray();
-            
+
             if (inn.SequenceEqual(outt))
             {
                 Console.WriteLine("Check OK");

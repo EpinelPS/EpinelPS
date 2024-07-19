@@ -1,11 +1,4 @@
-﻿using Google.Protobuf;
-using nksrv.StaticInfo;
-using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Misc
 {
@@ -19,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             var r = new ResGetFeatureFlag();
             r.IsOpen = true;
 
-          await  WriteDataAsync(r);
+            await WriteDataAsync(r);
         }
     }
 }

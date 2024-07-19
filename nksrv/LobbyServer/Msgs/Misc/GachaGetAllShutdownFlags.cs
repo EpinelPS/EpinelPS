@@ -14,8 +14,8 @@ namespace nksrv.LobbyServer.Msgs.Misc
             if (user.GachaTutorialPlayCount > 0)
                 response.Unavailables.Add(3);
 
-           // TODO: Validate response from real server and pull info from user info
-         await  WriteDataAsync(response);
+            // TODO: Validate response from real server and pull info from user info
+            await WriteDataAsync(response);
         }
     }
 }

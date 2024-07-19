@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.User
 {
@@ -18,7 +13,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var response = new ResGetFieldTalkList();
             // TODO
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

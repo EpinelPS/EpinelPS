@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Messenger
 {
@@ -17,7 +12,7 @@ namespace nksrv.LobbyServer.Msgs.Messenger
             // TODO: get proper response
             var response = new ResForcePickTodayRandomMessage();
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

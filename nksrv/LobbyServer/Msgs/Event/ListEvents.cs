@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Event
 {
@@ -102,7 +97,7 @@ namespace nksrv.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

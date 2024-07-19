@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 
 namespace DataFixupUtil
 {
@@ -9,7 +8,7 @@ namespace DataFixupUtil
         {
             Console.WriteLine("Hello, World!");
 
-            foreach(var arg in Directory.GetFiles("C:\\NIKKE\\NIKKE\\Game"))
+            foreach (var arg in Directory.GetFiles("C:\\NIKKE\\NIKKE\\Game"))
             {
                 var fileName = Path.GetFileName(arg);
                 if (fileName.StartsWith("input"))

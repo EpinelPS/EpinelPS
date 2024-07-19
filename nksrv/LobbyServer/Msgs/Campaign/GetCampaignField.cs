@@ -1,12 +1,6 @@
 ﻿using nksrv.LobbyServer.Msgs.Stage;
 using nksrv.StaticInfo;
 using nksrv.Utils;
-using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Campaign
 {
@@ -17,7 +11,7 @@ namespace nksrv.LobbyServer.Msgs.Campaign
         {
             var req = await ReadData<ReqGetCampaignFieldData>();
             var user = GetUser();
-           
+
             Console.WriteLine("Map ID: " + req.MapId);
 
             var response = new ResGetCampaignFieldData();

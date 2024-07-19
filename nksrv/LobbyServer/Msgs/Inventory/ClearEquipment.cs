@@ -1,10 +1,4 @@
-﻿using nksrv.LobbyServer.Msgs.User;
-using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Inventory
 {

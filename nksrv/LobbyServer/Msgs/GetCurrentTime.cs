@@ -16,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs
             response.CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0));
             // todo: validate response with actual server
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

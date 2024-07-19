@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Outpost
 {
@@ -21,7 +16,7 @@ namespace nksrv.LobbyServer.Msgs.Outpost
             var response = new ResShowOutpostBattleReward();
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

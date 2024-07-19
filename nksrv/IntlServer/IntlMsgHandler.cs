@@ -1,13 +1,8 @@
 ﻿using EmbedIO;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using nksrv.Utils;
 using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.IntlServer
 {
@@ -28,7 +23,7 @@ namespace nksrv.IntlServer
             {
                 var x = JsonConvert.DeserializeObject<AuthPkt>(Content);
                 string tokToCheck = "";
-                if(x != null && x.channel_info != null && !string.IsNullOrEmpty(x.channel_info.account_token))
+                if (x != null && x.channel_info != null && !string.IsNullOrEmpty(x.channel_info.account_token))
                 {
                     tokToCheck = x.channel_info.account_token;
                 }

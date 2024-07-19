@@ -1,12 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using EmbedIO;
 using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EmbedIO;
 
 namespace nksrv.LobbyServer.Msgs.Auth
 {

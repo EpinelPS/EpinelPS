@@ -1,5 +1,5 @@
-﻿using nksrv.Utils;
-using nksrv.Net;
+﻿using nksrv.Net;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Misc
 {
@@ -14,7 +14,7 @@ namespace nksrv.LobbyServer.Msgs.Misc
             r.MatchUrl = "https://global-match.nikke-kr.com";
             r.WorldId = 84;
 
-          await  WriteDataAsync(r);
+            await WriteDataAsync(r);
         }
     }
 }

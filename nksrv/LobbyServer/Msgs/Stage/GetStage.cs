@@ -1,5 +1,4 @@
-﻿using nksrv.Net;
-using nksrv.Utils;
+﻿using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Stage
 {
@@ -12,14 +11,14 @@ namespace nksrv.LobbyServer.Msgs.Stage
             var user = GetUser();
 
             var response = new ResGetStageData();
-            
+
             response.Field = CreateFieldInfo(user, req.Chapter - 1, req.Mod == 0 ? "Normal" : "Hard");
 
             response.HasChapterBossEntered = true;
 
             response.SquadData = "";
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
 
         public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter, string mod)

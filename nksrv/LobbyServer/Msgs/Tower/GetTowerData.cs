@@ -1,9 +1,4 @@
 ﻿using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Tower
 {
@@ -36,7 +31,7 @@ namespace nksrv.LobbyServer.Msgs.Tower
             response.Data.Add(t3);
             response.Data.Add(t4);
 
-          await  WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }
