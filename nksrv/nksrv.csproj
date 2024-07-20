@@ -30,6 +30,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Protos\liberate.proto" />
+	  <None Remove="Protos\shop.proto" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="gameconfig.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>

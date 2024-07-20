@@ -10,7 +10,7 @@ namespace nksrv.LobbyServer.Msgs.Shop
         {
             try
             {
-                var x = await ReadData<ReqGetJupiterProductList>(); //todo: causes crash
+                var x = await ReadData<ReqGetJupiterProductList>();
 
                 var response = new ResGetJupiterProductList();
                 foreach (var item in x.ProductIdList)

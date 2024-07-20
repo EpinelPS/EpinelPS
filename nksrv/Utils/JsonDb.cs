@@ -25,7 +25,6 @@ namespace nksrv.Utils
 
     public class Character
     {
-        // TODO
         public int Csn = 0;
         public int Tid = 0;
         public int CostumeId = 0;
@@ -86,8 +85,7 @@ namespace nksrv.Utils
         public Dictionary<string, FieldInfoNew> FieldInfoNew = [];
         public Dictionary<string, string> MapJson = [];
         public Dictionary<CurrencyType, long> Currency = new() {
-            { CurrencyType.ContentStamina, 2 },
-            { CurrencyType.CharPremiumTicket, 999999 }
+            { CurrencyType.ContentStamina, 2 }
         };
 
         public List<ItemData> Items = new();
@@ -206,8 +204,10 @@ namespace nksrv.Utils
     internal class JsonDb
     {
         public static CoreInfo Instance { get; internal set; }
+
+        // Note: change this in sodium
         public static byte[] ServerPrivateKey = Convert.FromBase64String("FSUY8Ohd942n5LWAfxn6slK3YGwc8OqmyJoJup9nNos=");
-        public static byte[] ServerPublicKey = Convert.FromBase64String("04hFDd1e/BOEF2h4b0MdkX2h6W5REeqyW+0r9+eSeh0="); // Note: change this in sodium
+        public static byte[] ServerPublicKey = Convert.FromBase64String("04hFDd1e/BOEF2h4b0MdkX2h6W5REeqyW+0r9+eSeh0=");
 
         static JsonDb()
         {

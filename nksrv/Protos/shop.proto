@@ -1,0 +1,35 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "nksrv.Net";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/Duration.proto";
+
+message NetShopProductInfoData {
+	int32 Order = 1;
+	int32 ProductId = 2;
+	int32 BuyLimitCount = 3;
+	int32 BuyCount = 4;
+	int32 CorpType = 5;
+	int32 Discount = 6;
+	int64 EndAt = 7;
+	bool UseDateCondition = 8;
+}
+
+message NetShopProductData {
+	int32 ShopTid = 1;
+	int32 ShopCategory = 2;
+	int32 RenewCount = 3;
+	int64 RenewAt = 4;
+	int64 NextRenewAt = 5;
+	int32 FreeRenewCount = 6;
+	repeated NetShopProductInfoData List = 7;
+}
+
+message GetShopRequest {
+	int32 ShopCategory = 1;
+}
+
+message GetShopResponse {
+	NetShopProductData Shop = 1;
+}

@@ -114,7 +114,6 @@ namespace nksrv.LobbyServer
                 LobbyJukebox = 2,
                 InfraCoreExp = user.InfraCoreExp,
                 InfraCoreLv = user.InfraCoreLvl,
-
             };
 
 
