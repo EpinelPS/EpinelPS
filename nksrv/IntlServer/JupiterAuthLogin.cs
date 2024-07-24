@@ -17,18 +17,16 @@ namespace nksrv.IntlServer
         ""error_code"": 0,
         ""error_message"": ""COMM_SUCC""
     },
-    ""game_launcher_info"": [
-        {
-            ""id"": 27,
-            ""execute_file"": ""NIKKE\\Game\\NIKKE.exe"",
-            ""param"": """",
-            ""description"": ""Nikke main process"",
-            ""os"": ""any"",
-            ""branch_id"": 0,
-            ""status"": 1,
-            ""param_type"": 1
-        }
-    ]
+    ""channel"": 0,
+    ""game_id"": ""0"",
+    ""openid"": """",
+    ""uid"": """",
+    ""biz_ticket"": """",
+    ""expire_interval"": 0,
+    ""refresh_interval"": 0,
+    ""login_key"": """",
+    ""login_ticket"": """",
+    ""third_uid"": """"
 }", true);
         }
     }
