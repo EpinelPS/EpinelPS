@@ -1,0 +1,49 @@
+{
+  "result": {
+    "error_code": 0,
+    "error_message": "success"
+  },
+  "version_info": {
+    "game_id": "16601",
+    "branch_id": "1",
+    "version_id": "0.0.0.37",
+    "version_name": "NIKKE.PC_Official_GL_122.8.20",
+    "version_status": 7,
+    "service_status": 0,
+    "build_id": "2810",
+    "cos_repo_files": "[{\"cdn_root\":\"https://cloud.nikke-kr.com/PC/prod/rid.48-r.02587\",\"chunk_encrypt_flag\":0,\"manifest_files\":[{\"chunks\":[{\"chunk_index\":0,\"chunk_md5\":\"7bcb43a7de15fae58cb5b626ff828910\",\"chunk_size\":109944,\"chunk_uncompress_md5\":\"7bcb43a7de15fae58cb5b626ff828910\",\"chunk_uncompress_size\":109944}],\"file_url\":\"/manifestv2/48_5937488248518493556_0.manifest\",\"manifest_md5\":\"7bcb43a7de15fae58cb5b626ff828910\",\"manifest_size\":109944}],\"manifest_flag\":13,\"manifest_id\":5937488248518493000,\"manifest_version\":2,\"patch_size\":96182631,\"repository_desc\":{\"zh_CN\":\"game repo\"},\"repository_id\":48,\"repository_name\":{\"en_US\":\"Game\",\"zh_CN\":\"Game\"},\"repository_size\":305372746,\"repository_type\":\"Game\",\"repository_uncompress_size\":787528757}]",
+    "cos_access_info": "[{\"repository_id\":48,\"repository_type\":\"Game\",\"repository_name\":\"Game\",\"repository_name_en\":\"Game\",\"description\":\"game repo\",\"cos_list\":[{\"public_cdn_domain\":\"https://cloud.nikke-kr.com\"}],\"encrytion_key\":\"158f36bf7e611c945320c399294c4a6d\",\"encrytion_algorithm_id\":6,\"manifest_encrytion_key\":\"0f448b096bb4dc5b339debdce77c4572\",\"manifest_encrytion_algorithm_id\":6,\"game_id\":16601,\"manifest_id\":5937488248518494316}]",
+    "key_file_info": "[{\"crc\":668752354,\"path\":\"NIKKE\\\\game\\\\nikke.exe\"}]",
+    "install_script": "{\"script_content\":{\"executable\":[]}}",
+    "installer_size": "305372746",
+    "installed_size": "787528757",
+    "publish_time_in_unix": "1720021809",
+    "is_first_version_in_branch": "1",
+    "version_description": "[{\"lang_code\":\"en\",\"text\":\"\"},{\"lang_code\":\"ja\",\"text\":\"\"},{\"lang_code\":\"ko\",\"text\":\"\"}]",
+    "update_type": 0
+  },
+  "pre_version_info": null,
+  "launcher_version_info": {
+    "game_id": "16701",
+    "branch_id": "1",
+    "version_id": "0.0.6.379",
+    "version_name": "nikke_launcher_0.0.6.379",
+    "version_status": 7,
+    "service_status": 0,
+    "build_id": "2813",
+    "cos_repo_files": "[{\"cdn_root\":\"https://cloud.nikke-kr.com/PC/prod/rid.50-r.971a3\",\"chunk_encrypt_flag\":0,\"manifest_files\":[{\"chunks\":[{\"chunk_index\":0,\"chunk_md5\":\"c470c01b495b3f24f671ecbb00504c2b\",\"chunk_size\":51800,\"chunk_uncompress_md5\":\"c470c01b495b3f24f671ecbb00504c2b\",\"chunk_uncompress_size\":51800}],\"file_url\":\"/manifestv2/50_5937488248518493869_0.manifest\",\"manifest_md5\":\"c470c01b495b3f24f671ecbb00504c2b\",\"manifest_size\":51800}],\"manifest_flag\":13,\"manifest_id\":5937488248518494000,\"manifest_version\":2,\"patch_size\":16110968,\"repository_desc\":{\"zh_CN\":\"game repo\"},\"repository_id\":50,\"repository_name\":{\"en_US\":\"Game\",\"zh_CN\":\"Game\"},\"repository_size\":150773851,\"repository_type\":\"Game\",\"repository_uncompress_size\":391274755}]",
+    "cos_access_info": "[{\"repository_id\":50,\"repository_type\":\"Game\",\"repository_name\":\"Game\",\"repository_name_en\":\"Game\",\"description\":\"game repo\",\"cos_list\":[{\"public_cdn_domain\":\"https://cloud.nikke-kr.com\"}],\"encrytion_key\":\"ab00cbd5b9e6f7c4759c12d489b34b61\",\"encrytion_algorithm_id\":10,\"manifest_encrytion_key\":\"f8c65f692a6a021a688507a6e441786a\",\"manifest_encrytion_algorithm_id\":6,\"game_id\":16701,\"manifest_id\":5937488248518494306}]",
+    "key_file_info": "[{\"crc\":2930257430,\"path\":\"nikke_launcher.exe\"}]",
+    "install_script": "{\"script_content\":{\"executable\":[]}}",
+    "installer_size": "150773851",
+    "installed_size": "391274755",
+    "publish_time_in_unix": "1720020044",
+    "is_first_version_in_branch": "1",
+    "version_description": "[{\"lang_code\":\"en\",\"text\":\"\"},{\"lang_code\":\"ja\",\"text\":\"\"},{\"lang_code\":\"id\",\"text\":\"\"},{\"lang_code\":\"th\",\"text\":\"\"},{\"lang_code\":\"pt\",\"text\":\"\"},{\"lang_code\":\"es\",\"text\":\"\"},{\"lang_code\":\"de\",\"text\":\"\"},{\"lang_code\":\"fr\",\"text\":\"\"},{\"lang_code\":\"zh-Hans\",\"text\":\"\"},{\"lang_code\":\"zh-Hant\",\"text\":\"\"}]",
+    "update_type": 2
+  },
+  "ip_2_location": {
+    "ip": "1.1.1.1",
+    "country_code": "GR"
+  }
+}

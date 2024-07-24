@@ -10,7 +10,15 @@ namespace nksrv.LobbyServer.Msgs.System
         {
             var req = await ReadData<CheckVersionRequest>();
             var response = new CheckVersionResponse();
-            response.VersionStatus = 0;
+
+            if (GameConfig.Root.GameMaxVer != req.Version)
+            {
+                response.VersionStatus = 1;
+            }
+            else
+            {
+                response.VersionStatus = 0;
+            }
 
             await WriteDataAsync(response);
         }

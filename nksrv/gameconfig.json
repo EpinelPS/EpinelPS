@@ -9,5 +9,9 @@
   },
 
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/resourcehosts2
-  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}"
+  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/122-b0255105e0/{Platform}",
+
+  // Extracted from route config
+  "GameMinVer": "122.8.19",
+  "GameMaxVer": "122.8.20"
 }

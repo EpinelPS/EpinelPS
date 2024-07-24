@@ -249,6 +249,7 @@ namespace nksrv
                 .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/PC/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
+                .WithModule(new ActionModule("/api/v1/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithStaticFolder("/nikke_launcher", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "launcher"), true)
                 .WithStaticFolder("/admin/assets/", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "assets"), true)
                 .WithModule(new ActionModule("/admin", HttpVerbs.Any, HandleAdminRequest))
@@ -433,12 +434,13 @@ namespace nksrv
         {
             if (ctx.RequestedPath.Contains("/route_config.json"))
             {
-                await ctx.SendStringAsync(@"{
+
+                var response = @"{
   ""Config"": [
     {
       ""VersionRange"": {
-        ""From"": ""122.8.19"",
-        ""To"": ""122.8.20"",
+        ""From"": ""{GameMinVer}"",
+        ""To"": ""{GameMaxVer}"",
         ""PackageName"": ""com.proximabeta.nikke""
       },
       ""Route"": [
@@ -481,8 +483,8 @@ namespace nksrv
     },
     {
       ""VersionRange"": {
-        ""From"": ""121.8.19"",
-        ""To"": ""122.8.20"",
+        ""From"": ""{GameMinVer}"",
+        ""To"": ""{GameMaxVer}"",
         ""PackageName"": ""com.gamamobi.nikke""
       },
       ""Route"": [
@@ -496,7 +498,10 @@ namespace nksrv
       ]
     }
   ]
-}", "application/json", Encoding.Default);
+}";
+                response = response.Replace("{GameMinVer}", GameConfig.Root.GameMinVer);
+                response = response.Replace("{GameMaxVer}", GameConfig.Root.GameMaxVer);
+                await ctx.SendStringAsync(response, "application/json", Encoding.Default);
             }
             else
             {

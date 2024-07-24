@@ -14,6 +14,15 @@ namespace nksrv.IntlServer
         protected string Seq = "";
         protected AccessToken? UsedToken;
         public abstract bool RequiresAuth { get; }
+
+        public void Reset()
+        {
+            UsedToken = null;
+            Seq = "";
+            User = null;
+            Content = "";
+            ctx = null;
+        }
         public async Task HandleAsync(IHttpContext ctx)
         {
             this.ctx = ctx;
@@ -72,14 +81,22 @@ namespace nksrv.IntlServer
             await HandleAsync();
         }
         protected abstract Task HandleAsync();
-        protected async Task WriteJsonStringAsync(string data)
+        protected async Task WriteJsonStringAsync(string data, bool juniper = false)
         {
             if (ctx != null)
             {
                 var bt = Encoding.UTF8.GetBytes(data);
-                ctx.Response.ContentEncoding = null;
-                ctx.Response.ContentType = "application/json";
-                ctx.Response.ContentLength64 = bt.Length;
+                if (juniper)
+                {
+                    ctx.Response.ContentEncoding = Encoding.UTF8;
+                    ctx.Response.ContentType = "application/json";
+                }
+                else
+                {
+                    ctx.Response.ContentEncoding = null;
+                    ctx.Response.ContentType = "application/json";
+                    ctx.Response.ContentLength64 = bt.Length;
+                }
                 await ctx.Response.OutputStream.WriteAsync(bt, ctx.CancellationToken);
                 await ctx.Response.OutputStream.FlushAsync();
             }

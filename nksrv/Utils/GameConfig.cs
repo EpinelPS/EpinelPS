@@ -7,6 +7,8 @@ namespace nksrv.Utils
     {
         public StaticData StaticData { get; set; } = new();
         public string ResourceBaseURL { get; set; } = "";
+        public string GameMinVer { get; set; } = "";
+        public string GameMaxVer { get; set; } = "";
     }
 
     public class StaticData

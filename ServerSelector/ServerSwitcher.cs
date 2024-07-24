@@ -92,6 +92,8 @@ namespace ServerSelector
 {ip} na-community.playerinfinite.com
 {ip} common-web.intlgame.com
 {ip} li-sg.intlgame.com
+255.255.221.21 na.fleetlogd.com
+{ip} www.jupiterlauncher.com
 {ip} data-aws-na.intlgame.com
 255.255.221.21 sentry.io";
 

@@ -23,7 +23,11 @@ namespace nksrv.IntlServer
             {"/gnconfig/acquire_config", new IntlReturnJsonHandler(AquireConfigResp) },
             {"/auth/auto_login", new AutoLoginEndpoint() },
             {"/reward/send", new IntlReturnJsonHandler(SetProtocolResp) }, // /v2/reward/send
-            {"/notice/get_notice_content", new GetNoticeContent() } // /v2/notice/get_notice_content
+            {"/notice/get_notice_content", new GetNoticeContent() }, // /v2/notice/get_notice_content
+            {"/fleet.repo.game.RepoSVC/GetVersion", new JuniperLauncherGetRepoVersion() }, // /api/v1/fleet.repo.game.RepoSVC/GetVersion
+            {"/fleet.repo.game.RepoMgr/GetGameLauncher", new JuniperLauncherGetGameLauncher() }, // /api/v1/fleet.repo.game.RepoMgr/
+            {"/fleet.repo.game.RepoSVC/GetRegion", new JuniperLauncherGetRegion() }, // /api/v1/fleet.repo.game.RepoMgr/                                                     // GetGameLauncher
+            {"/fleet.auth.game.AuthSvr/Login", new JupiterAuthLogin() } // /api/v1/fleet.auth.game.AuthSvr/Login
         };
         public const string GetConfResp = "{\"conf_version\":\"102\",\"msg\":\"\",\"ret\":1,\"seq\":\"((SEGID))\"}";
         public const string MinorcerResp = "{\"adult_age\":15,\"adult_age_map\":{},\"adult_check_status\":1,\"adult_check_status_expiration\":\"0\",\"adult_status_map\":{},\"certificate_type\":3,\"email\":\"\",\"eu_user_agree_status\":0,\"game_grade\":0,\"game_grade_map\":{},\"is_dma\":true,\"is_eea\":false,\"is_need_li_cert\":false,\"msg\":\"success\",\"need_parent_control\":0,\"need_realname_auth\":0,\"parent_certificate_status\":0,\"parent_certificate_status_expiration\":\"0\",\"parent_control_map\":{},\"qr_code_ret\":0,\"realname_auth_status\":0,\"region\":\"300\",\"ret\":0,\"seq\":\"((SEGID))\",\"ts\":\"1719156511\"}";
@@ -47,6 +51,7 @@ namespace nksrv.IntlServer
             }
             else
             {
+                handler.Reset();
                 await handler.HandleAsync(context);
             }
         }
