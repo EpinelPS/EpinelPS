@@ -2243,3 +2243,14 @@ message ResShowSpecialArenaReward {
 	bool IsBan = 7;
 	NetArenaBanInfo BanInfo = 8;
 }
+
+message SpecialLobbySlot {
+	int32 SpecialLobbySlotId = 1;
+	bool IsHidden = 2;
+}
+message ReqGetSpecialLobbySlotData {
+
+}
+message ResGetSpecialLobbySlotData {
+	repeated SpecialLobbySlot SpecialLobbySlots = 1;
+}
