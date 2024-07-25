@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.Database;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.User
 {

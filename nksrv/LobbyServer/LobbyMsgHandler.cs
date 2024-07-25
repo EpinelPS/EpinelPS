@@ -1,5 +1,6 @@
 ﻿using EmbedIO;
 using Google.Protobuf;
+using nksrv.Database;
 using nksrv.Utils;
 
 namespace nksrv.LobbyServer

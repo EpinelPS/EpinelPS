@@ -32,6 +32,7 @@
 	<ItemGroup>
 	  <None Remove="Protos\liberate.proto" />
 	  <None Remove="Protos\shop.proto" />
+	  <None Remove="Protos\sidestory.proto" />
 	</ItemGroup>
 
 	<ItemGroup>

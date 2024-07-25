@@ -1,4 +1,5 @@
-﻿using nksrv.Utils;
+﻿using nksrv.Database;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Stage
 {
@@ -21,7 +22,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
             await WriteDataAsync(response);
         }
 
-        public static NetFieldObjectData CreateFieldInfo(Utils.User user, int chapter, string mod)
+        public static NetFieldObjectData CreateFieldInfo(Database.User user, int chapter, string mod)
         {
             var f = new NetFieldObjectData();
             bool found = false;

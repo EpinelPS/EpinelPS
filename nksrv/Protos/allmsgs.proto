@@ -2193,16 +2193,6 @@ message ResGetLostSectorData {
 	repeated NetFieldStageData ClearedStages = 4;
 }
 
-message NetSideStoryStageData {
-	int32 SideStoryStageId = 1;
-	google.protobuf.Timestamp ClearedAt = 2;
-}
-
-message ReqListSideStory {}
-message ResListSideStory {
-	repeated NetSideStoryStageData SideStoryStageDataList = 1;
-}
-
 enum LiberateMissionState {
 	LiberateMissionState_Running = 0;
 	LiberateMissionState_Rewarded = 1;

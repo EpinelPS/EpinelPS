@@ -1,4 +1,5 @@
 ﻿using EmbedIO;
+using nksrv.Database;
 using nksrv.Utils;
 
 namespace nksrv.IntlServer

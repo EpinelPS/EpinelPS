@@ -1,4 +1,6 @@
-﻿using nksrv.Utils;
+﻿using Google.Protobuf.WellKnownTypes;
+using nksrv.Net;
+using nksrv.Utils;
 
 namespace nksrv.LobbyServer.Msgs.Sidestory
 {
@@ -12,7 +14,11 @@ namespace nksrv.LobbyServer.Msgs.Sidestory
 
             var response = new ResListSideStory();
 
-            // TODO
+            foreach (var item in user.CompletedSideStoryStages)
+            {
+                // TODO cleared at
+                response.SideStoryStageDataList.Add(new NetSideStoryStageData() { SideStoryStageId = item, ClearedAt = Timestamp.FromDateTime(DateTime.UtcNow) });
+            }
 
             await WriteDataAsync(response);
         }

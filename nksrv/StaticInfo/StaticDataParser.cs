@@ -49,6 +49,7 @@ namespace nksrv.StaticInfo
         private Dictionary<string, JArray> FieldMapData = [];
         private Dictionary<int, CharacterLevelData> LevelData = [];
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
+        public Dictionary<int, int> SidestoryRewardTable = [];
 
         public byte[] Sha256Hash;
         public int Size;
@@ -273,6 +274,22 @@ namespace nksrv.StaticInfo
                 TacticAcademyLessons.Add(id, new TacticAcademyLessonRecord() { CurrencyId = (CurrencyType)currencyId, CurrencyValue = currencyValue, GroupId = groupid, Id = id });
             }
 
+            var sideStoryTable = await LoadZip("SideStoryStageTable.json");
+
+            foreach (JToken item in sideStoryTable)
+            {
+                var idRaw = item["id"];
+                var rewardIdRaw = item["first_clear_reward"];
+
+                if (idRaw == null) throw new InvalidDataException();
+                if (rewardIdRaw != null)
+                {
+                    var id2 = idRaw.ToObject<int>();
+                    var reward = rewardIdRaw.ToObject<int>();
+
+                    SidestoryRewardTable.Add(id2, reward);
+                }
+            }
         }
 
         public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)

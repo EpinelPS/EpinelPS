@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
 using nksrv.LobbyServer;
 using nksrv.StaticInfo;
+using nksrv.Utils;
 using Swan.Logging;
 
-namespace nksrv.Utils
+namespace nksrv.Database
 {
     public class AccessToken
     {
@@ -107,6 +108,7 @@ namespace nksrv.Utils
         public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
         public int GachaTutorialPlayCount = 0;
         public List<int> CompletedTacticAcademyLessons = [];
+        public List<int> CompletedSideStoryStages = new();
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -213,7 +215,7 @@ namespace nksrv.Utils
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/db.json"))
             {
-                Logger.Warn("users: warning: configuration not found, writing default data");
+                "users: warning: configuration not found, writing default data".Warn();
                 Instance = new CoreInfo();
                 Save();
             }
@@ -281,7 +283,7 @@ namespace nksrv.Utils
                 Save();
 
                 ValidateDb();
-                Logger.Info("Loaded db");
+                "Loaded db".Info();
             }
             else
             {
@@ -298,7 +300,7 @@ namespace nksrv.Utils
                 {
                     if (c.Level > 1000)
                     {
-                        Logger.Warn($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
+                        $"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000".Warn();
                         c.Level = 1000;
                     }
                 }

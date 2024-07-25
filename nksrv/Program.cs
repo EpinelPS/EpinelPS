@@ -1,6 +1,7 @@
 ﻿using EmbedIO;
 using EmbedIO.Actions;
 using EmbedIO.WebApi;
+using nksrv.Database;
 using nksrv.IntlServer;
 using nksrv.LobbyServer;
 using nksrv.LobbyServer.Msgs.Stage;

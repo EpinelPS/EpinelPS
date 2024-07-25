@@ -1,4 +1,5 @@
-﻿using nksrv.StaticInfo;
+﻿using nksrv.Database;
+using nksrv.StaticInfo;
 using nksrv.Utils;
 using Swan.Logging;
 
@@ -26,7 +27,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
         }
 
 
-        public static ResClearStage CompleteStage(Utils.User user, int StageId, bool forceCompleteScenarios = false)
+        public static ResClearStage CompleteStage(Database.User user, int StageId, bool forceCompleteScenarios = false)
         {
             var response = new ResClearStage();
             var clearedStage = StaticDataParser.Instance.GetStageData(StageId);
@@ -113,7 +114,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
             return response;
         }
 
-        private static NetRewardData RegisterRewardsForUser(Utils.User user, RewardTableRecord rewardData)
+        public static NetRewardData RegisterRewardsForUser(Database.User user, RewardTableRecord rewardData)
         {
             NetRewardData ret = new();
             if (rewardData.rewards == null) return ret;
@@ -222,7 +223,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
             return ret;
         }
 
-        private static void DoQuestSpecificUserOperations(Utils.User user, int clearedStageId)
+        private static void DoQuestSpecificUserOperations(Database.User user, int clearedStageId)
         {
             var quest = StaticDataParser.Instance.GetMainQuestForStageClearCondition(clearedStageId);
             if (quest != null)
@@ -240,11 +241,11 @@ namespace nksrv.LobbyServer.Msgs.Stage
                 team1.LastContentsTeamNumber = 1;
 
 
-                user.Characters.Add(new Utils.Character() { Csn = 47263455, Tid = 201001 });
-                user.Characters.Add(new Utils.Character() { Csn = 47273456, Tid = 330501 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263457, Tid = 130201 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263458, Tid = 230101 });
-                user.Characters.Add(new Utils.Character() { Csn = 47263459, Tid = 301201 });
+                user.Characters.Add(new Database.Character() { Csn = 47263455, Tid = 201001 });
+                user.Characters.Add(new Database.Character() { Csn = 47273456, Tid = 330501 });
+                user.Characters.Add(new Database.Character() { Csn = 47263457, Tid = 130201 });
+                user.Characters.Add(new Database.Character() { Csn = 47263458, Tid = 230101 });
+                user.Characters.Add(new Database.Character() { Csn = 47263459, Tid = 301201 });
 
                 var team1Sub = new NetTeamData();
                 team1Sub.TeamNumber = 1;

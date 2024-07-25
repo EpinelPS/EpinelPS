@@ -33,8 +33,7 @@ To access the admin panel, go to https://127.0.0.1/admin/ and sign in. Note that
 
 To skip stages, a basic command line interface is implemented.
 
-## Progress
-Stage, character, outpost and story information is saved and works, as well as player nickname.
+## Screenshots
 
 <img src="https://github.com/user-attachments/assets/16d72494-27ce-4af5-9551-2c25940b0704" width="480" height="270">
 
@@ -50,6 +49,8 @@ Stage, character, outpost and story information is saved and works, as well as p
  - [X] Open Archives UI
  - [X] Inventory system
  - [X] Character level up
+ - [X] Side story
+ - [X] Archives
  - [ ] Skill level up
  - [ ] Outpost jukebox / relics saving
  - [ ] Field obtain object
@@ -64,7 +65,15 @@ Stage, character, outpost and story information is saved and works, as well as p
  - [ ] Lost sector
  - [ ] Custom launcher
  - [ ] Limit temporary participation
- - [ ] Archives
+ 
+## What is not working:
+ - Collecting items in campaign
+ - Events
+ - Skill upgrade, limit break
+ - Mission reward, daily/weekly missions
+ - Side quests
+ - Lots of things in the outpost
+ - And a lot more...
 
 ## Contributing
 Server code structure:
