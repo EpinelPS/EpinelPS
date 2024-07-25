@@ -434,65 +434,17 @@ namespace nksrv
         {
             if (ctx.RequestedPath.Contains("/route_config.json"))
             {
-
+                // NOTE: pub prefixes shows public (production server), local is local server (does not have any effect), dev is development server, etc.
+                // It does not have any effect, except for the publisher server, which adds a watermark?
                 var response = @"{
   ""Config"": [
     {
-      ""VersionRange"": {
-        ""From"": ""{GameMinVer}"",
-        ""To"": ""{GameMaxVer}"",
-        ""PackageName"": ""com.proximabeta.nikke""
-      },
       ""Route"": [
-        {
-          ""WorldId"": 81,
-          ""Name"": ""pub:live-jp"",
-          ""Url"": ""https://jp-lobby.nikke-kr.com/"",
-          ""Description"": ""JAPAN"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 82,
-          ""Name"": ""pub:live-na"",
-          ""Url"": ""https://us-lobby.nikke-kr.com/"",
-          ""Description"": ""NA"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 83,
-          ""Name"": ""pub:live-kr"",
-          ""Url"": ""https://kr-lobby.nikke-kr.com/"",
-          ""Description"": ""KOREA"",
-          ""Tags"": []
-        },
         {
           ""WorldId"": 84,
           ""Name"": ""pub:live-global"",
           ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": ""GLOBAL"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 85,
-          ""Name"": ""pub:live-sea"",
-          ""Url"": ""https://sea-lobby.nikke-kr.com/"",
-          ""Description"": ""SEA"",
-          ""Tags"": []
-        }
-      ]
-    },
-    {
-      ""VersionRange"": {
-        ""From"": ""{GameMinVer}"",
-        ""To"": ""{GameMaxVer}"",
-        ""PackageName"": ""com.gamamobi.nikke""
-      },
-      ""Route"": [
-        {
-          ""WorldId"": 91,
-          ""Name"": ""pub:live-hmt"",
-          ""Url"": ""https://hmt-lobby.nikke-kr.com/"",
-          ""Description"": ""HMT"",
+          ""Description"": ""Private Server"",
           ""Tags"": []
         }
       ]
