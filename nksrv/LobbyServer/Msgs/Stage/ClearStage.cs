@@ -88,7 +88,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
             if (clearedStage.stage_type != "Sub")
             {
                 // add outpost reward level if unlocked
-                if (user.IsStageCompleted(6002016, true))
+                if (user.MainQuestData.ContainsKey(21))
                 {
                     user.OutpostBattleLevel.Exp++;
                     if (user.OutpostBattleLevel.Exp >= 5)
