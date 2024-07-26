@@ -100,10 +100,7 @@ namespace nksrv.Database
         public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
         public NetWallpaperData[] WallpaperList = [];
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
-        public Dictionary<int, bool> MainQuestData = new()
-        {
-            {1, false }
-        };
+        public Dictionary<int, bool> MainQuestData = new();
         public int InfraCoreExp = 0;
         public int InfraCoreLvl = 1;
         public UserPointData userPointData = new();
@@ -118,16 +115,16 @@ namespace nksrv.Database
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
 
-        public void SetQuest(int tid, bool recieved)
+        public void SetQuest(int tid, bool recievedReward)
         {
             if (MainQuestData.ContainsKey(tid))
             {
-                MainQuestData[tid] = recieved;
+                MainQuestData[tid] = recievedReward;
                 return;
             }
             else
             {
-                MainQuestData.Add(tid, recieved);
+                MainQuestData.Add(tid, recievedReward);
             }
         }
 

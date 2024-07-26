@@ -227,7 +227,7 @@ namespace nksrv.LobbyServer.Msgs.Stage
         {
             var quest = StaticDataParser.Instance.GetMainQuestForStageClearCondition(clearedStageId);
             if (quest != null)
-                user.SetQuest(quest.id, true);
+                user.SetQuest(quest.id, false);
 
             if (clearedStageId == 6000003)
             {

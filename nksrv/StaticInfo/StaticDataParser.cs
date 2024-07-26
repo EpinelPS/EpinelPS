@@ -238,8 +238,6 @@ namespace nksrv.StaticInfo
         {
             using var progress = new ProgressBar();
 
-
-
             questDataRecords = await LoadZip("MainQuestTable.json", progress);
             stageDataRecords = await LoadZip("CampaignStageTable.json", progress);
             rewardDataRecords = await LoadZip("RewardTable.json", progress);
