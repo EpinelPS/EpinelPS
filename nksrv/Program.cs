@@ -440,10 +440,31 @@ namespace nksrv
                 var response = @"{
   ""Config"": [
     {
+    ""VersionRange"": {
+        ""From"": ""{GameMinVer}"",
+        ""To"": ""{GameMaxVer}"",
+        ""PackageName"": ""com.proximabeta.nikke""
+      },
       ""Route"": [
         {
-          ""WorldId"": 84,
-          ""Name"": ""pub:live-global"",
+          ""WorldId"": 1001,
+          ""Name"": ""pub:priv"",
+          ""Url"": ""https://global-lobby.nikke-kr.com/"",
+          ""Description"": ""Private Server"",
+          ""Tags"": []
+        }
+      ]
+    },
+    {
+      ""VersionRange"": {
+        ""From"": ""{GameMinVer}"",
+        ""To"": ""{GameMaxVer}"",
+        ""PackageName"": ""com.gamamobi.nikke""
+    },
+ ""Route"": [
+        {
+          ""WorldId"": 1001,
+          ""Name"": ""pub:priv"",
           ""Url"": ""https://global-lobby.nikke-kr.com/"",
           ""Description"": ""Private Server"",
           ""Tags"": []
