@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "nksrv.Net";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/Duration.proto";
+import "Protos/allmsgs.proto";
+
+message ReqGetInterceptData {}
+message ResGetInterceptData {
+	int32 NormalInterceptGroup = 1;
+	int32 SpecialInterceptId = 2;
+	int32 TicketCount = 3;
+	int32 MaxTicketCount = 4;
+}
