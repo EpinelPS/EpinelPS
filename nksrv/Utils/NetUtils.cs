@@ -76,5 +76,51 @@ namespace nksrv.Utils
 
             return 0;
         }
+        /// <summary>
+        /// Takes multiple NetRewardData objects and merges it into one. Note that this function expects that rewards are already applied to user object.
+        /// </summary>
+        /// <param name="rewards">list of rewards</param>
+        /// <param name="user">user to pull old currency count from</param>
+        /// <returns></returns>
+        public static NetRewardData MergeRewards(List<NetRewardData> rewards, User user)
+        {
+            NetRewardData result = new();
+
+            Dictionary<int, long> currencyDict = new Dictionary<int, long>();
+            List<NetItemData> items = new List<NetItemData>();
+
+            foreach (NetRewardData reward in rewards)
+            {
+                foreach (var c in reward.Currency)
+                {
+                    if (currencyDict.ContainsKey(c.Type))
+                        currencyDict[c.Type] += c.Value;
+                    else
+                        currencyDict.Add(c.Type, c.Value);
+                }
+
+                foreach (var item in reward.Item)
+                {
+                    items.Add(item);
+                }
+
+                foreach (var c in reward.Character)
+                {
+                    Logger.Warn("MergeRewards - TODO Character");
+                }
+            }
+
+            foreach (var c in currencyDict)
+            {
+                result.Currency.Add(new NetCurrencyData() { Value = c.Value, Type = c.Key, FinalValue = user.Currency[(CurrencyType)c.Key] });
+            }
+
+            // TODO is this right?
+            foreach (var c in items)
+            {
+                result.Item.Add(c);
+            }
+            return result;
+        }
     }
 }
