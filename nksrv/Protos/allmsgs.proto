@@ -2244,3 +2244,17 @@ message ReqGetSpecialLobbySlotData {
 message ResGetSpecialLobbySlotData {
 	repeated SpecialLobbySlot SpecialLobbySlots = 1;
 }
+
+message NetLastClearedEventStageData {
+	int32 DifficultyId = 1;
+	int32 StageId = 2;
+}
+
+message ReqStoryDungeonEventData {
+	int32 EventId = 2;
+}
+message ResStoryDungeonEventData {
+	int32 RemainingTickets = 1;
+	repeated NetLastClearedEventStageData LastClearedEventStageList = 2;
+	NetUserTeamData TeamData = 3;
+}

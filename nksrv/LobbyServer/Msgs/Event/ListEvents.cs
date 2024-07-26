@@ -97,6 +97,25 @@ namespace nksrv.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
+
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40053,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+            //response.EventList.Add(new NetEventData()
+            //{
+            //    Id = 40054,
+            //    EventSystemType = 5,
+            //    EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+            //    EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+            //    EventEndDate = DateTime.Now.AddDays(20).Ticks,
+            //    EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            //});
             await WriteDataAsync(response);
         }
     }
