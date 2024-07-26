@@ -1,6 +1,7 @@
 ﻿using EmbedIO;
 using EmbedIO.Actions;
 using EmbedIO.WebApi;
+using Newtonsoft.Json;
 using nksrv.Database;
 using nksrv.IntlServer;
 using nksrv.LobbyServer;
@@ -450,7 +451,7 @@ namespace nksrv
           ""WorldId"": 1001,
           ""Name"": ""pub:priv"",
           ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": ""Private Server"",
+          ""Description"": {ServerName},
           ""Tags"": []
         }
       ]
@@ -466,7 +467,7 @@ namespace nksrv
           ""WorldId"": 1001,
           ""Name"": ""pub:priv"",
           ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": ""Private Server"",
+          ""Description"": {ServerName},
           ""Tags"": []
         }
       ]
@@ -475,6 +476,7 @@ namespace nksrv
 }";
                 response = response.Replace("{GameMinVer}", GameConfig.Root.GameMinVer);
                 response = response.Replace("{GameMaxVer}", GameConfig.Root.GameMaxVer);
+                response = response.Replace("{ServerName}", JsonConvert.ToString(JsonDb.Instance.ServerName));
                 await ctx.SendStringAsync(response, "application/json", Encoding.Default);
             }
             else

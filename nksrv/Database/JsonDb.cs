@@ -79,6 +79,11 @@ namespace nksrv.Database
         public bool ProfileIconIsPrism = false;
         public bool IsAdmin = false;
 
+        public bool IsBanned = false;
+        public DateTime BanStart;
+        public DateTime BanEnd;
+        public int BanId = 0;
+
         // Game data
         public List<string> CompletedScenarios = [];
         public Dictionary<string, FieldInfo> FieldInfo = []; // here for backwards compatibility
@@ -202,6 +207,7 @@ namespace nksrv.Database
         public List<AccessToken> LauncherAccessTokens = [];
 
         public Dictionary<string, GameClientInfo> GameClientTokens = [];
+        public string ServerName = "<color=\"green\">Private Server</color>";
     }
     internal class JsonDb
     {

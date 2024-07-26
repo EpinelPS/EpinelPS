@@ -56,10 +56,10 @@ namespace nksrv.StaticInfo
 
         static async Task<StaticDataParser> BuildAsync()
         {
-            Logger.Info("Loading static data");
+            Logger.Info("Decrypting static data");
             await Load();
 
-            Logger.Info("Parsing static data");
+            Logger.Info("Loading static data");
             await Instance.Parse();
 
             return Instance;
@@ -212,7 +212,7 @@ namespace nksrv.StaticInfo
         }
         #endregion
 
-        private async Task<JArray> LoadZip(string entry)
+        private async Task<JArray> LoadZip(string entry, ProgressBar bar)
         {
             var mainQuestData = MainZip.GetEntry(entry);
             if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
@@ -227,20 +227,29 @@ namespace nksrv.StaticInfo
             var records = (JArray?)questdata["records"];
             if (records == null) throw new Exception(entry + " is missing records element");
 
+            currentFile++;
+            bar.Report((double)currentFile / totalFiles);
+
             return records;
         }
+        int totalFiles = 12;
+        int currentFile = 0;
         public async Task Parse()
         {
-            questDataRecords = await LoadZip("MainQuestTable.json");
-            stageDataRecords = await LoadZip("CampaignStageTable.json");
-            rewardDataRecords = await LoadZip("RewardTable.json");
-            userExpDataRecords = await LoadZip("UserExpTable.json");
-            chapterCampaignData = await LoadZip("CampaignChapterTable.json");
-            characterCostumeTable = await LoadZip("CharacterCostumeTable.json");
-            characterTable = await LoadZip("CharacterTable.json");
-            tutorialTable = await LoadZip("ContentsTutorialTable.json");
-            itemEquipTable = await LoadZip("ItemEquipTable.json");
-            var characterLevelTable = await LoadZip("CharacterLevelTable.json");
+            using var progress = new ProgressBar();
+
+
+
+            questDataRecords = await LoadZip("MainQuestTable.json", progress);
+            stageDataRecords = await LoadZip("CampaignStageTable.json", progress);
+            rewardDataRecords = await LoadZip("RewardTable.json", progress);
+            userExpDataRecords = await LoadZip("UserExpTable.json", progress);
+            chapterCampaignData = await LoadZip("CampaignChapterTable.json", progress);
+            characterCostumeTable = await LoadZip("CharacterCostumeTable.json", progress);
+            characterTable = await LoadZip("CharacterTable.json", progress);
+            tutorialTable = await LoadZip("ContentsTutorialTable.json", progress);
+            itemEquipTable = await LoadZip("ItemEquipTable.json", progress);
+            var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);
 
             foreach (JToken item in characterLevelTable)
             {
@@ -251,7 +260,7 @@ namespace nksrv.StaticInfo
                     Logger.Warn("failed to read character level table entry");
             }
 
-            var tacticLessonTable = await LoadZip("TacticAcademyFunctionTable.json");
+            var tacticLessonTable = await LoadZip("TacticAcademyFunctionTable.json", progress);
 
             foreach (JToken item in tacticLessonTable)
             {
@@ -274,7 +283,7 @@ namespace nksrv.StaticInfo
                 TacticAcademyLessons.Add(id, new TacticAcademyLessonRecord() { CurrencyId = (CurrencyType)currencyId, CurrencyValue = currencyValue, GroupId = groupid, Id = id });
             }
 
-            var sideStoryTable = await LoadZip("SideStoryStageTable.json");
+            var sideStoryTable = await LoadZip("SideStoryStageTable.json", progress);
 
             foreach (JToken item in sideStoryTable)
             {
