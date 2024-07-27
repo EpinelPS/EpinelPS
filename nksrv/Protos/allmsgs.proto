@@ -230,7 +230,7 @@ message NetUserCharacterDefaultData {
 	int32 dispatchTid = 6;
 	int32 costumeId = 7;
 	int32 ultiSkillLv = 8;
-	int32 skill1Lv = 9;	
+	int32 skill1Lv = 9;
 	int32 skill2Lv = 10;
 }
 
@@ -2264,4 +2264,14 @@ message ReqObtainMainQuestReward {
 }
 message ResObtainMainQuestReward {
 	NetRewardData Reward = 2;
+}
+
+message ReqCharacterGrowReset {
+	int64 Csn = 2;
+}
+message ResCharacterGrowReset {
+	NetUserCharacterDefaultData Character = 2;
+	repeated NetUserCurrencyData Currencies = 3;
+	int32 SynchroLv = 4;
+	repeated int64 SynchroStandardCharacters = 5;
 }

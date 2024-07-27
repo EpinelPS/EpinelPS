@@ -19,17 +19,23 @@ namespace nksrv.LobbyServer.Msgs.Gacha
             // TODO implement reward
             response.Reward = new NetRewardData();
 
-            if (user.GachaTutorialPlayCount == 0)
+            foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
             {
-                foreach (var c in StaticDataParser.Instance.GetAllCharacterTids())
+                if (!user.HasCharacter(c))
                 {
-                    response.Gacha.Add(new NetGachaEntityData() { Corporation = 1, PieceCount = 1, CurrencyValue = 5, Sn = c, Tid = c, Type = 1 });
+                    var id = user.GenerateUniqueCharacterId();
+                    response.Gacha.Add(new NetGachaEntityData() { Corporation = 1, PieceCount = 1, CurrencyValue = 5, Sn = id, Tid = c, Type = 1 });
 
-                    response.Characters.Add(new NetUserCharacterDefaultData() { CostumeId = 0, Csn = c, Grade = 0, Lv = 1, Skill1Lv = 1, Skill2Lv = 1, Tid = c, UltiSkillLv = 1 });
-                    user.Characters.Add(new Database.Character() { CostumeId = 0, Csn = c, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl = 1, Tid = c, UltimateLevel = 1 });
+                    response.Characters.Add(new NetUserCharacterDefaultData() { CostumeId = 0, Csn = id, Grade = 0, Lv = 1, Skill1Lv = 1, Skill2Lv = 1, Tid = c, UltiSkillLv = 1 });
+
+                    user.Characters.Add(new Database.Character() { CostumeId = 0, Csn = id, Grade = 0, Level = 1, Skill1Lvl = 1, Skill2Lvl = 1, Tid = c, UltimateLevel = 1 });
                 }
-                user.GachaTutorialPlayCount++;
+                else
+                {
+                    // TODO add spare body
+                }
             }
+            user.GachaTutorialPlayCount++;
 
             JsonDb.Save();
 

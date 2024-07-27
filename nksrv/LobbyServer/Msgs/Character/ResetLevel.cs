@@ -2,27 +2,38 @@
 using nksrv.StaticInfo;
 using nksrv.Utils;
 using Swan.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace nksrv.LobbyServer.Msgs.Character
 {
-    [PacketPath("/character/levelup")]
-    public class LevelUp : LobbyMsgHandler
+    [PacketPath("/character/growreset")]
+    public class ResetLevel : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCharacterLevelUp>();
+            var req = await ReadData<ReqCharacterGrowReset>();
             var user = GetUser();
-            var response = new ResCharacterLevelUp();
+            var response = new ResCharacterGrowReset();
             var data = StaticDataParser.Instance.GetCharacterLevelUpData();
 
             foreach (var item in user.Characters.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {
+                    if (item.Level == 1)
+                    {
+                        Logger.Warn("Character level is already 1 - cannot reset");
+                        return;
+                    }
+
                     int requiredCredit = 0;
                     int requiredBattleData = 0;
                     int requiredCoreDust = 0;
-                    for (int i = item.Level; i < req.Level; i++)
+                    for (int i = 1; i < item.Level; i++)
                     {
                         var levelUpData = data[i];
                         requiredCredit += levelUpData.gold;
@@ -30,21 +41,10 @@ namespace nksrv.LobbyServer.Msgs.Character
                         requiredCoreDust += levelUpData.character_exp2;
                     }
 
-                    if (user.CanSubtractCurrency(CurrencyType.Gold, requiredCredit) &&
-                        user.CanSubtractCurrency(CurrencyType.CharacterExp, requiredBattleData) &&
-                        user.CanSubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust))
-                    {
-                        user.SubtractCurrency(CurrencyType.Gold, requiredCredit);
-                        user.SubtractCurrency(CurrencyType.CharacterExp, requiredBattleData);
-                        user.SubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
-                        item.Level = req.Level;
-                    }
-                    else
-                    {
-                        // TOOD: log this
-                        Logger.Error("ERROR: Not enough currency for upgrade");
-                        return;
-                    }
+                    user.AddCurrency(CurrencyType.Gold, requiredCredit);
+                    user.AddCurrency(CurrencyType.CharacterExp, requiredBattleData);
+                    user.AddCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
+                    item.Level = 1;
 
                     response.Character = new()
                     {

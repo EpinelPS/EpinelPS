@@ -139,7 +139,17 @@ namespace nksrv.Database
 
             return num;
         }
+        public int GenerateUniqueCharacterId()
+        {
+            var num = Rng.RandomId();
 
+            while (Characters.Any(x => x.Csn == num))
+            {
+                num = Rng.RandomId();
+            }
+
+            return num;
+        }
         public bool IsStageCompleted(int id, bool isNorm)
         {
             foreach (var item in FieldInfoNew)
@@ -194,6 +204,11 @@ namespace nksrv.Database
                 if (val == 0) return true;
                 else return false;
             }
+        }
+
+        public bool HasCharacter(int c)
+        {
+            return Characters.Any(x => x.Tid == c);
         }
     }
     public class CoreInfo
