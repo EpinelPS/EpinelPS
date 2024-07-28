@@ -19,7 +19,7 @@ namespace nksrv.LobbyServer.Msgs.Intercept
             {
                 Intercept = 1,
                 InterceptId = 1,
-                TicketCount = 3,
+                TicketCount = 5,
                 MaxTicketCount = 10
             };
 
