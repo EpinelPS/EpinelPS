@@ -17,9 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Intercept
 
             var response = new ResGetInterceptNormalTable
             {
-     iterceptidd = 1,
-     iterceptgroup = 2,
-     itercepttype = 3
+
             };
 
             await WriteDataAsync(response);
