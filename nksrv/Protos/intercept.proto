@@ -90,8 +90,6 @@ message ResCheckClearInterceptToday {
 message ReqGetInterceptNormalTable {}
 
 message ResGetInterceptNormalTable {
-    int32 iterceptidd = 1;
-    int32 iterceptgroup = 2;
-    string itercepttype = 3;
+
 }
 
