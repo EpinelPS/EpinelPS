@@ -13,3 +13,88 @@ message ResGetInterceptData {
 	int32 TicketCount = 3;
 	int32 MaxTicketCount = 4;
 }
+
+message ReqClearIntercept {
+
+}
+
+
+message InterceptSpecialStaticInfo {
+    int32 CharacterLevel = 1;
+    int32 Percent_condition_reward_group = 2;
+    int32 Condition_reward_group = 3;
+    int32 Ticket_count = 4;
+    int32 Auto_charge_id = 5;
+    InterceptSpotType SpotType = 6;
+    int32 Spot_id = 7;
+    int32 Monster_stage_lv_change_group = 8;
+    int32 Cover_stage_lv = 9;
+    int32 Dynamic_object_stage_lv = 10;
+    int32 Monster_stage_lv = 11;
+    int32 Order = 12;
+    string Thumbnail = 13;
+    string MonsterSpine = 14;
+    float MonsterScale = 15;
+    int32 Id = 19;
+    int32 ID = 20;
+    int32 Group = 21;
+}
+
+enum InterceptSpotType {
+    UNKNOWN = 0;
+    TYPE1 = 1;
+    TYPE2 = 2;
+    // Add other types as needed
+}
+
+message ReqGetInterceptSpecialStaticInfo {
+    // Define request fields if needed
+}
+
+message ResGetInterceptSpecialStaticInfo {
+    repeated InterceptSpecialStaticInfo values = 1;
+}
+
+message ReqEnterIntercept {
+
+}
+
+message ResEnterInterceptData {
+    int32 NormalInterceptGroup = 1;
+    int32 SpecialInterceptId = 2;
+    int32 TicketCount = 3;
+    int32 MaxTicketCount = 4;
+}
+
+
+message ReqClearIntercept {
+
+}
+
+message ResClearInterceptData {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+    int32 TicketCount = 3;
+    int32 MaxTicketCount = 4;
+    NetRewardData NormalReward = 5;
+    NetRewardData BonusReward = 6;
+    NetRewardData NormalRewardByRewardUpEvent = 7;
+    NetRewardData BonusRewardByRewardUpEvent = 8;
+}
+
+message ReqCheckClearInterceptToday {
+
+}
+
+message ResCheckClearInterceptToday {
+    bool Clear = 1;
+}
+
+message ReqGetInterceptNormalTable {}
+
+message ResGetInterceptNormalTable {
+    int32 iterceptidd = 1;
+    int32 iterceptgroup = 2;
+    string itercepttype = 3;
+}
+
