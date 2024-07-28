@@ -14,9 +14,6 @@ message ResGetInterceptData {
 	int32 MaxTicketCount = 4;
 }
 
-message ReqClearIntercept {
-
-}
 
 
 message InterceptSpecialStaticInfo {
