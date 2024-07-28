@@ -17,7 +17,7 @@ namespace nksrv.LobbyServer.Msgs.Team
             response.Teams.AddRange(req.Teams.ToArray());
 
             // Add team data to user data
-            var teamData = new NetUserTeamData() { LastContentsTeamNumber = req.ContentsId, Type = req.Type };
+            var teamData = new NetUserTeamData() { LastContentsTeamNumber = req.ContentsId + 1, Type = req.Type };
             teamData.Teams.AddRange(req.Teams);
 
             if (user.UserTeams.ContainsKey(req.Type))
