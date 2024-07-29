@@ -219,8 +219,6 @@ namespace nksrv.StaticInfo
         #endregion
         private async Task<T> LoadZip<T>(string entry, ProgressBar bar)
         {
-            var st = new Stopwatch();
-            st.Start();
             var mainQuestData = MainZip.GetEntry(entry);
             if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
 
@@ -234,16 +232,10 @@ namespace nksrv.StaticInfo
             currentFile++;
             bar.Report((double)currentFile / totalFiles);
 
-            st.Stop();
-            Console.WriteLine($"LoadingNew {entry} took " + st.Elapsed);
-
             return questdata;
         }
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
         {
-            var st = new Stopwatch();
-            st.Start();
-
             var mainQuestData = MainZip.GetEntry(entry);
             if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
 
@@ -259,9 +251,6 @@ namespace nksrv.StaticInfo
 
             currentFile++;
             bar.Report((double)currentFile / totalFiles);
-
-            st.Stop();
-            Console.WriteLine($"LoadingOld {entry} took " + st.Elapsed);
 
             return records;
         }
