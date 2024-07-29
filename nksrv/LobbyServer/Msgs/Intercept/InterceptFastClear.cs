@@ -1,11 +1,6 @@
 using nksrv.Net;
 using nksrv.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Google.Protobuf;
 
 namespace nksrv.LobbyServer.Msgs.Intercept
 {
@@ -16,8 +11,14 @@ namespace nksrv.LobbyServer.Msgs.Intercept
         {
             var req = await ReadData<ReqFastClearIntercept>();
 
-			//add some rewards here ig
-			
+            var response = new ResFastClearIntercept
+            {
+                Intercept = 1,
+                InterceptId = 1,
+                TicketCount = 3,
+                MaxTicketCount = 10
+            };
+
             await WriteDataAsync(response);
         }
     }
