@@ -14,6 +14,22 @@ message ResGetInterceptData {
 	int32 MaxTicketCount = 4;
 }
 
+message ReqFastClearIntercept {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+}
+
+message ResFastClearIntercept {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+    int32 TicketCount = 3;
+    int32 MaxTicketCount = 4;
+    NetRewardData NormalReward = 5;
+    NetRewardData BonusReward = 6;
+    NetRewardData NormalRewardByRewardUpEvent = 7;
+    NetRewardData BonusRewardByRewardUpEvent = 8;
+}
+
 message ReqEnterIntercept {
 
 }
