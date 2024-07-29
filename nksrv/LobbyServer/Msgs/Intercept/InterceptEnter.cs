@@ -15,13 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Intercept
         {
             var req = await ReadData<ReqEnterIntercept>();
 
-            var response = new ResEnterIntercept
-            {
-                NormalInterceptGroup = 1,
-                SpecialInterceptId = 1,
-                TicketCount = 5,
-                MaxTicketCount = 10
-            };
+            var response = new ResEnterIntercept();
 
             await WriteDataAsync(response);
         }

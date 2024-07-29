@@ -15,7 +15,7 @@ namespace nksrv.LobbyServer.Msgs.Intercept
         {
             var req = await ReadData<ReqClearIntercept>();
 
-            var response = new ResClearInterceptData
+            var response = new ResClearIntercept
             {
                 Intercept = 1,
                 InterceptId = 1,
