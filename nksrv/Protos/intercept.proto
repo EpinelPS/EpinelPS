@@ -13,3 +13,59 @@ message ResGetInterceptData {
 	int32 TicketCount = 3;
 	int32 MaxTicketCount = 4;
 }
+
+
+message ReqFastClearIntercept {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+}
+
+message ResFastClearIntercept {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+    int32 TicketCount = 3;
+    int32 MaxTicketCount = 4;
+    NetRewardData NormalReward = 5;
+    NetRewardData BonusReward = 6;
+    NetRewardData NormalRewardByRewardUpEvent = 7;
+    NetRewardData BonusRewardByRewardUpEvent = 8;
+}
+
+message ReqEnterIntercept {
+    int32 Intercept = 2;
+    int32 InterceptId = 3;
+    int32 TeamNumber = 4;
+    NetAntiCheatBattleTLogAdditionalInfo AnticheatAdditionalInfo = 5;
+}
+message ResEnterIntercept {}
+
+
+message ReqClearIntercept {
+    int32 intercept = 2;
+    int32 InterceptID = 3;
+    int64 Damage = 4;
+    int32 TeamNumber = 5;
+    int32 BattleResult = 6;
+    NetAntiCheatBattleData AnticheatBattleData = 7;
+    NetAntiCheatBattleTLogAdditionalInfo AdditionalInfo = 8;
+}
+
+message ResClearIntercept {
+    int32 Intercept = 1;
+    int32 InterceptId = 2;
+    int32 TicketCount = 3;
+    int32 MaxTicketCount = 4;
+    NetRewardData NormalReward = 5;
+    NetRewardData BonusReward = 6;
+    NetRewardData NormalRewardByRewardUpEvent = 7;
+    NetRewardData BonusRewardByRewardUpEvent = 8;
+}
+
+message ReqCheckClearInterceptToday {
+    int32 InterceptType = 1;
+    int32 InterceptId = 2;
+}
+
+message ResCheckClearInterceptToday {
+    bool Clear = 1;
+}
