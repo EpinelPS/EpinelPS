@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using nksrv.Utils;
 using Swan.Logging;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 
 namespace nksrv.StaticInfo
@@ -37,15 +39,15 @@ namespace nksrv.StaticInfo
         }
         private ZipFile MainZip;
         private MemoryStream ZipStream;
-        private JArray questDataRecords;
-        private JArray stageDataRecords;
-        private JArray rewardDataRecords;
+        private Dictionary<int, MainQuestCompletionRecord> questDataRecords;
+        private Dictionary<int, CampaignStageRecord> stageDataRecords;
+        private Dictionary<int, RewardTableRecord> rewardDataRecords;
         private JArray userExpDataRecords;
-        private JArray chapterCampaignData;
+        private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
         private JArray characterCostumeTable;
-        private JArray characterTable;
-        private JArray tutorialTable;
-        private JArray itemEquipTable;
+        private Dictionary<int, CharacterRecord> characterTable;
+        private Dictionary<int, ClearedTutorialData> tutorialTable;
+        private Dictionary<int, ItemEquipRecord> itemEquipTable;
         private Dictionary<string, JArray> FieldMapData = [];
         private Dictionary<int, CharacterLevelData> LevelData = [];
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
@@ -60,8 +62,12 @@ namespace nksrv.StaticInfo
             await Load();
 
             Logger.Info("Loading static data");
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             await Instance.Parse();
 
+            stopWatch.Stop();
+            Console.WriteLine("Parsing took " + stopWatch.Elapsed);
             return Instance;
         }
 
@@ -211,9 +217,33 @@ namespace nksrv.StaticInfo
             _instance = new(targetFile);
         }
         #endregion
+        private async Task<T> LoadZip<T>(string entry, ProgressBar bar)
+        {
+            var st = new Stopwatch();
+            st.Start();
+            var mainQuestData = MainZip.GetEntry(entry);
+            if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
 
+            using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
+            var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
+
+
+            var questdata = JsonConvert.DeserializeObject<T>(mainQuestDataString);
+            if (questdata == null) throw new Exception("failed to parse " + entry);
+
+            currentFile++;
+            bar.Report((double)currentFile / totalFiles);
+
+            st.Stop();
+            Console.WriteLine($"LoadingNew {entry} took " + st.Elapsed);
+
+            return questdata;
+        }
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
         {
+            var st = new Stopwatch();
+            st.Start();
+
             var mainQuestData = MainZip.GetEntry(entry);
             if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
 
@@ -230,6 +260,9 @@ namespace nksrv.StaticInfo
             currentFile++;
             bar.Report((double)currentFile / totalFiles);
 
+            st.Stop();
+            Console.WriteLine($"LoadingOld {entry} took " + st.Elapsed);
+
             return records;
         }
         int totalFiles = 12;
@@ -238,15 +271,51 @@ namespace nksrv.StaticInfo
         {
             using var progress = new ProgressBar();
 
-            questDataRecords = await LoadZip("MainQuestTable.json", progress);
-            stageDataRecords = await LoadZip("CampaignStageTable.json", progress);
-            rewardDataRecords = await LoadZip("RewardTable.json", progress);
+            var questDataRecords = await LoadZip<MainQuestCompletionTable>("MainQuestTable.json", progress);
+            foreach (var obj in questDataRecords.records)
+            {
+                this.questDataRecords.Add(obj.id, obj);
+            }
+
+            var stageDataRecords = await LoadZip<CampaignStageTable>("CampaignStageTable.json", progress);
+            foreach (var obj in stageDataRecords.records)
+            {
+                this.stageDataRecords.Add(obj.id, obj);
+            }
+
+            var rewardDataRecords = await LoadZip<RewardTable>("RewardTable.json", progress);
+            foreach (var obj in rewardDataRecords.records)
+            {
+                this.rewardDataRecords.Add(obj.id, obj);
+            }
+
+            var chapterCampaignData = await LoadZip<CampaignChapterTable>("CampaignChapterTable.json", progress);
+            foreach (var obj in chapterCampaignData.records)
+            {
+                this.chapterCampaignData.Add(obj.chapter, obj);
+            }
+
             userExpDataRecords = await LoadZip("UserExpTable.json", progress);
-            chapterCampaignData = await LoadZip("CampaignChapterTable.json", progress);
             characterCostumeTable = await LoadZip("CharacterCostumeTable.json", progress);
-            characterTable = await LoadZip("CharacterTable.json", progress);
-            tutorialTable = await LoadZip("ContentsTutorialTable.json", progress);
-            itemEquipTable = await LoadZip("ItemEquipTable.json", progress);
+
+            var characterTable = await LoadZip<CharacterTable>("CharacterTable.json", progress);
+            foreach (var obj in characterTable.records)
+            {
+                this.characterTable.Add(obj.id, obj);
+            }
+
+            var tutorialTable = await LoadZip<TutorialTable>("ContentsTutorialTable.json", progress);
+            foreach (var obj in tutorialTable.records)
+            {
+                this.tutorialTable.Add(obj.id, obj);
+            }
+
+            var itemEquipTable = await LoadZip<ItemEquipTable>("ItemEquipTable.json", progress);
+            foreach (var obj in itemEquipTable.records)
+            {
+                this.itemEquipTable.Add(obj.id, obj);
+            }
+
             var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);
 
             foreach (JToken item in characterLevelTable)
@@ -299,77 +368,29 @@ namespace nksrv.StaticInfo
             }
         }
 
-        public MainQuestCompletionData? GetMainQuestForStageClearCondition(int stage)
+        public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)
         {
-            foreach (JObject item in questDataRecords)
+            foreach (var item in questDataRecords)
             {
-                var id = item["condition_id"];
-                if (id == null) throw new Exception("expected condition_id field in quest data");
-
-                int value = id.ToObject<int>();
-                if (value == stage)
+                if (item.Value.condition_id == stage)
                 {
-                    MainQuestCompletionData? data = item.ToObject<MainQuestCompletionData>();
-                    if (data == null) throw new Exception("failed to deserialize main quest data item");
-                    return data;
+                    return item.Value;
                 }
             }
 
             return null;
         }
-        public MainQuestCompletionData? GetMainQuestByTableId(int tid)
+        public MainQuestCompletionRecord? GetMainQuestByTableId(int tid)
         {
-            foreach (JObject item in questDataRecords)
-            {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected condition_id field in quest data");
-
-                int value = id.ToObject<int>();
-                if (value == tid)
-                {
-                    MainQuestCompletionData? data = item.ToObject<MainQuestCompletionData>();
-                    if (data == null) throw new Exception("failed to deserialize main quest data item");
-                    return data;
-                }
-            }
-
-            return null;
+            return questDataRecords[tid];
         }
         public CampaignStageRecord? GetStageData(int stage)
         {
-            foreach (JObject item in stageDataRecords)
-            {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected id field in campaign data");
-
-                int value = id.ToObject<int>();
-                if (value == stage)
-                {
-                    CampaignStageRecord? data = JsonConvert.DeserializeObject<CampaignStageRecord>(item.ToString());
-                    if (data == null) throw new Exception("failed to deserialize stage data");
-                    return data;
-                }
-            }
-
-            return null;
+            return stageDataRecords[stage];
         }
         public RewardTableRecord? GetRewardTableEntry(int rewardId)
         {
-            foreach (JObject item in rewardDataRecords)
-            {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected id field in reward data");
-
-                int value = id.ToObject<int>();
-                if (value == rewardId)
-                {
-                    RewardTableRecord? data = JsonConvert.DeserializeObject<RewardTableRecord>(item.ToString());
-                    if (data == null) throw new Exception("failed to deserialize reward data");
-                    return data;
-                }
-            }
-
-            return null;
+            return rewardDataRecords[rewardId];
         }
         /// <summary>
         /// Returns the level and its minimum value for XP value
@@ -430,24 +451,11 @@ namespace nksrv.StaticInfo
         }
         public int GetNormalChapterNumberFromFieldName(string field)
         {
-            foreach (JObject item in chapterCampaignData)
+            foreach (var item in chapterCampaignData)
             {
-                var id = item["field_id"];
-                if (id == null)
+                if (item.Value.field_id == field)
                 {
-                    throw new Exception("expected id field in reward data");
-                }
-
-                string? value = id.ToObject<string>();
-                if (value == field)
-                {
-                    var chapter = item["chapter"];
-                    if (chapter == null)
-                    {
-                        throw new Exception("expected id field in reward data");
-                    }
-
-                    return chapter.ToObject<int>();
+                    return item.Value.chapter;
                 }
             }
 
@@ -456,14 +464,7 @@ namespace nksrv.StaticInfo
 
         public IEnumerable<int> GetAllCharacterTids()
         {
-            foreach (JObject item in characterTable)
-            {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected id field in reward data");
-
-                int value = id.ToObject<int>();
-                yield return value;
-            }
+            return characterTable.Keys;
         }
         public IEnumerable<int> GetAllCostumes()
         {
@@ -479,56 +480,20 @@ namespace nksrv.StaticInfo
 
         internal ClearedTutorialData GetTutorialDataById(int TableId)
         {
-            foreach (JObject item in tutorialTable)
-            {
-                var id = item["id"];
-                if (id == null)
-                {
-                    throw new Exception("expected id field in reward data");
-                }
-
-                int idValue = id.ToObject<int>();
-                if (idValue == TableId)
-                {
-                    ClearedTutorialData? data = item.ToObject<ClearedTutorialData>();
-                    if (data == null) throw new Exception("failed to deserialize reward data");
-                    return data;
-                }
-            }
-
-            throw new Exception("tutorial not found: " + TableId);
+            return tutorialTable[TableId];
         }
 
         public string? GetItemSubType(int itemType)
         {
-            foreach (JObject item in itemEquipTable)
-            {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected id field in reward data");
-
-                int? idValue = id.ToObject<int>();
-                if (idValue == itemType)
-                {
-                    var subtype = item["item_sub_type"];
-                    if (subtype == null)
-                    {
-                        throw new Exception("expected item_sub_type field in item equip data");
-                    }
-
-                    return subtype.ToObject<string>();
-                }
-            }
-
-            return null;
+            return itemEquipTable[itemType].item_sub_type;
         }
 
         internal IEnumerable<int> GetStageIdsForChapter(int chapterNumber, bool normal)
         {
             string mod = normal ? "Normal" : "Hard";
-            foreach (JObject item in stageDataRecords)
+            foreach (var item in stageDataRecords)
             {
-                CampaignStageRecord? data = item.ToObject<CampaignStageRecord>();
-                if (data == null) throw new Exception("failed to deserialize stage data");
+                var data = item.Value;
 
                 int chVal = data.chapter_id - 1;
 

@@ -1,6 +1,6 @@
 ﻿namespace nksrv.StaticInfo
 {
-    public class MainQuestCompletionData
+    public class MainQuestCompletionRecord
     {
         public int id;
         public int group_id;
@@ -9,6 +9,10 @@
         public int next_main_quest_id = 0;
         public int reward_id = 0;
         public int target_chapter_id;
+    }
+    public class MainQuestCompletionTable
+    {
+        public List<MainQuestCompletionRecord> records;
     }
     public class CampaignStageRecord
     {
@@ -24,6 +28,10 @@
         public string enter_scenario = "";
         public string exit_scenario = "";
     }
+    public class CampaignStageTable
+    {
+        public List<CampaignStageRecord> records;
+    }
     public class RewardTableRecord
     {
         public int id;
@@ -31,6 +39,11 @@
         public int character_exp;
         public RewardEntry[]? rewards;
     }
+    public class RewardTable
+    {
+        public List<RewardTableRecord> records;
+    }
+
     public class RewardEntry
     {
         /// <summary>
@@ -52,6 +65,10 @@
         public int ClearedStageId;
         public int NextId;
         public bool SaveTutorial;
+    }
+    public class TutorialTable
+    {
+        public List<ClearedTutorialData> records;
     }
 
     public class CharacterLevelData
@@ -84,5 +101,37 @@
         public int CurrencyValue;
         public int Id;
         public int GroupId;
+    }
+
+    public class CampaignChapterRecord
+    {
+        public int id;
+        public int chapter;
+        public string field_id;
+        public string hard_field_id;
+    }
+    public class CampaignChapterTable
+    {
+        public List<CampaignChapterRecord> records;
+    }
+
+    public class CharacterRecord
+    {
+        public int id;
+        // TODO: There is more stuff here but it isn't needed yet
+    }
+    public class CharacterTable
+    {
+        public List<CharacterRecord> records;
+    }
+
+    public class ItemEquipRecord
+    {
+        public int id;
+        public string item_sub_type;
+    }
+    public class ItemEquipTable
+    {
+        public List<ItemEquipRecord> records;
     }
 }
