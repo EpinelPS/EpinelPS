@@ -210,6 +210,11 @@ namespace nksrv.Database
         {
             return Characters.Any(x => x.Tid == c);
         }
+
+        public Character? GetCharacterBySerialNumber(long value)
+        {
+            return Characters.Where(x => x.Csn == value).FirstOrDefault();
+        }
     }
     public class CoreInfo
     {

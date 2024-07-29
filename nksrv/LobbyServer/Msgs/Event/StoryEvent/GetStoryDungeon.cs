@@ -17,7 +17,8 @@ namespace nksrv.LobbyServer.Msgs.Event.StoryEvent
 
             var response = new ResStoryDungeonEventData()
             {
-                TeamData = new NetUserTeamData()
+                TeamData = new NetUserTeamData(),
+                RemainingTickets = 10,
             };
 
             // TOOD

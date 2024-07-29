@@ -14,10 +14,10 @@ namespace nksrv.LobbyServer.Msgs.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 81301,
-                EventDisableDate = 1000000000000000,
-                EventStartDate = 1,
-                EventEndDate = 1000000000000000,
-                EventVisibleDate = 0,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventSystemType = 34
             });
 
@@ -27,10 +27,10 @@ namespace nksrv.LobbyServer.Msgs.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 20001,
-                EventDisableDate = 1000000000000000,
-                EventStartDate = 1,
-                EventEndDate = 1000000000000000,
-                EventVisibleDate = 0,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventSystemType = 1
             });
 

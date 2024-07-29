@@ -9,12 +9,13 @@ namespace nksrv.LobbyServer.Msgs.User
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetProfileData>();
-            var user = GetUser();
+            var callingUser = GetUser();
+            var user = GetUser((ulong)req.TargetUsn);
             var response = new ResGetProfileData();
-            response.Data = new NetProfileData();
-            Console.WriteLine("GET USER PROFILE NOT IMPLEMENTED: " + req.TargetUsn);
-            if (user.ID == (ulong)req.TargetUsn)
+          
+            if (user != null)
             {
+                response.Data = new NetProfileData();
                 response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
                 response.Data.LastActionAt = DateTimeOffset.UtcNow.Ticks;
                 response.Data.CharacterCount = new() { Count = user.Characters.Count };
@@ -22,10 +23,16 @@ namespace nksrv.LobbyServer.Msgs.User
                 response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
                 response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
                 response.Data.OutpostOpenState = user.MainQuestData.ContainsKey(25);
-            }
-            else
-            {
-                Logger.Warn("Unknown User ID: " + req.TargetUsn);
+
+                foreach (var item in user.RepresentationTeamData.Slots)
+                {
+                    var c = user.GetCharacterBySerialNumber(item.Csn);
+
+                    if (c != null)
+                    {
+                        response.Data.ProfileTeam.Add(new NetProfileTeamSlot() { Slot = item.Slot, Default = new() { CostumeId = c.CostumeId, Csn = c.Csn, Grade = c.Grade, Lv = c.Level, Skill1Lv = c.Skill1Lvl, Skill2Lv = c.Skill2Lvl, Tid = c.Tid, UltiSkillLv = c.UltimateLevel } });
+                    }
+                }
             }
 
             await WriteDataAsync(response);

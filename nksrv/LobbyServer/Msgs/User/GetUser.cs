@@ -18,6 +18,7 @@ namespace nksrv.LobbyServer.Msgs.User
             response.User = LobbyHandler.CreateNetUserDataFromUser(user);
             response.ResetHour = 20;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
+            response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.IsSimple = req.IsSimple;
 
             foreach (var item in user.Currency)

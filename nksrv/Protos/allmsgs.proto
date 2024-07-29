@@ -2275,3 +2275,11 @@ message ResCharacterGrowReset {
 	int32 SynchroLv = 4;
 	repeated int64 SynchroStandardCharacters = 5;
 }
+
+message ReqSetProfileTeam {
+	NetTeamData Team = 2;
+}
+message ResSetProfileTeam {
+	int32 TeamCombat = 2;
+	NetWholeUserTeamData Team = 3;
+}

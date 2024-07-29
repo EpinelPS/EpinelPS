@@ -112,5 +112,9 @@ namespace nksrv.LobbyServer
         {
             return JsonDb.GetUser(UserId) ?? throw new Exception("null user");
         }
+        public User? GetUser(ulong id)
+        {
+            return JsonDb.GetUser(id);
+        }
     }
 }
