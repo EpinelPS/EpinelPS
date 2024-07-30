@@ -134,13 +134,13 @@ namespace nksrv.LobbyServer
             var ret = new NetWholeUserData()
             {
                 Lv = user.userPointData.UserLevel,
-                Frame = 1,
+                Frame = user.ProfileFrame,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
                 Nickname = user.Nickname,
                 Usn = (long)user.ID,
                 LastActionAt = DateTimeOffset.UtcNow.Ticks,
-
+                Server = 1001
             };
 
             return ret;

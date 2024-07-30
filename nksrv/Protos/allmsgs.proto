@@ -2283,3 +2283,11 @@ message ResSetProfileTeam {
 	int32 TeamCombat = 2;
 	NetWholeUserTeamData Team = 3;
 }
+
+message ReqSetProfileData {
+	int32 Icon = 2;
+	bool IsPrism = 3;
+	int32 Frame = 4;
+}
+message ResSetProfileData {
+}

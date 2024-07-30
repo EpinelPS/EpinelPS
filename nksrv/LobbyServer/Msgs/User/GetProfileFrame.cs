@@ -10,6 +10,7 @@ namespace nksrv.LobbyServer.Msgs.User
             var req = await ReadData<ReqGetProfileFrame>();
             var response = new ResGetProfileFrame();
 
+            // TODO
 
             await WriteDataAsync(response);
         }

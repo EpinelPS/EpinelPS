@@ -77,6 +77,7 @@ namespace nksrv.Database
         public string Nickname = "SomePlayer";
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
+        public int ProfileFrame = 1;
         public bool IsAdmin = false;
 
         public bool IsBanned = false;
