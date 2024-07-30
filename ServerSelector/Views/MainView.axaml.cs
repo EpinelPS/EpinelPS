@@ -38,7 +38,7 @@ public partial class MainView : UserControl
 
         if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
         {
-            ShowWarningMsg("Launcher path is invalid. Make sure that nikke_launcher.exe exists in the launcher folder", "Error");
+            ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
             return;
         }
 
