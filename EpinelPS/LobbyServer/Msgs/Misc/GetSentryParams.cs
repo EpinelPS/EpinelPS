@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
         protected override async Task HandleAsync()
         {
             var r = new SentryDataResponse();
-            // TODO: figure out a way to disable sentry so that Shift Up devs wouldn't be annoyed by this server
+            // TODO: Figure out a way so that the game developers would not be annoyed by bogus errors in Sentry dashboard
 
             await WriteDataAsync(r);
         }
