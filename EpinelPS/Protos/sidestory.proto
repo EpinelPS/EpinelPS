@@ -1,0 +1,63 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "EpinelPS.Net";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/Duration.proto";
+import "Protos/allmsgs.proto";
+
+// List completed
+message NetSideStoryStageData {
+	int32 SideStoryStageId = 1;
+	google.protobuf.Timestamp ClearedAt = 2;
+}
+
+message ReqListSideStory {}
+message ResListSideStory {
+	repeated NetSideStoryStageData SideStoryStageDataList = 1;
+}
+
+// Enter stage
+message ReqEnterSideStoryStage {
+	int32 SideStoryId = 1;
+	int32 SideStoryStageId = 2;
+	int32 TeamNumber = 3;
+	NetAntiCheatBattleTLogAdditionalInfo AnticheatData = 4;
+}
+message ResEnterSideStoryStage {
+}
+
+// Clear sceneario
+message ReqClearSideStoryCutForScenario {
+	int32 SideStoryStageId = 1;
+	int32 SideStoryCutId = 2;
+}
+message ResClearSideStoryCutForScenario {}
+
+// Clear stage
+message ReqClearSideStoryStage {
+	int32 SideStoryStageId = 1;
+}
+message ResClearSideStoryStage {
+	NetRewardData reward = 1;
+}
+
+// Enter battle
+message ReqEnterSideStoryCutForBattle {
+	int32 SideStoryStageId = 1;
+	int32 SideStoryCutId = 2;
+	int32 TeamNumber = 3;
+	NetAntiCheatBattleTLogAdditionalInfo AnticheatData = 4;
+}
+message ResEnterSideStoryCutForBattle {}
+
+// Clear battle
+message ReqClearSideStoryCutForBattle {
+	int32 SideStoryStageId = 1;
+	int32 SideStoryCutId = 2;
+	int32 TeamNumber = 3;
+	int32 BattleResult = 4;
+	NetAntiCheatBattleData AnticheatBattleData = 5;
+	NetAntiCheatBattleTLogAdditionalInfo AnticheatData = 6;
+}
+message ResClearSideStoryCutForBattle {}
