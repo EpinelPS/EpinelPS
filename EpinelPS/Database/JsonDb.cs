@@ -3,6 +3,8 @@ using EpinelPS.LobbyServer;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Swan.Logging;
+using Google.Protobuf.WellKnownTypes;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace EpinelPS.Database
 {
@@ -64,6 +66,21 @@ namespace EpinelPS.Database
         public List<string> CompletedScenarios = new();
     }
 
+    public class SynchroSlot
+    {
+        /// <summary>
+        /// Index of slot, 1 based
+        /// </summary>
+        public int Slot;
+        /// <summary>
+        /// Character CSN
+        /// </summary>
+        public long CharacterSerialNumber;
+        /// <summary>
+        /// Time when slot cooldown expires
+        /// </summary>
+        public long AvailableAt;
+    }
     public class User
     {
         // User info
@@ -94,6 +111,9 @@ namespace EpinelPS.Database
         public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 }
         };
+        public List<SynchroSlot> SynchroSlots = new List<SynchroSlot>();
+        public bool SynchroDeviceUpgraded = false;
+        public int SynchroDeviceLevel = 200;
 
         public List<ItemData> Items = new();
         public List<Character> Characters = [];
@@ -218,6 +238,45 @@ namespace EpinelPS.Database
         public Character? GetCharacterBySerialNumber(long value)
         {
             return Characters.Where(x => x.Csn == value).FirstOrDefault();
+        }
+
+        internal bool GetSynchro(long csn)
+        {
+            return SynchroSlots.Where(x => x.CharacterSerialNumber == csn).Count() >= 1;
+        }
+        internal int GetCharacterLevel(int csn)
+        {
+            var c = GetCharacterBySerialNumber(csn);
+            if (c == null) throw new Exception("failed to lookup character");
+
+            return GetCharacterLevel(csn, c.Level);
+        }
+        internal int GetCharacterLevel(int csn, int characterLevel)
+        {
+            foreach (var item in SynchroSlots)
+            {
+                if (item.CharacterSerialNumber == csn)
+                {
+                    return GetSynchroLevel();
+                }
+            }
+            return characterLevel;
+        }
+        internal int GetSynchroLevel()
+        {
+            if (SynchroDeviceUpgraded)
+                return SynchroDeviceLevel;
+            var highestLevelCharacters = Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+
+
+            if (highestLevelCharacters.Count > 0)
+            {
+                return highestLevelCharacters.Last().Level;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
     public class CoreInfo

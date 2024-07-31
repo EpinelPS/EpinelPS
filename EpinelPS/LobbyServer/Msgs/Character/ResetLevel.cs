@@ -29,6 +29,11 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                         Logger.Warn("Character level is already 1 - cannot reset");
                         return;
                     }
+                    if (item.Level == 200)
+                    {
+                        Logger.Warn("Character level is 200 - cannot reset");
+                        return;
+                    }
 
                     int requiredCredit = 0;
                     int requiredBattleData = 0;

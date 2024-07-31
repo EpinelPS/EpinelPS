@@ -46,9 +46,9 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
             foreach (var item in user.Characters)
             {
-                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Level = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
+                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Level = user.GetCharacterLevel(item.Csn, item.Level), Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel}, IsSynchro = user.GetSynchro(item.Csn) });
             }
-
+          
             foreach (var item in NetUtils.GetUserItems(user))
             {
                 response.Items.Add(item);
@@ -58,7 +58,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
             if (user.Characters.Count > 0)
             {
                 var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
-                response.SynchroLv = highestLevelCharacters.Last().Level;
+                response.SynchroLv = user.GetSynchroLevel();
+
                 foreach (var item in highestLevelCharacters)
                 {
                     response.SynchroStandardCharacters.Add(item.Csn);

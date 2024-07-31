@@ -125,7 +125,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
 
                 var oldXpData = GameData.Instance.GetUserLevelFromUserExp(user.userPointData.ExperiencePoint);
-                var newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel + 1);
+                var newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
                 var newLevel = user.userPointData.UserLevel;
 
                 if (newLevelExp == -1)
@@ -143,7 +143,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                     else
                         user.Currency.Add(CurrencyType.FreeCash, 30);
 
-                    newLevelExp = GameData.Instance.GetUserMinXpForLevel(newLevel + 1);
+                    newLevelExp = GameData.Instance.GetUserMinXpForLevel(newLevel);
                 }
 
 

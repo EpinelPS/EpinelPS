@@ -59,7 +59,7 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                     };
                     var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
 
-                    response.SynchroLv = highestLevelCharacters.Last().Level;
+                    response.SynchroLv = user.GetSynchroLevel();
 
                     foreach (var c in highestLevelCharacters)
                     {
