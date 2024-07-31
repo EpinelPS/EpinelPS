@@ -1,10 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Liberate
 {
@@ -13,16 +7,16 @@ namespace EpinelPS.LobbyServer.Msgs.Liberate
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ChooseLiberateCharacterRequest>();
+            var req = await ReadData<ReqChooseLiberateCharacter>();
             var user = GetUser();
 
-            var response = new ChooseLiberateCharacterResponse();
+            var response = new ResChooseLiberateCharacter();
 
             // TODO
             response.Data = new NetLiberateData() { CharacterId = req.CharacterId };
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 1 });
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 2 });
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 3 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 1 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 2 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 3 });
 
             await WriteDataAsync(response);
         }

@@ -38,8 +38,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
                 response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
             }
 
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
 
             await WriteDataAsync(response);
         }

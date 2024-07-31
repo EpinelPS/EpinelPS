@@ -16,14 +16,14 @@ namespace EpinelPS.LobbyServer.Msgs.Campaign
 
             var response = new ResSaveCampaignFieldObject();
 
-            Console.WriteLine($"save {req.MapId} with {req.FieldObject.PositionID}");
+            Console.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}");
 
             var chapter = GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
             var key = chapter + "_" + mod;
             var field = user.FieldInfoNew[key];
 
-            field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionID, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
+            field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
             JsonDb.Save();
 
             await WriteDataAsync(response);

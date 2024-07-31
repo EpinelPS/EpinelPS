@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Outpost
 {
@@ -8,8 +7,8 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<DoWipeOutRequest>();
-            var response = new DoWipeOutResponse();
+            var req = await ReadData<ReqObtainFastBattleReward>();
+            var response = new ResObtainFastBattleReward();
 
             // TODO
 

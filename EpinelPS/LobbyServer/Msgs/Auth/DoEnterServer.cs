@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<EnterServerRequest>();
+            var req = await ReadData<ReqEnterServer>();
 
             // request has auth token
             UsedAuthToken = req.AuthToken;
@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
 
             var user = GetUser();
 
-            var response = new EnterServerResponse();
+            var response = new ResEnterServer();
             var rsp = LobbyHandler.GenGameClientTok(req.ClientPublicKey, req.AuthToken);
             response.GameClientToken = rsp.ClientAuthToken;
             response.FeatureDataInfo = new NetFeatureDataInfo() { UseFeatureData = true };

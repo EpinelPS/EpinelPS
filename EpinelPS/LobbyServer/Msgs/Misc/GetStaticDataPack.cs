@@ -1,7 +1,6 @@
-﻿using Google.Protobuf;
-using EpinelPS.Net;
-using EpinelPS.StaticInfo;
+﻿using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
+using Google.Protobuf;
 
 namespace EpinelPS.LobbyServer.Msgs.Misc
 {
@@ -10,12 +9,12 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<StaticDataPackRequest>();
+            var req = await ReadData<ReqStaticDataPackInfo>();
 
-            var r = new StaticDataPackResponse();
+            var r = new ResStaticDataPackInfo();
             r.Url = GameConfig.Root.StaticData.Url;
             r.Version = GameConfig.Root.StaticData.Version;
-            r.FileSize = GameData.Instance.Size;
+            r.Size = GameData.Instance.Size;
             r.Sha256Sum = ByteString.CopyFrom(GameData.Instance.Sha256Hash);
             r.Salt1 = ByteString.CopyFrom(Convert.FromBase64String(GameConfig.Root.StaticData.Salt1));
             r.Salt2 = ByteString.CopyFrom(Convert.FromBase64String(GameConfig.Root.StaticData.Salt2));

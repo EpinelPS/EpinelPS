@@ -457,3 +457,5 @@ $RECYCLE.BIN/
 !nksrv/site.pfx
 !ServerSelector/myCA.pfx
 !ServerSelector/sodium.dll
+
+EpinelPS/Protos/allmsgs.proto

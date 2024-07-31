@@ -22,7 +22,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
                 var character = user.GetCharacterBySerialNumber(item.Value);
                 if (character != null)
                 {
-                    user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Csn = item.Value, Slot = item.Slot, CostumeId = character.CostumeId, Lvl = character.Level, Tid = character.Tid });
+                    user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Csn = item.Value, Slot = item.Slot, CostumeId = character.CostumeId, Level = character.Level, Tid = character.Tid });
                 }
             }
 

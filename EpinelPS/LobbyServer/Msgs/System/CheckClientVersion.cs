@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.System
 {
@@ -8,16 +7,16 @@ namespace EpinelPS.LobbyServer.Msgs.System
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<CheckVersionRequest>();
-            var response = new CheckVersionResponse();
+            var req = await ReadData<ReqCheckClientVersion>();
+            var response = new ResCheckClientVersion();
 
             if (GameConfig.Root.GameMaxVer != req.Version)
             {
-                response.VersionStatus = 1;
+                response.Availability = Availability.Available;
             }
             else
             {
-                response.VersionStatus = 0;
+                response.Availability = Availability.None;
             }
 
             await WriteDataAsync(response);

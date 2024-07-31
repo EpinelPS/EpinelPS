@@ -50,7 +50,7 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                     {
                         CostumeId = item.CostumeId,
                         Csn = item.Csn,
-                        Lv = item.Level,
+                        Level = item.Level,
                         Skill1Lv = item.Skill1Lvl,
                         Skill2Lv = item.Skill2Lvl,
                         UltiSkillLv = item.UltimateLevel,

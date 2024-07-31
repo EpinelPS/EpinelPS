@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Outpost
 {
@@ -8,11 +7,11 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<GetTacticAcademyDataRequest>();
+            var req = await ReadData<ReqGetTacticAcademyData>();
             var user = GetUser();
 
-            var response = new GetTacticAcademyDataResponse();
-            response.CompletedLessons.AddRange(user.CompletedTacticAcademyLessons);
+            var response = new ResGetTacticAcademyData();
+            response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
 
             await WriteDataAsync(response);
         }

@@ -1,10 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Liberate
 {
@@ -13,10 +7,10 @@ namespace EpinelPS.LobbyServer.Msgs.Liberate
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<GetLiberateProgressListRequest>();
+            var req = await ReadData<ReqGetLiberateProgressList>();
             var user = GetUser();
 
-            var response = new GetLiberateProgressListResponse();
+            var response = new ResGetLiberateProgressList();
 
             // TODO
 

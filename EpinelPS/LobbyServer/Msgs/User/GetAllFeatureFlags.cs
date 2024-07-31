@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
             var response = new ResGetAllFeatureFlags();
             response.Flags.AddRange([
-                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.UnionRaid2, IsOpen = true },
+                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.UnionRaid, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.CooperationEvent, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.RookieArena, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.SimulationRoom, IsOpen = true },
@@ -21,8 +21,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.Dice, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.StoryDungeonEvent, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.Tower, IsOpen = true },
-                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.LostSector2, IsOpen = true },
-                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.Subscription2, IsOpen = true },
+                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.LostSector, IsOpen = true },
+                    new NetFeatureFlag() { FeatureKind = NetFeatureKind.Subscription, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.ArchiveEventSystem, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.ViewShortCut, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.PollEvent, IsOpen = true },

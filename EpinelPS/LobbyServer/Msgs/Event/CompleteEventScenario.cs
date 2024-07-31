@@ -11,16 +11,16 @@ namespace EpinelPS.LobbyServer.Msgs.Event
             var req = await ReadData<ReqSetEventScenarioComplete>();
             var user = GetUser();
 
-            if (user.EventInfo.ContainsKey(req.EventID))
+            if (user.EventInfo.ContainsKey(req.EventId))
             {
-                var evt = user.EventInfo[req.EventID];
+                var evt = user.EventInfo[req.EventId];
                 evt.CompletedScenarios.Add(req.ScenarioId);
             }
             else
             {
                 var evt = new EventData();
                 evt.CompletedScenarios.Add(req.ScenarioId);
-                user.EventInfo.Add(req.EventID, evt);
+                user.EventInfo.Add(req.EventId, evt);
             }
 
             var response = new ResSetEventScenarioComplete();

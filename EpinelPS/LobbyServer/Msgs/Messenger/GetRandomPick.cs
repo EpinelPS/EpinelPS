@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Msgs.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqForcePickTodayRandomMessage>();
+            var req = await ReadData<ReqPickTodayRandomMessage>();
 
             // TODO: get proper response
-            var response = new ResForcePickTodayRandomMessage();
+            var response = new ResPickTodayRandomMessage();
 
             await WriteDataAsync(response);
         }

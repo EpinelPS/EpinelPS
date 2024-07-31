@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Misc
 {
@@ -8,7 +7,7 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
     {
         protected override async Task HandleAsync()
         {
-            var r = new MaintenanceNoticeResponse();
+            var r = new ResMaintenanceNotice();
 
             await WriteDataAsync(r);
         }

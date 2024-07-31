@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Misc
 {
@@ -8,7 +7,7 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
     {
         protected override async Task HandleAsync()
         {
-            var r = new SentryDataResponse();
+            var r = new ResGetSentryParams();
             // TODO: Figure out a way so that the game developers would not be annoyed by bogus errors in Sentry dashboard
 
             await WriteDataAsync(r);

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqAuthIntl>();
-            var response = new AuthIntlResponse();
+            var response = new ResAuth();
 
             UsedAuthToken = req.Token;
             foreach (var item in JsonDb.Instance.LauncherAccessTokens)
@@ -23,7 +23,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
             }
             if (UserId == 0)
             {
-                response.AuthError = new NetAuthError() { ErrorCode = AuthErrorCode.Error };
+                response.AuthError = new NetAuthError() { ErrorCode = AuthErrorCode.AuthErrorCodeError };
             }
             else
             {
@@ -44,7 +44,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
                 }
                 else
                 {
-                    response.AuthSuccess = new NetAuthSuccess() { AuthToken = req.Token, CentauriZoneId = "84", FirstAuth = "", PurchaseRestriction = new NetUserPurchaseRestriction() { PurchaseRestriction = PurchaseRestriction.Child, UpdatedAt = 638546758794611090 } };
+                    response.AuthSuccess = new NetAuthSuccess() { AuthToken = req.Token, CentauriZoneId = "84", FirstAuth = false, PurchaseRestriction = new NetUserPurchaseRestriction() { PurchaseRestriction = PurchaseRestriction.PurchaseRestrictionChild, UpdatedAt = 638546758794611090 } };
                 }
             }
 

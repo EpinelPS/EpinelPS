@@ -1,6 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
+using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.Msgs.Sidestory
 {

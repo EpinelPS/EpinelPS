@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
             user.Nickname = req.Nickname;
 
             var response = new ResSetNickname();
-            response.Result = SetNicknameResult.NicknameOk;
+            response.Result = SetNicknameResult.SetNicknameResultOkay;
             response.Nickname = req.Nickname;
 
             await WriteDataAsync(response);

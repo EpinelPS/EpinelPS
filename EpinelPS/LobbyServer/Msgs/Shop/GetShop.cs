@@ -1,10 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Shop
 {
@@ -13,9 +7,9 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<GetShopRequest>();
+            var x = await ReadData<ReqGetShop>();
 
-            var response = new GetShopResponse();
+            var response = new ResGetShop();
 
             // TODO
 

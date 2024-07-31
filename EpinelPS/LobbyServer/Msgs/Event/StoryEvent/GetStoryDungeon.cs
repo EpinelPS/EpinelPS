@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Msgs.Event.StoryEvent
             var response = new ResStoryDungeonEventData()
             {
                 TeamData = new NetUserTeamData(),
-                RemainingTickets = 10,
+                RemainTicket = 10,
             };
 
             // TOOD

@@ -1,5 +1,4 @@
-﻿using EpinelPS.Net;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Misc
 {
@@ -8,9 +7,9 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ResourceHostRequest>();
+            var req = await ReadData<ReqGetResourceHosts2>();
 
-            var r = new ResourceHostResponse();
+            var r = new ResGetResourceHosts2();
             r.BaseUrl = GameConfig.Root.ResourceBaseURL;
 
             await WriteDataAsync(r);

@@ -1,6 +1,4 @@
-using EpinelPS.Net;
 using EpinelPS.Utils;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.Msgs.Intercept
 {
@@ -13,10 +11,9 @@ namespace EpinelPS.LobbyServer.Msgs.Intercept
 
             var response = new ResFastClearIntercept
             {
-                Intercept = 1,
-                InterceptId = 1,
                 TicketCount = 3,
-                MaxTicketCount = 10
+                MaxTicketCount = 10,
+                Damage = 2
             };
 
             await WriteDataAsync(response);

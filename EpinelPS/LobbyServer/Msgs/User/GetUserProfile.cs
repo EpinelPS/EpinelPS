@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
                 response.Data = new NetProfileData();
                 response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
                 response.Data.LastActionAt = DateTimeOffset.UtcNow.Ticks;
-                response.Data.CharacterCount = new() { Count = user.Characters.Count };
+                response.Data.CharacterCount.Add(new NetCharacterCount() { Count = user.Characters.Count });
                 response.Data.InfraCoreLv = user.InfraCoreLvl;
                 response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
                 response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
                     if (c != null)
                     {
-                        response.Data.ProfileTeam.Add(new NetProfileTeamSlot() { Slot = item.Slot, Default = new() { CostumeId = c.CostumeId, Csn = c.Csn, Grade = c.Grade, Lv = c.Level, Skill1Lv = c.Skill1Lvl, Skill2Lv = c.Skill2Lvl, Tid = c.Tid, UltiSkillLv = c.UltimateLevel } });
+                        response.Data.ProfileTeam.Add(new NetProfileTeamSlot() { Slot = item.Slot, Default = new() { CostumeId = c.CostumeId, Csn = c.Csn, Grade = c.Grade, Level = c.Level, Skill1Lv = c.Skill1Lvl, Skill2Lv = c.Skill2Lvl, Tid = c.Tid, UltiSkillLv = c.UltimateLevel } });
                     }
                 }
             }

@@ -1,13 +1,7 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.LobbyServer.Msgs.Stage;
-using EpinelPS.Net;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.Msgs.Sidestory
 {

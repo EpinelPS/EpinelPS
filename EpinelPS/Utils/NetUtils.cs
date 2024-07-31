@@ -15,7 +15,7 @@ namespace EpinelPS.Utils
                 Csn = item.Csn,
                 Exp = item.Exp,
                 Isn = item.Isn,
-                Lv = item.Level,
+                Level = item.Level,
                 Position = item.Position,
                 Tid = item.ItemType
             };
@@ -36,12 +36,12 @@ namespace EpinelPS.Utils
                     }
                     else
                     {
-                        itemDictionary[item.ItemType] = new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position };
+                        itemDictionary[item.ItemType] = new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Level = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position };
                     }
                 }
                 else
                 {
-                    var newItem = new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position };
+                    var newItem = new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Level = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position };
                     itemDictionary[item.ItemType] = newItem;
                 }
             }

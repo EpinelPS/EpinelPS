@@ -23,8 +23,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
             response.SynchroLv = 1;
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 5, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
 
             // Add default slot data
             if (user.RepresentationTeamData.Slots.Count == 0)
@@ -46,7 +46,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
             foreach (var item in user.Characters)
             {
-                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
+                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Level = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } });
             }
 
             foreach (var item in NetUtils.GetUserItems(user))

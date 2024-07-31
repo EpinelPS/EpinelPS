@@ -12,14 +12,14 @@ namespace EpinelPS.LobbyServer.Msgs.Event
             var user = GetUser();
 
             var response = new ResGetEventScenarioData();
-            if (user.EventInfo.ContainsKey(req.EventID))
+            if (user.EventInfo.ContainsKey(req.EventId))
             {
-                var evt = user.EventInfo[req.EventID];
+                var evt = user.EventInfo[req.EventId];
                 response.ScenarioIdList.AddRange(evt.CompletedScenarios);
             }
             else
             {
-                user.EventInfo.Add(req.EventID, new EventData());
+                user.EventInfo.Add(req.EventId, new EventData());
             }
 
             await WriteDataAsync(response);
