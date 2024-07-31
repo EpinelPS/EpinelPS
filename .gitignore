@@ -454,7 +454,7 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Allow pregenerated ssl cert
-!nksrv/site.pfx
+!EpinelPS/site.pfx
 !ServerSelector/myCA.pfx
 !ServerSelector/sodium.dll
 
