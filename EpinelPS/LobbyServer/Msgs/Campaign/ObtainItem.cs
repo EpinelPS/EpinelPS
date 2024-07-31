@@ -1,4 +1,5 @@
-﻿using EpinelPS.LobbyServer.Msgs.Stage;
+﻿using EpinelPS.Database;
+using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Swan.Logging;
@@ -41,6 +42,8 @@ namespace EpinelPS.LobbyServer.Msgs.Campaign
 
             // Hide it from the field
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type});
+
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }
