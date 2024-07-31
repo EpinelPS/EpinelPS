@@ -113,9 +113,12 @@ namespace EpinelPS.Database
         public List<int> CompletedTacticAcademyLessons = [];
         public List<int> CompletedSideStoryStages = new();
 
+        public List<int> Memorial = new();
+        public List<int> JukeboxBgm = new();
+
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
-
+        
         public void SetQuest(int tid, bool recievedReward)
         {
             if (MainQuestData.ContainsKey(tid))

@@ -8,9 +8,14 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetMemoryList>();
+            var user = GetUser();
 
             var response = new ResGetMemoryList();
-            // TODO
+
+            response.MemoryList.AddRange(user.Memorial);
+
+            // TODO rewards
+
             await WriteDataAsync(response);
         }
     }

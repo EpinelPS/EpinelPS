@@ -1,5 +1,7 @@
-﻿using EpinelPS.StaticInfo;
+﻿using EpinelPS.LobbyServer.Msgs.Stage;
+using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
+using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.Campaign
 {
@@ -18,10 +20,27 @@ namespace EpinelPS.LobbyServer.Msgs.Campaign
             var key = chapter + "_" + mod;
             var field = user.FieldInfoNew[key];
 
-            // TODO
-            response.Reward = new();
 
+            foreach (var item in field.CompletedObjects)
+            {
+                if (item.PositionId == req.FieldObject.PositionId)
+                {
+                    Logger.Warn("attempted to collect campaign field object twice!");
+                    return;
+                }
+            }
 
+            // Register and return reward
+
+            if (!GameData.Instance.PositionReward.ContainsKey(req.FieldObject.PositionId)) throw new Exception("bad position id");
+            var fieldReward = GameData.Instance.PositionReward[req.FieldObject.PositionId];
+            var positionReward = GameData.Instance.FieldItems[fieldReward];
+            var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value);
+            if (reward == null) throw new Exception("failed to get reward");
+            response.Reward = ClearStage.RegisterRewardsForUser(user, reward);
+
+            // Hide it from the field
+            field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type});
 
             await WriteDataAsync(response);
         }

@@ -31,7 +31,7 @@ To skip stages, a basic command line interface is implemented.
 
 
 ## TODO: 
- - [X] Normal campaign
+ - [X] Campaign (Normal, Hard, Lost items, Rewards)
  - [X] Lobby
  - [X] Save team info
  - [X] Profile UI
@@ -41,8 +41,7 @@ To skip stages, a basic command line interface is implemented.
  - [X] Side story
  - [X] Archives
  - [ ] Skill level up
- - [ ] Outpost jukebox / relics saving
- - [ ] Field obtain object
+ - [ ] Outpost jukebox
  - [ ] Admin panel
  - [ ] Test hard stage support
  - [ ] Event system

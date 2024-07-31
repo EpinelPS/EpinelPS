@@ -134,4 +134,17 @@
     {
         public List<ItemEquipRecord> records;
     }
+
+    public class FieldItemRecord
+    {
+        public int id;
+        public string item_type;
+        public int type_value;
+        public bool is_final_reward;
+        public string difficulty;
+    }
+    public class FieldItemTable
+    {
+        public List<FieldItemRecord> records;
+    }
 }

@@ -39,6 +39,8 @@ namespace EpinelPS.StaticInfo
         private Dictionary<int, CharacterLevelData> LevelData = [];
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
         public Dictionary<int, int> SidestoryRewardTable = [];
+        public Dictionary<string, int> PositionReward = new Dictionary<string, int>();
+        public Dictionary<int, FieldItemRecord> FieldItems = [];
 
         public byte[] Sha256Hash;
         public int Size;
@@ -241,8 +243,9 @@ namespace EpinelPS.StaticInfo
 
             return records;
         }
-        int totalFiles = 12;
+        int totalFiles = 14;
         int currentFile = 0;
+
         public async Task Parse()
         {
             using var progress = new ProgressBar();
@@ -341,6 +344,32 @@ namespace EpinelPS.StaticInfo
 
                     SidestoryRewardTable.Add(id2, reward);
                 }
+            }
+
+
+            foreach (ZipEntry item in MainZip)
+            {
+                if (item.Name.StartsWith("CampaignMap/"))
+                {
+                    var x = await LoadZip(item.Name, progress);
+
+                    var items = x[0]["ItemSpawner"];
+                    foreach (var item2 in items)
+                    {
+                        var id = item2["positionId"].ToObject<string>();
+                        var reward = item2["itemId"].ToObject<int>();
+
+                        if (!PositionReward.ContainsKey(id))
+                            PositionReward.Add(id, reward);
+                    }
+                }
+            }
+
+
+            var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
+            foreach (var obj in fieldItems.records)
+            {
+                FieldItems.Add(obj.id, obj);
             }
         }
 

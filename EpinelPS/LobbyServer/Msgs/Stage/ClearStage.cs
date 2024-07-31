@@ -2,6 +2,7 @@
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Swan.Logging;
+using System.Linq;
 
 namespace EpinelPS.LobbyServer.Msgs.Stage
 {
@@ -212,6 +213,22 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                             Tid = item.reward_id,
                             Isn = id
                         });
+                    }
+                    else if (item.reward_type == "Memorial")
+                    {
+                        if (!user.Memorial.Contains(item.reward_id))
+                        {
+                            ret.Memorial.Add(item.reward_id);
+                            user.Memorial.Add(item.reward_id);
+                        }
+                    }
+                    else if (item.reward_type == "Bgm")
+                    {
+                        if (!user.JukeboxBgm.Contains(item.reward_id))
+                        {
+                            ret.JukeboxBgm.Add(item.reward_id);
+                            user.JukeboxBgm.Add(item.reward_id);
+                        }
                     }
                     else
                     {
