@@ -12,6 +12,7 @@ using Swan.Logging;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using EmbedIO.Files;
 
 namespace EpinelPS
 {
@@ -234,6 +235,8 @@ namespace EpinelPS
             }
         }
         private static string LauncherEndpoint = Encoding.UTF8.GetString(Convert.FromBase64String("L25pa2tlX2xhdW5jaGVy"));
+
+        private static FileModule AssetModule;
         private static WebServer CreateWebServer()
         {
             var cert = new X509Certificate2(new X509Certificate(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx"));
@@ -246,21 +249,20 @@ namespace EpinelPS
                 .WithModule(new ActionModule("/route/", HttpVerbs.Any, HandleRouteData))
                 .WithModule(new ActionModule("/v1/", HttpVerbs.Any, LobbyHandler.DispatchSingle))
                 .WithModule(new ActionModule("/v2/", HttpVerbs.Any, IntlHandler.Handle))
-                .WithModule(new ActionModule("/prdenv/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/account/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithModule(new ActionModule("/data/", HttpVerbs.Any, HandleDataEndpoint))
-                .WithModule(new ActionModule("/media/", HttpVerbs.Any, HandleAsset))
-                .WithModule(new ActionModule("/PC/", HttpVerbs.Any, HandleAsset))
                 .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
                 .WithModule(new ActionModule("/api/v1/", HttpVerbs.Any, IntlHandler.Handle))
                 .WithStaticFolder(LauncherEndpoint, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "launcher"), true)
                 .WithStaticFolder("/admin/assets/", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "assets"), true)
                 .WithModule(new ActionModule("/admin", HttpVerbs.Any, HandleAdminRequest))
-                .WithWebApi("/adminapi", m => m.WithController(typeof(AdminApiController)));
+                .WithWebApi("/adminapi", m => m.WithController(typeof(AdminApiController)))
+                .WithModule(new ActionModule("/", HttpVerbs.Any, HandleAsset));
 
-            // Listen for state changes.
-            //server.StateChanged += (s, e) => $"WebServer New State - {e.NewState}".Info();
 
+            FileSystemProvider fileSystemProvider = new FileSystemProvider(AppDomain.CurrentDomain.BaseDirectory + "cache/", false);
+            AssetModule = new FileModule("/", fileSystemProvider);
+            AssetModule.Start(CancellationToken.None);
             return server;
         }
 
@@ -400,6 +402,11 @@ namespace EpinelPS
         }
         private static async Task HandleAsset(IHttpContext ctx)
         {
+            if (!ctx.Request.RawUrl.StartsWith("/PC") && !ctx.Request.RawUrl.StartsWith("/media") && !ctx.Request.RawUrl.StartsWith("/prdenv"))
+            {
+                ctx.Response.StatusCode = 404;
+                return;
+            }
             string? targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(ctx.Request.RawUrl, ctx.CancellationToken);
 
             if (targetFile == null)
@@ -409,29 +416,11 @@ namespace EpinelPS
                 return;
             }
 
-            try
-            {
-                using var fss = new FileStream(targetFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var responseStream = ctx.OpenResponseStream();
-                if (ctx.RequestedPath.EndsWith(".mp4"))
-                {
-                    ctx.Response.ContentType = "video/mp4";
-                }
-                else if (ctx.RequestedPath.EndsWith(".json"))
-                {
-                    ctx.Response.ContentType = "application/json";
-                }
-                ctx.Response.StatusCode = 200;
-                //ctx.Response.ContentLength64 = fss.Length; // TODO: This causes chrome to download content very slowly
+            // without this, content-type will be video/mp4; charset=utf-8 which is wrong
+            ctx.Response.ContentEncoding = null;
+            
 
-                await fss.CopyToAsync(responseStream, ctx.CancellationToken);
-                fss.Close();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.ToString());
-            }
-
+            await AssetModule.HandleRequestAsync(ctx);
         }
         private static async Task HandleRouteData(IHttpContext ctx)
         {
