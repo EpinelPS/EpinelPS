@@ -1,17 +1,17 @@
 ﻿{
-  // Asset Urls for game version 123.8.11
+  // Asset Urls for game version 124.6.11M
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/staticdatapack
   "StaticData": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/123-c23c5e761e/staticdata/data/qa-240808-07c-p1/321424/StaticData.pack",
-    "Version": "data/qa-240808-07c-p1/321424",
-    "Salt1": "HSebFDp/MoIsKN09vw04N0EHguR5yZWB6+z4Mnzsa8c=",
-    "Salt2": "Y8yJHe0o3XYMfxrlSDUSoY1mRxQycVRDEEXHYrHwlps="
+    "Url": "https://cloud.nikke-kr.com/prdenv/124-c49cd38ca2/staticdata/data/qa-240822-08b/325603/StaticData.pack",
+    "Version": "data/qa-240822-08b/325603",
+    "Salt1": "/kDnxcuiGWYacEqbxgkMA3kpISDPN+meEyQXc7WzkO4=",
+    "Salt2": "Xx76odqD9vOjMmcU8oMhed7XA/4yAhKwAilMaM7sztY="
   },
 
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/resourcehosts2
-  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/123-bd816440f4/{Platform}",
+  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/124-be0b554337/{Platform}",
 
   // Extracted from route config
-  "GameMinVer": "123.8.10",
-  "GameMaxVer": "123.8.11"
+  "GameMinVer": "124.6.10",
+  "GameMaxVer": "124.6.11"
 }

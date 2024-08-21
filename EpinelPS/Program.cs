@@ -431,33 +431,61 @@ namespace EpinelPS
                 var response = @"{
   ""Config"": [
     {
-    ""VersionRange"": {
-        ""From"": ""{GameMinVer}"",
-        ""To"": ""{GameMaxVer}"",
+      ""VersionRange"": {
+        ""From"": ""124.6.10"",
+        ""To"": ""124.6.11"",
         ""PackageName"": ""com.proximabeta.nikke""
       },
       ""Route"": [
         {
-          ""WorldId"": 1001,
-          ""Name"": ""pub:priv"",
+          ""WorldId"": 81,
+          ""Name"": ""pub:live-jp"",
+          ""Url"": ""https://jp-lobby.nikke-kr.com/"",
+          ""Description"": ""JAPAN"",
+          ""Tags"": []
+        },
+        {
+          ""WorldId"": 82,
+          ""Name"": ""pub:live-na"",
+          ""Url"": ""https://us-lobby.nikke-kr.com/"",
+          ""Description"": ""NA"",
+          ""Tags"": []
+        },
+        {
+          ""WorldId"": 83,
+          ""Name"": ""pub:live-kr"",
+          ""Url"": ""https://kr-lobby.nikke-kr.com/"",
+          ""Description"": ""KOREA"",
+          ""Tags"": []
+        },
+        {
+          ""WorldId"": 84,
+          ""Name"": ""pub:live-global"",
           ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": {ServerName},
+          ""Description"": ""GLOBAL"",
+          ""Tags"": []
+        },
+        {
+          ""WorldId"": 85,
+          ""Name"": ""pub:live-sea"",
+          ""Url"": ""https://sea-lobby.nikke-kr.com/"",
+          ""Description"": ""SEA"",
           ""Tags"": []
         }
       ]
     },
     {
       ""VersionRange"": {
-        ""From"": ""{GameMinVer}"",
-        ""To"": ""{GameMaxVer}"",
+        ""From"": ""124.6.10"",
+        ""To"": ""124.6.11"",
         ""PackageName"": ""com.gamamobi.nikke""
-    },
- ""Route"": [
+      },
+      ""Route"": [
         {
-          ""WorldId"": 1001,
-          ""Name"": ""pub:priv"",
-          ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": {ServerName},
+          ""WorldId"": 91,
+          ""Name"": ""pub:live-hmt"",
+          ""Url"": ""https://hmt-lobby.nikke-kr.com/"",
+          ""Description"": ""HMT"",
           ""Tags"": []
         }
       ]
