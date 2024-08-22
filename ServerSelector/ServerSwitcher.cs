@@ -16,6 +16,7 @@ namespace ServerSelector
         {
             string sodiumLib = AppDomain.CurrentDomain.BaseDirectory + "sodium.dll";
             string gameSodium = gamePath + "/nikke_Data/Plugins/x86_64/sodium.dll";
+            string gameAssembly = gamePath + "/GameAssembly.dll";
             string sodiumBackup = gameSodium + ".bak";
             string hostsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts");
             var CAcert = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
@@ -69,6 +70,37 @@ namespace ServerSelector
                     throw new Exception("sodium backup does not exist");
                 }
                 File.Copy(sodiumBackup, gameSodium, true);
+
+                // revert gameassembly changes
+                var gameAssemblyBytes = File.ReadAllBytes(gameAssembly);
+                for (int i = 0x5877FFB; i < gameAssemblyBytes.Length; i++)
+                {
+                    if (gameAssemblyBytes[i] == 0xE8 &&
+           gameAssemblyBytes[i + 1] == 0xF0 &&
+           gameAssemblyBytes[i + 2] == 0x9D &&
+           gameAssemblyBytes[i + 3] == 0x43 &&
+           gameAssemblyBytes[i + 4] == 0xFB)
+                    {
+                        // was not patched
+                        break;
+                    }
+
+                    if (gameAssemblyBytes[i] == 0xb0 &&
+                        gameAssemblyBytes[i + 1] == 1 &&
+                        gameAssemblyBytes[i + 2] == 0x90 &&
+                        gameAssemblyBytes[i + 3] == 0x90 &&
+                        gameAssemblyBytes[i + 4] == 0x90)
+                    {
+                        gameAssemblyBytes[i] = 0xE8;
+                        gameAssemblyBytes[i + 1] = 0xF0;
+                        gameAssemblyBytes[i + 2] = 0x9D;
+                        gameAssemblyBytes[i + 3] = 0x43;
+                        gameAssemblyBytes[i + 4] = 0xFB;
+
+                        File.WriteAllBytes(gameAssembly, gameAssemblyBytes);
+                        break;
+                    }
+                }
 
                 var certList1 = File.ReadAllText(launcherCertList);
                 File.WriteAllText(launcherCertList, certList1.Substring(0, certList1.IndexOf("Good SSL Ca")));
@@ -128,6 +160,38 @@ namespace ServerSelector
 
                 // write new sodium library
                 File.WriteAllBytes(gameSodium, File.ReadAllBytes(sodiumLib));
+
+                // patch gameassembly to remove sodium IntegrityUtility Check. Was added in v124, note that this will need to be updated each game version! Thanks TenCent or ShiftDown!
+                var gameAssemblyBytes = File.ReadAllBytes(gameAssembly);
+                for (int i = 0x5877FFB; i < gameAssemblyBytes.Length; i++)
+                {
+                    if (gameAssemblyBytes[i] == 0xE8 &&
+                        gameAssemblyBytes[i + 1] == 0xF0 &&
+                        gameAssemblyBytes[i + 2] == 0x9D &&
+                        gameAssemblyBytes[i + 3] == 0x43 &&
+                        gameAssemblyBytes[i + 4] == 0xFB)
+                    {
+                        gameAssemblyBytes[i] = 0xb0; // MOV ax, 1
+                        gameAssemblyBytes[i + 1] = 0x01;
+                        gameAssemblyBytes[i + 2] = 0x90; // NOP
+                        gameAssemblyBytes[i + 3] = 0x90; // NOP
+                        gameAssemblyBytes[i + 4] = 0x90; // NOP
+
+                        File.WriteAllBytes(gameAssembly, gameAssemblyBytes);
+                        break;
+                    }
+
+                    if (gameAssemblyBytes[i] == 0xb0 &&
+                        gameAssemblyBytes[i + 1] == 1 &&
+                        gameAssemblyBytes[i + 2] == 0x90 &&
+                        gameAssemblyBytes[i + 3] == 0x90 &&
+                        gameAssemblyBytes[i + 4] == 0x90)
+                    {
+                        // was already patched
+                        break;
+                    }
+                }
+
 
 
                 // update launcher/game ca cert list
