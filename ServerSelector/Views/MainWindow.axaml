@@ -4,9 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:ServerSelector.Views"
-        mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="200"
+        mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="250"
         x:Class="ServerSelector.Views.MainWindow"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Server Switcher Utility" Width="370" Height="210" CanResize="False">
+        Title="Server Switcher" Width="370" Height="260" CanResize="False">
         <views:MainView />
 </Window>

@@ -3,9 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:ServerSelector.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="200"
+             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="250"
              x:Class="ServerSelector.Views.MainView"
              x:DataType="vm:MainViewModel"
+			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 >
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -13,46 +14,93 @@
 		<vm:MainViewModel />
 	</Design.DataContext>
 
-	<Grid Margin="5">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="auto"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-		</Grid.ColumnDefinitions>
+	<Grid>
+		<TabControl x:Name="MainUI">
+			<TabItem Header="PC" x:Name="TabPc">
+				<Grid Margin="5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"></ColumnDefinition>
+						<ColumnDefinition Width="*"></ColumnDefinition>
+						<ColumnDefinition Width="auto"></ColumnDefinition>
+					</Grid.ColumnDefinitions>
 
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"></RowDefinition>
-			<RowDefinition Height="5"></RowDefinition>
-			<RowDefinition Height="auto"></RowDefinition>
-			<RowDefinition Height="5"></RowDefinition>
-			<RowDefinition Height="auto"></RowDefinition>
-			<RowDefinition Height="5"></RowDefinition>
-			<RowDefinition Height="auto"></RowDefinition>
-			<RowDefinition Height="5"></RowDefinition>
-			<RowDefinition Height="auto"></RowDefinition>
-		</Grid.RowDefinitions>
-
-
-		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
-		<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1">C:\NIKKE\NIKKE\game</TextBox>
-
-		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0">Launcher path: </TextBlock>
-		<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1">C:\NIKKE\Launcher</TextBox>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+					</Grid.RowDefinitions>
 
 
-		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
+					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
+					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1">C:\NIKKE\NIKKE\game</TextBox>
+					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Content="..." Click="BtnSelectGamePath_Click"></Button>
 
-		<ComboBox SelectedIndex="0" x:Name="CmbServerSelection" Grid.Row="4" Grid.Column="1" SelectionChanged="CmbServerSelection_SelectionChanged">
-			<ComboBox.Items>
-				<ComboBoxItem>Official</ComboBoxItem>
-				<ComboBoxItem>Local</ComboBoxItem>
-			</ComboBox.Items>
-		</ComboBox>
+					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0">Launcher path: </TextBlock>
+					<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1">C:\NIKKE\Launcher</TextBox>
+					<Button x:Name="btnSelectLauncherPath" Grid.Row="2" Grid.Column="2" Content="..."  Click="BtnSelectLauncherPath_Click"></Button>
 
-		<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0">IP: </TextBlock>
-		<TextBox x:Name="TxtIpAddress" Grid.Row="6" Grid.Column="1">127.0.0.1</TextBox>
 
-	
-		<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="8" Grid.Column="1">Save</Button>
+					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
 
+					<ComboBox SelectedIndex="0" x:Name="CmbServerSelection" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" SelectionChanged="CmbServerSelection_SelectionChanged" HorizontalAlignment="Stretch">
+						<ComboBox.Items>
+							<ComboBoxItem>Official</ComboBoxItem>
+							<ComboBoxItem>Local</ComboBoxItem>
+						</ComboBox.Items>
+					</ComboBox>
+
+					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0">IP: </TextBlock>
+					<TextBox x:Name="TxtIpAddress" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2">127.0.0.1</TextBox>
+
+					<TextBlock  Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="5" x:Name="LblStatus">Status: OK</TextBlock>
+					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent">Save</Button>
+				</Grid>
+			</TabItem>
+			<TabItem Header="Android">
+				<Grid Margin="5">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"></ColumnDefinition>
+						<ColumnDefinition Width="*"></ColumnDefinition>
+						<ColumnDefinition Width="auto"></ColumnDefinition>
+					</Grid.ColumnDefinitions>
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
+					</Grid.RowDefinitions>
+
+
+					<TextBlock Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Margin="5">APK path: </TextBlock>
+					<TextBox x:Name="txtApkPath" Grid.Row="0" Grid.Column="1"></TextBox>
+					<Button x:Name="btnSelectApkPath" Grid.Row="0" Grid.Column="2" Content="..."></Button>
+
+
+					<TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5">IP: </TextBlock>
+					<TextBox x:Name="TxtAndroidIpAddress" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">127.0.0.1</TextBox>
+
+					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent" IsEnabled="False">Coming soon!</Button>
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+		<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="LoadingUI" IsVisible="False">
+			<ui:ProgressRing Height="48" Width="48"></ui:ProgressRing>
+			<TextBlock>Please wait...</TextBlock>
+		</StackPanel>
 	</Grid>
 </UserControl>

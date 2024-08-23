@@ -1,8 +1,11 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Platform.Storage;
+using FluentAvalonia.UI.Controls;
 using System;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace ServerSelector.Views;
 
@@ -14,6 +17,18 @@ public partial class MainView : UserControl
         CmbServerSelection.SelectedIndex = ServerSwitcher.IsUsingOfficalServer() ? 0 : 1;
 
         TxtIpAddress.IsEnabled = !ServerSwitcher.IsUsingOfficalServer();
+
+        if (OperatingSystem.IsWindows() && !new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+        {
+            TabPc.Content = new TextBlock()
+            {
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                Text = "Administrator privileges are required to change servers."
+            };
+        }
+
+        LblStatus.Text = "Status: " + ServerSwitcher.CheckIntegrity();
     }
 
     private void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -58,6 +73,8 @@ public partial class MainView : UserControl
         }
         if (TxtIpAddress.Text == null) TxtIpAddress.Text = "";
 
+        MainUI.IsVisible = false;
+        LoadingUI.IsVisible = true;
 
         try
         {
@@ -67,6 +84,9 @@ public partial class MainView : UserControl
         {
             ShowWarningMsg("Failed to save configuration: " + ex.ToString(), "Error");
         }
+
+        LoadingUI.IsVisible = false;
+        MainUI.IsVisible = true;
     }
 
     private void CmbServerSelection_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -75,13 +95,69 @@ public partial class MainView : UserControl
             TxtIpAddress.IsEnabled = CmbServerSelection.SelectedIndex == 1;
     }
 
-    // for some stupid reason avalonia does not support message boxes.
-
-    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    public static extern int MessageBox(IntPtr hWnd, String text, String caption, uint type);
-
     public static void ShowWarningMsg(string text, string title)
     {
-        MessageBox(IntPtr.Zero, text, title, 0x00000030);
+        ContentDialog dlg = new ContentDialog() { Title = title, Content = text, PrimaryButtonText = "OK" };
+        dlg.ShowAsync();
     }
+
+    private async void BtnSelectGamePath_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+
+        if (topLevel != null)
+        {
+            // Start async operation to open the dialog.
+            var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = "Select game path (with game executable)",
+                AllowMultiple = false
+            });
+
+            if (files.Count >= 1)
+            {
+                txtGamePath.Text = files[0].TryGetLocalPath();
+
+                // validate if the folder has game exe
+                if (!string.IsNullOrEmpty(txtGamePath.Text))
+                {
+                    if (!File.Exists(Path.Combine(txtGamePath.Text, "nikke.exe")))
+                    {
+                        ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the launcher folder", "Error");
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    private async void BtnSelectLauncherPath_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+
+        if (topLevel != null)
+        {
+            // Start async operation to open the dialog.
+            var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = "Select launcher path",
+                AllowMultiple = false
+            });
+
+            if (files.Count >= 1)
+            {
+                txtLauncherPath.Text = files[0].TryGetLocalPath();
+
+                // validate if the folder has game exe
+                if (!string.IsNullOrEmpty(txtLauncherPath.Text))
+                {
+                    if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
+                    {
+                        ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
 }
