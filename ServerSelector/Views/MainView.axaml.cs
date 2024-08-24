@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -17,6 +18,7 @@ public partial class MainView : UserControl
         CmbServerSelection.SelectedIndex = ServerSwitcher.IsUsingOfficalServer() ? 0 : 1;
 
         TxtIpAddress.IsEnabled = !ServerSwitcher.IsUsingOfficalServer();
+        ChkOffline.IsChecked = ServerSwitcher.IsOffline();
 
         if (OperatingSystem.IsWindows() && !new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
         {
@@ -28,40 +30,108 @@ public partial class MainView : UserControl
             };
         }
 
-        LblStatus.Text = "Status: " + ServerSwitcher.CheckIntegrity();
+        UpdateIntegrityLabel();
     }
 
-    private void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    private void SetGamePathValid(bool isValid)
     {
-        if (string.IsNullOrEmpty(txtGamePath.Text) || string.IsNullOrEmpty(txtLauncherPath.Text))
+        if (isValid)
         {
-            ShowWarningMsg("Game path / launcher path is empty", "Error");
-            return;
+            txtGamePath.BorderBrush = null;
+        }
+        else
+        {
+            txtGamePath.BorderBrush = new SolidColorBrush(Color.FromRgb(255,0,0));
+        }
+    }
+    private void SetLauncherPathValid(bool isValid)
+    {
+        if (isValid)
+        {
+            txtLauncherPath.BorderBrush = null;
+        }
+        else
+        {
+            txtLauncherPath.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+        }
+    }
+
+    private bool ValidatePaths(bool showMessage)
+    {
+        if (string.IsNullOrEmpty(txtGamePath.Text))
+        {
+            SetGamePathValid(false);
+            if (showMessage)
+                ShowWarningMsg("Game path is blank", "Error");
+            return false;
+        }
+        if (string.IsNullOrEmpty(txtLauncherPath.Text))
+        {
+            SetLauncherPathValid(false);
+            if (showMessage)
+                ShowWarningMsg("Launcher path is blank", "Error");
+            return false;
         }
 
         if (!Directory.Exists(txtGamePath.Text))
         {
-            ShowWarningMsg("Game path folder does not exist", "Error");
-            return;
+            SetGamePathValid(false);
+            if (showMessage)
+                ShowWarningMsg("Game path does not exist", "Error");
+            return false;
         }
 
         if (!Directory.Exists(txtLauncherPath.Text))
         {
-            ShowWarningMsg("Launcher folder does not exist", "Error");
-            return;
+            SetLauncherPathValid(false);
+            if (showMessage)
+                ShowWarningMsg("Launcher path does not exist", "Error");
+            return false;
         }
 
         if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
         {
-            ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
-            return;
+            SetGamePathValid(false);
+            if (showMessage)
+                ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
+
+            return false;
         }
 
-        if (!File.Exists(Path.Combine(txtGamePath.Text, "nikke.exe")))
-        {
-            ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the launcher folder", "Error");
+        SetGamePathValid(true);
+        SetLauncherPathValid(true);
+
+        return true;
+    }
+
+    private async void UpdateIntegrityLabel()
+    {
+        if (!ValidatePaths(false) || txtGamePath.Text == null || txtLauncherPath.Text == null)
             return;
+
+        SetLoadingScreenVisible(true);
+        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(txtGamePath.Text, txtLauncherPath.Text);
+        SetLoadingScreenVisible(false);
+    }
+
+    private void SetLoadingScreenVisible(bool visible)
+    {
+        if (visible)
+        {
+            MainUI.IsVisible = false;
+            LoadingUI.IsVisible = true;
         }
+        else
+        {
+            LoadingUI.IsVisible = false;
+            MainUI.IsVisible = true;
+        }
+    }
+
+    private async void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (!ValidatePaths(true) || txtGamePath.Text == null || txtLauncherPath.Text == null)
+            return;
 
         if (CmbServerSelection.SelectedIndex == 1)
         {
@@ -73,26 +143,27 @@ public partial class MainView : UserControl
         }
         if (TxtIpAddress.Text == null) TxtIpAddress.Text = "";
 
-        MainUI.IsVisible = false;
-        LoadingUI.IsVisible = true;
-
+        SetLoadingScreenVisible(true);
         try
         {
-            ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text, TxtIpAddress.Text);
+            await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
         }
         catch (Exception ex)
         {
             ShowWarningMsg("Failed to save configuration: " + ex.ToString(), "Error");
         }
-
-        LoadingUI.IsVisible = false;
-        MainUI.IsVisible = true;
+        UpdateIntegrityLabel();
+        SetLoadingScreenVisible(false);
     }
 
     private void CmbServerSelection_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (CmbServerSelection != null)
+        {
             TxtIpAddress.IsEnabled = CmbServerSelection.SelectedIndex == 1;
+            ChkOffline.IsEnabled = CmbServerSelection.SelectedIndex == 1;
+            LblIp.IsEnabled = CmbServerSelection.SelectedIndex == 1;
+        }
     }
 
     public static void ShowWarningMsg(string text, string title)
@@ -127,6 +198,7 @@ public partial class MainView : UserControl
                         return;
                     }
                 }
+                UpdateIntegrityLabel();
             }
         }
     }
@@ -156,8 +228,16 @@ public partial class MainView : UserControl
                         return;
                     }
                 }
+                UpdateIntegrityLabel();
             }
         }
     }
-
+    private void GamePath_TextChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    {
+        UpdateIntegrityLabel();
+    }
+    private void LauncherPath_TextChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    {
+        UpdateIntegrityLabel();
+    }
 }

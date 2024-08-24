@@ -3,17 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:ServerSelector.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="250"
+             mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="300"
              x:Class="ServerSelector.Views.MainView"
-             x:DataType="vm:MainViewModel"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 >
-	<Design.DataContext>
-		<!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-		<vm:MainViewModel />
-	</Design.DataContext>
-
 	<Grid>
 		<TabControl x:Name="MainUI">
 			<TabItem Header="PC" x:Name="TabPc">
@@ -34,15 +27,17 @@
 						<RowDefinition Height="auto"></RowDefinition>
 						<RowDefinition Height="5"></RowDefinition>
 						<RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="5"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
 					</Grid.RowDefinitions>
 
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
-					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1">C:\NIKKE\NIKKE\game</TextBox>
+					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged">C:\NIKKE\NIKKE\game</TextBox>
 					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Content="..." Click="BtnSelectGamePath_Click"></Button>
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0">Launcher path: </TextBlock>
-					<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1">C:\NIKKE\Launcher</TextBox>
+					<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1" TextChanged="LauncherPath_TextChanged">C:\NIKKE\Launcher</TextBox>
 					<Button x:Name="btnSelectLauncherPath" Grid.Row="2" Grid.Column="2" Content="..."  Click="BtnSelectLauncherPath_Click"></Button>
 
 
@@ -55,11 +50,13 @@
 						</ComboBox.Items>
 					</ComboBox>
 
-					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0">IP: </TextBlock>
+					<TextBlock x:Name="LblIp" VerticalAlignment="Center" Margin="5" Grid.Row="6" Grid.Column="0">IP: </TextBlock>
 					<TextBox x:Name="TxtIpAddress" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2">127.0.0.1</TextBox>
 
-					<TextBlock  Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="5" x:Name="LblStatus">Status: OK</TextBlock>
-					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent">Save</Button>
+					<CheckBox x:Name="ChkOffline" VerticalAlignment="Center" Margin="5" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" ToolTip.Tip="Enables the ability to run the game offline by making the game download the assets from the server, and not the official server. This only works if enableOffline is enabled on the server. Please note that this should not be enabled on public servers due to copyright issues.">Enable offline mode</CheckBox>
+
+					<TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Margin="5" x:Name="LblStatus" ToolTip.Tip="Shows the status of the patches to the game. All patches are reverted when server is set to official.">Status: OK</TextBlock>
+					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent">Save</Button>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Android">

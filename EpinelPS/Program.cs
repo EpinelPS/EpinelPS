@@ -13,6 +13,8 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using EmbedIO.Files;
+using Paseto;
+using Paseto.Builder;
 
 namespace EpinelPS
 {
