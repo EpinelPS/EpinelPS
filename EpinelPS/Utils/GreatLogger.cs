@@ -2,9 +2,9 @@
 
 namespace EpinelPS.Utils
 {
-    public class GreatLogger : ILogger
+    public class GreatLogger : Swan.Logging.ILogger
     {
-        public LogLevel LogLevel => LogLevel.Info;
+        public Swan.Logging.LogLevel LogLevel => Swan.Logging.LogLevel.Info;
         static readonly object lockObject = new();
         public void Log(LogMessageReceivedEventArgs logEvent)
         {
@@ -44,13 +44,13 @@ namespace EpinelPS.Utils
                 return ConsoleColor.DarkGreen;
             return logEvent.MessageType switch
             {
-                LogLevel.None => ConsoleColor.White,
-                LogLevel.Trace => ConsoleColor.Gray,
-                LogLevel.Debug => ConsoleColor.Gray,
-                LogLevel.Info => ConsoleColor.Gray,
-                LogLevel.Warning => ConsoleColor.Yellow,
-                LogLevel.Error => ConsoleColor.Red,
-                LogLevel.Fatal => ConsoleColor.Red,
+                Swan.Logging.LogLevel.None => ConsoleColor.White,
+                Swan.Logging.LogLevel.Trace => ConsoleColor.Gray,
+                Swan.Logging.LogLevel.Debug => ConsoleColor.Gray,
+                Swan.Logging.LogLevel.Info => ConsoleColor.Gray,
+                Swan.Logging.LogLevel.Warning => ConsoleColor.Yellow,
+                Swan.Logging.LogLevel.Error => ConsoleColor.Red,
+                Swan.Logging.LogLevel.Fatal => ConsoleColor.Red,
                 _ => ConsoleColor.White,
             };
         }

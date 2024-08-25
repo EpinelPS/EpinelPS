@@ -1,26 +1,21 @@
-﻿using EmbedIO;
-using EmbedIO.Actions;
-using EmbedIO.WebApi;
-using Newtonsoft.Json;
-using EpinelPS.Database;
-using EpinelPS.IntlServer;
+﻿using EpinelPS.Database;
 using EpinelPS.LobbyServer;
 using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.Options;
 using Swan.Logging;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using EmbedIO.Files;
-using Paseto;
-using Paseto.Builder;
 
 namespace EpinelPS
 {
     internal class Program
     {
-        static async Task Main()
+        static async Task Main(string[] args)
         {
             try
             {
@@ -37,8 +32,128 @@ namespace EpinelPS
                 Logger.Info("Starting server");
                 new Thread(() =>
                 {
-                    var server = CreateWebServer();
-                    server.RunAsync();
+                    var builder = WebApplication.CreateBuilder(args);
+
+                    // Configure HTTPS
+                    var httpsConnectionAdapterOptions = new HttpsConnectionAdapterOptions
+                    {
+                        SslProtocols = System.Security.Authentication.SslProtocols.Tls12,
+                        ClientCertificateMode = ClientCertificateMode.AllowCertificate,
+                        ServerCertificate = new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx")
+                    };
+
+                    builder.WebHost.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Listen(IPAddress.Any, 443,
+                            listenOptions =>
+                            {
+                                listenOptions.UseHttps(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx", "");
+                            });
+
+                        // TODO
+                        serverOptions.AllowSynchronousIO = true;
+                    });
+
+                    // Add services to the container.
+
+                    builder.Services.AddControllers();
+                    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+                    builder.Services.AddEndpointsApiExplorer();
+                    builder.Services.AddRouting();
+
+                    var app = builder.Build();
+
+                    app.UseDefaultFiles();
+                    app.UseStaticFiles();
+
+                    // Configure the HTTP request pipeline.
+                    if (app.Environment.IsDevelopment())
+                    {
+
+                    }
+
+                    app.UseHttpsRedirection();
+
+                    app.UseAuthorization();
+                    app.UseHttpsRedirection();
+                    app.UseRouting();
+
+                    app.MapControllers();
+
+                    app.MapPost("/$batch", HandleBatchRequests);
+                    app.MapGet("/prdenv/{**all}", AssetDownloadUtil.HandleReq);
+                    app.MapGet("/PC/{**all}", AssetDownloadUtil.HandleReq);
+                    app.MapGet("/media/{**all}", AssetDownloadUtil.HandleReq);
+
+                    // NOTE: pub prefixes shows public (production server), local is local server (does not have any effect), dev is development server, etc.
+                    // It does not have any effect, except for the publisher server, which adds a watermark?
+
+                    app.MapGet("/route/*/route_config.json", () => @"{
+          ""Config"": [
+            {
+              ""VersionRange"": {
+                ""From"": ""124.6.10"",
+                ""To"": ""124.6.11"",
+                ""PackageName"": ""com.proximabeta.nikke""
+              },
+              ""Route"": [
+                {
+                  ""WorldId"": 81,
+                  ""Name"": ""pub:live-jp"",
+                  ""Url"": ""https://jp-lobby.nikke-kr.com/"",
+                  ""Description"": ""JAPAN"",
+                  ""Tags"": []
+                },
+                {
+                  ""WorldId"": 82,
+                  ""Name"": ""pub:live-na"",
+                  ""Url"": ""https://us-lobby.nikke-kr.com/"",
+                  ""Description"": ""NA"",
+                  ""Tags"": []
+                },
+                {
+                  ""WorldId"": 83,
+                  ""Name"": ""pub:live-kr"",
+                  ""Url"": ""https://kr-lobby.nikke-kr.com/"",
+                  ""Description"": ""KOREA"",
+                  ""Tags"": []
+                },
+                {
+                  ""WorldId"": 84,
+                  ""Name"": ""pub:live-global"",
+                  ""Url"": ""https://global-lobby.nikke-kr.com/"",
+                  ""Description"": ""GLOBAL"",
+                  ""Tags"": []
+                },
+                {
+                  ""WorldId"": 85,
+                  ""Name"": ""pub:live-sea"",
+                  ""Url"": ""https://sea-lobby.nikke-kr.com/"",
+                  ""Description"": ""SEA"",
+                  ""Tags"": []
+                }
+              ]
+            },
+            {
+              ""VersionRange"": {
+                ""From"": ""124.6.10"",
+                ""To"": ""124.6.11"",
+                ""PackageName"": ""com.gamamobi.nikke""
+              },
+              ""Route"": [
+                {
+                  ""WorldId"": 91,
+                  ""Name"": ""pub:live-hmt"",
+                  ""Url"": ""https://hmt-lobby.nikke-kr.com/"",
+                  ""Description"": ""HMT"",
+                  ""Tags"": []
+                }
+              ]
+            }
+          ]
+        }");
+
+                    app.Run();
                 }).Start();
 
                 CliLoop();
@@ -238,90 +353,8 @@ namespace EpinelPS
         }
         private static string LauncherEndpoint = Encoding.UTF8.GetString(Convert.FromBase64String("L25pa2tlX2xhdW5jaGVy"));
 
-        private static FileModule AssetModule;
-        private static WebServer CreateWebServer()
-        {
-            var cert = new X509Certificate2(new X509Certificate(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx"));
 
-            var server = new WebServer(o => o
-                    .WithUrlPrefixes("https://*:443")
-                    .WithMode(HttpListenerMode.EmbedIO).WithAutoLoadCertificate().WithCertificate(cert))
-                // First, we will configure our web server by adding Modules.
-                .WithLocalSessionManager()
-                .WithModule(new ActionModule("/route/", HttpVerbs.Any, HandleRouteData))
-                .WithModule(new ActionModule("/v1/", HttpVerbs.Any, LobbyHandler.DispatchSingle))
-                .WithModule(new ActionModule("/v2/", HttpVerbs.Any, IntlHandler.Handle))
-                .WithModule(new ActionModule("/account/", HttpVerbs.Any, IntlHandler.Handle))
-                .WithModule(new ActionModule("/data/", HttpVerbs.Any, HandleDataEndpoint))
-                .WithModule(new ActionModule("/$batch", HttpVerbs.Any, HandleBatchRequests))
-                .WithModule(new ActionModule("/api/v1/", HttpVerbs.Any, IntlHandler.Handle))
-                .WithStaticFolder(LauncherEndpoint, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "launcher"), true)
-                .WithStaticFolder("/admin/assets/", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "assets"), true)
-                .WithModule(new ActionModule("/admin", HttpVerbs.Any, HandleAdminRequest))
-                .WithWebApi("/adminapi", m => m.WithController(typeof(AdminApiController)))
-                .WithModule(new ActionModule("/", HttpVerbs.Any, HandleAsset));
-
-
-            FileSystemProvider fileSystemProvider = new FileSystemProvider(AppDomain.CurrentDomain.BaseDirectory + "cache/", false);
-            AssetModule = new FileModule("/", fileSystemProvider);
-            AssetModule.Start(CancellationToken.None);
-            return server;
-        }
-
-        private static async Task HandleAdminRequest(IHttpContext context)
-        {
-            //check if user is logged in
-            if (context.Request.Cookies["token"] == null && context.Request.Url.PathAndQuery != "/api/login")
-            {
-                context.Redirect("/adminapi/login");
-                return;
-            }
-
-            //Check if authenticated correctly
-            User? currentUser = null;
-            if (context.Request.Url.PathAndQuery != "/api/login")
-            {
-                //verify token
-                foreach (var item in AdminApiController.AdminAuthTokens)
-                {
-                    if (item.Key == context.Request.Cookies["token"].Value)
-                    {
-                        currentUser = item.Value;
-                    }
-                }
-            }
-            if (currentUser == null)
-            {
-                context.Redirect("/adminapi/login");
-                return;
-            }
-
-            if (context.Request.Url.PathAndQuery == "/admin/")
-            {
-                context.Redirect("/admin/dashboard");
-            }
-            else if (context.Request.Url.PathAndQuery == "/admin/dashboard")
-            {
-                await context.SendStringAsync(ProcessAdminPage("dashbrd.html", currentUser), "text/html", Encoding.Unicode);
-            }
-            else
-            {
-                context.Response.StatusCode = 404;
-                await context.SendStringAsync("404 not found", "text/html", Encoding.Unicode);
-            }
-        }
-
-        private static string ProcessAdminPage(string pg, User? currentUser)
-        {
-            var pgContent = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", pg));
-            var nav = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "www", "admin", "nav.html"));
-
-            //navbar
-            pgContent = pgContent.Replace("{{navbar}}", nav);
-
-            return pgContent;
-        }
-        private static async Task HandleBatchRequests(IHttpContext ctx)
+        private static async Task HandleBatchRequests(HttpContext ctx)
         {
             var theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
 
@@ -330,7 +363,7 @@ namespace EpinelPS
             using MemoryStream streamforparser = new(theBytes.Contents);
             StreamContent content = new(streamforparser);
             content.Headers.Remove("Content-Type");
-            content.Headers.TryAddWithoutValidation("Content-Type", ctx.Request.Headers["Content-Type"]);
+            content.Headers.TryAddWithoutValidation("Content-Type", (string?)ctx.Request.Headers["Content-Type"]);
 
             // we have the form contents, 
             var multipart = await content.ReadAsMultipartAsync();
@@ -356,21 +389,21 @@ namespace EpinelPS
                     List<byte> ResponseWithBytes =
 [
     .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
-                    .. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
-                    .. Encoding.UTF8.GetBytes($"Content-Length: {res.Length}\r\n"),
-                    .. Encoding.UTF8.GetBytes($"\r\n"),
-                    .. res,
-                ];
+                            .. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
+                            .. Encoding.UTF8.GetBytes($"Content-Length: {res.Length}\r\n"),
+                            .. Encoding.UTF8.GetBytes($"\r\n"),
+                            .. res,
+                        ];
                     response.AddRange([.. ResponseWithBytes]);
                 }
                 else
                 {
                     List<byte> ResponseWithBytes =
 [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
-                    //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
-                    .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
-                    .. Encoding.UTF8.GetBytes($"\r\n"),
-                ];
+                            //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
+                            .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
+                            .. Encoding.UTF8.GetBytes($"\r\n"),
+                        ];
                 }
 
                 // add boundary, also include http newline if there is binary content
@@ -384,135 +417,23 @@ namespace EpinelPS
 
             var responseBytes = response.ToArray();
             ctx.Response.ContentType = "multipart/mixed; boundary=\"f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\"";
-            ctx.Response.OutputStream.Write(responseBytes);
+            ctx.Response.Body.Write(responseBytes);
         }
-        private static async Task HandleDataEndpoint(IHttpContext ctx)
-        {
-            // this endpoint does not appear to be needed, it is used for telemetry
-            if (ctx.RequestedPath == "/v1/dsr/query")
-            {
-                await WriteJsonStringAsync(ctx, "{\"ret\":0,\"msg\":\"\",\"status\":0,\"created_at\":\"0\",\"target_destroy_at\":\"0\",\"destroyed_at\":\"0\",\"err_code\":0,\"seq\":\"1\"}");
-            }
-            else
-            {
-                ctx.Response.StatusCode = 404;
-            }
-        }
+        //private static async Task HandleDataEndpoint(IHttpContext ctx)
+        //{
+        //     //this endpoint does not appear to be needed, it is used for telemetry
+        //    if (ctx.RequestedPath == "/v1/dsr/query")
+        //    {
+        //        await WriteJsonStringAsync(ctx, "{\"ret\":0,\"msg\":\"\",\"status\":0,\"created_at\":\"0\",\"target_destroy_at\":\"0\",\"destroyed_at\":\"0\",\"err_code\":0,\"seq\":\"1\"}");
+        //    }
+        //    else
+        //    {
+        //        ctx.Response.StatusCode = 404;
+        //    }
+        //}
         public static string GetCachePathForPath(string path)
         {
             return AppDomain.CurrentDomain.BaseDirectory + "cache/" + path;
-        }
-        private static async Task HandleAsset(IHttpContext ctx)
-        {
-            if (!ctx.Request.RawUrl.StartsWith("/PC") && !ctx.Request.RawUrl.StartsWith("/media") && !ctx.Request.RawUrl.StartsWith("/prdenv"))
-            {
-                ctx.Response.StatusCode = 404;
-                return;
-            }
-            string? targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(ctx.Request.RawUrl, ctx.CancellationToken);
-
-            if (targetFile == null)
-            {
-                Logger.Error("Download failed: " + ctx.RequestedPath);
-                ctx.Response.StatusCode = 404;
-                return;
-            }
-
-            // without this, content-type will be video/mp4; charset=utf-8 which is wrong
-            ctx.Response.ContentEncoding = null;
-            
-
-            await AssetModule.HandleRequestAsync(ctx);
-        }
-        private static async Task HandleRouteData(IHttpContext ctx)
-        {
-            if (ctx.RequestedPath.Contains("/route_config.json"))
-            {
-                // NOTE: pub prefixes shows public (production server), local is local server (does not have any effect), dev is development server, etc.
-                // It does not have any effect, except for the publisher server, which adds a watermark?
-                var response = @"{
-  ""Config"": [
-    {
-      ""VersionRange"": {
-        ""From"": ""124.6.10"",
-        ""To"": ""124.6.11"",
-        ""PackageName"": ""com.proximabeta.nikke""
-      },
-      ""Route"": [
-        {
-          ""WorldId"": 81,
-          ""Name"": ""pub:live-jp"",
-          ""Url"": ""https://jp-lobby.nikke-kr.com/"",
-          ""Description"": ""JAPAN"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 82,
-          ""Name"": ""pub:live-na"",
-          ""Url"": ""https://us-lobby.nikke-kr.com/"",
-          ""Description"": ""NA"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 83,
-          ""Name"": ""pub:live-kr"",
-          ""Url"": ""https://kr-lobby.nikke-kr.com/"",
-          ""Description"": ""KOREA"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 84,
-          ""Name"": ""pub:live-global"",
-          ""Url"": ""https://global-lobby.nikke-kr.com/"",
-          ""Description"": ""GLOBAL"",
-          ""Tags"": []
-        },
-        {
-          ""WorldId"": 85,
-          ""Name"": ""pub:live-sea"",
-          ""Url"": ""https://sea-lobby.nikke-kr.com/"",
-          ""Description"": ""SEA"",
-          ""Tags"": []
-        }
-      ]
-    },
-    {
-      ""VersionRange"": {
-        ""From"": ""124.6.10"",
-        ""To"": ""124.6.11"",
-        ""PackageName"": ""com.gamamobi.nikke""
-      },
-      ""Route"": [
-        {
-          ""WorldId"": 91,
-          ""Name"": ""pub:live-hmt"",
-          ""Url"": ""https://hmt-lobby.nikke-kr.com/"",
-          ""Description"": ""HMT"",
-          ""Tags"": []
-        }
-      ]
-    }
-  ]
-}";
-                response = response.Replace("{GameMinVer}", GameConfig.Root.GameMinVer);
-                response = response.Replace("{GameMaxVer}", GameConfig.Root.GameMaxVer);
-                response = response.Replace("{ServerName}", JsonConvert.ToString(JsonDb.Instance.ServerName));
-                await ctx.SendStringAsync(response, "application/json", Encoding.Default);
-            }
-            else
-            {
-                Console.WriteLine("ROUTE - Unknown: " + ctx.RequestedPath);
-                ctx.Response.StatusCode = 404;
-            }
-        }
-        private static async Task WriteJsonStringAsync(IHttpContext ctx, string data)
-        {
-            var bt = Encoding.UTF8.GetBytes(data);
-            ctx.Response.ContentEncoding = null;
-            ctx.Response.ContentType = "application/json";
-            ctx.Response.ContentLength64 = bt.Length;
-            await ctx.Response.OutputStream.WriteAsync(bt, ctx.CancellationToken);
-            await ctx.Response.OutputStream.FlushAsync();
         }
         private static (string key, string value) GetHeader(string line)
         {

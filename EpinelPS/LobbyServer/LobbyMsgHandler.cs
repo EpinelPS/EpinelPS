@@ -1,5 +1,4 @@
-﻿using EmbedIO;
-using Google.Protobuf;
+﻿using Google.Protobuf;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -7,7 +6,7 @@ namespace EpinelPS.LobbyServer
 {
     public abstract class LobbyMsgHandler
     {
-        protected IHttpContext? ctx;
+        protected HttpContext? ctx;
         protected ulong UserId;
         protected string UsedAuthToken = "";
         public byte[] ReturnBytes = [];
@@ -25,12 +24,12 @@ namespace EpinelPS.LobbyServer
             ctx = null;
         }
 
-        public async Task HandleAsync(IHttpContext ctx)
+        public async Task HandleAsync(HttpContext ctx)
         {
             this.ctx = ctx;
-            if (ctx.Request.Headers.AllKeys.Contains("Authorization"))
+            if (ctx.Request.Headers.Keys.Contains("Authorization"))
             {
-                var token = ctx.Request.Headers["Authorization"];
+                var token = ctx.Request.Headers.Authorization.FirstOrDefault();
                 if (token != null)
                 {
                     UsedAuthToken = token;
@@ -49,7 +48,7 @@ namespace EpinelPS.LobbyServer
                     UserId = item.Value.UserId;
                 }
             }
-            if (UserId == 0) throw new HttpException(403);
+            if (UserId == 0) throw new Exception("403");
             await HandleAsync();
         }
 
@@ -68,20 +67,20 @@ namespace EpinelPS.LobbyServer
             }
             else
             {
-                ctx.Response.ContentEncoding = null;
                 ctx.Response.ContentType = "application/octet-stream+protobuf";
-                ctx.Response.ContentLength64 = data.CalculateSize();
+                ctx.Response.ContentLength = data.CalculateSize();
                 bool encrypted = false;
-                var responseBytes = encrypted ? new MemoryStream() : ctx.Response.OutputStream;
+                var responseBytes = encrypted ? new MemoryStream() : ctx.Response.Body;
                 var x = new CodedOutputStream(responseBytes);
                 data.WriteTo(x);
+
                 x.Flush();
 
                 if (encrypted)
                 {
-                    ctx.Response.Headers.Set(System.Net.HttpRequestHeader.ContentEncoding, "gzip,enc");
+                    ctx.Response.Headers.ContentEncoding = new Microsoft.Extensions.Primitives.StringValues("gzip,enc");
                     var enc = PacketDecryption.EncryptData(((MemoryStream)responseBytes).ToArray(), UsedAuthToken);
-                    await ctx.Response.OutputStream.WriteAsync(enc, ctx.CancellationToken);
+                    await ctx.Response.Body.WriteAsync(enc);
                 }
             }
         }

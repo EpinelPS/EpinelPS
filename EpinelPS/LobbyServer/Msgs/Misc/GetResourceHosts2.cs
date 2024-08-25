@@ -11,6 +11,7 @@ namespace EpinelPS.LobbyServer.Msgs.Misc
 
             var r = new ResGetResourceHosts2();
             r.BaseUrl = GameConfig.Root.ResourceBaseURL;
+            r.Version = req.Version;
 
             await WriteDataAsync(r);
         }

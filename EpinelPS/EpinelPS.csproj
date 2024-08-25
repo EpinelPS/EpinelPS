@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -31,6 +31,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="wwwroot\admin\assets\login.css" />
+	  <None Include="wwwroot\admin\assets\login.jpg" />
+	  <None Include="wwwroot\admin\assets\style.css" />
+	  <None Include="wwwroot\admin\dashbrd.html" />
+	  <None Include="wwwroot\admin\index.html" />
+	  <None Include="wwwroot\admin\nav.html" />
+	  <None Include="wwwroot\nikke_launcher\index.html" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="gameconfig.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
@@ -40,7 +50,7 @@
 	  <None Update="site.pfx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="www\**\*">
+	  <None Update="wwwroot\**\*">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

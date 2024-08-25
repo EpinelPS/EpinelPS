@@ -54,6 +54,22 @@ namespace EpinelPS.Utils
             return targetFile;
         }
 
+        public static async Task HandleReq(HttpContext context)
+        {
+            string? targetFile = await DownloadOrGetFileAsync(context.Request.Path.Value ?? "", CancellationToken.None);
+
+            if (targetFile != null)
+            {
+                string? contentType = null;
+                if (targetFile.EndsWith("mp4"))
+                    contentType = "video/mp4";
+
+                await Results.Stream(new FileStream(targetFile, FileMode.Open, FileAccess.Read, FileShare.Read), contentType: contentType, enableRangeProcessing: true).ExecuteAsync(context);
+            }
+            else
+                context.Response.StatusCode = 404;
+        }
+
         private static async Task<string> GetCloudIpAsync()
         {
             var lookup = new LookupClient();

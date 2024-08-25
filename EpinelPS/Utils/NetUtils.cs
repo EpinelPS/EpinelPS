@@ -6,6 +6,26 @@ namespace EpinelPS.Utils
 {
     public class NetUtils
     {
+        public static (User?, AccessToken?) GetUser(string tokToCheck)
+        {
+            if (string.IsNullOrEmpty(tokToCheck))
+                throw new Exception("missing auth token");
+
+
+            foreach (var tok in JsonDb.Instance.LauncherAccessTokens)
+            {
+                if (tok.Token == tokToCheck)
+                {
+                    var user = JsonDb.Instance.Users.Find(x => x.ID == tok.UserID);
+                    if (user != null)
+                    {
+                        return (user, tok);
+                    }
+                }
+            }
+
+            return (null, null);
+        }
         public static NetUserItemData ToNet(ItemData item)
         {
             return new()

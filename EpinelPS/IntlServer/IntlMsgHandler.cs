@@ -121,9 +121,9 @@ namespace EpinelPS.IntlServer
         }
         public class AuthPkt2
         {
-            public string token = "";
-            public string openid = "";
-            public string account_token = "";
+            public string token { get; set; } = "";
+            public string openid { get; set; } = "";
+            public string account_token { get; set; } = "";
         }
     }
 }

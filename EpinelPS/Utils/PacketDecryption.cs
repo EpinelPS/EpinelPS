@@ -9,15 +9,15 @@ namespace EpinelPS.Utils
 {
     public class PacketDecryption
     {
-        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(IHttpContext ctx)
+        public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(HttpContext ctx)
         {
             byte[] bin = [];
 
             using MemoryStream buffer = new();
 
-            var stream = ctx.Request.InputStream;
+            var stream = ctx.Request.Body;
 
-            var encoding = ctx.Request.Headers[HttpHeaderNames.ContentEncoding]?.Trim();
+            var encoding = ctx.Request.Headers.ContentEncoding.FirstOrDefault();
 
             Stream decryptedStream;
             switch (encoding)
@@ -30,6 +30,7 @@ namespace EpinelPS.Utils
                     break;
                 case CompressionMethodNames.None:
                 case null:
+                case "":
                     decryptedStream = stream;
                     break;
                 case "gzip,enc":
@@ -77,7 +78,7 @@ namespace EpinelPS.Utils
             }
 
 
-            await stream.CopyToAsync(buffer, 81920, ctx.CancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+            await stream.CopyToAsync(buffer, 81920).ConfigureAwait(continueOnCapturedContext: false);
             return new PacketDecryptResponse() { Contents = buffer.ToArray() };
         }
 

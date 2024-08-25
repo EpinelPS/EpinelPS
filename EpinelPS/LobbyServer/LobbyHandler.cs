@@ -36,12 +36,13 @@ namespace EpinelPS.LobbyServer
                 }
             }
         }
-        public static async Task DispatchSingle(IHttpContext ctx)
+        public static async Task DispatchSingle(HttpContext ctx)
         {
             LobbyMsgHandler? handler = null;
+            string path = ctx.Request.Path.Value.Replace("/v1", "");
             foreach (var item in Handlers)
             {
-                if (ctx.RequestedPath == item.Key)
+                if (path == item.Key)
                 {
                     handler = item.Value;
                 }
