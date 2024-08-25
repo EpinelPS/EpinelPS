@@ -1,7 +1,6 @@
-﻿using EmbedIO;
-using Google.Protobuf.WellKnownTypes;
-using EpinelPS.Database;
+﻿using EpinelPS.Database;
 using EpinelPS.Utils;
+using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.Msgs.Auth
 {

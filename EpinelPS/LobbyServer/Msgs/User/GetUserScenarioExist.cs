@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {
@@ -18,13 +17,13 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
             foreach (var item in req.ScenarioGroupIds)
             {
-                Logger.Info("check scenario " + item);
+                Console.WriteLine("check scenario " + item);
                 foreach (var completed in user.CompletedScenarios)
                 {
                     // story thingy was completed
                     if (completed == item)
                     {
-                        Logger.Info(item + " is completed");
+                        Console.WriteLine(item + " is completed");
                         response.ExistGroupIds.Add(item);
                     }
                 }

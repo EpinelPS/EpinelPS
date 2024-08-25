@@ -1,11 +1,5 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
-using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.Msgs.Character
 {
@@ -25,7 +19,7 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                 {
                     if (item.CharacterSerialNumber == 0)
                     {
-                        Logger.Warn("must add character from synchrodevice first");
+                        Console.WriteLine("must add character from synchrodevice first");
                     }
                     else
                     {

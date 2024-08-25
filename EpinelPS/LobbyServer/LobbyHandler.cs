@@ -1,9 +1,7 @@
 ﻿using ASodium;
-using EmbedIO;
-using Google.Protobuf;
 using EpinelPS.Database;
 using EpinelPS.Utils;
-using Swan.Logging;
+using Google.Protobuf;
 
 namespace EpinelPS.LobbyServer
 {
@@ -19,7 +17,7 @@ namespace EpinelPS.LobbyServer
                     var attrib = (PacketPathAttribute?)Attribute.GetCustomAttribute(type, typeof(PacketPathAttribute));
                     if (attrib == null)
                     {
-                        Logger.Error("WARNING: Failed to get attribute for " + type.FullName);
+                        Console.WriteLine("WARNING: Failed to get attribute for " + type.FullName);
                         continue;
                     }
 
@@ -31,7 +29,7 @@ namespace EpinelPS.LobbyServer
                     }
                     else
                     {
-                        Logger.Error($"WARNING: Type {type.FullName} has PacketPathAttribute but does not implement LobbyMsgHandler");
+                        Console.WriteLine($"WARNING: Type {type.FullName} has PacketPathAttribute but does not implement LobbyMsgHandler");
                     }
                 }
             }

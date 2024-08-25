@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using EpinelPS.LobbyServer;
+﻿using EpinelPS.LobbyServer;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
-using Google.Protobuf.WellKnownTypes;
-using static Google.Rpc.Context.AttributeContext.Types;
+using Newtonsoft.Json;
 
 namespace EpinelPS.Database
 {
@@ -301,7 +298,7 @@ namespace EpinelPS.Database
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/db.json"))
             {
-                "users: warning: configuration not found, writing default data".Warn();
+                Console.WriteLine("users: warning: configuration not found, writing default data");
                 Instance = new CoreInfo();
                 Save();
             }
@@ -369,7 +366,7 @@ namespace EpinelPS.Database
                 Save();
 
                 ValidateDb();
-                "Loaded db".Info();
+                Console.WriteLine("Loaded db");
             }
             else
             {
@@ -386,7 +383,7 @@ namespace EpinelPS.Database
                 {
                     if (c.Level > 1000)
                     {
-                        $"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000".Warn();
+                        Console.WriteLine($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
                         c.Level = 1000;
                     }
                 }

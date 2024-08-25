@@ -1,10 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Ocsp;
-using static EpinelPS.IntlServer.IntlLogin1Endpoint;
-using static EpinelPS.IntlServer.IntlLogin2Endpoint;
-using static EpinelPS.IntlServer.IntlMsgHandler;
 
 namespace EpinelPS.Controllers
 {

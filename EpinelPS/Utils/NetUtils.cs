@@ -1,6 +1,5 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.StaticInfo;
-using Swan.Logging;
 
 namespace EpinelPS.Utils
 {
@@ -87,7 +86,7 @@ namespace EpinelPS.Utils
                         case "Module_D":
                             return 3;
                         default:
-                            Logger.Warn("Unknown item subtype: " + subType);
+                            Console.WriteLine("Unknown item subtype: " + subType);
                             break;
                     }
                     break;
@@ -126,7 +125,7 @@ namespace EpinelPS.Utils
 
                 foreach (var c in reward.Character)
                 {
-                    Logger.Warn("MergeRewards - TODO Character");
+                    Console.WriteLine("MergeRewards - TODO Character");
                 }
             }
 

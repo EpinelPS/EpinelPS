@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using Swan;
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {
@@ -23,7 +22,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
 
             });
 
-            r.Mail[0].Items.Add(new NetMailRewardItem() { ExpiredAt = DateTime.UtcNow.AddYears(10).ToUnixEpochDate(), RewardId = 1, RewardType = (int)CurrencyType.ChargeCash, RewardValue = 100000 });
+            r.Mail[0].Items.Add(new NetMailRewardItem() { ExpiredAt = DateTimeOffset.UtcNow.AddYears(10).ToUnixTimeSeconds(), RewardId = 1, RewardType = (int)CurrencyType.ChargeCash, RewardValue = 100000 });
 
             await WriteDataAsync(r);
         }

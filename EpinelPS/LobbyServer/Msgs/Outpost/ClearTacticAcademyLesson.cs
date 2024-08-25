@@ -1,6 +1,5 @@
 ﻿using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.Outpost
 {
@@ -30,7 +29,7 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
             }
             else
             {
-                Logger.Error($"User {user.PlayerName} tried to clear lesson {req.LessonTid} without enough currency");
+                Console.WriteLine($"User {user.PlayerName} tried to clear lesson {req.LessonTid} without enough currency");
             }
             await WriteDataAsync(response);
         }

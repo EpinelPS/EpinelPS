@@ -1,12 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.Msgs.Character
 {
@@ -42,7 +36,7 @@ namespace EpinelPS.LobbyServer.Msgs.Character
             else
             {
                 // TOOD: log this
-                Logger.Error("ERROR: Not enough currency for upgrade");
+                Console.WriteLine("ERROR: Not enough currency for upgrade");
                 return;
             }
 

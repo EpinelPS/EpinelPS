@@ -1,8 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
-using System.Linq;
 
 namespace EpinelPS.LobbyServer.Msgs.Stage
 {
@@ -59,7 +57,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
             if (rewardData != null)
                 response.StageClearReward = RegisterRewardsForUser(user, rewardData);
             else
-                Logger.Warn("rewardId is null for stage " + StageId);
+                Console.WriteLine("rewardId is null for stage " + StageId);
 
 
             if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
@@ -74,7 +72,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 }
                 else
                 {
-                    Logger.Warn("Unknown chapter mod " + clearedStage.chapter_mod);
+                    Console.WriteLine("Unknown chapter mod " + clearedStage.chapter_mod);
                 }
             }
             else if (clearedStage.stage_category == "Extra")
@@ -83,7 +81,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
             }
             else
             {
-                Logger.Warn("Unknown stage category " + clearedStage.stage_category);
+                Console.WriteLine("Unknown stage category " + clearedStage.stage_category);
             }
 
             if (clearedStage.stage_type != "Sub")
@@ -130,7 +128,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
 
                 if (newLevelExp == -1)
                 {
-                    Logger.Warn("Unknown user level value for xp " + newXp);
+                    Console.WriteLine("Unknown user level value for xp " + newXp);
                 }
 
 
@@ -232,7 +230,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                     }
                     else
                     {
-                        Logger.Warn("TODO: Reward type " + item.reward_type);
+                        Console.WriteLine("TODO: Reward type " + item.reward_type);
                     }
                 }
             }

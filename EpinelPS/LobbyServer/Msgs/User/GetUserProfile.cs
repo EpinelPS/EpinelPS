@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {

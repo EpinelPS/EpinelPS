@@ -2,7 +2,6 @@
 using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.Campaign
 {
@@ -26,7 +25,7 @@ namespace EpinelPS.LobbyServer.Msgs.Campaign
             {
                 if (item.PositionId == req.FieldObject.PositionId)
                 {
-                    Logger.Warn("attempted to collect campaign field object twice!");
+                    Console.WriteLine("attempted to collect campaign field object twice!");
                     return;
                 }
             }

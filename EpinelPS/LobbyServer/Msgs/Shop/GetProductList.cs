@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using Swan.Logging;
 
 namespace EpinelPS.LobbyServer.Msgs.Shop
 {
@@ -21,7 +20,7 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
             }
             catch (Exception ex)
             {
-                Logger.Error("Error while handling GetProductList request. Have you replaced sodium library?" + ex);
+                Console.WriteLine("Error while handling GetProductList request. Have you replaced sodium library?" + ex);
             }
         }
     }

@@ -1,12 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
-using Swan.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.Msgs.Character
 {
@@ -26,12 +20,12 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                 {
                     if (item.Level == 1)
                     {
-                        Logger.Warn("Character level is already 1 - cannot reset");
+                        Console.WriteLine("Character level is already 1 - cannot reset");
                         return;
                     }
                     if (item.Level == 200)
                     {
-                        Logger.Warn("Character level is 200 - cannot reset");
+                        Console.WriteLine("Character level is 200 - cannot reset");
                         return;
                     }
 

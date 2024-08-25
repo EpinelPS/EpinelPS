@@ -1,8 +1,7 @@
-﻿using EmbedIO;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
-using EpinelPS.Database;
-using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Auth
 {
@@ -22,7 +21,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
                     UserId = item.UserID;
                 }
             }
-            if (UserId == 0) throw new HttpException(403);
+            if (UserId == 0) throw new BadHttpRequestException("unknown auth token", 403);
 
             var user = GetUser();
 

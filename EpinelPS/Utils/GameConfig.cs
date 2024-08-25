@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Swan.Logging;
 
 namespace EpinelPS.Utils
 {
@@ -40,10 +39,10 @@ namespace EpinelPS.Utils
                 {
                     if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"))
                     {
-                        Logger.Error("Gameconfig.json is not found, the game WILL NOT work!");
+                        Console.WriteLine("Gameconfig.json is not found, the game WILL NOT work!");
                         _root = new GameConfigRoot();
                     }
-                    Logger.Info("Loaded game config");
+                    Console.WriteLine("Loaded game config");
 
 
                     _root = JsonConvert.DeserializeObject<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));

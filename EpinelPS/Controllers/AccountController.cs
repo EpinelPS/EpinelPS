@@ -1,15 +1,6 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.IntlServer;
 using EpinelPS.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Ocsp;
-using Swan.Logging;
-using static EpinelPS.IntlServer.IntlAccountRegisterEndpoint;
-using static EpinelPS.IntlServer.IntlLogin1Endpoint;
-using static EpinelPS.IntlServer.IntlLogin2Endpoint;
-using static EpinelPS.IntlServer.IntlMsgHandler;
-using static EpinelPS.IntlServer.SendCodeEndpoint;
 
 namespace EpinelPS.Controllers
 {
@@ -27,7 +18,7 @@ namespace EpinelPS.Controllers
             {
                 if (item.Username == req.account && item.Password == req.password)
                 {
-                    var tok = IntlHandler.CreateLauncherTokenForUser(item);
+                    var tok = CreateLauncherTokenForUser(item);
                     item.LastLogin = DateTime.UtcNow;
                     JsonDb.Save();
 
@@ -96,9 +87,20 @@ namespace EpinelPS.Controllers
 
             JsonDb.Instance.Users.Add(user);
 
-            var tok = IntlHandler.CreateLauncherTokenForUser(user);
+            var tok = CreateLauncherTokenForUser(user);
 
             return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}";
+        }
+        public static AccessToken CreateLauncherTokenForUser(User user)
+        {
+            // TODO: implement access token expiration
+            AccessToken token = new() { ExpirationTime = DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds() };
+            token.Token = Rng.RandomString(64);
+            token.UserID = user.ID;
+            JsonDb.Instance.LauncherAccessTokens.Add(token);
+            JsonDb.Save();
+
+            return token;
         }
     }
 }

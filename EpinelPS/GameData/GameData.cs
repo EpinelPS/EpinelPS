@@ -1,9 +1,7 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
+﻿using EpinelPS.Utils;
+using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using EpinelPS.Utils;
-using Swan.Logging;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
@@ -49,7 +47,7 @@ namespace EpinelPS.StaticInfo
         {
             await Load();
 
-            Logger.Info("Preparing");
+            Console.WriteLine("Preparing");
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             await Instance.Parse();
@@ -303,7 +301,7 @@ namespace EpinelPS.StaticInfo
                 if (obj != null)
                     LevelData.Add(obj.level, obj);
                 else
-                    Logger.Warn("failed to read character level table entry");
+                    Console.WriteLine("failed to read character level table entry");
             }
 
             var tacticLessonTable = await LoadZip("TacticAcademyFunctionTable.json", progress);

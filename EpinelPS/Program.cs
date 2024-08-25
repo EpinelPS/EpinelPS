@@ -4,8 +4,6 @@ using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
-using Microsoft.Extensions.Options;
-using Swan.Logging;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
@@ -19,17 +17,15 @@ namespace EpinelPS
         {
             try
             {
-                Logger.UnregisterLogger<ConsoleLogger>();
-                Logger.RegisterLogger(new GreatLogger());
-                Logger.Info("Initializing database");
+                Console.WriteLine("Initializing JsonDb");
                 JsonDb.Save();
 
                 GameData.Instance.GetAllCostumes(); // force static data to be loaded
 
-                Logger.Info("Initialize handlers");
+                Console.WriteLine("Initialize handlers");
                 LobbyHandler.Init();
 
-                Logger.Info("Starting server");
+                Console.WriteLine("Starting ASP.NET core on ports 80/443");
                 new Thread(() =>
                 {
                     var builder = WebApplication.CreateBuilder(args);
@@ -160,9 +156,9 @@ namespace EpinelPS
             }
             catch (Exception ex)
             {
-                Logger.Error("Fatal error:");
-                Logger.Error(ex.ToString());
-                Logger.Error("Press any key to exit");
+                Console.WriteLine("Fatal error:");
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Press any key to exit");
                 Console.ReadKey();
             }
         }
@@ -419,18 +415,6 @@ namespace EpinelPS
             ctx.Response.ContentType = "multipart/mixed; boundary=\"f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\"";
             ctx.Response.Body.Write(responseBytes);
         }
-        //private static async Task HandleDataEndpoint(IHttpContext ctx)
-        //{
-        //     //this endpoint does not appear to be needed, it is used for telemetry
-        //    if (ctx.RequestedPath == "/v1/dsr/query")
-        //    {
-        //        await WriteJsonStringAsync(ctx, "{\"ret\":0,\"msg\":\"\",\"status\":0,\"created_at\":\"0\",\"target_destroy_at\":\"0\",\"destroyed_at\":\"0\",\"err_code\":0,\"seq\":\"1\"}");
-        //    }
-        //    else
-        //    {
-        //        ctx.Response.StatusCode = 404;
-        //    }
-        //}
         public static string GetCachePathForPath(string path)
         {
             return AppDomain.CurrentDomain.BaseDirectory + "cache/" + path;
@@ -500,7 +484,7 @@ namespace EpinelPS
             url = url.Replace("/v1", "");
 
             // find appropriate handler
-            Logger.Info("BATCH: /v1" + url);
+            Console.WriteLine("BATCH: /v1" + url);
 
             foreach (var item in LobbyHandler.Handlers)
             {
@@ -512,7 +496,7 @@ namespace EpinelPS
                     return item.Value.ReturnBytes;
                 }
             }
-            Logger.Error("HANDLER NOT FOUND: " + url);
+            Console.WriteLine("HANDLER NOT FOUND: " + url);
             return null;
         }
     }

@@ -1,5 +1,4 @@
-﻿using EmbedIO;
-using EpinelPS.LobbyServer;
+﻿using EpinelPS.LobbyServer;
 using Sodium;
 using System.Buffers.Binary;
 using System.IO.Compression;
@@ -22,13 +21,12 @@ namespace EpinelPS.Utils
             Stream decryptedStream;
             switch (encoding)
             {
-                case CompressionMethodNames.Gzip:
+                case "gzip":
                     decryptedStream = new GZipStream(stream, CompressionMode.Decompress);
                     break;
-                case CompressionMethodNames.Deflate:
+                case "deflate":
                     decryptedStream = new DeflateStream(stream, CompressionMode.Decompress);
                     break;
-                case CompressionMethodNames.None:
                 case null:
                 case "":
                     decryptedStream = stream;
@@ -46,7 +44,7 @@ namespace EpinelPS.Utils
 
                     var bytes = encryptedBytes.ToArray();
 
-                    var key = LobbyHandler.GetInfo(decryptionToken) ?? throw HttpException.BadRequest("Invalid decryption token");
+                    var key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("Invalid decryption token");
                     var additionalData = GenerateAdditionalData(decryptionToken, false);
 
                     var x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
@@ -74,7 +72,7 @@ namespace EpinelPS.Utils
 
                     return new PacketDecryptResponse() { Contents = contents, UserId = key.UserId, UsedAuthToken = decryptionToken };
                 default:
-                    throw HttpException.BadRequest($"Unsupported content encoding \"{encoding}\"");
+                    throw new Exception($"Unsupported content encoding \"{encoding}\"");
             }
 
 
@@ -147,7 +145,7 @@ namespace EpinelPS.Utils
 
         public static byte[] EncryptData(byte[] message, string authToken)
         {
-            var key = LobbyHandler.GetInfo(authToken) ?? throw HttpException.BadRequest("Invalid decryption token");
+            var key = LobbyHandler.GetInfo(authToken) ?? throw new BadHttpRequestException("Invalid decryption token");
             MemoryStream m = new();
 
             m.WriteByte(89); // cbor ushort

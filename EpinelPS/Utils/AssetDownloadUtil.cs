@@ -1,5 +1,4 @@
 ﻿using DnsClient;
-using Swan.Logging;
 using System.Net;
 
 namespace EpinelPS.Utils
@@ -16,14 +15,14 @@ namespace EpinelPS.Utils
             var targetDir = Path.GetDirectoryName(targetFile);
             if (targetDir == null)
             {
-                Logger.Error($"ERROR: Directory name cannot be null for request " + url + ", file path is " + targetFile);
+                Console.WriteLine($"ERROR: Directory name cannot be null for request " + url + ", file path is " + targetFile);
                 return null;
             }
             Directory.CreateDirectory(targetDir);
 
             if (!File.Exists(targetFile))
             {
-                Logger.Info("Download " + targetFile);
+                Console.WriteLine("Download " + targetFile);
 
                 if (CloudIp == null)
                 {
@@ -46,7 +45,7 @@ namespace EpinelPS.Utils
                 }
                 else
                 {
-                    Logger.Error("Failed to download " + url + " with status code " + response.StatusCode);
+                    Console.WriteLine("Failed to download " + url + " with status code " + response.StatusCode);
                     return null;
                 }
             }
