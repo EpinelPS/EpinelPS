@@ -88,8 +88,8 @@ namespace EpinelPS
           ""Config"": [
             {
               ""VersionRange"": {
-                ""From"": ""124.6.10"",
-                ""To"": ""124.6.11"",
+                ""From"": ""{GameMinVer}"",
+                ""To"": ""{GameMaxVer}"",
                 ""PackageName"": ""com.proximabeta.nikke""
               },
               ""Route"": [
@@ -132,8 +132,8 @@ namespace EpinelPS
             },
             {
               ""VersionRange"": {
-                ""From"": ""124.6.10"",
-                ""To"": ""124.6.11"",
+                ""From"": ""{GameMinVer}"",
+                ""To"": ""{GameMaxVer}"",
                 ""PackageName"": ""com.gamamobi.nikke""
               },
               ""Route"": [
@@ -147,7 +147,7 @@ namespace EpinelPS
               ]
             }
           ]
-        }");
+        }".Replace("{GameMinVer}", GameConfig.Root.GameMinVer).Replace("{GameMaxVer}", GameConfig.Root.GameMaxVer));
 
                     app.Run();
                 }).Start();
