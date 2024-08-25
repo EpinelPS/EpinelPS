@@ -11,6 +11,9 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
 
             var response = new ResGetShop();
 
+            response.Shop = new NetShopProductData();
+            response.Shop.ShopCategory = x.ShopCategory;
+        
             // TODO
 
             await WriteDataAsync(response);

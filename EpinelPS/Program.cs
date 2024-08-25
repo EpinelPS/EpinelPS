@@ -52,7 +52,7 @@ namespace EpinelPS
 
                     // Add services to the container.
 
-                    builder.Services.AddControllers();
+                    builder.Services.AddControllersWithViews();
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                     builder.Services.AddEndpointsApiExplorer();
                     builder.Services.AddRouting();
@@ -73,6 +73,9 @@ namespace EpinelPS
                     app.UseAuthorization();
                     app.UseHttpsRedirection();
                     app.UseRouting();
+                    app.MapControllerRoute(
+               name: "default",
+               pattern: "/admin/{controller=Admin}/{action=Dashboard}/{id?}");
 
                     app.MapControllers();
 

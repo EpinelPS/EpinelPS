@@ -30,6 +30,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Views\Shared\error.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Views\Shared\error.cshtml" />
 	  <None Include="wwwroot\admin\assets\login.css" />
 	  <None Include="wwwroot\admin\assets\login.jpg" />
 	  <None Include="wwwroot\admin\assets\style.css" />

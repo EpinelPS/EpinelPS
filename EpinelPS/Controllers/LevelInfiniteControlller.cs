@@ -108,5 +108,22 @@ namespace EpinelPS.Controllers
         {
             return "{\"alpha2\":\"GR\",\"extra_json\":{\"certificate_type_map\":{}},\"msg\":\"success\",\"region\":\"300\",\"ret\":0,\"seq\":\"" + seq + "\",\"timestamp\":324234322}";
         }
+
+        [HttpPost]
+        [Route("gnconfig/acquire_config")]
+        public string AcquireConfig(string seq)
+        {
+            return "{\"ret\":23111202,\"msg\":\"no matched config error( [match logic]no match )\",\"rule_id\":\"\",\"resource_list\":\"\",\"sdk_enable\":0,\"sdk_debug_enable\":0,\"report_log_enable\":0,\"log_level\":0,\"inner_seq\":\"" + seq + "\",\"ab_test\":{\"id\":\"\",\"group\":\"\"},\"seq\":\"" + seq + "\"}";
+        }
+
+        [HttpPost]
+        [Route("profile/get_bind_info")]
+        public string GetProfileBindInfo(string seq, [FromBody] AuthPkt req)
+        {
+            User? user;
+            if ((user = NetUtils.GetUser(req.channel_info.token).Item1) == null) return BadAuthToken;
+
+            return "{\"bind_list\":[{\"bind_ts\":1717783095,\"channel_info\":{\"birthday\":\"1970-01\",\"email\":\"" + user.Username + "\",\"is_receive_email\":1,\"lang_type\":\"en\",\"last_login_time\":171000000,\"nick_name\":\"\",\"phone\":\"\",\"phone_area_code\":\"\",\"region\":\"724\",\"register_account\":\"" + user.Username + "\",\"register_account_type\":1,\"register_time\":" + user.RegisterTime + ",\"seq\":\"" + seq + "\",\"uid\":\"2752409592679849\",\"user_name\":\"" + user.PlayerName + "\",\"username_pass_verify\":0},\"channelid\":131,\"email\":\"" + user.Username + "\",\"history_scopes\":[],\"is_primary\":1,\"picture_url\":\"\",\"user_name\":\"" + user.PlayerName + "\"}],\"create_ts\":" + user.RegisterTime + ",\"last_login_ts\":171000000,\"msg\":\"success\",\"ret\":0,\"seq\":\"" + seq + "\"}";
+        }
     }
 }
