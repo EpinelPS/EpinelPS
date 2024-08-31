@@ -29,6 +29,15 @@ public partial class MainView : UserControl
                 Text = "Administrator privileges are required to change servers."
             };
         }
+        if (OperatingSystem.IsLinux() && Environment.UserName != "root")
+        {
+            TabPc.Content = new TextBlock()
+            {
+                VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                Text = "Root is required to change servers."
+            };
+        }
 
         UpdateIntegrityLabel();
     }
@@ -41,39 +50,37 @@ public partial class MainView : UserControl
         }
         else
         {
-            txtGamePath.BorderBrush = new SolidColorBrush(Color.FromRgb(255,0,0));
-        }
-    }
-    private void SetLauncherPathValid(bool isValid)
-    {
-        if (isValid)
-        {
-            txtLauncherPath.BorderBrush = null;
-        }
-        else
-        {
-            txtLauncherPath.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            txtGamePath.BorderBrush = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         }
     }
 
+    private string? GamePath
+    {
+        get
+        {
+            if (txtGamePath.Text == null) return null;
+            return Path.Combine(txtGamePath.Text, "NIKKE", "game");
+        }
+    }
+    private string? LauncherPath
+    {
+        get
+        {
+            if (txtGamePath.Text == null) return null;
+            return Path.Combine(txtGamePath.Text, "Launcher");
+        }
+    }
     private bool ValidatePaths(bool showMessage)
     {
-        if (string.IsNullOrEmpty(txtGamePath.Text))
+        if (string.IsNullOrEmpty(txtGamePath.Text) || LauncherPath == null)
         {
             SetGamePathValid(false);
             if (showMessage)
                 ShowWarningMsg("Game path is blank", "Error");
             return false;
         }
-        if (string.IsNullOrEmpty(txtLauncherPath.Text))
-        {
-            SetLauncherPathValid(false);
-            if (showMessage)
-                ShowWarningMsg("Launcher path is blank", "Error");
-            return false;
-        }
 
-        if (!Directory.Exists(txtGamePath.Text))
+        if (!Directory.Exists(GamePath))
         {
             SetGamePathValid(false);
             if (showMessage)
@@ -81,36 +88,27 @@ public partial class MainView : UserControl
             return false;
         }
 
-        if (!Directory.Exists(txtLauncherPath.Text))
-        {
-            SetLauncherPathValid(false);
-            if (showMessage)
-                ShowWarningMsg("Launcher path does not exist", "Error");
-            return false;
-        }
-
-        if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
+        if (!File.Exists(Path.Combine(LauncherPath, "nikke_launcher.exe")))
         {
             SetGamePathValid(false);
             if (showMessage)
-                ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
+                ShowWarningMsg("Launcher path is invalid. Make sure that nikke_launcher.exe exists in the launcher folder", "Error");
 
             return false;
         }
 
         SetGamePathValid(true);
-        SetLauncherPathValid(true);
 
         return true;
     }
 
     private async void UpdateIntegrityLabel()
     {
-        if (!ValidatePaths(false) || txtGamePath.Text == null || txtLauncherPath.Text == null)
+        if (!ValidatePaths(false) || txtGamePath.Text == null || GamePath == null || LauncherPath == null)
             return;
 
         SetLoadingScreenVisible(true);
-        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(txtGamePath.Text, txtLauncherPath.Text);
+        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath);
         SetLoadingScreenVisible(false);
     }
 
@@ -130,7 +128,7 @@ public partial class MainView : UserControl
 
     private async void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (!ValidatePaths(true) || txtGamePath.Text == null || txtLauncherPath.Text == null)
+        if (!ValidatePaths(true) || txtGamePath.Text == null || GamePath == null || LauncherPath == null)
             return;
 
         if (CmbServerSelection.SelectedIndex == 1)
@@ -146,7 +144,7 @@ public partial class MainView : UserControl
         SetLoadingScreenVisible(true);
         try
         {
-            await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, txtGamePath.Text, txtLauncherPath.Text, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
+            await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
         }
         catch (Exception ex)
         {
@@ -192,9 +190,14 @@ public partial class MainView : UserControl
                 // validate if the folder has game exe
                 if (!string.IsNullOrEmpty(txtGamePath.Text))
                 {
-                    if (!File.Exists(Path.Combine(txtGamePath.Text, "nikke.exe")))
+                    if (!File.Exists(Path.Combine(txtGamePath.Text, "game", "nikke.exe")))
                     {
-                        ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the launcher folder", "Error");
+                        ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the game folder", "Error");
+                        return;
+                    }
+                    if (!File.Exists(Path.Combine(txtGamePath.Text, "Launcher", "nikke_launcher.exe")))
+                    {
+                        ShowWarningMsg("Game path is invalid. Make sure that nikke_launcher.exe exists in the Launcher folder", "Error");
                         return;
                     }
                 }
@@ -202,36 +205,7 @@ public partial class MainView : UserControl
             }
         }
     }
-    private async void BtnSelectLauncherPath_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        var topLevel = TopLevel.GetTopLevel(this);
 
-        if (topLevel != null)
-        {
-            // Start async operation to open the dialog.
-            var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = "Select launcher path",
-                AllowMultiple = false
-            });
-
-            if (files.Count >= 1)
-            {
-                txtLauncherPath.Text = files[0].TryGetLocalPath();
-
-                // validate if the folder has game exe
-                if (!string.IsNullOrEmpty(txtLauncherPath.Text))
-                {
-                    if (!File.Exists(Path.Combine(txtLauncherPath.Text, "nikke_launcher.exe")))
-                    {
-                        ShowWarningMsg("Launcher path is invalid. Make sure that the game executable exists in the launcher folder", "Error");
-                        return;
-                    }
-                }
-                UpdateIntegrityLabel();
-            }
-        }
-    }
     private void GamePath_TextChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
     {
         UpdateIntegrityLabel();

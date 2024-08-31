@@ -33,13 +33,8 @@
 
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
-					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged">C:\NIKKE\NIKKE\game</TextBox>
+					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged">C:\NIKKE\NIKKE\</TextBox>
 					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Content="..." Click="BtnSelectGamePath_Click"></Button>
-
-					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2" Grid.Column="0">Launcher path: </TextBlock>
-					<TextBox x:Name="txtLauncherPath" Grid.Row="2" Grid.Column="1" TextChanged="LauncherPath_TextChanged">C:\NIKKE\Launcher</TextBox>
-					<Button x:Name="btnSelectLauncherPath" Grid.Row="2" Grid.Column="2" Content="..."  Click="BtnSelectLauncherPath_Click"></Button>
-
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
 
@@ -55,7 +50,7 @@
 
 					<CheckBox x:Name="ChkOffline" VerticalAlignment="Center" Margin="5" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" ToolTip.Tip="Enables the ability to run the game offline by making the game download the assets from the server, and not the official server. This only works if enableOffline is enabled on the server. Please note that this should not be enabled on public servers due to copyright issues, as assets are downloaded through said server. This is required if you want to use an older version of the game.">Enable offline mode</CheckBox>
 
-					<TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" Margin="5" x:Name="LblStatus" ToolTip.Tip="Shows the status of the patches to the game. All patches are reverted when server is set to official.">Status: OK</TextBlock>
+					<TextBlock Grid.Row="10" Grid.Column="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Margin="5" x:Name="LblStatus" ToolTip.Tip="Shows the status of the patches to the game. All patches are reverted when server is set to official.">Status: OK</TextBlock>
 					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent">Save</Button>
 				</Grid>
 			</TabItem>

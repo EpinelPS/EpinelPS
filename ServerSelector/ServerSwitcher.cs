@@ -15,13 +15,13 @@ namespace ServerSelector
 
         public static bool IsUsingOfficalServer()
         {
-            var hostsFile = File.ReadAllText("C:\\Windows\\System32\\drivers\\etc\\hosts");
+            var hostsFile = File.ReadAllText(OperatingSystem.IsWindows() ? "C:\\Windows\\System32\\drivers\\etc\\hosts" : "/etc/hosts");
             return !hostsFile.Contains("global-lobby.nikke-kr.com");
         }
 
         public static bool IsOffline()
         {
-            var hostsFile = File.ReadAllText("C:\\Windows\\System32\\drivers\\etc\\hosts");
+            var hostsFile = File.ReadAllText(OperatingSystem.IsWindows() ? "C:\\Windows\\System32\\drivers\\etc\\hosts" : "/etc/hosts");
             return hostsFile.Contains("cloud.nikke-kr.com");
         }
 
@@ -51,6 +51,13 @@ namespace ServerSelector
             string gameAssembly = gamePath + "/GameAssembly.dll";
             string sodiumBackup = gameSodium + ".bak";
             string hostsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts");
+
+            if (OperatingSystem.IsLinux())
+            {
+                // for wine
+                hostsFilePath = gamePath + "/../../../windows/system32/drivers/etc/hosts";
+            }
+
             var CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
@@ -75,9 +82,8 @@ namespace ServerSelector
             return "OK";
         }
 
-        public static async Task RevertHostsFile()
+        public static async Task RevertHostsFile(string hostsFilePath)
         {
-            string hostsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts");
             var txt = await File.ReadAllTextAsync(hostsFilePath);
 
             // remove stuff
@@ -139,16 +145,30 @@ namespace ServerSelector
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem";
 
 
+            if (OperatingSystem.IsLinux())
+            {
+                // for wine
+                hostsFilePath = gamePath + "/../../../windows/system32/drivers/etc/hosts";
+            }
+
+
             // TODO: allow changing ip address
             if (useOffical)
             {
-                await RevertHostsFile();
+                await RevertHostsFile(hostsFilePath);
+                if (OperatingSystem.IsLinux())
+                {
+                    await RevertHostsFile("/etc/hosts");
+                }
 
                 // remove cert
-                X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-                store.Open(OpenFlags.ReadWrite);
-                store.Remove(new X509Certificate2(X509Certificate.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
-                store.Close();
+                if (OperatingSystem.IsWindows())
+                {
+                    X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+                    store.Open(OpenFlags.ReadWrite);
+                    store.Remove(new X509Certificate2(X509Certificate.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
+                    store.Close();
+                }
 
                 // restore sodium
                 if (!File.Exists(sodiumBackup))
@@ -228,20 +248,35 @@ namespace ServerSelector
 255.255.221.21 sentry.io
 {HostsEndMarker}";
 
-                await RevertHostsFile();
+                await RevertHostsFile(hostsFilePath);
                 if (!(await File.ReadAllTextAsync(hostsFilePath)).Contains("global-lobby.nikke-kr.com"))
                 {
-                    using StreamWriter w = File.AppendText(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts"));
+                    using StreamWriter w = File.AppendText(hostsFilePath);
                     w.WriteLine();
                     w.Write(hosts);
                 }
 
+                // Also change /etc/hosts if running on linux
+                if (OperatingSystem.IsLinux())
+                {
+                    hostsFilePath = "/etc/hosts";
+                    await RevertHostsFile(hostsFilePath);
+                    if (!(await File.ReadAllTextAsync(hostsFilePath)).Contains("global-lobby.nikke-kr.com"))
+                    {
+                        using StreamWriter w = File.AppendText(hostsFilePath);
+                        w.WriteLine();
+                        w.Write(hosts);
+                    }
+                }
 
                 // trust CA
-                X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-                store.Open(OpenFlags.ReadWrite);
-                store.Add(new X509Certificate2(X509Certificate2.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
-                store.Close();
+                if (OperatingSystem.IsWindows())
+                {
+                    X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+                    store.Open(OpenFlags.ReadWrite);
+                    store.Add(new X509Certificate2(X509Certificate2.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
+                    store.Close();
+                }
 
                 // update sodium lib
 

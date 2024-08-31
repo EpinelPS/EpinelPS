@@ -6,6 +6,6 @@
         xmlns:views="clr-namespace:ServerSelector.Views"
         mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="300"
         x:Class="ServerSelector.Views.MainWindow"
-        Title="Server Switcher" Width="370" Height="300" CanResize="False">
+        Title="Server Switcher" Width="370" Height="300" CanResize="True">
         <views:MainView />
 </Window>
