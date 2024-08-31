@@ -237,11 +237,12 @@ namespace EpinelPS.StaticInfo
             if (records == null) throw new Exception(entry + " is missing records element");
 
             currentFile++;
+
             bar.Report((double)currentFile / totalFiles);
 
             return records;
         }
-        int totalFiles = 14;
+        int totalFiles = 78;
         int currentFile = 0;
 
         public async Task Parse()

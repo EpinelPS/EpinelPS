@@ -2,11 +2,11 @@
   "profiles": {
     "EpinelPS": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:64668;http://localhost:64669"
+      "applicationUrl": ""
     }
   }
 }

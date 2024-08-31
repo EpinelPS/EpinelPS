@@ -1,9 +1,13 @@
-﻿using EpinelPS.Database;
+﻿using DnsClient;
+using EpinelPS.Database;
 using EpinelPS.LobbyServer;
 using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
+using Google.Api;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.Logging.EventLog;
+using Microsoft.VisualBasic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
@@ -50,12 +54,23 @@ namespace EpinelPS
                         serverOptions.AllowSynchronousIO = true;
                     });
 
+
                     // Add services to the container.
 
                     builder.Services.AddControllersWithViews();
                     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                     builder.Services.AddEndpointsApiExplorer();
                     builder.Services.AddRouting();
+
+                    builder.Logging.ClearProviders();
+                    builder.Logging.AddColorConsoleLogger(configuration =>
+                    {
+                        // Replace warning value from appsettings.json of "Cyan"
+                        configuration.LogLevelToColorMap[LogLevel.Warning] = ConsoleColor.Yellow;
+                        // Replace warning value from appsettings.json of "Red"
+                        configuration.LogLevelToColorMap[LogLevel.Error] = ConsoleColor.DarkRed;
+                    });
+
 
                     var app = builder.Build();
 
@@ -87,7 +102,7 @@ namespace EpinelPS
                     // NOTE: pub prefixes shows public (production server), local is local server (does not have any effect), dev is development server, etc.
                     // It does not have any effect, except for the publisher server, which adds a watermark?
 
-                    app.MapGet("/route/*/route_config.json", () => @"{
+                    app.MapGet("/route/{**all}", () => @"{
           ""Config"": [
             {
               ""VersionRange"": {
@@ -499,7 +514,11 @@ namespace EpinelPS
                     return item.Value.ReturnBytes;
                 }
             }
+
+            var fg = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("HANDLER NOT FOUND: " + url);
+            Console.ForegroundColor = fg;
             return null;
         }
     }
