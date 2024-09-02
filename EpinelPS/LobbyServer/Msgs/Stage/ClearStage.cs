@@ -87,7 +87,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
             if (clearedStage.stage_type != "Sub")
             {
                 // add outpost reward level if unlocked
-                if (user.MainQuestData.ContainsKey(21))
+                if (user.MainQuestData.TryGetValue(21, out bool c))
                 {
                     user.OutpostBattleLevel.Exp++;
                     if (user.OutpostBattleLevel.Exp >= 5)

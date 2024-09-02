@@ -39,6 +39,7 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, int> SidestoryRewardTable = [];
         public Dictionary<string, int> PositionReward = new Dictionary<string, int>();
         public Dictionary<int, FieldItemRecord> FieldItems = [];
+        public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
 
         public byte[] Sha256Hash;
         public int Size;
@@ -369,6 +370,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in fieldItems.records)
             {
                 FieldItems.Add(obj.id, obj);
+            }
+
+            var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
+            foreach (var obj in battleOutpostTable.records)
+            {
+                OutpostBattle.Add(obj.id, obj);
             }
         }
 

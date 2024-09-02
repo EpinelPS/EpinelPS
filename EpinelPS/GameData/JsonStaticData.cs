@@ -147,4 +147,17 @@
     {
         public List<FieldItemRecord> records;
     }
+
+    public class OutpostBattleTableRecord
+    {
+        public int id;
+        public int credit;
+        public int character_exp1;
+        public int character_exp2;
+        public int user_exp;
+    }
+    public class OutpostBattleTable
+    {
+        public List<OutpostBattleTableRecord> records;
+    }
 }

@@ -396,28 +396,42 @@ namespace EpinelPS
                 response.AddRange(Encoding.UTF8.GetBytes("\r\n"));
 
                 var bin = await item.ReadAsByteArrayAsync();
-                var res = await SendReqLocalAndReadResponseAsync(bin);
-
-                if (res != null)
+                try
                 {
-                    List<byte> ResponseWithBytes =
-[
-    .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
+                    var res = await SendReqLocalAndReadResponseAsync(bin);
+
+                    if (res != null)
+                    {
+                        List<byte> ResponseWithBytes =
+    [
+        .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Length: {res.Length}\r\n"),
                             .. Encoding.UTF8.GetBytes($"\r\n"),
                             .. res,
                         ];
-                    response.AddRange([.. ResponseWithBytes]);
-                }
-                else
-                {
-                    List<byte> ResponseWithBytes =
-[                   .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
+                        response.AddRange([.. ResponseWithBytes]);
+                    }
+                    else
+                    {
+                        List<byte> ResponseWithBytes =
+    [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
                             //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
                             .. Encoding.UTF8.GetBytes($"\r\n"),
                         ];
+                        response.AddRange([.. ResponseWithBytes]);
+                    }
+                }
+                catch
+                {
+                    List<byte> ResponseWithBytes =
+   [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 505 Internal Server Error\r\n"),
+                            //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
+                            .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
+                            .. Encoding.UTF8.GetBytes($"\r\n"),
+                        ];
+                    response.AddRange([.. ResponseWithBytes]);
                 }
 
                 // add boundary, also include http newline if there is binary content

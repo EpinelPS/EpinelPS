@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.Msgs.Arena
 {
@@ -10,7 +11,9 @@ namespace EpinelPS.LobbyServer.Msgs.Arena
             var req = await ReadData<ReqGetArenaBanInfo>();
 
             var response = new ResGetArenaBanInfo();
-            // TODO
+            response.RookieArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) };
+            response.SpecialArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) };
+
             await WriteDataAsync(response);
         }
     }

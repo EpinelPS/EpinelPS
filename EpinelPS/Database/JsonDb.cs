@@ -78,6 +78,12 @@ namespace EpinelPS.Database
         /// </summary>
         public long AvailableAt;
     }
+    public class ResetableData
+    {
+        public int WipeoutCount = 0;
+        public bool ClearedSimulationRoom = false;
+        public int InterceptionTickets = 3;
+    }
     public class User
     {
         // User info
@@ -112,6 +118,7 @@ namespace EpinelPS.Database
         public bool SynchroDeviceUpgraded = false;
         public int SynchroDeviceLevel = 200;
 
+        public ResetableData ResetableData = new();
         public List<ItemData> Items = new();
         public List<Character> Characters = [];
         public NetWholeUserTeamData RepresentationTeamData = new();
