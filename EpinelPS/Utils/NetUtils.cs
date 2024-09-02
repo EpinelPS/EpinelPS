@@ -156,13 +156,7 @@ namespace EpinelPS.Utils
 
         public static double CalculateBoostValueForOutpost(User user, CurrencyType type)
         {
-            double boost = 1.0;
-            if (user.CompletedTacticAcademyLessons.Contains(1003) && type == CurrencyType.Gold)
-            {
-                boost += .10;
-            }
-
-            return boost;
+            return user.OutpostBuffs.GetTotalPercentages(type) / 100.0;
         }
 
         public static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost)
@@ -249,14 +243,21 @@ namespace EpinelPS.Utils
         {
             List<NetTimeReward> res = new List<NetTimeReward>();
 
+            // NetTimeRewardBuff
+            // FunctionType: 1: value increase, 2: percentage increase
+            // Tid: Outpost building ID
+
             var goldBuff = new NetTimeReward()
             {
                 UseId = 1,
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, false) * 10000
             };
+            foreach (var item in user.OutpostBuffs.CreditPercentages)
+            {
+                goldBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.OutpostBuffSourceTypeTacticAcademy, Value = item });
+            }
 
-           // goldBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 110101, FunctionType = 1, SourceType = OutpostBuffSourceType.OutpostBuffSourceTypeTacticAcademy, Value = 1000 });
 
             var battleDataBuff = new NetTimeReward()
             {
@@ -264,6 +265,10 @@ namespace EpinelPS.Utils
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, false) * 10000
             };
+            foreach (var item in user.OutpostBuffs.BattleDataPercentages)
+            {
+                battleDataBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.OutpostBuffSourceTypeTacticAcademy, Value = item });
+            }
 
             var xpBuff = new NetTimeReward()
             {
@@ -271,6 +276,10 @@ namespace EpinelPS.Utils
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, false) * 10000
             };
+            foreach (var item in user.OutpostBuffs.UserExpPercentages)
+            {
+                xpBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.OutpostBuffSourceTypeTacticAcademy, Value = item });
+            }
 
             var coredustBuff = new NetTimeReward()
             {
@@ -278,6 +287,10 @@ namespace EpinelPS.Utils
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, true) * 100,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, false) * 100
             };
+            foreach (var item in user.OutpostBuffs.CoreDustPercentages)
+            {
+                coredustBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.OutpostBuffSourceTypeTacticAcademy, Value = item });
+            }
 
             res.Add(battleDataBuff);
             res.Add(goldBuff);

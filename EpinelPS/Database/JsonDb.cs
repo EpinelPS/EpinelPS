@@ -84,6 +84,38 @@ namespace EpinelPS.Database
         public bool ClearedSimulationRoom = false;
         public int InterceptionTickets = 3;
     }
+    public class OutpostBuffs
+    {
+        public List<int> CreditPercentages = new List<int>();
+        public List<int> CoreDustPercentages = new List<int>();
+        public List<int> BattleDataPercentages = new List<int>();
+        public List<int> UserExpPercentages = new List<int>();
+
+        public List<int> GetPercentages(CurrencyType currency)
+        {
+            if (currency == CurrencyType.Gold)
+                return CreditPercentages;
+            else if (currency == CurrencyType.UserExp)
+                return UserExpPercentages;
+            else if (currency == CurrencyType.CharacterExp)
+                return BattleDataPercentages;
+            else if (currency == CurrencyType.CharacterExp2)
+                return CoreDustPercentages;
+
+            throw new InvalidOperationException();
+        }
+        public int GetTotalPercentages(CurrencyType currency)
+        {
+            int result = 0;
+            var numbs = GetPercentages(currency);
+            foreach (var item in numbs)
+            {
+                result += item;
+            }
+
+            return result;
+        }
+    }
     public class User
     {
         // User info
@@ -142,7 +174,9 @@ namespace EpinelPS.Database
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
-        
+
+        public OutpostBuffs OutpostBuffs = new();
+
         public void SetQuest(int tid, bool recievedReward)
         {
             if (MainQuestData.ContainsKey(tid))

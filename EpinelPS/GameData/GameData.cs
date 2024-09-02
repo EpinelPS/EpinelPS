@@ -306,27 +306,10 @@ namespace EpinelPS.StaticInfo
                     Console.WriteLine("failed to read character level table entry");
             }
 
-            var tacticLessonTable = await LoadZip("TacticAcademyFunctionTable.json", progress);
-
-            foreach (JToken item in tacticLessonTable)
+            var tacticLessonTable = await LoadZip<TacticAcademyLessonTable>("TacticAcademyFunctionTable.json", progress);
+            foreach (var obj in tacticLessonTable.records)
             {
-                var idRaw = item["id"];
-                var groupidRaw = item["group_id"];
-                var currencyIdRaw = item["currency_id"];
-                var currencyValueRaw = item["currency_value"];
-
-                if (idRaw == null) throw new InvalidDataException();
-                if (groupidRaw == null) throw new InvalidDataException();
-                if (currencyIdRaw == null) throw new InvalidDataException();
-                if (currencyValueRaw == null) throw new InvalidDataException();
-
-                var id = idRaw.ToObject<int>();
-                var currencyId = currencyIdRaw.ToObject<int>();
-                var currencyValue = currencyValueRaw.ToObject<int>();
-                var groupid = groupidRaw.ToObject<int>();
-
-                var fullId = int.Parse(groupid.ToString() + id.ToString());
-                TacticAcademyLessons.Add(id, new TacticAcademyLessonRecord() { CurrencyId = (CurrencyType)currencyId, CurrencyValue = currencyValue, GroupId = groupid, Id = id });
+                TacticAcademyLessons.Add(obj.id, obj);
             }
 
             var sideStoryTable = await LoadZip("SideStoryStageTable.json", progress);

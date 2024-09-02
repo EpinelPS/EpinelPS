@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Msgs.Character
             var req = await ReadData<ReqGetAttractiveList>();
 
             var response = new ResGetAttractiveList();
-            response.CounselAvailableCount = 3; // TODO
+            response.CounselAvailableCount = 0; // TODO
 
             // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);

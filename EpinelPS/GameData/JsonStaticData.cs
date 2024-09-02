@@ -95,12 +95,24 @@
         public int character_exp2 = 0;
     }
 
+    public class TacticAcademyLessonReward
+    {
+        public int lesson_reward_id;
+        public int lesson_reward_value;
+    }
     public class TacticAcademyLessonRecord
     {
-        public CurrencyType CurrencyId;
-        public int CurrencyValue;
-        public int Id;
-        public int GroupId;
+        public int currency_id;
+        public int currency_value;
+        public int id;
+        public int group_id;
+        public string lesson_type = "";
+        public TacticAcademyLessonReward[]? lesson_reward;
+    }
+    
+    public class TacticAcademyLessonTable
+    {
+        public List<TacticAcademyLessonRecord> records;
     }
 
     public class CampaignChapterRecord
