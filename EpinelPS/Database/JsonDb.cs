@@ -129,7 +129,7 @@ namespace EpinelPS.Database
         public string Nickname = "SomePlayer";
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
-        public int ProfileFrame = 25;
+        public int ProfileFrame = 1;
         public bool IsAdmin = false;
 		public bool sickpulls = false;
         public bool IsBanned = false;

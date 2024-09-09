@@ -360,6 +360,11 @@ namespace EpinelPS.StaticInfo
                     }
                 }
             }
+			var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
+            foreach (var obj in fieldItems.records)
+            {
+                FieldItems.Add(obj.id, obj);
+            }
 			var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
 			foreach (var obj in battleOutpostTable.records)
 			{
