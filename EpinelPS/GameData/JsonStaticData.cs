@@ -130,7 +130,9 @@
     public class CharacterRecord
     {
         public int id;
-        // TODO: There is more stuff here but it isn't needed yet
+        public int piece_id;
+		public string original_rare;
+		public string corporation;
     }
     public class CharacterTable
     {
@@ -159,7 +161,39 @@
     {
         public List<FieldItemRecord> records;
     }
+    public class JukeboxListRecord
+    {
+        public int id;
+        public int theme;
+        public string bgm ;
+        public bool is_loop;
+        public int play_time;
+        public string name ;
+        public int order;
+        public string artist;
+        public string get_info_type;
+        public string get_info_value;
+    }
 
+    public class JukeboxListTable
+    {
+        public List<JukeboxListRecord> records;
+    }
+
+    public class JukeboxThemeRecord
+    {
+        public int id;
+        public string name_localkey;
+        public string description_localkey;
+        public int order;
+        public string theme_resource;
+        public string bg_color;
+    }
+
+    public class JukeboxThemeTable
+    {
+        public List<JukeboxThemeRecord> records;
+    }
     public class OutpostBattleTableRecord
     {
         public int id;
@@ -172,4 +206,68 @@
     {
         public List<OutpostBattleTableRecord> records;
     }
+
+    public class GachaPriceGroup
+    {
+        public int gacha_price_type;
+        public int gacha_price_value_count_1;
+        public int daily_gacha_discount_price_value_1;
+        public int gacha_price_value_count_10;
+    }
+
+    public class GachaType
+    {
+        public int id;
+        public string type;
+        public int order_id;
+        public int event_id;
+        public string gacha_provide_count_type;
+        public bool use_daily_discount_one;
+        public int daily_free_gacha_event_id;
+        public List<GachaPriceGroup> gacha_price_group;
+        public int grade_prob_id;
+        public bool is_max_count;
+        public int max_ceiling_count;
+        public int fixed_char_amount;
+        public string gacha_page_prefab;
+        public int pickup_char_group_id;
+        public bool use_wish_list;
+        public int gacha_play_max_count;
+        public int gacha_reward_id;
+        public int gacha_play_max_count_reward_id;
+        public int previous_gacha_id;
+    }
+
+    public class GachaTypeTable
+    {
+        public List<GachaType> records;
+    }
+	
+	public class EventManager
+	{
+		public int id;
+		public string event_system_type;
+		public string event_shortcut_id;
+		public string name_localkey;
+		public string description_localkey;
+		public string schedule_type;
+		public string schedule_value;
+		public string event_disable_locale;
+		public string event_resource_id;
+		public string event_thumbnail_resource_table;
+		public string event_thumbnail_resource_id;
+		public string thumbnail_color;
+		public string event_banner_resource_table;
+		public string event_banner_resource_id;
+		public long event_order;
+		public bool is_popup;
+		public string active_type;
+		public string banner_print_type;
+	}
+
+	public class EventManagerTable
+	{
+		public List<EventManager> records;
+	}
+
 }

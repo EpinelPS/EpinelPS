@@ -129,9 +129,9 @@ namespace EpinelPS.Database
         public string Nickname = "SomePlayer";
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
-        public int ProfileFrame = 1;
+        public int ProfileFrame = 25;
         public bool IsAdmin = false;
-
+		public bool sickpulls = false;
         public bool IsBanned = false;
         public DateTime BanStart;
         public DateTime BanEnd;
@@ -170,7 +170,7 @@ namespace EpinelPS.Database
         public List<int> CompletedSideStoryStages = new();
 
         public List<int> Memorial = new();
-        public List<int> JukeboxBgm = new();
+        public List<int> JukeboxBgm = new List<int>();
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -442,5 +442,44 @@ namespace EpinelPS.Database
                 File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
             }
         }
+		public static int CurrentJukeboxBgm(int position)
+		{
+			var activeJukeboxBgm = new List<int>();
+			//important first position holds lobby bgm id and second commanders room bgm id
+			foreach (var user in Instance.Users)
+			{
+				if (user.JukeboxBgm == null || user.JukeboxBgm.Count == 0)
+				{
+					// this if statemet only exists becaus some weird black magic copies default value over and over
+					//in the file when its set in public List<int> JukeboxBgm = new List<int>(); 
+					//delete when or if it gets fixed
+					
+					user.JukeboxBgm = new List<int> { 2,5 };
+				}
+
+				activeJukeboxBgm.AddRange(user.JukeboxBgm);
+			}
+
+			if (activeJukeboxBgm.Count == 0)
+			{
+				return 8995001; 
+			}
+
+			position = (position == 2 && activeJukeboxBgm.Count > 1) ? 2 : 1;
+			return activeJukeboxBgm[position - 1];
+		}
+
+		public static bool IsSickPulls(User selectedUser)
+		{
+			if (selectedUser != null)
+			{
+				return selectedUser.sickpulls;
+			}
+			else
+			{
+				throw new Exception($"User with ID {selectedUser.ID} not found");
+			}
+		}
+
     }
 }

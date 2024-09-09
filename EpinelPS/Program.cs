@@ -208,7 +208,12 @@ namespace EpinelPS
                     Console.WriteLine("  unban - unban selected user from game");
                     Console.WriteLine("  exit - exit server application");
                     Console.WriteLine("  completestage (chapter num)-(stage number) - complete selected stage and get rewards (and all previous ones). Example completestage 15-1. Note that the exact stage number cleared may not be exact.");
-                }
+					Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
+					Console.WriteLine("  SetLevel (level) - Set all characters' level (between 1 and 999 takes effect on game and server restart)");
+					Console.WriteLine("  SetSkillLevel (level) - Set all characters' skill levels between 1 and 10 (takes effect on game and server restart)");
+					Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
+
+				}
                 else if (input == "ls /users")
                 {
                     Console.WriteLine("Id,Username,Nickname");
@@ -248,6 +253,146 @@ namespace EpinelPS
                         Console.WriteLine("Usage: chroot (user id)");
                     }
                 }
+				else if (input == "addallcharacters")
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else
+						{
+							// Add all characters to the selected user
+							foreach (var c in GameData.Instance.GetAllCharacterTids())
+							{
+								if (!user.HasCharacter(c))
+								{
+									// Generate a unique character ID
+									int id = user.GenerateUniqueCharacterId();
+									user.Characters.Add(new Database.Character() 
+									{ 
+										CostumeId = 0, 
+										Csn = id, 
+										Grade = 0, 
+										Level = 1, 
+										Skill1Lvl = 1, 
+										Skill2Lvl = 1, 
+										Tid = c, 
+										UltimateLevel = 1 
+									});
+								}
+							}
+							Console.WriteLine("Added all missing characters to user " + user.Username);
+							JsonDb.Save();
+						}
+					}
+				}
+				else if (input == "sickpulls")
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else
+						{
+							// Check current value of sickpulls and toggle it
+							bool currentSickPulls = EpinelPS.Database.JsonDb.IsSickPulls(user);
+							if (currentSickPulls)
+							{
+								user.sickpulls = false;
+								Console.WriteLine("sickpulls is now set to false for user " + user.Username);
+							}
+							else
+							{
+								user.sickpulls = true;
+								Console.WriteLine("sickpulls is now set to true for user " + user.Username);
+							}
+
+							// Save the changes to the database
+							JsonDb.Save();
+						}
+					}
+				}
+				else if (input.StartsWith("SetLevel"))
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else if (args.Length == 2 && int.TryParse(args[1], out int level) && level >= 1 && level <= 999)
+						{
+							foreach (var character in user.Characters)
+							{
+								character.Level = level;
+							}
+							Console.WriteLine("Set all characters' level to " + level);
+							JsonDb.Save();
+						}
+						else
+						{
+							Console.WriteLine("Invalid argument. Level must be between 1 and 999.");
+						}
+					}
+				}
+				else if (input.StartsWith("SetSkillLevel"))
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else if (args.Length == 2 && int.TryParse(args[1], out int skillLevel) && skillLevel >= 1 && skillLevel <= 10)
+						{
+							foreach (var character in user.Characters)
+							{
+								character.UltimateLevel = skillLevel;
+								character.Skill1Lvl = skillLevel;
+								character.Skill2Lvl = skillLevel;
+							}
+							Console.WriteLine("Set all characters' skill levels to " + skillLevel);
+							JsonDb.Save();
+						}
+						else
+						{
+							Console.WriteLine("Invalid argument. Skill level must be between 1 and 10.");
+						}
+					}
+				}
+				
                 else if (input.StartsWith("rmuser"))
                 {
                     if (selectedUser == 0)

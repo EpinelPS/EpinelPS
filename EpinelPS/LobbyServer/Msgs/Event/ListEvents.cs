@@ -100,8 +100,8 @@ namespace EpinelPS.LobbyServer.Msgs.Event
 
             response.EventList.Add(new NetEventData()
             {
-                Id = 40053,
-                EventSystemType = 5,
+                Id = 70034,
+                EventSystemType = 6,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,

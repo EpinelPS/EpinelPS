@@ -22,6 +22,7 @@ namespace EpinelPS.StaticInfo
                 return _instance;
             }
         }
+
         private ZipFile MainZip;
         private MemoryStream ZipStream;
         private Dictionary<int, MainQuestCompletionRecord> questDataRecords;
@@ -30,16 +31,21 @@ namespace EpinelPS.StaticInfo
         private JArray userExpDataRecords;
         private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
         private JArray characterCostumeTable;
-        private Dictionary<int, CharacterRecord> characterTable;
+        public Dictionary<int, CharacterRecord> characterTable;
         private Dictionary<int, ClearedTutorialData> tutorialTable;
         private Dictionary<int, ItemEquipRecord> itemEquipTable;
-        private Dictionary<string, JArray> FieldMapData = [];
-        private Dictionary<int, CharacterLevelData> LevelData = [];
-        private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
-        public Dictionary<int, int> SidestoryRewardTable = [];
-        public Dictionary<string, int> PositionReward = new Dictionary<string, int>();
-        public Dictionary<int, FieldItemRecord> FieldItems = [];
-        public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
+        private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
+        private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
+        private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
+        public Dictionary<int, int> SidestoryRewardTable = new Dictionary<int, int>();  // Fixed initialization
+        public Dictionary<string, int> PositionReward = new Dictionary<string, int>();  // Fixed initialization
+        public Dictionary<int, FieldItemRecord> FieldItems = new Dictionary<int, FieldItemRecord>();  // Fixed initialization
+        public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = new Dictionary<int, OutpostBattleTableRecord>();  // Fixed initialization
+        public Dictionary<int, JukeboxListRecord> jukeboxListDataRecords;
+        private Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords;
+		public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
+		public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
+
 
         public byte[] Sha256Hash;
         public int Size;
@@ -74,6 +80,10 @@ namespace EpinelPS.StaticInfo
             tutorialTable = new();
             itemEquipTable = new();
 
+            // Initialize Jukebox data dictionaries
+            jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
+            jukeboxThemeDataRecords = new Dictionary<int, JukeboxThemeRecord>();
+
             var rawBytes = File.ReadAllBytes(filePath);
             Sha256Hash = SHA256.HashData(rawBytes);
             Size = rawBytes.Length;
@@ -81,6 +91,7 @@ namespace EpinelPS.StaticInfo
             LoadGameData(filePath);
             if (MainZip == null) throw new Exception("failed to read zip file");
         }
+
         #region Data loading
         private static byte[] PresharedValue = [0xCB, 0xC2, 0x1C, 0x6F, 0xF3, 0xF5, 0x07, 0xF5, 0x05, 0xBA, 0xCA, 0xD4, 0x98, 0x28, 0x84, 0x1F, 0xF0, 0xD1, 0x38, 0xC7, 0x61, 0xDF, 0xD6, 0xE6, 0x64, 0x9A, 0x85, 0x13, 0x3E, 0x1A, 0x6A, 0x0C, 0x68, 0x0E, 0x2B, 0xC4, 0xDF, 0x72, 0xF8, 0xC6, 0x55, 0xE4, 0x7B, 0x14, 0x36, 0x18, 0x3B, 0xA7, 0xD1, 0x20, 0x81, 0x22, 0xD1, 0xA9, 0x18, 0x84, 0x65, 0x13, 0x0B, 0xED, 0xA3, 0x00, 0xE5, 0xD9];
         private static RSAParameters LoadParameters = new RSAParameters()
@@ -197,6 +208,7 @@ namespace EpinelPS.StaticInfo
                 outputStream.WriteByte((byte)(((byte)b) ^ mask));
             }
         }
+
         public static async Task Load()
         {
             var targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(GameConfig.Root.StaticData.Url, CancellationToken.None);
@@ -205,6 +217,7 @@ namespace EpinelPS.StaticInfo
             _instance = new(targetFile);
         }
         #endregion
+
         private async Task<T> LoadZip<T>(string entry, ProgressBar bar)
         {
             var mainQuestData = MainZip.GetEntry(entry);
@@ -212,7 +225,6 @@ namespace EpinelPS.StaticInfo
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
-
 
             var questdata = JsonConvert.DeserializeObject<T>(mainQuestDataString);
             if (questdata == null) throw new Exception("failed to parse " + entry);
@@ -222,6 +234,7 @@ namespace EpinelPS.StaticInfo
 
             return questdata;
         }
+
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
         {
             var mainQuestData = MainZip.GetEntry(entry);
@@ -229,7 +242,6 @@ namespace EpinelPS.StaticInfo
 
             using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
-
 
             var questdata = JObject.Parse(mainQuestDataString);
             if (questdata == null) throw new Exception("failed to parse " + entry);
@@ -243,6 +255,7 @@ namespace EpinelPS.StaticInfo
 
             return records;
         }
+
         int totalFiles = 78;
         int currentFile = 0;
 
@@ -347,18 +360,62 @@ namespace EpinelPS.StaticInfo
                     }
                 }
             }
+			var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
+			foreach (var obj in battleOutpostTable.records)
+			{
+				OutpostBattle.Add(obj.id, obj);
+			}
+			
+			var gachaTypeTable = await LoadZip<GachaTypeTable>("GachaTypeTable.json", progress);
 
+			// Add the records to the dictionary
+			foreach (var obj in gachaTypeTable.records)
+			{
+				gachaTypes.Add(obj.id, obj);  // Use obj.id as the key and obj (the GachaType) as the value
+			}
+			
+			var eventManagerTable = await LoadZip<EventManagerTable>("EventManagerTable.json", progress);
 
-            var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
-            foreach (var obj in fieldItems.records)
+			// Add the records to the dictionary
+			foreach (var obj in eventManagerTable.records)
+			{
+				eventManagers.Add(obj.id, obj);  // Use obj.id as the key and obj (the EventManager) as the value
+			}
+
+				
+            // Load Jukebox data
+            await LoadJukeboxListData(progress);
+            await LoadJukeboxThemeData(progress);
+        }
+
+        public async Task LoadJukeboxListData(ProgressBar bar)
+        {
+            var jukeboxListData = await LoadZip("JukeboxListTable.json", bar);
+            foreach (JObject obj in jukeboxListData)
             {
-                FieldItems.Add(obj.id, obj);
+                var record = obj.ToObject<JukeboxListRecord>();
+                if (record != null)
+                {
+                    jukeboxListDataRecords.Add(record.id, record);
+                }
             }
+        }
+		
+		public Dictionary<int, JukeboxListRecord> GetJukeboxListDataRecords()
+		{
+			return jukeboxListDataRecords;
+		}
 
-            var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
-            foreach (var obj in battleOutpostTable.records)
+        public async Task LoadJukeboxThemeData(ProgressBar bar)
+        {
+            var jukeboxThemeData = await LoadZip("JukeboxThemeTable.json", bar);
+            foreach (JObject obj in jukeboxThemeData)
             {
-                OutpostBattle.Add(obj.id, obj);
+                var record = obj.ToObject<JukeboxThemeRecord>();
+                if (record != null)
+                {
+                    jukeboxThemeDataRecords.Add(record.id, record);
+                }
             }
         }
 
@@ -506,6 +563,19 @@ namespace EpinelPS.StaticInfo
         public TacticAcademyLessonRecord GetTacticAcademyLesson(int lessonId)
         {
             return TacticAcademyLessons[lessonId];
+        }
+
+        // Methods to access Jukebox data
+        public JukeboxListRecord? GetJukeboxListRecordById(int id)
+        {
+            jukeboxListDataRecords.TryGetValue(id, out var record);
+            return record;
+        }
+
+        public JukeboxThemeRecord? GetJukeboxThemeRecordById(int id)
+        {
+            jukeboxThemeDataRecords.TryGetValue(id, out var record);
+            return record;
         }
     }
 }

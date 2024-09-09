@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {
@@ -38,8 +39,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
                 response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
             }
 
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = JsonDb.CurrentJukeboxBgm(2), Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = JsonDb.CurrentJukeboxBgm(1), Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
 
             await WriteDataAsync(response);
         }
