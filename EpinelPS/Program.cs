@@ -275,12 +275,10 @@ namespace EpinelPS
 							{
 								if (!user.HasCharacter(c))
 								{
-									// Generate a unique character ID
-									int id = user.GenerateUniqueCharacterId();
 									user.Characters.Add(new Database.Character() 
 									{ 
 										CostumeId = 0, 
-										Csn = id, 
+										Csn = c, 
 										Grade = 0, 
 										Level = 1, 
 										Skill1Lvl = 1, 
