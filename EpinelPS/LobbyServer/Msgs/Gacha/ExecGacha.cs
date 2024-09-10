@@ -2,7 +2,6 @@
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 
-
 namespace EpinelPS.LobbyServer.Msgs.Gacha
 {
     [PacketPath("/gacha/execute")]
@@ -17,6 +16,10 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqExecuteGacha>();
+            
+            // Count determines whether we select 1 or 10 characters
+            int numberOfPulls = req.Count == 1 ? 1 : 10; 
+
             var user = GetUser();
             var response = new ResExecuteGacha();
 
@@ -35,17 +38,17 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             // Check if user has 'sickpulls' set to true to use old method
             if (user.sickpulls)
             {
-                // Old selection method: Randomly select 10 characters without rarity-based selection, excluding characters in the sickPullsExclusionList
+                // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
                 selectedCharacters = allCharacterData
                     .Where(c => !sickPullsExclusionList.Contains(c.id)) // Exclude characters based on the exclusion list for sick pulls
                     .OrderBy(x => random.Next())
-                    .Take(10)
+                    .Take(numberOfPulls)
                     .ToList();
             }
             else
             {
-                // New method: Select 10 characters, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
-                for (int i = 0; i < 10; i++)
+                // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
+                for (int i = 0; i < numberOfPulls; i++)
                 {
                     var character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList);
                     selectedCharacters.Add(character);
