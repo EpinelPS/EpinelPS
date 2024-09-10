@@ -23,7 +23,12 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             var user = GetUser();
             var response = new ResExecuteGacha();
 
-            var allCharacterData = GameData.Instance.characterTable.Values.ToList();
+			var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
+			// Remove the .Values part since it's already a list.
+			var allCharacterData = entireallCharacterData
+				.GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     
+				.SelectMany(g => g.Where(c => c.grade_core_id == "11" || c.grade_core_id == "103" || c.grade_core_id == "201" || c.name_code == "3999"))  // Always add characters with grade_core_id == 11 and 103
+				.ToList();
 
             // Separate characters by rarity categories
             var rCharacters = allCharacterData.Where(c => c.original_rare == "R").ToList();
@@ -39,11 +44,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             if (user.sickpulls)
             {
                 // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
-                selectedCharacters = allCharacterData
-                    .Where(c => !sickPullsExclusionList.Contains(c.id)) // Exclude characters based on the exclusion list for sick pulls
-                    .OrderBy(x => random.Next())
-                    .Take(numberOfPulls)
-                    .ToList();
+                selectedCharacters = allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.id)).OrderBy(x => random.Next()).Take(numberOfPulls).ToList(); // Exclude characters based on the exclusion list for sick pulls
             }
             else
             {
@@ -56,59 +57,6 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             }
 
             var pieceIds = new List<Tuple<int, int>>(); // 2D array to store characterId and pieceId as Tuple
-
-            // Populate the 2D array with characterId and pieceId for each selected character
-            foreach (var characterData in selectedCharacters)
-            {
-                var characterId = characterData.id;
-                var pieceId = characterData.piece_id;
-
-                // Store characterId and pieceId in the array
-                pieceIds.Add(Tuple.Create(characterId, pieceId));
-
-                var id = user.GenerateUniqueCharacterId();
-                response.Gacha.Add(new NetGachaEntityData()
-                {
-                    Corporation = 1,
-                    PieceCount = 1,
-                    CurrencyValue = 5,
-                    Sn = id,
-                    Tid = characterId,
-                    Type = 1
-                });
-
-                // Check if the user already has the character, if not add it
-                if (!user.HasCharacter(characterId))
-                {
-                    response.Characters.Add(new NetUserCharacterDefaultData()
-                    {
-                        CostumeId = 0,
-                        Csn = id,
-                        Grade = 0,
-                        Level = 1,
-                        Skill1Lv = 1,
-                        Skill2Lv = 1,
-                        Tid = characterId,
-                        UltiSkillLv = 1
-                    });
-                }
-
-                if (!user.HasCharacter(characterId))
-                {
-                    user.Characters.Add(new Database.Character()
-                    {
-                        CostumeId = 0,
-                        Csn = id,
-                        Grade = 0,
-                        Level = 1,
-                        Skill1Lvl = 1,
-                        Skill2Lvl = 1,
-                        Tid = characterId,
-                        UltimateLevel = 1
-                    });
-                }
-            }
-
             // Add each character's item to user.Items if the character exists in user.Characters
             foreach (var characterData in selectedCharacters)
             {
@@ -137,6 +85,58 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                     });
                 }
             }
+            // Populate the 2D array with characterId and pieceId for each selected character
+            foreach (var characterData in selectedCharacters)
+            {
+                var characterId = characterData.id;
+                var pieceId = characterData.piece_id;
+
+                // Store characterId and pieceId in the array
+                pieceIds.Add(Tuple.Create(characterId, pieceId));
+				var id = user.GenerateUniqueCharacterId();
+                response.Gacha.Add(new NetGachaEntityData()
+                {
+                    Corporation = 1,
+                    PieceCount = 1,
+                    CurrencyValue = 5,
+                    Sn = id,
+                    Tid = characterId,
+                    Type = 1
+                });
+
+                // Check if the user already has the character, if not add it
+                if (!user.HasCharacter(characterId))
+                {
+                    response.Characters.Add(new NetUserCharacterDefaultData()
+                    {
+                        CostumeId = 0,
+                        Csn = characterId,
+                        Grade = 0,
+                        Level = 1,
+                        Skill1Lv = 1,
+                        Skill2Lv = 1,
+                        Tid = characterId,
+                        UltiSkillLv = 1
+                    });
+                }
+
+                if (!user.HasCharacter(characterId))
+                {
+                    user.Characters.Add(new Database.Character()
+                    {
+                        CostumeId = 0,
+                        Csn = characterId,
+                        Grade = 0,
+                        Level = 1,
+                        Skill1Lvl = 1,
+                        Skill2Lvl = 1,
+                        Tid = characterId,
+                        UltimateLevel = 1
+                    });
+                }
+            }
+
+
 
             user.GachaTutorialPlayCount++;
             JsonDb.Save();
