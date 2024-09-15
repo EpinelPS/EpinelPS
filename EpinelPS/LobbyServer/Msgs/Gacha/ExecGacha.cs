@@ -25,10 +25,9 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
 
 			var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
 			// Remove the .Values part since it's already a list.
-			var allCharacterData = entireallCharacterData
-				.GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     
-				.SelectMany(g => g.Where(c => c.grade_core_id == "11" || c.grade_core_id == "103" || c.grade_core_id == "201" || c.name_code == "3999"))  // Always add characters with grade_core_id == 11 and 103
-				.ToList();
+			// Group by name_code to treat same name_code as one character 
+			// Always add characters with grade_core_id == 11 and 103
+			var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == "11" || c.grade_core_id == "103" || c.grade_core_id == "201" || c.name_code == "3999")).ToList(); 
 
             // Separate characters by rarity categories
             var rCharacters = allCharacterData.Where(c => c.original_rare == "R").ToList();

@@ -135,6 +135,7 @@
 		public string corporation;
 		public string grade_core_id;
 		public string name_code;
+		public string grow_grade;
     }
     public class CharacterTable
     {
@@ -271,5 +272,15 @@
 	{
 		public List<EventManager> records;
 	}
+	
+    public class LiveWallpaperRecord
+    {
+        public int id;
+		public string livewallpaper_type;
+    }
 
+    public class LiveWallpaperTable
+    {
+        public List<LiveWallpaperRecord> records;
+    }
 }

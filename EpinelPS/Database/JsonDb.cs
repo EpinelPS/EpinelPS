@@ -28,7 +28,6 @@ namespace EpinelPS.Database
         public int Csn = 0;
         public int Tid = 0;
         public int CostumeId = 0;
-
         public int Level = 1;
         public int UltimateLevel = 1;
         public int Skill1Lvl = 1;

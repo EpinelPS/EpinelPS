@@ -45,6 +45,8 @@ namespace EpinelPS.StaticInfo
         private Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords;
 		public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
 		public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
+		public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
+
 
 
         public byte[] Sha256Hash;
@@ -387,7 +389,13 @@ namespace EpinelPS.StaticInfo
 				eventManagers.Add(obj.id, obj);  // Use obj.id as the key and obj (the EventManager) as the value
 			}
 
-				
+			var lwptable = await LoadZip<LiveWallpaperTable>("LiveWallpaperTable.json", progress);
+
+			// Add the records to the dictionary
+			foreach (var obj in lwptable.records)
+			{
+				lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
+			}			
             // Load Jukebox data
             await LoadJukeboxListData(progress);
             await LoadJukeboxThemeData(progress);
