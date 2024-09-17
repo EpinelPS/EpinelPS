@@ -29,6 +29,32 @@ namespace EpinelPS
                 Console.WriteLine("Initialize handlers");
                 LobbyHandler.Init();
 
+				foreach (var user in JsonDb.Instance.Users)
+				{
+					// Check if RepresentationTeamData exists and has slots
+					if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
+					{
+						// Iterate through RepresentationTeamData slots
+						foreach (var slot in user.RepresentationTeamData.Slots)
+						{
+							// Find the character in user's character list that matches the slot's Tid
+							var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Tid == slot.Tid);
+
+							if (correspondingCharacter != null)
+							{
+								// Update the CSN value if it differs
+								if (slot.Csn != correspondingCharacter.Csn)
+								{
+									slot.Csn = correspondingCharacter.Csn;
+								}
+							}
+						}
+					}
+				}
+
+				// Save the updated data
+				JsonDb.Save();
+
                 Console.WriteLine("Starting ASP.NET core on ports 80/443");
                 new Thread(() =>
                 {
@@ -283,12 +309,12 @@ namespace EpinelPS
 									user.Characters.Add(new Database.Character()
 									{
 										CostumeId = 0,
-										Csn = character.id,  // Use the character ID
+										Csn = user.GenerateUniqueCharacterId(),  
 										Grade = 0,
 										Level = 1,
 										Skill1Lvl = 1,
 										Skill2Lvl = 1,
-										Tid = character.id,  // Tid is also the character ID
+										Tid = character.id,  // Tid is the character ID
 										UltimateLevel = 1
 									});
 								}
@@ -397,7 +423,7 @@ namespace EpinelPS
 						}
 					}
 				}
-				
+
                 else if (input.StartsWith("rmuser"))
                 {
                     if (selectedUser == 0)

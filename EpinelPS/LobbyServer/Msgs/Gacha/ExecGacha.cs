@@ -64,7 +64,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                     user.Items.Add(new Database.ItemData()
                     {
                         ItemType = characterData.piece_id, // Assuming item id corresponds to character id
-                        Csn = characterData.piece_id,
+                        Csn = 0,
                         Count = 1, // or any relevant count
                         Level = 0,
                         Exp = 0,
@@ -75,7 +75,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                     response.Items.Add(new NetUserItemData()
                     {
                         Tid = characterData.piece_id, // Assuming item id corresponds to character id
-                        Csn = characterData.piece_id,
+                        Csn = 0,
                         Count = 1, // or any relevant count
                         Level = 0,
                         Exp = 0,
@@ -109,7 +109,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                     response.Characters.Add(new NetUserCharacterDefaultData()
                     {
                         CostumeId = 0,
-                        Csn = characterId,
+                        Csn = id,
                         Grade = 0,
                         Level = 1,
                         Skill1Lv = 1,
@@ -124,7 +124,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                     user.Characters.Add(new Database.Character()
                     {
                         CostumeId = 0,
-                        Csn = characterId,
+                        Csn = id,
                         Grade = 0,
                         Level = 1,
                         Skill1Lvl = 1,
