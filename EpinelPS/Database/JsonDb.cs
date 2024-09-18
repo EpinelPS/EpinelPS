@@ -171,6 +171,8 @@ namespace EpinelPS.Database
         public List<int> Memorial = new();
         public List<int> JukeboxBgm = new List<int>();
 
+        public Dictionary<int, int> TowerProgress = new Dictionary<int, int>();
+
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
 
