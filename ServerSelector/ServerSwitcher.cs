@@ -7,9 +7,9 @@ namespace ServerSelector
 {
     public class ServerSwitcher
     {
-        private static int GameAssemblySodiumIntegrityFuncHint = 0x5877FFB;
-        private static byte[] GameAssemblySodiumIntegrityFuncOrg = [0xE8, 0xF0, 0x9D, 0x43, 0xFB];
-        private static byte[] GameAssemblySodiumIntegrityFuncPatch = [0xb0, 0x01, 0x90, 0x90, 0x90];
+        private static int GameAssemblySodiumIntegrityFuncHint = 0x57295B0;
+        private static byte[] GameAssemblySodiumIntegrityFuncOrg = [0x40, 0x53, 0x56, 0x57, 0x41];
+        private static byte[] GameAssemblySodiumIntegrityFuncPatch = [0xb0, 0x01, 0xc3, 0x90, 0x90];
         private const string HostsStartMarker = "# begin ServerSelector entries";
         private const string HostsEndMarker = "# end ServerSelector entries";
 
@@ -132,7 +132,7 @@ namespace ServerSelector
             }
         }
 
-        public static async Task SaveCfg(bool useOffical, string gamePath, string launcherPath, string ip, bool offlineMode)
+        public static async Task<ServerSwitchResult> SaveCfg(bool useOffical, string gamePath, string launcherPath, string ip, bool offlineMode)
         {
             string sodiumLib = AppDomain.CurrentDomain.BaseDirectory + "sodium.dll";
             string gameSodium = gamePath + "/nikke_Data/Plugins/x86_64/sodium.dll";
@@ -143,7 +143,7 @@ namespace ServerSelector
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem";
-
+            bool supported = true;
 
             if (OperatingSystem.IsLinux())
             {
@@ -179,33 +179,33 @@ namespace ServerSelector
 
                 // revert gameassembly changes
                 var gameAssemblyBytes = await File.ReadAllBytesAsync(gameAssembly);
-                for (int i = 0x5877FFB; i < gameAssemblyBytes.Length; i++)
+                var i = GameAssemblySodiumIntegrityFuncHint;
+                if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
+        gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
+        gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
+        gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
+        gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
                 {
-                    if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
-           gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
-           gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
-           gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
-           gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
-                    {
-                        // was not patched
-                        break;
-                    }
 
-                    if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
-                        gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
-                        gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
-                        gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
-                        gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
-                    {
-                        gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncOrg[0];
-                        gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncOrg[1];
-                        gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncOrg[2];
-                        gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncOrg[3];
-                        gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncOrg[4];
+                }
+                else if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
+                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
+                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
+                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
+                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
+                {
+                    gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncOrg[0];
+                    gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncOrg[1];
+                    gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncOrg[2];
+                    gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncOrg[3];
+                    gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncOrg[4];
 
-                        File.WriteAllBytes(gameAssembly, gameAssemblyBytes);
-                        break;
-                    }
+                    File.WriteAllBytes(gameAssembly, gameAssemblyBytes);
+                }
+                else
+                {
+                    // TODO: unsupported version
+                    supported = false;
                 }
 
                 var certList1 = await File.ReadAllTextAsync(launcherCertList);
@@ -298,33 +298,34 @@ namespace ServerSelector
 
                 // patch gameassembly to remove sodium IntegrityUtility Check introduced in v124.6.10
                 var gameAssemblyBytes = await File.ReadAllBytesAsync(gameAssembly);
-                for (int i = 0x5877FFB; i < gameAssemblyBytes.Length; i++)
+
+                var i = GameAssemblySodiumIntegrityFuncHint;
+                if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
+                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
+                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
+                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
+                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
                 {
-                    if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
-                        gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
-                        gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
-                        gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
-                        gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
-                    {
-                        gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncPatch[0]; // MOV ax, 1
-                        gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncPatch[1];
-                        gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncPatch[2]; // NOP
-                        gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncPatch[3]; // NOP
-                        gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncPatch[4]; // NOP
+                    gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncPatch[0]; // MOV ax, 1
+                    gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncPatch[1];
+                    gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncPatch[2]; // NOP
+                    gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncPatch[3]; // NOP
+                    gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncPatch[4]; // NOP
 
-                        await File.WriteAllBytesAsync(gameAssembly, gameAssemblyBytes);
-                        break;
-                    }
-
-                    if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
-                        gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
-                        gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
-                        gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
-                        gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
-                    {
-                        // was already patched
-                        break;
-                    }
+                    await File.WriteAllBytesAsync(gameAssembly, gameAssemblyBytes);
+                }
+                else if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
+                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
+                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
+                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
+                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
+                {
+                    // was already patched
+                }
+                else
+                {
+                    // TODO: unsupported version
+                    supported = false;
                 }
 
 
@@ -341,6 +342,22 @@ namespace ServerSelector
                 certList2 += CAcert;
                 await File.WriteAllTextAsync(gameCertList, certList2);
             }
+
+            return new ServerSwitchResult(true, null, supported);
+        }
+    }
+
+    public class ServerSwitchResult
+    {
+        public bool Ok { get; set; }
+        public Exception? Exception { get; set; }
+        public bool IsSupported { get; set; }
+
+        public ServerSwitchResult(bool ok, Exception? exception, bool isSupported)
+        {
+            this.Ok = ok;
+            this.Exception = exception;
+            this.IsSupported = isSupported;
         }
     }
 }

@@ -24,8 +24,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
 
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = JsonDb.CurrentJukeboxBgm(2), Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = JsonDb.CurrentJukeboxBgm(1), Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
+            response.JukeboxV2 = new NetUserJukeboxDataV2() {CommandBgm = new NetJukeboxBgm() { JukeboxTableId = JsonDb.CurrentJukeboxBgm(2), Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom } };
 
             // Add default slot data
             if (user.RepresentationTeamData.Slots.Count == 0)

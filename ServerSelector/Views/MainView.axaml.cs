@@ -144,7 +144,12 @@ public partial class MainView : UserControl
         SetLoadingScreenVisible(true);
         try
         {
-            await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
+            var res = await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
+
+            if (!res.IsSupported)
+            {
+                ShowWarningMsg("Game version might not be supported", "Warning");
+            }
         }
         catch (Exception ex)
         {
