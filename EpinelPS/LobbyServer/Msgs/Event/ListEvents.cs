@@ -21,6 +21,16 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventSystemType = 34
             });
 
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 81500,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventSystemType = 10
+            });
+            
 
             // TODO: Support events
 
