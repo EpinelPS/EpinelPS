@@ -299,7 +299,7 @@ namespace EpinelPS
 							// Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
 							var allCharacters = GameData.Instance.characterTable.Values
 								.GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
-								.SelectMany(g => g.Where(c => c.grade_core_id == "11" || c.grade_core_id == "103" || c.grade_core_id == "201" || c.name_code == "3999"))  // Always add characters with grade_core_id == 11 and 103
+								.SelectMany(g => g.Where(c => c.grade_core_id == 11 || c.grade_core_id == 103 || c.grade_core_id == 201 || c.name_code == 3999))  // Always add characters with grade_core_id == 11 and 103
 								.ToList();
 
 							foreach (var character in allCharacters)

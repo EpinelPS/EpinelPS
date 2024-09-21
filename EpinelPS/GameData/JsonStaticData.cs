@@ -133,9 +133,9 @@
         public int piece_id;
 		public string original_rare;
 		public string corporation;
-		public string grade_core_id;
-		public string name_code;
-		public string grow_grade;
+		public int grade_core_id;
+		public int name_code;
+		public int grow_grade;
     }
     public class CharacterTable
     {

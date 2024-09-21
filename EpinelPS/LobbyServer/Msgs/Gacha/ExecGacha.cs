@@ -26,11 +26,11 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
 			var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
 			// Remove the .Values part since it's already a list.
 			// Group by name_code to treat same name_code as one character 
-			// Always add characters with grade_core_id == 11 and 103
-			var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == "11" || c.grade_core_id == "103" || c.grade_core_id == "201" || c.name_code == "3999")).ToList(); 
+			// Always add characters with grade_core_id == 1 and 101
+			var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999)).ToList(); 
 
             // Separate characters by rarity categories
-            var rCharacters = allCharacterData.Where(c => c.original_rare == "R").ToList();
+            var rCharacters = allCharacterData.Where(c => c.original_rare == "R" ).ToList();
             var srCharacters = allCharacterData.Where(c => c.original_rare == "SR").ToList();
             
             // Separate Pilgrim SSRs and non-Pilgrim SSRs
@@ -61,7 +61,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             {
                 if (user.Characters.Any(c => c.Tid == characterData.id))
                 {
-                    user.Items.Add(new Database.ItemData()
+                    user.Items.Add(new ItemData()
                     {
                         ItemType = characterData.piece_id, // Assuming item id corresponds to character id
                         Csn = 0,
@@ -117,10 +117,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
                         Tid = characterId,
                         UltiSkillLv = 1
                     });
-                }
 
-                if (!user.HasCharacter(characterId))
-                {
                     user.Characters.Add(new Database.Character()
                     {
                         CostumeId = 0,
