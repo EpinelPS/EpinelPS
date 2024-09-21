@@ -2,6 +2,9 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
 using Google.Protobuf;
+using Paseto.Builder;
+using Paseto;
+using Newtonsoft.Json;
 
 namespace EpinelPS.LobbyServer
 {
@@ -64,7 +67,7 @@ namespace EpinelPS.LobbyServer
         /// </summary>
         /// <param name="publicKey"></param>
         /// <returns></returns>
-        public static GameClientInfo GenGameClientTok(ByteString publicKey, string authToken)
+        public static GameClientInfo GenGameClientTok(ByteString publicKey, ulong userid)
         {
             var token = Rng.RandomString(381);
 
@@ -75,25 +78,23 @@ namespace EpinelPS.LobbyServer
             info.Keys = box;
             info.ClientAuthToken = token;
 
-            // look up user id
-            foreach (var user in JsonDb.Instance.LauncherAccessTokens)
-            {
-                if (user.Token == authToken)
-                {
-                    info.UserId = user.UserID;
-                }
-            }
-            if (info.UserId == 0)
+            if (userid == 0)
                 throw new Exception("expected user account");
 
-            JsonDb.Instance.GameClientTokens.Add(token, info);
-            JsonDb.Save();
+            info.UserId = userid;
+
             return info;
         }
 
         public static GameClientInfo? GetInfo(string token)
         {
-            return JsonDb.Instance.GameClientTokens[token];
+            var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                             .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+                             .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true });
+
+            var p = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["data"]).GetString();
+
+            return JsonConvert.DeserializeObject<GameClientInfo>(p);
         }
 
         public static void Init()

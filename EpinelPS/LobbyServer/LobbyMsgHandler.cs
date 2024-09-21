@@ -1,6 +1,11 @@
 ﻿using Google.Protobuf;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using Newtonsoft.Json;
+using Paseto.Builder;
+using Paseto;
+using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
 
 namespace EpinelPS.LobbyServer
 {
@@ -41,13 +46,13 @@ namespace EpinelPS.LobbyServer
         public async Task HandleAsync(string authToken)
         {
             this.UsedAuthToken = authToken;
-            foreach (var item in JsonDb.Instance.GameClientTokens)
-            {
-                if (item.Key == authToken)
-                {
-                    UserId = item.Value.UserId;
-                }
-            }
+
+            var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                             .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+                             .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true});
+
+            UserId = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userid"]).GetUInt64();
+
             if (UserId == 0) throw new Exception("403");
             await HandleAsync();
         }

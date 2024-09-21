@@ -2,6 +2,8 @@
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Newtonsoft.Json;
+using Paseto.Builder;
+using Paseto;
 
 namespace EpinelPS.Database
 {
@@ -121,7 +123,7 @@ namespace EpinelPS.Database
         public NetJukeboxLocation Location;
         public NetJukeboxBgmType Type;
         public int TableId;
-       
+
     }
     public class User
     {
@@ -138,7 +140,7 @@ namespace EpinelPS.Database
         public bool ProfileIconIsPrism = false;
         public int ProfileFrame = 25;
         public bool IsAdmin = false;
-		public bool sickpulls = false;
+        public bool sickpulls = false;
         public bool IsBanned = false;
         public DateTime BanStart;
         public DateTime BanEnd;
@@ -168,7 +170,7 @@ namespace EpinelPS.Database
         public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
         public NetWallpaperPlaylist[] WallpaperPlaylistList = [];
         public NetWallpaperJukebox[] WallpaperJukeboxList = [];
-        
+
 
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
         public Dictionary<int, bool> MainQuestData = new();
@@ -188,7 +190,7 @@ namespace EpinelPS.Database
 
         public Dictionary<int, int> TowerProgress = new Dictionary<int, int>();
 
-        public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId};
+        public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
         public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
 
         // Event data
@@ -343,8 +345,9 @@ namespace EpinelPS.Database
 
         public List<AccessToken> LauncherAccessTokens = [];
 
-        public Dictionary<string, GameClientInfo> GameClientTokens = [];
         public string ServerName = "<color=\"green\">Private Server</color>";
+        public byte[] LauncherTokenKey = [];
+        public byte[] EncryptionTokenKey = [];
     }
     internal class JsonDb
     {
@@ -423,6 +426,24 @@ namespace EpinelPS.Database
                     }
                     Console.WriteLine("Database update completed");
                 }
+
+                if (Instance.LauncherTokenKey.Length == 0)
+                {
+                    Console.WriteLine("Launcher token key is null, generating new key");
+
+                    var pasetoKey = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                                 .GenerateSymmetricKey();
+                    Instance.LauncherTokenKey = pasetoKey.Key.ToArray();
+                }
+                if (Instance.EncryptionTokenKey.Length == 0)
+                {
+                    Console.WriteLine("EncryptionTokenKey is null, generating new key");
+
+                    var pasetoKey = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                                 .GenerateSymmetricKey();
+                    Instance.EncryptionTokenKey = pasetoKey.Key.ToArray();
+                }
+
                 Save();
 
                 ValidateDb();
@@ -437,14 +458,34 @@ namespace EpinelPS.Database
         private static void ValidateDb()
         {
             // check if character level is valid
-            foreach (var item in Instance.Users)
+            foreach (var user in Instance.Users)
             {
-                foreach (var c in item.Characters)
+                foreach (var c in user.Characters)
                 {
                     if (c.Level > 1000)
                     {
                         Console.WriteLine($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
                         c.Level = 1000;
+                    }
+                }
+
+                // Check if RepresentationTeamData exists and has slots
+                if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
+                {
+                    // Iterate through RepresentationTeamData slots
+                    foreach (var slot in user.RepresentationTeamData.Slots)
+                    {
+                        // Find the character in user's character list that matches the slot's Tid
+                        var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Tid == slot.Tid);
+
+                        if (correspondingCharacter != null)
+                        {
+                            // Update the CSN value if it differs
+                            if (slot.Csn != correspondingCharacter.Csn)
+                            {
+                                slot.Csn = correspondingCharacter.Csn;
+                            }
+                        }
                     }
                 }
             }
@@ -461,44 +502,44 @@ namespace EpinelPS.Database
                 File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
             }
         }
-		public static int CurrentJukeboxBgm(int position)
-		{
-			var activeJukeboxBgm = new List<int>();
-			//important first position holds lobby bgm id and second commanders room bgm id
-			foreach (var user in Instance.Users)
-			{
-				if (user.JukeboxBgm == null || user.JukeboxBgm.Count == 0)
-				{
-					// this if statemet only exists becaus some weird black magic copies default value over and over
-					//in the file when its set in public List<int> JukeboxBgm = new List<int>(); 
-					//delete when or if it gets fixed
-					
-					user.JukeboxBgm = new List<int> { 2,5 };
-				}
+        public static int CurrentJukeboxBgm(int position)
+        {
+            var activeJukeboxBgm = new List<int>();
+            //important first position holds lobby bgm id and second commanders room bgm id
+            foreach (var user in Instance.Users)
+            {
+                if (user.JukeboxBgm == null || user.JukeboxBgm.Count == 0)
+                {
+                    // this if statemet only exists becaus some weird black magic copies default value over and over
+                    //in the file when its set in public List<int> JukeboxBgm = new List<int>(); 
+                    //delete when or if it gets fixed
 
-				activeJukeboxBgm.AddRange(user.JukeboxBgm);
-			}
+                    user.JukeboxBgm = new List<int> { 2, 5 };
+                }
 
-			if (activeJukeboxBgm.Count == 0)
-			{
-				return 8995001; 
-			}
+                activeJukeboxBgm.AddRange(user.JukeboxBgm);
+            }
 
-			position = (position == 2 && activeJukeboxBgm.Count > 1) ? 2 : 1;
-			return activeJukeboxBgm[position - 1];
-		}
+            if (activeJukeboxBgm.Count == 0)
+            {
+                return 8995001;
+            }
 
-		public static bool IsSickPulls(User selectedUser)
-		{
-			if (selectedUser != null)
-			{
-				return selectedUser.sickpulls;
-			}
-			else
-			{
-				throw new Exception($"User with ID {selectedUser.ID} not found");
-			}
-		}
+            position = (position == 2 && activeJukeboxBgm.Count > 1) ? 2 : 1;
+            return activeJukeboxBgm[position - 1];
+        }
+
+        public static bool IsSickPulls(User selectedUser)
+        {
+            if (selectedUser != null)
+            {
+                return selectedUser.sickpulls;
+            }
+            else
+            {
+                throw new Exception($"User with ID {selectedUser.ID} not found");
+            }
+        }
 
     }
 }

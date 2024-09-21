@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Msgs.Auth
         {
             var req = await ReadData<ReqLogout>();
 
-            JsonDb.Instance.GameClientTokens.Remove(UsedAuthToken);
+            // TODO remove UsedAuthToken
 
             await WriteDataAsync(new ResLogout());
         }
