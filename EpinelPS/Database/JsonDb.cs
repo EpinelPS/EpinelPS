@@ -115,6 +115,14 @@ namespace EpinelPS.Database
             return result;
         }
     }
+
+    public class JukeBoxSetting
+    {
+        public NetJukeboxLocation Location;
+        public NetJukeboxBgmType Type;
+        public int TableId;
+       
+    }
     public class User
     {
         // User info
@@ -154,7 +162,14 @@ namespace EpinelPS.Database
         public List<Character> Characters = [];
         public NetWholeUserTeamData RepresentationTeamData = new();
         public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
+
         public NetWallpaperData[] WallpaperList = [];
+        public NetWallpaperBackground[] WallpaperBackground = [];
+        public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
+        public NetWallpaperPlaylist[] WallpaperPlaylistList = [];
+        public NetWallpaperJukebox[] WallpaperJukeboxList = [];
+        
+
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
         public Dictionary<int, bool> MainQuestData = new();
         public int InfraCoreExp = 0;
@@ -172,6 +187,9 @@ namespace EpinelPS.Database
         public List<int> JukeboxBgm = new List<int>();
 
         public Dictionary<int, int> TowerProgress = new Dictionary<int, int>();
+
+        public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId};
+        public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();

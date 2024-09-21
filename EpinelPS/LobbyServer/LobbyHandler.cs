@@ -48,6 +48,7 @@ namespace EpinelPS.LobbyServer
 
             if (handler == null)
             {
+                Console.WriteLine("404: " + path);
                 ctx.Response.StatusCode = 404;
             }
             else

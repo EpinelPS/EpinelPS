@@ -9,7 +9,16 @@ namespace EpinelPS.LobbyServer.Msgs.User
         {
             var req = await ReadData<ReqGetWallpaper>();
             var response = new ResGetWallpaper();
-            response.WallpaperList.AddRange(GetUser().WallpaperList);
+            var user = GetUser();
+
+
+            response.WallpaperList.AddRange(user.WallpaperList);
+            response.WallpaperPlaylistList.AddRange(user.WallpaperPlaylistList);
+            response.WallpaperJukeboxList.AddRange(user.WallpaperJukeboxList);
+            response.WallpaperBackgroundList.AddRange(user.WallpaperBackground);
+            response.WallpaperFavoriteList.AddRange(user.WallpaperFavoriteList);
+
+            // TODO: JukeboxIdList
 
             await WriteDataAsync(response);
         }
