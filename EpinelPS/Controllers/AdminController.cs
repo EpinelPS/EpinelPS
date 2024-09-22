@@ -13,39 +13,59 @@ namespace EpinelPS.Controllers
         {
             _logger = logger;
         }
-        [Route("index")]
-        public IActionResult Index()
+
+        private bool CheckAuth()
         {
-            return View();
+            string? token = HttpContext.Request.Cookies["token"];
+            if (token == null) return false;
+
+
+            foreach (var item in AdminApiController.AdminAuthTokens)
+            {
+                if (item.Key == token) return true;
+            }
+            return false;
         }
         [Route("dashboard")]
         public IActionResult Dashboard()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
         [Route("Events")]
         public IActionResult Events()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
         [Route("Configuration")]
         public IActionResult Configuration()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
         [Route("Users")]
         public IActionResult Users()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
         [Route("Mail")]
         public IActionResult Mail()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
         [Route("Database")]
         public IActionResult Database()
         {
+            if (!CheckAuth()) return Redirect("/admin/");
+
             return View();
         }
 

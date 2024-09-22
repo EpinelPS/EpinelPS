@@ -19,7 +19,7 @@ async function AdminLogin() {
         if (json.ok) {
             localStorage.setItem("token", res.token);
 
-            window.location.pathname = "/admin/dashbrd.html";
+            window.location.pathname = "/admin/dashboard";
         }
         else {
             if (json.message !== undefined)
