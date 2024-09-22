@@ -32,7 +32,8 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                 }
 
                 // Find a new CSN based on the `name_code` of the current character and `grade_core_id + 1`
-                var newCharacter = fullchardata.FirstOrDefault(c => c.grade_core_id == currentCharacter.grade_core_id + 1);
+                var newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
+
 
                 if (newCharacter != null)
                 {
