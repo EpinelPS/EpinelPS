@@ -195,7 +195,7 @@ public partial class MainView : UserControl
                 // validate if the folder has game exe
                 if (!string.IsNullOrEmpty(txtGamePath.Text))
                 {
-                    if (!File.Exists(Path.Combine(txtGamePath.Text, "game", "nikke.exe")))
+                    if (!File.Exists(Path.Combine(txtGamePath.Text, "NIKKE", "game", "nikke.exe")))
                     {
                         ShowWarningMsg("Game path is invalid. Make sure that nikke.exe exists in the game folder", "Error");
                         return;
@@ -211,11 +211,11 @@ public partial class MainView : UserControl
         }
     }
 
-    private void GamePath_TextChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    private void GamePath_TextChanged(object? sender, TextChangedEventArgs e)
     {
         UpdateIntegrityLabel();
     }
-    private void LauncherPath_TextChanged(object? sender, Avalonia.Controls.TextChangedEventArgs e)
+    private void LauncherPath_TextChanged(object? sender, TextChangedEventArgs e)
     {
         UpdateIntegrityLabel();
     }
