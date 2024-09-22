@@ -46,6 +46,8 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
 		public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
 		public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
+		private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
+
 
 
 
@@ -395,7 +397,13 @@ namespace EpinelPS.StaticInfo
 			foreach (var obj in lwptable.records)
 			{
 				lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
-			}			
+			}		
+
+			var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
+			foreach (var obj in albumResourceTable.records)
+			{
+				albumResourceRecords.Add(obj.id, obj);  // Now refers to the class-level field
+			}		
             // Load Jukebox data
             await LoadJukeboxListData(progress);
             await LoadJukeboxThemeData(progress);
@@ -590,5 +598,49 @@ namespace EpinelPS.StaticInfo
             jukeboxThemeDataRecords.TryGetValue(id, out var record);
             return record;
         }
+		
+		public IEnumerable<string> GetScenarioStageIdsForChapter(int chapterNumber)
+		{
+			
+			return albumResourceRecords.Values.Where(record => record.target_chapter == chapterNumber && !string.IsNullOrEmpty(record.scenario_group_id)).Select(record => record.scenario_group_id);
+		}
+		public bool IsValidScenarioStage(string scenarioGroupId, int targetChapter, int targetStage)
+		{
+			// Example regular stage format: "d_main_26_08"
+			// Example scenario stage format: "d_main_18af_06"
+			
+			var parts = scenarioGroupId.Split('_');
+			
+			if (parts.Length != 4)
+			{
+				return false; // If it doesn't have 4 parts, it's not a valid stage
+			}
+
+			string chapterPart = parts[2]; // This could be "26" or "18af"
+			string stagePart = parts[3];   // This is the stage part, e.g., "08" or "06"
+
+			// Handle scenario stages (ending in "af")
+			bool isScenarioStage = chapterPart.EndsWith("af");
+
+			// Extract chapter number (remove "af" if present)
+			string chapterNumberStr = isScenarioStage ? chapterPart.Substring(0, chapterPart.Length - 2) : chapterPart;
+
+			// Parse chapter and stage numbers
+			if (int.TryParse(chapterNumberStr, out int chapter) && int.TryParse(stagePart, out int stage))
+			{
+				// Only accept stages if they are:
+				// 1. In a chapter less than the target chapter
+				// 2. OR in the target chapter but with a stage number less than or equal to the target stage
+				if (chapter < targetChapter || (chapter == targetChapter && stage <= targetStage))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+
+				
     }
 }

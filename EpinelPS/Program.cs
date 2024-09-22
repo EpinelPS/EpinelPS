@@ -512,8 +512,8 @@ namespace EpinelPS
 						}
 					}
 
-					// Save the updated data
-					JsonDb.Save();
+						// Save the updated data
+						JsonDb.Save();
 				}
 				else if (input.StartsWith("SetSkillLevel"))
 				{
@@ -582,71 +582,108 @@ namespace EpinelPS
                         }
                     }
                 }
-                else if (input.StartsWith("completestage"))
-                {
-                    if (selectedUser == 0)
-                    {
-                        Console.WriteLine("No user selected");
-                    }
-                    else
-                    {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-                        if (user == null)
-                        {
-                            Console.WriteLine("Selected user does not exist");
-                            selectedUser = 0;
-                            prompt = "# ";
-                        }
-                        else
-                        {
-                            if (args.Length == 2)
-                            {
-                                var input2 = args[1];
-                                try
-                                {
-                                    var chapter = int.TryParse(input2.Split('-')[0], out int chapterNumber);
-                                    var stage = int.TryParse(input2.Split('-')[1], out int stageNumber);
+				else if (input.StartsWith("completestage"))
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else
+						{
+							if (args.Length == 2)
+							{
+								var input2 = args[1];
+								try
+								{
+									var chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
+									var stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
 
-                                    if (chapter && stage)
-                                    {
-                                        for (int i = 0; i < chapterNumber + 1; i++)
-                                        {
-                                            var stages = GameData.Instance.GetStageIdsForChapter(i, true);
-                                            int target = 1;
-                                            foreach (var item in stages)
-                                            {
-                                                if (!user.IsStageCompleted(item, true))
-                                                {
-                                                    Console.WriteLine("Completing stage " + item);
-                                                    ClearStage.CompleteStage(user, item, true);
-                                                }
+									if (chapterParsed && stageParsed)
+									{
+										Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
 
-                                                if (i == chapterNumber && target == stageNumber)
-                                                {
-                                                    break;
-                                                }
+										// Complete main stages
+										for (int i = 0; i <= chapterNumber; i++)
+										{
+											var stages = GameData.Instance.GetStageIdsForChapter(i, true);
+											int target = 1;
+											foreach (var item in stages)
+											{
+												if (!user.IsStageCompleted(item, true))
+												{
+													Console.WriteLine("Completing stage " + item);
+													ClearStage.CompleteStage(user, item, true);
+												}
 
-                                                target++;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("chapter and stage number must be a 32 bit integer");
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine("exception:" + ex.ToString());
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("invalid argument length, must be 1");
-                            }
-                        }
-                    }
-                }
+												if (i == chapterNumber && target == stageNumber)
+												{
+													break;
+												}
+
+												target++;
+											}
+										}
+
+										// Process scenario and regular stages
+										Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
+
+										for (int chapter = 0; chapter <= chapterNumber; chapter++)
+										{
+											Console.WriteLine($"Processing chapter: {chapter}");
+
+											var stages = GameData.Instance.GetScenarioStageIdsForChapter(chapter)
+												.Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))
+												.ToList();
+
+											Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
+
+											foreach (var stage in stages)
+											{
+												if (!user.CompletedScenarios.Contains(stage))
+												{
+													user.CompletedScenarios.Add(stage);
+													Console.WriteLine($"Added stage {stage} to CompletedScenarios");
+												}
+												else
+												{
+													Console.WriteLine($"Stage {stage} is already completed");
+												}
+											}
+										}
+
+										// Save changes to user data
+										JsonDb.Save();
+									}
+									else
+									{
+										Console.WriteLine("Chapter and stage number must be valid integers");
+									}
+								}
+								catch (Exception ex)
+								{
+									Console.WriteLine("Exception: " + ex.ToString());
+								}
+							}
+							else
+							{
+								Console.WriteLine("Invalid argument length, must be 1");
+							}
+						}
+					}
+				}
+
+
+
+
                 else if (input == "exit")
                 {
                     Environment.Exit(0);

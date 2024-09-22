@@ -283,4 +283,21 @@
     {
         public List<LiveWallpaperRecord> records;
     }
+	public class AlbumResourceRecord
+	{
+		public int id;
+		public int sub_category_id;
+		public string scenario_name_localtable = "";
+		public string scenario_name_localkey = "";
+		public string scenario_group_id = "";
+		public int target_chapter;
+		public bool is_hidden;
+		public string dialogtype = "";
+	}
+
+	public class AlbumResourceTable
+	{
+		public List<AlbumResourceRecord> records;
+	}
+
 }
