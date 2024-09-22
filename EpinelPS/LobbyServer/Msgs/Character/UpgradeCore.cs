@@ -1,7 +1,7 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
 using EpinelPS.StaticInfo;
-//this file is work in progress and currently its fucked 
+
 namespace EpinelPS.LobbyServer.Msgs.Character
 {
     [PacketPath("/character/coreupgrade")]
@@ -13,29 +13,81 @@ namespace EpinelPS.LobbyServer.Msgs.Character
             var req = await ReadData<ReqCharacterCoreUpgrade>(); // Contains csn and isn (read-only)
             var response = new ResCharacterCoreUpgrade();
 
+            var user = GetUser();
+
             // Get all character data from the game's character table
             var fullchardata = GameData.Instance.characterTable.Values.ToList();
-            
-            // Find the element with the current csn from the request
-            var currentCharacter = fullchardata.FirstOrDefault(c => c.id == req.Csn);
-            
-            if (currentCharacter != null)
-            {
-                // Find a new CSN based on the `name_code` of the current character and `grade_core_id + 1`
-                var newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
-                
-                if (newCharacter != null)
-                {
-                    // Update the characterData with the new CSN
-                    var characterData = new NetUserCharacterDefaultData
-                    {
-                        Csn = newCharacter.id
-                        // Add any other required data here
-                    };
 
+            var targetCharacter = user.GetCharacterBySerialNumber(req.Csn);
+
+            // Find the element with the current csn from the request
+            var currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid);
+
+            if (currentCharacter != null && targetCharacter != null)
+            {
+                if (currentCharacter.grade_core_id == 103 || currentCharacter.grade_core_id == 11 || currentCharacter.grade_core_id == 201)
+                {
+                    Console.WriteLine("warning: cannot upgrade code any further!");
+                    await WriteDataAsync(response);
+                    return;
                 }
 
+                // Find a new CSN based on the `name_code` of the current character and `grade_core_id + 1`
+                // For some reason, there is a seperate character for each limit/core break value.
+                var newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
+
+
+                if (newCharacter != null)
+                {
+                    // replace character in DB with new character
+                    targetCharacter.Grade++;
+                    targetCharacter.Tid = newCharacter.id;
+
+                    response.Character = new NetUserCharacterDefaultData()
+                    {
+                        Csn = req.Csn,
+                        CostumeId = targetCharacter.CostumeId,
+                        Grade = targetCharacter.Grade,
+                        Level = user.GetSynchroLevel(),
+                        Skill1Lv = targetCharacter.Skill1Lvl,
+                        Skill2Lv = targetCharacter.Skill2Lvl,
+                        Tid = targetCharacter.Tid,
+                        UltiSkillLv = targetCharacter.UltimateLevel
+                    };
+
+                    // remove spare body item
+                    user.RemoveItemBySerialNumber(req.Isn, 1);
+
+                    foreach (var item in user.Items)
+                    {
+                        response.Items.Add(NetUtils.ToNet(item));
+                    }
+
+                    // replace any reference to the old character to the new TID
+                    // Check if RepresentationTeamData exists and has slots
+                    if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
+                    {
+                        // Iterate through RepresentationTeamData slots
+                        foreach (var slot in user.RepresentationTeamData.Slots)
+                        {
+                            // Find the character in user's character list that matches the slot's Tid
+                            var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Tid == slot.Tid);
+
+                            if (correspondingCharacter != null)
+                            {
+                                // Update the CSN value if it differs
+                                if (slot.Csn != correspondingCharacter.Csn)
+                                {
+                                    slot.Csn = correspondingCharacter.Csn;
+                                }
+                            }
+                        }
+                    }
+
+                    JsonDb.Save();
+                }
             }
+
             // Send the response back to the client
             await WriteDataAsync(response);
         }

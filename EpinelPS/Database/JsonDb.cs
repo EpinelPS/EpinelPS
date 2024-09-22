@@ -337,6 +337,47 @@ namespace EpinelPS.Database
                 return 1;
             }
         }
+
+        /// <summary>
+        /// Removes the specified amount of items by their ID. Returns the amount of items removed.
+        /// </summary>
+        /// <param name="isn"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public int RemoveItemBySerialNumber(long isn, int count)
+        {
+            int removed = 0;
+            foreach (var item in Items.ToList())
+            {
+                if (count == 0)
+                    break;
+
+                if (item.Isn == isn)
+                {
+                    if (item.Count == 1)
+                    {
+                        Items.Remove(item);
+                        count--;
+                    }
+                    else
+                    {
+                        // TODO test this
+                        if (item.Count >= count)
+                        {
+                            removed++;
+                            item.Count -= count;
+                        }
+                        else
+                        {
+                            removed += item.Count;
+                            Items.Remove(item);
+                        }
+                    }
+                }
+            }
+
+            return removed;
+        }
     }
     public class CoreInfo
     {
@@ -466,26 +507,6 @@ namespace EpinelPS.Database
                     {
                         Console.WriteLine($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
                         c.Level = 1000;
-                    }
-                }
-
-                // Check if RepresentationTeamData exists and has slots
-                if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-                {
-                    // Iterate through RepresentationTeamData slots
-                    foreach (var slot in user.RepresentationTeamData.Slots)
-                    {
-                        // Find the character in user's character list that matches the slot's Tid
-                        var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Tid == slot.Tid);
-
-                        if (correspondingCharacter != null)
-                        {
-                            // Update the CSN value if it differs
-                            if (slot.Csn != correspondingCharacter.Csn)
-                            {
-                                slot.Csn = correspondingCharacter.Csn;
-                            }
-                        }
                     }
                 }
             }
