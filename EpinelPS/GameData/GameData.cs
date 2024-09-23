@@ -606,32 +606,49 @@ namespace EpinelPS.StaticInfo
 		}
 		public bool IsValidScenarioStage(string scenarioGroupId, int targetChapter, int targetStage)
 		{
-			// Example regular stage format: "d_main_26_08"
-			// Example scenario stage format: "d_main_18af_06"
-			
-			var parts = scenarioGroupId.Split('_');
-			
-			if (parts.Length != 4)
+			// Only process stages that belong to the main quest
+			if (!scenarioGroupId.StartsWith("d_main_"))
 			{
-				return false; // If it doesn't have 4 parts, it's not a valid stage
+				return false; // Exclude stages that don't belong to the main quest
 			}
 
-			string chapterPart = parts[2]; // This could be "26" or "18af"
-			string stagePart = parts[3];   // This is the stage part, e.g., "08" or "06"
+			// Example regular stage format: "d_main_26_08"
+			// Example bonus stage format: "d_main_18af_06"
+			// Example stage with suffix format: "d_main_01_01_s" or "d_main_01_01_e"
 
-			// Handle scenario stages (ending in "af")
-			bool isScenarioStage = chapterPart.EndsWith("af");
+			var parts = scenarioGroupId.Split('_');
+
+			if (parts.Length < 4)
+			{
+				return false; // If it doesn't have at least 4 parts, it's not a valid stage
+			}
+
+			string chapterPart = parts[2]; // This could be "26", "18af", "01"
+			string stagePart = parts[3];   // This is the stage part, e.g., "08", "01_s", or "01_e"
+
+			// Remove any suffixes like "_s", "_e" from the stage part for comparison
+			string cleanedStagePart = stagePart.Split('_')[0];  // Removes "_s", "_e", etc.
+
+			// Handle bonus stages (ending in "af" or having "_s", "_e" suffix)
+			bool isBonusStage = chapterPart.EndsWith("af") || stagePart.Contains("_s") || stagePart.Contains("_e");
 
 			// Extract chapter number (remove "af" if present)
-			string chapterNumberStr = isScenarioStage ? chapterPart.Substring(0, chapterPart.Length - 2) : chapterPart;
+			string chapterNumberStr = isBonusStage && chapterPart.EndsWith("af") 
+				? chapterPart.Substring(0, chapterPart.Length - 2)  // Remove "af"
+				: chapterPart;
 
 			// Parse chapter and stage numbers
-			if (int.TryParse(chapterNumberStr, out int chapter) && int.TryParse(stagePart, out int stage))
+			if (int.TryParse(chapterNumberStr, out int chapter) && int.TryParse(cleanedStagePart, out int stage))
 			{
+				// Check if it's a bonus stage with a suffix
+				bool isSpecialStage = stagePart.Contains("_s") || stagePart.Contains("_e");
+
 				// Only accept stages if they are:
 				// 1. In a chapter less than the target chapter
 				// 2. OR in the target chapter but with a stage number less than or equal to the target stage
-				if (chapter < targetChapter || (chapter == targetChapter && stage <= targetStage))
+				// 3. OR it's a special stage (with "_s" or "_e") in the target chapter and target stage
+				if (chapter < targetChapter ||
+					(chapter == targetChapter && (stage < targetStage || (stage == targetStage && isSpecialStage))))
 				{
 					return true;
 				}
@@ -639,7 +656,6 @@ namespace EpinelPS.StaticInfo
 
 			return false;
 		}
-
 
 				
     }
