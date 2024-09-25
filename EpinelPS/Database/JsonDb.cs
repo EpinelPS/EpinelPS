@@ -123,7 +123,11 @@ namespace EpinelPS.Database
         public NetJukeboxLocation Location;
         public NetJukeboxBgmType Type;
         public int TableId;
+    }
 
+    public class MogMinigameInfo
+    {
+        public List<string> CompletedScenarios = [];
     }
     public class User
     {
@@ -192,11 +196,11 @@ namespace EpinelPS.Database
 
         public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
         public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
+        public OutpostBuffs OutpostBuffs = new();
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
-
-        public OutpostBuffs OutpostBuffs = new();
+        public MogMinigameInfo MogInfo = new();
 
         public void SetQuest(int tid, bool recievedReward)
         {
@@ -291,7 +295,7 @@ namespace EpinelPS.Database
 
         public bool HasCharacter(int c)
         {
-            return Characters.Any(x => x.Tid == c);
+            return Characters.Any(x => c <= x.Tid && x.Tid <= c + 12);
         }
 
         public Character? GetCharacterBySerialNumber(long value)
