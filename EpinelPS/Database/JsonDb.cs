@@ -293,10 +293,24 @@ namespace EpinelPS.Database
             }
         }
 
-        public bool HasCharacter(int c)
-        {
-            return Characters.Any(x => c <= x.Tid && x.Tid <= c + 12);
-        }
+		public bool HasCharacter(int c)
+		{
+			// Step 1: Get the 'name_code' of the input character with Tid 'c'
+			if (GameData.Instance.characterTable.TryGetValue(c, out var inputCharacterRecord))
+			{
+				int targetNameCode = inputCharacterRecord.name_code;
+				// Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
+				var matchingCharacterIds = GameData.Instance.characterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
+
+				// Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
+				return Characters.Any(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid));
+				
+			}
+			else
+				// The character with Tid 'c' does not exist in 'characterTable'
+				return false;
+			}
+		}
 
         public Character? GetCharacterBySerialNumber(long value)
         {

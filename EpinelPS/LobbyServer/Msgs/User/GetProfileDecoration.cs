@@ -12,6 +12,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
             var r = new ResProfileCardDecorationLayout();
             r.Layout = new ProfileCardDecorationLayout();
             r.Layout.BackgroundId = 101002;
+			r.Layout.ShowCharacterSpine = true;
             await WriteDataAsync(r);
         }
     }
