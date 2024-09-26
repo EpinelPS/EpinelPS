@@ -307,7 +307,7 @@ namespace EpinelPS.Database
 				
 			}
 			else
-				// The character with Tid 'c' does not exist in 'characterTable'
+			{	// The character with Tid 'c' does not exist in 'characterTable'
 				return false;
 			}
 		}
