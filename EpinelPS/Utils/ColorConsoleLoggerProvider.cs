@@ -68,7 +68,7 @@ namespace EpinelPS.Utils
 
                 string msg = formatter(state, exception).Replace("Request reached the end of the middleware pipeline without being handled by application code. Request path: ", "");
 
-                if (msg.StartsWith("Executing ObjectResult") || msg.StartsWith("Executed endpoint") || msg.StartsWith("Route matched with ") || msg.Contains("CatchAll") || msg.Contains("$batch"))
+                if (msg.StartsWith("Executing ObjectResult") || msg.StartsWith("Executed endpoint") || msg.StartsWith("Route matched with ") || msg.Contains("CatchAll") || msg.Contains("$batch") || msg.Contains("/dr/getsid"))
                     return;
 
                 Console.ForegroundColor = config.LogLevelToColorMap[logLevel];

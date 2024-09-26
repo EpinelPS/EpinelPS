@@ -18,9 +18,13 @@ namespace EpinelPS.Controllers
             st.Stop();
 
             var fg = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
 
-            Console.WriteLine("POST " + HttpContext.Request.Path.Value + " completed in " + st.Elapsed);
+            if (HttpContext.Response.StatusCode == 200)
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            else
+                Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine("POST " + HttpContext.Request.Path.Value + " completed in " + st.Elapsed + "with result " + HttpContext.Response.StatusCode);
 
             Console.ForegroundColor = fg;
         }
