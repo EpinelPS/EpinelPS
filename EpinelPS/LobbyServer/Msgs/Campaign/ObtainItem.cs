@@ -18,7 +18,20 @@ namespace EpinelPS.LobbyServer.Msgs.Campaign
             var chapter = GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
             var key = chapter + "_" + mod;
-            var field = user.FieldInfoNew[key];
+
+            if (chapter == -1)
+            {
+                Console.WriteLine("Warning: unknown chapter id for " + req.MapId);
+                key = req.MapId;
+            }
+
+            FieldInfoNew field;
+
+            if (!user.FieldInfoNew.TryGetValue(key, out field))
+            {
+                field = new FieldInfoNew();
+                user.FieldInfoNew.Add(key, field);
+            }
 
 
             foreach (var item in field.CompletedObjects)

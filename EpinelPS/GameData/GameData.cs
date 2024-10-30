@@ -43,10 +43,10 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = new Dictionary<int, OutpostBattleTableRecord>();  // Fixed initialization
         public Dictionary<int, JukeboxListRecord> jukeboxListDataRecords;
         private Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords;
-		public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
-		public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
-		public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
-		private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
+        public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
+        public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
+        public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
+        private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
 
 
 
@@ -349,61 +349,63 @@ namespace EpinelPS.StaticInfo
 
             foreach (ZipEntry item in MainZip)
             {
-                if (item.Name.StartsWith("CampaignMap/"))
+                if (item.Name.StartsWith("CampaignMap/") || item.Name.StartsWith("EventMap/"))
                 {
                     var x = await LoadZip(item.Name, progress);
 
                     var items = x[0]["ItemSpawner"];
-                    foreach (var item2 in items)
-                    {
-                        var id = item2["positionId"].ToObject<string>();
-                        var reward = item2["itemId"].ToObject<int>();
 
-                        if (!PositionReward.ContainsKey(id))
-                            PositionReward.Add(id, reward);
-                    }
+                    if (items != null)
+                        foreach (var item2 in items)
+                        {
+                            var id = item2["positionId"].ToObject<string>();
+                            var reward = item2["itemId"].ToObject<int>();
+
+                            if (!PositionReward.ContainsKey(id))
+                                PositionReward.Add(id, reward);
+                        }
                 }
             }
-			var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
+            var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
             foreach (var obj in fieldItems.records)
             {
                 FieldItems.Add(obj.id, obj);
             }
-			var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
-			foreach (var obj in battleOutpostTable.records)
-			{
-				OutpostBattle.Add(obj.id, obj);
-			}
-			
-			var gachaTypeTable = await LoadZip<GachaTypeTable>("GachaTypeTable.json", progress);
+            var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
+            foreach (var obj in battleOutpostTable.records)
+            {
+                OutpostBattle.Add(obj.id, obj);
+            }
 
-			// Add the records to the dictionary
-			foreach (var obj in gachaTypeTable.records)
-			{
-				gachaTypes.Add(obj.id, obj);  // Use obj.id as the key and obj (the GachaType) as the value
-			}
-			
-			var eventManagerTable = await LoadZip<EventManagerTable>("EventManagerTable.json", progress);
+            var gachaTypeTable = await LoadZip<GachaTypeTable>("GachaTypeTable.json", progress);
 
-			// Add the records to the dictionary
-			foreach (var obj in eventManagerTable.records)
-			{
-				eventManagers.Add(obj.id, obj);  // Use obj.id as the key and obj (the EventManager) as the value
-			}
+            // Add the records to the dictionary
+            foreach (var obj in gachaTypeTable.records)
+            {
+                gachaTypes.Add(obj.id, obj);  // Use obj.id as the key and obj (the GachaType) as the value
+            }
 
-			var lwptable = await LoadZip<LiveWallpaperTable>("LiveWallpaperTable.json", progress);
+            var eventManagerTable = await LoadZip<EventManagerTable>("EventManagerTable.json", progress);
 
-			// Add the records to the dictionary
-			foreach (var obj in lwptable.records)
-			{
-				lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
-			}		
+            // Add the records to the dictionary
+            foreach (var obj in eventManagerTable.records)
+            {
+                eventManagers.Add(obj.id, obj);  // Use obj.id as the key and obj (the EventManager) as the value
+            }
 
-			var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
-			foreach (var obj in albumResourceTable.records)
-			{
-				albumResourceRecords.Add(obj.id, obj);  // Now refers to the class-level field
-			}		
+            var lwptable = await LoadZip<LiveWallpaperTable>("LiveWallpaperTable.json", progress);
+
+            // Add the records to the dictionary
+            foreach (var obj in lwptable.records)
+            {
+                lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
+            }
+
+            var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
+            foreach (var obj in albumResourceTable.records)
+            {
+                albumResourceRecords.Add(obj.id, obj);  // Now refers to the class-level field
+            }
             // Load Jukebox data
             await LoadJukeboxListData(progress);
             await LoadJukeboxThemeData(progress);
@@ -421,11 +423,11 @@ namespace EpinelPS.StaticInfo
                 }
             }
         }
-		
-		public Dictionary<int, JukeboxListRecord> GetJukeboxListDataRecords()
-		{
-			return jukeboxListDataRecords;
-		}
+
+        public Dictionary<int, JukeboxListRecord> GetJukeboxListDataRecords()
+        {
+            return jukeboxListDataRecords;
+        }
 
         public async Task LoadJukeboxThemeData(ProgressBar bar)
         {
@@ -598,65 +600,65 @@ namespace EpinelPS.StaticInfo
             jukeboxThemeDataRecords.TryGetValue(id, out var record);
             return record;
         }
-		
-		public IEnumerable<string> GetScenarioStageIdsForChapter(int chapterNumber)
-		{
-			
-			return albumResourceRecords.Values.Where(record => record.target_chapter == chapterNumber && !string.IsNullOrEmpty(record.scenario_group_id)).Select(record => record.scenario_group_id);
-		}
-		public bool IsValidScenarioStage(string scenarioGroupId, int targetChapter, int targetStage)
-		{
-			// Only process stages that belong to the main quest
-			if (!scenarioGroupId.StartsWith("d_main_"))
-			{
-				return false; // Exclude stages that don't belong to the main quest
-			}
 
-			// Example regular stage format: "d_main_26_08"
-			// Example bonus stage format: "d_main_18af_06"
-			// Example stage with suffix format: "d_main_01_01_s" or "d_main_01_01_e"
+        public IEnumerable<string> GetScenarioStageIdsForChapter(int chapterNumber)
+        {
 
-			var parts = scenarioGroupId.Split('_');
+            return albumResourceRecords.Values.Where(record => record.target_chapter == chapterNumber && !string.IsNullOrEmpty(record.scenario_group_id)).Select(record => record.scenario_group_id);
+        }
+        public bool IsValidScenarioStage(string scenarioGroupId, int targetChapter, int targetStage)
+        {
+            // Only process stages that belong to the main quest
+            if (!scenarioGroupId.StartsWith("d_main_"))
+            {
+                return false; // Exclude stages that don't belong to the main quest
+            }
 
-			if (parts.Length < 4)
-			{
-				return false; // If it doesn't have at least 4 parts, it's not a valid stage
-			}
+            // Example regular stage format: "d_main_26_08"
+            // Example bonus stage format: "d_main_18af_06"
+            // Example stage with suffix format: "d_main_01_01_s" or "d_main_01_01_e"
 
-			string chapterPart = parts[2]; // This could be "26", "18af", "01"
-			string stagePart = parts[3];   // This is the stage part, e.g., "08", "01_s", or "01_e"
+            var parts = scenarioGroupId.Split('_');
 
-			// Remove any suffixes like "_s", "_e" from the stage part for comparison
-			string cleanedStagePart = stagePart.Split('_')[0];  // Removes "_s", "_e", etc.
+            if (parts.Length < 4)
+            {
+                return false; // If it doesn't have at least 4 parts, it's not a valid stage
+            }
 
-			// Handle bonus stages (ending in "af" or having "_s", "_e" suffix)
-			bool isBonusStage = chapterPart.EndsWith("af") || stagePart.Contains("_s") || stagePart.Contains("_e");
+            string chapterPart = parts[2]; // This could be "26", "18af", "01"
+            string stagePart = parts[3];   // This is the stage part, e.g., "08", "01_s", or "01_e"
 
-			// Extract chapter number (remove "af" if present)
-			string chapterNumberStr = isBonusStage && chapterPart.EndsWith("af") 
-				? chapterPart.Substring(0, chapterPart.Length - 2)  // Remove "af"
-				: chapterPart;
+            // Remove any suffixes like "_s", "_e" from the stage part for comparison
+            string cleanedStagePart = stagePart.Split('_')[0];  // Removes "_s", "_e", etc.
 
-			// Parse chapter and stage numbers
-			if (int.TryParse(chapterNumberStr, out int chapter) && int.TryParse(cleanedStagePart, out int stage))
-			{
-				// Check if it's a bonus stage with a suffix
-				bool isSpecialStage = stagePart.Contains("_s") || stagePart.Contains("_e");
+            // Handle bonus stages (ending in "af" or having "_s", "_e" suffix)
+            bool isBonusStage = chapterPart.EndsWith("af") || stagePart.Contains("_s") || stagePart.Contains("_e");
 
-				// Only accept stages if they are:
-				// 1. In a chapter less than the target chapter
-				// 2. OR in the target chapter but with a stage number less than or equal to the target stage
-				// 3. OR it's a special stage (with "_s" or "_e") in the target chapter and target stage
-				if (chapter < targetChapter ||
-					(chapter == targetChapter && (stage < targetStage || (stage == targetStage && isSpecialStage))))
-				{
-					return true;
-				}
-			}
+            // Extract chapter number (remove "af" if present)
+            string chapterNumberStr = isBonusStage && chapterPart.EndsWith("af")
+                ? chapterPart.Substring(0, chapterPart.Length - 2)  // Remove "af"
+                : chapterPart;
 
-			return false;
-		}
+            // Parse chapter and stage numbers
+            if (int.TryParse(chapterNumberStr, out int chapter) && int.TryParse(cleanedStagePart, out int stage))
+            {
+                // Check if it's a bonus stage with a suffix
+                bool isSpecialStage = stagePart.Contains("_s") || stagePart.Contains("_e");
 
-				
+                // Only accept stages if they are:
+                // 1. In a chapter less than the target chapter
+                // 2. OR in the target chapter but with a stage number less than or equal to the target stage
+                // 3. OR it's a special stage (with "_s" or "_e") in the target chapter and target stage
+                if (chapter < targetChapter ||
+                    (chapter == targetChapter && (stage < targetStage || (stage == targetStage && isSpecialStage))))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
     }
 }

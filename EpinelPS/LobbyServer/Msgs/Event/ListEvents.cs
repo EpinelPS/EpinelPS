@@ -9,8 +9,10 @@ namespace EpinelPS.LobbyServer.Msgs.Event
         {
             var req = await ReadData<ReqGetEventList>();
 
-            var response = new ResGetEventList();
+            // 10: FieldHubEvent
 
+            var response = new ResGetEventList();
+/*
             response.EventList.Add(new NetEventData()
             {
                 Id = 81301,
@@ -117,6 +119,20 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
+
+*/
+            // Old tales
+response.EventList.Add(new NetEventData()
+            {
+                Id = 81600,
+                EventSystemType = 10,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+            
             //response.EventList.Add(new NetEventData()
             //{
             //    Id = 40054,

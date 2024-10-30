@@ -8,10 +8,18 @@ namespace EpinelPS.LobbyServer.Msgs.Event
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqEnterEventField>();
+            var user = GetUser();
 
             var response = new ResEnterEventField();
 
             // TOOD
+
+            response.Field = new();
+            
+            if (user.MapJson.TryGetValue(req.MapId, out string mapJson))
+            {
+                response.Json = mapJson;
+            }
 
             await WriteDataAsync(response);
         }

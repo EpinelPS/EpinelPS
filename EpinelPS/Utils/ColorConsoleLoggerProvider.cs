@@ -73,6 +73,8 @@ namespace EpinelPS.Utils
 
                 Console.ForegroundColor = config.LogLevelToColorMap[logLevel];
                 Console.Write($"{msg}");
+                if (exception != null)
+                    Console.WriteLine(exception.ToString());
 
                 Console.ForegroundColor = originalColor;
                 Console.WriteLine();
