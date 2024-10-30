@@ -89,9 +89,15 @@ namespace EpinelPS.Controllers
 
         [HttpPost]
         [Route("fleet.repo.game.RepoSVC/GetVersion")]
-        public string LauncherGetVersion()
+        public string LauncherGetVersion([FromBody] LauncherVersionRequest? body)
         {
+            Console.WriteLine("Requesting gameId: " + body.game_id);
             return System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gameversion.json"));
+        }
+
+        public class LauncherVersionRequest
+        {
+            public int game_id {get;set;}
         }
     }
 }
