@@ -8,8 +8,16 @@ namespace EpinelPS.LobbyServer.Msgs.Event
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetEventList>();
+            
 
+            // Types
+            // 2: LoginEvent
+            // 5: StoryEvent
             // 10: FieldHubEvent
+            // 11: ShopEvent
+            // 20: ChallengeModeEvent
+            // 38: MVGMiniGame
+
 
             var response = new ResGetEventList();
 /*
@@ -122,7 +130,8 @@ namespace EpinelPS.LobbyServer.Msgs.Event
 
 */
             // Old tales
-response.EventList.Add(new NetEventData()
+
+            response.EventList.Add(new NetEventData()
             {
                 Id = 81600,
                 EventSystemType = 10,
@@ -131,6 +140,73 @@ response.EventList.Add(new NetEventData()
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
+
+            // Enable story event 1
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40061,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+            // Enable story event 2
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40062,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+            // Enable challenge mode
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 60061,
+                EventSystemType = 20,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+            // enable "mini" game
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 81601,
+                EventSystemType = 38,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+            // enable shop
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 81602,
+                EventSystemType = 11,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+
+             // enable login event
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 81603,
+                EventSystemType = 2,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
+            
 
             
             //response.EventList.Add(new NetEventData()

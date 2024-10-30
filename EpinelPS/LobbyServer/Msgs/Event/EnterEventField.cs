@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Event
 {
@@ -12,10 +13,29 @@ namespace EpinelPS.LobbyServer.Msgs.Event
 
             var response = new ResEnterEventField();
 
-            // TOOD
-
             response.Field = new();
-            
+
+            // Retrieve collected objects
+
+            FieldInfoNew field;
+
+            if (!user.FieldInfoNew.TryGetValue(req.MapId, out field))
+            {
+                field = new FieldInfoNew();
+                user.FieldInfoNew.Add(req.MapId, field);
+            }
+
+            foreach (var stage in field.CompletedStages)
+            {
+                response.Field.Stages.Add(new NetFieldStageData() { StageId = stage });
+            }
+            foreach (var obj in field.CompletedObjects)
+            {
+                response.Field.Objects.Add(obj);
+            }
+
+
+            // Retrieve camera data
             if (user.MapJson.TryGetValue(req.MapId, out string mapJson))
             {
                 response.Json = mapJson;
