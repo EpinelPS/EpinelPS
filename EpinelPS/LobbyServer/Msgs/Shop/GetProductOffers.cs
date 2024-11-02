@@ -7,10 +7,11 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
     {
         protected override async Task HandleAsync()
         {
-            // TODO use proper type: ResListSeenProductOffer
-            var x = await ReadData<ReqGetJupiterProductList>();
+            var x = await ReadData<ResListSeenProductOffer>();
 
-            var response = new ResGetJupiterProductList();
+            // TODO
+
+            var response = new ReqListSeenProductOffer();
             await WriteDataAsync(response);
         }
     }

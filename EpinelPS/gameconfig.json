@@ -2,10 +2,10 @@
   // Asset Urls for game version 125.8.15
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/staticdatapack
   "StaticData": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/126-c2e562bd11/staticdata/data/qa-241031-10b/345904/StaticData.pack",
-    "Version": "data/qa-241031-10b/345904",
-    "Salt1": "Vsm2cdvBtmQJtLny5Lk55XbXhTfwp/IMSbrzROfjNxQ=",
-    "Salt2": "swx3L8RVipiqwQ8Cq1y7n6BqFp49d9M6yh/dFuhKef0="
+    "Url": "https://cloud.nikke-kr.com/prdenv/126-c2e562bd11/staticdata/data/qa-241031-10b/346163/StaticData.pack",
+    "Version": "data/qa-241031-10b/346163",
+    "Salt1": "KfaSXJ3RzjtHyElAfYMQyVgkdFj/d6NSQ9UGIEhhTNU=",
+    "Salt2": "bMyor1Yq6S59WKle86oSMr16tGvXAVEI9pSMG7G79yc="
   },
 
   // Extracted from POST https://global-lobby.nikke-kr.com/v1/resourcehosts2
