@@ -2,16 +2,16 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Shop
 {
-    [PacketPath("/productoffer/list")]
-    public class GetProductOffers : LobbyMsgHandler
+    [PacketPath("/productoffer/setseen")]
+    public class SeenProductOffer : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqListSeenProductOffer>();
+            var x = await ReadData<ReqSetSetSeenProductOffer>();
 
             // TODO: Figure out a way to disable ads
 
-            var response = new ResListSeenProductOffer();
+            var response = new ResSetSetSeenProductOffer();
 
             await WriteDataAsync(response);
         }
