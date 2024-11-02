@@ -27,6 +27,6 @@ namespace EpinelPS
         SilverMileageTicket = 11000,
         GoldMileageTicket = 12000,
         SimulationRoomPoint = 13000,
-        CharacterSkillResetTicket = 14000,
+        CharacterSkillResetTicket = 14000
     }
 }
