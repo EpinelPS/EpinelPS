@@ -83,7 +83,15 @@ namespace EpinelPS.Controllers
                 }
             }
 
-            var user = new User() { ID = uid, Password = req.password, RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(), Username = req.account, PlayerName = "Player_" + Rng.RandomString(8) };
+            var user = new User()
+            {
+                ID = uid,
+                Password = req.password,
+                RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                Username = req.account,
+                PlayerName = "Player_" + Rng.RandomString(8),
+                IsAdmin = JsonDb.Instance.Users.Count == 0
+            };
 
             JsonDb.Instance.Users.Add(user);
 

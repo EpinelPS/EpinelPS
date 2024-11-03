@@ -14,9 +14,9 @@ namespace EpinelPS.Controllers
             _logger = logger;
         }
 
-        private bool CheckAuth()
+        public static bool CheckAuth(HttpContext context)
         {
-            string? token = HttpContext.Request.Cookies["token"];
+            string? token = context.Request.Cookies["token"];
             if (token == null) return false;
 
 
@@ -26,45 +26,40 @@ namespace EpinelPS.Controllers
             }
             return false;
         }
+
         [Route("dashboard")]
         public IActionResult Dashboard()
         {
-            if (!CheckAuth()) return Redirect("/admin/");
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
             return View();
         }
         [Route("Events")]
         public IActionResult Events()
         {
-            if (!CheckAuth()) return Redirect("/admin/");
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
             return View();
         }
         [Route("Configuration")]
         public IActionResult Configuration()
         {
-            if (!CheckAuth()) return Redirect("/admin/");
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
             return View();
         }
-        [Route("Users")]
-        public IActionResult Users()
-        {
-            if (!CheckAuth()) return Redirect("/admin/");
 
-            return View();
-        }
         [Route("Mail")]
         public IActionResult Mail()
         {
-            if (!CheckAuth()) return Redirect("/admin/");
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
             return View();
         }
         [Route("Database")]
         public IActionResult Database()
         {
-            if (!CheckAuth()) return Redirect("/admin/");
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
             return View();
         }
