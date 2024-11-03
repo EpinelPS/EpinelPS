@@ -506,7 +506,7 @@ namespace EpinelPS.Database
                 Save();
 
                 ValidateDb();
-                Console.WriteLine("Loaded db");
+                Console.WriteLine("JsonDb: Loaded");
             }
             else
             {

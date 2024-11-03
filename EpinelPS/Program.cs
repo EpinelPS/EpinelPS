@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.VisualBasic;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -21,15 +22,16 @@ namespace EpinelPS
         {
             try
             {
-                Console.WriteLine("Initializing JsonDb");
+                Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
+                Console.WriteLine("Initializing database");
                 JsonDb.Save();
 
                 GameData.Instance.GetAllCostumes(); // force static data to be loaded
 
-                Console.WriteLine("Initialize handlers");
+                Console.WriteLine("Register handlers");
                 LobbyHandler.Init();
 
-                Console.WriteLine("Starting ASP.NET core on ports 80/443");
+                Console.WriteLine("Starting ASP.NET core on port 443");
                 new Thread(() =>
                 {
                     var builder = WebApplication.CreateBuilder(args);
@@ -166,6 +168,10 @@ namespace EpinelPS
             }
           ]
         }".Replace("{GameMinVer}", GameConfig.Root.GameMinVer).Replace("{GameMaxVer}", GameConfig.Root.GameMaxVer));
+
+                    app.MapGet("/", () => {
+                        return $"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/";
+                    });
 
                     app.Run();
                 }).Start();
