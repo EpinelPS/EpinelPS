@@ -14,6 +14,8 @@
 </div>
 Private/local server for another anime game. Discord server: https://discord.gg/Ztt6Y9vQjF
 
+> [!CAUTION]
+> Please be aware that some people are trying to sell this private server. Please do not buy it!
 
 > [!WARNING]
 > This project is in a very early state so many functions in the game do not work.
