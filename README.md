@@ -40,24 +40,22 @@ To skip stages, a basic command line interface is implemented.
  - [X] Character level up
  - [X] Side story
  - [X] Archives
+ - [X] Outpost Rewards
+ - [ ] Admin Panel
+ - [ ] Simulation Room
  - [ ] Skill level up
  - [ ] Outpost jukebox
- - [ ] Admin panel
- - [ ] Test hard stage support
  - [ ] Event system
  - [ ] Download all game assets ahead of time
  - [ ] Basic friend list support
- - [ ] Aegis Diver minigame, MOG minigame, etc
- - [ ] Outpost claim rewards
+ - [ ] Arcade
  - [ ] Daily, weekly missions etc
  - [ ] Lost sector
- - [ ] Custom launcher
  - [ ] Limit temporary participation
  
 ## What is not working:
- - Collecting items in campaign
  - Events
- - Skill upgrade, limit break
+ - Skill upgrade
  - Mission reward, daily/weekly missions
  - Side quests
  - Lots of things in the outpost
