@@ -14,6 +14,8 @@
 </div>
 Private/local server for another anime game. Discord server: https://discord.gg/Ztt6Y9vQjF
 
+> [!CAUTION]
+> Please be aware that some people are trying to sell this private server. Please do not buy it!
 
 > [!WARNING]
 > This project is in a very early state so many functions in the game do not work.
@@ -40,24 +42,22 @@ To skip stages, a basic command line interface is implemented.
  - [X] Character level up
  - [X] Side story
  - [X] Archives
+ - [X] Outpost Rewards
+ - [ ] Admin Panel
+ - [ ] Simulation Room
  - [ ] Skill level up
  - [ ] Outpost jukebox
- - [ ] Admin panel
- - [ ] Test hard stage support
  - [ ] Event system
  - [ ] Download all game assets ahead of time
  - [ ] Basic friend list support
- - [ ] Aegis Diver minigame, MOG minigame, etc
- - [ ] Outpost claim rewards
+ - [ ] Arcade
  - [ ] Daily, weekly missions etc
  - [ ] Lost sector
- - [ ] Custom launcher
  - [ ] Limit temporary participation
  
 ## What is not working:
- - Collecting items in campaign
  - Events
- - Skill upgrade, limit break
+ - Skill upgrade
  - Mission reward, daily/weekly missions
  - Side quests
  - Lots of things in the outpost
