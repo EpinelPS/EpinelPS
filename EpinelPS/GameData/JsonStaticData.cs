@@ -299,5 +299,23 @@
 	{
 		public List<AlbumResourceRecord> records;
 	}
+	
+	public class UserFrameTableRecord
+	{
+		public int id;
+		public string resource_id;
+		public string tab_type;
+		public string user_profile_type;
+		public string filter_type;
+		public int order;
+		public string name_localkey;
+		public string description_localkey;
+		public bool is_sub_resource_prism;
+	}
+
+	public class UserFrameTable
+	{
+		public List<UserFrameTableRecord> records;
+	}
 
 }

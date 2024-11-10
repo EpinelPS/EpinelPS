@@ -206,6 +206,16 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
+            // banner for cinderella i think
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 70070,
+                EventSystemType = 6,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });
             
 
             

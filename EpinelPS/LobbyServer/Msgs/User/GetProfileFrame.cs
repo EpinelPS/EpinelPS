@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using EpinelPS.StaticInfo;
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {
@@ -10,7 +11,10 @@ namespace EpinelPS.LobbyServer.Msgs.User
             var req = await ReadData<ReqGetProfileFrame>();
             var response = new ResGetProfileFrame();
 
-            // TODO
+            foreach (var frameRecord in GameData.Instance.userFrameTable.Values)
+            {
+                response.Frames.Add(frameRecord.id);
+            }
 
             await WriteDataAsync(response);
         }

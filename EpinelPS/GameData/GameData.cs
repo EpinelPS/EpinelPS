@@ -47,6 +47,7 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
         public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
         private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
+		public Dictionary<int, UserFrameTableRecord> userFrameTable = new Dictionary<int, UserFrameTableRecord>();
 
 
 
@@ -400,6 +401,12 @@ namespace EpinelPS.StaticInfo
             {
                 lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
             }
+		
+			var userFrameData = await LoadZip<UserFrameTable>("UserFrameTable.json", progress);
+			foreach (var record in userFrameData.records)
+			{
+				userFrameTable[record.id] = record;
+			}
 
             var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
             foreach (var obj in albumResourceTable.records)
