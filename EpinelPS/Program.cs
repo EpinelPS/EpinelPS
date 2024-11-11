@@ -214,11 +214,11 @@ namespace EpinelPS
                     Console.WriteLine("  unban - unban selected user from game");
                     Console.WriteLine("  exit - exit server application");
                     Console.WriteLine("  completestage (chapter num)-(stage number) - complete selected stage and get rewards (and all previous ones). Example completestage 15-1. Note that the exact stage number cleared may not be exact.");
-					Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
-					Console.WriteLine("  SetLevel (level) - Set all characters' level (between 1 and 999 takes effect on game and server restart)");
-					Console.WriteLine("  SetSkillLevel (level) - Set all characters' skill levels between 1 and 10 (takes effect on game and server restart)");
-					Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
-					Console.WriteLine("  SetGrade (grade) - Set all characters' grades based on the input (from 0 to 11)");
+		    Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
+                    Console.WriteLine("  SetLevel (level) - Set all characters' level (between 1 and 999 takes effect on game and server restart)");
+                    Console.WriteLine("  SetSkillLevel (level) - Set all characters' skill levels between 1 and 10 (takes effect on game and server restart)");
+                    Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
+                    Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
 
 				}
                 else if (input == "ls /users")
