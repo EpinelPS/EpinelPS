@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             var response = new ResCheckDailyFreeGacha();
 
             // TODO implement
-            response.FreeCount = 0;
+            response.FreeCount = 1;
             response.EventData = new NetEventData() { Id = 1 };
 
             await WriteDataAsync(response);

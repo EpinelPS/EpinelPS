@@ -19,16 +19,9 @@ namespace EpinelPS.LobbyServer.Msgs
                 response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
             }
 
-            // Now let's loop through gachaTypes and add those with "type" == "GachaPickup"
-            foreach (var gacha in GameData.Instance.gachaTypes.Values)  // We're looping through the dictionary's values
-            {
-                if (gacha.type == "GachaPickup")
-                {
-                    // Add this GachaType ID to the response
-                    response.Gacha.Add(new NetUserGachaData() { GachaType = gacha.id, PlayCount = 1 });
-                }
-            }
-
+			response.Gacha.Add(new NetUserGachaData() { GachaType = 9, PlayCount = 0 }); //type 9 = pickup gacha
+			response.GachaEventData.Add(new NetGachaEvent() {FreeCount = 1, GachaTypeId = 9  } ); 
+			response.MultipleCustom.Add(new NetGachaCustomData() {Type = 9, Tid = 451101});
             // Write the response back
             await WriteDataAsync(response);
         }
