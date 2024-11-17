@@ -1,9 +1,5 @@
 ﻿using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Msgs.Event.StoryEvent
 {
@@ -13,14 +9,22 @@ namespace EpinelPS.LobbyServer.Msgs.Event.StoryEvent
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqStoryDungeonEventData>();
-            var user = GetUser();
+            var evid = req.EventId;
+			var user = GetUser();
+			var eventData = user.EventInfo[evid];
+            var response = new ResStoryDungeonEventData();
+            response.RemainTicket = 5;
 
-            var response = new ResStoryDungeonEventData()
+			response.TeamData = new NetUserTeamData()
+			{
+				LastContentsTeamNumber = 1,
+				Type = 20
+			};
+            response.LastClearedEventStageList.Add(new NetLastClearedEventStageData()
             {
-                TeamData = new NetUserTeamData(),
-                RemainTicket = 10,
-            };
-
+                DifficultyId = eventData.Diff,
+                StageId = eventData.LastStage
+            });
             // TOOD
 
             await WriteDataAsync(response);

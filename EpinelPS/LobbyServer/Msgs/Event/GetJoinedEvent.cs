@@ -62,6 +62,19 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                     EventSystemType = 1
                 },
                 JoinAt = 0
+            });            
+			response.EventWithJoinData.Add(new NetEventWithJoinData()
+            {
+                EventData = new NetEventData()
+                {
+					Id = 70070,
+					EventSystemType = 6,
+					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+					EventEndDate = DateTime.Now.AddDays(20).Ticks,
+					EventDisableDate = DateTime.Now.AddDays(20).Ticks
+                },
+                JoinAt = 0
             });
 
             await WriteDataAsync(response);

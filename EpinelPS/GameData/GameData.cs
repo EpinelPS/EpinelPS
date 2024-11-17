@@ -46,7 +46,7 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
         public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
         public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
-        private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
+        public Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
 		public Dictionary<int, UserFrameTableRecord> userFrameTable = new Dictionary<int, UserFrameTableRecord>();
 		public Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = new Dictionary<int, ArchiveRecordManagerRecord>();
 		public Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = new Dictionary<int, ArchiveEventStoryRecord>();

@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Msgs.Event.Mission
         {
             var req = await ReadData<ReqGetEventMissionClearList>();
 
-            var response = new ResGetEventMissionClearList();
+            var response = new ResGetEventMissionClearList(); //field ResGetEventMissionClearMap data type NestEventMissionClear field NestEventMissionClear data type NetEventMissionClearData fields EventId EventMissionId CreatedAt
 
             // TOOD
 
