@@ -1,4 +1,9 @@
-﻿using EpinelPS.Database;
+﻿//todo
+//implement response.Reward 
+// and response.Currencies
+//NetUserCurrencyData fields Type 9000 and Value 150
+//NetRewardData field Currency = new NetUserCurrencyData copy type and value from response.Currencies new NetUserCurrencyData
+using EpinelPS.Database;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 
@@ -11,7 +16,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
 
         // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
         private static readonly List<int> sickPullsExclusionList = new List<int> { 2500601 }; // Add more IDs as needed
-        private static readonly List<int> normalPullsExclusionList = new List<int> { 2500601 }; // Add more IDs as needed
+        private static readonly List<int> normalPullsExclusionList = new List<int> { 2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701 }; // Add more IDs as needed
 
         protected override async Task HandleAsync()
         {
