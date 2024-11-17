@@ -48,6 +48,10 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
         private Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
 		public Dictionary<int, UserFrameTableRecord> userFrameTable = new Dictionary<int, UserFrameTableRecord>();
+		public Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = new Dictionary<int, ArchiveRecordManagerRecord>();
+		public Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = new Dictionary<int, ArchiveEventStoryRecord>();
+		public Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = new Dictionary<int, ArchiveEventQuestRecord>();
+		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
 
 
 
@@ -377,6 +381,12 @@ namespace EpinelPS.StaticInfo
             {
                 OutpostBattle.Add(obj.id, obj);
             }
+			
+			var archiveRecordManagerTableData = await LoadZip<ArchiveRecordManagerTable>("ArchiveRecordManagerTable.json", progress);
+			foreach (var obj in archiveRecordManagerTableData.records)
+			{
+				archiveRecordManagerTable.Add(obj.id, obj);
+			}
 
             var gachaTypeTable = await LoadZip<GachaTypeTable>("GachaTypeTable.json", progress);
 
@@ -406,6 +416,26 @@ namespace EpinelPS.StaticInfo
 			foreach (var record in userFrameData.records)
 			{
 				userFrameTable[record.id] = record;
+			}
+			// Load and parse ArchiveEventDungeonStageTable.json
+			var archiveEventDungeonStageData = await LoadZip<ArchiveEventDungeonStageTable>("ArchiveEventDungeonStageTable.json", progress);
+			foreach (var obj in archiveEventDungeonStageData.records)
+			{
+				archiveEventDungeonStageRecords.Add(obj.id, obj);
+			}
+
+			// Load and parse ArchiveEventStoryTable.json
+			var archiveEventStoryTable = await LoadZip<ArchiveEventStoryTable>("ArchiveEventStoryTable.json", progress);
+			foreach (var obj in archiveEventStoryTable.records)
+			{
+				archiveEventStoryRecords.Add(obj.id, obj);
+			}
+
+			// Load and parse ArchiveEventQuestTable.json
+			var archiveEventQuestTable = await LoadZip<ArchiveEventQuestTable>("ArchiveEventQuestTable.json", progress);
+			foreach (var obj in archiveEventQuestTable.records)
+			{
+				archiveEventQuestRecords.Add(obj.id, obj);
 			}
 
             var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);

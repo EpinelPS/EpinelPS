@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using EpinelPS.StaticInfo;
 
 namespace EpinelPS.LobbyServer.Msgs.Archive
 {
@@ -10,8 +11,20 @@ namespace EpinelPS.LobbyServer.Msgs.Archive
             var req = await ReadData<ReqGetArchiveRecord>();
 
             var response = new ResGetArchiveRecord();
-            response.ArchiveRecordManagerList.AddRange([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]);
-            response.UnlockedArchiveRecordList.AddRange([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800]);
+
+            // Explicitly select IDs from the records
+            var allIds = GameData.Instance.archiveRecordManagerTable.Values.Select(record => record.id).ToList();
+
+            // Add the IDs to the response lists
+            response.ArchiveRecordManagerList.AddRange(allIds);
+            response.UnlockedArchiveRecordList.AddRange(allIds);
+
+            // Get entries with record_type "EventQuest"
+            var eventQuestRecords = GameData.Instance.archiveRecordManagerTable.Values.Where(record => record.record_type == "EventQuest").ToList();
+
+            response.UnlockedArchiveEventQuestList.AddRange(eventQuestRecords.Select(record => record.id));
+
+
             // TODO: allow unlocking
             await WriteDataAsync(response);
         }

@@ -62,6 +62,8 @@ namespace EpinelPS.Database
     public class EventData
     {
         public List<string> CompletedScenarios = new();
+		public int Diff = 0; // Default value for Diff
+		public int LastStage = 0; // Default value for LastStage
     }
 
     public class SynchroSlot

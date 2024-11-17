@@ -317,5 +317,77 @@
 	{
 		public List<UserFrameTableRecord> records;
 	}
+	
+	public class ArchiveRecordManagerRecord
+	{
+		public int id;
+		public string record_type;
+		public string record_title_locale;
+		public int record_main_archive_event_id;
+		public int record_list_order;
+		public int unlock_ticket_id;
+		public int unlock_ticket_count;
+		public int reward_info_list_id;
+		public int event_quest_clear_reward_id;
+		public int recommended_story_list_id;
+		public int included_contents_group_id;
+		public string record_slot_bg_addressable;
+		public string record_unlock_bg_addressable;
+	}
+
+	public class ArchiveRecordManagerTable
+	{
+		public List<ArchiveRecordManagerRecord> records;
+	}
+	
+	public class ArchiveEventStoryRecord
+	{
+		public int id;
+		public int event_id;
+		public string prologue_scenario = "";
+		public int dungeon_id;
+		public int album_category_group;
+		public string ui_prefab = "";
+		public int archive_ticket_item_id;
+		public int archive_currency_item_id;
+	}
+
+	public class ArchiveEventStoryTable
+	{
+		public List<ArchiveEventStoryRecord> records;
+	}
+
+	public class ArchiveEventQuestRecord
+	{
+		public int id;
+		public int event_quest_manager_id;
+		public string condition_type = "";
+		public int condition_value;
+		public string name_localkey = "";
+		public string description_localkey = "";
+		public int next_quest_id;
+		public string end_scenario_id = "";
+	}
+
+	public class ArchiveEventQuestTable
+	{
+		public List<ArchiveEventQuestRecord> records;
+	}
+	
+	public class ArchiveEventDungeonStageRecord
+	{
+		public int id;
+		public int group;
+		public int step;
+		public string stage_name = "";
+		public string stage_contents_type = "";
+		public int stage_id;
+		public bool is_repeat_clear;
+	}
+
+	public class ArchiveEventDungeonStageTable
+	{
+		public List<ArchiveEventDungeonStageRecord> records;
+	}
 
 }
