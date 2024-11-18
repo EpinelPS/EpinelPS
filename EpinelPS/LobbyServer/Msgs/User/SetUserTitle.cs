@@ -1,5 +1,5 @@
 using EpinelPS.Utils;
-
+using EpinelPS.Database;
 namespace EpinelPS.LobbyServer.Msgs.User
 {
     [PacketPath("/lobby/usertitle/set")]
@@ -8,7 +8,9 @@ namespace EpinelPS.LobbyServer.Msgs.User
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqSetUserTitle>();
-
+			var user = GetUser();
+			user.TitleId = req.UserTitleId;
+			JsonDb.Save();
             var response = new ResSetUserTitle();
 
             await WriteDataAsync(response);

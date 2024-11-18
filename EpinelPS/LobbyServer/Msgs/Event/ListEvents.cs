@@ -215,6 +215,16 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });            
+			// free pull for cinderella
+			response.EventList.Add(new NetEventData()
+            {
+                Id = 80004,
+                EventSystemType = 21,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
             
 

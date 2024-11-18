@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using EpinelPS.StaticInfo; // For GameData access
 
 namespace EpinelPS.LobbyServer.Msgs.User
 {
@@ -8,9 +9,15 @@ namespace EpinelPS.LobbyServer.Msgs.User
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetUserTitleList>();
-
             var r = new ResGetUserTitleList();
-            r.UserTitleList.Add(new NetUserTitle() { UserTitleId = 1 });
+
+            // Access GameData and get all UserTitle IDs
+            var userTitleRecords = GameData.Instance.userTitleRecords;
+
+            foreach (var titleId in userTitleRecords.Keys)
+            {
+                r.UserTitleList.Add(new NetUserTitle() { UserTitleId = titleId });
+            }
 
             await WriteDataAsync(r);
         }

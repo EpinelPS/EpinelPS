@@ -148,6 +148,7 @@ namespace EpinelPS.Database
         public bool IsAdmin = false;
         public bool sickpulls = false;
         public bool IsBanned = false;
+		public int TitleId = 1;
         public DateTime BanStart;
         public DateTime BanEnd;
         public int BanId = 0;

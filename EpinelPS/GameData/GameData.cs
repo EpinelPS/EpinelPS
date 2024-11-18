@@ -52,6 +52,7 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = new Dictionary<int, ArchiveEventStoryRecord>();
 		public Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = new Dictionary<int, ArchiveEventQuestRecord>();
 		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
+		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
 
 
 
@@ -422,6 +423,12 @@ namespace EpinelPS.StaticInfo
 			foreach (var obj in archiveEventDungeonStageData.records)
 			{
 				archiveEventDungeonStageRecords.Add(obj.id, obj);
+			}
+			
+			var userTitleTable = await LoadZip<UserTitleTable>("UserTitleTable.json", progress);
+			foreach (var obj in userTitleTable.records)
+			{
+				userTitleRecords.Add(obj.id, obj);
 			}
 
 			// Load and parse ArchiveEventStoryTable.json

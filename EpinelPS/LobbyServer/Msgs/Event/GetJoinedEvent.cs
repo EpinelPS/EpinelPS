@@ -62,7 +62,8 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                     EventSystemType = 1
                 },
                 JoinAt = 0
-            });            
+            });
+			// cinderella banner
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
@@ -73,6 +74,20 @@ namespace EpinelPS.LobbyServer.Msgs.Event
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventEndDate = DateTime.Now.AddDays(20).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks
+                },
+                JoinAt = 0
+            });	
+			//cinderella free pull
+			response.EventWithJoinData.Add(new NetEventWithJoinData()
+            {
+                EventData = new NetEventData()
+                {
+                Id = 80004,
+                EventSystemType = 21,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
                 },
                 JoinAt = 0
             });

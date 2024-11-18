@@ -138,6 +138,7 @@ namespace EpinelPS.LobbyServer
                 Frame = user.ProfileFrame,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
+				UserTitleId = user.TitleId,
                 Nickname = user.Nickname,
                 Usn = (long)user.ID,
                 LastActionAt = DateTimeOffset.UtcNow.Ticks,

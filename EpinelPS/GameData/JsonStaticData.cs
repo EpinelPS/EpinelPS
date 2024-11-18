@@ -389,5 +389,21 @@
 	{
 		public List<ArchiveEventDungeonStageRecord> records;
 	}
+    public class UserTitleRecord
+    {
+        public int id;
+        public int order;
+        public string user_title_production_type = "";
+        public int user_title_production_id;
+        public string icon_resource_id = "";
+        public string name_locale_key = "";
+        public string desc_locale_key = "";
+        public int reward_id;
+        public bool not_acquired_is_visible;
+    }
 
+    public class UserTitleTable
+    {
+        public List<UserTitleRecord> records;
+    }
 }
