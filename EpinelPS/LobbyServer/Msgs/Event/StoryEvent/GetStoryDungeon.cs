@@ -11,7 +11,13 @@ namespace EpinelPS.LobbyServer.Msgs.Event.StoryEvent
             var req = await ReadData<ReqStoryDungeonEventData>();
             var evid = req.EventId;
 			var user = GetUser();
-			var eventData = user.EventInfo[evid];
+
+
+            if (!user.EventInfo.TryGetValue(evid, out EventData eventData))
+            {
+                eventData = new();
+            }
+
             var response = new ResStoryDungeonEventData();
             response.RemainTicket = 5;
 
