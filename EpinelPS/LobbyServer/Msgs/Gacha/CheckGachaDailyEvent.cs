@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             response.FreeCount = 1;
             response.EventData = new NetEventData()
             {
-                Id = 80004,
+                Id = 80005,
                 EventSystemType = 21,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,

@@ -130,7 +130,7 @@ namespace EpinelPS.LobbyServer.Msgs.Event
 
 */
             // Old tales
-
+/*
             response.EventList.Add(new NetEventData()
             {
                 Id = 81600,
@@ -206,27 +206,59 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
-            // banner for cinderella i think
+			
+			*/
+             // secret garden - system error when trying to enter event idk why
             response.EventList.Add(new NetEventData()
             {
-                Id = 70070,
+                Id = 40063,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });			
+            // Enable challenge mode
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 60063,
+                EventSystemType = 20,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });			
+			
+            // banner for grave i think
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 70071,
                 EventSystemType = 6,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });            
-			// free pull for cinderella
+			// free pull for grave
 			response.EventList.Add(new NetEventData()
             {
-                Id = 80004,
+                Id = 80005,
                 EventSystemType = 21,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks,
             });
-            
+            // banner for flora
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 70072,
+                EventSystemType = 6,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks,
+            });            
 
             
             //response.EventList.Add(new NetEventData()

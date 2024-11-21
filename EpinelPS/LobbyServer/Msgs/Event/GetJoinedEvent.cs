@@ -63,12 +63,12 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 },
                 JoinAt = 0
             });
-			// cinderella banner
+			// grave banner
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-					Id = 70070,
+					Id = 70071,
 					EventSystemType = 6,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
@@ -77,12 +77,12 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 },
                 JoinAt = 0
             });	
-			//cinderella free pull
+			//grave free pull
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-                Id = 80004,
+                Id = 80005,
                 EventSystemType = 21,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
@@ -90,8 +90,22 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks
                 },
                 JoinAt = 0
+            });			
+			// banner for flora
+			response.EventWithJoinData.Add(new NetEventWithJoinData()
+            {
+                EventData = new NetEventData()
+                {
+                Id = 70072,
+                EventSystemType = 6,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+                },
+                JoinAt = 0
             });
-
+            
             await WriteDataAsync(response);
         }
     }
