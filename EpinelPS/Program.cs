@@ -5,6 +5,7 @@ using EpinelPS.LobbyServer.Msgs.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Google.Api;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Logging.EventLog;
 using Microsoft.VisualBasic;
@@ -49,6 +50,7 @@ namespace EpinelPS
                         serverOptions.Listen(IPAddress.Any, 443,
                             listenOptions =>
                             {
+                                listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
                                 listenOptions.UseHttps(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx", "");
                             });
 
@@ -766,15 +768,17 @@ namespace EpinelPS
                         response.AddRange([.. ResponseWithBytes]);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     List<byte> ResponseWithBytes =
-   [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 505 Internal Server Error\r\n"),
+   [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 500 Internal Server Error\r\n"),
                             //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
                             .. Encoding.UTF8.GetBytes($"\r\n"),
                         ];
                     response.AddRange([.. ResponseWithBytes]);
+
+                    Console.WriteLine("Exception during batch request: " + ex.ToString());
                 }
 
                 // add boundary, also include http newline if there is binary content
