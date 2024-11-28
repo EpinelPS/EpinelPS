@@ -12,13 +12,13 @@
 [![Discord](https://img.shields.io/discord/1261717212448952450?style=flat-square)](https://discord.gg/Ztt6Y9vQjF)
 
 </div>
-Private/local server for another anime game. Discord server: https://discord.gg/Ztt6Y9vQjF
+Private/local server for a 2d anime rpg game. The goal of this project is to replicate the functionality of the official server. Discord server: https://discord.gg/Ztt6Y9vQjF
 
 > [!CAUTION]
-> Please be aware that some people are trying to sell this private server. Please do not buy it!
+> Please note that GitHub is the only official source for EpinelPS. **If you bought it from someone, you got scammed.**
 
 > [!WARNING]
-> This project is in a very early state so many functions in the game do not work.
+> This project is in an early state so many functions in the game do not work. It is recommended to download the latest build from GitHub actions.
 
 ## Usage
 Download the latest release/GitHub actions build, and run ServerSelector.Desktop.exe as administrator (to modify DNS hosts file and install a CA cert). Make sure to close the game and launcher first. Select Local server, and then click save. After that, start EpinelPS.exe to start the actual server.
