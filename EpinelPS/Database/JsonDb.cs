@@ -127,6 +127,12 @@ namespace EpinelPS.Database
         public int TableId;
     }
 
+    public class UnlockData
+    {
+        public bool ButtonAnimationPlayed = false;
+        public bool PopupAnimationPlayed = false;
+    }
+
     public class MogMinigameInfo
     {
         public List<string> CompletedScenarios = [];
@@ -200,6 +206,7 @@ namespace EpinelPS.Database
         public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
         public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
         public OutpostBuffs OutpostBuffs = new();
+        public Dictionary<int, UnlockData> ContentsOpenUnlocked = new();
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();

@@ -24,6 +24,7 @@ namespace EpinelPS
             try
             {
                 Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
+                Console.WriteLine("Targeting Game Version " + GameConfig.Root.GameMaxVer);
                 Console.WriteLine("Initializing database");
                 JsonDb.Save();
 

@@ -108,12 +108,10 @@ namespace EpinelPS.LobbyServer
             {
                 Level = user.userPointData.UserLevel,
                 Exp = user.userPointData.ExperiencePoint,
-                CommanderRoomJukebox = 5,
                 CostumeLv = 1,
                 Frame = 1,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
-                LobbyJukebox = 2,
                 InfraCoreExp = user.InfraCoreExp,
                 InfraCoreLv = user.InfraCoreLvl,
             };
