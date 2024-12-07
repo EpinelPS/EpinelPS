@@ -20,10 +20,7 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
             var response = new ResGetOutpostData
             {
                 OutpostBattleLevel = user.OutpostBattleLevel,
-                Jukebox = new() { SelectTid = 5 },
                 JukeboxV2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } },
-                BattleTime = 864000000000,
-                MaxBattleTime = 864000000000,
                 SkinGroupId = 1000,
             };
 
@@ -36,7 +33,6 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
             var jukeboxIds = GameData.Instance.jukeboxListDataRecords.Keys.ToList();
 
             // Update response lists with the IDs
-            response.Jukebox.List.AddRange(jukeboxIds);
             response.JukeboxV2.JukeboxTableIds.AddRange(jukeboxIds);
 			
             response.OutpostBattleLevel = user.OutpostBattleLevel;
