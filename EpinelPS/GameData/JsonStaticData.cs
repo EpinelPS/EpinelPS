@@ -406,4 +406,25 @@
     {
         public List<UserTitleRecord> records;
     }
+	
+    public class ArchiveMessengerConditionList
+    {
+        public string condition_type;
+        public int condition_id;
+    }
+
+    public class ArchiveMessengerConditionRecord
+    {
+        public int id;
+        public int archive_messenger_group_id;
+        public List<ArchiveMessengerConditionList> archive_messenger_condition_list;
+        public string tid;
+    }
+
+    public class ArchiveMessengerConditionTable
+    {
+        public string version;
+        public List<ArchiveMessengerConditionRecord> records;
+    }
+
 }

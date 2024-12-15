@@ -31,6 +31,45 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks
             });			
+             // ice dragon saga story 1
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40064,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });			
+             // ice dragon saga story 2
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40065,
+                EventSystemType = 5,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });	
+			// ice dragon saga challenge mode
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 60064,
+                EventSystemType = 20,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });			
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 81701,
+                EventSystemType = 39,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });			
 
             // banner for new guilotine
             response.EventList.Add(new NetEventData()

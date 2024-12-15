@@ -10,18 +10,19 @@ namespace EpinelPS.LobbyServer.Msgs.Archive
         {
             var req = await ReadData<ReqGetArchiveStoryDungeon>(); // has EventId field
             var evid = req.EventId;
-
-            // Retrieve the user based on session (assuming GetCurrentUser is defined elsewhere)
             var user = GetUser();
-            if (user == null)
-            {
-                throw new Exception("User not found.");
-            }
 
-            // Access EventData directly
+            // Ensure the EventInfo dictionary contains the requested EventId
             if (!user.EventInfo.ContainsKey(evid))
             {
-                throw new Exception($"Event with ID {evid} not found.");
+                // Create a new default entry for the missing EventId
+                user.EventInfo[evid] = new EventData
+                {
+                    CompletedScenarios = new List<string>(), // Initialize empty list
+                    Diff = 0,                                // Default difficulty
+                    LastStage = 0                            // Default last cleared stage
+                };
+				JsonDb.Save();
             }
 
             var eventData = user.EventInfo[evid];
@@ -30,14 +31,14 @@ namespace EpinelPS.LobbyServer.Msgs.Archive
             var response = new ResGetArchiveStoryDungeon();
 
             // Populate team data
-            response.TeamData = new NetUserTeamData()
+            response.TeamData = new NetUserTeamData
             {
                 LastContentsTeamNumber = 1,
                 Type = 1
             };
 
             // Populate the last cleared stage
-            response.LastClearedArchiveStageList.Add(new NetLastClearedArchiveStage()
+            response.LastClearedArchiveStageList.Add(new NetLastClearedArchiveStage
             {
                 DifficultyId = eventData.Diff,
                 StageId = eventData.LastStage

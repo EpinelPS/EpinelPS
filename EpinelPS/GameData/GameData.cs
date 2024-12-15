@@ -53,6 +53,7 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = new Dictionary<int, ArchiveEventQuestRecord>();
 		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
 		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
+        public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords;
 
 
 
@@ -93,6 +94,7 @@ namespace EpinelPS.StaticInfo
             // Initialize Jukebox data dictionaries
             jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
             jukeboxThemeDataRecords = new Dictionary<int, JukeboxThemeRecord>();
+			archiveMessengerConditionRecords = new Dictionary<int, ArchiveMessengerConditionRecord>();
 
             var rawBytes = File.ReadAllBytes(filePath);
             Sha256Hash = SHA256.HashData(rawBytes);
@@ -444,7 +446,12 @@ namespace EpinelPS.StaticInfo
 			{
 				archiveEventQuestRecords.Add(obj.id, obj);
 			}
-
+            // LOAD ARCHIVE MESSENGER CONDITION TABLE
+            var archiveMessengerConditionTable = await LoadZip<ArchiveMessengerConditionTable>("ArchiveMessengerConditionTable.json", progress);
+            foreach (var obj in archiveMessengerConditionTable.records)
+            {
+                archiveMessengerConditionRecords.Add(obj.id, obj);
+            }
             var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
             foreach (var obj in albumResourceTable.records)
             {
