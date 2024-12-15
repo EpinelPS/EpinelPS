@@ -63,12 +63,12 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 },
                 JoinAt = 0
             });
-			// grave banner
+			// new guilotine banner
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-					Id = 70071,
+					Id = 70076,
 					EventSystemType = 6,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
@@ -77,13 +77,13 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 },
                 JoinAt = 0
             });	
-			//grave free pull
+			// new maiden banner
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-                Id = 80005,
-                EventSystemType = 21,
+                Id = 70073,
+                EventSystemType = 6,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -91,12 +91,26 @@ namespace EpinelPS.LobbyServer.Msgs.Event
                 },
                 JoinAt = 0
             });			
-			// banner for flora
+			// repickup ludmila
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-                Id = 70072,
+                Id = 70074,
+                EventSystemType = 6,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+                },
+                JoinAt = 0
+            });		
+			// repickup mica
+			response.EventWithJoinData.Add(new NetEventWithJoinData()
+            {
+                EventData = new NetEventData()
+                {
+                Id = 70075,
                 EventSystemType = 6,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
