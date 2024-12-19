@@ -221,9 +221,10 @@ namespace EpinelPS
                     Console.WriteLine("  SetLevel (level) - Set all characters' level (between 1 and 999 takes effect on game and server restart)");
                     Console.WriteLine("  SetSkillLevel (level) - Set all characters' skill levels between 1 and 10 (takes effect on game and server restart)");
                     Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
+                    Console.WriteLine("  finishalltutorials - finish all tutorials (takes effect on game and server restart)");
                     Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
-                    Console.WriteLine("  AddItem (id) (amount) - Adds an item");
-                    Console.WriteLine("  AddCharacter (id) - Adds a character");
+                    Console.WriteLine("  AddItem (id) (amount) - Adds an item (takes effect on game and server restart)");
+                    Console.WriteLine("  AddCharacter (id) - Adds a character (takes effect on game and server restart)");
 
                 }
                 else if (input == "ls /users")
@@ -307,6 +308,36 @@ namespace EpinelPS
                             }
 
                             Console.WriteLine("Added all missing characters to user " + user.Username);
+                            JsonDb.Save();
+                        }
+                    }
+                }
+                else if (input == "finishalltutorials")
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            foreach (var tutorial in GameData.Instance.tutorialTable.Values)
+                            {
+                                if (!user.ClearedTutorialData.ContainsKey(tutorial.id))
+                                {
+                                    user.ClearedTutorialData.Add(tutorial.id, tutorial);
+                                }
+                            }
+                            
+                            Console.WriteLine("Finished all tutorials for user " + user.Username);
                             JsonDb.Save();
                         }
                     }

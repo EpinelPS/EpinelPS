@@ -32,7 +32,7 @@ namespace EpinelPS.StaticInfo
         private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
         private JArray characterCostumeTable;
         public Dictionary<int, CharacterRecord> characterTable;
-        private Dictionary<int, ClearedTutorialData> tutorialTable;
+        public Dictionary<int, ClearedTutorialData> tutorialTable;
         private Dictionary<int, ItemEquipRecord> itemEquipTable;
         private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
         private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
