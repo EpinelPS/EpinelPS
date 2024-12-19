@@ -131,11 +131,38 @@
     {
         public int id;
         public int piece_id;
-		public string original_rare;
-		public string corporation;
-		public int grade_core_id;
-		public int name_code;
-		public int grow_grade;
+        public string original_rare;
+        public string corporation;
+        public int grade_core_id;
+        public int name_code;
+        public int grow_grade;
+        public int stat_enhance_id;
+        public string character_class;
+        public List<int> element_id;
+        public int critical_ratio;
+        public int critical_damage;
+        public int shot_id;
+        public int bonusrange_min;
+        public int bonusrange_max;
+        public string use_burst_skill;
+        public string change_burst_step;
+        public int burst_apply_delay;
+        public int burst_duration;
+        public int ulti_skill_id;
+        public int skill1_id;
+        public string skill1_table;
+        public int skill2_id;
+        public string skill2_table;
+        public string eff_category_type;
+        public int eff_category_value;
+        public string category_type_1;
+        public string category_type_2;
+        public string category_type_3;
+        public string cv_localkey;
+        public string squad;
+        public bool is_visible;
+        public bool prism_is_active;
+        public bool is_detail_close;
     }
     public class CharacterTable
     {
@@ -427,4 +454,20 @@
         public List<ArchiveMessengerConditionRecord> records;
     }
 
+    public class CharacterStatRecord
+    {
+        public int id;
+        public int group;
+        public int level;
+        public int level_hp;
+        public int level_attack;
+        public int level_defence;
+        public int level_energy_resist;
+        public int level_bio_resist;
+    }
+    
+    public class CharacterStatTable
+    {
+        public List<CharacterStatRecord> records;
+    }
 }

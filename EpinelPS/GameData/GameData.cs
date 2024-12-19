@@ -54,6 +54,7 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
 		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
         public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords;
+        public Dictionary<int, CharacterStatRecord> characterStatTable;
 
 
 
@@ -90,6 +91,7 @@ namespace EpinelPS.StaticInfo
             ZipStream = new();
             tutorialTable = new();
             itemEquipTable = new();
+            characterStatTable = new();
 
             // Initialize Jukebox data dictionaries
             jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
@@ -460,6 +462,12 @@ namespace EpinelPS.StaticInfo
             // Load Jukebox data
             await LoadJukeboxListData(progress);
             await LoadJukeboxThemeData(progress);
+
+            var characterStatTable = await LoadZip<CharacterStatTable>("CharacterStatTable.json", progress);
+            foreach (var obj in characterStatTable.records)
+            {
+                this.characterStatTable.Add(obj.id, obj);
+            }
         }
 
         public async Task LoadJukeboxListData(ProgressBar bar)

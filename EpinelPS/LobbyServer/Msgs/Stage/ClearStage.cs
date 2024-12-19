@@ -319,7 +319,7 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                     Slot = character.Slot,
                     Tid = character.Tid,
                     Level = character.Level,
-                    Combat = 0, // TODO: CP either needs to be pulled from somewhere else or calculated server-side
+                    Combat = FormulaUtils.CalculateCP(user, character.Csn),
                     CharacterType = StageClearInfoTeamCharacterType.StageClearInfoTeamCharacterTypeOwnedCharacter // TODO: how do we get this?
                 });
             }
