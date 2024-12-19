@@ -85,6 +85,8 @@ namespace EpinelPS.LobbyServer.Msgs.User
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
             response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
 
+            response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
+
             await WriteDataAsync(response);
         }
     }

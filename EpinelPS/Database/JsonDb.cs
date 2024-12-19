@@ -183,6 +183,7 @@ namespace EpinelPS.Database
         public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
         public NetWallpaperPlaylist[] WallpaperPlaylistList = [];
         public NetWallpaperJukebox[] WallpaperJukeboxList = [];
+        public List<int> LobbyDecoBackgroundList = [];
 
 
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
