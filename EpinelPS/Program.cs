@@ -217,13 +217,14 @@ namespace EpinelPS
                     Console.WriteLine("  unban - unban selected user from game");
                     Console.WriteLine("  exit - exit server application");
                     Console.WriteLine("  completestage (chapter num)-(stage number) - complete selected stage and get rewards (and all previous ones). Example completestage 15-1. Note that the exact stage number cleared may not be exact.");
-					Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
+                    Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
                     Console.WriteLine("  SetLevel (level) - Set all characters' level (between 1 and 999 takes effect on game and server restart)");
                     Console.WriteLine("  SetSkillLevel (level) - Set all characters' skill levels between 1 and 10 (takes effect on game and server restart)");
                     Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
                     Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
+                    Console.WriteLine("  AddItem (id) (amount) - Adds an item");
 
-				}
+                }
                 else if (input == "ls /users")
                 {
                     Console.WriteLine("Id,Username,Nickname");
@@ -263,299 +264,299 @@ namespace EpinelPS
                         Console.WriteLine("Usage: chroot (user id)");
                     }
                 }
-				else if (input == "addallcharacters")
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else
-						{
-							// Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
-							var allCharacters = GameData.Instance.characterTable.Values
-								.GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
-								.SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))  // Always add characters with grade_core_id == 11 and 103
-								.ToList();
+                else if (input == "addallcharacters")
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            // Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
+                            var allCharacters = GameData.Instance.characterTable.Values
+                                .GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
+                                .SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))  // Always add characters with grade_core_id == 11 and 103
+                                .ToList();
 
-							foreach (var character in allCharacters)
-							{
-								if (!user.HasCharacter(character.id))
-								{
-									user.Characters.Add(new Database.Character()
-									{
-										CostumeId = 0,
-										Csn = user.GenerateUniqueCharacterId(),  
-										Grade = 0,
-										Level = 1,
-										Skill1Lvl = 1,
-										Skill2Lvl = 1,
-										Tid = character.id,  // Tid is the character ID
-										UltimateLevel = 1
-									});
-								}
-							}
+                            foreach (var character in allCharacters)
+                            {
+                                if (!user.HasCharacter(character.id))
+                                {
+                                    user.Characters.Add(new Database.Character()
+                                    {
+                                        CostumeId = 0,
+                                        Csn = user.GenerateUniqueCharacterId(),
+                                        Grade = 0,
+                                        Level = 1,
+                                        Skill1Lvl = 1,
+                                        Skill2Lvl = 1,
+                                        Tid = character.id,  // Tid is the character ID
+                                        UltimateLevel = 1
+                                    });
+                                }
+                            }
 
-							Console.WriteLine("Added all missing characters to user " + user.Username);
-							JsonDb.Save();
-						}
-					}
-				}
-				else if (input.StartsWith("SetCoreLevel"))
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else if (args.Length == 2 && int.TryParse(args[1], out int inputGrade) && inputGrade >= 0 && inputGrade <= 11)
-						{
-							foreach (var character in user.Characters)
-							{
-								// Get current character's Tid
-								int tid = character.Tid;
+                            Console.WriteLine("Added all missing characters to user " + user.Username);
+                            JsonDb.Save();
+                        }
+                    }
+                }
+                else if (input.StartsWith("SetCoreLevel"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else if (args.Length == 2 && int.TryParse(args[1], out int inputGrade) && inputGrade >= 0 && inputGrade <= 11)
+                        {
+                            foreach (var character in user.Characters)
+                            {
+                                // Get current character's Tid
+                                int tid = character.Tid;
 
-								// Get the character data from the character table
-								if (!GameData.Instance.characterTable.TryGetValue(tid, out var charData))
-								{
-									Console.WriteLine($"Character data not found for Tid {tid}");
-									continue;
-								}
+                                // Get the character data from the character table
+                                if (!GameData.Instance.characterTable.TryGetValue(tid, out var charData))
+                                {
+                                    Console.WriteLine($"Character data not found for Tid {tid}");
+                                    continue;
+                                }
 
-								int currentGradeCoreId = charData.grade_core_id;
-								int nameCode = charData.name_code;
-								string originalRare = charData.original_rare;
+                                int currentGradeCoreId = charData.grade_core_id;
+                                int nameCode = charData.name_code;
+                                string originalRare = charData.original_rare;
 
-								// Skip characters with original_rare == "R"
-								if (originalRare == "R" || nameCode == 3999)
-								{
-									continue;
-								}
+                                // Skip characters with original_rare == "R"
+                                if (originalRare == "R" || nameCode == 3999)
+                                {
+                                    continue;
+                                }
 
-								// Now handle normal SR and SSR characters
-								int maxGradeCoreId = 0;
+                                // Now handle normal SR and SSR characters
+                                int maxGradeCoreId = 0;
 
-								// If the character is "SSR", it can have a grade_core_id from 1 to 11
-								if (originalRare == "SSR")
-								{
-									maxGradeCoreId = 11;  // SSR characters can go from 1 to 11
+                                // If the character is "SSR", it can have a grade_core_id from 1 to 11
+                                if (originalRare == "SSR")
+                                {
+                                    maxGradeCoreId = 11;  // SSR characters can go from 1 to 11
 
-									// Calculate the new grade_core_id within the bounds
-									int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
+                                    // Calculate the new grade_core_id within the bounds
+                                    int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
 
-									// Find the character with the same name_code and new grade_core_id
-									var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
-										c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
+                                    // Find the character with the same name_code and new grade_core_id
+                                    var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
+                                        c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
-									if (newCharData != null)
-									{
-										// Update the character's Tid and Grade
-										character.Tid = newCharData.id;
-										character.Grade = inputGrade;
-									}
+                                    if (newCharData != null)
+                                    {
+                                        // Update the character's Tid and Grade
+                                        character.Tid = newCharData.id;
+                                        character.Grade = inputGrade;
+                                    }
 
-								}
+                                }
 
-								// If the character is "SR", it can have a grade_core_id from 101 to 103
-								else if (originalRare == "SR")
-								{
-									maxGradeCoreId = 103;  // SR characters can go from 101 to 103
+                                // If the character is "SR", it can have a grade_core_id from 101 to 103
+                                else if (originalRare == "SR")
+                                {
+                                    maxGradeCoreId = 103;  // SR characters can go from 101 to 103
 
-									// Start from 101 and increment based on inputGrade (inputGrade 0 -> grade_core_id 101)
-									int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
+                                    // Start from 101 and increment based on inputGrade (inputGrade 0 -> grade_core_id 101)
+                                    int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
 
-									// Find the character with the same name_code and new grade_core_id
-									var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
-										c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
+                                    // Find the character with the same name_code and new grade_core_id
+                                    var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
+                                        c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
-									if (newCharData != null)
-									{
-										// Update the character's Tid and Grade
-										character.Tid = newCharData.id;
-										character.Grade = inputGrade;
-									}
+                                    if (newCharData != null)
+                                    {
+                                        // Update the character's Tid and Grade
+                                        character.Tid = newCharData.id;
+                                        character.Grade = inputGrade;
+                                    }
 
-								}
+                                }
 
-							}
-							Console.WriteLine($"Core level of all characters have been set to {inputGrade}");
-							JsonDb.Save();
-						}
-						else
-						{
-							Console.WriteLine("Invalid argument. Core level must be between 0 and 11.");
-						}
-					}
-					//code above WILL change tids in user.characters so this will update them in representation team
-					foreach (var user in JsonDb.Instance.Users)
-					{
-						// Check if RepresentationTeamData exists and has slots
-						if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-						{
-							// Iterate through RepresentationTeamData slots
-							foreach (var slot in user.RepresentationTeamData.Slots)
-							{
-								// Find the character in user's character list that matches the slot's Csn
-								var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
+                            }
+                            Console.WriteLine($"Core level of all characters have been set to {inputGrade}");
+                            JsonDb.Save();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid argument. Core level must be between 0 and 11.");
+                        }
+                    }
+                    //code above WILL change tids in user.characters so this will update them in representation team
+                    foreach (var user in JsonDb.Instance.Users)
+                    {
+                        // Check if RepresentationTeamData exists and has slots
+                        if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
+                        {
+                            // Iterate through RepresentationTeamData slots
+                            foreach (var slot in user.RepresentationTeamData.Slots)
+                            {
+                                // Find the character in user's character list that matches the slot's Csn
+                                var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
 
-								if (correspondingCharacter != null)
-								{
-									// Update the Tid value if it differs
-									if (slot.Tid != correspondingCharacter.Tid)
-									{
-										slot.Tid = correspondingCharacter.Tid;
-									}
-								}
-							}
-						}
-					}
+                                if (correspondingCharacter != null)
+                                {
+                                    // Update the Tid value if it differs
+                                    if (slot.Tid != correspondingCharacter.Tid)
+                                    {
+                                        slot.Tid = correspondingCharacter.Tid;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-					// Save the updated data
-					JsonDb.Save();
+                    // Save the updated data
+                    JsonDb.Save();
 
-				}
+                }
 
 
 
-				else if (input == "sickpulls")
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else
-						{
-							// Check current value of sickpulls and toggle it
-							bool currentSickPulls = EpinelPS.Database.JsonDb.IsSickPulls(user);
-							if (currentSickPulls)
-							{
-								user.sickpulls = false;
-								Console.WriteLine("sickpulls is now set to false for user " + user.Username);
-							}
-							else
-							{
-								user.sickpulls = true;
-								Console.WriteLine("sickpulls is now set to true for user " + user.Username);
-							}
+                else if (input == "sickpulls")
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            // Check current value of sickpulls and toggle it
+                            bool currentSickPulls = EpinelPS.Database.JsonDb.IsSickPulls(user);
+                            if (currentSickPulls)
+                            {
+                                user.sickpulls = false;
+                                Console.WriteLine("sickpulls is now set to false for user " + user.Username);
+                            }
+                            else
+                            {
+                                user.sickpulls = true;
+                                Console.WriteLine("sickpulls is now set to true for user " + user.Username);
+                            }
 
-							// Save the changes to the database
-							JsonDb.Save();
-						}
-					}
-				}
-				else if (input.StartsWith("SetLevel"))
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else if (args.Length == 2 && int.TryParse(args[1], out int level) && level >= 1 && level <= 999)
-						{
-							foreach (var character in user.Characters)
-							{
-								character.Level = level;
-							}
-							Console.WriteLine("Set all characters' level to " + level);
-							JsonDb.Save();
-						}
-						else
-						{
-							Console.WriteLine("Invalid argument. Level must be between 1 and 999.");
-						}
-					}
-						//code above WILL change levels in user.characters so this will update them in representation team
-					foreach (var user in JsonDb.Instance.Users)
-					{
-						// Check if RepresentationTeamData exists and has slots
-						if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-						{
-							// Iterate through RepresentationTeamData slots
-							foreach (var slot in user.RepresentationTeamData.Slots)
-							{
-								// Find the character in user's character list that matches the slot's Csn
-								var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
+                            // Save the changes to the database
+                            JsonDb.Save();
+                        }
+                    }
+                }
+                else if (input.StartsWith("SetLevel"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else if (args.Length == 2 && int.TryParse(args[1], out int level) && level >= 1 && level <= 999)
+                        {
+                            foreach (var character in user.Characters)
+                            {
+                                character.Level = level;
+                            }
+                            Console.WriteLine("Set all characters' level to " + level);
+                            JsonDb.Save();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid argument. Level must be between 1 and 999.");
+                        }
+                    }
+                    //code above WILL change levels in user.characters so this will update them in representation team
+                    foreach (var user in JsonDb.Instance.Users)
+                    {
+                        // Check if RepresentationTeamData exists and has slots
+                        if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
+                        {
+                            // Iterate through RepresentationTeamData slots
+                            foreach (var slot in user.RepresentationTeamData.Slots)
+                            {
+                                // Find the character in user's character list that matches the slot's Csn
+                                var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
 
-								if (correspondingCharacter != null)
-								{
-									// Update the Level value if it differs
-									if (slot.Level != correspondingCharacter.Level)
-									{
-										slot.Level = correspondingCharacter.Level;
-									}
-								}
-							}
-						}
-					}
+                                if (correspondingCharacter != null)
+                                {
+                                    // Update the Level value if it differs
+                                    if (slot.Level != correspondingCharacter.Level)
+                                    {
+                                        slot.Level = correspondingCharacter.Level;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-						// Save the updated data
-						JsonDb.Save();
-				}
-				else if (input.StartsWith("SetSkillLevel"))
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else if (args.Length == 2 && int.TryParse(args[1], out int skillLevel) && skillLevel >= 1 && skillLevel <= 10)
-						{
-							foreach (var character in user.Characters)
-							{
-								character.UltimateLevel = skillLevel;
-								character.Skill1Lvl = skillLevel;
-								character.Skill2Lvl = skillLevel;
-							}
-							Console.WriteLine("Set all characters' skill levels to " + skillLevel);
-							JsonDb.Save();
-						}
-						else
-						{
-							Console.WriteLine("Invalid argument. Skill level must be between 1 and 10.");
-						}
-					}
-				}
+                    // Save the updated data
+                    JsonDb.Save();
+                }
+                else if (input.StartsWith("SetSkillLevel"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else if (args.Length == 2 && int.TryParse(args[1], out int skillLevel) && skillLevel >= 1 && skillLevel <= 10)
+                        {
+                            foreach (var character in user.Characters)
+                            {
+                                character.UltimateLevel = skillLevel;
+                                character.Skill1Lvl = skillLevel;
+                                character.Skill2Lvl = skillLevel;
+                            }
+                            Console.WriteLine("Set all characters' skill levels to " + skillLevel);
+                            JsonDb.Save();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid argument. Skill level must be between 1 and 10.");
+                        }
+                    }
+                }
 
                 else if (input.StartsWith("rmuser"))
                 {
@@ -591,106 +592,163 @@ namespace EpinelPS
                         }
                     }
                 }
-				else if (input.StartsWith("completestage"))
-				{
-					if (selectedUser == 0)
-					{
-						Console.WriteLine("No user selected");
-					}
-					else
-					{
-						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-						if (user == null)
-						{
-							Console.WriteLine("Selected user does not exist");
-							selectedUser = 0;
-							prompt = "# ";
-						}
-						else
-						{
-							if (args.Length == 2)
-							{
-								var input2 = args[1];
-								try
-								{
-									var chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
-									var stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
+                else if (input.StartsWith("completestage"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            if (args.Length == 2)
+                            {
+                                var input2 = args[1];
+                                try
+                                {
+                                    var chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
+                                    var stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
 
-									if (chapterParsed && stageParsed)
-									{
-										Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
+                                    if (chapterParsed && stageParsed)
+                                    {
+                                        Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
 
-										// Complete main stages
-										for (int i = 0; i <= chapterNumber; i++)
-										{
-											var stages = GameData.Instance.GetStageIdsForChapter(i, true);
-											int target = 1;
-											foreach (var item in stages)
-											{
-												if (!user.IsStageCompleted(item, true))
-												{
-													Console.WriteLine("Completing stage " + item);
-													ClearStage.CompleteStage(user, item, true);
-												}
+                                        // Complete main stages
+                                        for (int i = 0; i <= chapterNumber; i++)
+                                        {
+                                            var stages = GameData.Instance.GetStageIdsForChapter(i, true);
+                                            int target = 1;
+                                            foreach (var item in stages)
+                                            {
+                                                if (!user.IsStageCompleted(item, true))
+                                                {
+                                                    Console.WriteLine("Completing stage " + item);
+                                                    ClearStage.CompleteStage(user, item, true);
+                                                }
 
-												if (i == chapterNumber && target == stageNumber)
-												{
-													break;
-												}
+                                                if (i == chapterNumber && target == stageNumber)
+                                                {
+                                                    break;
+                                                }
 
-												target++;
-											}
-										}
+                                                target++;
+                                            }
+                                        }
 
-										// Process scenario and regular stages
-										Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
+                                        // Process scenario and regular stages
+                                        Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
 
-										for (int chapter = 0; chapter <= chapterNumber; chapter++)
-										{
-											Console.WriteLine($"Processing chapter: {chapter}");
+                                        for (int chapter = 0; chapter <= chapterNumber; chapter++)
+                                        {
+                                            Console.WriteLine($"Processing chapter: {chapter}");
 
-											var stages = GameData.Instance.GetScenarioStageIdsForChapter(chapter)
-												.Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))
-												.ToList();
+                                            var stages = GameData.Instance.GetScenarioStageIdsForChapter(chapter)
+                                                .Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))
+                                                .ToList();
 
-											Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
+                                            Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
 
-											foreach (var stage in stages)
-											{
-												if (!user.CompletedScenarios.Contains(stage))
-												{
-													user.CompletedScenarios.Add(stage);
-													Console.WriteLine($"Added stage {stage} to CompletedScenarios");
-												}
-												else
-												{
-													Console.WriteLine($"Stage {stage} is already completed");
-												}
-											}
-										}
+                                            foreach (var stage in stages)
+                                            {
+                                                if (!user.CompletedScenarios.Contains(stage))
+                                                {
+                                                    user.CompletedScenarios.Add(stage);
+                                                    Console.WriteLine($"Added stage {stage} to CompletedScenarios");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine($"Stage {stage} is already completed");
+                                                }
+                                            }
+                                        }
 
-										// Save changes to user data
-										JsonDb.Save();
-									}
-									else
-									{
-										Console.WriteLine("Chapter and stage number must be valid integers");
-									}
-								}
-								catch (Exception ex)
-								{
-									Console.WriteLine("Exception: " + ex.ToString());
-								}
-							}
-							else
-							{
-								Console.WriteLine("Invalid argument length, must be 1");
-							}
-						}
-					}
-				}
+                                        // Save changes to user data
+                                        JsonDb.Save();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Chapter and stage number must be valid integers");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Exception: " + ex.ToString());
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid argument length, must be 1");
+                            }
+                        }
+                    }
+                }
+                else if (input.StartsWith("AddItem"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            if (args.Length == 3)
+                            {
+                                if (int.TryParse(args[1], out int itemId) && int.TryParse(args[2], out int amount))
+                                {
+                                    ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
+                                    
+                                    if (item == null)
+                                    {
+                                        user.Items.Add(new ItemData
+                                        {
+                                            Isn = user.GenerateUniqueItemId(),
+                                            ItemType = itemId,
+                                            Level = 1,
+                                            Exp = 1,
+                                            Count = amount
+                                        });
+                                    }
+                                    else
+                                    {
+                                        item.Count += amount;
 
+                                        if (item.Count < 0)
+                                        {
+                                            item.Count = 0;
+                                        }
+                                    }
 
+                                    Console.WriteLine($"Added {amount} of item {itemId} to user {user.Username}");
+                                    JsonDb.Save();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid item ID or amount");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid argument length, must be 2");
+                            }
+                        }
+                    }
+                }
 
 
                 else if (input == "exit")
