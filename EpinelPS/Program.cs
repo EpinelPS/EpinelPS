@@ -223,6 +223,7 @@ namespace EpinelPS
                     Console.WriteLine("  addallcharacters - Add all missing characters to the selected user with default levels and skills (takes effect on game and server restart)");
                     Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
                     Console.WriteLine("  AddItem (id) (amount) - Adds an item");
+                    Console.WriteLine("  AddCharacter (id) - Adds a character");
 
                 }
                 else if (input == "ls /users")
@@ -712,7 +713,7 @@ namespace EpinelPS
                                 if (int.TryParse(args[1], out int itemId) && int.TryParse(args[2], out int amount))
                                 {
                                     ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
-                                    
+
                                     if (item == null)
                                     {
                                         user.Items.Add(new ItemData
@@ -749,6 +750,62 @@ namespace EpinelPS
                         }
                     }
                 }
+                else if (input.StartsWith("AddCharacter"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            if (args.Length == 2)
+                            {
+                                if (int.TryParse(args[1], out int characterId))
+                                {
+                                    if (!user.HasCharacter(characterId))
+                                    {
+                                        user.Characters.Add(new Database.Character()
+                                        {
+                                            CostumeId = 0,
+                                            Csn = user.GenerateUniqueCharacterId(),
+                                            Grade = 0,
+                                            Level = 1,
+                                            Skill1Lvl = 1,
+                                            Skill2Lvl = 1,
+                                            Tid = characterId,
+                                            UltimateLevel = 1
+                                        });
+
+                                        Console.WriteLine($"Added character {characterId} to user {user.Username}");
+                                        JsonDb.Save();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"User {user.Username} already has character {characterId}");
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid character ID");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid argument length, must be 1");
+                            }
+                        }
+                    }
+                }
+
 
 
                 else if (input == "exit")
