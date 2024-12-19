@@ -104,6 +104,8 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 }
             }
 
+            // CreateClearInfo(user);
+            
             var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
             if (!user.FieldInfoNew.ContainsKey(key))
                 user.FieldInfoNew.Add(key, new FieldInfoNew());
@@ -283,6 +285,46 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Level = 1 });
             }
             // TODO: add neon
+        }
+
+        private static void CreateClearInfo(Database.User user)
+        {
+            NetStageClearInfo clearInfo = new NetStageClearInfo
+            {
+                User = new NetWholeUserData
+                {
+                    Usn = (long)user.ID,
+                    Server = 1, // probably not right but shouldn't matter?
+                    Nickname = user.Nickname,
+                    Level = user.userPointData.UserLevel,
+                    Icon = user.ProfileIconId,
+                    IconPrism = user.ProfileIconIsPrism,
+                    Frame = user.ProfileFrame,
+                    TeamCombat = user.RepresentationTeamData.TeamCombat,
+                    LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                    GuildName = string.Empty, // TODO
+                    IsBot = false, // TODO: how do we check this?
+                    GroupId = 0, // TODO: what is this?
+                    UserTitleId = user.TitleId
+                },
+
+                TeamCombat = user.RepresentationTeamData.TeamCombat,
+                ClearedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+
+            foreach (var character in user.RepresentationTeamData.Slots)
+            {
+                clearInfo.Slots.Add(new NetStageClearInfoTeam()
+                {
+                    Slot = character.Slot,
+                    Tid = character.Tid,
+                    Level = character.Level,
+                    Combat = 0, // TODO: CP either needs to be pulled from somewhere else or calculated server-side
+                    CharacterType = StageClearInfoTeamCharacterType.StageClearInfoTeamCharacterTypeOwnedCharacter // TODO: how do we get this?
+                });
+            }
+
+            user.StageClearHistorys.Add(clearInfo);
         }
     }
 }

@@ -209,6 +209,8 @@ namespace EpinelPS.Database
         public OutpostBuffs OutpostBuffs = new();
         public Dictionary<int, UnlockData> ContentsOpenUnlocked = new();
 
+        public List<NetStageClearInfo> StageClearHistorys = [];
+
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
         public MogMinigameInfo MogInfo = new();
