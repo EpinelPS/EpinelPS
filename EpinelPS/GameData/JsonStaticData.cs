@@ -131,11 +131,38 @@
     {
         public int id;
         public int piece_id;
-		public string original_rare;
-		public string corporation;
-		public int grade_core_id;
-		public int name_code;
-		public int grow_grade;
+        public string original_rare;
+        public string corporation;
+        public int grade_core_id;
+        public int name_code;
+        public int grow_grade;
+        public int stat_enhance_id;
+        public string character_class;
+        public List<int> element_id;
+        public int critical_ratio;
+        public int critical_damage;
+        public int shot_id;
+        public int bonusrange_min;
+        public int bonusrange_max;
+        public string use_burst_skill;
+        public string change_burst_step;
+        public int burst_apply_delay;
+        public int burst_duration;
+        public int ulti_skill_id;
+        public int skill1_id;
+        public string skill1_table;
+        public int skill2_id;
+        public string skill2_table;
+        public string eff_category_type;
+        public int eff_category_value;
+        public string category_type_1;
+        public string category_type_2;
+        public string category_type_3;
+        public string cv_localkey;
+        public string squad;
+        public bool is_visible;
+        public bool prism_is_active;
+        public bool is_detail_close;
     }
     public class CharacterTable
     {
@@ -427,4 +454,82 @@
         public List<ArchiveMessengerConditionRecord> records;
     }
 
+    public class CharacterStatRecord
+    {
+        public int id;
+        public int group;
+        public int level;
+        public int level_hp;
+        public int level_attack;
+        public int level_defence;
+        public int level_energy_resist;
+        public int level_bio_resist;
+    }
+    
+    public class CharacterStatTable
+    {
+        public List<CharacterStatRecord> records;
+    }
+
+    public class ItemMaterialRecord
+    {
+        public int id;
+        public string name_localkey;
+        public string description_localkey;
+        public string resource_id;
+        public string item_type;
+        public string item_sub_type;
+        public string item_rare;
+        public int item_value;
+        public string material_type;
+        public int material_value;
+        public int stack_max;
+    }
+
+    public class ItemMaterialTable
+    {
+        public List<ItemMaterialRecord> records;
+    }
+
+    public class SkillInfoRecord
+    {
+        public int id;
+        public int group_id;
+        public int skill_level;
+        public int next_level_id;
+        public int level_up_cost_id;
+        public string icon;
+        public string name_localkey;
+        public string description_localkey;
+        public string info_description_localkey;
+        public List<DescriptionValue> description_value_list;
+    }
+
+    public class DescriptionValue
+    {
+        public string description_value;
+    }
+
+    public class SkillInfoTable
+    {
+        public List<SkillInfoRecord> records;
+    }
+
+    public class CostRecord
+    {
+        public int id;
+        public List<CostData> costs;
+    }
+
+    public class CostData
+    {
+        public string item_type;
+        public int item_id;
+        public int item_value;
+    }
+
+    public class CostTable
+    {
+        public List<CostRecord> records;
+    }
 }

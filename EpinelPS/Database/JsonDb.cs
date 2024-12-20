@@ -183,6 +183,7 @@ namespace EpinelPS.Database
         public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
         public NetWallpaperPlaylist[] WallpaperPlaylistList = [];
         public NetWallpaperJukebox[] WallpaperJukeboxList = [];
+        public List<int> LobbyDecoBackgroundList = [];
 
 
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
@@ -207,6 +208,8 @@ namespace EpinelPS.Database
         public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
         public OutpostBuffs OutpostBuffs = new();
         public Dictionary<int, UnlockData> ContentsOpenUnlocked = new();
+
+        public List<NetStageClearInfo> StageClearHistorys = [];
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -382,24 +385,12 @@ namespace EpinelPS.Database
 
                 if (item.Isn == isn)
                 {
-                    if (item.Count == 1)
+                    removed++;
+                    item.Count -= count;
+
+                    if (item.Count < 0)
                     {
-                        Items.Remove(item);
-                        count--;
-                    }
-                    else
-                    {
-                        // TODO test this
-                        if (item.Count >= count)
-                        {
-                            removed++;
-                            item.Count -= count;
-                        }
-                        else
-                        {
-                            removed += item.Count;
-                            Items.Remove(item);
-                        }
+                        item.Count = 0;
                     }
                 }
             }

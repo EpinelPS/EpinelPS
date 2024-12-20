@@ -104,6 +104,8 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 }
             }
 
+            // CreateClearInfo(user);
+            
             var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
             if (!user.FieldInfoNew.ContainsKey(key))
                 user.FieldInfoNew.Add(key, new FieldInfoNew());
@@ -308,6 +310,30 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Level = 1 });
             }
             // TODO: add neon
+        }
+
+        private static void CreateClearInfo(Database.User user)
+        {
+            NetStageClearInfo clearInfo = new NetStageClearInfo
+            {
+                User = LobbyHandler.CreateWholeUserDataFromDbUser(user),
+                TeamCombat = user.RepresentationTeamData.TeamCombat,
+                ClearedAt = DateTimeOffset.UtcNow.Ticks
+            };
+
+            foreach (var character in user.RepresentationTeamData.Slots)
+            {
+                clearInfo.Slots.Add(new NetStageClearInfoTeam()
+                {
+                    Slot = character.Slot,
+                    Tid = character.Tid,
+                    Level = character.Level,
+                    Combat = FormulaUtils.CalculateCP(user, character.Csn),
+                    CharacterType = StageClearInfoTeamCharacterType.StageClearInfoTeamCharacterTypeOwnedCharacter // TODO: how do we get this?
+                });
+            }
+
+            user.StageClearHistorys.Add(clearInfo);
         }
     }
 }

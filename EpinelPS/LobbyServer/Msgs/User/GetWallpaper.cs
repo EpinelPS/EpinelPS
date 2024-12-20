@@ -17,6 +17,7 @@ namespace EpinelPS.LobbyServer.Msgs.User
             response.WallpaperJukeboxList.AddRange(user.WallpaperJukeboxList);
             response.WallpaperBackgroundList.AddRange(user.WallpaperBackground);
             response.WallpaperFavoriteList.AddRange(user.WallpaperFavoriteList);
+            response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
             // TODO: JukeboxIdList
 

@@ -32,8 +32,9 @@ namespace EpinelPS.StaticInfo
         private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
         private JArray characterCostumeTable;
         public Dictionary<int, CharacterRecord> characterTable;
-        private Dictionary<int, ClearedTutorialData> tutorialTable;
-        private Dictionary<int, ItemEquipRecord> itemEquipTable;
+        public Dictionary<int, ClearedTutorialData> tutorialTable;
+        public Dictionary<int, ItemEquipRecord> itemEquipTable;
+        public Dictionary<int, ItemMaterialRecord> itemMaterialTable;
         private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
         private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
@@ -54,6 +55,9 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
 		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
         public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords;
+        public Dictionary<int, CharacterStatRecord> characterStatTable;
+        public Dictionary<int, SkillInfoRecord> skillInfoTable;
+        public Dictionary<int, CostRecord> costTable;
 
 
 
@@ -90,6 +94,10 @@ namespace EpinelPS.StaticInfo
             ZipStream = new();
             tutorialTable = new();
             itemEquipTable = new();
+            itemMaterialTable = new();
+            characterStatTable = new();
+            skillInfoTable = new();
+            costTable = new();
 
             // Initialize Jukebox data dictionaries
             jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
@@ -320,6 +328,12 @@ namespace EpinelPS.StaticInfo
                 this.itemEquipTable.Add(obj.id, obj);
             }
 
+            var itemMaterialTable = await LoadZip<ItemMaterialTable>("ItemMaterialTable.json", progress);
+            foreach (var obj in itemMaterialTable.records)
+            {
+                this.itemMaterialTable.Add(obj.id, obj);
+            }
+
             var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);
 
             foreach (JToken item in characterLevelTable)
@@ -460,6 +474,24 @@ namespace EpinelPS.StaticInfo
             // Load Jukebox data
             await LoadJukeboxListData(progress);
             await LoadJukeboxThemeData(progress);
+
+            var characterStatTable = await LoadZip<CharacterStatTable>("CharacterStatTable.json", progress);
+            foreach (var obj in characterStatTable.records)
+            {
+                this.characterStatTable.Add(obj.id, obj);
+            }
+
+            var skillinfoTable = await LoadZip<SkillInfoTable>("SkillInfoTable.json", progress);
+            foreach (var obj in skillinfoTable.records)
+            {
+                this.skillInfoTable.Add(obj.id, obj);
+            }
+
+            var costTable = await LoadZip<CostTable>("CostTable.json", progress);
+            foreach (var obj in costTable.records)
+            {
+                this.costTable.Add(obj.id, obj);
+            }
         }
 
         public async Task LoadJukeboxListData(ProgressBar bar)

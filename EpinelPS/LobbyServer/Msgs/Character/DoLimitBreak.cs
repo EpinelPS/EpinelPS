@@ -55,12 +55,9 @@ namespace EpinelPS.LobbyServer.Msgs.Character
                     };
 
                     // remove spare body item
+                    var bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn);
                     user.RemoveItemBySerialNumber(req.Isn, 1);
-
-                    foreach (var item in user.Items)
-                    {
-                        response.Items.Add(NetUtils.ToNet(item));
-                    }
+                    response.Items.Add(NetUtils.ToNet(bodyItem));
 
                     // replace any reference to the old character to the new TID
                     // Check if RepresentationTeamData exists and has slots

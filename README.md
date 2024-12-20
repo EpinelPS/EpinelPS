@@ -45,7 +45,7 @@ To skip stages, a basic command line interface is implemented.
  - [X] Outpost Rewards
  - [ ] Admin Panel
  - [ ] Simulation Room
- - [ ] Skill level up
+ - [X] Skill level up
  - [ ] Outpost jukebox
  - [ ] Event system
  - [ ] Download all game assets ahead of time
@@ -57,7 +57,6 @@ To skip stages, a basic command line interface is implemented.
  
 ## What is not working:
  - Events
- - Skill upgrade
  - Mission reward, daily/weekly missions
  - Side quests
  - Lots of things in the outpost
