@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.StaticInfo;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Shop
 {
@@ -14,7 +15,22 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
                 var response = new ResGetJupiterProductList();
                 foreach (var item in x.ProductIdList)
                 {
-                    response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "US", CurrencySymbol = "$", MicroPrice = 0, Price = "1", ProductId = item });
+                    // TODO: Optimize this!
+                    var product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
+
+                    if (product.Any())
+                    {
+                        // Example:
+                        // Midas RequestGetLocalPriceAsync res ProductId = com.proximabeta.nikke.costumegacha11_02, Price = 3.99, MicroPrice = 3990000, CurrencyCode = USD, CurrencySymbol = $
+                        MidasProductRecord? record = product.FirstOrDefault().Value;
+
+                        long microPrice = (long)(double.Parse(record.cost) * 1000000);
+                        response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "USD", CurrencySymbol = "$", MicroPrice = microPrice, Price = record.cost, ProductId = item });
+                    }
+                    else
+                    {
+                        Console.WriteLine("Missing!!!! " + item);
+                    }
                 }
                 await WriteDataAsync(response);
             }

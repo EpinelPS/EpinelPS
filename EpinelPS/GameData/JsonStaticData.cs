@@ -532,4 +532,19 @@
     {
         public List<CostRecord> records;
     }
+    public class MidasProductRecord
+    {
+        public int id;
+        public string product_type;
+        public int product_id;
+        public string item_type;
+        public string midas_product_id_proximabeta;
+        public string midas_product_id_gamamobi;
+        public bool is_free;
+        public string cost;
+    }
+    public class MidasProductTable
+    {
+        public List<MidasProductRecord> records;
+    }
 }

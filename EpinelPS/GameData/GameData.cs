@@ -54,11 +54,11 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = new Dictionary<int, ArchiveEventQuestRecord>();
 		public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
 		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
-        public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords;
-        public Dictionary<int, CharacterStatRecord> characterStatTable;
-        public Dictionary<int, SkillInfoRecord> skillInfoTable;
-        public Dictionary<int, CostRecord> costTable;
-
+        public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
+        public Dictionary<int, CharacterStatRecord> characterStatTable = [];
+        public Dictionary<int, SkillInfoRecord> skillInfoTable = [];
+        public Dictionary<int, CostRecord> costTable = [];
+        public Dictionary<string, MidasProductRecord> mediasProductTable = [];
 
 
 
@@ -491,6 +491,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in costTable.records)
             {
                 this.costTable.Add(obj.id, obj);
+            }
+
+            var mediasProductTable = await LoadZip<MidasProductTable>("MidasProductTable.json", progress);
+            foreach (var obj in mediasProductTable.records)
+            {
+                this.mediasProductTable.Add(obj.midas_product_id_proximabeta, obj);
             }
         }
 
