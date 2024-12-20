@@ -385,24 +385,12 @@ namespace EpinelPS.Database
 
                 if (item.Isn == isn)
                 {
-                    if (item.Count == 1)
+                    removed++;
+                    item.Count -= count;
+
+                    if (item.Count < 0)
                     {
-                        Items.Remove(item);
-                        count--;
-                    }
-                    else
-                    {
-                        // TODO test this
-                        if (item.Count >= count)
-                        {
-                            removed++;
-                            item.Count -= count;
-                        }
-                        else
-                        {
-                            removed += item.Count;
-                            Items.Remove(item);
-                        }
+                        item.Count = 0;
                     }
                 }
             }
