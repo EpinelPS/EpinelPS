@@ -19,10 +19,11 @@ namespace EpinelPS.LobbyServer.Msgs.Trigger
             var user = GetUser();
 
             ResObtainMainQuestReward response = new();
-            List<NetRewardData> rewards = new();
+            List<NetRewardData> rewards = [];
 
             foreach (var item in user.MainQuestData)
             {
+                // give only rewards for things that were completed and not claimed already
                 if (!item.Value && req.TidList.Contains(item.Key))
                 {
                     user.MainQuestData[item.Key] = true;
@@ -37,6 +38,12 @@ namespace EpinelPS.LobbyServer.Msgs.Trigger
             }
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
+
+            foreach (var item in response.Reward.Item)
+            {
+                Console.WriteLine($"item: {item.Tid} {item.Isn} {item.Count}");
+            }
+            
             JsonDb.Save();
 
             await WriteDataAsync(response);

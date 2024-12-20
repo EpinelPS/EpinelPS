@@ -108,8 +108,8 @@ namespace EpinelPS.Utils
         {
             NetRewardData result = new();
 
-            Dictionary<int, long> currencyDict = new Dictionary<int, long>();
-            List<NetItemData> items = new List<NetItemData>();
+            Dictionary<int, long> currencyDict = [];
+            List<NetItemData> items = [];
 
             foreach (NetRewardData reward in rewards)
             {
