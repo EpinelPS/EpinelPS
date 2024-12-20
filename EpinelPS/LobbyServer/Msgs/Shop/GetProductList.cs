@@ -1,4 +1,8 @@
-﻿using EpinelPS.StaticInfo;
+﻿using System;
+using System.Globalization; // Ensure this is included
+using System.Linq;
+using System.Threading.Tasks;
+using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Msgs.Shop
@@ -13,28 +17,35 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
             var response = new ResGetJupiterProductList();
             foreach (var item in x.ProductIdList)
             {
-                // TODO: Optimize this!
                 var product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
 
                 if (product.Any())
                 {
-                    // Example:
-                    // Midas RequestGetLocalPriceAsync res ProductId = com.proximabeta.nikke.costumegacha11_02, Price = 3.99, MicroPrice = 3990000, CurrencyCode = USD, CurrencySymbol = $
                     MidasProductRecord? record = product.FirstOrDefault().Value;
                     if (record != null)
                     {
-                        if(!decimal.TryParse(record.cost, out decimal price))
+                        string normalizedCost = record.cost.Replace(',', '.');
+
+                        if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
                         {
-                            Console.WriteLine("Failed to parse " + record.cost+" Cash shop will not work probably");
+                            Console.WriteLine($"Failed to parse '{record.cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.");
+                            continue;
                         }
 
                         long microPrice = (long)(price * 1000000);
-                        response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "USD", CurrencySymbol = "$", MicroPrice = microPrice, Price = record.cost, ProductId = item });
+                        response.ProductInfoList.Add(new NetJupiterProductInfo
+                        {
+                            CurrencyCode = "USD",
+                            CurrencySymbol = "$",
+                            MicroPrice = microPrice,
+                            Price = record.cost,
+                            ProductId = item
+                        });
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Missing!!!! " + item);
+                    Console.WriteLine($"Missing!!!! {item}");
                 }
             }
             await WriteDataAsync(response);
