@@ -316,25 +316,9 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
         {
             NetStageClearInfo clearInfo = new NetStageClearInfo
             {
-                User = new NetWholeUserData
-                {
-                    Usn = (long)user.ID,
-                    Server = 1, // probably not right but shouldn't matter?
-                    Nickname = user.Nickname,
-                    Level = user.userPointData.UserLevel,
-                    Icon = user.ProfileIconId,
-                    IconPrism = user.ProfileIconIsPrism,
-                    Frame = user.ProfileFrame,
-                    TeamCombat = user.RepresentationTeamData.TeamCombat,
-                    LastActionAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                    GuildName = string.Empty, // TODO
-                    IsBot = false, // TODO: how do we check this?
-                    GroupId = 0, // TODO: what is this?
-                    UserTitleId = user.TitleId
-                },
-
+                User = LobbyHandler.CreateWholeUserDataFromDbUser(user),
                 TeamCombat = user.RepresentationTeamData.TeamCombat,
-                ClearedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                ClearedAt = DateTimeOffset.UtcNow.Ticks
             };
 
             foreach (var character in user.RepresentationTeamData.Slots)
