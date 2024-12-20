@@ -23,11 +23,11 @@ namespace EpinelPS.LobbyServer.Msgs.Shop
                     MidasProductRecord? record = product.FirstOrDefault().Value;
                     if (record != null)
                     {
-                        if(!double.TryParse(record.cost, out double price))
+                        if(!decimal.TryParse(record.cost, out decimal price))
                         {
                             Console.WriteLine("Failed to parse " + record.cost+" Cash shop will not work probably");
                         }
-                        
+
                         long microPrice = (long)(price * 1000000);
                         response.ProductInfoList.Add(new NetJupiterProductInfo() { CurrencyCode = "USD", CurrencySymbol = "$", MicroPrice = microPrice, Price = record.cost, ProductId = item });
                     }
