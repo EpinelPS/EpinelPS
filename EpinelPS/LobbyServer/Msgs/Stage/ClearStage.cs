@@ -205,14 +205,39 @@ namespace EpinelPS.LobbyServer.Msgs.Stage
                     }
                     else if (item.reward_type == "Item")
                     {
-                        var id = user.GenerateUniqueItemId();
-                        user.Items.Add(new ItemData() { ItemType = item.reward_id, Isn = id, Level = 1, Exp = 0, Count = 1 });
-                        ret.Item.Add(new NetItemData()
+                        // Check if user already has said item. If it is level 1, increase item count.
+                        // If user does not have item, generate a new item ID
+                        if (user.Items.Where(x => x.ItemType == item.reward_id && x.Level == 1).Any())
                         {
-                            Count = item.reward_value,
-                            Tid = item.reward_id,
-                            Isn = id
-                        });
+                            ItemData? newItem = user.Items.Where(x => x.ItemType == item.reward_id && x.Level == 1).FirstOrDefault();
+                            if (newItem != null)
+                            {
+                                newItem.Count += item.reward_value;
+
+                                ret.Item.Add(new NetItemData()
+                                {
+                                    Count = item.reward_value,
+                                    Tid = item.reward_id,
+                                    Isn = newItem.Isn
+                                });
+                            }
+                            else
+                            {
+                                throw new Exception("should not occur");
+                            }
+                        }
+                        else
+                        {
+
+                            var id = user.GenerateUniqueItemId();
+                            user.Items.Add(new ItemData() { ItemType = item.reward_id, Isn = id, Level = 1, Exp = 0, Count = item.reward_value });
+                            ret.Item.Add(new NetItemData()
+                            {
+                                Count = item.reward_value,
+                                Tid = item.reward_id,
+                                Isn = id
+                            });
+                        }
                     }
                     else if (item.reward_type == "Memorial")
                     {
