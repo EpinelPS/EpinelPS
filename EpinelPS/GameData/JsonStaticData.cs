@@ -470,4 +470,24 @@
     {
         public List<CharacterStatRecord> records;
     }
+
+    public class ItemMaterialRecord
+    {
+        public int id;
+        public string name_localkey;
+        public string description_localkey;
+        public string resource_id;
+        public string item_type;
+        public string item_sub_type;
+        public string item_rare;
+        public int item_value;
+        public string material_type;
+        public int material_value;
+        public int stack_max;
+    }
+
+    public class ItemMaterialTable
+    {
+        public List<ItemMaterialRecord> records;
+    }
 }

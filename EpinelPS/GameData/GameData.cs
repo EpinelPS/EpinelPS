@@ -33,7 +33,8 @@ namespace EpinelPS.StaticInfo
         private JArray characterCostumeTable;
         public Dictionary<int, CharacterRecord> characterTable;
         public Dictionary<int, ClearedTutorialData> tutorialTable;
-        private Dictionary<int, ItemEquipRecord> itemEquipTable;
+        public Dictionary<int, ItemEquipRecord> itemEquipTable;
+        public Dictionary<int, ItemMaterialRecord> itemMaterialTable;
         private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
         private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
@@ -91,6 +92,7 @@ namespace EpinelPS.StaticInfo
             ZipStream = new();
             tutorialTable = new();
             itemEquipTable = new();
+            itemMaterialTable = new();
             characterStatTable = new();
 
             // Initialize Jukebox data dictionaries
@@ -320,6 +322,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in itemEquipTable.records)
             {
                 this.itemEquipTable.Add(obj.id, obj);
+            }
+
+            var itemMaterialTable = await LoadZip<ItemMaterialTable>("ItemMaterialTable.json", progress);
+            foreach (var obj in itemMaterialTable.records)
+            {
+                this.itemMaterialTable.Add(obj.id, obj);
             }
 
             var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);
