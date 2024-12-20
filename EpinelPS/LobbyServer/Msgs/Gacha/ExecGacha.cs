@@ -64,55 +64,58 @@ namespace EpinelPS.LobbyServer.Msgs.Gacha
             // Add each character's item to user.Items if the character exists in user.Characters
 			foreach (var characterData in selectedCharacters)
 			{
-				// Check if the item for this character already exists in user.Items based on ItemType
-				var existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
+                if (user.HasCharacter(characterData.id))
+                {
+                    // Check if the item for this character already exists in user.Items based on ItemType
+                    var existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
 
-				if (existingItem != null)
-				{
-					// If the item exists, increment the count
-					existingItem.Count += 1;
+                    if (existingItem != null)
+                    {
+                        // If the item exists, increment the count
+                        existingItem.Count += 1;
 
-					// Send the updated item in the response
-					response.Items.Add(new NetUserItemData()
-					{
-						Tid = existingItem.ItemType,
-						Csn = existingItem.Csn,
-						Count = existingItem.Count,
-						Level = existingItem.Level,
-						Exp = existingItem.Exp,
-						Position = existingItem.Position,
-						Isn = existingItem.Isn
-					});
-				}
-				else
-				{
-					// If the item does not exist, create a new item entry
-					var newItem = new ItemData()
-					{
-						ItemType = characterData.piece_id,
-						Csn = 0,
-						Count = 1, // or any relevant count
-						Level = 0,
-						Exp = 0,
-						Position = 0,
-						Corp = 0,
-						Isn = user.GenerateUniqueItemId()
-					};
-					user.Items.Add(newItem);
+                        // Send the updated item in the response
+                        response.Items.Add(new NetUserItemData()
+                        {
+                            Tid = existingItem.ItemType,
+                            Csn = existingItem.Csn,
+                            Count = existingItem.Count,
+                            Level = existingItem.Level,
+                            Exp = existingItem.Exp,
+                            Position = existingItem.Position,
+                            Isn = existingItem.Isn
+                        });
+                    }
+                    else
+                    {
+                        // If the item does not exist, create a new item entry
+                        var newItem = new ItemData()
+                        {
+                            ItemType = characterData.piece_id,
+                            Csn = 0,
+                            Count = 1, // or any relevant count
+                            Level = 0,
+                            Exp = 0,
+                            Position = 0,
+                            Corp = 0,
+                            Isn = user.GenerateUniqueItemId()
+                        };
+                        user.Items.Add(newItem);
 
-					// Add the new item to response
-					response.Items.Add(new NetUserItemData()
-					{
-						Tid = newItem.ItemType,
-						Csn = newItem.Csn,
-						Count = newItem.Count,
-						Level = newItem.Level,
-						Exp = newItem.Exp,
-						Position = newItem.Position,
-						Isn = newItem.Isn
-					});
-				}
-			}
+                        // Add the new item to response
+                        response.Items.Add(new NetUserItemData()
+                        {
+                            Tid = newItem.ItemType,
+                            Csn = newItem.Csn,
+                            Count = newItem.Count,
+                            Level = newItem.Level,
+                            Exp = newItem.Exp,
+                            Position = newItem.Position,
+                            Isn = newItem.Isn
+                        });
+                    }
+                }
+            }
 
             // Populate the 2D array with characterId and pieceId for each selected character
             foreach (var characterData in selectedCharacters)
