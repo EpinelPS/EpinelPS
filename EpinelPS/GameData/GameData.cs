@@ -56,6 +56,8 @@ namespace EpinelPS.StaticInfo
 		public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
         public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords;
         public Dictionary<int, CharacterStatRecord> characterStatTable;
+        public Dictionary<int, SkillInfoRecord> skillInfoTable;
+        public Dictionary<int, CostRecord> costTable;
 
 
 
@@ -94,6 +96,8 @@ namespace EpinelPS.StaticInfo
             itemEquipTable = new();
             itemMaterialTable = new();
             characterStatTable = new();
+            skillInfoTable = new();
+            costTable = new();
 
             // Initialize Jukebox data dictionaries
             jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
@@ -475,6 +479,18 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in characterStatTable.records)
             {
                 this.characterStatTable.Add(obj.id, obj);
+            }
+
+            var skillinfoTable = await LoadZip<SkillInfoTable>("SkillInfoTable.json", progress);
+            foreach (var obj in skillinfoTable.records)
+            {
+                this.skillInfoTable.Add(obj.id, obj);
+            }
+
+            var costTable = await LoadZip<CostTable>("CostTable.json", progress);
+            foreach (var obj in costTable.records)
+            {
+                this.costTable.Add(obj.id, obj);
             }
         }
 

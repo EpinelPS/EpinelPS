@@ -490,4 +490,46 @@
     {
         public List<ItemMaterialRecord> records;
     }
+
+    public class SkillInfoRecord
+    {
+        public int id;
+        public int group_id;
+        public int skill_level;
+        public int next_level_id;
+        public int level_up_cost_id;
+        public string icon;
+        public string name_localkey;
+        public string description_localkey;
+        public string info_description_localkey;
+        public List<DescriptionValue> description_value_list;
+    }
+
+    public class DescriptionValue
+    {
+        public string description_value;
+    }
+
+    public class SkillInfoTable
+    {
+        public List<SkillInfoRecord> records;
+    }
+
+    public class CostRecord
+    {
+        public int id;
+        public List<CostData> costs;
+    }
+
+    public class CostData
+    {
+        public string item_type;
+        public int item_id;
+        public int item_value;
+    }
+
+    public class CostTable
+    {
+        public List<CostRecord> records;
+    }
 }
