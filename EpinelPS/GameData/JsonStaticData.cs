@@ -109,7 +109,7 @@
         public string lesson_type = "";
         public TacticAcademyLessonReward[]? lesson_reward;
     }
-    
+
     public class TacticAcademyLessonTable
     {
         public List<TacticAcademyLessonRecord> records;
@@ -195,10 +195,10 @@
     {
         public int id;
         public int theme;
-        public string bgm ;
+        public string bgm;
         public bool is_loop;
         public int play_time;
-        public string name ;
+        public string name;
         public int order;
         public string artist;
         public string get_info_type;
@@ -272,150 +272,150 @@
     {
         public List<GachaType> records;
     }
-	
-	public class EventManager
-	{
-		public int id;
-		public string event_system_type;
-		public string event_shortcut_id;
-		public string name_localkey;
-		public string description_localkey;
-		public string schedule_type;
-		public string schedule_value;
-		public string event_disable_locale;
-		public string event_resource_id;
-		public string event_thumbnail_resource_table;
-		public string event_thumbnail_resource_id;
-		public string thumbnail_color;
-		public string event_banner_resource_table;
-		public string event_banner_resource_id;
-		public long event_order;
-		public bool is_popup;
-		public string active_type;
-		public string banner_print_type;
-	}
 
-	public class EventManagerTable
-	{
-		public List<EventManager> records;
-	}
-	
+    public class EventManager
+    {
+        public int id;
+        public string event_system_type;
+        public string event_shortcut_id;
+        public string name_localkey;
+        public string description_localkey;
+        public string schedule_type;
+        public string schedule_value;
+        public string event_disable_locale;
+        public string event_resource_id;
+        public string event_thumbnail_resource_table;
+        public string event_thumbnail_resource_id;
+        public string thumbnail_color;
+        public string event_banner_resource_table;
+        public string event_banner_resource_id;
+        public long event_order;
+        public bool is_popup;
+        public string active_type;
+        public string banner_print_type;
+    }
+
+    public class EventManagerTable
+    {
+        public List<EventManager> records;
+    }
+
     public class LiveWallpaperRecord
     {
         public int id;
-		public string livewallpaper_type;
+        public string livewallpaper_type;
     }
 
     public class LiveWallpaperTable
     {
         public List<LiveWallpaperRecord> records;
     }
-	public class AlbumResourceRecord
-	{
-		public int id;
-		public int sub_category_id;
-		public string scenario_name_localtable = "";
-		public string scenario_name_localkey = "";
-		public string scenario_group_id = "";
-		public int target_chapter;
-		public bool is_hidden;
-		public string dialogtype = "";
-	}
+    public class AlbumResourceRecord
+    {
+        public int id;
+        public int sub_category_id;
+        public string scenario_name_localtable = "";
+        public string scenario_name_localkey = "";
+        public string scenario_group_id = "";
+        public int target_chapter;
+        public bool is_hidden;
+        public string dialogtype = "";
+    }
 
-	public class AlbumResourceTable
-	{
-		public List<AlbumResourceRecord> records;
-	}
-	
-	public class UserFrameTableRecord
-	{
-		public int id;
-		public string resource_id;
-		public string tab_type;
-		public string user_profile_type;
-		public string filter_type;
-		public int order;
-		public string name_localkey;
-		public string description_localkey;
-		public bool is_sub_resource_prism;
-	}
+    public class AlbumResourceTable
+    {
+        public List<AlbumResourceRecord> records;
+    }
 
-	public class UserFrameTable
-	{
-		public List<UserFrameTableRecord> records;
-	}
-	
-	public class ArchiveRecordManagerRecord
-	{
-		public int id;
-		public string record_type;
-		public string record_title_locale;
-		public int record_main_archive_event_id;
-		public int record_list_order;
-		public int unlock_ticket_id;
-		public int unlock_ticket_count;
-		public int reward_info_list_id;
-		public int event_quest_clear_reward_id;
-		public int recommended_story_list_id;
-		public int included_contents_group_id;
-		public string record_slot_bg_addressable;
-		public string record_unlock_bg_addressable;
-	}
+    public class UserFrameTableRecord
+    {
+        public int id;
+        public string resource_id;
+        public string tab_type;
+        public string user_profile_type;
+        public string filter_type;
+        public int order;
+        public string name_localkey;
+        public string description_localkey;
+        public bool is_sub_resource_prism;
+    }
 
-	public class ArchiveRecordManagerTable
-	{
-		public List<ArchiveRecordManagerRecord> records;
-	}
-	
-	public class ArchiveEventStoryRecord
-	{
-		public int id;
-		public int event_id;
-		public string prologue_scenario = "";
-		public int dungeon_id;
-		public int album_category_group;
-		public string ui_prefab = "";
-		public int archive_ticket_item_id;
-		public int archive_currency_item_id;
-	}
+    public class UserFrameTable
+    {
+        public List<UserFrameTableRecord> records;
+    }
 
-	public class ArchiveEventStoryTable
-	{
-		public List<ArchiveEventStoryRecord> records;
-	}
+    public class ArchiveRecordManagerRecord
+    {
+        public int id;
+        public string record_type;
+        public string record_title_locale;
+        public int record_main_archive_event_id;
+        public int record_list_order;
+        public int unlock_ticket_id;
+        public int unlock_ticket_count;
+        public int reward_info_list_id;
+        public int event_quest_clear_reward_id;
+        public int recommended_story_list_id;
+        public int included_contents_group_id;
+        public string record_slot_bg_addressable;
+        public string record_unlock_bg_addressable;
+    }
 
-	public class ArchiveEventQuestRecord
-	{
-		public int id;
-		public int event_quest_manager_id;
-		public string condition_type = "";
-		public int condition_value;
-		public string name_localkey = "";
-		public string description_localkey = "";
-		public int next_quest_id;
-		public string end_scenario_id = "";
-	}
+    public class ArchiveRecordManagerTable
+    {
+        public List<ArchiveRecordManagerRecord> records;
+    }
 
-	public class ArchiveEventQuestTable
-	{
-		public List<ArchiveEventQuestRecord> records;
-	}
-	
-	public class ArchiveEventDungeonStageRecord
-	{
-		public int id;
-		public int group;
-		public int step;
-		public string stage_name = "";
-		public string stage_contents_type = "";
-		public int stage_id;
-		public bool is_repeat_clear;
-	}
+    public class ArchiveEventStoryRecord
+    {
+        public int id;
+        public int event_id;
+        public string prologue_scenario = "";
+        public int dungeon_id;
+        public int album_category_group;
+        public string ui_prefab = "";
+        public int archive_ticket_item_id;
+        public int archive_currency_item_id;
+    }
 
-	public class ArchiveEventDungeonStageTable
-	{
-		public List<ArchiveEventDungeonStageRecord> records;
-	}
+    public class ArchiveEventStoryTable
+    {
+        public List<ArchiveEventStoryRecord> records;
+    }
+
+    public class ArchiveEventQuestRecord
+    {
+        public int id;
+        public int event_quest_manager_id;
+        public string condition_type = "";
+        public int condition_value;
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public int next_quest_id;
+        public string end_scenario_id = "";
+    }
+
+    public class ArchiveEventQuestTable
+    {
+        public List<ArchiveEventQuestRecord> records;
+    }
+
+    public class ArchiveEventDungeonStageRecord
+    {
+        public int id;
+        public int group;
+        public int step;
+        public string stage_name = "";
+        public string stage_contents_type = "";
+        public int stage_id;
+        public bool is_repeat_clear;
+    }
+
+    public class ArchiveEventDungeonStageTable
+    {
+        public List<ArchiveEventDungeonStageRecord> records;
+    }
     public class UserTitleRecord
     {
         public int id;
@@ -433,7 +433,7 @@
     {
         public List<UserTitleRecord> records;
     }
-	
+
     public class ArchiveMessengerConditionList
     {
         public string condition_type;
@@ -465,7 +465,7 @@
         public int level_energy_resist;
         public int level_bio_resist;
     }
-    
+
     public class CharacterStatTable
     {
         public List<CharacterStatRecord> records;
@@ -546,5 +546,17 @@
     public class MidasProductTable
     {
         public List<MidasProductRecord> records;
+    }
+    public enum ShopCategoryType
+    {
+        None = 0,
+        Normal = 1,
+        Guild = 2,
+        Disassemble = 3,
+        Maze = 4,
+        PvP = 5,
+        StoryEvent = 6,
+        Mileage = 7,
+        Trade = 8
     }
 }
