@@ -1,5 +1,7 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using EpinelPS.StaticInfo;
+using EpinelPS.LobbyServer.Stage;
 
 namespace EpinelPS.LobbyServer.Tower
 {
@@ -25,19 +27,25 @@ namespace EpinelPS.LobbyServer.Tower
         {
             var response = new ResClearTower();
 
+            if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord record)) throw new Exception("unable to find tower with id " + TowerId);
+
             // Parse TowerId to get TowerType and FloorNumber
             int TowerType = (TowerId / 10000) - 1; // For some weird reason the Type here doesn't match up with NetTowerData, thus the -1
             int FloorNumber = TowerId % 10000;
 
             // Update user's TowerProgress
-            if (!user.TowerProgress.ContainsKey(TowerType))
+            if (!user.TowerProgress.TryGetValue(TowerType, out int value))
             {
-                user.TowerProgress[TowerType] = FloorNumber;
+                user.TowerProgress[TowerType] = record.floor;
             }
-            else if (user.TowerProgress[TowerType] < FloorNumber)
+            else if (value < FloorNumber)
             {
-                user.TowerProgress[TowerType] = FloorNumber;
+                user.TowerProgress[TowerType] = record.floor;
             }
+
+            var reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
+            response.Reward = ClearStage.RegisterRewardsForUser(user, reward);
+
 
             JsonDb.Save();
 

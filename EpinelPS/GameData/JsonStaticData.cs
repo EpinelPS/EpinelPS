@@ -559,4 +559,16 @@
         Mileage = 7,
         Trade = 8
     }
+    public class TowerRecord
+    {
+        public int id;
+        public int floor;
+        public string type = "";
+        public int standard_battle_power;
+        public int reward_id;
+    }
+    public class TowerTable
+    {
+        public List<TowerRecord> records = []; 
+    }
 }

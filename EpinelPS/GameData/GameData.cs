@@ -59,6 +59,7 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, SkillInfoRecord> skillInfoTable = [];
         public Dictionary<int, CostRecord> costTable = [];
         public Dictionary<string, MidasProductRecord> mediasProductTable = [];
+        public Dictionary<int, TowerRecord> towerTable = [];
 
 
 
@@ -491,6 +492,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in mediasProductTable.records)
             {
                 this.mediasProductTable.Add(obj.midas_product_id_proximabeta, obj);
+            }
+
+            var towerTable = await LoadZip<TowerTable>("TowerTable.json", progress);
+            foreach (var obj in towerTable.records)
+            {
+                this.towerTable.Add(obj.id, obj);
             }
         }
 
