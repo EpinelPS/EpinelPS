@@ -33,7 +33,7 @@ namespace EpinelPS.LobbyServer.Trigger
                     var reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id);
                     if (reward == null) throw new Exception("failed to lookup reward id " + questInfo.reward_id);
 
-                    rewards.Add(ClearStage.RegisterRewardsForUser(user, reward));
+                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
                 }
             }
 

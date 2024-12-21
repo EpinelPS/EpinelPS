@@ -1,8 +1,7 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.LobbyServer.Stage;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Outpost
+namespace EpinelPS.LobbyServer.Msgs.Outpost
 {
     [PacketPath("/outpost/obtainoutpostbattlereward")]
     public class ObtainOutpostReward : LobbyMsgHandler

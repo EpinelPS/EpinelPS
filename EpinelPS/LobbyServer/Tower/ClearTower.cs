@@ -44,7 +44,7 @@ namespace EpinelPS.LobbyServer.Tower
             }
 
             var reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
-            response.Reward = ClearStage.RegisterRewardsForUser(user, reward);
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
 
             JsonDb.Save();

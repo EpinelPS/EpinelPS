@@ -46,7 +46,7 @@ namespace EpinelPS.LobbyServer.Campaign
             if (!GameData.Instance.PositionReward.TryGetValue(req.FieldObject.PositionId, out int fieldReward)) throw new Exception("bad position id");
             var positionReward = GameData.Instance.FieldItems[fieldReward];
             var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
-            response.Reward = ClearStage.RegisterRewardsForUser(user, reward);
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
             // Hide it from the field
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type});
