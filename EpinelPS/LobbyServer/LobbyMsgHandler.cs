@@ -1,11 +1,8 @@
 ﻿using Google.Protobuf;
 using EpinelPS.Database;
 using EpinelPS.Utils;
-using Newtonsoft.Json;
 using Paseto.Builder;
 using Paseto;
-using System.Security.Cryptography;
-using Newtonsoft.Json.Linq;
 
 namespace EpinelPS.LobbyServer
 {

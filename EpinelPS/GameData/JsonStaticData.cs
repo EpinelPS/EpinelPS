@@ -12,7 +12,7 @@
     }
     public class MainQuestCompletionTable
     {
-        public List<MainQuestCompletionRecord> records;
+        public List<MainQuestCompletionRecord> records = [];
     }
     public class CampaignStageRecord
     {
@@ -30,7 +30,7 @@
     }
     public class CampaignStageTable
     {
-        public List<CampaignStageRecord> records;
+        public List<CampaignStageRecord> records = [];
     }
     public class RewardTableRecord
     {
@@ -41,7 +41,7 @@
     }
     public class RewardTable
     {
-        public List<RewardTableRecord> records;
+        public List<RewardTableRecord> records = [];
     }
 
     public class RewardEntry
@@ -68,7 +68,7 @@
     }
     public class TutorialTable
     {
-        public List<ClearedTutorialData> records;
+        public List<ClearedTutorialData> records = [];
     }
 
     public class CharacterLevelData
@@ -112,117 +112,117 @@
 
     public class TacticAcademyLessonTable
     {
-        public List<TacticAcademyLessonRecord> records;
+        public List<TacticAcademyLessonRecord> records = [];
     }
 
     public class CampaignChapterRecord
     {
         public int id;
         public int chapter;
-        public string field_id;
-        public string hard_field_id;
+        public string field_id = "";
+        public string hard_field_id = "";
     }
     public class CampaignChapterTable
     {
-        public List<CampaignChapterRecord> records;
+        public List<CampaignChapterRecord> records = [];
     }
 
     public class CharacterRecord
     {
         public int id;
         public int piece_id;
-        public string original_rare;
-        public string corporation;
+        public string original_rare = "";
+        public string corporation = "";
         public int grade_core_id;
         public int name_code;
         public int grow_grade;
         public int stat_enhance_id;
-        public string character_class;
-        public List<int> element_id;
+        public string character_class = "";
+        public List<int> element_id = [];
         public int critical_ratio;
         public int critical_damage;
         public int shot_id;
         public int bonusrange_min;
         public int bonusrange_max;
-        public string use_burst_skill;
-        public string change_burst_step;
+        public string use_burst_skill = "";
+        public string change_burst_step = "";
         public int burst_apply_delay;
         public int burst_duration;
         public int ulti_skill_id;
         public int skill1_id;
-        public string skill1_table;
+        public string skill1_table = "";
         public int skill2_id;
-        public string skill2_table;
-        public string eff_category_type;
+        public string skill2_table = "";
+        public string eff_category_type = "";
         public int eff_category_value;
-        public string category_type_1;
-        public string category_type_2;
-        public string category_type_3;
-        public string cv_localkey;
-        public string squad;
+        public string category_type_1 = "";
+        public string category_type_2 = "";
+        public string category_type_3 = "";
+        public string cv_localkey = "";
+        public string squad = "";
         public bool is_visible;
         public bool prism_is_active;
         public bool is_detail_close;
     }
     public class CharacterTable
     {
-        public List<CharacterRecord> records;
+        public List<CharacterRecord> records = [];
     }
 
     public class ItemEquipRecord
     {
         public int id;
-        public string item_sub_type;
+        public string item_sub_type = "";
     }
     public class ItemEquipTable
     {
-        public List<ItemEquipRecord> records;
+        public List<ItemEquipRecord> records = [];
     }
 
     public class FieldItemRecord
     {
         public int id;
-        public string item_type;
+        public string item_type = "";
         public int type_value;
         public bool is_final_reward;
-        public string difficulty;
+        public string difficulty = "";
     }
     public class FieldItemTable
     {
-        public List<FieldItemRecord> records;
+        public List<FieldItemRecord> records = [];
     }
     public class JukeboxListRecord
     {
         public int id;
         public int theme;
-        public string bgm;
+        public string bgm = "";
         public bool is_loop;
         public int play_time;
-        public string name;
+        public string name = "";
         public int order;
-        public string artist;
-        public string get_info_type;
-        public string get_info_value;
+        public string artist = "";
+        public string get_info_type = "";
+        public string get_info_value = "";
     }
 
     public class JukeboxListTable
     {
-        public List<JukeboxListRecord> records;
+        public List<JukeboxListRecord> records = [];
     }
 
     public class JukeboxThemeRecord
     {
         public int id;
-        public string name_localkey;
-        public string description_localkey;
+        public string name_localkey = "";
+        public string description_localkey = "";
         public int order;
-        public string theme_resource;
-        public string bg_color;
+        public string theme_resource = "";
+        public string bg_color = "";
     }
 
     public class JukeboxThemeTable
     {
-        public List<JukeboxThemeRecord> records;
+        public List<JukeboxThemeRecord> records = [];
     }
     public class OutpostBattleTableRecord
     {
@@ -234,7 +234,7 @@
     }
     public class OutpostBattleTable
     {
-        public List<OutpostBattleTableRecord> records;
+        public List<OutpostBattleTableRecord> records = [];
     }
 
     public class GachaPriceGroup
@@ -248,18 +248,18 @@
     public class GachaType
     {
         public int id;
-        public string type;
+        public string type = "";
         public int order_id;
         public int event_id;
-        public string gacha_provide_count_type;
+        public string gacha_provide_count_type = "";
         public bool use_daily_discount_one;
         public int daily_free_gacha_event_id;
-        public List<GachaPriceGroup> gacha_price_group;
+        public List<GachaPriceGroup> gacha_price_group = [];
         public int grade_prob_id;
         public bool is_max_count;
         public int max_ceiling_count;
         public int fixed_char_amount;
-        public string gacha_page_prefab;
+        public string gacha_page_prefab = "";
         public int pickup_char_group_id;
         public bool use_wish_list;
         public int gacha_play_max_count;
@@ -270,45 +270,45 @@
 
     public class GachaTypeTable
     {
-        public List<GachaType> records;
+        public List<GachaType> records = [];
     }
 
     public class EventManager
     {
         public int id;
-        public string event_system_type;
-        public string event_shortcut_id;
-        public string name_localkey;
-        public string description_localkey;
-        public string schedule_type;
-        public string schedule_value;
-        public string event_disable_locale;
-        public string event_resource_id;
-        public string event_thumbnail_resource_table;
-        public string event_thumbnail_resource_id;
-        public string thumbnail_color;
-        public string event_banner_resource_table;
-        public string event_banner_resource_id;
+        public string event_system_type = "";
+        public string event_shortcut_id = "";
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public string schedule_type = "";
+        public string schedule_value = "";
+        public string event_disable_locale = "";
+        public string event_resource_id = "";
+        public string event_thumbnail_resource_table = "";
+        public string event_thumbnail_resource_id = "";
+        public string thumbnail_color = "";
+        public string event_banner_resource_table = "";
+        public string event_banner_resource_id = "";
         public long event_order;
         public bool is_popup;
-        public string active_type;
-        public string banner_print_type;
+        public string active_type = "";
+        public string banner_print_type = "";
     }
 
     public class EventManagerTable
     {
-        public List<EventManager> records;
+        public List<EventManager> records = [];
     }
 
     public class LiveWallpaperRecord
     {
         public int id;
-        public string livewallpaper_type;
+        public string livewallpaper_type = "";
     }
 
     public class LiveWallpaperTable
     {
-        public List<LiveWallpaperRecord> records;
+        public List<LiveWallpaperRecord> records = [];
     }
     public class AlbumResourceRecord
     {
@@ -324,32 +324,32 @@
 
     public class AlbumResourceTable
     {
-        public List<AlbumResourceRecord> records;
+        public List<AlbumResourceRecord> records = [];
     }
 
     public class UserFrameTableRecord
     {
         public int id;
-        public string resource_id;
-        public string tab_type;
-        public string user_profile_type;
-        public string filter_type;
+        public string resource_id = "";
+        public string tab_type = "";
+        public string user_profile_type = "";
+        public string filter_type = "";
         public int order;
-        public string name_localkey;
-        public string description_localkey;
+        public string name_localkey = "";
+        public string description_localkey = "";
         public bool is_sub_resource_prism;
     }
 
     public class UserFrameTable
     {
-        public List<UserFrameTableRecord> records;
+        public List<UserFrameTableRecord> records = [];
     }
 
     public class ArchiveRecordManagerRecord
     {
         public int id;
-        public string record_type;
-        public string record_title_locale;
+        public string record_type = "";
+        public string record_title_locale = "";
         public int record_main_archive_event_id;
         public int record_list_order;
         public int unlock_ticket_id;
@@ -358,13 +358,13 @@
         public int event_quest_clear_reward_id;
         public int recommended_story_list_id;
         public int included_contents_group_id;
-        public string record_slot_bg_addressable;
-        public string record_unlock_bg_addressable;
+        public string record_slot_bg_addressable = "";
+        public string record_unlock_bg_addressable = "";
     }
 
     public class ArchiveRecordManagerTable
     {
-        public List<ArchiveRecordManagerRecord> records;
+        public List<ArchiveRecordManagerRecord> records = [];
     }
 
     public class ArchiveEventStoryRecord
@@ -381,7 +381,7 @@
 
     public class ArchiveEventStoryTable
     {
-        public List<ArchiveEventStoryRecord> records;
+        public List<ArchiveEventStoryRecord> records = [];
     }
 
     public class ArchiveEventQuestRecord
@@ -398,7 +398,7 @@
 
     public class ArchiveEventQuestTable
     {
-        public List<ArchiveEventQuestRecord> records;
+        public List<ArchiveEventQuestRecord> records = [];
     }
 
     public class ArchiveEventDungeonStageRecord
@@ -414,7 +414,7 @@
 
     public class ArchiveEventDungeonStageTable
     {
-        public List<ArchiveEventDungeonStageRecord> records;
+        public List<ArchiveEventDungeonStageRecord> records = [];
     }
     public class UserTitleRecord
     {
@@ -431,12 +431,12 @@
 
     public class UserTitleTable
     {
-        public List<UserTitleRecord> records;
+        public List<UserTitleRecord> records = [];
     }
 
     public class ArchiveMessengerConditionList
     {
-        public string condition_type;
+        public string condition_type = "";
         public int condition_id;
     }
 
@@ -444,14 +444,14 @@
     {
         public int id;
         public int archive_messenger_group_id;
-        public List<ArchiveMessengerConditionList> archive_messenger_condition_list;
-        public string tid;
+        public List<ArchiveMessengerConditionList> archive_messenger_condition_list = [];
+        public string tid = "";
     }
 
     public class ArchiveMessengerConditionTable
     {
-        public string version;
-        public List<ArchiveMessengerConditionRecord> records;
+        public string version = "";
+        public List<ArchiveMessengerConditionRecord> records = [];
     }
 
     public class CharacterStatRecord
@@ -468,27 +468,27 @@
 
     public class CharacterStatTable
     {
-        public List<CharacterStatRecord> records;
+        public List<CharacterStatRecord> records = [];
     }
 
     public class ItemMaterialRecord
     {
         public int id;
-        public string name_localkey;
-        public string description_localkey;
-        public string resource_id;
-        public string item_type;
-        public string item_sub_type;
-        public string item_rare;
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public string resource_id = "";
+        public string item_type = "";
+        public string item_sub_type = "";
+        public string item_rare = "";
         public int item_value;
-        public string material_type;
+        public string material_type = "";
         public int material_value;
         public int stack_max;
     }
 
     public class ItemMaterialTable
     {
-        public List<ItemMaterialRecord> records;
+        public List<ItemMaterialRecord> records = [];
     }
 
     public class SkillInfoRecord
@@ -498,54 +498,54 @@
         public int skill_level;
         public int next_level_id;
         public int level_up_cost_id;
-        public string icon;
-        public string name_localkey;
-        public string description_localkey;
-        public string info_description_localkey;
-        public List<DescriptionValue> description_value_list;
+        public string icon = "";
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public string info_description_localkey = "";
+        public List<DescriptionValue> description_value_list = [];
     }
 
     public class DescriptionValue
     {
-        public string description_value;
+        public string description_value = "";
     }
 
     public class SkillInfoTable
     {
-        public List<SkillInfoRecord> records;
+        public List<SkillInfoRecord> records = [];
     }
 
     public class CostRecord
     {
         public int id;
-        public List<CostData> costs;
+        public List<CostData> costs = [];
     }
 
     public class CostData
     {
-        public string item_type;
+        public string item_type = "";
         public int item_id;
         public int item_value;
     }
 
     public class CostTable
     {
-        public List<CostRecord> records;
+        public List<CostRecord> records = [];
     }
     public class MidasProductRecord
     {
         public int id;
-        public string product_type;
+        public string product_type = "";
         public int product_id;
-        public string item_type;
-        public string midas_product_id_proximabeta;
-        public string midas_product_id_gamamobi;
+        public string item_type = "";
+        public string midas_product_id_proximabeta = "";
+        public string midas_product_id_gamamobi = "";
         public bool is_free;
-        public string cost;
+        public string cost = "";
     }
     public class MidasProductTable
     {
-        public List<MidasProductRecord> records;
+        public List<MidasProductRecord> records = [];
     }
     public enum ShopCategoryType
     {

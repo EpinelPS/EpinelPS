@@ -84,25 +84,25 @@ namespace EpinelPS.StaticInfo
             if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
 
             // disable warnings
-            questDataRecords = new();
-            stageDataRecords = new();
-            rewardDataRecords = new();
-            userExpDataRecords = new();
-            chapterCampaignData = new();
-            characterCostumeTable = new();
-            characterTable = new();
             ZipStream = new();
-            tutorialTable = new();
-            itemEquipTable = new();
-            itemMaterialTable = new();
-            characterStatTable = new();
-            skillInfoTable = new();
-            costTable = new();
+            questDataRecords = [];
+            stageDataRecords = [];
+            rewardDataRecords = [];
+            userExpDataRecords = [];
+            chapterCampaignData = [];
+            characterCostumeTable = [];
+            characterTable = [];
+            tutorialTable = [];
+            itemEquipTable = [];
+            itemMaterialTable = [];
+            characterStatTable = [];
+            skillInfoTable = [];
+            costTable = [];
 
             // Initialize Jukebox data dictionaries
-            jukeboxListDataRecords = new Dictionary<int, JukeboxListRecord>();
-            jukeboxThemeDataRecords = new Dictionary<int, JukeboxThemeRecord>();
-			archiveMessengerConditionRecords = new Dictionary<int, ArchiveMessengerConditionRecord>();
+            jukeboxListDataRecords = [];
+            jukeboxThemeDataRecords = [];
+			archiveMessengerConditionRecords = [];
 
             var rawBytes = File.ReadAllBytes(filePath);
             Sha256Hash = SHA256.HashData(rawBytes);
@@ -240,10 +240,8 @@ namespace EpinelPS.StaticInfo
 
         private async Task<T> LoadZip<T>(string entry, ProgressBar bar)
         {
-            var mainQuestData = MainZip.GetEntry(entry);
-            if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
-
-            using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
+            var mainQuestData = MainZip.GetEntry(entry) ?? throw new Exception(entry + " does not exist in static data");
+            using StreamReader mainQuestReader = new(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
 
             var questdata = JsonConvert.DeserializeObject<T>(mainQuestDataString);
@@ -257,18 +255,12 @@ namespace EpinelPS.StaticInfo
 
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
         {
-            var mainQuestData = MainZip.GetEntry(entry);
-            if (mainQuestData == null) throw new Exception(entry + " does not exist in static data");
-
-            using StreamReader mainQuestReader = new StreamReader(MainZip.GetInputStream(mainQuestData));
+            var mainQuestData = MainZip.GetEntry(entry) ?? throw new Exception(entry + " does not exist in static data");
+            using StreamReader mainQuestReader = new(MainZip.GetInputStream(mainQuestData));
             var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
 
-            var questdata = JObject.Parse(mainQuestDataString);
-            if (questdata == null) throw new Exception("failed to parse " + entry);
-
-            var records = (JArray?)questdata["records"];
-            if (records == null) throw new Exception(entry + " is missing records element");
-
+            JObject questdata = JObject.Parse(mainQuestDataString) ?? throw new Exception("failed to parse " + entry);
+            JArray? records = (JArray?)questdata["records"] ?? throw new Exception(entry + " is missing records element");
             currentFile++;
 
             bar.Report((double)currentFile / totalFiles);
@@ -380,11 +372,13 @@ namespace EpinelPS.StaticInfo
                     if (items != null)
                         foreach (var item2 in items)
                         {
-                            var id = item2["positionId"].ToObject<string>();
-                            var reward = item2["itemId"].ToObject<int>();
+                            var posId = item2["positionId"] ?? throw new Exception("positionId cannot be null");
+                            var rewardObj = item2["itemId"] ?? throw new Exception("itemId cannot be null");
 
-                            if (!PositionReward.ContainsKey(id))
-                                PositionReward.Add(id, reward);
+                            var id = posId.ToObject<string>() ?? throw new Exception("positionId cannot be null");
+                            var reward = rewardObj.ToObject<int>();
+
+                            PositionReward.TryAdd(id, reward);
                         }
                 }
             }

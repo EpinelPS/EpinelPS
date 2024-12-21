@@ -25,9 +25,7 @@ namespace EpinelPS.LobbyServer.Campaign
                 key = req.MapId;
             }
 
-            FieldInfoNew field;
-
-            if (!user.FieldInfoNew.TryGetValue(key, out field))
+            if (!user.FieldInfoNew.TryGetValue(key, out FieldInfoNew? field))
             {
                 field = new FieldInfoNew();
                 user.FieldInfoNew.Add(key, field);
@@ -45,11 +43,9 @@ namespace EpinelPS.LobbyServer.Campaign
 
             // Register and return reward
 
-            if (!GameData.Instance.PositionReward.ContainsKey(req.FieldObject.PositionId)) throw new Exception("bad position id");
-            var fieldReward = GameData.Instance.PositionReward[req.FieldObject.PositionId];
+            if (!GameData.Instance.PositionReward.TryGetValue(req.FieldObject.PositionId, out int fieldReward)) throw new Exception("bad position id");
             var positionReward = GameData.Instance.FieldItems[fieldReward];
-            var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value);
-            if (reward == null) throw new Exception("failed to get reward");
+            var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
             response.Reward = ClearStage.RegisterRewardsForUser(user, reward);
 
             // Hide it from the field

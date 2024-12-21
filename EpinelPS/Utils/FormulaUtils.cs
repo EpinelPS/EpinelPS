@@ -7,8 +7,14 @@ namespace EpinelPS.Utils
         public static int CalculateCP(Database.User user, long csn)
         {
             var character = user.Characters.FirstOrDefault(c => c.Csn == csn);
+            if (character == null) return 0;
+
             var charRecord = GameData.Instance.characterTable.Values.FirstOrDefault(c => c.id == character.Tid);
+            if (charRecord == null) return 0;
+
             var statRecord = GameData.Instance.characterStatTable.Values.FirstOrDefault(s => charRecord.stat_enhance_id == s.group + (character.Level - 1));
+            if (statRecord == null) return 0;
+
             float coreMult = 1f + character.Grade * 0.02f;
             float hp = statRecord.level_hp * coreMult;
             float atk = statRecord.level_attack * coreMult;

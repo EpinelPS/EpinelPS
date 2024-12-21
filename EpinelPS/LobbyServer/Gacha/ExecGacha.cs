@@ -12,11 +12,11 @@ namespace EpinelPS.LobbyServer.Gacha
     [PacketPath("/gacha/execute")]
     public class ExecGacha : LobbyMsgHandler
     {
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
-        private static readonly List<int> sickPullsExclusionList = new List<int> { 2500601 }; // Add more IDs as needed
-        private static readonly List<int> normalPullsExclusionList = new List<int> { 2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701 }; // Add more IDs as needed
+        private static readonly List<int> sickPullsExclusionList = [2500601 ]; // Add more IDs as needed
+        private static readonly List<int> normalPullsExclusionList = [2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701 ]; // Add more IDs as needed
 
         protected override async Task HandleAsync()
         {
@@ -173,7 +173,7 @@ namespace EpinelPS.LobbyServer.Gacha
             await WriteDataAsync(response);
         }
 
-        private CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList)
+        private static CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList)
         {
             // Remove excluded characters from each category
             var availableRCharacters = rCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
@@ -184,12 +184,12 @@ namespace EpinelPS.LobbyServer.Gacha
             // Each time we call this method, a new category will be selected for a single character
             double roll = random.NextDouble() * 100; // Roll from 0 to 100
 
-            if (roll < 53 && availableRCharacters.Any())
+            if (roll < 53 && availableRCharacters.Count != 0)
             {
                 // R category
                 return availableRCharacters[random.Next(availableRCharacters.Count)];
             }
-            else if (roll < 53 + 43 && availableSRCharacters.Any())
+            else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
             {
                 // SR category
                 return availableSRCharacters[random.Next(availableSRCharacters.Count)];
@@ -199,12 +199,12 @@ namespace EpinelPS.LobbyServer.Gacha
                 // SSR category
                 double ssrRoll = random.NextDouble() * 100;
 
-                if (ssrRoll < 4.55 && availablePilgrimCharacters.Any())
+                if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
                 {
                     // PILGRIM SSR
                     return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
                 }
-                else if (availableSSRCharacters.Any())
+                else if (availableSSRCharacters.Count != 0)
                 {
                     // Non-PILGRIM SSR
                     return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
@@ -212,7 +212,7 @@ namespace EpinelPS.LobbyServer.Gacha
             }
 
             // Fallback to a random R character if somehow no SSR characters are left after exclusion
-            return availableRCharacters.Any() ? availableRCharacters[random.Next(availableRCharacters.Count)] : null;
+            return availableRCharacters.Count != 0 ? availableRCharacters[random.Next(availableRCharacters.Count)] : throw new Exception("cannot find any characters");
         }
     }
 }

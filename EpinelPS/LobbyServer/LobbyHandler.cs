@@ -92,9 +92,9 @@ namespace EpinelPS.LobbyServer
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                              .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
-            var p = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["data"]).GetString();
+            var p = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["data"]).GetString() ?? throw new Exception("auth token cannot be null");
 
-            return JsonConvert.DeserializeObject<GameClientInfo>(p);
+            return JsonConvert.DeserializeObject<GameClientInfo>(p ?? throw new Exception("data cannot be null"));
         }
 
         public static void Init()

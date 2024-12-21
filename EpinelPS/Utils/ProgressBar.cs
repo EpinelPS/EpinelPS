@@ -41,7 +41,7 @@ namespace EpinelPS.Utils
             Interlocked.Exchange(ref currentProgress, value);
         }
 
-        private void TimerHandler(object state)
+        private void TimerHandler(object? state)
         {
             lock (timer)
             {
@@ -70,11 +70,11 @@ namespace EpinelPS.Utils
             }
 
             // Backtrack to the first differing character
-            StringBuilder outputBuilder = new StringBuilder();
+            StringBuilder outputBuilder = new();
             outputBuilder.Append('\b', currentText.Length - commonPrefixLength);
 
             // Output new suffix
-            outputBuilder.Append(text.Substring(commonPrefixLength));
+            outputBuilder.Append(text.AsSpan(commonPrefixLength));
 
             // If the new text is shorter than the old one: delete overlapping characters
             int overlapCount = currentText.Length - text.Length;
@@ -100,6 +100,7 @@ namespace EpinelPS.Utils
                 disposed = true;
                 UpdateText(string.Empty);
             }
+            GC.SuppressFinalize(this);
         }
     }
 }

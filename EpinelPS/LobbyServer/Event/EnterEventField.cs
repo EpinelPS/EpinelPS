@@ -11,15 +11,14 @@ namespace EpinelPS.LobbyServer.Event
             var req = await ReadData<ReqEnterEventField>();
             var user = GetUser();
 
-            var response = new ResEnterEventField();
-
-            response.Field = new();
+            ResEnterEventField response = new()
+            {
+                Field = new()
+            };
 
             // Retrieve collected objects
 
-            FieldInfoNew field;
-
-            if (!user.FieldInfoNew.TryGetValue(req.MapId, out field))
+            if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew field))
             {
                 field = new FieldInfoNew();
                 user.FieldInfoNew.Add(req.MapId, field);

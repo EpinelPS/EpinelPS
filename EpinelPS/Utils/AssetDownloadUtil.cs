@@ -75,7 +75,7 @@ namespace EpinelPS.Utils
             var result = await lookup.QueryAsync("cloud.nikke-kr.com", QueryType.A);
 
             var record = result.Answers.ARecords().FirstOrDefault();
-            var ip = record?.Address;
+            var ip = record?.Address ?? throw new Exception("Failed to find IP address of cloud.nikke-kr.com, check your internet connection.");
 
             return ip.ToString();
         }
