@@ -1,7 +1,7 @@
 ﻿using DnsClient;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer;
-using EpinelPS.LobbyServer.Msgs.Stage;
+using EpinelPS.LobbyServer.Stage;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 using Google.Api;
