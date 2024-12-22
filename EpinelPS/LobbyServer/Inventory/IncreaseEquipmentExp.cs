@@ -41,7 +41,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 Value = user.GetCurrencyVal(CurrencyType.Gold) - MathUtils.Clamp(goldCost, 0, CalcTotalExp(destItem))
             };
 
-            // TODO
+            // TODO: need reward handling function first
             if (modules > 0)
             {
                 (int t1, int t2, int t3) = CalcModules(modules);
@@ -105,13 +105,13 @@ namespace EpinelPS.LobbyServer.Inventory
 
             while (destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1] && destItem.Exp >= expNextTable[destItem.Level + 1] && destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1])
             {
-                destItem.Exp -= expNextTable[destItem.Level - 1];
+                destItem.Exp -= expNextTable[destItem.Level + 1];
                 destItem.Level++;
             }
 
             if (destItem.Level >= maxLevel[destEquipRecord.grade_core_id - 1])
             {
-                modules = destItem.Exp; // is the ratio actually 1:1?
+                modules = destItem.Exp; // TODO: check this. is the ratio actually 1:1?
                 destItem.Exp = 0;
             }
 
