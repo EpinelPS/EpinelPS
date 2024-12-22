@@ -1,4 +1,3 @@
-using Google.Protobuf.WellKnownTypes;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Simroom
@@ -10,10 +9,11 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             var req = await ReadData<ReqSelectSimRoomDifficulty>();
 
-            ResSelectSimRoomDifficulty response = new();
-            
-            // TODO
-            
+            ResSelectSimRoomDifficulty response = new ResSelectSimRoomDifficulty
+            {
+                Result = SimRoomResult.SimRoomResultSuccess,
+            };
+
             await WriteDataAsync(response);
         }
     }
