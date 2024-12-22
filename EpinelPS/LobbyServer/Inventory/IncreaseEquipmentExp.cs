@@ -7,6 +7,13 @@ namespace EpinelPS.LobbyServer.Inventory
     [PacketPath("/inventory/increaseexpequipment")]
     public class IncreaseEquipmentExp : LobbyMsgHandler
     {
+        readonly Dictionary<int, int> boostExpTable = new Dictionary<int, int>
+        {
+            { 7010001, 100 },
+            { 7010002, 1000 },
+            { 7010003, 8000 }
+        };
+        
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqIncreaseExpEquip>();
@@ -14,15 +21,16 @@ namespace EpinelPS.LobbyServer.Inventory
             var response = new ResIncreaseExpEquip();
             var destItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
             int goldCost = 0;
+            int modules = 0;
 
             foreach (var srcItem in req.ItemList)
             {
                 var item = user.Items.FirstOrDefault(x => x.Isn == srcItem.Isn);
                 item.Count -= srcItem.Count;
 
-                goldCost += AddExp(srcItem, destItem).exp;
-
-                // TODO: boost modules. for now, excess exp gets scrapped
+                (int addedExp, int addedModules) = AddExp(srcItem, destItem);
+                goldCost += addedExp;
+                modules += addedModules;
 
                 response.Items.Add(NetUtils.ToNet(item));
             }
@@ -30,8 +38,24 @@ namespace EpinelPS.LobbyServer.Inventory
             response.Currency = new NetUserCurrencyData
             {
                 Type = (int)CurrencyType.Gold,
-                Value = user.GetCurrencyVal(CurrencyType.Gold) - goldCost
+                Value = user.GetCurrencyVal(CurrencyType.Gold) - MathUtils.Clamp(goldCost, 0, CalcTotalExp(destItem))
             };
+
+            // TODO
+            if (modules > 0)
+            {
+                (int t1, int t2, int t3) = CalcModules(modules);
+
+                if (t1 > 0)
+                {
+                }
+                if (t2 > 0)
+                {
+                }
+                if (t3 > 0)
+                {
+                }
+            }
 
             // we NEED to make sure the target item itself is in the delta list, or the UI won't update!
             response.Items.Add(NetUtils.ToNet(destItem));
@@ -43,24 +67,43 @@ namespace EpinelPS.LobbyServer.Inventory
 
         (int exp, int modules) AddExp(NetItemData srcItem, ItemData destItem)
         {
+            int[] maxLevel = { 0, 0, 3, 3, 4, 4, 5, 5, 5, 5 };
             var srcEquipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == srcItem.Tid);
             var destEquipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType);
-            var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == srcEquipRecord.grade_core_id);
-            int[] maxLevel = { 0, 0, 3, 3, 4, 4, 5, 5, 5, 5 };
             int[] expNextTable = GameData.Instance.itemEquipExpTable.Values
-                .Where(x => x.item_rare == destEquipRecord.item_rare)
-                .Select(x => x.exp)
-                .OrderBy(x => x) // order from lowest to highest
-                .ToArray();
-            int exp = levelRecord.exp * srcItem.Count;
+                    .Where(x => x.item_rare == destEquipRecord.item_rare)
+                    .Select(x => x.exp)
+                    .OrderBy(x => x) // order from lowest to highest
+                    .ToArray();
+            int exp = 0;
             int modules = 0;
 
-            destItem.Exp += exp * srcItem.Count;
+            if (srcEquipRecord != null)
+            {
+                var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == srcEquipRecord.grade_core_id);
+
+                exp = srcItem.Count * levelRecord.exp;
+
+                destItem.Exp += exp;
+            }
+            else // if the record is null, boost modules are being used
+            {
+                foreach (var entry in boostExpTable)
+                {
+                    if (entry.Key == srcItem.Tid)
+                    {
+                        exp = srcItem.Count * entry.Value;
+                        break;
+                    }
+                }
+
+                destItem.Exp += exp;
+            }
 
             // TODO: double-check this. is this a thing?
             // destItem.Exp += GetSourceExp(srcItem);
 
-            while (destItem.Exp >= expNextTable[destItem.Level + 1] && destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1])
+            while (destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1] && destItem.Exp >= expNextTable[destItem.Level + 1] && destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1])
             {
                 destItem.Exp -= expNextTable[destItem.Level - 1];
                 destItem.Level++;
@@ -94,5 +137,27 @@ namespace EpinelPS.LobbyServer.Inventory
 
             return exp;
         }
+
+        int CalcTotalExp(ItemData destItem)
+        {
+            int exp = 0;
+            var equipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType);
+            var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == equipRecord.grade_core_id);
+            int[] expNextTable = GameData.Instance.itemEquipExpTable.Values
+                .Where(x => x.item_rare == equipRecord.item_rare)
+                .Select(x => x.exp)
+                .ToArray();
+
+            // skip the first level, it's unused
+            for (int i = 1; i < expNextTable.Length; i++)
+            {
+                exp += expNextTable[i];
+            }
+
+            return exp;
+        }
+        
+        (int t1, int t2, int t3) CalcModules(int exp)
+            => (exp / boostExpTable[7010001], exp / boostExpTable[7010002], exp / boostExpTable[7010003]);
     }
 }
