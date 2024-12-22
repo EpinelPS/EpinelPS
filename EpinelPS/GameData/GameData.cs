@@ -35,6 +35,8 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, ClearedTutorialData> tutorialTable;
         public Dictionary<int, ItemEquipRecord> itemEquipTable;
         public Dictionary<int, ItemMaterialRecord> itemMaterialTable;
+        public Dictionary<int, ItemEquipExpRecord> itemEquipExpTable;
+        public Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable;
         private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
         private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
@@ -96,6 +98,8 @@ namespace EpinelPS.StaticInfo
             tutorialTable = [];
             itemEquipTable = [];
             itemMaterialTable = [];
+            itemEquipExpTable = [];
+            ItemEquipGradeExpTable = [];
             characterStatTable = [];
             skillInfoTable = [];
             costTable = [];
@@ -325,6 +329,18 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in itemMaterialTable.records)
             {
                 this.itemMaterialTable.Add(obj.id, obj);
+            }
+
+            var itemEquipExpTable = await LoadZip<ItemEquipExpTable>("ItemEquipExpTable.json", progress);
+            foreach (var obj in itemEquipExpTable.records)
+            {
+                this.itemEquipExpTable.Add(obj.id, obj);
+            }
+
+            var ItemEquipGradeExpTable = await LoadZip<ItemEquipGradeExpTable>("ItemEquipGradeExpTable.json", progress);
+            foreach (var obj in ItemEquipGradeExpTable.records)
+            {
+                this.ItemEquipGradeExpTable.Add(obj.id, obj);
             }
 
             var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);

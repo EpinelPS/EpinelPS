@@ -172,7 +172,32 @@
     public class ItemEquipRecord
     {
         public int id;
-        public string item_sub_type = "";
+        public string name_localkey;
+        public string description_localkey;
+        public string resource_id;
+        public string item_type;
+        public string item_sub_type;
+        public string @class;
+        public string item_rare;
+        public int grade_core_id;
+        public int grow_grade;
+        public List<Stat> stat;
+        public List<OptionSlot> option_slot;
+        public int option_cost;
+        public int option_change_cost;
+        public int option_lock_cost;
+    }
+
+    public class Stat
+    {
+        public string stat_type = "";
+        public int stat_value;
+    }
+
+    public class OptionSlot
+    {
+        public int option_slot;
+        public int option_slot_success_ratio;
     }
     public class ItemEquipTable
     {
@@ -570,5 +595,32 @@
     public class TowerTable
     {
         public List<TowerRecord> records = []; 
+    }
+
+    public class ItemEquipExpRecord
+    {
+        public int id;
+        public int level;
+        public int exp;
+        public string item_rare;
+        public int grade_core_id;
+    }
+
+    public class ItemEquipExpTable
+    {
+        public List<ItemEquipExpRecord> records = [];
+    }
+
+    public class ItemEquipGradeExpRecord
+    {
+        public int id;
+        public int exp;
+        public string item_rare;
+        public int grade_core_id;
+    }
+
+    public class ItemEquipGradeExpTable
+    {
+        public List<ItemEquipGradeExpRecord> records = [];
     }
 }
