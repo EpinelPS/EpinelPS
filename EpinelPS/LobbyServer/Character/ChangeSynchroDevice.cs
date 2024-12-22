@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +49,9 @@ namespace EpinelPS.LobbyServer.Character
             {
                 response.Slots.Add(new NetSynchroSlot() { Slot = item.Slot, AvailableRegisterAt = item.AvailableAt, Csn = item.CharacterSerialNumber });
             }
+            
+            JsonDb.Save();
+            
             await WriteDataAsync(response);
         }
     }

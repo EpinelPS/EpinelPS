@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Character
 {
@@ -41,6 +42,7 @@ namespace EpinelPS.LobbyServer.Character
                 }
             }
            
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }
