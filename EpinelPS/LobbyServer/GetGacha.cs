@@ -13,6 +13,8 @@ namespace EpinelPS.LobbyServer
 
             var response = new ResGetGachaData();
 
+            // TODO: should not return anything when not completed chatper 2
+
             // Adding a default GachaType if the tutorial is done
             if (user.GachaTutorialPlayCount > 0)
             {

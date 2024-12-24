@@ -10,6 +10,7 @@ namespace EpinelPS.Utils
         public static NetRewardData RegisterRewardsForUser(Database.User user, RewardTableRecord rewardData)
         {
             NetRewardData ret = new();
+            ret.PassPoint = new();
             if (rewardData.rewards == null) return ret;
 
             if (rewardData.user_exp != 0)
@@ -25,10 +26,15 @@ namespace EpinelPS.Utils
                     Console.WriteLine("Unknown user level value for xp " + newXp);
                 }
 
+                bool leveled = false;
+                int newGems = 0;
+
 
                 while (newXp >= newLevelExp)
                 {
+                    leveled = true;
                     newLevel++;
+                    newGems += 30;
                     newXp -= oldXpData.Item2;
                     if (user.Currency.ContainsKey(CurrencyType.FreeCash))
                         user.Currency[CurrencyType.FreeCash] += 30;
@@ -51,8 +57,7 @@ namespace EpinelPS.Utils
                     CurrentExp = newXp,
                     CurrentLv = newLevel,
 
-                    GainExp = rewardData.user_exp,
-                    Csn = 123,
+                    GainExp = rewardData.user_exp
                 };
                 user.userPointData.ExperiencePoint = newXp;
 

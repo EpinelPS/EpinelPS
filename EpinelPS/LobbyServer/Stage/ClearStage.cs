@@ -54,11 +54,25 @@ namespace EpinelPS.LobbyServer.Stage
                 }
             }
 
+            var oldLevel = user.userPointData.UserLevel;
+
             if (rewardData != null)
                 response.StageClearReward = RewardUtils.RegisterRewardsForUser(user, rewardData);
             else
                 Console.WriteLine("rewardId is null for stage " + StageId);
+            response.Reward = response.StageClearReward;
 
+            response.ScenarioReward = new NetRewardData(){PassPoint = new()};
+            if (user.userPointData.UserLevel != oldLevel)
+            {
+                response.UserLevelUpReward = new NetRewardData();
+                response.UserLevelUpReward.Currency.Add(new NetCurrencyData()
+                {
+                    Type = (int)CurrencyType.FreeCash,
+                    Value = 30 * (user.userPointData.UserLevel - oldLevel),
+                    FinalValue = user.GetCurrencyVal(CurrencyType.FreeCash)
+                });
+            }
 
             if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
             {
@@ -121,7 +135,7 @@ namespace EpinelPS.LobbyServer.Stage
             if (quest != null)
                 user.SetQuest(quest.id, false);
 
-            if (clearedStageId == 6000003)
+            if (clearedStageId == 6001004)
             {
                 // TODO: Is this the right place to copy over default characters?
                 // TODO: What is CSN and TID? Also need to add names for these

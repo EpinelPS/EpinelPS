@@ -19,7 +19,8 @@ namespace EpinelPS.LobbyServer.Stage
             {
                 foreach (var stages in fields.Value.CompletedStages)
                 {
-                    response.ClearedStageIds.Add(stages);
+                    if (req.StageIds.Contains(stages))
+                        response.ClearedStageIds.Add(stages);
                 }
             }
 

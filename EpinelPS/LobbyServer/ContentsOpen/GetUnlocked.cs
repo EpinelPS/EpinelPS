@@ -30,13 +30,6 @@ namespace EpinelPS.LobbyServer.ContentsOpen
                 user.ContentsOpenUnlocked.Add(19, new(true, true));
                 JsonDb.Save();
             }
-            response.ContentsOpenUnlockInfoList.Add(new NetContentsOpenUnlockInfo()
-            {
-                ContentsOpenTableId = 3,
-                IsUnlockButtonPlayed = true,
-                IsUnlockPopupPlayed = true,
-            });
-
 
             foreach (var item in user.ContentsOpenUnlocked)
             {
