@@ -131,6 +131,13 @@ namespace EpinelPS.Database
     {
         public bool ButtonAnimationPlayed = false;
         public bool PopupAnimationPlayed = false;
+
+        public UnlockData() {}
+        public UnlockData(bool button, bool popup)
+        {
+            ButtonAnimationPlayed = button;
+            PopupAnimationPlayed = popup;
+        }
     }
 
     public class MogMinigameInfo

@@ -126,6 +126,12 @@ namespace EpinelPS.Utils
                     items.Add(item);
                 }
 
+                foreach (var item in reward.UserItems)
+                {
+                    // TODO: do these need to be combined?
+                    result.UserItems.Add(item);
+                }
+
                 foreach (var c in reward.Character)
                 {
                     Console.WriteLine("MergeRewards - TODO Character");

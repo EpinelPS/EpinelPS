@@ -187,8 +187,10 @@ namespace EpinelPS.Utils
 
             // prep payload
             MemoryStream msm = new();
-            msm.WriteByte(88);
-            msm.WriteByte(0);
+            msm.WriteByte(67);
+            msm.WriteByte(129);
+
+            // TODO: write message length
 
             msm.Write(message);
 

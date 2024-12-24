@@ -10,9 +10,11 @@ namespace EpinelPS.LobbyServer.Wallet
             var req = await ReadData<ReqRefreshChargeCurrencyData>();
             var user = GetUser();
 
-            var response = new ResRefreshChargeCurrencyData();
-            response.FreeCash = new();
-            response.ChargeCash = new();
+            ResRefreshChargeCurrencyData response = new()
+            {
+                FreeCash = new() { Type = (int)CurrencyType.FreeCash },
+                ChargeCash = new() { Type = (int)CurrencyType.ChargeCash }
+            };
 
             foreach (var item in user.Currency)
             {

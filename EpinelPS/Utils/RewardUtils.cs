@@ -106,11 +106,20 @@ namespace EpinelPS.Utils
                             {
                                 newItem.Count += item.reward_value;
 
+                                // Tell the client the reward and its amount
                                 ret.Item.Add(new NetItemData()
                                 {
                                     Count = item.reward_value,
                                     Tid = item.reward_id,
-                                    Isn = newItem.Isn
+                                    //Isn = newItem.Isn
+                                });
+
+                                // Tell the client the new amount of this item
+                                ret.UserItems.Add(new NetUserItemData()
+                                {
+                                   Isn = newItem.Isn,
+                                   Tid = newItem.ItemType,
+                                   Count = newItem.Count
                                 });
                             }
                             else
@@ -127,7 +136,15 @@ namespace EpinelPS.Utils
                             {
                                 Count = item.reward_value,
                                 Tid = item.reward_id,
-                                Isn = id
+                                //Isn = id
+                            });
+
+                            // Tell the client the new amount of this item (which is the same as user did not have item previously)
+                            ret.UserItems.Add(new NetUserItemData()
+                            {
+                                Isn = id,
+                                Tid = item.reward_id,
+                                Count = item.reward_value
                             });
                         }
                     }

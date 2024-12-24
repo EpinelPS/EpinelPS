@@ -56,8 +56,18 @@ namespace EpinelPS.LobbyServer
 
         protected abstract Task HandleAsync();
 
+
+        private void PrintMessage<T>(T data) where T : IMessage, new()
+        {
+            var str = (string)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
+            Console.WriteLine(str);
+        }
         protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
         {
+            Console.WriteLine("Writing " + data.GetType().Name);
+            PrintMessage(data);
+            Console.WriteLine();
+
             if (ctx == null)
             {
                 var ms = new MemoryStream();
@@ -71,7 +81,8 @@ namespace EpinelPS.LobbyServer
             {
                 ctx.Response.ContentType = "application/octet-stream+protobuf";
                 ctx.Response.ContentLength = data.CalculateSize();
-                bool encrypted = false;
+                bool encrypted = ctx.Request.Headers.ContentEncoding.Contains("enc");
+                encrypted = false; //TODO implement, although client does not complain
                 var responseBytes = encrypted ? new MemoryStream() : ctx.Response.Body;
                 var x = new CodedOutputStream(responseBytes);
                 data.WriteTo(x);
@@ -101,6 +112,10 @@ namespace EpinelPS.LobbyServer
                 // return grpc IMessage from byte array with type T
                 T msg = new();
                 msg.MergeFrom(bin.Contents);
+
+                Console.WriteLine("Reading " + msg.GetType().Name);
+                PrintMessage(msg);
+                Console.WriteLine();
 
                 UserId = bin.UserId;
                 UsedAuthToken = bin.UsedAuthToken;
