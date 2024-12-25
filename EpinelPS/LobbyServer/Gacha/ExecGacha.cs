@@ -196,6 +196,9 @@ namespace EpinelPS.LobbyServer.Gacha
                         Tid = characterData.id,
                         UltimateLevel = 1
                     });
+
+                    // Add "New Character" Badge
+                    user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
                 }
 
                 response.Gacha.Add(gacha);

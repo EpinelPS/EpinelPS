@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Utils;
+using Google.Protobuf;
 
 namespace EpinelPS.LobbyServer.Badge
 {
@@ -8,8 +9,15 @@ namespace EpinelPS.LobbyServer.Badge
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqSyncBadge>();
+            var user = GetUser();
 
             var response = new ResSyncBadge();
+
+            foreach (var item in user.Badges)
+            {
+                response.BadgeList.Add(item.ToNet());
+            }
+
             await WriteDataAsync(response);
         }
     }

@@ -4,6 +4,7 @@ using EpinelPS.Utils;
 using Newtonsoft.Json;
 using Paseto.Builder;
 using Paseto;
+using Google.Protobuf;
 
 namespace EpinelPS.Database
 {
@@ -62,8 +63,8 @@ namespace EpinelPS.Database
     public class EventData
     {
         public List<string> CompletedScenarios = new();
-		public int Diff = 0; // Default value for Diff
-		public int LastStage = 0; // Default value for LastStage
+        public int Diff = 0; // Default value for Diff
+        public int LastStage = 0; // Default value for LastStage
     }
 
     public class SynchroSlot
@@ -132,7 +133,7 @@ namespace EpinelPS.Database
         public bool ButtonAnimationPlayed = false;
         public bool PopupAnimationPlayed = false;
 
-        public UnlockData() {}
+        public UnlockData() { }
         public UnlockData(bool button, bool popup)
         {
             ButtonAnimationPlayed = button;
@@ -143,6 +144,33 @@ namespace EpinelPS.Database
     public class MogMinigameInfo
     {
         public List<string> CompletedScenarios = [];
+    }
+    public class Badge
+    {
+        public string Location = "";
+        public long Seq;
+        public BadgeContents BadgeContent;
+        public string BadgeGuid;
+
+        public Badge() {}
+        public Badge(NetBadge badge)
+        {
+            Location = badge.Location;
+            Seq = badge.Seq;
+            BadgeContent = badge.BadgeContent;
+            BadgeGuid = new Guid(badge.BadgeGuid.ToArray()).ToString();
+        }
+
+        public NetBadge ToNet()
+        {
+            return new NetBadge()
+            {
+                BadgeContent = BadgeContent,
+                BadgeGuid = ByteString.CopyFrom(new Guid(BadgeGuid).ToByteArray()),
+                Location = Location,
+                Seq = Seq
+            };
+        }
     }
     public class User
     {
@@ -161,7 +189,7 @@ namespace EpinelPS.Database
         public bool IsAdmin = false;
         public bool sickpulls = false;
         public bool IsBanned = false;
-		public int TitleId = 1;
+        public int TitleId = 1;
         public DateTime BanStart;
         public DateTime BanEnd;
         public int BanId = 0;
@@ -218,9 +246,35 @@ namespace EpinelPS.Database
 
         public List<NetStageClearInfo> StageClearHistorys = [];
 
+        public List<Badge> Badges = [];
+
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
         public MogMinigameInfo MogInfo = new();
+
+        public Badge AddBadge(BadgeContents type, string location)
+        {
+            // generate unique badge SEQ
+            var num = Rng.RandomId();
+
+            while (Badges.Any(x => x.Seq == num))
+            {
+                num = Rng.RandomId();
+            }
+
+            var badge = new Badge()
+            {
+                BadgeContent = type,
+                Location = location,
+                BadgeGuid = Guid.NewGuid().ToString(),
+                Seq = num
+            };
+
+            Badges.Add(badge);
+
+            return badge;
+        }
+
 
         public void SetQuest(int tid, bool recievedReward)
         {
@@ -313,43 +367,43 @@ namespace EpinelPS.Database
             }
         }
 
-		public bool HasCharacter(int c)
-		{
-			// Step 1: Get the 'name_code' of the input character with Tid 'c'
-			if (GameData.Instance.characterTable.TryGetValue(c, out var inputCharacterRecord))
-			{
-				int targetNameCode = inputCharacterRecord.name_code;
-				// Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
-				var matchingCharacterIds = GameData.Instance.characterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
+        public bool HasCharacter(int c)
+        {
+            // Step 1: Get the 'name_code' of the input character with Tid 'c'
+            if (GameData.Instance.characterTable.TryGetValue(c, out var inputCharacterRecord))
+            {
+                int targetNameCode = inputCharacterRecord.name_code;
+                // Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
+                var matchingCharacterIds = GameData.Instance.characterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
-				// Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
-				return Characters.Any(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid));
-				
-			}
-			else
-			{	// The character with Tid 'c' does not exist in 'characterTable'
-				return false;
-			}
-		}
+                // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
+                return Characters.Any(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid));
+
+            }
+            else
+            {   // The character with Tid 'c' does not exist in 'characterTable'
+                return false;
+            }
+        }
 
         public Character? GetCharacter(int c)
-		{
-			// Step 1: Get the 'name_code' of the input character with Tid 'c'
-			if (GameData.Instance.characterTable.TryGetValue(c, out var inputCharacterRecord))
-			{
-				int targetNameCode = inputCharacterRecord.name_code;
-				// Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
-				var matchingCharacterIds = GameData.Instance.characterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
+        {
+            // Step 1: Get the 'name_code' of the input character with Tid 'c'
+            if (GameData.Instance.characterTable.TryGetValue(c, out var inputCharacterRecord))
+            {
+                int targetNameCode = inputCharacterRecord.name_code;
+                // Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
+                var matchingCharacterIds = GameData.Instance.characterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
-				// Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
-				return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).First();
-				
-			}
-			else
-			{	// The character with Tid 'c' does not exist in 'characterTable'
-				return null;
-			}
-		}
+                // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
+                return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).First();
+
+            }
+            else
+            {   // The character with Tid 'c' does not exist in 'characterTable'
+                return null;
+            }
+        }
 
         public Character? GetCharacterBySerialNumber(long value)
         {
