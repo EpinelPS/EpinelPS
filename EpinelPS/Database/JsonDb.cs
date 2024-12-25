@@ -248,6 +248,8 @@ namespace EpinelPS.Database
 
         public List<Badge> Badges = [];
 
+        public List<NetUserAttractiveData> BondInfo = [];
+
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
         public MogMinigameInfo MogInfo = new();

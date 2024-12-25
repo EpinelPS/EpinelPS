@@ -171,6 +171,9 @@ namespace EpinelPS.LobbyServer.Stage
                 user.Characters.Add(new Database.Character() { Csn = 47263458, Tid = 230101 });
                 user.Characters.Add(new Database.Character() { Csn = 47263459, Tid = 301201 });
 
+                user.BondInfo.Add(new() { NameCode = 3001, Level = 1 });
+                user.BondInfo.Add(new() { NameCode = 3005, Level = 1 });
+
                 NetTeamData team1Sub = new()
                 {
                     TeamNumber = 1

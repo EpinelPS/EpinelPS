@@ -199,13 +199,14 @@ namespace EpinelPS.LobbyServer.Gacha
 
                     // Add "New Character" Badge
                     user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
+                    user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
                 }
 
                 response.Gacha.Add(gacha);
             }
 
-            response.Reward.Currency.Add(new NetCurrencyData(){ Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls});
-            response.Reward.Currency.Add(new NetCurrencyData(){ Type = (int)CurrencyType.CharacterExp, Value = totalBodyLabels});
+            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls });
+            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.CharacterExp, Value = totalBodyLabels });
             user.AddCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
             user.GachaTutorialPlayCount++;

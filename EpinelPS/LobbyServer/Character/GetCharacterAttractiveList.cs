@@ -8,9 +8,17 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetAttractiveList>();
+            var user = GetUser();
 
-            var response = new ResGetAttractiveList();
-            response.CounselAvailableCount = 0; // TODO
+            ResGetAttractiveList response = new();
+            response.CounselAvailableCount = 3; // TODO
+
+            foreach(var item in user.BondInfo)
+            {
+                response.Attractives.Add(item);
+                item.CanCounselToday = true;
+            }
+
 
             // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);
