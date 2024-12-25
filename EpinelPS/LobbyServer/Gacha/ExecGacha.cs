@@ -199,7 +199,9 @@ namespace EpinelPS.LobbyServer.Gacha
 
                     // Add "New Character" Badge
                     user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
-                    user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
+
+                    if (characterData.original_rare == "SSR" || characterData.original_rare == "SR")
+                        user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
                 }
 
                 response.Gacha.Add(gacha);
