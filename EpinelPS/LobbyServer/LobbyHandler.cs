@@ -109,7 +109,7 @@ namespace EpinelPS.LobbyServer
                 Level = user.userPointData.UserLevel,
                 Exp = user.userPointData.ExperiencePoint,
                 CostumeLv = 1,
-                Frame = 1,
+                Frame = user.ProfileFrame,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,
                 InfraCoreExp = user.InfraCoreExp,
