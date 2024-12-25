@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Stage
         }
 
 
-        public static ResClearStage CompleteStage(Database.User user, int StageId, bool forceCompleteScenarios = false)
+        public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
         {
             var response = new ResClearStage();
             var clearedStage = GameData.Instance.GetStageData(StageId);
@@ -55,6 +55,7 @@ namespace EpinelPS.LobbyServer.Stage
             }
 
             var oldLevel = user.userPointData.UserLevel;
+            var oldOutpostLevel = user.OutpostBattleLevel.Level;
 
             if (rewardData != null)
                 response.StageClearReward = RewardUtils.RegisterRewardsForUser(user, rewardData);
@@ -62,7 +63,11 @@ namespace EpinelPS.LobbyServer.Stage
                 Console.WriteLine("rewardId is null for stage " + StageId);
             response.Reward = response.StageClearReward;
 
-            response.ScenarioReward = new NetRewardData(){PassPoint = new()};
+            response.ScenarioReward = new NetRewardData() { PassPoint = new() };
+
+            response.OutpostBattleLevelReward = new NetRewardData() { PassPoint = new() };
+
+            // Check if user level changed, if so return the reward
             if (user.userPointData.UserLevel != oldLevel)
             {
                 response.UserLevelUpReward = new NetRewardData();
@@ -70,6 +75,17 @@ namespace EpinelPS.LobbyServer.Stage
                 {
                     Type = (int)CurrencyType.FreeCash,
                     Value = 30 * (user.userPointData.UserLevel - oldLevel),
+                    FinalValue = user.GetCurrencyVal(CurrencyType.FreeCash)
+                });
+            }
+            // Check if outpost level changed, if so return the reward
+            if (user.OutpostBattleLevel.Level != oldOutpostLevel)
+            {
+                response.OutpostBattleLevelReward = new NetRewardData();
+                response.OutpostBattleLevelReward.Currency.Add(new NetCurrencyData()
+                {
+                    Type = (int)CurrencyType.FreeCash,
+                    Value = 100 * (user.OutpostBattleLevel.Level - oldOutpostLevel),
                     FinalValue = user.GetCurrencyVal(CurrencyType.FreeCash)
                 });
             }
@@ -119,7 +135,7 @@ namespace EpinelPS.LobbyServer.Stage
             }
 
             // CreateClearInfo(user);
-            
+
             var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
             if (!user.FieldInfoNew.ContainsKey(key))
                 user.FieldInfoNew.Add(key, new FieldInfoNew());
@@ -135,17 +151,19 @@ namespace EpinelPS.LobbyServer.Stage
             if (quest != null)
                 user.SetQuest(quest.id, false);
 
+            // TODO: Is this the right place to add default characters?
+            // Stage 1-4 BOSS
             if (clearedStageId == 6001004)
             {
-                // TODO: Is this the right place to copy over default characters?
-                // TODO: What is CSN and TID? Also need to add names for these
-                // Note: TID is table index, not sure what CSN is
+                // TID: Character ID
+                // CSN: Character Serial Number
 
                 // create a squad with first 5 characters
-                var team1 = new NetUserTeamData();
-                team1.Type = 1;
-                team1.LastContentsTeamNumber = 1;
-
+                var team1 = new NetUserTeamData
+                {
+                    Type = 1,
+                    LastContentsTeamNumber = 1
+                };
 
                 user.Characters.Add(new Database.Character() { Csn = 47263455, Tid = 201001 });
                 user.Characters.Add(new Database.Character() { Csn = 47273456, Tid = 330501 });
@@ -153,8 +171,11 @@ namespace EpinelPS.LobbyServer.Stage
                 user.Characters.Add(new Database.Character() { Csn = 47263458, Tid = 230101 });
                 user.Characters.Add(new Database.Character() { Csn = 47263459, Tid = 301201 });
 
-                var team1Sub = new NetTeamData();
-                team1Sub.TeamNumber = 1;
+                NetTeamData team1Sub = new()
+                {
+                    TeamNumber = 1
+                };
+
                 for (int i = 1; i < 6; i++)
                 {
                     var character = user.Characters[i - 1];
@@ -163,17 +184,23 @@ namespace EpinelPS.LobbyServer.Stage
                 team1.Teams.Add(team1Sub);
                 user.UserTeams.Add(1, team1);
 
-
                 user.RepresentationTeamData.TeamNumber = 1;
-                user.RepresentationTeamData.TeamCombat = 1446; // TODO: Don't hardcode this
                 user.RepresentationTeamData.Slots.Clear();
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 1, Csn = 47263455, Tid = 201001, Level = 1 });
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 2, Csn = 47273456, Tid = 330501, Level = 1 });
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 3, Csn = 47263457, Tid = 130201, Level = 1 });
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 4, Csn = 47263458, Tid = 230101, Level = 1 });
                 user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot { Slot = 5, Csn = 47263459, Tid = 301201, Level = 1 });
+
+                int totalCP = 0;
+
+                foreach (var item in user.RepresentationTeamData.Slots)
+                {
+                    totalCP += FormulaUtils.CalculateCP(user, item.Csn);
+                }
+
+                user.RepresentationTeamData.TeamCombat = totalCP;
             }
-            // TODO: add neon
         }
 
         private static void CreateClearInfo(Database.User user)

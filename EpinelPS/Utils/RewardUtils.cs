@@ -29,13 +29,12 @@ namespace EpinelPS.Utils
                 bool leveled = false;
                 int newGems = 0;
 
-
                 while (newXp >= newLevelExp)
                 {
                     leveled = true;
                     newLevel++;
                     newGems += 30;
-                    newXp -= oldXpData.Item2;
+                    newXp -= newLevelExp;
                     if (user.Currency.ContainsKey(CurrencyType.FreeCash))
                         user.Currency[CurrencyType.FreeCash] += 30;
                     else
@@ -53,11 +52,12 @@ namespace EpinelPS.Utils
                     BeforeExp = user.userPointData.ExperiencePoint,
                     BeforeLv = user.userPointData.UserLevel,
 
-                    IncreaseExp = rewardData.user_exp,
+                   // IncreaseExp = rewardData.user_exp,
                     CurrentExp = newXp,
                     CurrentLv = newLevel,
 
-                    GainExp = rewardData.user_exp
+                    GainExp = rewardData.user_exp,
+                    
                 };
                 user.userPointData.ExperiencePoint = newXp;
 

@@ -586,14 +586,10 @@ namespace EpinelPS.StaticInfo
             {
                 var item = userExpDataRecords[i];
 
-                var level = item["level"];
-                if (level == null) throw new Exception("expected level field in user exp table data");
-
+                var level = item["level"] ?? throw new Exception("expected level field in user exp table data");
                 int levelValue = level.ToObject<int>();
 
-                var exp = item["exp"];
-                if (exp == null) throw new Exception("expected exp field in user exp table data");
-
+                var exp = item["exp"] ?? throw new Exception("expected exp field in user exp table data");
                 int expValue = exp.ToObject<int>();
 
                 if (prevValue < targetExp)
