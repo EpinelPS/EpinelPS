@@ -15,29 +15,29 @@ namespace EpinelPS.LobbyServer.Gacha
         private static readonly Random random = new();
 
         // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
-        private static readonly List<int> sickPullsExclusionList = [2500601 ]; // Add more IDs as needed
-        private static readonly List<int> normalPullsExclusionList = [2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701 ]; // Add more IDs as needed
+        private static readonly List<int> sickPullsExclusionList = [2500601]; // Add more IDs as needed
+        private static readonly List<int> normalPullsExclusionList = [2500601, 422401, 306201, 399901, 399902, 399903, 399904, 201401, 301501, 112101, 313201, 319301, 319401, 320301, 422601, 426101, 328301, 328401, 235101, 235301, 136101, 339201, 140001, 140101, 140201, 580001, 580101, 580201, 581001, 581101, 581201, 582001, 582101, 582201, 583001, 583101, 583201, 583301, 190101, 290701]; // Add more IDs as needed
 
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqExecuteGacha>();
-            
+
             // Count determines whether we select 1 or 10 characters
-            int numberOfPulls = req.Count == 1 ? 1 : 10; 
+            int numberOfPulls = req.Count == 1 ? 1 : 10;
 
             var user = GetUser();
-            var response = new ResExecuteGacha();
+            var response = new ResExecuteGacha() { Reward = new NetRewardData() { PassPoint = new() } };
 
-			var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
-			// Remove the .Values part since it's already a list.
-			// Group by name_code to treat same name_code as one character 
-			// Always add characters with grade_core_id == 1 and 101
-			var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999)).ToList(); 
+            var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
+            // Remove the .Values part since it's already a list.
+            // Group by name_code to treat same name_code as one character 
+            // Always add characters with grade_core_id == 1 and 101
+            var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999)).ToList();
 
             // Separate characters by rarity categories
-            var rCharacters = allCharacterData.Where(c => c.original_rare == "R" ).ToList();
+            var rCharacters = allCharacterData.Where(c => c.original_rare == "R").ToList();
             var srCharacters = allCharacterData.Where(c => c.original_rare == "SR").ToList();
-            
+
             // Separate Pilgrim SSRs and non-Pilgrim SSRs
             var pilgrimCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation == "PILGRIM").ToList();
             var ssrCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation != "PILGRIM").ToList();
@@ -60,112 +60,150 @@ namespace EpinelPS.LobbyServer.Gacha
                 }
             }
 
-            var pieceIds = new List<Tuple<int, int>>(); // 2D array to store characterId and pieceId as Tuple
-            // Add each character's item to user.Items if the character exists in user.Characters
-			foreach (var characterData in selectedCharacters)
-			{
+            int totalBodyLabels = 0;
+
+            foreach (var characterData in selectedCharacters)
+            {
+                var gacha = new NetGachaEntityData()
+                {
+                    // PieceCount = 1, // Spare Body
+                    CurrencyValue = 0, // Body Label
+                    Tid = characterData.id,
+                    Type = 1
+                };
+
+
+                // Check if user has this character.
+                // If so, check if it is fully limit broken, then add body labels
+                // If not fully limit broken, add spare body item
+                // If user does not have character, generate CSN and add character
+
                 if (user.HasCharacter(characterData.id))
                 {
-                    // Check if the item for this character already exists in user.Items based on ItemType
+                    Database.Character character = user.GetCharacter(characterData.id) ?? throw new Exception("HasCharacter() returned true, however character was null");
+
                     var existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
 
-                    if (existingItem != null)
-                    {
-                        // If the item exists, increment the count
-                        existingItem.Count += 1;
+                    bool increase_item = false;
 
-                        // Send the updated item in the response
-                        response.Items.Add(new NetUserItemData()
+                    gacha.Sn = character.Csn;
+                    gacha.Tid = characterData.id;
+
+                    // Check if we can add upgrade item
+                    if (characterData.original_rare == "SR")
+                    {
+                        if (existingItem != null && character.Grade + existingItem.Count <= 1)
                         {
-                            Tid = existingItem.ItemType,
-                            Csn = existingItem.Csn,
-                            Count = existingItem.Count,
-                            Level = existingItem.Level,
-                            Exp = existingItem.Exp,
-                            Position = existingItem.Position,
-                            Isn = existingItem.Isn
-                        });
+                            increase_item = true;
+                        }
+                        else if (existingItem == null && character.Grade <= 1)
+                        {
+                            increase_item = true;
+                        }
+                    }
+                    else if (characterData.original_rare == "SSR")
+                    {
+                        if (existingItem != null && character.Grade + existingItem.Count <= 10)
+                        {
+                            increase_item = true;
+                        }
+                        else if (existingItem == null && character.Grade <= 10)
+                        {
+                            increase_item = true;
+                        }
+                    }
+
+                    if (increase_item)
+                    {
+                        gacha.PieceCount = 1;
+                        if (existingItem != null)
+                        {
+                            existingItem.Count++;
+
+                            // Send the updated item in the response
+                            response.Items.Add(new NetUserItemData()
+                            {
+                                Tid = existingItem.ItemType,
+                                Csn = existingItem.Csn,
+                                Count = existingItem.Count,
+                                Level = existingItem.Level,
+                                Exp = existingItem.Exp,
+                                Position = existingItem.Position,
+                                Isn = existingItem.Isn
+                            });
+                        }
+                        else
+                        {
+                            // If the item does not exist, create a new item entry
+                            var newItem = new ItemData()
+                            {
+                                ItemType = characterData.piece_id,
+                                Csn = 0,
+                                Count = 1, // or any relevant count
+                                Level = 0,
+                                Exp = 0,
+                                Position = 0,
+                                Corp = 0,
+                                Isn = user.GenerateUniqueItemId()
+                            };
+                            user.Items.Add(newItem);
+
+                            // Add the new item to response
+                            response.Items.Add(new NetUserItemData()
+                            {
+                                Tid = newItem.ItemType,
+                                Csn = newItem.Csn,
+                                Count = newItem.Count,
+                                Level = newItem.Level,
+                                Exp = newItem.Exp,
+                                Position = newItem.Position,
+                                Isn = newItem.Isn
+                            });
+                        }
                     }
                     else
                     {
-                        // If the item does not exist, create a new item entry
-                        var newItem = new ItemData()
-                        {
-                            ItemType = characterData.piece_id,
-                            Csn = 0,
-                            Count = 1, // or any relevant count
-                            Level = 0,
-                            Exp = 0,
-                            Position = 0,
-                            Corp = 0,
-                            Isn = user.GenerateUniqueItemId()
-                        };
-                        user.Items.Add(newItem);
+                        gacha.CurrencyValue = characterData.original_rare == "SSR" ? 6000 : (characterData.original_rare == "SR" ? 200 : 150);
+                        user.AddCurrency(CurrencyType.CharacterExp, gacha.CurrencyValue);
 
-                        // Add the new item to response
-                        response.Items.Add(new NetUserItemData()
-                        {
-                            Tid = newItem.ItemType,
-                            Csn = newItem.Csn,
-                            Count = newItem.Count,
-                            Level = newItem.Level,
-                            Exp = newItem.Exp,
-                            Position = newItem.Position,
-                            Isn = newItem.Isn
-                        });
+                        totalBodyLabels += (int)gacha.CurrencyValue;
                     }
                 }
-            }
-
-            // Populate the 2D array with characterId and pieceId for each selected character
-            foreach (var characterData in selectedCharacters)
-            {
-                var characterId = characterData.id;
-                var pieceId = characterData.piece_id;
-
-                // Store characterId and pieceId in the array
-                pieceIds.Add(Tuple.Create(characterId, pieceId));
-				var id = user.GenerateUniqueCharacterId();
-                response.Gacha.Add(new NetGachaEntityData()
+                else
                 {
-                    Corporation = 1,
-                    PieceCount = 1,
-                    CurrencyValue = 5,
-                    Sn = id,
-                    Tid = characterId,
-                    Type = 1
-                });
-
-                // Check if the user already has the character, if not add it
-                if (!user.HasCharacter(characterId))
-                {
+                    // Add new character to user
+                    gacha.Sn = user.GenerateUniqueCharacterId();
                     response.Characters.Add(new NetUserCharacterDefaultData()
                     {
                         CostumeId = 0,
-                        Csn = id,
+                        Csn = gacha.Sn,
                         Grade = 0,
                         Level = 1,
                         Skill1Lv = 1,
                         Skill2Lv = 1,
-                        Tid = characterId,
+                        Tid = characterData.id,
                         UltiSkillLv = 1
                     });
 
                     user.Characters.Add(new Database.Character()
                     {
                         CostumeId = 0,
-                        Csn = id,
+                        Csn = (int)gacha.Sn,
                         Grade = 0,
                         Level = 1,
                         Skill1Lvl = 1,
                         Skill2Lvl = 1,
-                        Tid = characterId,
+                        Tid = characterData.id,
                         UltimateLevel = 1
                     });
                 }
+
+                response.Gacha.Add(gacha);
             }
 
-
+            response.Reward.Currency.Add(new NetCurrencyData(){ Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls});
+            response.Reward.Currency.Add(new NetCurrencyData(){ Type = (int)CurrencyType.CharacterExp, Value = totalBodyLabels});
+            user.AddCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
             user.GachaTutorialPlayCount++;
             JsonDb.Save();
