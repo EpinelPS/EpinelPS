@@ -47,6 +47,8 @@ namespace EpinelPS.LobbyServer.Character
             }
             response.SynchroLv = user.SynchroDeviceLevel;
 
+            user.AddTrigger(TriggerType.CharacterLevelUpCount, 1);
+
             JsonDb.Save();
             await WriteDataAsync(response);
         }

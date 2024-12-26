@@ -658,4 +658,19 @@
     {
         public List<SideStoryStageRecord> records = [];
     }
+
+    public class TriggerRecord
+    {
+        public int id;
+        public int condition_id;
+        public int condition_value;
+        public int reward_id;
+        public int point_value;
+        public bool print_value;
+        public int before_trigger_id;
+    }
+    public class TriggerTable
+    {
+        public List<TriggerRecord> records = [];
+    }
 }

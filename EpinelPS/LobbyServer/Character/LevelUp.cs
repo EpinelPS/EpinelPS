@@ -73,6 +73,8 @@ namespace EpinelPS.LobbyServer.Character
                     break;
                 }
             }
+
+            user.AddTrigger(TriggerType.CharacterLevelUpCount, 1);
             JsonDb.Save();
 
             await WriteDataAsync(response);

@@ -132,10 +132,18 @@ namespace EpinelPS.Utils
                     result.UserItems.Add(item);
                 }
 
+                foreach (var item in reward.Point)
+                {
+                    result.Point.Add(item);
+                }
+
                 foreach (var c in reward.Character)
                 {
                     Console.WriteLine("MergeRewards - TODO Character");
                 }
+
+                if (reward.InfraCoreExp != null)
+                    result.InfraCoreExp = reward.InfraCoreExp;
             }
 
             foreach (var c in currencyDict)
@@ -175,7 +183,7 @@ namespace EpinelPS.Utils
             if (includeBoost)
                 boost += CalculateBoostValueForOutpost(user, type);
 
-            switch(type)
+            switch (type)
             {
                 case CurrencyType.CharacterExp2:
                     value = battleData.character_exp2;

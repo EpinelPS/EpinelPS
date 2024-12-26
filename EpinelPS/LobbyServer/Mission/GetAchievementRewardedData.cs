@@ -7,11 +7,12 @@ namespace EpinelPS.LobbyServer.Mission
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetAchievementRewardedData>();
+            await ReadData<ReqGetAchievementRewardedData>();
+            var user = GetUser();
 
             var response = new ResGetAchievementRewardedData();
-
-            // TODO
+            response.Ids.AddRange(user.CompletedAchievements);
+            
             await WriteDataAsync(response);
         }
     }

@@ -65,7 +65,7 @@ namespace EpinelPS.StaticInfo
         public readonly Dictionary<int, CostRecord> costTable = [];
         public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
         public readonly Dictionary<int, TowerRecord> towerTable = [];
-
+        public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
 
 
         public byte[] Sha256Hash;
@@ -500,6 +500,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in towerTable.records)
             {
                 this.towerTable.Add(obj.id, obj);
+            }
+            
+            var triggerTable = await LoadZip<TriggerTable>("TriggerTable.json", progress);
+            foreach (var obj in triggerTable.records)
+            {
+                this.TriggerTable.Add(obj.id, obj);
             }
         }
 

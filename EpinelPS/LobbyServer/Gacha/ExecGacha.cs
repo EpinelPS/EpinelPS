@@ -201,10 +201,19 @@ namespace EpinelPS.LobbyServer.Gacha
                     user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
 
                     if (characterData.original_rare == "SSR" || characterData.original_rare == "SR")
+                    {
                         user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
+
+                        if (characterData.original_rare == "SSR")
+                        {
+                            user.AddTrigger(TriggerType.ObtainCharacterSSR, 1);
+                        }
+                    }
                 }
 
                 response.Gacha.Add(gacha);
+
+                user.AddTrigger(TriggerType.GachaCharacter, 1);
             }
 
             response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls });
@@ -212,6 +221,7 @@ namespace EpinelPS.LobbyServer.Gacha
             user.AddCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
             user.GachaTutorialPlayCount++;
+
             JsonDb.Save();
 
             await WriteDataAsync(response);

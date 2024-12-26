@@ -27,6 +27,8 @@ namespace EpinelPS.LobbyServer.Msgs.Outpost
 
             user.BattleTime = DateTime.UtcNow;
 
+            user.AddTrigger(StaticInfo.TriggerType.OutpostBattleReward, 1);
+
             JsonDb.Save();
 
             await WriteDataAsync(response);

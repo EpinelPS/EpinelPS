@@ -79,6 +79,11 @@ namespace EpinelPS.LobbyServer.Character
                 newChar.Skill2Lv++;
             }
 
+            if (character.UltimateLevel == 10 && character.Skill1Lvl == 10 && character.Skill2Lvl == 10)
+            {
+                user.AddTrigger(TriggerType.CharacterSkillLevelMax, 1);
+            }
+
             response.Character = newChar;
 
             JsonDb.Save();

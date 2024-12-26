@@ -87,6 +87,13 @@ namespace EpinelPS.Database
         public int WipeoutCount = 0;
         public bool ClearedSimulationRoom = false;
         public int InterceptionTickets = 3;
+        public List<int> CompletedDailyMissions = [];
+        public int DailyMissionPoints;
+    }
+    public class WeeklyResetableData
+    {
+        public List<int> CompletedWeeklyMissions = [];
+        public int WeeklyMissionPoints;
     }
     public class OutpostBuffs
     {
@@ -229,6 +236,7 @@ namespace EpinelPS.Database
         public int SynchroDeviceLevel = 200;
 
         public ResetableData ResetableData = new();
+        public WeeklyResetableData WeeklyResetableData = new();
         public List<ItemData> Items = new();
         public List<Character> Characters = [];
         public NetWholeUserTeamData RepresentationTeamData = new();
@@ -272,6 +280,7 @@ namespace EpinelPS.Database
         public List<NetUserAttractiveData> BondInfo = [];
         public List<Trigger> Triggers = [];
         public int LastTriggerId = 1;
+        public List<int> CompletedAchievements = [];
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -284,7 +293,7 @@ namespace EpinelPS.Database
                 Id = LastTriggerId++,
                 Type = type,
                 ConditionId = conditionId,
-                CreatedAt = DateTime.Now.Ticks,
+                CreatedAt = DateTime.UtcNow.AddHours(9).Ticks,
                 Value = value
             };
 
@@ -319,14 +328,10 @@ namespace EpinelPS.Database
 
         public void SetQuest(int tid, bool recievedReward)
         {
-            if (MainQuestData.ContainsKey(tid))
+            if (!MainQuestData.TryAdd(tid, recievedReward))
             {
                 MainQuestData[tid] = recievedReward;
                 return;
-            }
-            else
-            {
-                MainQuestData.Add(tid, recievedReward);
             }
         }
 

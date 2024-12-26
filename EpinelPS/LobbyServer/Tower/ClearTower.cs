@@ -42,6 +42,27 @@ namespace EpinelPS.LobbyServer.Tower
                 user.TowerProgress[TowerType] = record.floor;
             }
 
+            if (record.type == "TETRA")
+            {
+                user.AddTrigger(TriggerType.TowerTetraClear, 1);
+            }
+            else if (record.type == "ELYSION")
+            {
+                user.AddTrigger(TriggerType.TowerElysionClear, 1);
+            }
+            else if (record.type == "MISSILIS")
+            {
+                user.AddTrigger(TriggerType.TowerMissilisClear, 1);
+            }
+            else if (record.type == "PILGRIM")
+            {
+                user.AddTrigger(TriggerType.TowerOverspecClear, 1);
+            }
+            else if (record.type == "ALL")
+            {
+                user.AddTrigger(TriggerType.TowerBasicClear, 1);
+            }
+
             var reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 

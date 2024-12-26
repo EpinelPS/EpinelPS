@@ -64,7 +64,7 @@ namespace EpinelPS.Utils
 
             foreach (var item in rewardData.rewards)
             {
-                if (item.reward_id != 0)
+                if (item.reward_id != 0 || !string.IsNullOrEmpty(item.reward_type))
                 {
                     if (string.IsNullOrEmpty(item.reward_type) || string.IsNullOrWhiteSpace(item.reward_type)) { }
                     else if (item.reward_type == "Currency")
@@ -166,6 +166,15 @@ namespace EpinelPS.Utils
                             ret.JukeboxBgm.Add(item.reward_id);
                             user.JukeboxBgm.Add(item.reward_id);
                         }
+                    }
+                    else if (item.reward_type == "InfraCoreExp")
+                    {
+                        ret.InfraCoreExp = new NetIncreaseExpData()
+                        {
+                            BeforeLv = user.InfraCoreLvl,
+                            BeforeExp = user.InfraCoreExp,
+                            // TODO
+                        };
                     }
                     else
                     {

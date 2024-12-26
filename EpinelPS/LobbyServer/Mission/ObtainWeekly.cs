@@ -4,15 +4,15 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Mission
 {
-    [PacketPath("/mission/obtain/daily")]
-    public class ObtainDaily : LobbyMsgHandler
+    [PacketPath("/mission/obtain/weekly")]
+    public class ObtainWeekly : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainDailyMissionReward>();
+            var req = await ReadData<ReqObtainWeeklyMissionReward>();
             var user = GetUser();
 
-            var response = new ResObtainDailyMissionReward();
+            var response = new ResObtainWeeklyMissionReward();
 
             List<NetRewardData> rewards = new();
 
@@ -20,11 +20,11 @@ namespace EpinelPS.LobbyServer.Mission
 
             foreach (var item in req.TidList)
             {
-                if (user.ResetableData.CompletedDailyMissions.Contains(item)) continue;
+                if (user.WeeklyResetableData.CompletedWeeklyMissions.Contains(item)) continue;
 
                 if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-                user.ResetableData.CompletedDailyMissions.Add(item);
+                user.WeeklyResetableData.CompletedWeeklyMissions.Add(item);
 
                 if (key.reward_id != 0)
                 {
@@ -44,15 +44,15 @@ namespace EpinelPS.LobbyServer.Mission
                 }
             }
 
-            user.AddTrigger(TriggerType.PointRewardDaily, total_points);
-            user.ResetableData.DailyMissionPoints += total_points;
+            user.AddTrigger(TriggerType.PointRewardWeekly, total_points);
+            user.WeeklyResetableData.WeeklyMissionPoints += total_points;
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
             response.EventBonusReward = new() { PassPoint = new() };
             response.Reward.PassPoint = new();
 
             JsonDb.Save();
-
+            
             await WriteDataAsync(response);
         }
     }

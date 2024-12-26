@@ -81,6 +81,11 @@ namespace EpinelPS.LobbyServer.Character
                         }
                     }
 
+                    if (newCharacter.grade_core_id == 103 || newCharacter.grade_core_id == 11 || newCharacter.grade_core_id == 201)
+                    {
+                        user.AddTrigger(TriggerType.CharacterGradeMax, 1);
+                    }
+
                     JsonDb.Save();
                 }
             }
