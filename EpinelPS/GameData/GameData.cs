@@ -3,6 +3,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Reflection;
 using System.Security.Cryptography;
 
 namespace EpinelPS.StaticInfo
@@ -25,12 +26,14 @@ namespace EpinelPS.StaticInfo
 
         private ZipFile MainZip;
         private MemoryStream ZipStream;
-        private Dictionary<int, MainQuestCompletionRecord> questDataRecords;
+
+
+        private Dictionary<int, MainQuestCompletionRecord> questDataRecords = [];
         private Dictionary<int, CampaignStageRecord> stageDataRecords;
         private Dictionary<int, RewardTableRecord> rewardDataRecords;
-        private JArray userExpDataRecords;
+        private Dictionary<int, UserExpRecord> userExpDataRecords;
         private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
-        private JArray characterCostumeTable;
+        private Dictionary<int, CharacterCostumeRecord> characterCostumeTable;
         public Dictionary<int, CharacterRecord> characterTable;
         public Dictionary<int, ClearedTutorialData> tutorialTable;
         public Dictionary<int, ItemEquipRecord> itemEquipTable;
@@ -38,9 +41,9 @@ namespace EpinelPS.StaticInfo
         public Dictionary<int, ItemEquipExpRecord> itemEquipExpTable;
         public Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable;
         private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
-        private Dictionary<int, CharacterLevelData> LevelData = new Dictionary<int, CharacterLevelData>();  // Fixed initialization
+        private Dictionary<int, CharacterLevelData> LevelData = [];
         private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
-        public Dictionary<int, int> SidestoryRewardTable = new Dictionary<int, int>();  // Fixed initialization
+        public Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
         public Dictionary<string, int> PositionReward = new Dictionary<string, int>();  // Fixed initialization
         public Dictionary<int, FieldItemRecord> FieldItems = new Dictionary<int, FieldItemRecord>();  // Fixed initialization
         public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = new Dictionary<int, OutpostBattleTableRecord>();  // Fixed initialization
@@ -280,6 +283,17 @@ namespace EpinelPS.StaticInfo
         {
             using var progress = new ProgressBar();
 
+            var fieldsWhereGameData = GetType().GetProperties().Where(x => x.GetCustomAttribute<GameDataFileAttribute>() != null);
+            totalFiles = fieldsWhereGameData.Count();
+
+            foreach (var attribs in fieldsWhereGameData)
+            {
+                var attrib = attribs.GetCustomAttribute<GameDataFileAttribute>();
+
+
+            }
+
+
             var questDataRecords = await LoadZip<MainQuestCompletionTable>("MainQuestTable.json", progress);
             foreach (var obj in questDataRecords.records)
             {
@@ -304,8 +318,17 @@ namespace EpinelPS.StaticInfo
                 this.chapterCampaignData.Add(obj.chapter, obj);
             }
 
-            userExpDataRecords = await LoadZip("UserExpTable.json", progress);
-            characterCostumeTable = await LoadZip("CharacterCostumeTable.json", progress);
+            var userExpDataRecords = await LoadZip<UserExpTable>("UserExpTable.json", progress);
+            foreach (var obj in userExpDataRecords.records)
+            {
+                this.userExpDataRecords.Add(obj.level, obj);
+            }
+
+            var characterCostumeTable = await LoadZip<CharacterCostumeTable>("CharacterCostumeTable.json", progress);
+            foreach (var obj in characterCostumeTable.records)
+            {
+                this.characterCostumeTable.Add(obj.id, obj);
+            }
 
             var characterTable = await LoadZip<CharacterTable>("CharacterTable.json", progress);
             foreach (var obj in characterTable.records)
@@ -343,15 +366,10 @@ namespace EpinelPS.StaticInfo
                 this.ItemEquipGradeExpTable.Add(obj.id, obj);
             }
 
-            var characterLevelTable = await LoadZip("CharacterLevelTable.json", progress);
-
-            foreach (JToken item in characterLevelTable)
+            var characterLevelTable = await LoadZip<CharacterLevelTable>("CharacterLevelTable.json", progress);
+            foreach (var obj in characterLevelTable.records)
             {
-                var obj = item.ToObject<CharacterLevelData>();
-                if (obj != null)
-                    LevelData.Add(obj.level, obj);
-                else
-                    Console.WriteLine("failed to read character level table entry");
+                LevelData.Add(obj.level, obj);
             }
 
             var tacticLessonTable = await LoadZip<TacticAcademyLessonTable>("TacticAcademyFunctionTable.json", progress);
@@ -360,23 +378,11 @@ namespace EpinelPS.StaticInfo
                 TacticAcademyLessons.Add(obj.id, obj);
             }
 
-            var sideStoryTable = await LoadZip("SideStoryStageTable.json", progress);
-
-            foreach (JToken item in sideStoryTable)
+            var sidestoryTable = await LoadZip<SideStoryStageTable>("SideStoryStageTable.json", progress);
+            foreach (var obj in sidestoryTable.records)
             {
-                var idRaw = item["id"];
-                var rewardIdRaw = item["first_clear_reward"];
-
-                if (idRaw == null) throw new InvalidDataException();
-                if (rewardIdRaw != null)
-                {
-                    var id2 = idRaw.ToObject<int>();
-                    var reward = rewardIdRaw.ToObject<int>();
-
-                    SidestoryRewardTable.Add(id2, reward);
-                }
+                SidestoryRewardTable.Add(obj.id, obj);
             }
-
 
             foreach (ZipEntry item in MainZip)
             {
@@ -482,9 +488,18 @@ namespace EpinelPS.StaticInfo
             {
                 albumResourceRecords.Add(obj.id, obj);  // Now refers to the class-level field
             }
-            // Load Jukebox data
-            await LoadJukeboxListData(progress);
-            await LoadJukeboxThemeData(progress);
+
+            var jukeboxListData = await LoadZip<JukeboxListTable>("JukeboxListTable.json", progress);
+            foreach (var obj in jukeboxListData.records)
+            {
+                jukeboxListDataRecords.Add(obj.id, obj);  // Now refers to the class-level field
+            }
+
+            var jukeboxThemeData = await LoadZip<JukeboxThemeTable>("JukeboxThemeTable.json", progress);
+            foreach (var obj in jukeboxThemeData.records)
+            {
+                jukeboxThemeDataRecords.Add(obj.id, obj);  // Now refers to the class-level field
+            }
 
             var characterStatTable = await LoadZip<CharacterStatTable>("CharacterStatTable.json", progress);
             foreach (var obj in characterStatTable.records)
@@ -517,35 +532,9 @@ namespace EpinelPS.StaticInfo
             }
         }
 
-        public async Task LoadJukeboxListData(ProgressBar bar)
-        {
-            var jukeboxListData = await LoadZip("JukeboxListTable.json", bar);
-            foreach (JObject obj in jukeboxListData)
-            {
-                var record = obj.ToObject<JukeboxListRecord>();
-                if (record != null)
-                {
-                    jukeboxListDataRecords.Add(record.id, record);
-                }
-            }
-        }
-
         public Dictionary<int, JukeboxListRecord> GetJukeboxListDataRecords()
         {
             return jukeboxListDataRecords;
-        }
-
-        public async Task LoadJukeboxThemeData(ProgressBar bar)
-        {
-            var jukeboxThemeData = await LoadZip("JukeboxThemeTable.json", bar);
-            foreach (JObject obj in jukeboxThemeData)
-            {
-                var record = obj.ToObject<JukeboxThemeRecord>();
-                if (record != null)
-                {
-                    jukeboxThemeDataRecords.Add(record.id, record);
-                }
-            }
         }
 
         public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)
@@ -582,20 +571,14 @@ namespace EpinelPS.StaticInfo
         {
             int prevLevel = 0;
             int prevValue = 0;
-            for (int i = 0; i < userExpDataRecords.Count; i++)
+            for (int i = 1; i < userExpDataRecords.Count + 1; i++)
             {
                 var item = userExpDataRecords[i];
 
-                var level = item["level"] ?? throw new Exception("expected level field in user exp table data");
-                int levelValue = level.ToObject<int>();
-
-                var exp = item["exp"] ?? throw new Exception("expected exp field in user exp table data");
-                int expValue = exp.ToObject<int>();
-
                 if (prevValue < targetExp)
                 {
-                    prevLevel = levelValue;
-                    prevValue = expValue;
+                    prevLevel = item.level;
+                    prevValue = item.exp;
                 }
                 else
                 {
@@ -606,21 +589,13 @@ namespace EpinelPS.StaticInfo
         }
         public int GetUserMinXpForLevel(int targetLevel)
         {
-            for (int i = 0; i < userExpDataRecords.Count; i++)
+            for (int i = 1; i < userExpDataRecords.Count + 1; i++)
             {
                 var item = userExpDataRecords[i];
 
-                var level = item["level"];
-                if (level == null) throw new Exception("expected level field in user exp table data");
-
-                int levelValue = level.ToObject<int>();
-                if (targetLevel == levelValue)
+                if (targetLevel == item.level)
                 {
-                    var exp = item["exp"];
-                    if (exp == null) throw new Exception("expected exp field in user exp table data");
-
-                    int expValue = exp.ToObject<int>();
-                    return expValue;
+                    return item.exp;
                 }
             }
             return -1;
@@ -644,13 +619,9 @@ namespace EpinelPS.StaticInfo
         }
         public IEnumerable<int> GetAllCostumes()
         {
-            foreach (JObject item in characterCostumeTable)
+            foreach (var item in characterCostumeTable)
             {
-                var id = item["id"];
-                if (id == null) throw new Exception("expected id field in reward data");
-
-                int value = id.ToObject<int>();
-                yield return value;
+                yield return item.Value.id;
             }
         }
 
@@ -688,19 +659,6 @@ namespace EpinelPS.StaticInfo
         public TacticAcademyLessonRecord GetTacticAcademyLesson(int lessonId)
         {
             return TacticAcademyLessons[lessonId];
-        }
-
-        // Methods to access Jukebox data
-        public JukeboxListRecord? GetJukeboxListRecordById(int id)
-        {
-            jukeboxListDataRecords.TryGetValue(id, out var record);
-            return record;
-        }
-
-        public JukeboxThemeRecord? GetJukeboxThemeRecordById(int id)
-        {
-            jukeboxThemeDataRecords.TryGetValue(id, out var record);
-            return record;
         }
 
         public IEnumerable<string> GetScenarioStageIdsForChapter(int chapterNumber)
@@ -760,8 +718,6 @@ namespace EpinelPS.StaticInfo
 
             return false;
         }
-
-
     }
 
     public enum TriggerType

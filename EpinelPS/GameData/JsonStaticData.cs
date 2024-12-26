@@ -94,6 +94,10 @@
         /// </summary>
         public int character_exp2 = 0;
     }
+    public class CharacterLevelTable
+    {
+        public List<CharacterLevelData> records = [];
+    }
 
     public class TacticAcademyLessonReward
     {
@@ -622,5 +626,36 @@
     public class ItemEquipGradeExpTable
     {
         public List<ItemEquipGradeExpRecord> records = [];
+    }
+
+    public class UserExpRecord
+    {
+        public int level;
+        public int exp;
+        public int reward_id;
+    }
+    public class UserExpTable
+    {
+        public List<UserExpRecord> records = [];
+    }
+
+    public class CharacterCostumeRecord
+    {
+        public int id;
+    }
+    public class CharacterCostumeTable
+    {
+        public List<CharacterCostumeRecord> records = [];
+    }
+
+    public class SideStoryStageRecord
+    {
+        public int id;
+        public int first_clear_reward;
+    }
+
+    public class SideStoryStageTable
+    {
+        public List<SideStoryStageRecord> records = [];
     }
 }

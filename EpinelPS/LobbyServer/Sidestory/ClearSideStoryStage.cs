@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Sidestory
 
                 if (GameData.Instance.SidestoryRewardTable.ContainsKey(req.SideStoryStageId))
                 {
-                    var rewardData = GameData.Instance.GetRewardTableEntry(GameData.Instance.SidestoryRewardTable[req.SideStoryStageId]);
+                    var rewardData = GameData.Instance.GetRewardTableEntry(GameData.Instance.SidestoryRewardTable[req.SideStoryStageId].first_clear_reward);
 
                     if (rewardData != null)
                         response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);
