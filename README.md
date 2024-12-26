@@ -46,18 +46,17 @@ To skip stages, a basic command line interface is implemented.
  - [ ] Admin Panel
  - [ ] Simulation Room
  - [X] Skill level up
- - [ ] Outpost jukebox
+ - [X] Outpost jukebox
  - [ ] Event system
  - [ ] Download all game assets ahead of time
  - [ ] Basic friend list support
  - [ ] Arcade
- - [ ] Daily, weekly missions etc
+ - [X] Daily, weekly missions etc
  - [ ] Lost sector
  - [ ] Limit temporary participation
  
 ## What is not working:
  - Events
- - Mission reward, daily/weekly missions
  - Side quests
- - Lots of things in the outpost
+ - Outpost buildings, recycle room, infrastructure core
  - And a lot more...
