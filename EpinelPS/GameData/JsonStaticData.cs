@@ -176,17 +176,17 @@
     public class ItemEquipRecord
     {
         public int id;
-        public string name_localkey;
-        public string description_localkey;
-        public string resource_id;
-        public string item_type;
-        public string item_sub_type;
-        public string @class;
-        public string item_rare;
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public string resource_id = "";
+        public string item_type = "";
+        public string item_sub_type = "";
+        public string @class = "";
+        public string item_rare = "";
         public int grade_core_id;
         public int grow_grade;
-        public List<Stat> stat;
-        public List<OptionSlot> option_slot;
+        public List<Stat> stat = null!;
+        public List<OptionSlot> option_slot = null!;
         public int option_cost;
         public int option_change_cost;
         public int option_lock_cost;
@@ -606,7 +606,7 @@
         public int id;
         public int level;
         public int exp;
-        public string item_rare;
+        public string item_rare = "";
         public int grade_core_id;
     }
 
@@ -619,7 +619,7 @@
     {
         public int id;
         public int exp;
-        public string item_rare;
+        public string item_rare = "";
         public int grade_core_id;
     }
 

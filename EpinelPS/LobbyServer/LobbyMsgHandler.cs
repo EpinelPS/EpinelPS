@@ -29,7 +29,7 @@ namespace EpinelPS.LobbyServer
         public async Task HandleAsync(HttpContext ctx)
         {
             this.ctx = ctx;
-            if (ctx.Request.Headers.Keys.Contains("Authorization"))
+            if (ctx.Request.Headers.ContainsKey("Authorization"))
             {
                 var token = ctx.Request.Headers.Authorization.FirstOrDefault();
                 if (token != null)
@@ -46,7 +46,7 @@ namespace EpinelPS.LobbyServer
 
             var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                             .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true});
+                             .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
             UserId = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userid"]).GetUInt64();
 
@@ -57,10 +57,11 @@ namespace EpinelPS.LobbyServer
         protected abstract Task HandleAsync();
 
 
-        private void PrintMessage<T>(T data) where T : IMessage, new()
+        private static void PrintMessage<T>(T data) where T : IMessage, new()
         {
-            var str = (string)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
-            Console.WriteLine(str);
+            var str = (string?)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
+            if (str != null)
+                Console.WriteLine(str);
         }
         protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
         {

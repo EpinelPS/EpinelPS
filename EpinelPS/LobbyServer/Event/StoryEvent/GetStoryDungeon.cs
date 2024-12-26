@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
 			var user = GetUser();
 
 
-            if (!user.EventInfo.TryGetValue(evid, out EventData eventData))
+            if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
             {
                 eventData = new();
             }

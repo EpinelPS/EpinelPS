@@ -1,7 +1,6 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
 using EpinelPS.StaticInfo;
-using EpinelPS.LobbyServer.Stage;
 
 namespace EpinelPS.LobbyServer.Tower
 {
@@ -23,11 +22,11 @@ namespace EpinelPS.LobbyServer.Tower
             await WriteDataAsync(response);
         }
 
-        public static ResClearTower CompleteTower(Database.User user, int TowerId)
+        public static ResClearTower CompleteTower(User user, int TowerId)
         {
             var response = new ResClearTower();
 
-            if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord record)) throw new Exception("unable to find tower with id " + TowerId);
+            if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with id " + TowerId);
 
             // Parse TowerId to get TowerType and FloorNumber
             int TowerType = (TowerId / 10000) - 1; // For some weird reason the Type here doesn't match up with NetTowerData, thus the -1

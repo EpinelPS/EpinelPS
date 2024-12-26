@@ -26,12 +26,10 @@ namespace EpinelPS.Utils
                     Console.WriteLine("Unknown user level value for xp " + newXp);
                 }
 
-                bool leveled = false;
                 int newGems = 0;
 
                 while (newXp >= newLevelExp)
                 {
-                    leveled = true;
                     newLevel++;
                     newGems += 30;
                     newXp -= newLevelExp;

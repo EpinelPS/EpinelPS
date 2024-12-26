@@ -150,7 +150,7 @@ namespace EpinelPS.Database
         public string Location = "";
         public long Seq;
         public BadgeContents BadgeContent;
-        public string BadgeGuid;
+        public string BadgeGuid = "";
 
         public Badge() {}
         public Badge(NetBadge badge)
@@ -698,7 +698,7 @@ namespace EpinelPS.Database
             }
             else
             {
-                throw new Exception($"User with ID {selectedUser.ID} not found");
+                throw new Exception($"User not found");
             }
         }
 

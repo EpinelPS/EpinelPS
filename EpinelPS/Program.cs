@@ -15,7 +15,7 @@ namespace EpinelPS
 {
     internal class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
@@ -195,6 +195,7 @@ namespace EpinelPS
                 Console.Write(prompt);
 
                 var input = Console.ReadLine();
+                if (input == null) break;
                 var args = input.Split(' ');
                 if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
                 {

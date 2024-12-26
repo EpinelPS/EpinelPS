@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Character
             var targetCharacter = user.GetCharacterBySerialNumber(req.Csn);
 
             // Find the element with the current csn from the request
-            var currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid);
+            var currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid) ?? throw new NullReferenceException();
 
             if (currentCharacter != null && targetCharacter != null)
             {
@@ -55,7 +55,7 @@ namespace EpinelPS.LobbyServer.Character
                     };
 
                     // remove spare body item
-                    var bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn);
+                    var bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
                     user.RemoveItemBySerialNumber(req.Isn, 1);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
 

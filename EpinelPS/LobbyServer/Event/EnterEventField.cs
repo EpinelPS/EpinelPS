@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Event
 
             // Retrieve collected objects
 
-            if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew field))
+            if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
             {
                 field = new FieldInfoNew();
                 user.FieldInfoNew.Add(req.MapId, field);
@@ -35,7 +35,7 @@ namespace EpinelPS.LobbyServer.Event
 
 
             // Retrieve camera data
-            if (user.MapJson.TryGetValue(req.MapId, out string mapJson))
+            if (user.MapJson.TryGetValue(req.MapId, out string? mapJson))
             {
                 response.Json = mapJson;
             }

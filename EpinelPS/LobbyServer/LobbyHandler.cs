@@ -40,7 +40,10 @@ namespace EpinelPS.LobbyServer
         public static async Task DispatchSingle(HttpContext ctx)
         {
             LobbyMsgHandler? handler = null;
-            string path = ctx.Request.Path.Value.Replace("/v1", "");
+
+            string fullPath = ctx.Request.Path.Value ?? throw new Exception();
+            string path = fullPath.Replace("/v1", "");
+            
             foreach (var item in Handlers)
             {
                 if (path == item.Key)

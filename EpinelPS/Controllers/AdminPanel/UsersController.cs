@@ -8,15 +8,10 @@ using System.Text;
 namespace EpinelPS.Controllers
 {
     [Route("admin/Users")]
-    public class UsersController : Controller
+    public class UsersController(ILogger<AdminController> logger) : Controller
     {
-        private readonly ILogger<AdminController> _logger;
-        private static MD5 sha = MD5.Create();
-
-        public UsersController(ILogger<AdminController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<AdminController> _logger = logger;
+        private static readonly MD5 sha = MD5.Create();
 
         public IActionResult Index()
         {
@@ -29,11 +24,6 @@ namespace EpinelPS.Controllers
         public IActionResult Modify(ulong id)
         {
             if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
-
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
             if (user == null)
@@ -48,11 +38,6 @@ namespace EpinelPS.Controllers
         public IActionResult SetPassword(ulong id)
         {
             if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
-
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
             if (user == null)
@@ -71,7 +56,7 @@ namespace EpinelPS.Controllers
         [Route("SetPassword")]
         [HttpPost, ActionName("SetPassword")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetPasswordConfirm(ulong? id)
+        public IActionResult SetPasswordConfirm(ulong? id)
         {
             if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 

@@ -7,7 +7,7 @@ namespace EpinelPS.LobbyServer.Inventory
     [PacketPath("/inventory/increaseexpequipment")]
     public class IncreaseEquipmentExp : LobbyMsgHandler
     {
-        readonly Dictionary<int, int> boostExpTable = new Dictionary<int, int>
+        readonly Dictionary<int, int> boostExpTable = new()
         {
             { 7010001, 100 },
             { 7010002, 1000 },
@@ -19,13 +19,13 @@ namespace EpinelPS.LobbyServer.Inventory
             var req = await ReadData<ReqIncreaseExpEquip>();
             var user = GetUser();
             var response = new ResIncreaseExpEquip();
-            var destItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+            var destItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new NullReferenceException();;
             int goldCost = 0;
             int modules = 0;
 
             foreach (var srcItem in req.ItemList)
             {
-                var item = user.Items.FirstOrDefault(x => x.Isn == srcItem.Isn);
+                var item = user.Items.FirstOrDefault(x => x.Isn == srcItem.Isn) ?? throw new NullReferenceException();;
                 item.Count -= srcItem.Count;
 
                 (int addedExp, int addedModules) = AddExp(srcItem, destItem);
@@ -67,20 +67,19 @@ namespace EpinelPS.LobbyServer.Inventory
 
         (int exp, int modules) AddExp(NetItemData srcItem, ItemData destItem)
         {
-            int[] maxLevel = { 0, 0, 3, 3, 4, 4, 5, 5, 5, 5 };
+            int[] maxLevel = [0, 0, 3, 3, 4, 4, 5, 5, 5, 5];
             var srcEquipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == srcItem.Tid);
-            var destEquipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType);
-            int[] expNextTable = GameData.Instance.itemEquipExpTable.Values
+            var destEquipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType) ?? throw new NullReferenceException();;
+            int[] expNextTable = [.. GameData.Instance.itemEquipExpTable.Values
                     .Where(x => x.item_rare == destEquipRecord.item_rare)
                     .Select(x => x.exp)
-                    .OrderBy(x => x) // order from lowest to highest
-                    .ToArray();
+                    .OrderBy(x => x)];
             int exp = 0;
             int modules = 0;
 
             if (srcEquipRecord != null)
             {
-                var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == srcEquipRecord.grade_core_id);
+                var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == srcEquipRecord.grade_core_id) ?? throw new NullReferenceException();;
 
                 exp = srcItem.Count * levelRecord.exp;
 
@@ -118,10 +117,10 @@ namespace EpinelPS.LobbyServer.Inventory
             return (exp, modules);
         }
 
-        int GetSourceExp(NetItemData srcItem)
+        private int GetSourceExp(NetItemData srcItem)
         {
-            var item = GetUser().Items.FirstOrDefault(x => x.Isn == srcItem.Isn);
-            var equipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == item.ItemType);
+            var item = GetUser().Items.FirstOrDefault(x => x.Isn == srcItem.Isn) ?? throw new NullReferenceException();
+            var equipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == item.ItemType) ?? throw new NullReferenceException();
             var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == equipRecord.grade_core_id);
             int[] expNextTable = GameData.Instance.itemEquipExpTable.Values
                 .Where(x => x.item_rare == equipRecord.item_rare)
@@ -138,10 +137,10 @@ namespace EpinelPS.LobbyServer.Inventory
             return exp;
         }
 
-        int CalcTotalExp(ItemData destItem)
+        private static int CalcTotalExp(ItemData destItem)
         {
             int exp = 0;
-            var equipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType);
+            var equipRecord = GameData.Instance.itemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType) ?? throw new NullReferenceException();
             var levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == equipRecord.grade_core_id);
             int[] expNextTable = GameData.Instance.itemEquipExpTable.Values
                 .Where(x => x.item_rare == equipRecord.item_rare)

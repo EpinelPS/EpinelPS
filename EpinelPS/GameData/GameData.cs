@@ -28,43 +28,43 @@ namespace EpinelPS.StaticInfo
         private MemoryStream ZipStream;
 
 
-        private Dictionary<int, MainQuestCompletionRecord> questDataRecords = [];
-        private Dictionary<int, CampaignStageRecord> stageDataRecords;
-        private Dictionary<int, RewardTableRecord> rewardDataRecords;
-        private Dictionary<int, UserExpRecord> userExpDataRecords;
-        private Dictionary<int, CampaignChapterRecord> chapterCampaignData;
-        private Dictionary<int, CharacterCostumeRecord> characterCostumeTable;
-        public Dictionary<int, CharacterRecord> characterTable;
-        public Dictionary<int, ClearedTutorialData> tutorialTable;
-        public Dictionary<int, ItemEquipRecord> itemEquipTable;
-        public Dictionary<int, ItemMaterialRecord> itemMaterialTable;
-        public Dictionary<int, ItemEquipExpRecord> itemEquipExpTable;
-        public Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable;
-        private Dictionary<string, JArray> FieldMapData = new Dictionary<string, JArray>();  // Fixed initialization
-        private Dictionary<int, CharacterLevelData> LevelData = [];
-        private Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = new Dictionary<int, TacticAcademyLessonRecord>();  // Fixed initialization
-        public Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
-        public Dictionary<string, int> PositionReward = new Dictionary<string, int>();  // Fixed initialization
-        public Dictionary<int, FieldItemRecord> FieldItems = new Dictionary<int, FieldItemRecord>();  // Fixed initialization
-        public Dictionary<int, OutpostBattleTableRecord> OutpostBattle = new Dictionary<int, OutpostBattleTableRecord>();  // Fixed initialization
-        public Dictionary<int, JukeboxListRecord> jukeboxListDataRecords;
-        private Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords;
-        public Dictionary<int, GachaType> gachaTypes = new Dictionary<int, GachaType>(); // Fixed initialization
-        public Dictionary<int, EventManager> eventManagers = new Dictionary<int, EventManager>();
-        public Dictionary<int, LiveWallpaperRecord> lwptablemgrs = new Dictionary<int, LiveWallpaperRecord>(); // Fixed initialization
-        public Dictionary<int, AlbumResourceRecord> albumResourceRecords = new Dictionary<int, AlbumResourceRecord>();
-        public Dictionary<int, UserFrameTableRecord> userFrameTable = new Dictionary<int, UserFrameTableRecord>();
-        public Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = new Dictionary<int, ArchiveRecordManagerRecord>();
-        public Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = new Dictionary<int, ArchiveEventStoryRecord>();
-        public Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = new Dictionary<int, ArchiveEventQuestRecord>();
-        public Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = new Dictionary<int, ArchiveEventDungeonStageRecord>();
-        public Dictionary<int, UserTitleRecord> userTitleRecords = new Dictionary<int, UserTitleRecord>();
-        public Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
-        public Dictionary<int, CharacterStatRecord> characterStatTable = [];
-        public Dictionary<int, SkillInfoRecord> skillInfoTable = [];
-        public Dictionary<int, CostRecord> costTable = [];
-        public Dictionary<string, MidasProductRecord> mediasProductTable = [];
-        public Dictionary<int, TowerRecord> towerTable = [];
+        private readonly Dictionary<int, MainQuestCompletionRecord> questDataRecords = [];
+        private readonly Dictionary<int, CampaignStageRecord> stageDataRecords = [];
+        private readonly Dictionary<int, RewardTableRecord> rewardDataRecords = [];
+        private readonly Dictionary<int, UserExpRecord> userExpDataRecords = [];
+        private readonly Dictionary<int, CampaignChapterRecord> chapterCampaignData = [];
+        private readonly Dictionary<int, CharacterCostumeRecord> characterCostumeTable = [];
+        public readonly Dictionary<int, CharacterRecord> characterTable = [];
+        public readonly Dictionary<int, ClearedTutorialData> tutorialTable = [];
+        public readonly Dictionary<int, ItemEquipRecord> itemEquipTable = [];
+        public readonly Dictionary<int, ItemMaterialRecord> itemMaterialTable = [];
+        public readonly Dictionary<int, ItemEquipExpRecord> itemEquipExpTable = [];
+        public readonly Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable = [];
+        private readonly Dictionary<string, JArray> FieldMapData = [];
+        private readonly Dictionary<int, CharacterLevelData> LevelData = [];
+        private readonly Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
+        public readonly Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
+        public readonly Dictionary<string, int> PositionReward = [];
+        public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
+        public readonly Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
+        public readonly Dictionary<int, JukeboxListRecord> jukeboxListDataRecords = [];
+        private readonly Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords = [];
+        public readonly Dictionary<int, GachaType> gachaTypes = [];
+        public readonly Dictionary<int, EventManager> eventManagers = [];
+        public readonly Dictionary<int, LiveWallpaperRecord> lwptablemgrs = [];
+        public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
+        public readonly Dictionary<int, UserFrameTableRecord> userFrameTable = [];
+        public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
+        public readonly Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = [];
+        public readonly Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = [];
+        public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
+        public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
+        public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
+        public readonly Dictionary<int, CharacterStatRecord> characterStatTable = [];
+        public readonly Dictionary<int, SkillInfoRecord> skillInfoTable = [];
+        public readonly Dictionary<int, CostRecord> costTable = [];
+        public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
+        public readonly Dictionary<int, TowerRecord> towerTable = [];
 
 
 
@@ -91,26 +91,6 @@ namespace EpinelPS.StaticInfo
 
             // disable warnings
             ZipStream = new();
-            questDataRecords = [];
-            stageDataRecords = [];
-            rewardDataRecords = [];
-            userExpDataRecords = [];
-            chapterCampaignData = [];
-            characterCostumeTable = [];
-            characterTable = [];
-            tutorialTable = [];
-            itemEquipTable = [];
-            itemMaterialTable = [];
-            itemEquipExpTable = [];
-            ItemEquipGradeExpTable = [];
-            characterStatTable = [];
-            skillInfoTable = [];
-            costTable = [];
-
-            // Initialize Jukebox data dictionaries
-            jukeboxListDataRecords = [];
-            jukeboxThemeDataRecords = [];
-            archiveMessengerConditionRecords = [];
 
             var rawBytes = File.ReadAllBytes(filePath);
             Sha256Hash = SHA256.HashData(rawBytes);
@@ -276,23 +256,12 @@ namespace EpinelPS.StaticInfo
             return records;
         }
 
-        int totalFiles = 78;
+        int totalFiles = 90;
         int currentFile = 0;
 
         public async Task Parse()
         {
             using var progress = new ProgressBar();
-
-            var fieldsWhereGameData = GetType().GetProperties().Where(x => x.GetCustomAttribute<GameDataFileAttribute>() != null);
-            totalFiles = fieldsWhereGameData.Count();
-
-            foreach (var attribs in fieldsWhereGameData)
-            {
-                var attrib = attribs.GetCustomAttribute<GameDataFileAttribute>();
-
-
-            }
-
 
             var questDataRecords = await LoadZip<MainQuestCompletionTable>("MainQuestTable.json", progress);
             foreach (var obj in questDataRecords.records)
@@ -393,6 +362,7 @@ namespace EpinelPS.StaticInfo
                     var items = x[0]["ItemSpawner"];
 
                     if (items != null)
+                    {
                         foreach (var item2 in items)
                         {
                             var posId = item2["positionId"] ?? throw new Exception("positionId cannot be null");
@@ -403,6 +373,7 @@ namespace EpinelPS.StaticInfo
 
                             PositionReward.TryAdd(id, reward);
                         }
+                    }
                 }
             }
             var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
@@ -530,11 +501,6 @@ namespace EpinelPS.StaticInfo
             {
                 this.towerTable.Add(obj.id, obj);
             }
-        }
-
-        public Dictionary<int, JukeboxListRecord> GetJukeboxListDataRecords()
-        {
-            return jukeboxListDataRecords;
         }
 
         public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)
