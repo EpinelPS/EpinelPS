@@ -673,4 +673,20 @@
     {
         public List<TriggerRecord> records = [];
     }
+    public class InfracoreFunction
+    {
+        public int function;
+    }
+    public class InfracoreRecord
+    {
+        public int id;
+        public int grade;
+        public int reard_id;
+        public int infra_core_exp;
+        public List<InfracoreFunction> function_list = [];
+    }
+    public class InfracoreTable
+    {
+        public List<InfracoreRecord> records = [];
+    }
 }

@@ -66,6 +66,7 @@ namespace EpinelPS.StaticInfo
         public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
         public readonly Dictionary<int, TowerRecord> towerTable = [];
         public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
+        public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
 
 
         public byte[] Sha256Hash;
@@ -506,6 +507,12 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in triggerTable.records)
             {
                 this.TriggerTable.Add(obj.id, obj);
+            }
+
+            var infracoreTable = await LoadZip<InfracoreTable>("InfraCoreGradeTable.json", progress);
+            foreach (var obj in infracoreTable.records)
+            {
+                this.InfracoreTable.Add(obj.id, obj);
             }
         }
 

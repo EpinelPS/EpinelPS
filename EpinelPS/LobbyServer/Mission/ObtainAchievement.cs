@@ -1,3 +1,4 @@
+using EpinelPS.Database;
 using EpinelPS.StaticInfo;
 using EpinelPS.Utils;
 
@@ -29,6 +30,8 @@ namespace EpinelPS.LobbyServer.Mission
             }
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
+
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }
