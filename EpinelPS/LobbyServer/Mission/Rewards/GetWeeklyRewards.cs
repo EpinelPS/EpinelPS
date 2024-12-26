@@ -7,7 +7,7 @@ namespace EpinelPS.LobbyServer.Mission.Rewards
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqGetWeeklyRewardedData>();
+            var req = await ReadData<ReqGetWeeklyRewardedData>();
 
             // TODO: implement
             var response = new ResGetWeeklyRewardedData();

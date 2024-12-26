@@ -147,9 +147,11 @@ namespace EpinelPS.LobbyServer.Stage
 
         private static void DoQuestSpecificUserOperations(Database.User user, int clearedStageId)
         {
-            var quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
-            if (quest != null)
-                user.SetQuest(quest.id, false);
+            var quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId) ?? throw new Exception("cannot find quest from cleared stage id");
+            
+            user.SetQuest(quest.id, false);
+            user.AddTrigger(TriggerType.CampaignClear, 1, clearedStageId);
+            user.AddTrigger(TriggerType.MainQuestClear, 1, quest.id);
 
             // TODO: Is this the right place to add default characters?
             // Stage 1-4 BOSS

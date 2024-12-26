@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Trigger
 {
@@ -7,9 +8,39 @@ namespace EpinelPS.LobbyServer.Trigger
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqSyncTrigger>();
+            var req = await ReadData<ReqSyncTrigger>();
+            var user = GetUser();
+
+            // This request is responsible for fetching a log for
+            // daily, weekly, challenge mission completion.
+            // This endpoint also returns the entire "history" for the account when 
+            // Seq = 0, which the client does when it is started for the first time, or when 
+            // the "Clear Cache" option is invoked. 
+            // When Seq = 0, the server limits the responses to 2000 items,
+            // and HasRemainData is set to true.
+            // TODO: Is it necessary to store the entire account history each time a stage
+            // is cleared, why does the official server do this?
 
             var response = new ResSyncTrigger();
+            Console.WriteLine("needs " + req.Seq);
+
+            // Look for triggers past that amount
+            var newTriggers = user.Triggers.Where(x => x.Id > req.Seq).ToArray();
+
+            // Return all triggers
+            int triggerCount = 0;
+            foreach (var item in newTriggers)
+            {
+                triggerCount++;
+
+                response.Triggers.Add(item.ToNet());
+
+                if (triggerCount >= 2000)
+                {
+                    response.HasRemainData = true;
+                    break;
+                }
+            }
             await WriteDataAsync(response);
         }
     }

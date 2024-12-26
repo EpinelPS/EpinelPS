@@ -107,13 +107,13 @@ namespace EpinelPS.LobbyServer
             }
             else
             {
-                var bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
-
                 // return grpc IMessage from byte array with type T
                 T msg = new();
+                Console.WriteLine("Reading " + msg.GetType().Name);
+
+                var bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
                 msg.MergeFrom(bin.Contents);
 
-                Console.WriteLine("Reading " + msg.GetType().Name);
                 PrintMessage(msg);
                 Console.WriteLine();
 

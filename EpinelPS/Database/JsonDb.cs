@@ -172,6 +172,27 @@ namespace EpinelPS.Database
             };
         }
     }
+
+    public class Trigger
+    {
+        public TriggerType Type;
+        public long Id;
+        public long CreatedAt;
+        public int ConditionId;
+        public int Value;
+
+        public NetTrigger ToNet()
+        {
+            return new()
+            {
+                ConditionId = ConditionId,
+                CreatedAt = CreatedAt,
+                Seq = Id,
+                Trigger = (int)Type,
+                UserValue = Value
+            };
+        }
+    }
     public class User
     {
         // User info
@@ -249,10 +270,28 @@ namespace EpinelPS.Database
         public List<Badge> Badges = [];
 
         public List<NetUserAttractiveData> BondInfo = [];
+        public List<Trigger> Triggers = [];
+        public int LastTriggerId = 1;
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
         public MogMinigameInfo MogInfo = new();
+
+        public Trigger AddTrigger(TriggerType type, int value, int conditionId = 0)
+        {
+            Trigger t = new()
+            {
+                Id = LastTriggerId++,
+                Type = type,
+                ConditionId = conditionId,
+                CreatedAt = DateTime.Now.Ticks,
+                Value = value
+            };
+
+            Triggers.Add(t);
+
+            return t;
+        }
 
         public Badge AddBadge(BadgeContents type, string location)
         {

@@ -7,7 +7,7 @@ namespace EpinelPS.LobbyServer.Jukebox
     {
         protected override async Task HandleAsync()
         {
-            var req = ReadData<ReqRecordJukeboxPlayHistory>();
+            var req = await ReadData<ReqRecordJukeboxPlayHistory>();
 
             var response = new ResRecordJukeboxPlayHistory();
             await WriteDataAsync(response);
