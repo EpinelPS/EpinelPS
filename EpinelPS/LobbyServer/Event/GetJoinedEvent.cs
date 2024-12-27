@@ -63,54 +63,13 @@ namespace EpinelPS.LobbyServer.Event
                 },
                 JoinAt = 0
             });
-			// new guilotine banner
+
+			// ssr rapi
 			response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
-					Id = 70076,
-					EventSystemType = 6,
-					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-					EventEndDate = DateTime.Now.AddDays(20).Ticks,
-					EventDisableDate = DateTime.Now.AddDays(20).Ticks
-                },
-                JoinAt = 0
-            });	
-			// new maiden banner
-			response.EventWithJoinData.Add(new NetEventWithJoinData()
-            {
-                EventData = new NetEventData()
-                {
-                Id = 70073,
-                EventSystemType = 6,
-                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-                EventEndDate = DateTime.Now.AddDays(20).Ticks,
-                EventDisableDate = DateTime.Now.AddDays(20).Ticks
-                },
-                JoinAt = 0
-            });			
-			// repickup ludmila
-			response.EventWithJoinData.Add(new NetEventWithJoinData()
-            {
-                EventData = new NetEventData()
-                {
-                Id = 70074,
-                EventSystemType = 6,
-                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-                EventEndDate = DateTime.Now.AddDays(20).Ticks,
-                EventDisableDate = DateTime.Now.AddDays(20).Ticks
-                },
-                JoinAt = 0
-            });		
-			// repickup mica
-			response.EventWithJoinData.Add(new NetEventWithJoinData()
-            {
-                EventData = new NetEventData()
-                {
-                Id = 70075,
+                Id = 70077,
                 EventSystemType = 6,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
