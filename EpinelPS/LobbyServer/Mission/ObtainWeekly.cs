@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Mission
 
             var response = new ResObtainWeeklyMissionReward();
 
-            List<NetRewardData> rewards = new();
+            List<NetRewardData> rewards = [];
 
             int total_points = 0;
 
@@ -35,11 +35,6 @@ namespace EpinelPS.LobbyServer.Mission
                 else
                 {
                     // Point reward
-
-                    var reward = new NetRewardData();
-
-                    rewards.Add(reward);
-
                     total_points += key.point_value;
                 }
             }

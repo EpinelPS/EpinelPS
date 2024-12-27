@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Campaign
             Console.WriteLine("Map ID: " + req.MapId);
 
             var response = new ResGetCampaignFieldData();
-            response.Field = GetStage.CreateFieldInfo(user, GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId), req.MapId.Contains("hard") ? "Hard" : "Normal");
+            response.Field = GetStage.CreateFieldInfo(user, GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId), req.MapId.Contains("hard") ? "Hard" : "Normal", out bool bossEntered);
 
             // todo save this data
             response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };

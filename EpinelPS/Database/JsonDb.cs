@@ -24,6 +24,7 @@ namespace EpinelPS.Database
     {
         public List<int> CompletedStages = [];
         public List<NetFieldObject> CompletedObjects = [];
+        public bool BossEntered = false;
     }
 
     public class Character

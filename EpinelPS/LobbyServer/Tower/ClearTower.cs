@@ -44,23 +44,23 @@ namespace EpinelPS.LobbyServer.Tower
 
             if (record.type == "TETRA")
             {
-                user.AddTrigger(TriggerType.TowerTetraClear, 1);
+                user.AddTrigger(TriggerType.TowerTetraClear, TowerId);
             }
             else if (record.type == "ELYSION")
             {
-                user.AddTrigger(TriggerType.TowerElysionClear, 1);
+                user.AddTrigger(TriggerType.TowerElysionClear, TowerId);
             }
             else if (record.type == "MISSILIS")
             {
-                user.AddTrigger(TriggerType.TowerMissilisClear, 1);
+                user.AddTrigger(TriggerType.TowerMissilisClear, TowerId);
             }
             else if (record.type == "PILGRIM")
             {
-                user.AddTrigger(TriggerType.TowerOverspecClear, 1);
+                user.AddTrigger(TriggerType.TowerOverspecClear, TowerId);
             }
             else if (record.type == "ALL")
             {
-                user.AddTrigger(TriggerType.TowerBasicClear, 1);
+                user.AddTrigger(TriggerType.TowerBasicClear, TowerId);
             }
 
             var reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");

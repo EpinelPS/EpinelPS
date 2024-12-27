@@ -14,7 +14,9 @@ namespace EpinelPS.LobbyServer.Mission
 
             var response = new ResObtainAchievementReward();
 
-            List<NetRewardData> rewards = new();
+            List<NetRewardData> rewards = [];
+
+            int total_points = 0;
 
             foreach (var item in req.TidList)
             {
@@ -24,10 +26,15 @@ namespace EpinelPS.LobbyServer.Mission
 
                 var rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
 
-                rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
+                var reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
+                rewards.Add(reward);
 
                 user.CompletedAchievements.Add(item);
+
+                total_points++;
             }
+
+            user.AddTrigger(TriggerType.PointRewardAchievement, total_points);
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
 

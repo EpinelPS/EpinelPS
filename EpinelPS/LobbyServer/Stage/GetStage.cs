@@ -8,25 +8,25 @@ namespace EpinelPS.LobbyServer.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetStageData>();
+            ReqGetStageData req = await ReadData<ReqGetStageData>();
             var user = GetUser();
 
-            var response = new ResGetStageData();
-
-            response.Field = CreateFieldInfo(user, req.Chapter - 1, req.Mod == 0 ? "Normal" : "Hard");
-
-            response.HasChapterBossEntered = true;
-
-            response.SquadData = "";
+            ResGetStageData response = new()
+            {
+                Field = CreateFieldInfo(user, req.Chapter - 1, req.Mod == 0 ? "Normal" : "Hard", out bool bossEntered),
+                HasChapterBossEntered = bossEntered,
+                SquadData = ""
+            };
 
             await WriteDataAsync(response);
         }
 
-        public static NetFieldObjectData CreateFieldInfo(Database.User user, int chapter, string mod)
+        public static NetFieldObjectData CreateFieldInfo(Database.User user, int chapter, string mod, out bool BossEntered)
         {
             var f = new NetFieldObjectData();
             bool found = false;
             string key = chapter + "_" + mod;
+            BossEntered = false;
             foreach (var item in user.FieldInfoNew)
             {
                 if (item.Key == key)
@@ -40,6 +40,7 @@ namespace EpinelPS.LobbyServer.Stage
                     {
                         f.Objects.Add(obj);
                     }
+                    BossEntered = item.Value.BossEntered;
                     break;
                 }
             }
@@ -47,7 +48,7 @@ namespace EpinelPS.LobbyServer.Stage
             if (!found)
             {
                 user.FieldInfoNew.Add(key, new FieldInfoNew());
-                return CreateFieldInfo(user, chapter, mod);
+                return CreateFieldInfo(user, chapter, mod, out BossEntered);
             }
 
             return f;

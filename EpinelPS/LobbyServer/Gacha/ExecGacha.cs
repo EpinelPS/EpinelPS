@@ -206,14 +206,18 @@ namespace EpinelPS.LobbyServer.Gacha
 
                         if (characterData.original_rare == "SSR")
                         {
-                            user.AddTrigger(TriggerType.ObtainCharacterSSR, 1);
+                            user.AddTrigger(TriggerType.ObtainCharacterSSR, characterData.name_code);
+                        }
+                        else
+                        {
+                            user.AddTrigger(TriggerType.ObtainCharacter, characterData.name_code);
                         }
                     }
                 }
 
                 response.Gacha.Add(gacha);
 
-                user.AddTrigger(TriggerType.GachaCharacter, 1);
+                user.AddTrigger(TriggerType.GachaCharacter, 0, 0);
             }
 
             response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls });

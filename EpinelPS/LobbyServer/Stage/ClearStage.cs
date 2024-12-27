@@ -29,9 +29,7 @@ namespace EpinelPS.LobbyServer.Stage
         public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
         {
             var response = new ResClearStage();
-            var clearedStage = GameData.Instance.GetStageData(StageId);
-            if (clearedStage == null) throw new Exception("cleared stage cannot be null");
-
+            var clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
             if (user.FieldInfoNew.Count == 0)
             {
@@ -132,6 +130,16 @@ namespace EpinelPS.LobbyServer.Stage
                         response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = false, Exp = user.OutpostBattleLevel.Exp, Level = user.OutpostBattleLevel.Level };
                     }
                 }
+            }
+
+
+            // Mark chapter as completed if boss stage was completed
+            if (clearedStage.stage_category == "Boss" && clearedStage.stage_type == "Main")
+            {
+                if (clearedStage.chapter_mod == "Hard")
+                    user.AddTrigger(TriggerType.HardChapterClear, 1, clearedStage.chapter_id);
+                else
+                    user.AddTrigger(TriggerType.ChapterClear, 1, clearedStage.chapter_id);
             }
 
             // CreateClearInfo(user);

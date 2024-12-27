@@ -1,4 +1,6 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.StaticInfo;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Stage
 {
@@ -11,8 +13,23 @@ namespace EpinelPS.LobbyServer.Stage
             var user = GetUser();
 
             var response = new ResEnterStage();
-            
-            user.AddTrigger(StaticInfo.TriggerType.CampaignStart, 1);
+
+            var clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
+
+            if (clearedStage.stage_category == "Boss")
+            {
+                // When entering a boss stage, unlock boss information in campaign
+                var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
+                if (!user.FieldInfoNew.ContainsKey(key))
+                    user.FieldInfoNew.Add(key, new FieldInfoNew());
+
+                if (user.FieldInfoNew.TryGetValue(key, out FieldInfoNew? info))
+                    info.BossEntered = true;
+            }
+
+            user.AddTrigger(TriggerType.CampaignStart, 1);
+
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }
