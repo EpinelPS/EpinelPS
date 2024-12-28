@@ -115,7 +115,7 @@ namespace EpinelPS.LobbyServer.Stage
             if (clearedStage.stage_type != "Sub")
             {
                 // add outpost reward level if unlocked
-                if (user.MainQuestData.TryGetValue(21, out bool c))
+                if (user.MainQuestData.TryGetValue(21, out bool _))
                 {
                     user.OutpostBattleLevel.Exp++;
                     if (user.OutpostBattleLevel.Exp >= 5)
@@ -153,7 +153,7 @@ namespace EpinelPS.LobbyServer.Stage
             return response;
         }
 
-        private static void DoQuestSpecificUserOperations(Database.User user, int clearedStageId)
+        private static void DoQuestSpecificUserOperations(User user, int clearedStageId)
         {
             var quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
             if (quest != null)

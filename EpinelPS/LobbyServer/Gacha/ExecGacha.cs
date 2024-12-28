@@ -84,6 +84,18 @@ namespace EpinelPS.LobbyServer.Gacha
 
                     var existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
 
+                    response.Characters.Add(new NetUserCharacterDefaultData()
+                    {
+                        CostumeId = character.CostumeId,
+                        Csn = character.Csn,
+                        Grade = character.Grade,
+                        Level = character.Level,
+                        UltiSkillLv = character.UltimateLevel,
+                        Skill1Lv = character.Skill1Lvl,
+                        Skill2Lv = character.Skill2Lvl,
+                        Tid = characterData.id,
+                    });
+
                     bool increase_item = false;
 
                     gacha.Sn = character.Csn;
@@ -164,7 +176,7 @@ namespace EpinelPS.LobbyServer.Gacha
                     else
                     {
                         gacha.CurrencyValue = characterData.original_rare == "SSR" ? 6000 : (characterData.original_rare == "SR" ? 200 : 150);
-                        user.AddCurrency(CurrencyType.CharacterExp, gacha.CurrencyValue);
+                        user.AddCurrency(CurrencyType.DissolutionPoint, gacha.CurrencyValue);
 
                         totalBodyLabels += (int)gacha.CurrencyValue;
                     }
@@ -223,7 +235,7 @@ namespace EpinelPS.LobbyServer.Gacha
 			var currencyType = TicketType == 5100 ? (int)CurrencyType.SilverMileageTicket : (int)CurrencyType.GoldMileageTicket;
 			var currencyTypeToAdd = TicketType == 5100 ? CurrencyType.SilverMileageTicket : CurrencyType.GoldMileageTicket;
 			response.Reward.Currency.Add(new NetCurrencyData() { Type = currencyType, Value = numberOfPulls });
-            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.CharacterExp, Value = totalBodyLabels });
+            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.DissolutionPoint, Value = totalBodyLabels });
             user.AddCurrency(currencyTypeToAdd, numberOfPulls);
 
             user.GachaTutorialPlayCount++;
