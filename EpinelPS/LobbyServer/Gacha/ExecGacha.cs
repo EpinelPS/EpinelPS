@@ -219,10 +219,12 @@ namespace EpinelPS.LobbyServer.Gacha
 
                 user.AddTrigger(TriggerType.GachaCharacter, 0, 0);
             }
-
-            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.SilverMileageTicket, Value = numberOfPulls });
+			var TicketType = req.CurrencyType;
+			var currencyType = TicketType == 5100 ? (int)CurrencyType.SilverMileageTicket : (int)CurrencyType.GoldMileageTicket;
+			var currencyTypeToAdd = TicketType == 5100 ? CurrencyType.SilverMileageTicket : CurrencyType.GoldMileageTicket;
+			response.Reward.Currency.Add(new NetCurrencyData() { Type = currencyType, Value = numberOfPulls });
             response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.CharacterExp, Value = totalBodyLabels });
-            user.AddCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
+            user.AddCurrency(currencyTypeToAdd, numberOfPulls);
 
             user.GachaTutorialPlayCount++;
 
