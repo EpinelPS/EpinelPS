@@ -21,6 +21,8 @@ namespace EpinelPS.LobbyServer.Gacha
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqExecuteGacha>();
+			var IncreasedChanceCharacterID = req.Tid;
+			
 
             // Count determines whether we select 1 or 10 characters
             int numberOfPulls = req.Count == 1 ? 1 : 10;
@@ -39,7 +41,8 @@ namespace EpinelPS.LobbyServer.Gacha
             var srCharacters = allCharacterData.Where(c => c.original_rare == "SR").ToList();
 
             // Separate Pilgrim SSRs and non-Pilgrim SSRs
-            var pilgrimCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation == "PILGRIM").ToList();
+			// treat overspec as pilgrim 
+            var pilgrimCharacters = allCharacterData.Where(c => (c.original_rare == "SSR" && c.corporation == "PILGRIM") || (c.original_rare == "SSR" && c.corporation_sub_type == "OVERSPEC")).ToList();
             var ssrCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation != "PILGRIM").ToList();
 
             var selectedCharacters = new List<CharacterRecord>();
@@ -55,7 +58,7 @@ namespace EpinelPS.LobbyServer.Gacha
                 // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
                 for (int i = 0; i < numberOfPulls; i++)
                 {
-                    var character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList);
+                    var character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList, IncreasedChanceCharacterID, allCharacterData);
                     selectedCharacters.Add(character);
                 }
             }
@@ -245,46 +248,60 @@ namespace EpinelPS.LobbyServer.Gacha
             await WriteDataAsync(response);
         }
 
-        private static CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList)
-        {
-            // Remove excluded characters from each category
-            var availableRCharacters = rCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availableSRCharacters = srCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availableSSRCharacters = ssrCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availablePilgrimCharacters = pilgrimCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
+		private static CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters,List<CharacterRecord> srCharacters,List<CharacterRecord> ssrCharacters,List<CharacterRecord> pilgrimCharacters,List<int> exclusionList,int increasedChanceCharacterID,List<CharacterRecord> allCharacterData)
+		{
+			// Remove excluded characters from each category
+			var availableRCharacters = rCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
+			var availableSRCharacters = srCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
+			var availableSSRCharacters = ssrCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
+			var availablePilgrimCharacters = pilgrimCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
 
-            // Each time we call this method, a new category will be selected for a single character
-            double roll = random.NextDouble() * 100; // Roll from 0 to 100
+			// Find the IncreasedChanceCharacterID in the SSR list
+			var increasedChanceCharacter = availableSSRCharacters.FirstOrDefault(c => c.id == increasedChanceCharacterID);
+			bool isPilgrimOrOverspec = increasedChanceCharacter != null && (increasedChanceCharacter.corporation == "PILGRIM" || increasedChanceCharacter.corporation_sub_type == "OVERSPEC");
 
-            if (roll < 53 && availableRCharacters.Count != 0)
-            {
-                // R category
-                return availableRCharacters[random.Next(availableRCharacters.Count)];
-            }
-            else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
-            {
-                // SR category
-                return availableSRCharacters[random.Next(availableSRCharacters.Count)];
-            }
-            else
-            {
-                // SSR category
-                double ssrRoll = random.NextDouble() * 100;
+			double increasedChance = increasedChanceCharacterID != 1 ? (isPilgrimOrOverspec ? 1.0 : 2.0): 0.0;
 
-                if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
-                {
-                    // PILGRIM SSR
-                    return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
-                }
-                else if (availableSSRCharacters.Count != 0)
-                {
-                    // Non-PILGRIM SSR
-                    return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
-                }
-            }
+			double roll = random.NextDouble() * 100; // Roll from 0 to 100
 
-            // Fallback to a random R character if somehow no SSR characters are left after exclusion
-            return availableRCharacters.Count != 0 ? availableRCharacters[random.Next(availableRCharacters.Count)] : throw new Exception("cannot find any characters");
-        }
+			if (roll < 53 && availableRCharacters.Count != 0)
+			{
+				// R category
+				return availableRCharacters[random.Next(availableRCharacters.Count)];
+			}
+			else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
+			{
+				// SR category
+				return availableSRCharacters[random.Next(availableSRCharacters.Count)];
+			}
+			else
+			{
+				// SSR category
+				double ssrRoll = random.NextDouble() * 100;
+
+				if (increasedChanceCharacter != null && ssrRoll < increasedChance)
+				{
+					// Increased Chance SSR
+					return increasedChanceCharacter;
+				}
+
+				ssrRoll -= increasedChance;
+
+				if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
+				{
+					// PILGRIM SSR
+					return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
+				}
+				else if (availableSSRCharacters.Count != 0)
+				{
+					// Non-PILGRIM SSR
+					return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
+				}
+			}
+
+			// Fallback to a random R character if somehow no SSR characters are left after exclusion
+			return availableRCharacters.Count != 0 ? availableRCharacters[random.Next(availableRCharacters.Count)] : throw new Exception("cannot find any characters");
+		}
+
     }
 }

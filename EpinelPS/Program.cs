@@ -309,55 +309,56 @@ namespace EpinelPS
                         }
                     }
                 }
-                else if (input == "addallmaterials")
-                {
-                    if (selectedUser == 0)
-                    {
-                        Console.WriteLine("No user selected");
-                    }
-                    else
-                    {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
-                        if (user == null)
-                        {
-                            Console.WriteLine("Selected user does not exist");
-                            selectedUser = 0;
-                            prompt = "# ";
-                        }
-                        else
-                        {
-                            int amount = 1000000;
-                            if (args.Length >= 2)
-                            {
-                                int.TryParse(args[1], out amount);
-                            }
+				else if (input.StartsWith("addallmaterials"))
+				{
+					if (selectedUser == 0)
+					{
+						Console.WriteLine("No user selected");
+					}
+					else
+					{
+						var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+						if (user == null)
+						{
+							Console.WriteLine("Selected user does not exist");
+							selectedUser = 0;
+							prompt = "# ";
+						}
+						else
+						{
+							int amount = 1; // Default amount if not provided
+							if (args.Length >= 2 && int.TryParse(args[1], out int parsedAmount))
+							{
+								amount = parsedAmount;
+							}
 
-                            foreach (var tableItem in GameData.Instance.itemMaterialTable.Values)
-                            {
-                                ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.id);
+							foreach (var tableItem in GameData.Instance.itemMaterialTable.Values)
+							{
+								ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.id);
 
-                                if (item == null)
-                                {
-                                    user.Items.Add(new ItemData
-                                    {
-                                        Isn = user.GenerateUniqueItemId(),
-                                        ItemType = tableItem.id,
-                                        Level = 1,
-                                        Exp = 1,
-                                        Count = amount
-                                    });
-                                }
-                                else
-                                {
-                                    item.Count += amount;
-                                }
-                            }
+								if (item == null)
+								{
+									user.Items.Add(new ItemData
+									{
+										Isn = user.GenerateUniqueItemId(),
+										ItemType = tableItem.id,
+										Level = 1,
+										Exp = 1,
+										Count = amount
+									});
+								}
+								else
+								{
+									item.Count += amount;
+								}
+							}
 
-                            Console.WriteLine($"Added {amount} of all materials to user " + user.Username);
-                            JsonDb.Save();
-                        }
-                    }
-                }
+							Console.WriteLine($"Added {amount} of all materials to user " + user.Username);
+							JsonDb.Save();
+						}
+					}
+				}
+
                 else if (input == "finishalltutorials")
                 {
                     if (selectedUser == 0)

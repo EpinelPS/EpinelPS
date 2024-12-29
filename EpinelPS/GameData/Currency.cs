@@ -11,9 +11,9 @@ namespace EpinelPS
         CharacterExp2 = 3000,
         FriendshipPoint = 4000,
         ArenaChip = 5000,
-        CharPremiumTicket = 5100,
-        CharCustomizeTicket = 5200,
-        CharCorporationTicket = 5300,
+        CharPremiumTicket = 5100, //normal cards
+        CharCustomizeTicket = 5200, //spec cards
+        CharCorporationTicket = 5300, //unused
         ArenaTicket = 6001,
         _2NdArenaTicket = 6002,
         InterceptTicket2 = 6003,
