@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/EpinelPS/bin/Debug/net8.0/linux-x64/EpinelPS.dll",
+            "program": "${workspaceFolder}/EpinelPS/bin/Debug/net9.0/linux-x64/EpinelPS.dll",
             "args": [],
             "cwd": "${workspaceFolder}/EpinelPS",
             "stopAtEntry": false,
