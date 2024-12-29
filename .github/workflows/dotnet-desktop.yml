@@ -42,7 +42,7 @@ jobs:
       run: dotnet publish EpinelPS
 
     - name: Copy to output
-      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy /s /e "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy /s /e "${{ github.workspace }}\EpinelPS\bin\Release\net8.0\win-x64\publish\" "${{ github.workspace }}\out\"  && copy "${{ github.workspace }}\ServerSelector.Desktop\sodium.dll" "${{ github.workspace }}\out\sodium.dll"
+      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy /s /e "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net9.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy /s /e "${{ github.workspace }}\EpinelPS\bin\Release\net9.0\win-x64\publish\" "${{ github.workspace }}\out\"  && copy "${{ github.workspace }}\ServerSelector.Desktop\sodium.dll" "${{ github.workspace }}\out\sodium.dll"
   
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
