@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
+		<DebugType>none</DebugType>
+		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

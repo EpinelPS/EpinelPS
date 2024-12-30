@@ -9,6 +9,9 @@
 		<PublishSingleFile>true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
 		<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+		<DebugType>none</DebugType>
+    	<DebugSymbols>false</DebugSymbols>
+		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
 		<Version>0.1.4.2</Version>
 	</PropertyGroup>
 
