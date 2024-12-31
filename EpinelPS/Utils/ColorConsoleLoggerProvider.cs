@@ -21,7 +21,7 @@ namespace EpinelPS.Utils
         }
 
         public ILogger CreateLogger(string categoryName) =>
-            _loggers.GetOrAdd(categoryName, name => new ColorConsoleLogger(name, GetCurrentConfig));
+            _loggers.GetOrAdd(categoryName, _ => new ColorConsoleLogger(GetCurrentConfig));
 
         private ColorConsoleLoggerConfiguration GetCurrentConfig() => _currentConfig;
 
@@ -40,7 +40,7 @@ namespace EpinelPS.Utils
             [LogLevel.Information] = ConsoleColor.Green
         };
     }
-    public sealed class ColorConsoleLogger(string name, Func<ColorConsoleLoggerConfiguration> getCurrentConfig) : ILogger
+    public sealed class ColorConsoleLogger(Func<ColorConsoleLoggerConfiguration> getCurrentConfig) : ILogger
     {
         public IDisposable? BeginScope<TState>(TState state) where TState : notnull => default!;
 

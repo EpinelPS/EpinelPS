@@ -207,7 +207,11 @@ namespace EpinelPS.LobbyServer.Gacha
             }
 
             // Fallback to a random R character if somehow no SSR characters are left after exclusion
-            return availableRCharacters.Any() ? availableRCharacters[random.Next(availableRCharacters.Count)] : null;
+            if (!availableRCharacters.Any())
+            {
+                throw new InvalidOperationException("No available characters found for gacha pull");
+            }
+            return availableRCharacters[random.Next(availableRCharacters.Count)];
         }
     }
 }

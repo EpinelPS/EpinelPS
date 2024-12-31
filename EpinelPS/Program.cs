@@ -39,7 +39,7 @@ namespace EpinelPS
                     {
                         SslProtocols = System.Security.Authentication.SslProtocols.Tls12,
                         ClientCertificateMode = ClientCertificateMode.AllowCertificate,
-                        ServerCertificate = new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx")
+                        ServerCertificate = new X509Certificate2(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "site.pfx")))
                     };
 
                     builder.WebHost.ConfigureKestrel(serverOptions =>
