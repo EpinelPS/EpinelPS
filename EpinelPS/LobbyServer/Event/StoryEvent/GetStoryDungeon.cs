@@ -1,7 +1,7 @@
 ﻿using EpinelPS.Utils;
 using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Event.StoryEvent
+namespace EpinelPS.LobbyServer.Event.EventStory
 {
     [PacketPath("/event/storydungeon/get")]
     public class GetStoryDungeon : LobbyMsgHandler
