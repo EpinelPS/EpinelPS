@@ -45,10 +45,10 @@ namespace EpinelPS.LobbyServer.Auth
                                .Encode();
 
 
-            var response = new ResEnterServer();
+            ResEnterServer response = new();
          
             response.GameClientToken = token;
-            response.FeatureDataInfo = new NetFeatureDataInfo() { UseFeatureData = true };
+            response.FeatureDataInfo = new NetFeatureDataInfo() {  }; // TODO
             response.Identifier = new NetLegacyUserIdentifier() { Server = 1000, Usn = (long)user.ID };
             response.ShouldRestartAfter = Duration.FromTimeSpan(TimeSpan.FromSeconds(86400));
             
