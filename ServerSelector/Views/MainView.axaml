@@ -33,7 +33,7 @@
 
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
-					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged">C:\NIKKE\NIKKE\</TextBox>
+					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged">C:\NIKKE\</TextBox>
 					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Content="..." Click="BtnSelectGamePath_Click"></Button>
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
