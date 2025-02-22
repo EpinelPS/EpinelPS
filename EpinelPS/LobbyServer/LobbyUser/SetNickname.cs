@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -14,6 +15,8 @@ namespace EpinelPS.LobbyServer.LobbyUser
             var response = new ResSetNickname();
             response.Result = SetNicknameResult.SetNicknameResultOkay;
             response.Nickname = req.Nickname;
+
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }

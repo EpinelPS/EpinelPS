@@ -3,16 +3,16 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
-    [PacketPath("/user/setnicknamefree")]
-    public class SetNicknameFree : LobbyMsgHandler
+    [PacketPath("/user/SetNickNameInTutorial")]
+    public class SetNicknameInTutorial : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetNicknameFree>();
+            var req = await ReadData<ReqSetNicknameInTutorial>();
             var user = GetUser();
             user.Nickname = req.Nickname;
 
-            var response = new ResSetNicknameFree();
+            var response = new ResSetNicknameInTutorial();
             response.Result = SetNicknameResult.SetNicknameResultOkay;
             response.Nickname = req.Nickname;
 
