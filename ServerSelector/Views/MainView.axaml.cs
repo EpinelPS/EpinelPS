@@ -108,7 +108,7 @@ public partial class MainView : UserControl
             return;
 
         SetLoadingScreenVisible(true);
-        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath);
+        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath) + ", for game version " + ServerSwitcher.PatchGameVersion;
         SetLoadingScreenVisible(false);
     }
 

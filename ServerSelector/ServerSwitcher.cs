@@ -8,6 +8,8 @@ namespace ServerSelector
     public class ServerSwitcher
     {
         private static int GameAssemblySodiumIntegrityFuncHint = 0x5F17AF0;
+        public static string PatchGameVersion = "130.8.13";
+
         private static byte[] GameAssemblySodiumIntegrityFuncOrg = [0x40, 0x53, 0x56, 0x57, 0x41];
         private static byte[] GameAssemblySodiumIntegrityFuncPatch = [0xb0, 0x01, 0xc3, 0x90, 0x90];
         private const string HostsStartMarker = "# begin ServerSelector entries";
