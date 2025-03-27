@@ -61,7 +61,7 @@ namespace ServerSelector
             }
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
-            string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem";
+            string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
 
             if (File.Exists(launcherCertList))
             {
@@ -148,7 +148,7 @@ namespace ServerSelector
             var CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
-            string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem";
+            string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
             bool supported = true;
 
             if (OperatingSystem.IsLinux())
