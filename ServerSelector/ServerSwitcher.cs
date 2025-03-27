@@ -7,8 +7,8 @@ namespace ServerSelector
 {
     public class ServerSwitcher
     {
-        private static int GameAssemblySodiumIntegrityFuncHint = 0x5F17AF0;
-        public static string PatchGameVersion = "130.8.13";
+        private static int GameAssemblySodiumIntegrityFuncHint = 0x6014080;
+        public static string PatchGameVersion = "131.10.2";
 
         private static byte[] GameAssemblySodiumIntegrityFuncOrg = [0x40, 0x53, 0x56, 0x57, 0x41];
         private static byte[] GameAssemblySodiumIntegrityFuncPatch = [0xb0, 0x01, 0xc3, 0x90, 0x90];
@@ -60,26 +60,30 @@ namespace ServerSelector
                 hostsFilePath = gamePath + "/../../../windows/system32/drivers/etc/hosts";
             }
 
-            var CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
-
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem";
 
-            var certList1 = await File.ReadAllTextAsync(launcherCertList);
+            if (File.Exists(launcherCertList))
+            {
+                var certList1 = await File.ReadAllTextAsync(launcherCertList);
 
-            int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
-            if (goodSslIndex1 == -1)
-                return "Patch missing";
+                int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
+                if (goodSslIndex1 == -1)
+                    return "Patch missing";
+            }
 
-            var certList2 = await File.ReadAllTextAsync(gameCertList);
+            if (File.Exists(gameCertList))
+            {
+                var certList2 = await File.ReadAllTextAsync(gameCertList);
 
-            int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
-            if (goodSslIndex2 == -1)
-                return "Patch missing";
-
+                int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
+                if (goodSslIndex2 == -1)
+                    return "Patch missing";
+            }
 
             // TODO: Check sodium lib
             // TODO: Check if gameassembly was patched
+            // TODO: check hosts file
 
             return "OK";
         }
@@ -210,17 +214,23 @@ namespace ServerSelector
                     supported = false;
                 }
 
-                var certList1 = await File.ReadAllTextAsync(launcherCertList);
+                if (File.Exists(launcherCertList))
+                {
+                    var certList1 = await File.ReadAllTextAsync(launcherCertList);
 
-                int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
-                if (goodSslIndex1 != -1)
-                    await File.WriteAllTextAsync(launcherCertList, certList1.Substring(0, goodSslIndex1));
+                    int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
+                    if (goodSslIndex1 != -1)
+                        await File.WriteAllTextAsync(launcherCertList, certList1.Substring(0, goodSslIndex1));
+                }
 
-                var certList2 = await File.ReadAllTextAsync(gameCertList);
+                if (File.Exists(gameCertList))
+                {
+                    var certList2 = await File.ReadAllTextAsync(gameCertList);
 
-                int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
-                if (goodSslIndex2 != -1)
-                    await File.WriteAllTextAsync(gameCertList, certList2.Substring(0, goodSslIndex2));
+                    int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
+                    if (goodSslIndex2 != -1)
+                        await File.WriteAllTextAsync(gameCertList, certList2.Substring(0, goodSslIndex2));
+                }
             }
             else
             {
@@ -274,7 +284,7 @@ namespace ServerSelector
                 // trust CA
                 if (OperatingSystem.IsWindows())
                 {
-                    X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+                    X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
                     store.Open(OpenFlags.ReadWrite);
                     store.Add(new X509Certificate2(X509Certificate2.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
                     store.Close();

@@ -9,9 +9,11 @@ namespace EpinelPS.LobbyServer.Intercept
         {
             var req = await ReadData<ReqInterceptAnomalousData>();
 
+            // TODO
+
             var response = new ResInterceptAnomalousData
             {
-                LastEnteredInterceptAnomalousId = 1,
+                InterceptAnomalousManagerId = 1,
                 RemainingTickets = 5
             };
 			response.ClearedInterceptAnomalousIds.Add(new[] { 1, 2, 3, 4, 5 });

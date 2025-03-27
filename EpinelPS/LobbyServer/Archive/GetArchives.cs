@@ -22,7 +22,9 @@ namespace EpinelPS.LobbyServer.Archive
             // Get entries with record_type "EventQuest"
             var eventQuestRecords = GameData.Instance.archiveRecordManagerTable.Values.Where(record => record.record_type == "EventQuest").ToList();
 
-            response.UnlockedArchiveEventQuestList.AddRange(eventQuestRecords.Select(record => record.id));
+            response.ArchiveEventQuest = new();
+            response.ArchiveEventQuest.UnlockedArchiveRecordManagerEventQuestIdList.AddRange(eventQuestRecords.Select(record => record.id));
+            // TODO more fields
 
 
             // TODO: allow unlocking
