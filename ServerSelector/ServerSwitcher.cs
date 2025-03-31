@@ -167,13 +167,20 @@ namespace ServerSelector
                     await RevertHostsFile("/etc/hosts");
                 }
 
-                // remove cert
-                if (OperatingSystem.IsWindows())
+                try
                 {
-                    X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
-                    store.Open(OpenFlags.ReadWrite);
-                    store.Remove(new X509Certificate2(X509Certificate.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
-                    store.Close();
+                    // remove cert
+                    if (OperatingSystem.IsWindows())
+                    {
+                        X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+                        store.Open(OpenFlags.ReadWrite);
+                        store.Remove(new X509Certificate2(X509Certificate.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
+                        store.Close();
+                    }
+                }
+                catch
+                {
+                    // may not be installed
                 }
 
                 // restore sodium
@@ -281,13 +288,20 @@ namespace ServerSelector
                     }
                 }
 
-                // trust CA
-                if (OperatingSystem.IsWindows())
+                // trust CA. TODO is this needed?
+                try
                 {
-                    X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
-                    store.Open(OpenFlags.ReadWrite);
-                    store.Add(new X509Certificate2(X509Certificate2.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
-                    store.Close();
+                    if (OperatingSystem.IsWindows())
+                    {
+                        X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
+                        store.Open(OpenFlags.ReadWrite);
+                        store.Add(new X509Certificate2(X509Certificate2.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
+                        store.Close();
+                    }
+                }
+                catch
+                {
+
                 }
 
                 // update sodium lib
