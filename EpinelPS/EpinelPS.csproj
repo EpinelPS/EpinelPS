@@ -11,6 +11,7 @@
 		<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
 		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
 		<Version>0.1.4.2</Version>
+		<CETCompat>false</CETCompat>
 	</PropertyGroup>
 
 	<ItemGroup>
