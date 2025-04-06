@@ -5,7 +5,6 @@ using FluentAvalonia.UI.Controls;
 using System;
 using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Security.Principal;
 
 namespace ServerSelector.Views;
@@ -108,7 +107,7 @@ public partial class MainView : UserControl
             return;
 
         SetLoadingScreenVisible(true);
-        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath) + ", for game version " + ServerSwitcher.PatchGameVersion;
+        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath);
         SetLoadingScreenVisible(false);
     }
 
@@ -209,6 +208,11 @@ public partial class MainView : UserControl
                 UpdateIntegrityLabel();
             }
         }
+    }
+
+    private void BtnSelectApkPath_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        // To be implemented
     }
 
     private void GamePath_TextChanged(object? sender, TextChangedEventArgs e)

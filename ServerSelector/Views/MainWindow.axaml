@@ -4,8 +4,199 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:ServerSelector.Views"
-        mc:Ignorable="d" d:DesignWidth="370" d:DesignHeight="300"
+        xmlns:ui="using:FluentAvalonia.UI.Controls"
+        mc:Ignorable="d" d:DesignWidth="380" d:DesignHeight="300"
         x:Class="ServerSelector.Views.MainWindow"
-        Title="Server Switcher" Width="370" Height="300" CanResize="True">
-        <views:MainView />
+        Width="380" Height="360"
+        WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1">
+        <Window.Styles>
+        <!-- Global Button Style -->
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="RenderTransform" Value="none"/>
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter Property="Background" Value="#3E3E42"/>
+            <Setter Property="RenderTransform" Value="scale(1.02)"/>
+        </Style>
+        <Style Selector="Button:pressed">
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+        </Style>
+
+        <!-- Primary Button Style -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#007ACC"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#1C97EA"/>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#3E3E42"/>
+        </Style>
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#505054"/>
+        </Style>
+
+        <!-- Danger Button Style -->
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#E51400"/>
+        </Style>
+        <Style Selector="Button.danger:pointerover">
+            <Setter Property="Background" Value="#FF2D1A"/>
+        </Style>
+    </Window.Styles>
+
+    <Panel>
+        <!-- Gradient Background -->
+        <Panel>
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                        <GradientStop Offset="0" Color="#15171E"/>
+                        <GradientStop Offset="1" Color="#1A1C23"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Panel>
+
+        <!-- Enhanced Acrylic Effect -->
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="#151515"
+                    TintOpacity="0.3"
+                    MaterialOpacity="0.2"
+                    FallbackColor="#151515"/>
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+
+        <!-- Additional Overlay for Depth -->
+        <Border IsHitTestVisible="False">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                    <GradientStop Offset="0" Color="#15000000"/>
+                    <GradientStop Offset="1" Color="#45000000"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <Grid RowDefinitions="Auto,Auto,*" Margin="20">
+            <!-- Header with Window Controls -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Height="40">
+                <!-- Draggable Title Area -->
+                <Grid Grid.Column="0" Grid.ColumnSpan="2"
+                      Background="Transparent"
+                      PointerPressed="WindowPointerPressed">
+                    <TextBlock Text="SERVER SWITCHER"
+                             FontSize="14"
+                             FontWeight="SemiBold"
+                             Foreground="White"
+                             VerticalAlignment="Center"
+                             Margin="5,0,0,0"/>
+                </Grid>
+
+                <!-- Window Controls -->
+                <StackPanel Grid.Column="2"
+                          Orientation="Horizontal"
+                          HorizontalAlignment="Right"
+                          Spacing="0">
+                    <!-- Minimize Button -->
+                    <Button Click="MinimizeButton_Click"
+                            Width="40" Height="30"
+                            Padding="0"
+                            Margin="0"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            CornerRadius="0">
+                        <Button.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="Transitions">
+                                    <Transitions>
+                                        <BrushTransition Property="Background" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                                    </Transitions>
+                                </Setter>
+                            </Style>
+                            <Style Selector="Button:pointerover">
+                                <Setter Property="Background" Value="#25FFFFFF"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </Style>
+                            <Style Selector="Button:pressed">
+                                <Setter Property="Background" Value="#15FFFFFF"/>
+                            </Style>
+                        </Button.Styles>
+                        <TextBlock Text="─"
+                                 FontSize="14"
+                                 FontWeight="Bold"/>
+                    </Button>
+                    <!-- Close Button -->
+                    <Button Click="CloseButton_Click"
+                            Width="40" Height="30"
+                            Padding="0"
+                            Margin="1,0,1,0"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Background="#DC143C"
+                            BorderThickness="0"
+                            CornerRadius="4">
+                        <Button.Styles>
+                            <Style Selector="Button">
+                                <Setter Property="Template">
+                                    <ControlTemplate>
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="{TemplateBinding CornerRadius}">
+                                            <ContentPresenter Name="PART_ContentPresenter"
+                                                            Content="{TemplateBinding Content}"
+                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                            Padding="{TemplateBinding Padding}"
+                                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter>
+                                <Setter Property="Transitions">
+                                    <Transitions>
+                                        <BrushTransition Property="Background" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                                        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                                    </Transitions>
+                                </Setter>
+                            </Style>
+                            <Style Selector="Button:pointerover">
+                                <Setter Property="Background" Value="#E32636"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="RenderTransform" Value="translateY(-1px)"/>
+                            </Style>
+                            <Style Selector="Button:pressed">
+                                <Setter Property="Background" Value="#B22222"/>
+                                <Setter Property="RenderTransform" Value="translateY(1px)"/>
+                            </Style>
+                        </Button.Styles>
+                        <TextBlock Text="×"
+                                 FontSize="20"
+                                 FontWeight="Bold"
+                                 VerticalAlignment="Center"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Main Content -->
+            <views:MainView Grid.Row="2" Margin="5"/>
+        </Grid>
+    </Panel>
 </Window>

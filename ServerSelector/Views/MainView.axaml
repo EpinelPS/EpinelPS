@@ -7,6 +7,88 @@
              x:Class="ServerSelector.Views.MainView"
 			 xmlns:ui="using:FluentAvalonia.UI.Controls"
 			 >
+    <UserControl.Styles>
+        <!-- Modern Utility Button Style -->
+        <Style Selector="Button.utility">
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="#3E3E42"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Content" Value="•••"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        Padding="{TemplateBinding Padding}"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.utility:pointerover">
+            <Setter Property="Background" Value="#4b4b4e"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="RenderTransform" Value="translateY(-1px)"/>
+            <Setter Property="Opacity" Value="0.9"/>
+        </Style>
+        <Style Selector="Button.utility:pressed">
+            <Setter Property="Background" Value="#505054"/>
+            <Setter Property="RenderTransform" Value="translateY(1px)"/>
+            <Setter Property="Opacity" Value="0.8"/>
+        </Style>
+
+        <!-- Modern Save Button Style -->
+        <Style Selector="Button.save-button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Background" Value="#3CB371"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.2" Easing="CubicEaseOut"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Button.save-button:pointerover">
+            <Setter Property="Background" Value="#45C67D"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Opacity" Value="0.95"/>
+        </Style>
+        <Style Selector="Button.save-button:pressed">
+            <Setter Property="Background" Value="#318F5A"/>
+            <Setter Property="Opacity" Value="0.9"/>
+            <Setter Property="RenderTransform" Value="scale(0.98)"/>
+        </Style>
+    </UserControl.Styles>
+
 	<Grid>
 		<TabControl x:Name="MainUI">
 			<TabItem Header="PC" x:Name="TabPc">
@@ -34,7 +116,7 @@
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0">Game path: </TextBlock>
 					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged" ToolTip.Tip="The folder with the game and launcher folders.">C:\NIKKE\</TextBox>
-					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Content="..." Click="BtnSelectGamePath_Click"></Button>
+					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Classes="utility" Click="BtnSelectGamePath_Click">...</Button>
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
 
@@ -51,7 +133,15 @@
 					<CheckBox x:Name="ChkOffline" VerticalAlignment="Center" Margin="5" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" ToolTip.Tip="Enables the ability to run the game offline by making the game download the assets from the server, and not the official server. This only works if enableOffline is enabled on the server. Please note that this should not be enabled on public servers due to copyright issues, as assets are downloaded through said server. This is required if you want to use an older version of the game.">Enable offline mode</CheckBox>
 
 					<TextBlock Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" Margin="5" x:Name="LblStatus" ToolTip.Tip="Shows the status of the patches to the game. All patches are reverted when server is set to official.">Status: OK</TextBlock>
-					<Button HorizontalAlignment="Right" Margin="5" Click="Save_Click" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Classes="accent">Save</Button>
+					<Button HorizontalAlignment="Right"
+                            Margin="5"
+                            Click="Save_Click"
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Classes="save-button">
+                        Save Changes
+                    </Button>
 				</Grid>
 			</TabItem>
 			<TabItem Header="Android">
@@ -70,16 +160,12 @@
 						<RowDefinition Height="auto"></RowDefinition>
 						<RowDefinition Height="5"></RowDefinition>
 						<RowDefinition Height="auto"></RowDefinition>
-						<RowDefinition Height="5"></RowDefinition>
-						<RowDefinition Height="auto"></RowDefinition>
-						<RowDefinition Height="5"></RowDefinition>
-						<RowDefinition Height="auto"></RowDefinition>
 					</Grid.RowDefinitions>
 
 
 					<TextBlock Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center" Margin="5">APK path: </TextBlock>
 					<TextBox x:Name="txtApkPath" Grid.Row="0" Grid.Column="1"></TextBox>
-					<Button x:Name="btnSelectApkPath" Grid.Row="0" Grid.Column="2" Content="..."></Button>
+					<Button x:Name="btnSelectApkPath" Grid.Row="0" Grid.Column="2" Classes="utility">...</Button>
 
 
 					<TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="5">IP: </TextBlock>
