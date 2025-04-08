@@ -502,7 +502,7 @@ namespace EpinelPS.StaticInfo
             {
                 this.towerTable.Add(obj.id, obj);
             }
-            
+
             var triggerTable = await LoadZip<TriggerTable>("TriggerTable.json", progress);
             foreach (var obj in triggerTable.records)
             {
@@ -578,6 +578,33 @@ namespace EpinelPS.StaticInfo
                 }
             }
             return -1;
+        }
+        public string? GetMapIdFromDBFieldName(string field)
+        {
+            // Get game map ID from DB Field Name (ex: 1_Normal for chapter 1 normal)
+            string[] keys = field.Split("_");
+            if (int.TryParse(keys[0], out int chapterNum))
+            {
+                string difficulty = keys[1];
+
+                foreach (var item in chapterCampaignData)
+                {
+                    if (difficulty == "Normal" && item.Value.chapter == chapterNum)
+                    {
+                        return item.Value.field_id;
+                    }
+                    else if (difficulty == "Hard" && item.Value.chapter == chapterNum)
+                    {
+                        return item.Value.hard_field_id;
+                    }
+                }
+
+                return null;
+            }
+            else
+            {
+                return keys[0]; // Already a Map ID
+            }
         }
         public int GetNormalChapterNumberFromFieldName(string field)
         {
