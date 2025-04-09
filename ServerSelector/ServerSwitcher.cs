@@ -7,11 +7,9 @@ namespace ServerSelector
 {
     public class ServerSwitcher
     {
-        private static int GameAssemblySodiumIntegrityFuncHint = 0x6014080;
-        public static string PatchGameVersion = "131.10.2";
-
-        private static byte[] GameAssemblySodiumIntegrityFuncOrg = [0x40, 0x53, 0x56, 0x57, 0x41];
-        private static byte[] GameAssemblySodiumIntegrityFuncPatch = [0xb0, 0x01, 0xc3, 0x90, 0x90];
+        private static string[] GameAssemblySodiumIntegrityFuncHint = ["40 53 56 57 41 54 41 55 41 56 41 57 48 81 EC C0 00 00 00 80 3d ?? ?? ?? ?? 00 0f 85 ?? 00 00 00 48"];
+        public static bool GameAssemblyNeedsPatch = true; // Set to false if running on versions before v124
+        private static string[] GameAssemblySodiumIntegrityFuncPatch = ["b0 01 c3 90 90"];
         private const string HostsStartMarker = "# begin ServerSelector entries";
         private const string HostsEndMarker = "# end ServerSelector entries";
 
@@ -67,8 +65,7 @@ namespace ServerSelector
             {
                 var certList1 = await File.ReadAllTextAsync(launcherCertList);
 
-                int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
-                if (goodSslIndex1 == -1)
+                if (!certList1.Contains("Good SSL Ca"))
                     return "Patch missing";
             }
 
@@ -76,8 +73,7 @@ namespace ServerSelector
             {
                 var certList2 = await File.ReadAllTextAsync(gameCertList);
 
-                int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
-                if (goodSslIndex2 == -1)
+                if (!certList2.Contains("Good SSL Ca"))
                     return "Patch missing";
             }
 
@@ -127,7 +123,7 @@ namespace ServerSelector
                     endIdx = txt.IndexOf(endIndexStr) + endIndexStr.Length;
                 }
 
-                txt = txt.Substring(0, startIdx) + txt.Substring(endIdx);
+                txt = string.Concat(txt.AsSpan(0, startIdx), txt.AsSpan(endIdx));
 
 
                 await File.WriteAllTextAsync(hostsFilePath, txt);
@@ -136,6 +132,24 @@ namespace ServerSelector
             {
 
             }
+        }
+
+        public static bool PatchGameAssembly(string dll, bool install)
+        {
+            if (!GameAssemblyNeedsPatch) return true;
+
+            bool backupExists = File.Exists(dll + ".bak");
+
+            if (install && !backupExists)
+            {
+                return PatchUtility.SearchAndReplace(dll, GameAssemblySodiumIntegrityFuncHint, GameAssemblySodiumIntegrityFuncPatch);
+            }
+            else if (backupExists)
+            {
+                File.Move(dll + ".bak", dll, true);
+            }
+
+            return true;
         }
 
         public static async Task<ServerSwitchResult> SaveCfg(bool useOffical, string gamePath, string launcherPath, string ip, bool offlineMode)
@@ -172,7 +186,7 @@ namespace ServerSelector
                     // remove cert
                     if (OperatingSystem.IsWindows())
                     {
-                        X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+                        X509Store store = new(StoreName.Root, StoreLocation.LocalMachine);
                         store.Open(OpenFlags.ReadWrite);
                         store.Remove(new X509Certificate2(X509Certificate.CreateFromCertFile(AppDomain.CurrentDomain.BaseDirectory + "myCA.pfx")));
                         store.Close();
@@ -186,39 +200,13 @@ namespace ServerSelector
                 // restore sodium
                 if (!File.Exists(sodiumBackup))
                 {
-                    throw new Exception("sodium backup does not exist");
+                    throw new Exception("sodium backup does not exist. Repair the game in the launcher and switch to local server and back to official.");
                 }
                 File.Copy(sodiumBackup, gameSodium, true);
 
-                // revert gameassembly changes
-                var gameAssemblyBytes = await File.ReadAllBytesAsync(gameAssembly);
-                var i = GameAssemblySodiumIntegrityFuncHint;
-                if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
-        gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
-        gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
-        gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
-        gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
+                if (!PatchGameAssembly(gameAssembly, false))
                 {
-
-                }
-                else if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
-                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
-                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
-                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
-                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
-                {
-                    gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncOrg[0];
-                    gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncOrg[1];
-                    gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncOrg[2];
-                    gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncOrg[3];
-                    gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncOrg[4];
-
-                    File.WriteAllBytes(gameAssembly, gameAssemblyBytes);
-                }
-                else
-                {
-                    // TODO: unsupported version
-                    supported = false;
+                    throw new Exception("Failed to restore GameAssembly.dll. Please repair the game in the launcher.");
                 }
 
                 if (File.Exists(launcherCertList))
@@ -227,7 +215,7 @@ namespace ServerSelector
 
                     int goodSslIndex1 = certList1.IndexOf("Good SSL Ca");
                     if (goodSslIndex1 != -1)
-                        await File.WriteAllTextAsync(launcherCertList, certList1.Substring(0, goodSslIndex1));
+                        await File.WriteAllTextAsync(launcherCertList, certList1[..goodSslIndex1]);
                 }
 
                 if (File.Exists(gameCertList))
@@ -236,7 +224,7 @@ namespace ServerSelector
 
                     int goodSslIndex2 = certList2.IndexOf("Good SSL Ca");
                     if (goodSslIndex2 != -1)
-                        await File.WriteAllTextAsync(gameCertList, certList2.Substring(0, goodSslIndex2));
+                        await File.WriteAllTextAsync(gameCertList, certList2[..goodSslIndex2]);
                 }
             }
             else
@@ -323,38 +311,7 @@ namespace ServerSelector
                 await File.WriteAllBytesAsync(gameSodium, await File.ReadAllBytesAsync(sodiumLib));
 
                 // patch gameassembly to remove sodium IntegrityUtility Check introduced in v124.6.10
-                var gameAssemblyBytes = await File.ReadAllBytesAsync(gameAssembly);
-
-                var i = GameAssemblySodiumIntegrityFuncHint;
-                if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncOrg[0] &&
-                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncOrg[1] &&
-                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncOrg[2] &&
-                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncOrg[3] &&
-                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncOrg[4])
-                {
-                    gameAssemblyBytes[i] = GameAssemblySodiumIntegrityFuncPatch[0]; // MOV ax, 1
-                    gameAssemblyBytes[i + 1] = GameAssemblySodiumIntegrityFuncPatch[1];
-                    gameAssemblyBytes[i + 2] = GameAssemblySodiumIntegrityFuncPatch[2]; // NOP
-                    gameAssemblyBytes[i + 3] = GameAssemblySodiumIntegrityFuncPatch[3]; // NOP
-                    gameAssemblyBytes[i + 4] = GameAssemblySodiumIntegrityFuncPatch[4]; // NOP
-
-                    await File.WriteAllBytesAsync(gameAssembly, gameAssemblyBytes);
-                }
-                else if (gameAssemblyBytes[i] == GameAssemblySodiumIntegrityFuncPatch[0] &&
-                    gameAssemblyBytes[i + 1] == GameAssemblySodiumIntegrityFuncPatch[1] &&
-                    gameAssemblyBytes[i + 2] == GameAssemblySodiumIntegrityFuncPatch[2] &&
-                    gameAssemblyBytes[i + 3] == GameAssemblySodiumIntegrityFuncPatch[3] &&
-                    gameAssemblyBytes[i + 4] == GameAssemblySodiumIntegrityFuncPatch[4])
-                {
-                    // was already patched
-                }
-                else
-                {
-                    // TODO: unsupported version
-                    supported = false;
-                }
-
-
+                supported = PatchGameAssembly(gameAssembly, true);
 
                 // update launcher/game ca cert list
 
@@ -373,17 +330,10 @@ namespace ServerSelector
         }
     }
 
-    public class ServerSwitchResult
+    public class ServerSwitchResult(bool ok, Exception? exception, bool isSupported)
     {
-        public bool Ok { get; set; }
-        public Exception? Exception { get; set; }
-        public bool IsSupported { get; set; }
-
-        public ServerSwitchResult(bool ok, Exception? exception, bool isSupported)
-        {
-            this.Ok = ok;
-            this.Exception = exception;
-            this.IsSupported = isSupported;
-        }
+        public bool Ok { get; set; } = ok;
+        public Exception? Exception { get; set; } = exception;
+        public bool IsSupported { get; set; } = isSupported;
     }
 }

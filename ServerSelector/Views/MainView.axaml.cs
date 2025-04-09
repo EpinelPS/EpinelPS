@@ -34,11 +34,14 @@ public partial class MainView : UserControl
             {
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                Text = "Root is required to change servers."
+                Text = "Root is required to change servers in order to modify /etc/hosts."
             };
         }
 
         UpdateIntegrityLabel();
+
+        txtGamePath.Text = GameSettings.Settings.GameRoot;
+        TxtIpAddress.Text = GameSettings.Settings.LastIp;
     }
 
     private void SetGamePathValid(bool isValid)
@@ -83,7 +86,7 @@ public partial class MainView : UserControl
         {
             SetGamePathValid(false);
             if (showMessage)
-                ShowWarningMsg("Game path does not exist", "Error");
+                ShowWarningMsg("game folder does not exist in the game root folder", "Error");
             return false;
         }
 
@@ -91,7 +94,7 @@ public partial class MainView : UserControl
         {
             SetGamePathValid(false);
             if (showMessage)
-                ShowWarningMsg("Launcher path is invalid. Make sure that nikke_launcher.exe exists in the launcher folder", "Error");
+                ShowWarningMsg("Game path is invalid. Make sure that nikke_launcher.exe exists in the <Game Path>/launcher folder", "Error");
 
             return false;
         }
@@ -130,15 +133,18 @@ public partial class MainView : UserControl
         if (!ValidatePaths(true) || txtGamePath.Text == null || GamePath == null || LauncherPath == null)
             return;
 
-        if (CmbServerSelection.SelectedIndex == 1)
+        if (CmbServerSelection.SelectedIndex == 1 && !IPAddress.TryParse(TxtIpAddress.Text, out _))
         {
-            if (!IPAddress.TryParse(TxtIpAddress.Text, out _))
-            {
-                ShowWarningMsg("Invalid IP address. The entered IP address should be IPv4 or IPv6.", "Error");
-                return;
-            }
+            ShowWarningMsg("Invalid IP address. The entered IP address should be IPv4 or IPv6.", "Error");
+            return;
         }
-        if (TxtIpAddress.Text == null) TxtIpAddress.Text = "";
+
+        GameSettings.Settings.GameRoot = txtGamePath.Text;
+        GameSettings.Settings.LastIp = TxtIpAddress.Text ?? "127.0.0.1";
+
+        TxtIpAddress.Text ??= "";
+
+        GameSettings.Save();
 
         SetLoadingScreenVisible(true);
         try
@@ -170,7 +176,7 @@ public partial class MainView : UserControl
 
     public static void ShowWarningMsg(string text, string title)
     {
-        ContentDialog dlg = new ContentDialog() { Title = title, Content = text, PrimaryButtonText = "OK" };
+        ContentDialog dlg = new() { Title = title, Content = text, PrimaryButtonText = "OK" };
         dlg.ShowAsync();
     }
 
