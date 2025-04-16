@@ -2,17 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace EpinelPS.Controllers
+namespace EpinelPS.Controllers.AdminPanel
 {
     [Route("admin")]
-    public class AdminController : Controller
+    public class AdminController(ILogger<AdminController> logger) : Controller
     {
-        private readonly ILogger<AdminController> _logger;
-
-        public AdminController(ILogger<AdminController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<AdminController> _logger = logger;
 
         public static bool CheckAuth(HttpContext context)
         {

@@ -32,7 +32,7 @@ namespace EpinelPS.Utils
                 var requestUri = new Uri("https://" + CloudIp + "/" + rawUrl);
                 using var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
                 request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
-                using var response = await AssetDownloader.SendAsync(request);
+                using var response = await AssetDownloader.SendAsync(request, cancellationToken);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     if (!File.Exists(targetFile))

@@ -10,11 +10,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             var req = await ReadData<ReqSetScenarioComplete>();
 
-            var response = new ResSetScenarioComplete();
-
-            // Mark the story "scenario" as completed.
-            // TODO: Get rewards by making a database of them from actual server.
-            response.Reward = new NetRewardData();
+            var response = new ResSetScenarioComplete
+            {
+                // Mark the story "scenario" as completed.
+                // TODO: Get rewards by making a database of them from actual server.
+                Reward = new NetRewardData()
+            };
 
 
             var user = JsonDb.GetUser(UserId);

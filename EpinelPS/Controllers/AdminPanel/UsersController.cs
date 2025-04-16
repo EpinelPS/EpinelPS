@@ -5,12 +5,12 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EpinelPS.Controllers
+namespace EpinelPS.Controllers.AdminPanel
 {
     [Route("admin/Users")]
-    public class UsersController(ILogger<AdminController> logger) : Controller
+    public class UsersController(ILogger<UsersController> logger) : Controller
     {
-        private readonly ILogger<AdminController> _logger = logger;
+        private readonly ILogger<UsersController> _logger = logger;
         private static readonly MD5 sha = MD5.Create();
 
         public IActionResult Index()
@@ -79,7 +79,7 @@ namespace EpinelPS.Controllers
                 return NotFound();
             }
 
-            userToUpdate.Password = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower(); ;
+            userToUpdate.Password = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower();
 
             return View(userToUpdate);
         }
