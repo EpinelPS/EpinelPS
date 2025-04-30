@@ -9,15 +9,7 @@ namespace EpinelPS.LobbyServer.Client
         {
             var req = await ReadData<ReqCheckClientVersion>();
             var response = new ResCheckClientVersion();
-
-            if (GameConfig.Root.GameMaxVer != req.Version)
-            {
-                response.Availability = Availability.Available;
-            }
-            else
-            {
-                response.Availability = Availability.None;
-            }
+            response.Availability = Availability.None;
 
             await WriteDataAsync(response);
         }
