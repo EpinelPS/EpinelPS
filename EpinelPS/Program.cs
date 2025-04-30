@@ -301,6 +301,8 @@ namespace EpinelPS
                                         Tid = character.id,  // Tid is the character ID
                                         UltimateLevel = 1
                                     });
+
+                                    user.BondInfo.Add(new() { NameCode = character.name_code, Level = 1 });
                                 }
                             }
 
