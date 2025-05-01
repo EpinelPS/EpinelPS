@@ -3,7 +3,7 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
-    [PacketPath("/user/SetNickNameInTutorial")]
+    [PacketPath("/User/SetNickNameInTutorial")]
     public class SetNicknameInTutorial : LobbyMsgHandler
     {
         protected override async Task HandleAsync()

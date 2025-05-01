@@ -185,6 +185,12 @@ namespace EpinelPS.LobbyServer.Stage
 
                 user.BondInfo.Add(new() { NameCode = 3001, Level = 1 });
                 user.BondInfo.Add(new() { NameCode = 3005, Level = 1 });
+                
+                user.AddTrigger(TriggerType.ObtainCharacter, 1, 3001);
+                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1018);
+                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1015);
+                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1014);
+                user.AddTrigger(TriggerType.ObtainCharacter, 1, 3005);
 
                 NetTeamData team1Sub = new()
                 {

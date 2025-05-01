@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Messenger
 {
@@ -8,9 +9,16 @@ namespace EpinelPS.LobbyServer.Messenger
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetMessages>();
+            var user = GetUser();
 
-            // TODO: save these things
             var response = new ResGetMessages();
+
+            var newMessages = user.MessengerData.Where(x => x.Seq >= req.Seq);
+
+            foreach (var item in newMessages)
+            {
+                response.Messages.Add(item);
+            }
 
             await WriteDataAsync(response);
         }

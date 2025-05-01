@@ -219,14 +219,7 @@ namespace EpinelPS.LobbyServer.Gacha
                     {
                         user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
 
-                        if (characterData.original_rare == "SSR")
-                        {
-                            user.AddTrigger(TriggerType.ObtainCharacterSSR, characterData.name_code);
-                        }
-                        else
-                        {
-                            user.AddTrigger(TriggerType.ObtainCharacter, characterData.name_code);
-                        }
+                        user.AddTrigger(TriggerType.ObtainCharacter, characterData.name_code);
                     }
                 }
 

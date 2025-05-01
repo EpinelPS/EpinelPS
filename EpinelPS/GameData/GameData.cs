@@ -69,6 +69,9 @@ namespace EpinelPS.StaticInfo
         public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
         public readonly Dictionary<int, AttractiveCounselCharacterRecord> AttractiveCounselCharacterTable = [];
         public readonly Dictionary<int, AttractiveLevelRewardRecord> AttractiveLevelReward = [];
+        public readonly Dictionary<int, SubquestRecord> Subquests = [];
+        public readonly Dictionary<string, MessengerDialogRecord> Messages = [];
+        public readonly Dictionary<int, MessengerMsgConditionRecord> MessageConditions = [];
 
 
         public byte[] Sha256Hash;
@@ -527,6 +530,24 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in attrLData.records)
             {
                 this.AttractiveLevelReward.Add(obj.id, obj);
+            }
+
+            var subquest = await LoadZip<SubquestTable>("SubQuestTable.json", progress);
+            foreach (var obj in subquest.records)
+            {
+                this.Subquests.Add(obj.id, obj);
+            }
+
+            var msgs = await LoadZip<MessengerDialogTable>("MessengerDialogTable.json", progress);
+            foreach (var obj in msgs.records)
+            {
+                this.Messages.Add(obj.id, obj);
+            }
+
+            var msgc = await LoadZip<MessengerMsgConditionTable>("MessengerConditionTriggerTable.json", progress);
+            foreach (var obj in msgc.records)
+            {
+                this.MessageConditions.Add(obj.id, obj);
             }
         }
 

@@ -1,4 +1,6 @@
 using EpinelPS.Utils;
+using EpinelPS.StaticInfo;
+using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Messenger
 {
@@ -8,16 +10,18 @@ namespace EpinelPS.LobbyServer.Messenger
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqEnterMessengerDialog>();
+            var user = GetUser();
 
-            // TODO: save these things
             var response = new ResEnterMessengerDialog();
-            response.Message = new NetMessage(){
-ConversationId = "m_mainafter_28_01",
-CreatedAt = 132123123,
-MessageId = "m_mainafter_28_01_1",
-Seq = 324234,
-State = 0
-            };
+
+            var opener = GameData.Instance.MessageConditions[req.Tid];
+            var conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.tid && x.Value.is_opener).First();
+            
+            response.Message = user.CreateMessage(conversation.Value);
+
+            user.AddTrigger(TriggerType.MessageClear, 1, req.Tid); // TODO check if this is correct
+            
+            JsonDb.Save();
 
             await WriteDataAsync(response);
         }

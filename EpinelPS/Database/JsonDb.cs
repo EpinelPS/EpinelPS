@@ -160,7 +160,7 @@ namespace EpinelPS.Database
         public BadgeContents BadgeContent;
         public string BadgeGuid = "";
 
-        public Badge() {}
+        public Badge() { }
         public Badge(NetBadge badge)
         {
             Location = badge.Location;
@@ -200,6 +200,18 @@ namespace EpinelPS.Database
                 UserValue = Value
             };
         }
+    }
+    public class ConversationChoice
+    {
+
+    }
+    public class ConversationMessage
+    {
+        public string ConversationId { get; set; } = "";
+        public long CreatedAt { get; set; }
+        public ulong Seq { get; set; }
+        public string Id { get; set; } = "";
+        public int State { get; set; }
     }
     public class User
     {
@@ -282,6 +294,8 @@ namespace EpinelPS.Database
         public List<Trigger> Triggers = [];
         public int LastTriggerId = 1;
         public List<int> CompletedAchievements = [];
+        public List<NetMessage> MessengerData = [];
+        public ulong LastMessageId = 1;
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -523,6 +537,34 @@ namespace EpinelPS.Database
             }
 
             return removed;
+        }
+
+        public NetMessage CreateMessage(MessengerDialogRecord r, int state = 0)
+        {
+            var msg = new NetMessage()
+            {
+                ConversationId = r.conversation_id,
+                CreatedAt = DateTime.UtcNow.Ticks,
+                MessageId = r.id,
+                Seq = (long)LastMessageId++,
+                State = state
+            };
+            MessengerData.Add(msg);
+            return msg;
+        }
+
+        public NetMessage CreateMessage(string conversationId, string messageId, int state = 0)
+        {
+            var msg = new NetMessage()
+            {
+                ConversationId = conversationId,
+                CreatedAt = DateTime.UtcNow.Ticks,
+                MessageId = messageId,
+                Seq = (long)LastMessageId++,
+                State = state
+            };
+            MessengerData.Add(msg);
+            return msg;
         }
     }
     public class CoreInfo
