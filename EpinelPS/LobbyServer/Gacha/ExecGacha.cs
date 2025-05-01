@@ -219,7 +219,7 @@ namespace EpinelPS.LobbyServer.Gacha
                     {
                         user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
 
-                        user.AddTrigger(TriggerType.ObtainCharacter, characterData.name_code);
+                        user.AddTrigger(TriggerType.ObtainCharacter, 1, characterData.name_code);
                     }
                 }
 
