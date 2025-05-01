@@ -214,12 +214,12 @@ namespace EpinelPS.LobbyServer.Gacha
 
                     // Add "New Character" Badge
                     user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
+                    user.AddTrigger(TriggerType.ObtainCharacter, 1, characterData.name_code);
 
                     if (characterData.original_rare == "SSR" || characterData.original_rare == "SR")
                     {
                         user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
 
-                        user.AddTrigger(TriggerType.ObtainCharacter, 1, characterData.name_code);
                     }
                 }
 

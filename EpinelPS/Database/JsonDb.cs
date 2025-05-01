@@ -265,6 +265,7 @@ namespace EpinelPS.Database
 
         public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
         public Dictionary<int, bool> MainQuestData = new();
+        public Dictionary<int, bool> SubQuestData = new();
         public int InfraCoreExp = 0;
         public int InfraCoreLvl = 1;
         public UserPointData userPointData = new();
@@ -346,6 +347,15 @@ namespace EpinelPS.Database
             if (!MainQuestData.TryAdd(tid, recievedReward))
             {
                 MainQuestData[tid] = recievedReward;
+                return;
+            }
+        }
+
+        public void SetSubQuest(int tid, bool recievedReward)
+        {
+            if (!SubQuestData.TryAdd(tid, recievedReward))
+            {
+                SubQuestData[tid] = recievedReward;
                 return;
             }
         }
@@ -681,6 +691,23 @@ namespace EpinelPS.Database
             else
             {
                 throw new Exception("Failed to read configuration json file");
+            }
+        }
+
+        public static void Reload()
+        {
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/db.json"))
+            {
+                Console.WriteLine("users: warning: configuration not found, writing default data");
+                Instance = new CoreInfo();
+                Save();
+            }
+
+            var j = JsonConvert.DeserializeObject<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
+            if (j != null)
+            {
+                Instance = j;
+                Console.WriteLine("Database reload complete.");
             }
         }
 
