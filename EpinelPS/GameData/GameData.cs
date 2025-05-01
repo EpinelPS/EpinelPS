@@ -67,6 +67,8 @@ namespace EpinelPS.StaticInfo
         public readonly Dictionary<int, TowerRecord> towerTable = [];
         public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
         public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
+        public readonly Dictionary<int, AttractiveCounselCharacterRecord> AttractiveCounselCharacterTable = [];
+        public readonly Dictionary<int, AttractiveLevelRewardRecord> AttractiveLevelReward = [];
 
 
         public byte[] Sha256Hash;
@@ -513,6 +515,18 @@ namespace EpinelPS.StaticInfo
             foreach (var obj in infracoreTable.records)
             {
                 this.InfracoreTable.Add(obj.id, obj);
+            }
+            
+            var attrData = await LoadZip<AttractiveCounselCharacterTable>("AttractiveCounselCharacterTable.json", progress);
+            foreach (var obj in attrData.records)
+            {
+                this.AttractiveCounselCharacterTable.Add(obj.name_code, obj);
+            }
+
+            var attrLData = await LoadZip<AttractiveLevelRewardTable>("AttractiveLevelRewardTable.json", progress);
+            foreach (var obj in attrLData.records)
+            {
+                this.AttractiveLevelReward.Add(obj.id, obj);
             }
         }
 

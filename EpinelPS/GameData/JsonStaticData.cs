@@ -690,4 +690,27 @@
     {
         public List<InfracoreRecord> records = [];
     }
+    public class AttractiveCounselCharacterRecord
+    {
+        public int id;
+        public int name_code;
+        public int collect_reward_id;
+    }
+    public class AttractiveCounselCharacterTable
+    {
+        public List<AttractiveCounselCharacterRecord> records = [];
+    }
+
+    public class AttractiveLevelRewardRecord
+    {
+        public int id;
+        public int name_code;
+        public int reward_id;
+        public int attractive_level;
+        public int costume;
+    }
+    public class AttractiveLevelRewardTable
+    {
+        public List<AttractiveLevelRewardRecord> records = [];
+    }
 }
