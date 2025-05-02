@@ -297,6 +297,7 @@ namespace EpinelPS.Database
         public List<int> CompletedAchievements = [];
         public List<NetMessage> MessengerData = [];
         public ulong LastMessageId = 1;
+        public long LastBadgeSeq = 1;
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();
@@ -321,19 +322,13 @@ namespace EpinelPS.Database
         public Badge AddBadge(BadgeContents type, string location)
         {
             // generate unique badge SEQ
-            var num = Rng.RandomId();
-
-            while (Badges.Any(x => x.Seq == num))
-            {
-                num = Rng.RandomId();
-            }
 
             var badge = new Badge()
             {
                 BadgeContent = type,
                 Location = location,
                 BadgeGuid = Guid.NewGuid().ToString(),
-                Seq = num
+                Seq = LastBadgeSeq++
             };
 
             Badges.Add(badge);

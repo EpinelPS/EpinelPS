@@ -11,9 +11,6 @@ namespace EpinelPS.LobbyServer.Stage
 
             var response = new ResCheckStageClear();
             var user = GetUser();
-            Console.WriteLine("CheckClear len: " + req.StageIds.Count);
-
-            // TODO: is this correct
 
             foreach (var fields in user.FieldInfoNew)
             {
@@ -23,8 +20,6 @@ namespace EpinelPS.LobbyServer.Stage
                         response.ClearedStageIds.Add(stages);
                 }
             }
-
-
 
             await WriteDataAsync(response);
         }

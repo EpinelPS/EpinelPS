@@ -305,6 +305,7 @@ namespace EpinelPS
 
                                     user.BondInfo.Add(new() { NameCode = character.name_code, Level = 1 });
                                     user.AddTrigger(TriggerType.ObtainCharacter, 1, character.name_code);
+                                    user.AddTrigger(TriggerType.ObtainCharacterNew, 1);
                                 }
                             }
 
