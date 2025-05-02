@@ -33,7 +33,7 @@ To skip stages, a basic command line interface is implemented.
 
 
 ## TODO: 
- - [X] Campaign (Normal, Hard, Lost items, Rewards)
+ - [X] Campaign (Normal, Hard, Lost items, Rewards, Subquests)
  - [X] Lobby
  - [X] Save team info
  - [X] Profile UI
@@ -43,16 +43,16 @@ To skip stages, a basic command line interface is implemented.
  - [X] Side story
  - [X] Archives
  - [X] Outpost Rewards
- - [ ] Admin Panel
- - [ ] Simulation Room
  - [X] Skill level up
- - [X] Outpost jukebox
- - [ ] Event system
- - [ ] Download all game assets ahead of time
- - [ ] Basic friend list support
- - [ ] Arcade
  - [X] Daily, weekly missions etc
+ - [X] Outpost jukebox
+ - [X] Messenger
+ - [ ] Simulation Room
  - [ ] Lost sector
+ - [ ] Basic friend list support
+ - [ ] Admin Panel
+ - [ ] Change events in Admin Panel
+ - [ ] Arcade
  - [ ] Limit temporary participation
  
 ## What is not working:
