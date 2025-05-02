@@ -57,6 +57,6 @@ To skip stages, a basic command line interface is implemented.
  
 ## What is not working:
  - Events
- - Side quests
  - Outpost buildings, recycle room, infrastructure core
+ - Interception rewards, simulation room
  - And a lot more...
