@@ -23,59 +23,146 @@ namespace EpinelPS.Data
             }
         }
 
-        private ZipFile MainZip;
-        private MemoryStream ZipStream;
-
-
-        private readonly Dictionary<int, MainQuestCompletionRecord> questDataRecords = [];
-        private readonly Dictionary<int, CampaignStageRecord> stageDataRecords = [];
-        private readonly Dictionary<int, RewardTableRecord> rewardDataRecords = [];
-        private readonly Dictionary<int, UserExpRecord> userExpDataRecords = [];
-        private readonly Dictionary<int, CampaignChapterRecord> chapterCampaignData = [];
-        private readonly Dictionary<int, CharacterCostumeRecord> characterCostumeTable = [];
-        public readonly Dictionary<int, CharacterRecord> characterTable = [];
-        public readonly Dictionary<int, ClearedTutorialData> tutorialTable = [];
-        public readonly Dictionary<int, ItemEquipRecord> itemEquipTable = [];
-        public readonly Dictionary<int, ItemMaterialRecord> itemMaterialTable = [];
-        public readonly Dictionary<int, ItemEquipExpRecord> itemEquipExpTable = [];
-        public readonly Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable = [];
-        private readonly Dictionary<string, JArray> FieldMapData = [];
-        private readonly Dictionary<int, CharacterLevelData> LevelData = [];
-        private readonly Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
-        public readonly Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
-        public readonly Dictionary<string, int> PositionReward = [];
-        public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
-        public readonly Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
-        public readonly Dictionary<int, JukeboxListRecord> jukeboxListDataRecords = [];
-        private readonly Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords = [];
-        public readonly Dictionary<int, GachaType> gachaTypes = [];
-        public readonly Dictionary<int, EventManager> eventManagers = [];
-        public readonly Dictionary<int, LiveWallpaperRecord> lwptablemgrs = [];
-        public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
-        public readonly Dictionary<int, UserFrameTableRecord> userFrameTable = [];
-        public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
-        public readonly Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = [];
-        public readonly Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = [];
-        public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
-        public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
-        public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
-        public readonly Dictionary<int, CharacterStatRecord> characterStatTable = [];
-        public readonly Dictionary<int, SkillInfoRecord> skillInfoTable = [];
-        public readonly Dictionary<int, CostRecord> costTable = [];
-        public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
-        public readonly Dictionary<int, TowerRecord> towerTable = [];
-        public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
-        public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
-        public readonly Dictionary<int, AttractiveCounselCharacterRecord> AttractiveCounselCharacterTable = [];
-        public readonly Dictionary<int, AttractiveLevelRewardRecord> AttractiveLevelReward = [];
-        public readonly Dictionary<int, SubquestRecord> Subquests = [];
-        public readonly Dictionary<string, MessengerDialogRecord> Messages = [];
-        public readonly Dictionary<int, MessengerMsgConditionRecord> MessageConditions = [];
-        public readonly Dictionary<string, ScenarioRewardRecord> ScenarioRewards = [];
-
-
         public byte[] Sha256Hash;
         public int Size;
+
+        private ZipFile MainZip;
+        private MemoryStream ZipStream;
+        private int totalFiles = 1;
+        private int currentFile = 0;
+
+
+
+        [LoadRecord("MainQuestTable.json", "id", typeof(MainQuestCompletionTable))]
+        public readonly Dictionary<int, MainQuestCompletionRecord> QuestDataRecords = [];
+        
+        [LoadRecord("CampaignStageTable.json", "id", typeof(CampaignStageTable))]
+        public readonly Dictionary<int, CampaignStageRecord> StageDataRecords = [];
+        
+        [LoadRecord("RewardTable.json", "id", typeof(RewardTable))]
+        public readonly Dictionary<int, RewardTableRecord> RewardDataRecords = [];
+        
+        [LoadRecord("UserExpTable.json", "level", typeof(UserExpTable))]
+        public readonly Dictionary<int, UserExpRecord> UserExpDataRecords = [];
+        
+        [LoadRecord("CampaignChapterTable.json", "chapter", typeof(CampaignChapterTable))]
+        public readonly Dictionary<int, CampaignChapterRecord> ChapterCampaignData = [];
+        
+        [LoadRecord("CharacterCostumeTable.json", "id", typeof(CharacterCostumeTable))]
+        public readonly Dictionary<int, CharacterCostumeRecord> CharacterCostumeTable = [];
+        
+        [LoadRecord("CharacterTable.json", "id", typeof(CharacterTable))]
+        public readonly Dictionary<int, CharacterRecord> CharacterTable = [];
+        
+        [LoadRecord("ContentsTutorialTable.json", "id", typeof(TutorialTable))]
+        public readonly Dictionary<int, ClearedTutorialData> TutorialTable = [];
+        [LoadRecord("ItemEquipTable.json", "id", typeof(ItemEquipTable))]
+
+        public readonly Dictionary<int, ItemEquipRecord> ItemEquipTable = [];
+        
+        [LoadRecord("ItemMaterialTable.json", "id", typeof(ItemMaterialTable))]
+        public readonly Dictionary<int, ItemMaterialRecord> itemMaterialTable = [];
+        
+        [LoadRecord("ItemEquipExpTable.json", "id", typeof(ItemEquipExpTable))]
+        public readonly Dictionary<int, ItemEquipExpRecord> itemEquipExpTable = [];
+        
+        [LoadRecord("ItemEquipGradeExpTable.json", "id", typeof(ItemEquipGradeExpTable))]
+        public readonly Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable = [];
+        
+        [LoadRecord("CharacterLevelTable.json", "level", typeof(CharacterLevelTable))]
+        public readonly Dictionary<int, CharacterLevelData> LevelData = [];
+        
+        [LoadRecord("TacticAcademyFunctionTable.json", "id", typeof(TacticAcademyLessonTable))]
+        public readonly Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
+        
+        [LoadRecord("SideStoryStageTable.json", "id", typeof(SideStoryStageTable))]
+        public readonly Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
+        public readonly Dictionary<string, int> PositionReward = [];
+        
+        [LoadRecord("FieldItemTable.json", "id", typeof(FieldItemTable))]
+        public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
+        
+        [LoadRecord("OutpostBattleTable.json", "id", typeof(OutpostBattleTable))]
+        public readonly Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
+        
+        [LoadRecord("JukeboxListTable.json", "id", typeof(JukeboxListTable))]
+        public readonly Dictionary<int, JukeboxListRecord> jukeboxListDataRecords = [];
+        
+        [LoadRecord("JukeboxThemeTable.json", "id", typeof(JukeboxThemeTable))]
+        public readonly Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords = [];
+        
+        [LoadRecord("GachaTypeTable.json", "id", typeof(GachaTypeTable))]
+        public readonly Dictionary<int, GachaType> gachaTypes = [];
+        
+        [LoadRecord("EventManagerTable.json", "id", typeof(EventManagerTable))]
+        public readonly Dictionary<int, EventManager> eventManagers = [];
+        
+        [LoadRecord("LiveWallpaperTable.json", "id", typeof(LiveWallpaperTable))]
+        public readonly Dictionary<int, LiveWallpaperRecord> lwptablemgrs = [];
+        
+        [LoadRecord("AlbumResourceTable.json", "id", typeof(AlbumResourceTable))]
+        public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
+        
+        [LoadRecord("UserFrameTable.json", "id", typeof(UserFrameTable))]
+        public readonly Dictionary<int, UserFrameTableRecord> userFrameTable = [];
+        
+        [LoadRecord("ArchiveRecordManagerTable.json", "id", typeof(ArchiveRecordManagerTable))]
+        public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
+        
+        [LoadRecord("ArchiveEventStoryTable.json", "id", typeof(ArchiveEventStoryTable))]
+        public readonly Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = [];
+        
+        [LoadRecord("ArchiveEventQuestTable.json", "id", typeof(ArchiveEventQuestTable))]
+        public readonly Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = [];
+        
+        [LoadRecord("ArchiveEventDungeonStageTable.json", "id", typeof(ArchiveEventDungeonStageTable))]
+        public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
+        
+        [LoadRecord("UserTitleTable.json", "id", typeof(UserTitleTable))]
+        public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
+        
+        [LoadRecord("ArchiveMessengerConditionTable.json", "id", typeof(ArchiveMessengerConditionTable))]
+        public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
+        
+        [LoadRecord("CharacterStatTable.json", "id", typeof(CharacterStatTable))]
+        public readonly Dictionary<int, CharacterStatRecord> characterStatTable = [];
+        
+        [LoadRecord("SkillInfoTable.json", "id", typeof(SkillInfoTable))]
+        public readonly Dictionary<int, SkillInfoRecord> skillInfoTable = [];
+        
+        [LoadRecord("CostTable.json", "id", typeof(CostTable))]
+        public readonly Dictionary<int, CostRecord> costTable = [];
+        
+        [LoadRecord("MidasProductTable.json", "midas_product_id_proximabeta", typeof(MidasProductTable))]
+        public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
+        
+        [LoadRecord("TowerTable.json", "id", typeof(TowerTable))]
+        public readonly Dictionary<int, TowerRecord> towerTable = [];
+        
+        [LoadRecord("TriggerTable.json", "id", typeof(TriggerTable))]
+        public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
+        
+        [LoadRecord("InfraCoreGradeTable.json", "id", typeof(InfracoreTable))]
+        public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
+        
+        [LoadRecord("AttractiveCounselCharacterTable.json", "name_code", typeof(AttractiveCounselCharacterTable))]
+        public readonly Dictionary<int, AttractiveCounselCharacterRecord> AttractiveCounselCharacterTable = [];
+        
+        [LoadRecord("AttractiveLevelRewardTable.json", "id", typeof(AttractiveLevelRewardTable))]
+        public readonly Dictionary<int, AttractiveLevelRewardRecord> AttractiveLevelReward = [];
+        
+        [LoadRecord("SubQuestTable.json", "id", typeof(SubquestTable))]
+        public readonly Dictionary<int, SubquestRecord> Subquests = [];
+
+        [LoadRecord("MessengerDialogTable.json", "id", typeof(MessengerDialogTable))]
+        public readonly Dictionary<string, MessengerDialogRecord> Messages = [];
+
+        [LoadRecord("MessengerConditionTriggerTable.json", "id", typeof(MessengerMsgConditionTable))]
+        public readonly Dictionary<int, MessengerMsgConditionRecord> MessageConditions = [];
+
+        [LoadRecord("ScenarioRewardsTable.json", "condition_id", typeof(ScenarioRewardTable))]
+        public readonly Dictionary<string, ScenarioRewardRecord> ScenarioRewards = [];
+
 
         static async Task<GameData> BuildAsync()
         {
@@ -232,7 +319,7 @@ namespace EpinelPS.Data
         }
         #endregion
 
-        private async Task<T> LoadZip<T>(string entry, ProgressBar bar)
+        public async Task<T> LoadZip<T>(string entry, IProgress<double> bar)
         {
             var mainQuestData = MainZip.GetEntry(entry) ?? throw new Exception(entry + " does not exist in static data");
             using StreamReader mainQuestReader = new(MainZip.GetInputStream(mainQuestData));
@@ -262,102 +349,13 @@ namespace EpinelPS.Data
             return records;
         }
 
-        int totalFiles = 90;
-        int currentFile = 0;
-
         public async Task Parse()
         {
             using var progress = new ProgressBar();
 
-            var questDataRecords = await LoadZip<MainQuestCompletionTable>("MainQuestTable.json", progress);
-            foreach (var obj in questDataRecords.records)
-            {
-                this.questDataRecords.Add(obj.id, obj);
-            }
+            totalFiles = GameDataInitializer.TotalFiles;
 
-            var stageDataRecords = await LoadZip<CampaignStageTable>("CampaignStageTable.json", progress);
-            foreach (var obj in stageDataRecords.records)
-            {
-                this.stageDataRecords.Add(obj.id, obj);
-            }
-
-            var rewardDataRecords = await LoadZip<RewardTable>("RewardTable.json", progress);
-            foreach (var obj in rewardDataRecords.records)
-            {
-                this.rewardDataRecords.Add(obj.id, obj);
-            }
-
-            var chapterCampaignData = await LoadZip<CampaignChapterTable>("CampaignChapterTable.json", progress);
-            foreach (var obj in chapterCampaignData.records)
-            {
-                this.chapterCampaignData.Add(obj.chapter, obj);
-            }
-
-            var userExpDataRecords = await LoadZip<UserExpTable>("UserExpTable.json", progress);
-            foreach (var obj in userExpDataRecords.records)
-            {
-                this.userExpDataRecords.Add(obj.level, obj);
-            }
-
-            var characterCostumeTable = await LoadZip<CharacterCostumeTable>("CharacterCostumeTable.json", progress);
-            foreach (var obj in characterCostumeTable.records)
-            {
-                this.characterCostumeTable.Add(obj.id, obj);
-            }
-
-            var characterTable = await LoadZip<CharacterTable>("CharacterTable.json", progress);
-            foreach (var obj in characterTable.records)
-            {
-                this.characterTable.Add(obj.id, obj);
-            }
-
-            var tutorialTable = await LoadZip<TutorialTable>("ContentsTutorialTable.json", progress);
-            foreach (var obj in tutorialTable.records)
-            {
-                this.tutorialTable.Add(obj.id, obj);
-            }
-
-            var itemEquipTable = await LoadZip<ItemEquipTable>("ItemEquipTable.json", progress);
-            foreach (var obj in itemEquipTable.records)
-            {
-                this.itemEquipTable.Add(obj.id, obj);
-            }
-
-            var itemMaterialTable = await LoadZip<ItemMaterialTable>("ItemMaterialTable.json", progress);
-            foreach (var obj in itemMaterialTable.records)
-            {
-                this.itemMaterialTable.Add(obj.id, obj);
-            }
-
-            var itemEquipExpTable = await LoadZip<ItemEquipExpTable>("ItemEquipExpTable.json", progress);
-            foreach (var obj in itemEquipExpTable.records)
-            {
-                this.itemEquipExpTable.Add(obj.id, obj);
-            }
-
-            var ItemEquipGradeExpTable = await LoadZip<ItemEquipGradeExpTable>("ItemEquipGradeExpTable.json", progress);
-            foreach (var obj in ItemEquipGradeExpTable.records)
-            {
-                this.ItemEquipGradeExpTable.Add(obj.id, obj);
-            }
-
-            var characterLevelTable = await LoadZip<CharacterLevelTable>("CharacterLevelTable.json", progress);
-            foreach (var obj in characterLevelTable.records)
-            {
-                LevelData.Add(obj.level, obj);
-            }
-
-            var tacticLessonTable = await LoadZip<TacticAcademyLessonTable>("TacticAcademyFunctionTable.json", progress);
-            foreach (var obj in tacticLessonTable.records)
-            {
-                TacticAcademyLessons.Add(obj.id, obj);
-            }
-
-            var sidestoryTable = await LoadZip<SideStoryStageTable>("SideStoryStageTable.json", progress);
-            foreach (var obj in sidestoryTable.records)
-            {
-                SidestoryRewardTable.Add(obj.id, obj);
-            }
+            await GameDataInitializer.InitializeGameData(progress);
 
             foreach (ZipEntry item in MainZip)
             {
@@ -382,184 +380,12 @@ namespace EpinelPS.Data
                     }
                 }
             }
-            var fieldItems = await LoadZip<FieldItemTable>("FieldItemTable.json", progress);
-            foreach (var obj in fieldItems.records)
-            {
-                FieldItems.Add(obj.id, obj);
-            }
-            var battleOutpostTable = await LoadZip<OutpostBattleTable>("OutpostBattleTable.json", progress);
-            foreach (var obj in battleOutpostTable.records)
-            {
-                OutpostBattle.Add(obj.id, obj);
-            }
-
-            var archiveRecordManagerTableData = await LoadZip<ArchiveRecordManagerTable>("ArchiveRecordManagerTable.json", progress);
-            foreach (var obj in archiveRecordManagerTableData.records)
-            {
-                archiveRecordManagerTable.Add(obj.id, obj);
-            }
-
-            var gachaTypeTable = await LoadZip<GachaTypeTable>("GachaTypeTable.json", progress);
-
-            // Add the records to the dictionary
-            foreach (var obj in gachaTypeTable.records)
-            {
-                gachaTypes.Add(obj.id, obj);  // Use obj.id as the key and obj (the GachaType) as the value
-            }
-
-            var eventManagerTable = await LoadZip<EventManagerTable>("EventManagerTable.json", progress);
-
-            // Add the records to the dictionary
-            foreach (var obj in eventManagerTable.records)
-            {
-                eventManagers.Add(obj.id, obj);  // Use obj.id as the key and obj (the EventManager) as the value
-            }
-
-            var lwptable = await LoadZip<LiveWallpaperTable>("LiveWallpaperTable.json", progress);
-
-            // Add the records to the dictionary
-            foreach (var obj in lwptable.records)
-            {
-                lwptablemgrs.Add(obj.id, obj);  // Use obj.id as the key and obj (the LiveWallpaperRecord) as the value
-            }
-
-            var userFrameData = await LoadZip<UserFrameTable>("UserFrameTable.json", progress);
-            foreach (var record in userFrameData.records)
-            {
-                userFrameTable[record.id] = record;
-            }
-            // Load and parse ArchiveEventDungeonStageTable.json
-            var archiveEventDungeonStageData = await LoadZip<ArchiveEventDungeonStageTable>("ArchiveEventDungeonStageTable.json", progress);
-            foreach (var obj in archiveEventDungeonStageData.records)
-            {
-                archiveEventDungeonStageRecords.Add(obj.id, obj);
-            }
-
-            var userTitleTable = await LoadZip<UserTitleTable>("UserTitleTable.json", progress);
-            foreach (var obj in userTitleTable.records)
-            {
-                userTitleRecords.Add(obj.id, obj);
-            }
-
-            // Load and parse ArchiveEventStoryTable.json
-            var archiveEventStoryTable = await LoadZip<ArchiveEventStoryTable>("ArchiveEventStoryTable.json", progress);
-            foreach (var obj in archiveEventStoryTable.records)
-            {
-                archiveEventStoryRecords.Add(obj.id, obj);
-            }
-
-            // Load and parse ArchiveEventQuestTable.json
-            var archiveEventQuestTable = await LoadZip<ArchiveEventQuestTable>("ArchiveEventQuestTable.json", progress);
-            foreach (var obj in archiveEventQuestTable.records)
-            {
-                archiveEventQuestRecords.Add(obj.id, obj);
-            }
-            // LOAD ARCHIVE MESSENGER CONDITION TABLE
-            var archiveMessengerConditionTable = await LoadZip<ArchiveMessengerConditionTable>("ArchiveMessengerConditionTable.json", progress);
-            foreach (var obj in archiveMessengerConditionTable.records)
-            {
-                archiveMessengerConditionRecords.Add(obj.id, obj);
-            }
-            var albumResourceTable = await LoadZip<AlbumResourceTable>("AlbumResourceTable.json", progress);
-            foreach (var obj in albumResourceTable.records)
-            {
-                albumResourceRecords.Add(obj.id, obj);  // Now refers to the class-level field
-            }
-
-            var jukeboxListData = await LoadZip<JukeboxListTable>("JukeboxListTable.json", progress);
-            foreach (var obj in jukeboxListData.records)
-            {
-                jukeboxListDataRecords.Add(obj.id, obj);  // Now refers to the class-level field
-            }
-
-            var jukeboxThemeData = await LoadZip<JukeboxThemeTable>("JukeboxThemeTable.json", progress);
-            foreach (var obj in jukeboxThemeData.records)
-            {
-                jukeboxThemeDataRecords.Add(obj.id, obj);  // Now refers to the class-level field
-            }
-
-            var characterStatTable = await LoadZip<CharacterStatTable>("CharacterStatTable.json", progress);
-            foreach (var obj in characterStatTable.records)
-            {
-                this.characterStatTable.Add(obj.id, obj);
-            }
-
-            var skillinfoTable = await LoadZip<SkillInfoTable>("SkillInfoTable.json", progress);
-            foreach (var obj in skillinfoTable.records)
-            {
-                this.skillInfoTable.Add(obj.id, obj);
-            }
-
-            var costTable = await LoadZip<CostTable>("CostTable.json", progress);
-            foreach (var obj in costTable.records)
-            {
-                this.costTable.Add(obj.id, obj);
-            }
-
-            var mediasProductTable = await LoadZip<MidasProductTable>("MidasProductTable.json", progress);
-            foreach (var obj in mediasProductTable.records)
-            {
-                this.mediasProductTable.Add(obj.midas_product_id_proximabeta, obj);
-            }
-
-            var towerTable = await LoadZip<TowerTable>("TowerTable.json", progress);
-            foreach (var obj in towerTable.records)
-            {
-                this.towerTable.Add(obj.id, obj);
-            }
-
-            var triggerTable = await LoadZip<TriggerTable>("TriggerTable.json", progress);
-            foreach (var obj in triggerTable.records)
-            {
-                this.TriggerTable.Add(obj.id, obj);
-            }
-
-            var infracoreTable = await LoadZip<InfracoreTable>("InfraCoreGradeTable.json", progress);
-            foreach (var obj in infracoreTable.records)
-            {
-                this.InfracoreTable.Add(obj.id, obj);
-            }
-            
-            var attrData = await LoadZip<AttractiveCounselCharacterTable>("AttractiveCounselCharacterTable.json", progress);
-            foreach (var obj in attrData.records)
-            {
-                this.AttractiveCounselCharacterTable.Add(obj.name_code, obj);
-            }
-
-            var attrLData = await LoadZip<AttractiveLevelRewardTable>("AttractiveLevelRewardTable.json", progress);
-            foreach (var obj in attrLData.records)
-            {
-                this.AttractiveLevelReward.Add(obj.id, obj);
-            }
-
-            var subquest = await LoadZip<SubquestTable>("SubQuestTable.json", progress);
-            foreach (var obj in subquest.records)
-            {
-                this.Subquests.Add(obj.id, obj);
-            }
-
-            var msgs = await LoadZip<MessengerDialogTable>("MessengerDialogTable.json", progress);
-            foreach (var obj in msgs.records)
-            {
-                this.Messages.Add(obj.id, obj);
-            }
-
-            var msgc = await LoadZip<MessengerMsgConditionTable>("MessengerConditionTriggerTable.json", progress);
-            foreach (var obj in msgc.records)
-            {
-                this.MessageConditions.Add(obj.id, obj);
-            }
-
-            var scr = await LoadZip<ScenarioRewardTable>("ScenarioRewardsTable.json", progress);
-            foreach (var obj in scr.records)
-            {
-                this.ScenarioRewards.Add(obj.condition_id, obj);
-            }
+           
         }
 
         public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)
         {
-            foreach (var item in questDataRecords)
+            foreach (var item in QuestDataRecords)
             {
                 if (item.Value.condition_id == stage)
                 {
@@ -571,15 +397,15 @@ namespace EpinelPS.Data
         }
         public MainQuestCompletionRecord? GetMainQuestByTableId(int tid)
         {
-            return questDataRecords[tid];
+            return QuestDataRecords[tid];
         }
         public CampaignStageRecord? GetStageData(int stage)
         {
-            return stageDataRecords[stage];
+            return StageDataRecords[stage];
         }
         public RewardTableRecord? GetRewardTableEntry(int rewardId)
         {
-            return rewardDataRecords[rewardId];
+            return RewardDataRecords[rewardId];
         }
         /// <summary>
         /// Returns the level and its minimum value for XP value
@@ -591,9 +417,9 @@ namespace EpinelPS.Data
         {
             int prevLevel = 0;
             int prevValue = 0;
-            for (int i = 1; i < userExpDataRecords.Count + 1; i++)
+            for (int i = 1; i < UserExpDataRecords.Count + 1; i++)
             {
-                var item = userExpDataRecords[i];
+                var item = UserExpDataRecords[i];
 
                 if (prevValue < targetExp)
                 {
@@ -609,9 +435,9 @@ namespace EpinelPS.Data
         }
         public int GetUserMinXpForLevel(int targetLevel)
         {
-            for (int i = 1; i < userExpDataRecords.Count + 1; i++)
+            for (int i = 1; i < UserExpDataRecords.Count + 1; i++)
             {
-                var item = userExpDataRecords[i];
+                var item = UserExpDataRecords[i];
 
                 if (targetLevel == item.level)
                 {
@@ -628,7 +454,7 @@ namespace EpinelPS.Data
             {
                 string difficulty = keys[1];
 
-                foreach (var item in chapterCampaignData)
+                foreach (var item in ChapterCampaignData)
                 {
                     if (difficulty == "Normal" && item.Value.chapter == chapterNum)
                     {
@@ -649,7 +475,7 @@ namespace EpinelPS.Data
         }
         public int GetNormalChapterNumberFromFieldName(string field)
         {
-            foreach (var item in chapterCampaignData)
+            foreach (var item in ChapterCampaignData)
             {
                 if (item.Value.field_id == field)
                 {
@@ -659,14 +485,9 @@ namespace EpinelPS.Data
 
             return -1;
         }
-
-        public IEnumerable<int> GetAllCharacterTids()
-        {
-            return characterTable.Keys;
-        }
         public IEnumerable<int> GetAllCostumes()
         {
-            foreach (var item in characterCostumeTable)
+            foreach (var item in CharacterCostumeTable)
             {
                 yield return item.Value.id;
             }
@@ -674,18 +495,18 @@ namespace EpinelPS.Data
 
         internal ClearedTutorialData GetTutorialDataById(int TableId)
         {
-            return tutorialTable[TableId];
+            return TutorialTable[TableId];
         }
 
         public string? GetItemSubType(int itemType)
         {
-            return itemEquipTable[itemType].item_sub_type;
+            return ItemEquipTable[itemType].item_sub_type;
         }
 
         internal IEnumerable<int> GetStageIdsForChapter(int chapterNumber, bool normal)
         {
             string mod = normal ? "Normal" : "Hard";
-            foreach (var item in stageDataRecords)
+            foreach (var item in StageDataRecords)
             {
                 var data = item.Value;
 

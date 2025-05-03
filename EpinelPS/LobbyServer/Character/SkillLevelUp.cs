@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Character
             
             var character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
 
-            var charRecord = GameData.Instance.characterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
+            var charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
             var skillIdMap = new Dictionary<int, int>
             {
                 { 1, charRecord.ulti_skill_id },

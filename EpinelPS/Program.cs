@@ -282,7 +282,7 @@ namespace EpinelPS
                         else
                         {
                             // Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
-                            var allCharacters = GameData.Instance.characterTable.Values
+                            var allCharacters = GameData.Instance.CharacterTable.Values
                                 .GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
                                 .SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))  // Always add characters with grade_core_id == 11 and 103
                                 .ToList();
@@ -381,7 +381,7 @@ namespace EpinelPS
                         }
                         else
                         {
-                            foreach (var tutorial in GameData.Instance.tutorialTable.Values)
+                            foreach (var tutorial in GameData.Instance.TutorialTable.Values)
                             {
                                 if (!user.ClearedTutorialData.ContainsKey(tutorial.id))
                                 {
@@ -417,7 +417,7 @@ namespace EpinelPS
                                 int tid = character.Tid;
 
                                 // Get the character data from the character table
-                                if (!GameData.Instance.characterTable.TryGetValue(tid, out var charData))
+                                if (!GameData.Instance.CharacterTable.TryGetValue(tid, out var charData))
                                 {
                                     Console.WriteLine($"Character data not found for Tid {tid}");
                                     continue;
@@ -445,7 +445,7 @@ namespace EpinelPS
                                     int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
 
                                     // Find the character with the same name_code and new grade_core_id
-                                    var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
+                                    var newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
                                         c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
                                     if (newCharData != null)
@@ -466,7 +466,7 @@ namespace EpinelPS
                                     int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
 
                                     // Find the character with the same name_code and new grade_core_id
-                                    var newCharData = GameData.Instance.characterTable.Values.FirstOrDefault(c =>
+                                    var newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
                                         c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
                                     if (newCharData != null)

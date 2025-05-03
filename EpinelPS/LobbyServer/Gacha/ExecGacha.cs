@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.Gacha
             var user = GetUser();
             var response = new ResExecuteGacha() { Reward = new NetRewardData() { PassPoint = new() } };
 
-            var entireallCharacterData = GameData.Instance.characterTable.Values.ToList();
+            var entireallCharacterData = GameData.Instance.CharacterTable.Values.ToList();
             // Remove the .Values part since it's already a list.
             // Group by name_code to treat same name_code as one character 
             // Always add characters with grade_core_id == 1 and 101

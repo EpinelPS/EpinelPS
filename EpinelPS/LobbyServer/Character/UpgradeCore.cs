@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.Character
             var user = GetUser();
 
             // Get all character data from the game's character table
-            var fullchardata = GameData.Instance.characterTable.Values.ToList();
+            var fullchardata = GameData.Instance.CharacterTable.Values.ToList();
 
             var targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
 
