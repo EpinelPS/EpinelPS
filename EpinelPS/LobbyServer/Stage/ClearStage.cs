@@ -92,11 +92,13 @@ namespace EpinelPS.LobbyServer.Stage
             {
                 if (clearedStage.chapter_mod == "Hard")
                 {
-                    user.LastHardStageCleared = StageId;
+                    if (StageId > user.LastHardStageCleared)
+                        user.LastHardStageCleared = StageId;
                 }
                 else if (clearedStage.chapter_mod == "Normal")
                 {
-                    user.LastNormalStageCleared = StageId;
+                    if (StageId > user.LastNormalStageCleared)
+                        user.LastNormalStageCleared = StageId;
                 }
                 else
                 {
