@@ -56,7 +56,7 @@ namespace EpinelPS.LobbyServer
 
             if (handler == null)
             {
-                Logging.WriteLine("HANDLER NOT FOUND: " + path, LogType.Error);
+                Logging.WriteLine($"Error: Implementation for {path} not found", LogType.Error);
                 //ctx.Response.StatusCode = 404;
 
                 // to prevent "reloading" of the game for now, return empty response

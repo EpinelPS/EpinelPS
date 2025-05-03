@@ -10,9 +10,7 @@ namespace EpinelPS.LobbyServer.Campaign
             var req = await ReadData<ReqSaveCampaignField>();
             var user = GetUser();
 
-            var response = new ResGetFieldTalkList();
-
-            Console.WriteLine($"save {req.MapId} with {req.Json}");
+            var response = new ResSaveCampaignField();
 
             if (!user.MapJson.ContainsKey(req.MapId))
             {

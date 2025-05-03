@@ -18,16 +18,7 @@ namespace EpinelPS.Controllers
             await LobbyHandler.DispatchSingle(HttpContext);
             st.Stop();
 
-            var fg = Console.ForegroundColor;
-
-            if (HttpContext.Response.StatusCode == 200)
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-            else
-                Console.ForegroundColor = ConsoleColor.Red;
-
-            Logging.WriteLine("POST " + HttpContext.Request.Path.Value + " completed in " + st.Elapsed + " with result " + HttpContext.Response.StatusCode, LogType.InfoSuccess);
-
-            Console.ForegroundColor = fg;
+            Logging.WriteLine($"POST {HttpContext.Request.Path.Value}: {HttpContext.Response.StatusCode}", LogType.Info);
         }
     }
 }

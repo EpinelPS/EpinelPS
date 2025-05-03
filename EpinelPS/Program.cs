@@ -1063,7 +1063,7 @@ namespace EpinelPS
             url = url.Replace("/v1", "");
 
             // find appropriate handler
-            Logging.WriteLine("BATCH: /v1" + url, LogType.Info);
+            Logging.WriteLine("BATCH " + url, LogType.Info);
 
             foreach (var item in LobbyHandler.Handlers)
             {
