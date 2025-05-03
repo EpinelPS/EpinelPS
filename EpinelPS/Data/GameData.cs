@@ -168,13 +168,13 @@ namespace EpinelPS.Data
         {
             await Load();
 
-            Console.WriteLine("Preparing");
+            Logging.WriteLine("Preparing");
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             await Instance.Parse();
 
             stopWatch.Stop();
-            Console.WriteLine("Preparing took " + stopWatch.Elapsed);
+            Logging.WriteLine("Preparing took " + stopWatch.Elapsed);
             return Instance;
         }
 

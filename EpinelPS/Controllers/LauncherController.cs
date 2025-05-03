@@ -96,7 +96,6 @@ namespace EpinelPS.Controllers
                 return "{}";
             }
             
-            Console.WriteLine("Requesting gameId: " + body.game_id);
             return System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gameversion.json"));
         }
 

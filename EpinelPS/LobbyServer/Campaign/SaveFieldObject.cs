@@ -12,11 +12,9 @@ namespace EpinelPS.LobbyServer.Campaign
             var req = await ReadData<ReqSaveCampaignFieldObject>();
             var user = GetUser();
 
-            Console.WriteLine("Map ID: " + req.MapId);
-
             var response = new ResSaveCampaignFieldObject();
 
-            Console.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}");
+            Logging.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}", LogType.Debug);
 
             var chapter = GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
             var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";

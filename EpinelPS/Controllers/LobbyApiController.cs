@@ -1,6 +1,7 @@
 ﻿using EpinelPS.LobbyServer;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using EpinelPS.Utils;
 
 namespace EpinelPS.Controllers
 {
@@ -24,7 +25,7 @@ namespace EpinelPS.Controllers
             else
                 Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.WriteLine("POST " + HttpContext.Request.Path.Value + " completed in " + st.Elapsed + "with result " + HttpContext.Response.StatusCode);
+            Logging.WriteLine("POST " + HttpContext.Request.Path.Value + " completed in " + st.Elapsed + " with result " + HttpContext.Response.StatusCode, LogType.InfoSuccess);
 
             Console.ForegroundColor = fg;
         }

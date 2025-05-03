@@ -26,10 +26,10 @@ namespace EpinelPS
 
                 GameData.Instance.GetAllCostumes(); // force static data to be loaded
 
-                Console.WriteLine("Register handlers");
+                Logging.WriteLine("Register handlers");
                 LobbyHandler.Init();
 
-                Console.WriteLine("Starting ASP.NET core on port 443");
+                Logging.WriteLine("Starting ASP.NET core on port 443");
                 new Thread(() =>
                 {
                     var builder = WebApplication.CreateBuilder(args);
@@ -1063,7 +1063,7 @@ namespace EpinelPS
             url = url.Replace("/v1", "");
 
             // find appropriate handler
-            Console.WriteLine("BATCH: /v1" + url);
+            Logging.WriteLine("BATCH: /v1" + url, LogType.Info);
 
             foreach (var item in LobbyHandler.Handlers)
             {
@@ -1076,10 +1076,8 @@ namespace EpinelPS
                 }
             }
 
-            var fg = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("HANDLER NOT FOUND: " + url);
-            Console.ForegroundColor = fg;
+            Logging.WriteLine("Handler not found: " + url, LogType.Error);
+
             return null;
         }
     }

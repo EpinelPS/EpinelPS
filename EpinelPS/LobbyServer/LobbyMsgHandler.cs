@@ -61,13 +61,13 @@ namespace EpinelPS.LobbyServer
         {
             var str = (string?)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
             if (str != null)
-                Console.WriteLine(str);
+                Logging.WriteLine(str, LogType.Debug);
         }
         protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
         {
-            Console.WriteLine("Writing " + data.GetType().Name);
+            Logging.WriteLine("Writing " + data.GetType().Name, LogType.Debug);
             PrintMessage(data);
-            Console.WriteLine();
+            Logging.WriteLine("", LogType.Debug);
 
             if (ctx == null)
             {
@@ -110,13 +110,13 @@ namespace EpinelPS.LobbyServer
             {
                 // return grpc IMessage from byte array with type T
                 T msg = new();
-                Console.WriteLine("Reading " + msg.GetType().Name);
+                Logging.WriteLine("Reading " + msg.GetType().Name, LogType.Debug);
 
                 var bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
                 msg.MergeFrom(bin.Contents);
 
                 PrintMessage(msg);
-                Console.WriteLine();
+                Logging.WriteLine("", LogType.Debug);
 
                 UserId = bin.UserId;
                 UsedAuthToken = bin.UsedAuthToken;

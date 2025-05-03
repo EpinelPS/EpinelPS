@@ -11,10 +11,6 @@ namespace EpinelPS.LobbyServer.Wallet
             var user = GetUser();
 
             var response = new ResGetCurrencyData();
-            foreach (var item in req.Currencies)
-            {
-                Console.WriteLine("Request currency " + (CurrencyType)item);
-            }
 
             foreach (var currency in user.Currency)
             {

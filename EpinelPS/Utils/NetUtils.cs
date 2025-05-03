@@ -139,7 +139,7 @@ namespace EpinelPS.Utils
 
                 foreach (var c in reward.Character)
                 {
-                    Console.WriteLine("MergeRewards - TODO Character");
+                    Logging.WriteLine("MergeRewards - TODO Character", LogType.Error);
                 }
 
                 if (reward.InfraCoreExp != null)

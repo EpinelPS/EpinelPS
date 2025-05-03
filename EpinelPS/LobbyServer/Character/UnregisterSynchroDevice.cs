@@ -19,14 +19,13 @@ namespace EpinelPS.LobbyServer.Character
                 {
                     if (item.CharacterSerialNumber == 0)
                     {
-                        Console.WriteLine("must add character from synchrodevice first");
+                        Logging.WriteLine("must add character from synchrodevice first", LogType.Warning);
                     }
                     else
                     {
                         var oldCSN = item.CharacterSerialNumber;
                         item.CharacterSerialNumber = 0;
-                        var data = user.GetCharacterBySerialNumber(oldCSN);
-                        if (data == null) throw new Exception("failed to lookup character"); 
+                        var data = user.GetCharacterBySerialNumber(oldCSN) ?? throw new Exception("failed to lookup character");
 
                         response.Character = new NetUserCharacterDefaultData()
                         {

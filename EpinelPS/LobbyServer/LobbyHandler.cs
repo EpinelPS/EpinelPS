@@ -5,6 +5,8 @@ using Google.Protobuf;
 using Paseto.Builder;
 using Paseto;
 using Newtonsoft.Json;
+using EpinelPS.LobbyServer.Stage;
+using EpinelPS.LobbyServer.Event.EventStory;
 
 namespace EpinelPS.LobbyServer
 {
@@ -20,7 +22,7 @@ namespace EpinelPS.LobbyServer
                     var attrib = (PacketPathAttribute?)Attribute.GetCustomAttribute(type, typeof(PacketPathAttribute));
                     if (attrib == null)
                     {
-                        Console.WriteLine("WARNING: Failed to get attribute for " + type.FullName);
+                        Logging.WriteLine("WARNING: Failed to get attribute for " + type.FullName, LogType.Warning);
                         continue;
                     }
 
@@ -32,7 +34,7 @@ namespace EpinelPS.LobbyServer
                     }
                     else
                     {
-                        Console.WriteLine($"WARNING: Type {type.FullName} has PacketPathAttribute but does not implement LobbyMsgHandler");
+                        Logging.WriteLine($"WARNING: Type {type.FullName} has PacketPathAttribute but does not implement LobbyMsgHandler", LogType.Warning);
                     }
                 }
             }
@@ -54,8 +56,13 @@ namespace EpinelPS.LobbyServer
 
             if (handler == null)
             {
-                Console.WriteLine("404: " + path);
-                ctx.Response.StatusCode = 404;
+                Logging.WriteLine("HANDLER NOT FOUND: " + path, LogType.Error);
+                //ctx.Response.StatusCode = 404;
+
+                // to prevent "reloading" of the game for now, return empty response
+                // this may cause more problems later on
+                
+                await new EmptyHandler().HandleAsync(ctx);
             }
             else
             {

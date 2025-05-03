@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Campaign
 
             if (chapter == -1)
             {
-                Console.WriteLine("Warning: unknown chapter id for " + req.MapId);
+                Logging.WriteLine("Warning: unknown chapter id for " + req.MapId, LogType.Warning);
                 key = req.MapId;
             }
 
@@ -36,7 +36,7 @@ namespace EpinelPS.LobbyServer.Campaign
             {
                 if (item.PositionId == req.FieldObject.PositionId)
                 {
-                    Console.WriteLine("attempted to collect campaign field object twice!");
+                    Logging.WriteLine("attempted to collect campaign field object twice!", LogType.WarningAntiCheat);
                     return;
                 }
             }

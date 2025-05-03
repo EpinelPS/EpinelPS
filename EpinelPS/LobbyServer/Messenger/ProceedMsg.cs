@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Messenger
 
             if (msgToSave.Value.reward_id != 0)
             {
-                Console.WriteLine("TODO reward for messenger. Reward ID: " + msgToSave.Value.reward_id + " Message ID: " + req.MessageId);
+                Logging.WriteLine("TODO reward for messenger. Reward ID: " + msgToSave.Value.reward_id + " Message ID: " + req.MessageId, LogType.Warning);
             }
 
             JsonDb.Save();

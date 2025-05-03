@@ -582,6 +582,7 @@ namespace EpinelPS.Database
         public string ServerName = "<color=\"green\">Private Server</color>";
         public byte[] LauncherTokenKey = [];
         public byte[] EncryptionTokenKey = [];
+        public LogType LogLevel = LogType.Debug;
     }
     internal class JsonDb
     {

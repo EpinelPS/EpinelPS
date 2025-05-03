@@ -17,13 +17,11 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             foreach (var item in req.ScenarioGroupIds)
             {
-                Console.WriteLine("check scenario " + item);
                 foreach (var completed in user.CompletedScenarios)
                 {
                     // story thingy was completed
                     if (completed == item)
                     {
-                        Console.WriteLine(item + " is completed");
                         response.ExistGroupIds.Add(item);
                     }
                 }
