@@ -1,4 +1,5 @@
-﻿using EpinelPS.Database;
+﻿using System.Reflection;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Ocsp;
@@ -99,12 +100,61 @@ namespace EpinelPS.Controllers
             // Enable encryption, not used in this server.
             return "{\"msg\":\"success\",\"ret\":0,\"seq\":\"" + seq + "\"}";
         }
+        private static IntlNotice CreateNotice(int id, NoticeType type, string contentText, string title = "", string picture = "")
+        {
+            IntlNotice notice = new()
+            {
+                app_id = "3001001",
+                app_notice_id = "post-" + id,
+                area_list = "[\"81\",\"82\",\"83\",\"84\",\"85\"]",
+                extra_data = "{\"NoticeType\":\"" + type.ToString() + "\",\"Order\":\"11\",\"extra_reserved\":\"{\\\"Author\\\":\\\"\\\",\\\"Category\\\":\\\"\\\",\\\"CreateType\\\":\\\"4\\\",\\\"IsOpenService\\\":\\\"0\\\",\\\"IsToping\\\":true,\\\"Keyword\\\":\\\"\\\",\\\"Sort\\\":\\\"\\\",\\\"TopEnd\\\":\\\"2030-01-01 00:00:01\\\",\\\"TopStart\\\":\\\"2000-01-01 00:00:01\\\"}\"}",
+                id = id,
+                start_time = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                end_time = (int)DateTimeOffset.UtcNow.AddDays(1).ToUnixTimeSeconds(),
+                update_time = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                status = 1
+            };
+
+            ContentList content = new()
+            {
+                app_content_id = "post-" + id,
+                content = contentText,
+                extra_data = "{}",
+                id = id,
+                lang_type = "en",
+                title = title,
+                update_time = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+
+            if (!string.IsNullOrEmpty(picture))
+            {
+                content.picture_list.Add(new PictureList()
+                {
+                    extra_data = "{\"id\":\"TitleImage\"}",
+                    hash = "",
+                    redirect_url = "",
+                    url = picture
+                });
+            }
+
+            notice.content_list.Add(content);
+            return notice;
+        }
 
         [HttpPost]
         [Route("notice/get_notice_content")]
-        public string GetNotices(string seq)
+        public IntlNoticeListResponse GetNotices(string seq)
         {
-            return "{\r\n  \"msg\": \"success\",\r\n  \"notice_list\": [\r\n    {\r\n      \"app_id\": \"3001001\",\r\n      \"app_notice_id\": \"post-6rpvwgrdx1b\",\r\n      \"area_list\": \"[\\\"81\\\",\\\"82\\\",\\\"83\\\",\\\"84\\\",\\\"85\\\"]\",\r\n      \"content_list\": [\r\n        {\r\n          \"app_content_id\": \"post-9ilpu79xxzp\",\r\n          \"content\": \"This isn't working\",\r\n          \"extra_data\": \"{}\",\r\n          \"id\": 48706,\r\n          \"lang_type\": \"en\",\r\n          \"picture_list\": [\r\n            {\r\n              \"extra_data\": \"{\\\"id\\\":\\\"TitleImage\\\"}\",\r\n              \"hash\": \"44a99a61152b5b80a0466ff9f0cee2bc\",\r\n              \"redirect_url\": \"\",\r\n              \"url\": \"pnt-console-cdn.playernetwork.intlgame.com/prod/29080/notice/022681b1121a40259a575fbe587651b4.jpg\"\r\n            }\r\n          ],\r\n          \"title\": \"New Character\",\r\n          \"update_time\": 1717637493\r\n        }\r\n      ],\r\n      \"end_time\": 1819431999,\r\n      \"extra_data\": \"{\\\"NoticeType\\\":\\\"Event\\\",\\\"Order\\\":\\\"11\\\",\\\"extra_reserved\\\":\\\"{\\\\\\\"Author\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Category\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"CreateType\\\\\\\":\\\\\\\"4\\\\\\\",\\\\\\\"IsOpenService\\\\\\\":\\\\\\\"0\\\\\\\",\\\\\\\"IsToping\\\\\\\":true,\\\\\\\"Keyword\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"Sort\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"TopEnd\\\\\\\":\\\\\\\"2030-01-01 00:00:01\\\\\\\",\\\\\\\"TopStart\\\\\\\":\\\\\\\"2000-01-01 00:00:01\\\\\\\"}\\\"}\",\r\n      \"id\": 7560,\r\n      \"picture_list\": [],\r\n      \"start_time\": 1717617599,\r\n      \"status\": 1,\r\n      \"update_time\": 1717637494\r\n    }\r\n  ],\r\n  \"ret\": 0,\r\n  \"seq\": \"" + seq + "\"\r\n}";
+            IntlNoticeListResponse rsp = new()
+            {
+                seq = seq,
+                ret = 0,
+                msg = "success"
+            };
+
+            rsp.notice_list.Add(CreateNotice(2, NoticeType.System, "You are running EpinelPS v" + Assembly.GetExecutingAssembly().GetName().Version, "Server version"));
+
+            return rsp;
         }
 
         [HttpPost]

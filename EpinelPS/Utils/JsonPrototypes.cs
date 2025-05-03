@@ -89,4 +89,58 @@
         public int code_type { get; set; }
         public int support_captcha { get; set; }
     }
+    public class IntlApiResponse
+    {
+        public required string msg { get; set; } = "";
+        public required int ret { get; set; }
+        public required string seq { get; set; } = "";
+    }
+    public class ContentList
+    {
+        public string app_content_id { get; set; } = "";
+        public string content { get; set; } = "";
+        public string extra_data { get; set; } = "";
+        public int id { get; set; }
+        public string lang_type { get; set; } = "";
+        public List<PictureList> picture_list { get; set; } = [];
+        public string title { get; set; } = "";
+        public int update_time { get; set; }
+    }
+
+    public class PictureList
+    {
+        public string extra_data { get; set; } = "";
+        public string hash { get; set; } = "";
+        public string redirect_url { get; set; } = "";
+        public string url { get; set; } = "";
+    }
+    public class IntlNotice
+    {
+        public string app_id { get; set; } = "";
+        public string app_notice_id { get; set; } = "";
+        public string area_list { get; set; } = "";
+        public List<ContentList> content_list { get; set; } = [];
+        public int end_time { get; set; }
+        public string extra_data { get; set; } = "";
+        public int id { get; set; }
+        public List<PictureList> picture_list { get; set; } = [];
+        public int start_time { get; set; }
+        public int status { get; set; }
+        public int update_time { get; set; }
+    }
+    public class IntlNoticeListResponse : IntlApiResponse
+    {
+        public List<IntlNotice> notice_list { get; set; } = [];
+    }
+
+    public enum NoticeType
+    {
+        None = 0,
+        Title = 1,
+        Daily = 2,
+        Event = 3,
+        System = 4,
+        Emergency = 5,
+        PollData = 6
+    }
 }
