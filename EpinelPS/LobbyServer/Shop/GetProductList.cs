@@ -2,7 +2,7 @@
 using System.Globalization; // Ensure this is included
 using System.Linq;
 using System.Threading.Tasks;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Shop

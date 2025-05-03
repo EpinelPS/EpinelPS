@@ -1,13 +1,17 @@
 using EpinelPS.Database;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 
 namespace EpinelPS.Utils
 {
     // Calculate rewards for various messages
     public class RewardUtils
     {
-        
-        public static NetRewardData RegisterRewardsForUser(Database.User user, RewardTableRecord rewardData)
+        public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
+        {
+            var rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
+            return RegisterRewardsForUser(user, rewardData);
+        }
+        public static NetRewardData RegisterRewardsForUser(User user, RewardTableRecord rewardData)
         {
             NetRewardData ret = new();
             ret.PassPoint = new();

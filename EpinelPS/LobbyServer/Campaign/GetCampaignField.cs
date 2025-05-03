@@ -1,5 +1,5 @@
 ﻿using EpinelPS.LobbyServer.Stage;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Campaign

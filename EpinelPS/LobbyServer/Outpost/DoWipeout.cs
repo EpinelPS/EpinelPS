@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Outpost
 {
@@ -29,7 +30,7 @@ namespace EpinelPS.LobbyServer.Outpost
                 response.Currencies.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value});
             }
 
-            user.AddTrigger(StaticInfo.TriggerType.OutpostFastBattleReward, 1);
+            user.AddTrigger(TriggerType.OutpostFastBattleReward, 1);
 
             JsonDb.Save();
 

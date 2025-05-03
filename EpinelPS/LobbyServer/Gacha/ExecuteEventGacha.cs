@@ -2,7 +2,7 @@
 //but only does 1x pull
 //its here only so there is no system error on 1x free gacha event
 using EpinelPS.Database;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Gacha

@@ -1,5 +1,5 @@
 using EpinelPS.Utils;
-using EpinelPS.StaticInfo; // Ensure this namespace is included
+using EpinelPS.Data; // Ensure this namespace is included
 
 
 namespace EpinelPS.LobbyServer.Archive

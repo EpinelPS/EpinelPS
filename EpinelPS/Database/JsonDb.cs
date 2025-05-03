@@ -1,5 +1,5 @@
 ﻿using EpinelPS.LobbyServer;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 using Newtonsoft.Json;
 using Paseto.Builder;

@@ -1,7 +1,7 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.LobbyServer;
 using EpinelPS.LobbyServer.Stage;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;

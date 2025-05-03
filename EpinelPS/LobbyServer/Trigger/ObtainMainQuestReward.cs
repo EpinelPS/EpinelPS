@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.LobbyServer.Stage;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 using System;
 using System.Collections.Generic;

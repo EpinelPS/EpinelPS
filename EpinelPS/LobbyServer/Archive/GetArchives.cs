@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Utils;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Archive
 {

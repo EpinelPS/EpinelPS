@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.StaticInfo
+﻿namespace EpinelPS.Data
 {
     public class MainQuestCompletionRecord
     {
@@ -748,5 +748,16 @@
     public class MessengerMsgConditionTable
     {
         public List<MessengerMsgConditionRecord> records = [];
+    }
+    public class ScenarioRewardRecord
+    {
+        public int id;
+        public string condition_id = "";
+        public string condition_type = "";
+        public int reward_id;
+    }
+    public class ScenarioRewardTable
+    {
+        public List<ScenarioRewardRecord> records = [];
     }
 }

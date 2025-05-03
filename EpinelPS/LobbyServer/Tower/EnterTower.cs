@@ -1,5 +1,6 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Tower
 {
@@ -14,7 +15,7 @@ namespace EpinelPS.LobbyServer.Tower
             var response = new ResEnterTower();
 
 
-            user.AddTrigger(StaticInfo.TriggerType.TowerAllStart, 1);
+            user.AddTrigger(TriggerType.TowerAllStart, 1);
             JsonDb.Save();
 
             await WriteDataAsync(response);

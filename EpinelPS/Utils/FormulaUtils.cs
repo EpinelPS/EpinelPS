@@ -1,4 +1,4 @@
-﻿using EpinelPS.StaticInfo;
+﻿using EpinelPS.Data;
 
 namespace EpinelPS.Utils
 {

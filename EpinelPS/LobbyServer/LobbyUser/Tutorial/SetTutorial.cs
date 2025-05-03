@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser.Tutorial

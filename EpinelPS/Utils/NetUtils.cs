@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using Google.Protobuf.WellKnownTypes;
 using System.Collections.Generic;
 using static Google.Rpc.Context.AttributeContext.Types;

@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Utils;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Messenger

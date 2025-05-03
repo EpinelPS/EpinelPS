@@ -60,6 +60,8 @@ namespace ServerSelector
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
+            if (!File.Exists(gameCertList))
+                gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem"; // older INTL sdk versions
 
             if (File.Exists(launcherCertList))
             {
@@ -163,6 +165,8 @@ namespace ServerSelector
 
             string launcherCertList = launcherPath + "/intl_service/cacert.pem";
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
+            if (!File.Exists(gameCertList))
+                gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem"; // older INTL sdk versions
             bool supported = true;
 
             if (OperatingSystem.IsLinux())

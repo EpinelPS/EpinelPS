@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
@@ -9,21 +10,20 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqSetScenarioComplete>();
+            var user = GetUser();
 
             var response = new ResSetScenarioComplete
             {
-                // Mark the story "scenario" as completed.
-                // TODO: Get rewards by making a database of them from actual server.
                 Reward = new NetRewardData()
             };
 
-
-            var user = JsonDb.GetUser(UserId);
-            if (user == null)
-            {
-                throw new Exception("null user in SetScenarioComplete command");
-            }
             user.CompletedScenarios.Add(req.ScenarioId);
+
+            if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardRecord? record))
+            {
+                response.Reward = RewardUtils.RegisterRewardsForUser(user, record.reward_id);
+            }
+
             JsonDb.Save();
 
             await WriteDataAsync(response);

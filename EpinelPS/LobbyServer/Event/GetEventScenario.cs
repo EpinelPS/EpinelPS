@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
-using EpinelPS.StaticInfo; // For GameData access
+using EpinelPS.Data; // For GameData access
 using System.Linq;
 using System.Threading.Tasks;
 

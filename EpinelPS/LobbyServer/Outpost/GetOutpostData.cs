@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Utils;
 using EpinelPS.Database;
-using EpinelPS.StaticInfo;
+using EpinelPS.Data;
 namespace EpinelPS.LobbyServer.Outpost
 {
     [PacketPath("/outpost/getoutpostdata")]

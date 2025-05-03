@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Utils;
-using EpinelPS.StaticInfo; // For GameData access
+using EpinelPS.Data; // For GameData access
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {

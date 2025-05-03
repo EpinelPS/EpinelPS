@@ -11,11 +11,11 @@ namespace EpinelPS.LobbyServer.LobbyUser
             var req = await ReadData<ReqSetWallpaper>();
             var response = new ResSetWallpaper();
             var user = GetUser();
-            user.WallpaperList = req.WallpaperList.ToArray();
-            user.WallpaperBackground = req.WallpaperBackgroundList.ToArray();
-            user.WallpaperFavoriteList = req.WallpaperFavoriteList.ToArray();
-            user.WallpaperPlaylistList = req.WallpaperPlaylistList.ToArray();
-            user.WallpaperJukeboxList = req.WallpaperJukeboxList.ToArray();
+            user.WallpaperList = [.. req.WallpaperList];
+            user.WallpaperBackground = [.. req.WallpaperBackgroundList];
+            user.WallpaperFavoriteList = [.. req.WallpaperFavoriteList];
+            user.WallpaperPlaylistList = [.. req.WallpaperPlaylistList];
+            user.WallpaperJukeboxList = [.. req.WallpaperJukeboxList];
 
             JsonDb.Save();
 
