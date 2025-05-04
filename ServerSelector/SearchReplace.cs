@@ -5,8 +5,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+namespace ServerSelector;
+
 public static class PatchUtility
 {
+    public static bool CanFindOffset(string filePath, string[] searchPatterns)
+    {
+        // Check if the file exists
+        if (!File.Exists(filePath)) { Console.WriteLine("[ERROR] File not found: " + filePath); return false; }
+
+        // Read the binary data from the file as an array of bytes
+        byte[] fileData = File.ReadAllBytes(filePath);
+
+        for (int k = 0; k < searchPatterns.Length; k++)
+        {
+            // Convert the hexadecimal strings to byte arrays using a helper method
+            byte[] searchBytes = HexStringToBytes(searchPatterns[k]);
+
+            // Find the index of the first occurrence of the search pattern in the file data using another helper method
+            var results = FindPatternIndex(fileData, searchBytes);
+            if (results.Count <= 1) return false;
+
+            Console.WriteLine("offset: " + results[1].ToString("X"));
+
+            // If the index is -1, it means the pattern was not found, so we return false and log an error message
+            if (results[1] == -1)
+            {
+                Console.WriteLine("[ERROR] Search pattern not found: " + searchPatterns[k]);
+                return false;
+            }
+        }
+        return true;
+    }
     // This method searches and replaces binary patterns in a given file
     // It takes three parameters:
     // - filePath: the path of the file to be patched

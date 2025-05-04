@@ -34,6 +34,7 @@ public partial class MainView : UserControl
             {
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                TextWrapping = TextWrapping.Wrap,
                 Text = "Root is required to change servers in order to modify /etc/hosts."
             };
         }
