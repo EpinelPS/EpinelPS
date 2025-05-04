@@ -4,9 +4,9 @@
     ViewData["Title"] = "Modify user";
 }
 
-<h1>Modify</h1>
+<h1>Change user info</h1>
 
-<h4>User</h4>
+<h3>User info</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -38,9 +38,15 @@
                 <span asp-validation-for="Nickname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" style="margin-top:10px;" />
             </div>
         </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <hr>
+        <h3>Cheats</h3>
         
         <p>Campaign:</p>
         <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">Skip stages</button>
@@ -49,8 +55,8 @@
         <button class="btn btn-secondary" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">Add all characters</button>
         <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">Add character</button>
         <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">Set character levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">Set character skill levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('finishalltutorials', '@Model.ID', 'core level / 0-3 sets stars')">Set core level</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">Set character skill levels</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">Set core level</button>
         <p>Inventory:</p>
         <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">Add all equipment</button>
         <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">Add item</button>
