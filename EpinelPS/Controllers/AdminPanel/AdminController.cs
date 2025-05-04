@@ -1,6 +1,9 @@
-﻿using EpinelPS.Models;
+﻿using EpinelPS.Database;
+using EpinelPS.Models;
+using EpinelPS.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Net.Security;
 
 namespace EpinelPS.Controllers.AdminPanel
 {
@@ -14,8 +17,8 @@ namespace EpinelPS.Controllers.AdminPanel
             string? token = context.Request.Cookies["token"];
             if (token == null) return false;
 
-
-            foreach (var item in AdminApiController.AdminAuthTokens)
+            // TODO better authentication
+            foreach (var item in JsonDb.Instance.AdminAuthTokens)
             {
                 if (item.Key == token) return true;
             }
@@ -36,12 +39,33 @@ namespace EpinelPS.Controllers.AdminPanel
 
             return View();
         }
+
         [Route("Configuration")]
         public IActionResult Configuration()
         {
             if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
-            return View();
+            ServerConfiguration model = new()
+            {
+                LogType = JsonDb.Instance.LogLevel
+            };
+
+            return View(model);
+        }
+
+        [Route("Configuration"), ActionName("Configuration")]
+        [HttpPost]
+        public IActionResult ConfigurationSave([FromForm] ServerConfiguration cfg)
+        {
+            if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+            if (!ModelState.IsValid)
+                return View();
+
+            JsonDb.Instance.LogLevel = cfg.LogType;
+            JsonDb.Save();
+
+            return View(new ServerConfiguration() { LogType = cfg.LogType });
         }
 
         [Route("Mail")]

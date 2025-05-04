@@ -1,8 +1,10 @@
-﻿using EpinelPS.Database;
-using EpinelPS.LobbyServer;
+﻿using EpinelPS.Controllers.AdminPanel;
+using EpinelPS.Data;
+using EpinelPS.Database;
+using EpinelPS.LobbyServer.Stage;
+using EpinelPS.Models.Admin;
+using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.X509;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -12,8 +14,7 @@ namespace EpinelPS.Controllers
     [ApiController]
     public class AdminApiController : ControllerBase
     {
-        public static Dictionary<string, User> AdminAuthTokens = new();
-        private static MD5 md5 = MD5.Create();
+        private static readonly MD5 md5 = MD5.Create();
 
         [HttpPost]
         [Route("login")]
@@ -23,8 +24,8 @@ namespace EpinelPS.Controllers
             bool nullusernames = false;
             if (b.Username != null && b.Password != null)
             {
-                var passwordHash = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(b.Password))).ToLower();
-                foreach (var item in JsonDb.Instance.Users)
+                string passwordHash = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(b.Password))).ToLower();
+                foreach (User item in JsonDb.Instance.Users)
                 {
                     if (item.Username == b.Username)
                     {
@@ -37,25 +38,20 @@ namespace EpinelPS.Controllers
             }
             else
             {
-                nullusernames = true; 
+                nullusernames = true;
             }
 
             if (user == null)
             {
-                if (nullusernames)
-                {
-                    return new LoginApiResponse() { Message = "Please enter a username and password" };
-                }
-                else
-                {
-                    return new LoginApiResponse() { Message = "Username or password is incorrect" };
-                }
+                return nullusernames
+                    ? new LoginApiResponse() { Message = "Please enter a username and password" }
+                    : new LoginApiResponse() { Message = "Username or password is incorrect" };
             }
             else
             {
                 if (user.IsAdmin)
                 {
-                    var tok = CreateAuthToken(user);
+                    string tok = CreateAuthToken(user);
                     HttpContext.Response.Cookies.Append("token", tok);
                     return new LoginApiResponse() { OK = true, Token = tok };
                 }
@@ -64,35 +60,48 @@ namespace EpinelPS.Controllers
                     return new LoginApiResponse() { Message = "User is not an administrator." };
                 }
             }
+        }
 
+        [HttpPost("RunCmd")]
+        public RunCmdResponse RunCmd([FromBody] RunCmdRequest req)
+        {
+            if (!AdminController.CheckAuth(HttpContext)) return new RunCmdResponse() { error = "bad token" };
+
+            switch (req.cmdName)
+            {
+                case "reloadDb":
+                    JsonDb.Reload();
+                    return RunCmdResponse.OK;
+                case "completestage":
+                    return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
+                case "addallcharacters":
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                        return AdminCommands.AddAllCharacters(user);
+                    }
+                case "addallmaterials":
+                    {
+                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                        return AdminCommands.AddAllMaterials(user, int.Parse(req.p2));
+                    }
+            }
+            return new RunCmdResponse() { error = "Not implemented" };
         }
 
         private static string CreateAuthToken(User user)
         {
-            var tok = RandomString(128);
-            AdminAuthTokens.Add(tok, user);
+            string tok = RandomString(128);
+            JsonDb.Instance.AdminAuthTokens.Add(tok, user);
+            JsonDb.Save();
             return tok;
         }
 
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[new Random().Next(s.Length)]).ToArray());
-        }
-
-        public class LoginApiBody
-        {
-            [Required]
-            public string Username { get; set; } = "";
-            [Required]
-            public string Password { get; set; } = "";
-        }
-        public class LoginApiResponse
-        {
-            public string Message { get; set; } = "";
-            public bool OK { get; set; }
-            public string Token { get; set; } = "";
+            return new string([.. Enumerable.Repeat(chars, length).Select(static s => s[new Random().Next(s.Length)])]);
         }
     }
 }

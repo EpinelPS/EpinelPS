@@ -1,5 +1,4 @@
-﻿using EpinelPS.LobbyServer;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Utils;
 using Newtonsoft.Json;
 using Paseto.Builder;
@@ -578,6 +577,7 @@ namespace EpinelPS.Database
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
+        public Dictionary<string, User> AdminAuthTokens = [];
 
         public string ServerName = "<color=\"green\">Private Server</color>";
         public byte[] LauncherTokenKey = [];

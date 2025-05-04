@@ -13,8 +13,10 @@ namespace EpinelPS.Utils
         }
         public static NetRewardData RegisterRewardsForUser(User user, RewardTableRecord rewardData)
         {
-            NetRewardData ret = new();
-            ret.PassPoint = new();
+            NetRewardData ret = new()
+            {
+                PassPoint = new()
+            };
             if (rewardData.rewards == null) return ret;
 
             if (rewardData.user_exp != 0)

@@ -1,7 +1,6 @@
 using EpinelPS.Database;
-using EpinelPS.Models;
+using EpinelPS.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -31,7 +30,53 @@ namespace EpinelPS.Controllers.AdminPanel
                 return NotFound();
             }
 
-            return View(user);
+            return View(
+                new ModUserModel()
+                {
+                    IsAdmin = user.IsAdmin,
+                    IsBanned = user.IsBanned,
+                    Nickname = user.Nickname,
+                    sickpulls = user.sickpulls,
+                    Username = user.Username,
+                    ID = user.ID
+                }
+            );
+        }
+
+        [Route("Modify/{id}"), ActionName("Modify")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DoModifyUser(ulong id, [FromForm] ModUserModel toSet)
+        {
+            if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+            if (!ModelState.IsValid) throw new Exception("model state invalid");
+
+            var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrEmpty(toSet.Username))
+                throw new Exception("username cannot be empty");
+
+            user.Username = toSet.Username;
+            user.IsAdmin = toSet.IsAdmin;
+            user.sickpulls = toSet.sickpulls;
+            user.IsBanned = toSet.IsBanned;
+            user.Nickname = toSet.Nickname;
+            JsonDb.Save();
+
+            return View(new ModUserModel()
+                {
+                    IsAdmin = user.IsAdmin,
+                    IsBanned = user.IsBanned,
+                    Nickname = user.Nickname,
+                    sickpulls = user.sickpulls,
+                    Username = user.Username,
+                    ID = user.ID
+                });
         }
 
         [Route("SetPassword/{id}")]

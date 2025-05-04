@@ -1,8 +1,22 @@
+@model EpinelPS.Models.Admin.ServerConfiguration
+
 @{
     ViewData["Title"] = "Configuration";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Configuration</h1>
-    <p>Coming soon!</p>
+    <h1 class="display-4">Server configuration</h1>
+    <form asp-action="Configuration">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <dl class="row">
+            <dt class = "col-sm-2">Log Level:</dt>
+            <dd class = "col-sm-10">
+                @Html.DropDownListFor(model => model.LogType, Html.GetEnumSelectList<LogType>(), "", new { @class = "form-control" })
+            </dd>
+        </dl>
+
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>

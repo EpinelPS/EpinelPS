@@ -43,9 +43,7 @@
 	  <None Include="wwwroot\admin\assets\login.css" />
 	  <None Include="wwwroot\admin\assets\login.jpg" />
 	  <None Include="wwwroot\admin\assets\style.css" />
-	  <None Include="wwwroot\admin\dashbrd.html" />
 	  <None Include="wwwroot\admin\index.html" />
-	  <None Include="wwwroot\admin\nav.html" />
 	  <None Include="wwwroot\nikke_launcher\index.html" />
 	</ItemGroup>
 

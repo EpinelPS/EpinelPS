@@ -1,4 +1,4 @@
-@model EpinelPS.Database.User
+@model EpinelPS.Models.Admin.ModUserModel
 
 @{
     ViewData["Title"] = "Modify user";
@@ -12,19 +12,23 @@
     <div class="col-md-4">
         <form asp-action="Modify">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
             <div class="form-group">
                 <label asp-for="Username" class="control-label col-sm-2"></label>
                  <div class="col-sm-10"><input asp-for="Username" class="form-control" /></div>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IsAdmin" class="control-label"></label>
+                <label for="IsAdmin" class="control-label">Is Admin: </label>
                 <input asp-for="IsAdmin" class="form-check-input" />
                 <span asp-validation-for="IsAdmin" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IsBanned" class="control-label"></label>
+                <label class="control-label" title="allows for all characters to have equal chances of getting pulled">Disable Gacha System: </label>
+                <input asp-for="sickpulls" class="form-check-input" title="allows for all characters to have equal chances of getting pulled"/>
+                <span asp-validation-for="sickpulls" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="IsBanned" class="control-label">Banned:</label>
                 <input asp-for="IsBanned" class="form-check-input" />
                 <span asp-validation-for="IsBanned" class="text-danger"></span>
             </div>
@@ -37,6 +41,21 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        
+        <p>Campaign:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">Skip stages</button>
+
+        <p>Characters:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">Add all characters</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">Add character</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">Set character levels</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">Set character skill levels</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('finishalltutorials', '@Model.ID', 'core level / 0-3 sets stars')">Set core level</button>
+        <p>Inventory:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">Add all equipment</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">Add item</button>
+        <p>Misc:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')">Finish all tutorials</button>
     </div>
 </div>
 

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using EpinelPS.Database;
 
 namespace EpinelPS.Utils
@@ -25,7 +26,6 @@ namespace EpinelPS.Utils
             {
                 case LogType.Debug: return ConsoleColor.DarkGray;
                 case LogType.Info: return ConsoleColor.Gray;
-                case LogType.InfoSuccess: return ConsoleColor.Green;
                 case LogType.Warning: return ConsoleColor.Yellow;
                 case LogType.WarningAntiCheat: return ConsoleColor.DarkMagenta;
                 case LogType.Error: return ConsoleColor.Red;
@@ -36,11 +36,15 @@ namespace EpinelPS.Utils
 
     public enum LogType
     {
+        [Display(Name = "Debug")]
         Debug,
-        InfoSuccess,
+        [Display(Name = "Info")]
         Info,
+        [Display(Name = "Warning")]
         Warning,
+        [Display(Name = "Anticheat warnings")]
         WarningAntiCheat,
+        [Display(Name = "Errors")]
         Error
     }
 }

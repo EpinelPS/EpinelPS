@@ -15,12 +15,13 @@
                     @Html.DisplayNameFor(model => model.Username)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.IsAdmin)
+                    @Html.DisplayNameFor(model => model.Nickname)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PlayerName)
+                    @Html.DisplayNameFor(model => model.IsAdmin)
                 </th>
-            <th></th>
+
+                <th></th>
         </tr>
     </thead>
     <tbody>
@@ -30,10 +31,10 @@
                 @Html.DisplayFor(modelItem => item.Username)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsAdmin)
+                @Html.DisplayFor(modelItem => item.Nickname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PlayerName)
+                @Html.DisplayFor(modelItem => item.IsAdmin)
             </td>
             <td>
                 <a asp-action="SetPassword" asp-route-id="@item.ID">Change Password</a> |
