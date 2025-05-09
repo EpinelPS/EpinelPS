@@ -1,47 +1,264 @@
 ﻿@model IEnumerable<EpinelPS.Database.User>
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "用户管理";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Users</h1>
-    
+<div class="nikke-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" data-i18n="users.title">用户管理</h1>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.add">添加新用户</span>
+        </a>
+    </div>
+
+    <!-- 搜索过滤 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="searchUsername" class="form-label" data-i18n="users.search.username">用户名</label>
+                    <input type="text" class="form-control" id="searchUsername" data-i18n-placeholder="users.search.usernamePlaceholder" placeholder="搜索用户名...">
+                </div>
+                <div class="col-md-3">
+                    <label for="userType" class="form-label" data-i18n="users.search.userType">用户类型</label>
+                    <select class="form-select" id="userType">
+                        <option value="" data-i18n="users.search.types.all">全部</option>
+                        <option value="admin" data-i18n="users.search.types.admin">管理员</option>
+                        <option value="user" data-i18n="users.search.types.user">普通用户</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy" class="form-label" data-i18n="users.search.sort">排序方式</label>
+                    <select class="form-select" id="sortBy">
+                        <option value="username" data-i18n="users.search.sortOptions.username">用户名</option>
+                        <option value="created" data-i18n="users.search.sortOptions.created">创建时间</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" id="searchBtn">
+                        <i class="fas fa-search me-2"></i> <span data-i18n="users.search.button">搜索</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户表格 -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th style="width: 40%">
+                            <i class="fas fa-user me-2"></i> <span data-i18n="users.table.username">@Html.DisplayNameFor(model => model.Username)</span>
+                        </th>
+                        <th style="width: 30%">
+                            <i class="fas fa-id-card me-2"></i> <span data-i18n="users.table.nickname">@Html.DisplayNameFor(model => model.Nickname)</span>
+                        </th>
+                        <th style="width: 15%">
+                            <i class="fas fa-user-shield me-2"></i> <span data-i18n="users.table.isAdmin">@Html.DisplayNameFor(model => model.IsAdmin)</span>
+                        </th>
+                        <th style="width: 15%" data-i18n="users.table.actions">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td class="align-middle">
+                                <div class="user-item">
+                                    <img src="/admin/assets/img/avatar-@(new Random().Next(1, 6)).png" alt="头像" class="user-avatar">
+                                    <div>
+                                        <div class="user-name">@Html.DisplayFor(modelItem => item.Username)</div>
+                                        <small class="text-muted"><span data-i18n="users.table.id">ID</span>: @item.ID</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.Nickname)
+                            </td>
+                            <td class="align-middle">
+                                @if (item.IsAdmin) {
+                                    <span class="badge-admin" data-i18n="users.search.types.admin">管理员</span>
+                                } else {
+                                    <span class="badge bg-secondary" data-i18n="users.search.types.user">普通用户</span>
+                                }
+                            </td>
+                            <td class="align-middle">
+                                <div class="btn-group">
+                                    <a asp-action="SetPassword" asp-route-id="@item.ID" class="btn btn-sm btn-outline-primary" data-i18n-title="nav.changePass">
+                                        <i class="fas fa-key"></i>
+                                    </a>
+                                    <a asp-action="Modify" asp-route-id="@item.ID" class="btn btn-sm btn-outline-info" data-i18n-title="common.edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-sm btn-outline-danger" data-i18n-title="common.delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页 -->
+            <nav aria-label="用户列表分页" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" data-i18n="users.pagination.prev">上一页</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" data-i18n="users.pagination.next">下一页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Username)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nickname)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsAdmin)
-                </th>
+<!-- 添加用户模态框 -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel" data-i18n="users.modal.add">添加新用户</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label for="newUsername" class="form-label" data-i18n="users.modal.username">用户名</label>
+                        <input type="text" class="form-control" id="newUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newNickname" class="form-label" data-i18n="users.modal.nickname">昵称</label>
+                        <input type="text" class="form-control" id="newNickname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label" data-i18n="users.modal.password">密码</label>
+                        <input type="password" class="form-control" id="newPassword" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="isAdmin">
+                        <label class="form-check-label" for="isAdmin" data-i18n="users.modal.isAdmin">管理员权限</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="users.modal.cancel">取消</button>
+                <button type="button" class="btn btn-primary" id="saveUserBtn" data-i18n="users.modal.save">保存用户</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nickname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAdmin)
-            </td>
-            <td>
-                <a asp-action="SetPassword" asp-route-id="@item.ID">Change Password</a> |
-                <a asp-action="Modify" asp-route-id="@item.ID">Modify</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
+@section Scripts {
+    <script>
+        // 模拟搜索功能
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const username = document.getElementById('searchUsername').value.toLowerCase();
+            const userType = document.getElementById('userType').value;
+
+            // 显示搜索中状态
+            this.innerHTML = `<i class="fas fa-circle-notch fa-spin me-2"></i> <span>${i18n.t('users.search.searching')}</span>`;
+            this.disabled = true;
+
+            // 模拟搜索延迟
+            setTimeout(() => {
+                const rows = document.querySelectorAll('tbody tr');
+
+                rows.forEach(row => {
+                    const usernameCell = row.querySelector('.user-name').textContent.toLowerCase();
+                    const isAdmin = row.querySelector('.badge-admin') !== null;
+
+                    let show = true;
+
+                    // 按用户名筛选
+                    if (username && !usernameCell.includes(username)) {
+                        show = false;
+                    }
+
+                    // 按用户类型筛选
+                    if (userType === 'admin' && !isAdmin) {
+                        show = false;
+                    } else if (userType === 'user' && isAdmin) {
+                        show = false;
+                    }
+
+                    // 显示或隐藏行
+                    row.style.display = show ? '' : 'none';
+                });
+
+                // 恢复按钮状态
+                this.innerHTML = `<i class="fas fa-search me-2"></i> <span>${i18n.t('users.search.button')}</span>`;
+                this.disabled = false;
+
+                // 显示通知
+                showNotification(i18n.t('users.notifications.searchDone'), 'info');
+            }, 500);
+        });
+
+        // 保存用户按钮
+        document.getElementById('saveUserBtn').addEventListener('click', function() {
+            const username = document.getElementById('newUsername').value;
+            const nickname = document.getElementById('newNickname').value;
+            const password = document.getElementById('newPassword').value;
+
+            if (!username || !password) {
+                showNotification(i18n.t('users.notifications.requiredFields'), 'error');
+                return;
+            }
+
+            // 显示加载状态
+            this.innerHTML = `<i class="fas fa-circle-notch fa-spin me-2"></i> <span>${i18n.t('users.modal.saving')}</span>`;
+            this.disabled = true;
+
+            // 模拟添加延迟
+            setTimeout(() => {
+                // 关闭模态框
+                bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+
+                // 恢复按钮状态
+                this.innerHTML = i18n.t('users.modal.save');
+                this.disabled = false;
+
+                // 清空表单
+                document.getElementById('addUserForm').reset();
+
+                // 显示成功通知
+                showNotification(i18n.t('users.notifications.userAdded'), 'success');
+            }, 1000);
+        });
+
+        // 监听语言变更事件
+        window.addEventListener('nikke:languageChanged', function() {
+            // 更新页面标题
+            document.title = i18n.t('users.title') + ' - ' + i18n.t('app.name');
+
+            // 更新搜索选项的文本
+            document.querySelectorAll('select option').forEach(option => {
+                if (option.hasAttribute('data-i18n')) {
+                    const key = option.getAttribute('data-i18n');
+                    option.textContent = i18n.t(key);
+                }
+            });
+
+            // 更新搜索按钮
+            const searchBtn = document.getElementById('searchBtn');
+            if (!searchBtn.disabled) {
+                searchBtn.innerHTML = `<i class="fas fa-search me-2"></i> <span>${i18n.t('users.search.button')}</span>`;
+            }
+
+            // 更新保存按钮
+            const saveBtn = document.getElementById('saveUserBtn');
+            if (!saveBtn.disabled) {
+                saveBtn.textContent = i18n.t('users.modal.save');
+            }
+        });
+    </script>
 }
-    </tbody>
-</table>

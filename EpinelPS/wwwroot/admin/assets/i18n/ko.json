@@ -1,0 +1,213 @@
+{
+  "app": {
+    "name": "NIKKE 관리 콘솔",
+    "version": "버전 v2.5.3",
+    "footer": "© 2025 - NIKKE: 승리의 여신 - 관리 콘솔"
+  },
+  "auth": {
+    "login": "로그인",
+    "username": "사용자 이름",
+    "password": "비밀번호",
+    "enter": "콘솔 입장",
+    "welcome": "관리 기능에 접근하려면 로그인하세요",
+    "verifying": "확인 중...",
+    "success": "로그인 성공",
+    "error": {
+      "required": "사용자 이름과 비밀번호를 입력하세요",
+      "invalid": "로그인 실패, 자격 증명을 확인하세요",
+      "network": "네트워크 오류, 나중에 다시 시도하세요"
+    }
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "confirm": "확인",
+    "cancel": "취소",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "actions": "작업",
+    "search": "검색",
+    "status": {
+      "online": "온라인",
+      "offline": "오프라인"
+    },
+    "notifications": {
+      "title": "시스템 알림",
+      "dashboardRefreshed": "대시보드 데이터가 성공적으로 새로고침되었습니다"
+    }
+  },
+  "nav": {
+    "dashboard": "대시보드",
+    "events": "이벤트",
+    "users": "사용자",
+    "mail": "메일",
+    "config": "구성",
+    "database": "데이터베이스",
+    "profile": "프로필",
+    "changePass": "비밀번호 변경",
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "콘솔 개요",
+    "refresh": "데이터 새로고침",
+    "refreshing": "새로고침 중...",
+    "statsCards": {
+      "users": "등록된 사용자",
+      "server": "서버 상태",
+      "events": "활성 이벤트",
+      "mail": "오늘의 메일"
+    },
+    "charts": {
+      "activity": "사용자 활동 추세",
+      "server": "서버 리소스 사용량",
+      "periods": {
+        "day": "일",
+        "week": "주",
+        "month": "월"
+      }
+    },
+    "serverStats": {
+      "cpu": "CPU 사용량",
+      "memory": "메모리 사용량",
+      "storage": "저장소 사용량"
+    },
+    "activity": {
+      "title": "최근 활동",
+      "newUser": "새 사용자 등록",
+      "loginAlert": "비정상 로그인 감지됨",
+      "configUpdate": "시스템 구성 업데이트됨",
+      "rewards": "전체 보상 배포됨",
+      "newEvent": "새 이벤트 생성됨",
+      "bugfix": "게임 버그 수정됨",
+      "timeFormat": {
+        "min": "분 전",
+        "hour": "시간 전",
+        "yesterday": "어제",
+        "daysAgo": "일 전"
+      }
+    },
+    "quickAccess": {
+      "users": {
+        "title": "사용자 관리",
+        "desc": "게임 사용자 계정, 권한 및 역할 관리"
+      },
+      "events": {
+        "title": "이벤트 관리",
+        "desc": "게임 이벤트 생성, 편집 및 모니터링"
+      },
+      "mail": {
+        "title": "메일 시스템",
+        "desc": "플레이어에게 시스템 메일 및 보상 전송"
+      },
+      "database": {
+        "title": "데이터베이스",
+        "desc": "게임 데이터베이스 관리 및 유지보수"
+      },
+      "enter": "입장"
+    }
+  },
+  "users": {
+    "title": "사용자 관리",
+    "add": "새 사용자 추가",
+    "table": {
+      "id": "ID",
+      "username": "사용자 이름",
+      "nickname": "닉네임",
+      "playerName": "플레이어 이름",
+      "isAdmin": "권한",
+      "isBanned": "차단됨",
+      "actions": "작업"
+    },
+    "search": {
+      "username": "사용자 이름",
+      "usernamePlaceholder": "사용자 이름 검색...",
+      "userType": "사용자 유형",
+      "types": {
+        "all": "전체",
+        "admin": "관리자",
+        "user": "일반 사용자"
+      },
+      "sort": "정렬 기준",
+      "sortOptions": {
+        "username": "사용자 이름",
+        "created": "생성일"
+      },
+      "button": "검색",
+      "searching": "검색 중..."
+    },
+    "pagination": {
+      "prev": "이전",
+      "next": "다음"
+    },
+    "modal": {
+      "add": "새 사용자 추가",
+      "close": "닫기",
+      "username": "사용자 이름",
+      "nickname": "닉네임",
+      "password": "비밀번호",
+      "isAdmin": "관리자 권한",
+      "cancel": "취소",
+      "save": "사용자 저장",
+      "saving": "저장 중..."
+    },
+    "modify": {
+      "title": "사용자 정보 수정",
+      "subtitle": "사용자 정보",
+      "isAdmin": "관리자 권한: ",
+      "disableGacha": "가챠 시스템 비활성화: ",
+      "disableGachaHint": "모든 캐릭터가 동일한 확률로 출현하도록 합니다",
+      "isBanned": "차단됨:",
+      "cheats": "치트 기능",
+      "campaign": "캠페인:",
+      "skipStages": "스테이지 건너뛰기",
+      "characters": "캐릭터:",
+      "addAllChars": "모든 캐릭터 추가",
+      "addChar": "캐릭터 추가",
+      "setCharLevels": "캐릭터 레벨 설정",
+      "setSkillLevels": "스킬 레벨 설정",
+      "setCoreLevel": "코어 레벨 설정",
+      "inventory": "인벤토리:",
+      "addAllEquip": "모든 장비 추가",
+      "addItem": "아이템 추가",
+      "misc": "기타:",
+      "finishTutorials": "모든 튜토리얼 완료",
+      "backToList": "목록으로 돌아가기"
+    },
+    "password": {
+      "title": "비밀번호 변경",
+      "changeButton": "비밀번호 변경",
+      "backToList": "목록으로 돌아가기"
+    },
+    "delete": {
+      "title": "사용자 삭제",
+      "confirmation": "이 사용자를 삭제하시겠습니까?",
+      "backToList": "목록으로 돌아가기"
+    },
+    "notifications": {
+      "searchDone": "검색 완료",
+      "requiredFields": "필수 필드를 작성해주세요",
+      "userAdded": "사용자가 성공적으로 추가되었습니다! 페이지를 새로고침하여 확인하세요."
+    }
+  },
+  "events": {
+    "config": {
+      "title": "이벤트 구성",
+      "comingSoon": "곧 출시 예정!"
+    }
+  },
+  "mail": {
+    "title": "게임 내 메일",
+    "comingSoon": "곧 출시 예정!"
+  },
+  "config": {
+    "server": {
+      "title": "서버 구성",
+      "logLevel": "로그 레벨:"
+    },
+    "database": {
+      "title": "데이터베이스 구성",
+      "reload": "데이터베이스 다시 로드",
+      "reloadHint": "db.json의 변경사항을 메모리에 로드합니다. 저장되지 않은 변경사항은 버려집니다."
+    }
+  }
+}

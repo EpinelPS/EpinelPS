@@ -1,61 +1,202 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EpinelPS</title>
-    <link rel="stylesheet" href="/admin/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/admin/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="/admin/assets/style.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - NIKKE: <span data-i18n="app.name">胜利女神</span></title>
+
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 基础框架 -->
+    <link rel="stylesheet" href="/admin/assets/css/bootstrap.min.css" />
+
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/admin/assets/css/nikke-theme.css" />
+    <link rel="stylesheet" href="/admin/assets/css/nikke-dashboard.css" />
+    <link rel="stylesheet" href="/admin/assets/css/nikke-i18n.css" />
+    <link rel="stylesheet" href="/admin/assets/css/style.css" asp-append-version="true" />
+
+    <!-- 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/admin/dashboard">EpinelPS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Dashboard">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Events">Events</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Users/">Users</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Mail">Mail</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Configuration">Configuration</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/admin/Database">Database</a>
-                        </li>
-                    </ul>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/admin/dashboard" data-i18n="app.name">NIKKE控制台</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="切换导航">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Dashboard" ? "active" : "")" href="/admin/Dashboard">
+                            <i class="fas fa-tachometer-alt me-1"></i> <span data-i18n="nav.dashboard">仪表盘</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Events" ? "active" : "")" href="/admin/Events">
+                            <i class="fas fa-calendar-alt me-1"></i> <span data-i18n="nav.events">活动</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Users" ? "active" : "")" href="/admin/Users/">
+                            <i class="fas fa-users me-1"></i> <span data-i18n="nav.users">用户</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Mail" ? "active" : "")" href="/admin/Mail">
+                            <i class="fas fa-envelope me-1"></i> <span data-i18n="nav.mail">邮件</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Configuration" ? "active" : "")" href="/admin/Configuration">
+                            <i class="fas fa-cogs me-1"></i> <span data-i18n="nav.config">配置</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Database" ? "active" : "")" href="/admin/Database">
+                            <i class="fas fa-database me-1"></i> <span data-i18n="nav.database">数据库</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <!-- 语言切换器插槽 -->
+                    <div id="navbar-language-switcher" class="me-3"></div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-link dropdown-toggle text-decoration-none" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i> <span>管理员</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> <span data-i18n="nav.profile">个人信息</span></a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-key me-2"></i> <span data-i18n="nav.changePass">修改密码</span></a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> <span data-i18n="nav.logout">退出登录</span></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - EpinelPS - <a href="https://github.com/MishaProductions/EpinelPS">Source code</a>
         </div>
-    </footer>
-    <script src="/admin/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/admin/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/admin/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav>
+</header>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span data-i18n="app.footer">&copy; 2025 - NIKKE: 胜利女神 - 管理控制台</span>
+            </div>
+            <div>
+                <a href="https://github.com/MishaProductions/EpinelPS" class="text-decoration-none">
+                    <i class="fab fa-github me-1"></i> <span>源代码</span>
+                </a>
+                <span class="ms-3" data-i18n="app.version">版本 v2.5.3</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- 通知弹窗 -->
+<div class="nikke-notification" id="notification">
+    <div class="notification-header">
+        <div class="notification-title" data-i18n="common.notifications.title">系统通知</div>
+        <button class="notification-close" onclick="closeNotification()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="notification-body" id="notificationMessage">
+        操作成功完成。
+    </div>
+</div>
+
+<script src="/admin/assets/js/jquery.min.js"></script>
+<script src="/admin/assets/js/bootstrap.bundle.min.js"></script>
+
+<!-- 国际化支持 -->
+<script src="/admin/assets/js/nikke-i18n.js"></script>
+<script src="/admin/assets/js/site.js" asp-append-version="true"></script>
+
+<script>
+    // 退出登录
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/admin';
+    }
+
+    // 显示通知
+    function showNotification(message, type = 'info') {
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notificationMessage');
+
+        // 设置通知类型
+        notification.className = 'nikke-notification';
+
+        switch(type) {
+            case 'success':
+                notification.style.borderLeftColor = 'var(--nikke-success)';
+                break;
+            case 'error':
+                notification.style.borderLeftColor = 'var(--nikke-danger)';
+                break;
+            case 'warning':
+                notification.style.borderLeftColor = 'var(--nikke-warning)';
+                break;
+            default:
+                notification.style.borderLeftColor = 'var(--nikke-info)';
+        }
+
+        // 设置消息
+        notificationMessage.textContent = message;
+
+        // 显示通知
+        notification.classList.add('show');
+
+        // 5秒后自动关闭
+        setTimeout(closeNotification, 5000);
+    }
+
+    // 关闭通知
+    function closeNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('show');
+    }
+
+    // 检查认证状态
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('token');
+        if (!token && window.location.pathname !== '/admin') {
+            // 未登录，重定向到登录页
+            // window.location.href = '/admin';
+        }
+
+        // 监听语言变化事件
+        window.addEventListener('nikke:languageChanged', function(e) {
+            // 通知用户语言已更改
+            showNotification(`语言已切换到: ${i18n.languageNames[e.detail.lang]}`, 'info');
+
+            // 更新页面标题
+            if (document.title.includes(' - ')) {
+                const baseTitle = document.title.split(' - ')[0];
+                document.title = `${baseTitle} - ${i18n.t('app.name')}`;
+            }
+        });
+    });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

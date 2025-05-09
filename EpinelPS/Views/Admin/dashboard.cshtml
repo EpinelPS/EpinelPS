@@ -1,8 +1,428 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "仪表盘";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>There are @JsonDb.Instance.Users.Count registered users</p>
+<div class="nikke-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" data-i18n="dashboard.title">控制台概览</h1>
+        <button class="btn btn-primary" onclick="refreshDashboard()">
+            <i class="fas fa-sync-alt me-2"></i> <span data-i18n="dashboard.refresh">刷新数据</span>
+        </button>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="nikke-stats">
+        <div class="stats-card">
+            <div class="icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="value">@JsonDb.Instance.Users.Count</div>
+            <div class="label" data-i18n="dashboard.statsCards.users">注册用户</div>
+            <div class="decoration"></div>
+        </div>
+
+        <div class="stats-card">
+            <div class="icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="value">@($"{new Random().Next(80, 100)}%")</div>
+            <div class="label" data-i18n="dashboard.statsCards.server">服务器状态</div>
+            <div class="decoration"></div>
+        </div>
+
+        <div class="stats-card">
+            <div class="icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="value">@(new Random().Next(2, 10))</div>
+            <div class="label" data-i18n="dashboard.statsCards.events">活动进行中</div>
+            <div class="decoration"></div>
+        </div>
+
+        <div class="stats-card">
+            <div class="icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="value">@(new Random().Next(50, 500))</div>
+            <div class="label" data-i18n="dashboard.statsCards.mail">今日邮件</div>
+            <div class="decoration"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- 玩家统计图表 -->
+        <div class="col-md-8 mb-4">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-line me-2"></i> <span data-i18n="dashboard.charts.activity">用户活跃度趋势</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light active" data-period="week" data-i18n="dashboard.charts.periods.week">周</button>
+                        <button class="btn btn-sm btn-outline-light" data-period="month" data-i18n="dashboard.charts.periods.month">月</button>
+                    </div>
+                </div>
+                <div class="chart-body">
+                    <canvas id="playerChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 服务器状态 -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-server me-2"></i> <span data-i18n="dashboard.charts.server">服务器资源使用</span>
+                    </div>
+                </div>
+                <div class="chart-body" style="height: 200px;">
+                    <div class="row align-items-center h-100">
+                        <div class="col-md-4 text-center">
+                            <div class="mb-2" data-i18n="dashboard.serverStats.cpu">CPU 使用率</div>
+                            <div class="nikke-progress">
+                                <div class="nikke-progress-bar" style="width: 45%"></div>
+                            </div>
+                            <div class="text-end mt-1">45%</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="mb-2" data-i18n="dashboard.serverStats.memory">内存使用率</div>
+                            <div class="nikke-progress">
+                                <div class="nikke-progress-bar" style="width: 68%"></div>
+                            </div>
+                            <div class="text-end mt-1">68%</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="mb-2" data-i18n="dashboard.serverStats.storage">存储使用率</div>
+                            <div class="nikke-progress">
+                                <div class="nikke-progress-bar" style="width: 32%"></div>
+                            </div>
+                            <div class="text-end mt-1">32%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动面板 -->
+        <div class="col-md-4">
+            <div class="activity-list h-100">
+                <div class="activity-header">
+                    <i class="fas fa-bell me-2"></i> <span data-i18n="dashboard.activity.title">最近活动</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-accent);">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.newUser">新用户注册</div>
+                        <div class="activity-time">5 <span data-i18n="dashboard.activity.timeFormat.min">分钟前</span></div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-warning);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.loginAlert">检测到异常登录</div>
+                        <div class="activity-time">25 <span data-i18n="dashboard.activity.timeFormat.min">分钟前</span></div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-primary);">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.configUpdate">系统配置已更新</div>
+                        <div class="activity-time">1 <span data-i18n="dashboard.activity.timeFormat.hour">小时前</span></div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-success);">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.rewards">发放全服奖励</div>
+                        <div class="activity-time">3 <span data-i18n="dashboard.activity.timeFormat.hour">小时前</span></div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-info);">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.newEvent">新活动已创建</div>
+                        <div class="activity-time"><span data-i18n="dashboard.activity.timeFormat.yesterday">昨天</span> 15:30</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--nikke-danger);">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title" data-i18n="dashboard.activity.bugfix">修复游戏漏洞</div>
+                        <div class="activity-time"><span data-i18n="dashboard.activity.timeFormat.daysAgo">前天</span> 09:15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速访问卡片 -->
+    <div class="row mt-4">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3" style="color: var(--nikke-primary);"></i>
+                    <h5 data-i18n="dashboard.quickAccess.users.title">用户管理</h5>
+                    <p data-i18n="dashboard.quickAccess.users.desc">管理游戏用户账号，权限和角色</p>
+                    <a href="/admin/Users/" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-calendar-alt fa-3x mb-3" style="color: var(--nikke-accent);"></i>
+                    <h5 data-i18n="dashboard.quickAccess.events.title">活动管理</h5>
+                    <p data-i18n="dashboard.quickAccess.events.desc">创建、编辑和监控游戏活动</p>
+                    <a href="/admin/Events" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-envelope fa-3x mb-3" style="color: var(--nikke-success);"></i>
+                    <h5 data-i18n="dashboard.quickAccess.mail.title">邮件系统</h5>
+                    <p data-i18n="dashboard.quickAccess.mail.desc">发送系统邮件和奖励给玩家</p>
+                    <a href="/admin/Mail" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-database fa-3x mb-3" style="color: var(--nikke-warning);"></i>
+                    <h5 data-i18n="dashboard.quickAccess.database.title">数据库</h5>
+                    <p data-i18n="dashboard.quickAccess.database.desc">管理和维护游戏数据库</p>
+                    <a href="/admin/Database" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 玩家活跃度图表
+            const playerCtx = document.getElementById('playerChart').getContext('2d');
+            const playerChart = new Chart(playerCtx, {
+                type: 'line',
+                data: {
+                    labels: getWeekdayLabels(),
+                    datasets: [{
+                        label: i18n.t('dashboard.statsCards.users'),
+                        data: [1200, 1900, 1700, 2100, 2500, 1800, 1500],
+                        borderColor: 'rgba(232, 62, 140, 1)',
+                        backgroundColor: 'rgba(232, 62, 140, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: i18n.t('dashboard.activity.newUser'),
+                        data: [800, 1200, 950, 1300, 1700, 1100, 900],
+                        borderColor: 'rgba(43, 57, 144, 1)',
+                        backgroundColor: 'rgba(43, 57, 144, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 保存图表实例到window对象
+            window.playerChart = playerChart;
+
+            // 周/月切换按钮
+            document.querySelectorAll('[data-period]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有active类
+                    document.querySelectorAll('[data-period]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    // 添加active类到当前按钮
+                    this.classList.add('active');
+
+                    // 切换数据
+                    const period = this.getAttribute('data-period');
+                    updateChartData(period);
+                });
+            });
+
+            // 监听语言变更事件
+            window.addEventListener('nikke:languageChanged', function() {
+                // 更新图表标签
+                if (window.playerChart) {
+                    window.playerChart.data.datasets[0].label = i18n.t('dashboard.statsCards.users');
+                    window.playerChart.data.datasets[1].label = i18n.t('dashboard.activity.newUser');
+
+                    // 更新周期标签
+                    if (window.playerChart.data.labels.length <= 7) {
+                        window.playerChart.data.labels = getWeekdayLabels();
+                    } else {
+                        // 月视图标签
+                        window.playerChart.data.labels = getDayLabels(30);
+                    }
+
+                    window.playerChart.update();
+                }
+            });
+        });
+
+        // 获取当前语言的星期标签
+        function getWeekdayLabels() {
+            // 根据当前语言获取本地化的星期几名称
+            const weekdays = [];
+            const date = new Date();
+            // 设置为本周一
+            date.setDate(date.getDate() - date.getDay() + 1);
+
+            for (let i = 0; i < 7; i++) {
+                weekdays.push(new Intl.DateTimeFormat(i18n.currentLang, { weekday: 'short' }).format(date));
+                date.setDate(date.getDate() + 1);
+            }
+
+            return weekdays;
+        }
+
+        // 获取日期标签
+        function getDayLabels(days) {
+            const labels = [];
+            const date = new Date();
+            date.setDate(date.getDate() - days + 1);
+
+            for (let i = 0; i < days; i++) {
+                labels.push(new Intl.DateTimeFormat(i18n.currentLang, { day: 'numeric' }).format(date) +
+                    ' ' + new Intl.DateTimeFormat(i18n.currentLang, { month: 'short' }).format(date));
+                date.setDate(date.getDate() + 1);
+            }
+
+            return labels;
+        }
+
+        // 更新图表数据
+        function updateChartData(period) {
+            if (!window.playerChart) return;
+
+            if (period === 'week') {
+                window.playerChart.data.labels = getWeekdayLabels();
+                window.playerChart.data.datasets[0].data = [1200, 1900, 1700, 2100, 2500, 1800, 1500];
+                window.playerChart.data.datasets[1].data = [800, 1200, 950, 1300, 1700, 1100, 900];
+            } else if (period === 'month') {
+                // 生成30天标签
+                window.playerChart.data.labels = getDayLabels(30);
+
+                // 生成随机数据
+                const activeData = Array.from({length: 30}, () => Math.floor(Math.random() * 2000) + 1000);
+                const newData = Array.from({length: 30}, () => Math.floor(Math.random() * 1200) + 500);
+
+                window.playerChart.data.datasets[0].data = activeData;
+                window.playerChart.data.datasets[1].data = newData;
+            }
+
+            window.playerChart.update();
+        }
+
+        // 刷新仪表盘
+        function refreshDashboard() {
+            // 显示加载状态
+            const refreshBtn = document.querySelector('.btn-primary');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin me-2"></i> <span>${i18n.t('dashboard.refreshing')}</span>`;
+            refreshBtn.disabled = true;
+
+            // 随机更新进度条
+            document.querySelectorAll('.nikke-progress-bar').forEach(bar => {
+                const newWidth = Math.floor(Math.random() * 90) + 10;
+                setTimeout(() => {
+                    bar.style.width = newWidth + '%';
+                    bar.closest('.col-md-4').querySelector('.text-end').textContent = newWidth + '%';
+                }, 500);
+            });
+
+            // 随机更新统计卡片
+            document.querySelectorAll('.stats-card .value').forEach((value, index) => {
+                if (index === 0) return; // 跳过用户数，它是后端数据
+
+                let newValue;
+                switch (index) {
+                    case 1: // 服务器状态
+                        newValue = Math.floor(Math.random() * 20) + 80 + '%';
+                        break;
+                    case 2: // 活动进行中
+                        newValue = Math.floor(Math.random() * 8) + 2;
+                        break;
+                    case 3: // 今日邮件
+                        newValue = Math.floor(Math.random() * 450) + 50;
+                        break;
+                    default:
+                        newValue = Math.floor(Math.random() * 1000);
+                }
+
+                setTimeout(() => {
+                    value.textContent = newValue;
+                }, 500);
+            });
+
+            // 更新图表数据
+            setTimeout(() => {
+                if (window.playerChart) {
+                    // 生成新的随机数据
+                    window.playerChart.data.datasets[0].data = Array.from({length: window.playerChart.data.labels.length}, () => Math.floor(Math.random() * 1500) + 1000);
+                    window.playerChart.data.datasets[1].data = Array.from({length: window.playerChart.data.labels.length}, () => Math.floor(Math.random() * 1000) + 500);
+                    window.playerChart.update();
+                }
+
+                // 恢复按钮状态
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+
+                // 显示成功通知
+                showNotification(i18n.t('common.notifications.dashboardRefreshed'), 'success');
+            }, 1000);
+        }
+    </script>
+}

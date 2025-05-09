@@ -1,0 +1,251 @@
+/* NIKKE 国际化支持样式 */
+[data-i18n], 
+[data-i18n-placeholder], 
+[data-i18n-title] {
+  transition: opacity 0.3s ease;
+}
+
+.lang-loading [data-i18n], 
+.lang-loading [data-i18n-placeholder], 
+.lang-loading [data-i18n-title] {
+  opacity: 0.5;
+}
+
+.language-transition-enter-active,
+.language-transition-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.language-transition-enter,
+.language-transition-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* 语言切换器样式 - 放在右上角 */
+.language-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+  font-family: 'Exo 2', 'Noto Sans SC', sans-serif;
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+/* 登录页面特殊位置 */
+body.login-page .language-switcher {
+  top: 20px;
+  right: 20px;
+}
+
+/* 仪表盘页面特殊位置 */
+body:not(.login-page) .language-switcher {
+  top: 15px;
+  right: 170px; /* 预留用户菜单空间 */
+}
+
+.language-switcher-toggle {
+  background-color: rgba(35, 35, 45, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.language-switcher-toggle:hover {
+  background-color: rgba(43, 57, 144, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.language-switcher-toggle i.fa-globe {
+  margin-right: 8px;
+  color: var(--nikke-accent-light, #f16eac);
+}
+
+.language-switcher-toggle i.fa-chevron-down {
+  margin-left: 8px;
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  opacity: 0.7;
+}
+
+.language-switcher.open .language-switcher-toggle i.fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.language-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background-color: rgba(35, 35, 45, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  backdrop-filter: blur(4px);
+}
+
+.language-switcher.open .language-options {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.language-option {
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.language-option:hover {
+  background-color: rgba(43, 57, 144, 0.5);
+}
+
+.language-option.active {
+  background-color: rgba(232, 62, 140, 0.2);
+  position: relative;
+}
+
+.language-option.active:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: var(--nikke-accent, #e83e8c);
+}
+
+.language-name {
+  margin-right: 10px;
+}
+
+.language-code {
+  opacity: 0.5;
+  font-size: 0.8em;
+}
+
+/* RTL 支持 (针对阿拉伯语等从右到左的语言) */
+[dir="rtl"] .language-switcher-toggle i.fa-globe {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+[dir="rtl"] .language-switcher-toggle i.fa-chevron-down {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+[dir="rtl"] .language-options {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .language-option.active:after {
+  left: auto;
+  right: 0;
+}
+
+/* 语言特定字体 */
+html[lang="zh"] body {
+  font-family: 'Noto Sans SC', 'Exo 2', sans-serif;
+}
+
+html[lang="ja"] body {
+  font-family: 'Noto Sans JP', 'Exo 2', sans-serif;
+}
+
+html[lang="ko"] body {
+  font-family: 'Noto Sans KR', 'Exo 2', sans-serif;
+}
+
+/* 提高可访问性 */
+.language-option:focus {
+  outline: 2px solid var(--nikke-accent, #e83e8c);
+  outline-offset: -2px;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+  .language-switcher-toggle {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+  }
+  
+  body:not(.login-page) .language-switcher {
+    top: 60px;
+    right: 15px;
+  }
+  
+  .language-option {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* 导航栏集成的语言切换器 */
+.language-switcher.navbar-integrated {
+  position: static;
+  opacity: 1;
+}
+
+.language-switcher.navbar-integrated .language-switcher-toggle {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.language-switcher.navbar-integrated .language-switcher-toggle:hover {
+  background-color: rgba(43, 57, 144, 0.2);
+  transform: none;
+  box-shadow: none;
+}
+
+.language-switcher.navbar-integrated .language-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1050;
+  margin-top: 10px;
+}
+
+/* 移动设备上的导航栏集成 */
+@media (max-width: 767.98px) {
+  .language-switcher.navbar-integrated {
+    margin-bottom: 10px;
+  }
+  
+  .language-switcher.navbar-integrated .language-options {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* 登录页面的语言切换器 */
+body.login-page .language-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}

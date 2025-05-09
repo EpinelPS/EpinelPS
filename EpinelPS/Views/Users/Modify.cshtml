@@ -4,41 +4,41 @@
     ViewData["Title"] = "Modify user";
 }
 
-<h1>Change user info</h1>
+<h1 data-i18n="users.modify.title">修改用户信息</h1>
 
-<h3>User info</h3>
+<h3 data-i18n="users.modify.subtitle">用户信息</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Modify">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Username" class="control-label col-sm-2"></label>
-                 <div class="col-sm-10"><input asp-for="Username" class="form-control" /></div>
+                <label asp-for="Username" class="control-label col-sm-2" data-i18n="users.table.username">用户名</label>
+                <div class="col-sm-10"><input asp-for="Username" class="form-control" /></div>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="IsAdmin" class="control-label">Is Admin: </label>
+                <label for="IsAdmin" class="control-label" data-i18n="users.modify.isAdmin">管理员权限: </label>
                 <input asp-for="IsAdmin" class="form-check-input" />
                 <span asp-validation-for="IsAdmin" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label" title="allows for all characters to have equal chances of getting pulled">Disable Gacha System: </label>
-                <input asp-for="sickpulls" class="form-check-input" title="allows for all characters to have equal chances of getting pulled"/>
+                <label class="control-label" data-i18n="users.modify.disableGacha" data-i18n-title="users.modify.disableGachaHint">禁用抽卡系统: </label>
+                <input asp-for="sickpulls" class="form-check-input" data-i18n-title="users.modify.disableGachaHint"/>
                 <span asp-validation-for="sickpulls" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="IsBanned" class="control-label">Banned:</label>
+                <label for="IsBanned" class="control-label" data-i18n="users.modify.isBanned">禁止登录:</label>
                 <input asp-for="IsBanned" class="form-check-input" />
                 <span asp-validation-for="IsBanned" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Nickname" class="control-label col-sm-2"></label>
-                 <div class="col-sm-10"><input asp-for="Nickname" class="form-control" /></div>
+                <label asp-for="Nickname" class="control-label col-sm-2" data-i18n="users.table.nickname">昵称</label>
+                <div class="col-sm-10"><input asp-for="Nickname" class="form-control" /></div>
                 <span asp-validation-for="Nickname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" style="margin-top:10px;" />
+                <input type="submit" value="保存" class="btn btn-primary" style="margin-top:10px;" data-i18n-title="common.save" />
             </div>
         </form>
     </div>
@@ -46,25 +46,27 @@
 <div class="row">
     <div class="col-md-4">
         <hr>
-        <h3>Cheats</h3>
-        
-        <p>Campaign:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">Skip stages</button>
+        <h3 data-i18n="users.modify.cheats">作弊功能</h3>
 
-        <p>Characters:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">Add all characters</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">Add character</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">Set character levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">Set character skill levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">Set core level</button>
-        <p>Inventory:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">Add all equipment</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">Add item</button>
-        <p>Misc:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')">Finish all tutorials</button>
+        <p data-i18n="users.modify.campaign">战役:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')" data-i18n="users.modify.skipStages">跳过关卡</button>
+
+        <p data-i18n="users.modify.characters">角色:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmd('addallcharacters', '@Model.ID')" data-i18n="users.modify.addAllChars">添加所有角色</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')" data-i18n="users.modify.addChar">添加角色</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')" data-i18n="users.modify.setCharLevels">设置角色等级</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')" data-i18n="users.modify.setSkillLevels">设置技能等级</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')" data-i18n="users.modify.setCoreLevel">设置核心等级</button>
+
+        <p data-i18n="users.modify.inventory">物品:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')" data-i18n="users.modify.addAllEquip">添加所有装备</button>
+        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')" data-i18n="users.modify.addItem">添加物品</button>
+
+        <p data-i18n="users.modify.misc">其他:</p>
+        <button class="btn btn-secondary" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')" data-i18n="users.modify.finishTutorials">完成所有教程</button>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" data-i18n="users.modify.backToList">返回列表</a>
 </div>
