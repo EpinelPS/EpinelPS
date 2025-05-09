@@ -176,7 +176,9 @@
     "password": {
       "title": "Change Password",
       "changeButton": "Change Password",
-      "backToList": "Back to List"
+      "backToList": "Back to List",
+      "enterNewPassword": "Enter new password",
+      "hint": "Please enter a strong password with letters, numbers and special characters"
     },
     "delete": {
       "title": "Delete User",

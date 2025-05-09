@@ -176,7 +176,9 @@
     "password": {
       "title": "修改密码",
       "changeButton": "修改密码",
-      "backToList": "返回列表"
+      "backToList": "返回列表",
+      "enterNewPassword": "输入新密码",
+      "hint": "请输入强密码，包含字母、数字和特殊字符"
     },
     "delete": {
       "title": "删除用户",

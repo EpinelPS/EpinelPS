@@ -6,9 +6,9 @@
 <div class="nikke-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="display-4 mb-0" data-i18n="users.title">用户管理</h1>
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+        <button class="btn btn-primary nikke-btn" onclick="openAddUserModal()">
             <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.add">添加新用户</span>
-        </a>
+        </button>
     </div>
 
     <!-- 搜索过滤 -->
@@ -103,59 +103,282 @@
                 </table>
             </div>
 
-            <!-- 分页 -->
-            <nav aria-label="用户列表分页" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true" data-i18n="users.pagination.prev">上一页</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" data-i18n="users.pagination.next">下一页</a>
-                    </li>
-                </ul>
-            </nav>
+            <!-- 分页 - 修改为NIKKE风格 -->
+            <div class="nikke-pagination mt-4">
+                <button class="nikke-pagination-btn prev disabled" aria-disabled="true">
+                    <i class="fas fa-chevron-left me-2"></i> <span data-i18n="users.pagination.prev">上一页</span>
+                </button>
+                <div class="nikke-pagination-numbers">
+                    <button class="nikke-pagination-number active">1</button>
+                    <button class="nikke-pagination-number">2</button>
+                    <button class="nikke-pagination-number">3</button>
+                </div>
+                <button class="nikke-pagination-btn next">
+                    <span data-i18n="users.pagination.next">下一页</span> <i class="fas fa-chevron-right ms-2"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- 添加用户模态框 -->
-<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addUserModalLabel" data-i18n="users.modal.add">添加新用户</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addUserForm">
-                    <div class="mb-3">
-                        <label for="newUsername" class="form-label" data-i18n="users.modal.username">用户名</label>
-                        <input type="text" class="form-control" id="newUsername" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="newNickname" class="form-label" data-i18n="users.modal.nickname">昵称</label>
-                        <input type="text" class="form-control" id="newNickname">
-                    </div>
-                    <div class="mb-3">
-                        <label for="newPassword" class="form-label" data-i18n="users.modal.password">密码</label>
-                        <input type="password" class="form-control" id="newPassword" required>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="isAdmin">
-                        <label class="form-check-label" for="isAdmin" data-i18n="users.modal.isAdmin">管理员权限</label>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="users.modal.cancel">取消</button>
-                <button type="button" class="btn btn-primary" id="saveUserBtn" data-i18n="users.modal.save">保存用户</button>
-            </div>
+<!-- 添加用户模态框 - 修改为NIKKE风格 -->
+<div class="nikke-modal" id="addUserModal">
+    <div class="nikke-modal-backdrop"></div>
+    <div class="nikke-modal-container">
+        <div class="nikke-modal-header">
+            <h5 class="nikke-modal-title" data-i18n="users.modal.add">添加新用户</h5>
+            <button type="button" class="nikke-modal-close" onclick="closeAddUserModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="nikke-modal-body">
+            <form id="addUserForm">
+                <div class="mb-3">
+                    <label for="newUsername" class="form-label" data-i18n="users.modal.username">用户名</label>
+                    <input type="text" class="form-control" id="newUsername" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newNickname" class="form-label" data-i18n="users.modal.nickname">昵称</label>
+                    <input type="text" class="form-control" id="newNickname">
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label" data-i18n="users.modal.password">密码</label>
+                    <input type="password" class="form-control" id="newPassword" required>
+                </div>
+                <div class="mb-3 form-check nikke-checkbox">
+                    <input type="checkbox" class="nikke-checkbox-input" id="isAdmin">
+                    <label class="nikke-checkbox-label" for="isAdmin" data-i18n="users.modal.isAdmin">管理员权限</label>
+                </div>
+            </form>
+        </div>
+        <div class="nikke-modal-footer">
+            <button type="button" class="btn btn-outline-light" onclick="closeAddUserModal()" data-i18n="users.modal.cancel">取消</button>
+            <button type="button" class="btn btn-primary" id="saveUserBtn" data-i18n="users.modal.save">保存用户</button>
         </div>
     </div>
 </div>
+
+<!-- 添加自定义样式 -->
+<style>
+    /* NIKKE风格分页 */
+    .nikke-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nikke-pagination-btn {
+        background-color: var(--nikke-gray-dark);
+        color: var(--nikke-light);
+        border: 1px solid var(--nikke-gray);
+        border-radius: var(--radius-md);
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+    }
+
+    .nikke-pagination-btn:not(.disabled):hover {
+        background-color: var(--nikke-primary);
+        border-color: var(--nikke-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(43, 57, 144, 0.4);
+    }
+
+    .nikke-pagination-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .nikke-pagination-numbers {
+        display: flex;
+        gap: 8px;
+    }
+
+    .nikke-pagination-number {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-md);
+        background-color: var(--nikke-gray-dark);
+        border: 1px solid var(--nikke-gray);
+        color: var(--nikke-light);
+        font-weight: 600;
+        transition: all var(--transition-fast);
+    }
+
+    .nikke-pagination-number:hover {
+        background-color: var(--nikke-primary);
+        border-color: var(--nikke-primary);
+        transform: translateY(-2px);
+    }
+
+    .nikke-pagination-number.active {
+        background-color: var(--nikke-accent);
+        border-color: var(--nikke-accent);
+        color: white;
+        box-shadow: 0 0 10px rgba(232, 62, 140, 0.4);
+    }
+
+    /* NIKKE风格模态框 */
+    .nikke-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        z-index: 1050;
+    }
+
+    .nikke-modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nikke-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(23, 23, 31, 0.8);
+        backdrop-filter: blur(4px);
+    }
+
+    .nikke-modal-container {
+        position: relative;
+        background-color: var(--nikke-gray-dark);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--nikke-accent);
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all var(--transition-normal);
+        z-index: 1051;
+    }
+
+    .nikke-modal.show .nikke-modal-container {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .nikke-modal-header {
+        background-color: var(--nikke-primary);
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--nikke-primary-dark);
+        border-top-left-radius: var(--radius-md);
+        border-top-right-radius: var(--radius-md);
+    }
+
+    .nikke-modal-title {
+        color: var(--nikke-light);
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .nikke-modal-close {
+        background-color: transparent;
+        border: none;
+        color: var(--nikke-light);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: color var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+
+    .nikke-modal-close:hover {
+        color: var(--nikke-accent);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nikke-modal-body {
+        padding: 20px;
+    }
+
+    .nikke-modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid var(--nikke-gray);
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    /* NIKKE风格复选框 */
+    .nikke-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .nikke-checkbox-input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .nikke-checkbox-label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nikke-checkbox-label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background-color: var(--nikke-gray);
+        border: 1px solid var(--nikke-gray-light);
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:before {
+        background-color: var(--nikke-accent);
+        border-color: var(--nikke-accent);
+    }
+
+    .nikke-checkbox-label:after {
+        content: '\f00c';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        left: 3px;
+        top: 1px;
+        color: white;
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+        font-size: 14px;
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:after {
+        opacity: 1;
+    }
+</style>
 
 @section Scripts {
     <script>
@@ -203,6 +426,27 @@
             }, 500);
         });
 
+        // 打开添加用户模态框
+        function openAddUserModal() {
+            const modal = document.getElementById('addUserModal');
+            modal.classList.add('show');
+            setTimeout(() => {
+                document.getElementById('newUsername').focus();
+            }, 300);
+        }
+
+        // 关闭添加用户模态框
+        function closeAddUserModal() {
+            const modal = document.getElementById('addUserModal');
+            modal.classList.remove('show');
+            document.getElementById('addUserForm').reset();
+        }
+
+        // 点击背景关闭模态框
+        document.querySelector('.nikke-modal-backdrop').addEventListener('click', function() {
+            closeAddUserModal();
+        });
+
         // 保存用户按钮
         document.getElementById('saveUserBtn').addEventListener('click', function() {
             const username = document.getElementById('newUsername').value;
@@ -221,7 +465,7 @@
             // 模拟添加延迟
             setTimeout(() => {
                 // 关闭模态框
-                bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+                closeAddUserModal();
 
                 // 恢复按钮状态
                 this.innerHTML = i18n.t('users.modal.save');
@@ -233,6 +477,61 @@
                 // 显示成功通知
                 showNotification(i18n.t('users.notifications.userAdded'), 'success');
             }, 1000);
+        });
+
+        // 分页按钮事件
+        document.querySelectorAll('.nikke-pagination-number').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.nikke-pagination-number').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // 模拟页面切换
+                showNotification(`已切换到第 ${this.textContent} 页`, 'info');
+            });
+        });
+
+        document.querySelector('.nikke-pagination-btn.next').addEventListener('click', function() {
+            const active = document.querySelector('.nikke-pagination-number.active');
+            const next = active.nextElementSibling;
+            if (next) {
+                active.classList.remove('active');
+                next.classList.add('active');
+
+                if (!next.nextElementSibling) {
+                    this.classList.add('disabled');
+                    this.setAttribute('aria-disabled', 'true');
+                }
+
+                document.querySelector('.nikke-pagination-btn.prev').classList.remove('disabled');
+                document.querySelector('.nikke-pagination-btn.prev').removeAttribute('aria-disabled');
+
+                // 模拟页面切换
+                showNotification(`已切换到第 ${next.textContent} 页`, 'info');
+            }
+        });
+
+        document.querySelector('.nikke-pagination-btn.prev').addEventListener('click', function() {
+            if (this.classList.contains('disabled')) return;
+
+            const active = document.querySelector('.nikke-pagination-number.active');
+            const prev = active.previousElementSibling;
+            if (prev) {
+                active.classList.remove('active');
+                prev.classList.add('active');
+
+                if (!prev.previousElementSibling) {
+                    this.classList.add('disabled');
+                    this.setAttribute('aria-disabled', 'true');
+                }
+
+                document.querySelector('.nikke-pagination-btn.next').classList.remove('disabled');
+                document.querySelector('.nikke-pagination-btn.next').removeAttribute('aria-disabled');
+
+                // 模拟页面切换
+                showNotification(`已切换到第 ${prev.textContent} 页`, 'info');
+            }
         });
 
         // 监听语言变更事件
@@ -247,18 +546,6 @@
                     option.textContent = i18n.t(key);
                 }
             });
-
-            // 更新搜索按钮
-            const searchBtn = document.getElementById('searchBtn');
-            if (!searchBtn.disabled) {
-                searchBtn.innerHTML = `<i class="fas fa-search me-2"></i> <span>${i18n.t('users.search.button')}</span>`;
-            }
-
-            // 更新保存按钮
-            const saveBtn = document.getElementById('saveUserBtn');
-            if (!saveBtn.disabled) {
-                saveBtn.textContent = i18n.t('users.modal.save');
-            }
         });
     </script>
 }
