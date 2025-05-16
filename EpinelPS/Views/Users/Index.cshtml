@@ -67,7 +67,7 @@
                         <tr>
                             <td class="align-middle">
                                 <div class="user-item">
-                                    <img src="/admin/assets/img/avatar-@(new Random().Next(1, 6)).png" alt="头像" class="user-avatar">
+                                    <img src="/admin/assets/img/avatar-1.png" alt="头像" class="user-avatar">
                                     <div>
                                         <div class="user-name">@Html.DisplayFor(modelItem => item.Username)</div>
                                         <small class="text-muted"><span data-i18n="users.table.id">ID</span>: @item.ID</small>
@@ -236,12 +236,6 @@
         z-index: 1050;
     }
 
-    .nikke-modal.show {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .nikke-modal-backdrop {
         position: fixed;
         top: 0;
@@ -364,7 +358,7 @@
 
     .nikke-checkbox-label:after {
         content: '\f00c';
-        font-family: 'Font Awesome 5 Free';
+        font-family: 'Font Awesome 5 Free', serif;
         font-weight: 900;
         position: absolute;
         left: 3px;

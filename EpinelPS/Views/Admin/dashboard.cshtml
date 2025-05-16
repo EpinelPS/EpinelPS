@@ -217,7 +217,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             // 玩家活跃度图表
             const playerCtx = document.getElementById('playerChart').getContext('2d');
-            const playerChart = new Chart(playerCtx, {
+            // 保存图表实例到window对象
+            window.playerChart = new Chart(playerCtx, {
                 type: 'line',
                 data: {
                     labels: getWeekdayLabels(),
@@ -271,9 +272,6 @@
                     }
                 }
             });
-
-            // 保存图表实例到window对象
-            window.playerChart = playerChart;
 
             // 周/月切换按钮
             document.querySelectorAll('[data-period]').forEach(button => {

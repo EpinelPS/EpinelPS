@@ -75,8 +75,6 @@
                             <i class="fas fa-user-circle me-1"></i> <span>管理员</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> <span data-i18n="nav.profile">个人信息</span></a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-key me-2"></i> <span data-i18n="nav.changePass">修改密码</span></a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> <span data-i18n="nav.logout">退出登录</span></a></li>
                         </ul>
@@ -179,8 +177,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         const token = localStorage.getItem('token');
         if (!token && window.location.pathname !== '/admin') {
-            // 未登录，重定向到登录页
-            // window.location.href = '/admin';
         }
 
         // 监听语言变化事件
