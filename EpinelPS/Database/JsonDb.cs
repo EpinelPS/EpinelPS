@@ -577,7 +577,7 @@ namespace EpinelPS.Database
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
-        public Dictionary<string, User> AdminAuthTokens = [];
+        public Dictionary<string, ulong> AdminAuthTokens = new();
 
         public string ServerName = "<color=\"green\">Private Server</color>";
         public byte[] LauncherTokenKey = [];

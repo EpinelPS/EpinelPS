@@ -4,6 +4,7 @@ using EpinelPS.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Security;
+using System.Linq;
 
 namespace EpinelPS.Controllers.AdminPanel
 {
@@ -18,9 +19,12 @@ namespace EpinelPS.Controllers.AdminPanel
             if (token == null) return false;
 
             // TODO better authentication
-            foreach (var item in JsonDb.Instance.AdminAuthTokens)
+            if (JsonDb.Instance.AdminAuthTokens.ContainsKey(token))
             {
-                if (item.Key == token) return true;
+                ulong userId = JsonDb.Instance.AdminAuthTokens[token];
+                var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+                if (user != null && user.IsAdmin)
+                    return true;
             }
             return false;
         }
