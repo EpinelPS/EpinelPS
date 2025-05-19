@@ -1,0 +1,215 @@
+{
+  "app": {
+    "name": "胜利女神控制台",
+    "version": "版本 v2.5.3",
+    "footer": "© 2025 - NIKKE: 胜利女神 - 管理控制台"
+  },
+  "auth": {
+    "login": "登录",
+    "username": "用户名",
+    "password": "密码",
+    "enter": "进入控制台",
+    "welcome": "请登录以访问管理功能",
+    "verifying": "验证中...",
+    "success": "登录成功",
+    "error": {
+      "required": "请输入用户名和密码",
+      "invalid": "登录失败，请检查用户名和密码",
+      "network": "网络错误，请稍后重试"
+    }
+  },
+  "common": {
+    "loading": "加载中...",
+    "confirm": "确认",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "actions": "操作",
+    "search": "搜索",
+    "status": {
+      "online": "在线",
+      "offline": "离线"
+    },
+    "notifications": {
+      "title": "系统通知",
+      "dashboardRefreshed": "仪表盘数据已成功刷新"
+    }
+  },
+  "nav": {
+    "dashboard": "仪表盘",
+    "events": "活动",
+    "users": "用户",
+    "mail": "邮件",
+    "config": "配置",
+    "database": "数据库",
+    "profile": "个人信息",
+    "changePass": "修改密码",
+    "logout": "退出登录"
+  },
+  "dashboard": {
+    "title": "控制台概览",
+    "refresh": "刷新数据",
+    "refreshing": "刷新中...",
+    "statsCards": {
+      "users": "注册用户",
+      "server": "服务器状态",
+      "events": "活动进行中",
+      "mail": "今日邮件"
+    },
+    "charts": {
+      "activity": "用户活跃度趋势",
+      "server": "服务器资源使用",
+      "periods": {
+        "day": "日",
+        "week": "周",
+        "month": "月"
+      }
+    },
+    "serverStats": {
+      "cpu": "CPU 使用率",
+      "memory": "内存使用率",
+      "storage": "存储使用率"
+    },
+    "activity": {
+      "title": "最近活动",
+      "newUser": "新用户注册",
+      "loginAlert": "检测到异常登录",
+      "configUpdate": "系统配置已更新",
+      "rewards": "发放全服奖励",
+      "newEvent": "新活动已创建",
+      "bugfix": "修复游戏漏洞",
+      "timeFormat": {
+        "min": "分钟前",
+        "hour": "小时前",
+        "yesterday": "昨天",
+        "daysAgo": "前天"
+      }
+    },
+    "quickAccess": {
+      "users": {
+        "title": "用户管理",
+        "desc": "管理游戏用户账号，权限和角色"
+      },
+      "events": {
+        "title": "活动管理",
+        "desc": "创建、编辑和监控游戏活动"
+      },
+      "mail": {
+        "title": "邮件系统",
+        "desc": "发送系统邮件和奖励给玩家"
+      },
+      "database": {
+        "title": "数据库",
+        "desc": "管理和维护游戏数据库"
+      },
+      "enter": "进入"
+    }
+  },
+  "users": {
+    "title": "用户管理",
+    "add": "添加新用户",
+    "table": {
+      "id": "ID",
+      "username": "用户名",
+      "nickname": "昵称",
+      "playerName": "玩家名称",
+      "isAdmin": "权限",
+      "isBanned": "禁止登录",
+      "actions": "操作"
+    },
+    "search": {
+      "username": "用户名",
+      "usernamePlaceholder": "搜索用户名...",
+      "userType": "用户类型",
+      "types": {
+        "all": "全部",
+        "admin": "管理员",
+        "user": "普通用户"
+      },
+      "sort": "排序方式",
+      "sortOptions": {
+        "username": "用户名",
+        "created": "创建时间"
+      },
+      "button": "搜索",
+      "searching": "搜索中..."
+    },
+    "pagination": {
+      "prev": "上一页",
+      "next": "下一页"
+    },
+    "modal": {
+      "add": "添加新用户",
+      "close": "关闭",
+      "username": "用户名",
+      "nickname": "昵称",
+      "password": "密码",
+      "isAdmin": "管理员权限",
+      "cancel": "取消",
+      "save": "保存用户",
+      "saving": "保存中..."
+    },
+    "modify": {
+      "title": "修改用户信息",
+      "subtitle": "用户信息",
+      "isAdmin": "管理员权限: ",
+      "disableGacha": "禁用抽卡系统: ",
+      "disableGachaHint": "允许所有角色有相同概率被抽到",
+      "isBanned": "禁止登录:",
+      "cheats": "作弊功能",
+      "campaign": "战役:",
+      "skipStages": "跳过关卡",
+      "characters": "角色:",
+      "addAllChars": "添加所有角色",
+      "addChar": "添加角色",
+      "setCharLevels": "设置角色等级",
+      "setSkillLevels": "设置技能等级",
+      "setCoreLevel": "设置核心等级",
+      "inventory": "物品:",
+      "addAllEquip": "添加所有装备",
+      "addItem": "添加物品",
+      "misc": "其他:",
+      "finishTutorials": "完成所有教程",
+      "backToList": "返回列表"
+    },
+    "password": {
+      "title": "修改密码",
+      "changeButton": "修改密码",
+      "backToList": "返回列表",
+      "enterNewPassword": "输入新密码",
+      "hint": "请输入强密码，包含字母、数字和特殊字符"
+    },
+    "delete": {
+      "title": "删除用户",
+      "confirmation": "您确定要删除这个用户吗？",
+      "backToList": "返回列表"
+    },
+    "notifications": {
+      "searchDone": "搜索完成",
+      "requiredFields": "请填写必填字段",
+      "userAdded": "用户添加成功！请刷新页面查看。"
+    }
+  },
+  "events": {
+    "config": {
+      "title": "活动配置",
+      "comingSoon": "即将上线！"
+    }
+  },
+  "mail": {
+    "title": "游戏内邮件",
+    "comingSoon": "即将上线！"
+  },
+  "config": {
+    "server": {
+      "title": "服务器配置",
+      "logLevel": "日志级别:"
+    },
+    "database": {
+      "title": "数据库配置",
+      "reload": "重新加载数据库",
+      "reloadHint": "从db.json加载更改到内存中。未保存的更改将丢失。"
+    }
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "app": {
+    "name": "NIKKEアドミンコンソール",
+    "version": "バージョン v2.5.3",
+    "footer": "© 2025 - NIKKE: 勝利の女神 - アドミンコンソール"
+  },
+  "auth": {
+    "login": "ログイン",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "enter": "コンソールに入る",
+    "welcome": "管理機能にアクセスするにはログインしてください",
+    "verifying": "確認中...",
+    "success": "ログイン成功",
+    "error": {
+      "required": "ユーザー名とパスワードを入力してください",
+      "invalid": "ログインに失敗しました。認証情報を確認してください",
+      "network": "ネットワークエラー。後ほど再試行してください"
+    }
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "actions": "アクション",
+    "search": "検索",
+    "status": {
+      "online": "オンライン",
+      "offline": "オフライン"
+    },
+    "notifications": {
+      "title": "システム通知",
+      "dashboardRefreshed": "ダッシュボードデータが正常に更新されました"
+    }
+  },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "events": "イベント",
+    "users": "ユーザー",
+    "mail": "メール",
+    "config": "設定",
+    "database": "データベース",
+    "profile": "プロフィール",
+    "changePass": "パスワード変更",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "title": "コンソール概要",
+    "refresh": "データを更新",
+    "refreshing": "更新中...",
+    "statsCards": {
+      "users": "登録ユーザー",
+      "server": "サーバーステータス",
+      "events": "アクティブイベント",
+      "mail": "今日のメール"
+    },
+    "charts": {
+      "activity": "ユーザーアクティビティ傾向",
+      "server": "サーバーリソース使用状況",
+      "periods": {
+        "day": "日",
+        "week": "週",
+        "month": "月"
+      }
+    },
+    "serverStats": {
+      "cpu": "CPU使用率",
+      "memory": "メモリ使用率",
+      "storage": "ストレージ使用率"
+    },
+    "activity": {
+      "title": "最近のアクティビティ",
+      "newUser": "新規ユーザー登録",
+      "loginAlert": "異常なログインを検出",
+      "configUpdate": "システム設定が更新されました",
+      "rewards": "全体報酬を配布しました",
+      "newEvent": "新しいイベントが作成されました",
+      "bugfix": "ゲームのバグを修正しました",
+      "timeFormat": {
+        "min": "分前",
+        "hour": "時間前",
+        "yesterday": "昨日",
+        "daysAgo": "日前"
+      }
+    },
+    "quickAccess": {
+      "users": {
+        "title": "ユーザー管理",
+        "desc": "ゲームユーザーアカウント、権限、ロールを管理"
+      },
+      "events": {
+        "title": "イベント管理",
+        "desc": "ゲームイベントの作成、編集、監視"
+      },
+      "mail": {
+        "title": "メールシステム",
+        "desc": "プレイヤーにシステムメールと報酬を送信"
+      },
+      "database": {
+        "title": "データベース",
+        "desc": "ゲームデータベースの管理と保守"
+      },
+      "enter": "入る"
+    }
+  },
+  "users": {
+    "title": "ユーザー管理",
+    "add": "新規ユーザー追加",
+    "table": {
+      "id": "ID",
+      "username": "ユーザー名",
+      "nickname": "ニックネーム",
+      "playerName": "プレイヤー名",
+      "isAdmin": "権限",
+      "isBanned": "禁止",
+      "actions": "アクション"
+    },
+    "search": {
+      "username": "ユーザー名",
+      "usernamePlaceholder": "ユーザー名を検索...",
+      "userType": "ユーザータイプ",
+      "types": {
+        "all": "すべて",
+        "admin": "管理者",
+        "user": "一般ユーザー"
+      },
+      "sort": "並び替え",
+      "sortOptions": {
+        "username": "ユーザー名",
+        "created": "作成日"
+      },
+      "button": "検索",
+      "searching": "検索中..."
+    },
+    "pagination": {
+      "prev": "前へ",
+      "next": "次へ"
+    },
+    "modal": {
+      "add": "新規ユーザー追加",
+      "close": "閉じる",
+      "username": "ユーザー名",
+      "nickname": "ニックネーム",
+      "password": "パスワード",
+      "isAdmin": "管理者権限",
+      "cancel": "キャンセル",
+      "save": "ユーザーを保存",
+      "saving": "保存中..."
+    },
+    "modify": {
+      "title": "ユーザー情報の変更",
+      "subtitle": "ユーザー情報",
+      "isAdmin": "管理者権限: ",
+      "disableGacha": "ガチャシステムを無効化: ",
+      "disableGachaHint": "すべてのキャラクターが同じ確率で排出されるようになります",
+      "isBanned": "禁止:",
+      "cheats": "チート機能",
+      "campaign": "キャンペーン:",
+      "skipStages": "ステージスキップ",
+      "characters": "キャラクター:",
+      "addAllChars": "すべてのキャラクターを追加",
+      "addChar": "キャラクター追加",
+      "setCharLevels": "キャラクターレベル設定",
+      "setSkillLevels": "スキルレベル設定",
+      "setCoreLevel": "コアレベル設定",
+      "inventory": "インベントリ:",
+      "addAllEquip": "すべての装備を追加",
+      "addItem": "アイテム追加",
+      "misc": "その他:",
+      "finishTutorials": "すべてのチュートリアルを完了",
+      "backToList": "一覧に戻る"
+    },
+    "password": {
+      "title": "パスワード変更",
+      "changeButton": "パスワード変更",
+      "backToList": "リストに戻る",
+      "enterNewPassword": "新しいパスワードを入力",
+      "hint": "文字、数字、特殊文字を含む強力なパスワードを入力してください"
+    },
+    "delete": {
+      "title": "ユーザー削除",
+      "confirmation": "このユーザーを削除してもよろしいですか？",
+      "backToList": "一覧に戻る"
+    },
+    "notifications": {
+      "searchDone": "検索完了",
+      "requiredFields": "必須フィールドに入力してください",
+      "userAdded": "ユーザーが正常に追加されました！ページを更新して確認してください。"
+    }
+  },
+  "events": {
+    "config": {
+      "title": "イベント設定",
+      "comingSoon": "近日公開!"
+    }
+  },
+  "mail": {
+    "title": "ゲーム内メール",
+    "comingSoon": "近日公開!"
+  },
+  "config": {
+    "server": {
+      "title": "サーバー設定",
+      "logLevel": "ログレベル:"
+    },
+    "database": {
+      "title": "データベース設定",
+      "reload": "データベースを再読み込み",
+      "reloadHint": "db.jsonからの変更をメモリに読み込みます。保存されていない変更は破棄されます。"
+    }
+  }
+}

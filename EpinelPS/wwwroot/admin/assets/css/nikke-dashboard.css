@@ -1,0 +1,376 @@
+/* NIKKE 仪表盘专用样式 */
+
+/* 仪表板容器 */
+.nikke-dashboard {
+  padding: var(--spacing-lg);
+  min-height: calc(100vh - 120px);
+}
+
+/* 统计卡片 */
+.nikke-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stats-card {
+  background-color: var(--nikke-gray-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-normal);
+  border: 1px solid var(--nikke-gray);
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--nikke-accent);
+}
+
+.stats-card .icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--nikke-accent);
+}
+
+.stats-card .value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--nikke-light);
+  margin-bottom: 0.5rem;
+}
+
+.stats-card .label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--nikke-gray-light);
+  font-weight: normal;
+  padding: 0;
+  display: block;
+  text-align: left;
+}
+
+.stats-card .decoration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 5px;
+  background: linear-gradient(to bottom, var(--nikke-accent), transparent);
+}
+
+/* 图表卡片 */
+.chart-card {
+  background-color: var(--nikke-gray-dark);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--nikke-gray);
+  transition: all var(--transition-normal);
+}
+
+.chart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.chart-title {
+  font-weight: 600;
+  color: var(--nikke-light);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.chart-body {
+  position: relative;
+  width: 100%;
+}
+
+.chart-card .btn-outline-light {
+  color: var(--nikke-gray-light);
+  border-color: var(--nikke-gray);
+  background-color: transparent;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.chart-card .btn-outline-light:hover,
+.chart-card .btn-outline-light.active {
+  color: var(--nikke-light);
+  background-color: var(--nikke-accent);
+  border-color: var(--nikke-accent);
+}
+
+/* 进度条 */
+.nikke-progress {
+  height: 8px;
+  background-color: var(--nikke-gray);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.nikke-progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--nikke-accent-dark), var(--nikke-accent));
+  border-radius: var(--radius-full);
+}
+
+/* 活动列表 */
+.activity-list {
+  background-color: var(--nikke-gray-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--nikke-gray);
+  box-shadow: var(--shadow-md);
+  height: 100%;
+}
+
+.activity-header {
+  background-color: var(--nikke-primary);
+  color: var(--nikke-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 1px solid var(--nikke-primary-dark);
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid rgba(58, 58, 72, 0.5);
+  transition: background-color var(--transition-fast);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item:hover {
+  background-color: rgba(43, 57, 144, 0.1);
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--nikke-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.activity-content {
+  flex-grow: 1;
+}
+
+.activity-title {
+  color: var(--nikke-light);
+  margin-bottom: 5px;
+}
+
+.activity-time {
+  color: var(--nikke-gray-light);
+  font-size: 0.85rem;
+}
+
+/* 用户相关样式 */
+.user-item {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: var(--spacing-md);
+  border: 2px solid var(--nikke-accent);
+  background-color: var(--nikke-gray);
+}
+
+.user-name {
+  font-weight: 500;
+  color: var(--nikke-light);
+}
+
+.badge-admin {
+  display: inline-block;
+  background-color: var(--nikke-accent);
+  color: white;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+/* 通知 */
+.nikke-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 300px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--nikke-gray-dark);
+  color: var(--nikke-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1050;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all var(--transition-normal);
+}
+
+.nikke-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nikke-notification.info {
+  border-left: 5px solid var(--nikke-info);
+}
+
+.nikke-notification.success {
+  border-left: 5px solid var(--nikke-success);
+}
+
+.nikke-notification.warning {
+  border-left: 5px solid var(--nikke-warning);
+}
+
+.nikke-notification.error {
+  border-left: 5px solid var(--nikke-danger);
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.notification-title {
+  font-weight: 600;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--nikke-gray-light);
+  cursor: pointer;
+}
+
+.notification-close:hover {
+  color: var(--nikke-light);
+}
+
+.notification-body {
+  font-size: 0.9rem;
+}
+
+/* 仪表盘适应性 */
+@media (max-width: 1199.98px) {
+  .nikke-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .nikke-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .nikke-notification {
+    min-width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+  }
+}
+
+/* 自定义图表样式 */
+canvas {
+  width: 100% !important;
+}
+
+/* 确保图表中的文字使用正确的颜色 */
+.chartjs-render-monitor {
+  color: var(--nikke-light);
+}
+
+/* 图表工具提示定制 */
+.chartjs-tooltip {
+  background-color: var(--nikke-gray-dark) !important;
+  border: 1px solid var(--nikke-gray) !important;
+  color: var(--nikke-light) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-md) !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  font-family: 'Exo 2', 'Noto Sans SC', sans-serif !important;
+  font-size: 0.85rem !important;
+}
+
+/* 页面加载动画 */
+.dashboard-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(23, 23, 31, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.dashboard-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--nikke-gray);
+  border-top: 3px solid var(--nikke-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 仪表盘特殊动画 */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(232, 62, 140, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(232, 62, 140, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 62, 140, 0); }
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}

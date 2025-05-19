@@ -1,70 +1,250 @@
 @model EpinelPS.Models.Admin.ModUserModel
 
 @{
-    ViewData["Title"] = "Modify user";
+    ViewData["Title"] = "修改用户";
 }
 
-<h1>Change user info</h1>
+<div class="nikke-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" data-i18n="users.modify.title">修改用户信息</h1>
+        <a asp-action="Index" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i> <span data-i18n="users.modify.backToList">返回列表</span>
+        </a>
+    </div>
 
-<h3>User info</h3>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Modify">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label col-sm-2"></label>
-                 <div class="col-sm-10"><input asp-for="Username" class="form-control" /></div>
-                <span asp-validation-for="Username" class="text-danger"></span>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0" data-i18n="users.modify.subtitle">用户信息</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Modify">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Username" class="form-label" data-i18n="users.table.username">用户名</label>
+                                    <input asp-for="Username" class="form-control" />
+                                    <span asp-validation-for="Username" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Nickname" class="form-label" data-i18n="users.table.nickname">昵称</label>
+                                    <input asp-for="Nickname" class="form-control" />
+                                    <span asp-validation-for="Nickname" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="nikke-checkbox-group">
+                                    <div class="nikke-checkbox mb-2">
+                                        <input asp-for="IsAdmin" class="nikke-checkbox-input" />
+                                        <label asp-for="IsAdmin" class="nikke-checkbox-label" data-i18n="users.modify.isAdmin">管理员权限</label>
+                                        <span asp-validation-for="IsAdmin" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="nikke-checkbox mb-2">
+                                        <input asp-for="sickpulls" class="nikke-checkbox-input" data-i18n-title="users.modify.disableGachaHint" />
+                                        <label asp-for="sickpulls" class="nikke-checkbox-label" data-i18n="users.modify.disableGacha" data-i18n-title="users.modify.disableGachaHint">禁用抽卡系统</label>
+                                        <span asp-validation-for="sickpulls" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="nikke-checkbox">
+                                        <input asp-for="IsBanned" class="nikke-checkbox-input" />
+                                        <label asp-for="IsBanned" class="nikke-checkbox-label" data-i18n="users.modify.isBanned">禁止登录</label>
+                                        <span asp-validation-for="IsBanned" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary" data-i18n="common.save">
+                                <i class="fas fa-save me-2"></i> 保存
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="IsAdmin" class="control-label">Is Admin: </label>
-                <input asp-for="IsAdmin" class="form-check-input" />
-                <span asp-validation-for="IsAdmin" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0" data-i18n="users.modify.cheats">作弊功能</h3>
+                </div>
+                <div class="card-body">
+                    <div class="cheats-section mb-4">
+                        <h4 class="section-title" data-i18n="users.modify.campaign">战役</h4>
+                        <div class="button-group">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">
+                                <i class="fas fa-forward me-2"></i> <span data-i18n="users.modify.skipStages">跳过关卡</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cheats-section mb-4">
+                        <h4 class="section-title" data-i18n="users.modify.characters">角色</h4>
+                        <div class="button-group">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">
+                                <i class="fas fa-users me-2"></i> <span data-i18n="users.modify.addAllChars">添加所有角色</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">
+                                <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.modify.addChar">添加角色</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">
+                                <i class="fas fa-level-up-alt me-2"></i> <span data-i18n="users.modify.setCharLevels">设置角色等级</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">
+                                <i class="fas fa-bolt me-2"></i> <span data-i18n="users.modify.setSkillLevels">设置技能等级</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">
+                                <i class="fas fa-star me-2"></i> <span data-i18n="users.modify.setCoreLevel">设置核心等级</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cheats-section mb-4">
+                        <h4 class="section-title" data-i18n="users.modify.inventory">物品</h4>
+                        <div class="button-group">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">
+                                <i class="fas fa-tools me-2"></i> <span data-i18n="users.modify.addAllEquip">添加所有装备</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">
+                                <i class="fas fa-box-open me-2"></i> <span data-i18n="users.modify.addItem">添加物品</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cheats-section">
+                        <h4 class="section-title" data-i18n="users.modify.misc">其他</h4>
+                        <div class="button-group">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')">
+                                <i class="fas fa-graduation-cap me-2"></i> <span data-i18n="users.modify.finishTutorials">完成所有教程</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="control-label" title="allows for all characters to have equal chances of getting pulled">Disable Gacha System: </label>
-                <input asp-for="sickpulls" class="form-check-input" title="allows for all characters to have equal chances of getting pulled"/>
-                <span asp-validation-for="sickpulls" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="IsBanned" class="control-label">Banned:</label>
-                <input asp-for="IsBanned" class="form-check-input" />
-                <span asp-validation-for="IsBanned" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nickname" class="control-label col-sm-2"></label>
-                 <div class="col-sm-10"><input asp-for="Nickname" class="form-control" /></div>
-                <span asp-validation-for="Nickname" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" style="margin-top:10px;" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <hr>
-        <h3>Cheats</h3>
-        
-        <p>Campaign:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">Skip stages</button>
 
-        <p>Characters:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">Add all characters</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">Add character</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">Set character levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">Set character skill levels</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">Set core level</button>
-        <p>Inventory:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">Add all equipment</button>
-        <button class="btn btn-secondary" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">Add item</button>
-        <p>Misc:</p>
-        <button class="btn btn-secondary" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')">Finish all tutorials</button>
-    </div>
-</div>
+<style>
+    /* NIKKE风格卡片标题 */
+    .card-header {
+        background-color: var(--nikke-primary);
+        color: var(--nikke-light);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        padding: 15px 20px;
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    /* 作弊功能部分 */
+    .cheats-section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        color: var(--nikke-accent);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--nikke-gray);
+        padding-bottom: 8px;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* 自定义按钮 */
+    .btn-accent {
+        background-color: var(--nikke-accent-dark);
+        color: white;
+        border: none;
+        transition: all var(--transition-fast);
+    }
+
+    .btn-accent:hover {
+        background-color: var(--nikke-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(232, 62, 140, 0.4);
+        color: white;
+    }
+
+    /* 自定义复选框样式 */
+    .nikke-checkbox-group {
+        margin-top: 10px;
+    }
+
+    .nikke-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .nikke-checkbox-input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .nikke-checkbox-label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nikke-checkbox-label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background-color: var(--nikke-gray);
+        border: 1px solid var(--nikke-gray-light);
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:before {
+        background-color: var(--nikke-accent);
+        border-color: var(--nikke-accent);
+    }
+
+    .nikke-checkbox-label:after {
+        content: '\f00c';
+        font-family: 'Font Awesome 5 Free', serif;
+        font-weight: 900;
+        position: absolute;
+        left: 3px;
+        top: 1px;
+        color: white;
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+        font-size: 14px;
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:after {
+        opacity: 1;
+    }
+</style>

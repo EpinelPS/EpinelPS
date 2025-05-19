@@ -1,0 +1,229 @@
+body.login-page {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: url('/admin/assets/img/nikke-login-bg.jpg') no-repeat center center;
+  background-size: cover;
+  font-family: 'Exo 2', 'Noto Sans SC', sans-serif;
+}
+
+.login-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(23, 23, 31, 0.85), rgba(43, 57, 144, 0.7));
+  z-index: 1;
+}
+
+.login-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 420px;
+  background-color: rgba(35, 35, 45, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 15px rgba(232, 62, 140, 0.5);
+  animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-header {
+  padding: 30px 40px 15px;
+  text-align: center;
+  background: linear-gradient(to right, var(--nikke-primary-dark), var(--nikke-primary));
+  position: relative;
+  overflow: hidden;
+}
+
+.login-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/admin/assets/img/nikke-pattern.png');
+  background-size: 200px;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.login-header .logo {
+  position: relative;
+  z-index: 1;
+  max-width: 120px;
+  margin-bottom: 15px;
+}
+
+.login-header h1 {
+  position: relative;
+  z-index: 1;
+  color: white;
+  font-size: 24px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.login-header p {
+  position: relative;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.login-body {
+  padding: 30px 40px;
+}
+
+.form-floating {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.form-floating label {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  height: 100%;
+  padding: 1rem 0.75rem;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+  color: var(--nikke-gray-light);
+  display: flex;
+  align-items: center;
+}
+
+.form-floating .form-control {
+  height: 58px;
+  padding: 1.5rem 0.75rem 0.5rem;
+  color: white;
+  background-color: var(--nikke-gray);
+  border: 1px solid var(--nikke-gray-dark);
+  border-radius: 8px;
+}
+
+.form-floating .form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(232, 62, 140, 0.25);
+  border-color: var(--nikke-accent);
+}
+
+.form-floating .form-control:focus ~ label,
+.form-floating .form-control:not(:placeholder-shown) ~ label {
+  opacity: .65;
+  transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to right, var(--nikke-accent-dark), var(--nikke-accent));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+}
+
+.login-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(232, 62, 140, 0.4);
+}
+
+.login-button:hover::after {
+  transform: translateX(100%);
+  transition: transform 1s;
+}
+
+.error-message {
+  background-color: rgba(244, 66, 131, 0.2);
+  color: var(--nikke-danger);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  margin: 15px 0;
+  display: none;
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.error-message.visible {
+  display: block;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.login-footer {
+  text-align: center;
+  padding: 0 40px 30px;
+  color: var(--nikke-gray-light);
+  font-size: 12px;
+}
+
+.version {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  z-index: 2;
+}
+
+/* 动画光效 */
+.nikke-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(232, 62, 140, 0.4) 0%, rgba(232, 62, 140, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+body.login-page:hover .nikke-glow {
+  opacity: 1;
+}
