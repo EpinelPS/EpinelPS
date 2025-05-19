@@ -138,17 +138,51 @@ namespace ServerSelector
 
         public static bool PatchGameAssembly(string dll, bool install)
         {
+            // v124 introduced check to ensure that sodium dll is not changed.
             if (!GameAssemblyNeedsPatch) return true;
 
-            bool backupExists = File.Exists(dll + ".bak");
+            string backupPath = dll + ".bak";
+            bool backupExists = File.Exists(backupPath);
 
-            if (install && !backupExists)
+            /*
+                Official->Local (Install):
+                    - Check if backup file exists:
+                        - Game was updated, delete backup file
+                    - Check if game assembly is not patched:
+                        - Patch game assembly
+                Local->Official (Uninstall):
+                    - Check if game assembly is not patched:
+                        - Game updated, delete backup and return
+                    - Check if backup exists
+                        - Restore DLL
+            */
+
+            if (install)
             {
+                // todo reuse offset value
+                if (backupExists && PatchUtility.CanFindOffset(dll, GameAssemblySodiumIntegrityFuncHint))
+                {
+                    // game was likely updated, delete backup
+                    File.Delete(backupPath);
+                }
+
+                // patch assembly
                 return PatchUtility.SearchAndReplace(dll, GameAssemblySodiumIntegrityFuncHint, GameAssemblySodiumIntegrityFuncPatch);
             }
-            else if (backupExists && !PatchUtility.CanFindOffset(dll, GameAssemblySodiumIntegrityFuncHint))
+            else
             {
-                File.Move(dll + ".bak", dll, true);
+                if (PatchUtility.CanFindOffset(dll, GameAssemblySodiumIntegrityFuncHint))
+                {
+                    // game was updated, delete backup
+                    if (backupExists) File.Delete(backupPath);
+                    return true;
+                }
+                
+                // restore backup if it exists
+                if(backupExists)
+                {
+                    File.Move(backupPath, dll, true);
+                }
             }
 
             return true;
