@@ -1,0 +1,426 @@
+:root {
+  /* NIKKE主题色系 */
+  --nikke-primary: #2b3990;  /* NIKKE蓝色 */
+  --nikke-primary-light: #4754b9;
+  --nikke-primary-dark: #1a2370;
+  
+  --nikke-accent: #e83e8c;  /* NIKKE粉色 */
+  --nikke-accent-light: #f16eac;
+  --nikke-accent-dark: #c72c70;
+  
+  /* 中性色 */
+  --nikke-dark: #17171f;
+  --nikke-gray-dark: #23232d;
+  --nikke-gray: #3a3a48;
+  --nikke-gray-light: #7c7c8a;
+  --nikke-light: #f8f9fc;
+  
+  /* 功能色 */
+  --nikke-success: #32d296;
+  --nikke-warning: #faa05a;
+  --nikke-danger: #f44283;
+  --nikke-info: #3fafec;
+  
+  /* 尺寸 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.25);
+  --shadow-neon: 0 0 10px rgba(232, 62, 140, 0.5);
+  
+  /* 过渡 */
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-normal: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+}
+
+/* 全局样式 */
+body {
+  font-family: 'Exo 2', 'Noto Sans SC', sans-serif;
+  background: linear-gradient(135deg, var(--nikke-dark) 0%, rgba(26, 35, 112, 0.9) 100%);
+  color: var(--nikke-light);
+  line-height: 1.6;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/img/nikke-bg-pattern.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  z-index: -1;
+  pointer-events: none;
+} 
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--nikke-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.display-4 {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: var(--spacing-lg);
+  color: var(--nikke-light);
+  text-shadow: 0 0 10px rgba(232, 62, 140, 0.5);
+}
+
+a {
+  color: var(--nikke-accent);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+a:hover {
+  color: var(--nikke-accent-light);
+  text-shadow: 0 0 8px rgba(232, 62, 140, 0.4);
+}
+
+a.nav-link:after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--nikke-accent);
+  transition: width var(--transition-normal);
+}
+
+a.nav-link:hover:after {
+  width: 100%;
+}
+
+/* 导航栏样式 */
+.navbar {
+  background-color: var(--nikke-primary-dark) !important;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid rgba(232, 62, 140, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--nikke-light) !important;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand:before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  background-image: url('/admin/assets/img/nikke-logo-icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link.active {
+  color: var(--nikke-light) !important;
+  background-color: rgba(232, 62, 140, 0.2);
+}
+
+/* 容器样式 */
+.container, .container-fluid {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+}
+
+/* 表格样式 */
+.table {
+  background-color: var(--nikke-gray-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--nikke-gray);
+  box-shadow: var(--shadow-md);
+  color: var(--nikke-light);
+}
+
+.table thead th {
+  background-color: var(--nikke-primary);
+  color: var(--nikke-light);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  border-bottom: none;
+  padding: 1rem;
+}
+
+.table tbody tr:nth-of-type(odd) {
+  background-color: rgba(43, 57, 144, 0.1);
+}
+
+.table tbody tr {
+  transition: background-color var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(232, 62, 140, 0.1);
+}
+
+.table td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-top: 1px solid var(--nikke-gray);
+}
+
+/* 按钮样式 */
+.btn {
+  border-radius: var(--radius-md);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 0.5rem 1.25rem;
+  transition: all var(--transition-fast);
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+  background-color: var(--nikke-primary);
+  border-color: var(--nikke-primary);
+  color: var(--nikke-light);
+}
+
+.btn-primary:hover {
+  background-color: var(--nikke-primary-light);
+  border-color: var(--nikke-primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 57, 144, 0.4);
+}
+
+.btn-primary:focus, .btn-primary:active {
+  background-color: var(--nikke-primary-dark) !important;
+  border-color: var(--nikke-primary-dark) !important;
+  box-shadow: 0 0 0 0.25rem rgba(43, 57, 144, 0.5) !important;
+}
+
+.btn-danger {
+  background-color: var(--nikke-danger);
+  border-color: var(--nikke-danger);
+}
+
+.btn-danger:hover {
+  background-color: var(--nikke-accent-dark);
+  border-color: var(--nikke-accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 62, 140, 0.4);
+}
+
+.btn-outline-primary {
+  color: var(--nikke-primary);
+  border-color: var(--nikke-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--nikke-primary);
+  color: var(--nikke-light);
+  transform: translateY(-2px);
+}
+
+/* 表单样式 */
+.form-control, .form-select {
+  background-color: var(--nikke-gray-dark);
+  border: 1px solid var(--nikke-gray);
+  color: var(--nikke-light);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  transition: all var(--transition-fast);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: var(--nikke-gray);
+  border-color: var(--nikke-accent);
+  color: var(--nikke-light);
+  box-shadow: 0 0 0 0.25rem rgba(232, 62, 140, 0.25);
+}
+
+.form-label {
+  color: var(--nikke-light);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.form-control::placeholder {
+  color: var(--nikke-gray-light);
+}
+
+/* 卡片样式 */
+.card {
+  background-color: var(--nikke-gray-dark);
+  border: 1px solid var(--nikke-gray);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  background-color: var(--nikke-primary);
+  color: var(--nikke-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--nikke-primary-dark);
+}
+
+.card-body {
+  padding: 1.5rem;
+  color: var(--nikke-light);
+}
+
+/* 徽章样式 */
+.badge {
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.35em 0.65em;
+  border-radius: var(--radius-sm);
+}
+
+.badge-admin {
+  background-color: var(--nikke-accent);
+  color: var(--nikke-light);
+}
+
+/* 页脚样式 */
+.footer {
+  background-color: var(--nikke-gray-dark);
+  color: var(--nikke-gray-light);
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--nikke-gray);
+}
+
+/* 动画和效果 */
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(232, 62, 140, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(232, 62, 140, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(232, 62, 140, 0.5); }
+}
+
+.glow-effect {
+  animation: glow 2s infinite;
+}
+
+/* 数据表格特殊样式 */
+.admin-badge {
+  background-color: var(--nikke-accent);
+  color: white;
+  padding: 0.25em 0.5em;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* 自定义组件 */
+.stat-card {
+  background-color: var(--nikke-gray-dark);
+  border: 1px solid var(--nikke-gray);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(232, 62, 140, 0.1));
+  transform: skewX(-25deg) translateX(100%);
+  transition: transform 1s;
+}
+
+.stat-card:hover::after {
+  transform: skewX(-25deg) translateX(-150%);
+}
+
+.stat-card .icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--nikke-accent);
+}
+
+.stat-card .value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--nikke-light);
+}
+
+.stat-card .label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--nikke-gray-light);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+  
+  .display-4 {
+    font-size: 2rem;
+  }
+  
+  .table {
+    font-size: 0.85rem;
+  }
+}

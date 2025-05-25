@@ -131,7 +131,9 @@ namespace EpinelPS.Controllers
         private static string CreateAuthToken(User user)
         {
             string tok = RandomString(128);
-            JsonDb.Instance.AdminAuthTokens.Add(tok, user);
+            // 只保留一个token
+            JsonDb.Instance.AdminAuthTokens.Clear();
+            JsonDb.Instance.AdminAuthTokens.Add(tok, user.ID);
             JsonDb.Save();
             return tok;
         }

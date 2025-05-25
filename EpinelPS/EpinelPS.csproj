@@ -16,6 +16,11 @@
 
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+	  <DebugSymbols>false</DebugSymbols>
+	  <DebugType>none</DebugType>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="ASodium" Version="0.6.1" />
 		<PackageReference Include="DnsClient" Version="1.8.0" />
@@ -39,10 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Views\Shared\error.cshtml" />
-	  <None Include="wwwroot\admin\assets\login.css" />
-	  <None Include="wwwroot\admin\assets\login.jpg" />
-	  <None Include="wwwroot\admin\assets\style.css" />
+		<None Include="wwwroot\admin\**" />
 	  <None Include="wwwroot\admin\index.html" />
 	  <None Include="wwwroot\nikke_launcher\index.html" />
 	</ItemGroup>
@@ -64,5 +66,13 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\EpinelPS.Analyzers\EpinelPS.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\admin\assets\js\loginpage.js" />
+	  <_ContentIncludedByDefault Remove="wwwroot\admin\assets\login.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\admin\assets\login.jpg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\admin\assets\style.css" />
+	  <_ContentIncludedByDefault Remove="wwwroot\admin\css\site.css" />
 	</ItemGroup>
 </Project>

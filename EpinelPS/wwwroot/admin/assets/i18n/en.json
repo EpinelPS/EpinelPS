@@ -1,0 +1,215 @@
+{
+  "app": {
+    "name": "NIKKE Admin Console",
+    "version": "Version v2.5.3",
+    "footer": "© 2025 - NIKKE: Goddess of Victory - Admin Console"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "enter": "Enter Console",
+    "welcome": "Please login to access admin features",
+    "verifying": "Verifying...",
+    "success": "Login successful",
+    "error": {
+      "required": "Please enter username and password",
+      "invalid": "Login failed, please check your credentials",
+      "network": "Network error, please try again later"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "actions": "Actions",
+    "search": "Search",
+    "status": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "notifications": {
+      "title": "System Notification",
+      "dashboardRefreshed": "Dashboard data successfully refreshed"
+    }
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "events": "Events",
+    "users": "Users",
+    "mail": "Mail",
+    "config": "Configuration",
+    "database": "Database",
+    "profile": "Profile",
+    "changePass": "Change Password",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Console Overview",
+    "refresh": "Refresh Data",
+    "refreshing": "Refreshing...",
+    "statsCards": {
+      "users": "Registered Users",
+      "server": "Server Status",
+      "events": "Active Events",
+      "mail": "Mail Today"
+    },
+    "charts": {
+      "activity": "User Activity Trends",
+      "server": "Server Resource Usage",
+      "periods": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month"
+      }
+    },
+    "serverStats": {
+      "cpu": "CPU Usage",
+      "memory": "Memory Usage",
+      "storage": "Storage Usage"
+    },
+    "activity": {
+      "title": "Recent Activity",
+      "newUser": "New User Registration",
+      "loginAlert": "Unusual Login Detected",
+      "configUpdate": "System Configuration Updated",
+      "rewards": "Global Rewards Distributed",
+      "newEvent": "New Event Created",
+      "bugfix": "Game Bug Fixed",
+      "timeFormat": {
+        "min": "minutes ago",
+        "hour": "hours ago",
+        "yesterday": "yesterday",
+        "daysAgo": "days ago"
+      }
+    },
+    "quickAccess": {
+      "users": {
+        "title": "User Management",
+        "desc": "Manage game user accounts, permissions and roles"
+      },
+      "events": {
+        "title": "Event Management",
+        "desc": "Create, edit and monitor game events"
+      },
+      "mail": {
+        "title": "Mail System",
+        "desc": "Send system mails and rewards to players"
+      },
+      "database": {
+        "title": "Database",
+        "desc": "Manage and maintain game database"
+      },
+      "enter": "Enter"
+    }
+  },
+  "users": {
+    "title": "User Management",
+    "add": "Add New User",
+    "table": {
+      "id": "ID",
+      "username": "Username",
+      "nickname": "Nickname",
+      "playerName": "Player Name",
+      "isAdmin": "Permission",
+      "isBanned": "Banned",
+      "actions": "Actions"
+    },
+    "search": {
+      "username": "Username",
+      "usernamePlaceholder": "Search username...",
+      "userType": "User Type",
+      "types": {
+        "all": "All",
+        "admin": "Admin",
+        "user": "Regular User"
+      },
+      "sort": "Sort By",
+      "sortOptions": {
+        "username": "Username",
+        "created": "Creation Date"
+      },
+      "button": "Search",
+      "searching": "Searching..."
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "modal": {
+      "add": "Add New User",
+      "close": "Close",
+      "username": "Username",
+      "nickname": "Nickname",
+      "password": "Password",
+      "isAdmin": "Admin Privileges",
+      "cancel": "Cancel",
+      "save": "Save User",
+      "saving": "Saving..."
+    },
+    "modify": {
+      "title": "Modify User Info",
+      "subtitle": "User Information",
+      "isAdmin": "Admin Privileges: ",
+      "disableGacha": "Disable Gacha System: ",
+      "disableGachaHint": "Allows all characters to have equal chances of getting pulled",
+      "isBanned": "Banned:",
+      "cheats": "Cheat Functions",
+      "campaign": "Campaign:",
+      "skipStages": "Skip Stages",
+      "characters": "Characters:",
+      "addAllChars": "Add All Characters",
+      "addChar": "Add Character",
+      "setCharLevels": "Set Character Levels",
+      "setSkillLevels": "Set Skill Levels",
+      "setCoreLevel": "Set Core Level",
+      "inventory": "Inventory:",
+      "addAllEquip": "Add All Equipment",
+      "addItem": "Add Item",
+      "misc": "Miscellaneous:",
+      "finishTutorials": "Finish All Tutorials",
+      "backToList": "Back to List"
+    },
+    "password": {
+      "title": "Change Password",
+      "changeButton": "Change Password",
+      "backToList": "Back to List",
+      "enterNewPassword": "Enter new password",
+      "hint": "Please enter a strong password with letters, numbers and special characters"
+    },
+    "delete": {
+      "title": "Delete User",
+      "confirmation": "Are you sure you want to delete this user?",
+      "backToList": "Back to List"
+    },
+    "notifications": {
+      "searchDone": "Search completed",
+      "requiredFields": "Please fill in the required fields",
+      "userAdded": "User added successfully! Please refresh the page to view."
+    }
+  },
+  "events": {
+    "config": {
+      "title": "Event Configuration",
+      "comingSoon": "Coming Soon!"
+    }
+  },
+  "mail": {
+    "title": "In-game Mail",
+    "comingSoon": "Coming Soon!"
+  },
+  "config": {
+    "server": {
+      "title": "Server Configuration",
+      "logLevel": "Log Level:"
+    },
+    "database": {
+      "title": "Database Configuration",
+      "reload": "Reload Database",
+      "reloadHint": "Loads changes from db.json into memory. Discards unsaved changes."
+    }
+  }
+}
