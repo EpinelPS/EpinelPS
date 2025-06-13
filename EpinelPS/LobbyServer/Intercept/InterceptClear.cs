@@ -11,8 +11,8 @@ namespace EpinelPS.LobbyServer.Intercept
 
             var response = new ResClearIntercept
             {
-                Intercept = 1,
-                InterceptId = 1,
+                Intercept = req.Intercept,
+                InterceptId = req.InterceptId,
                 TicketCount = 5,
                 MaxTicketCount = 10
             };

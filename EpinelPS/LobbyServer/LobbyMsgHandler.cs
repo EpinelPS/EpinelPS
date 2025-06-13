@@ -104,6 +104,11 @@ namespace EpinelPS.LobbyServer
             {
                 T msg2 = new();
                 msg2.MergeFrom(Contents);
+
+                Logging.WriteLine("Reading " + msg2.GetType().Name, LogType.Debug);
+                PrintMessage(msg2);
+                Logging.WriteLine("", LogType.Debug);
+                
                 return msg2;
             }
             else
