@@ -9,6 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetSimRoom>();
+            var user = GetUser();
 
             var response = new ResGetSimRoom
             {
@@ -54,6 +55,14 @@ namespace EpinelPS.LobbyServer.Simroom
                 NextRenewAt = DateTime.UtcNow.AddDays(7).Ticks,
                 NextLegacyBuffResetDate = Timestamp.FromDateTimeOffset(DateTime.UtcNow.AddDays(7))
             };
+
+            if (user.ResetableData.SimRoomData.Entered)
+            {
+                response.Status = SimRoomStatus.Progress;
+                
+                response.CurrentDifficulty = user.ResetableData.SimRoomData.CurrentDifficulty;
+            }
+
 
             await WriteDataAsync(response);
         }

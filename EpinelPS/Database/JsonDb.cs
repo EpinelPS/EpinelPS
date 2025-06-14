@@ -82,6 +82,12 @@ namespace EpinelPS.Database
         /// </summary>
         public long AvailableAt;
     }
+    public class SimroomData
+    {
+        public int CurrentDifficulty;
+        public int CurrentChapter;
+        public bool Entered = false;
+    }
     public class ResetableData
     {
         public int WipeoutCount = 0;
@@ -89,6 +95,7 @@ namespace EpinelPS.Database
         public int InterceptionTickets = 3;
         public List<int> CompletedDailyMissions = [];
         public int DailyMissionPoints;
+        public SimroomData SimRoomData = new();
     }
     public class WeeklyResetableData
     {

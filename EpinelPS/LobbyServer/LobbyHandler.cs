@@ -100,9 +100,10 @@ namespace EpinelPS.LobbyServer
         {
             var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                             .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true });
+                             .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true }) ?? throw new Exception("failed to decrypt");
+            var elem = (encryptionToken.Paseto.Payload["data"] as System.Text.Json.JsonElement?) ?? throw new Exception("expected data field in auth token");
 
-            var p = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["data"]).GetString() ?? throw new Exception("auth token cannot be null");
+            var p = elem.GetString() ?? throw new Exception("auth token cannot be null");
 
             return JsonConvert.DeserializeObject<GameClientInfo>(p ?? throw new Exception("data cannot be null"));
         }
