@@ -68,9 +68,16 @@ public static class PatchUtility
                 byte[] replaceBytes = HexStringToBytes(replacePatterns[k]);
 
                 // Find the index of the first occurrence of the search pattern in the file data using another helper method
-                int index = FindPatternIndex(fileData, searchBytes)[1];
 
-                Console.WriteLine("offset: " + index.ToString("X"));
+                // Note: game versions 124 - 133 have 2 matches, 2nd one is the correct one
+                //       game version 134 - ? has 1 match which is correct
+                int index = -1;
+                var indexes = FindPatternIndex(fileData, searchBytes);
+                if (indexes.Count == 1)
+                    index = indexes[0];
+                else index = indexes[1];
+
+                Console.WriteLine("Found offset: " + index.ToString("X"));
 
                 // If the index is -1, it means the pattern was not found, so we return false and log an error message
                 if (index == -1)
