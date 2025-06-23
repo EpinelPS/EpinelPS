@@ -258,7 +258,7 @@ namespace EpinelPS.Database
         public WeeklyResetableData WeeklyResetableData = new();
         public List<ItemData> Items = new();
         public List<Character> Characters = [];
-        public NetWholeUserTeamData RepresentationTeamData = new();
+        public long[] RepresentationTeamDataNew = [];
         public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
 
         public NetWallpaperData[] WallpaperList = [];
@@ -288,8 +288,8 @@ namespace EpinelPS.Database
 
         public Dictionary<int, int> TowerProgress = new Dictionary<int, int>();
 
-        public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationLobby, TableId = 2, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
-        public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom, TableId = 5, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId };
+        public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
+        public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
         public OutpostBuffs OutpostBuffs = new();
         public Dictionary<int, UnlockData> ContentsOpenUnlocked = new();
 
@@ -479,6 +479,7 @@ namespace EpinelPS.Database
 
         public Character? GetCharacterBySerialNumber(long value)
         {
+            if (value == 0) return null;
             return Characters.Where(x => x.Csn == value).FirstOrDefault();
         }
 
@@ -634,7 +635,7 @@ namespace EpinelPS.Database
                     }
                     Console.WriteLine("Database update completed");
                 }
-                else if (Instance.DbVersion == 1)
+                if (Instance.DbVersion == 1)
                 {
                     Console.WriteLine("Starting database update...");
                     // there was a bug where equipment position was not saved, so remove all items from each characters
@@ -648,7 +649,7 @@ namespace EpinelPS.Database
                     }
                     Console.WriteLine("Database update completed");
                 }
-                else if (Instance.DbVersion == 2)
+                if (Instance.DbVersion == 2)
                 {
                     Console.WriteLine("Starting database update...");
                     // I used to use a class for FieldInfo cleared stages, but now int list is used
@@ -665,6 +666,16 @@ namespace EpinelPS.Database
                             user.FieldInfoNew.Add(f.Key, newField);
                         }
                         user.FieldInfo.Clear();
+                    }
+                    Console.WriteLine("Database update completed");
+                }
+                if (Instance.DbVersion == 3)
+                {
+                    Console.WriteLine("Starting database update...");
+                    Instance.DbVersion = 4;
+                    foreach (var user in Instance.Users)
+                    {
+                        user.RepresentationTeamDataNew = new long[5];
                     }
                     Console.WriteLine("Database update completed");
                 }

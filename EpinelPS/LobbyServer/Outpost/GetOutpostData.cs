@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Outpost
             var response = new ResGetOutpostData
             {
                 OutpostBattleLevel = user.OutpostBattleLevel,
-                JukeboxV2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } }
+                JukeboxV2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } }
             };
 
             // TODO: do not hard code this!

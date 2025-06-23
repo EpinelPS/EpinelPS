@@ -361,29 +361,6 @@ namespace EpinelPS
                             Console.WriteLine("Invalid argument. Core level must be between 0 and 11.");
                         }
                     }
-                    //code above WILL change tids in user.characters so this will update them in representation team
-                    foreach (var user in JsonDb.Instance.Users)
-                    {
-                        // Check if RepresentationTeamData exists and has slots
-                        if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-                        {
-                            // Iterate through RepresentationTeamData slots
-                            foreach (var slot in user.RepresentationTeamData.Slots)
-                            {
-                                // Find the character in user's character list that matches the slot's Csn
-                                var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
-
-                                if (correspondingCharacter != null)
-                                {
-                                    // Update the Tid value if it differs
-                                    if (slot.Tid != correspondingCharacter.Tid)
-                                    {
-                                        slot.Tid = correspondingCharacter.Tid;
-                                    }
-                                }
-                            }
-                        }
-                    }
 
                     // Save the updated data
                     JsonDb.Save();
@@ -447,29 +424,6 @@ namespace EpinelPS
                         else
                         {
                             Console.WriteLine("Invalid argument. Level must be between 1 and 999.");
-                        }
-                    }
-                    //code above WILL change levels in user.characters so this will update them in representation team
-                    foreach (var user in JsonDb.Instance.Users)
-                    {
-                        // Check if RepresentationTeamData exists and has slots
-                        if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-                        {
-                            // Iterate through RepresentationTeamData slots
-                            foreach (var slot in user.RepresentationTeamData.Slots)
-                            {
-                                // Find the character in user's character list that matches the slot's Csn
-                                var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Csn == slot.Csn);
-
-                                if (correspondingCharacter != null)
-                                {
-                                    // Update the Level value if it differs
-                                    if (slot.Level != correspondingCharacter.Level)
-                                    {
-                                        slot.Level = correspondingCharacter.Level;
-                                    }
-                                }
-                            }
                         }
                     }
 

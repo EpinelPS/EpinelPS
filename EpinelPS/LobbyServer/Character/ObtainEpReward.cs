@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Character
             var user = GetUser();
 
             // look up ID from name code and level
-            var levelUpRecord = GameData.Instance.AttractiveLevelReward.Where(x => x.Value.attractive_level == req.Level && x.Value.name_code == req.NameCode).FirstOrDefault();
+            var levelUpRecord = GameData.Instance.AttractiveLevelReward.Where(x => x.Value.attractive_level == req.Lv && x.Value.name_code == req.NameCode).FirstOrDefault();
 
             foreach (var item in user.BondInfo)
             {

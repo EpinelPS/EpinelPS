@@ -117,7 +117,7 @@ namespace EpinelPS.LobbyServer
         {
             NetUserData ret = new()
             {
-                Level = user.userPointData.UserLevel,
+                Lv = user.userPointData.UserLevel,
                 Exp = user.userPointData.ExperiencePoint,
                 CostumeLv = 1,
                 Frame = user.ProfileFrame,
@@ -143,7 +143,7 @@ namespace EpinelPS.LobbyServer
         {
             var ret = new NetWholeUserData()
             {
-                Level = user.userPointData.UserLevel,
+                Lv = user.userPointData.UserLevel,
                 Frame = user.ProfileFrame,
                 Icon = user.ProfileIconId,
                 IconPrism = user.ProfileIconIsPrism,

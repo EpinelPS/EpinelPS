@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             foreach (var titleId in userTitleRecords.Keys)
             {
-                r.UserTitleList.Add(new NetUserTitle() { UserTitleId = titleId });
+                r.UserTitleList.Add(new ResGetUserTitleList.Types.NetUserTitle() { UserTitleId = titleId });
             }
 
             await WriteDataAsync(r);

@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             var response = new ResSetNicknameInTutorial
             {
-                Result = SetNicknameResult.SetNicknameResultOkay,
+                Result = SetNicknameResult.Okay,
                 Nickname = req.Nickname
             };
 

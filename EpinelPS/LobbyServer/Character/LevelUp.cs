@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Character
                     int requiredCredit = 0;
                     int requiredBattleData = 0;
                     int requiredCoreDust = 0;
-                    for (int i = item.Level; i < req.Level; i++)
+                    for (int i = item.Level; i < req.Lv; i++)
                     {
                         var levelUpData = data[i];
                         requiredCredit += levelUpData.gold;
@@ -36,7 +36,7 @@ namespace EpinelPS.LobbyServer.Character
                         user.SubtractCurrency(CurrencyType.Gold, requiredCredit);
                         user.SubtractCurrency(CurrencyType.CharacterExp, requiredBattleData);
                         user.SubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
-                        item.Level = req.Level;
+                        item.Level = req.Lv;
                     }
                     else
                     {
@@ -48,7 +48,7 @@ namespace EpinelPS.LobbyServer.Character
                     {
                         CostumeId = item.CostumeId,
                         Csn = item.Csn,
-                        Level = item.Level,
+                        Lv = item.Level,
                         Skill1Lv = item.Skill1Lvl,
                         Skill2Lv = item.Skill2Lvl,
                         UltiSkillLv = item.UltimateLevel,

@@ -14,22 +14,25 @@ namespace EpinelPS.LobbyServer.LobbyUser
           
             if (user != null)
             {
-                response.Data = new NetProfileData();
-                response.Data.User = LobbyHandler.CreateWholeUserDataFromDbUser(user);
-                response.Data.LastActionAt = DateTimeOffset.UtcNow.Ticks;
+                response.Data = new NetProfileData
+                {
+                    User = LobbyHandler.CreateWholeUserDataFromDbUser(user),
+                    LastActionAt = DateTimeOffset.UtcNow.Ticks,
+                };
                 response.Data.CharacterCount.Add(new NetCharacterCount() { Count = user.Characters.Count });
                 response.Data.InfraCoreLv = user.InfraCoreLvl;
                 response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
                 response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
                 response.Data.OutpostOpenState = user.MainQuestData.ContainsKey(25);
 
-                foreach (var item in user.RepresentationTeamData.Slots)
+                for (int i = 0; i < user.RepresentationTeamDataNew.Length; i++)
                 {
-                    var c = user.GetCharacterBySerialNumber(item.Csn);
+                    long csn = user.RepresentationTeamDataNew[i];
+                    var c = user.GetCharacterBySerialNumber(csn);
 
                     if (c != null)
                     {
-                        response.Data.ProfileTeam.Add(new NetProfileTeamSlot() { Slot = item.Slot, Default = new() { CostumeId = c.CostumeId, Csn = c.Csn, Grade = c.Grade, Level = c.Level, Skill1Lv = c.Skill1Lvl, Skill2Lv = c.Skill2Lvl, Tid = c.Tid, UltiSkillLv = c.UltimateLevel } });
+                        response.Data.ProfileTeam.Add(new NetProfileTeamSlot() { Slot = i + 1, Default = new() { CostumeId = c.CostumeId, Csn = c.Csn, Grade = c.Grade, Lv = c.Level, Skill1Lv = c.Skill1Lvl, Skill2Lv = c.Skill2Lvl, Tid = c.Tid, UltiSkillLv = c.UltimateLevel } });
                     }
                 }
             }

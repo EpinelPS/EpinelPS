@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             user.Nickname = req.Nickname;
 
             var response = new ResSetNickname();
-            response.Result = SetNicknameResult.SetNicknameResultOkay;
+            response.Result = SetNicknameResult.Okay;
             response.Nickname = req.Nickname;
 
             JsonDb.Save();

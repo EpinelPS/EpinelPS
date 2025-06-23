@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
-            response.RepresentationTeam = user.RepresentationTeamData;
+            response.RepresentationTeam = NetUtils.GetDisplayedTeam(user);
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
@@ -39,8 +39,8 @@ namespace EpinelPS.LobbyServer.LobbyUser
                 response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
             }
 
-            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom };
-            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.LobbyMusic.TableId, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationLobby };
+            response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
+            response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.LobbyMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
 
             await WriteDataAsync(response);
         }

@@ -24,20 +24,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
 
-            response.JukeboxV2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId, Location = NetJukeboxLocation.NetJukeboxLocationCommanderRoom } };
+            response.JukeboxV2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom } };
 
-            // Add default slot data
-            if (user.RepresentationTeamData.Slots.Count == 0)
-            {
-                user.RepresentationTeamData = new NetWholeUserTeamData() { TeamNumber = 1, Type = 2 };
-                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 1 });
-                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 2 });
-                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 3 });
-                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 4 });
-                user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Slot = 5 });
-                JsonDb.Save();
-            }
-            response.RepresentationTeam = user.RepresentationTeamData;
+         
 
             foreach (var item in user.Currency)
             {
@@ -46,7 +35,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             foreach (var item in user.Characters)
             {
-                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Level = user.GetCharacterLevel(item.Csn, item.Level), Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel}, IsSynchro = user.GetSynchro(item.Csn) });
+                response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = user.GetCharacterLevel(item.Csn, item.Level), Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel}, IsSynchro = user.GetSynchro(item.Csn) });
             }
           
             foreach (var item in NetUtils.GetUserItems(user))

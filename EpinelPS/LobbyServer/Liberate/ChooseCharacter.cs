@@ -14,9 +14,9 @@ namespace EpinelPS.LobbyServer.Liberate
 
             // TODO
             response.Data = new NetLiberateData() { CharacterId = req.CharacterId };
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 1 });
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 2 });
-            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.LiberateMissionStateRunning, Id = 3 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 1 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 2 });
+            response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 3 });
 
             await WriteDataAsync(response);
         }

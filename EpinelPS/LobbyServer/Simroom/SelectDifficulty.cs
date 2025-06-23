@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Simroom
 
             ResSelectSimRoomDifficulty response = new()
             {
-                Result = SimRoomResult.SimRoomResultSuccess,
+                Result = SimRoomResult.Success,
             };
 
             user.ResetableData.SimRoomData.Entered = true;

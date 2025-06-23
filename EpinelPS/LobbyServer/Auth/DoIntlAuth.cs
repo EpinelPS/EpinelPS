@@ -22,7 +22,7 @@ namespace EpinelPS.LobbyServer.Auth
             }
             if (UserId == 0)
             {
-                response.AuthError = new NetAuthError() { ErrorCode = AuthErrorCode.AuthErrorCodeError };
+                response.AuthError = new NetAuthError() { ErrorCode = AuthErrorCode.Error };
             }
             else
             {
@@ -43,7 +43,7 @@ namespace EpinelPS.LobbyServer.Auth
                 }
                 else
                 {
-                    response.AuthSuccess = new NetAuthSuccess() { AuthToken = req.Token, CentauriZoneId = "84", FirstAuth = false, PurchaseRestriction = new NetUserPurchaseRestriction() { PurchaseRestriction = PurchaseRestriction.PurchaseRestrictionChild, UpdatedAt = 638546758794611090 } };
+                    response.AuthSuccess = new NetAuthSuccess() { AuthToken = req.Token, CentauriZoneId = "84", FirstAuth = false, PurchaseRestriction = new NetUserPurchaseRestriction() { PurchaseRestriction = PurchaseRestriction.Child, UpdatedAt = 638546758794611090 } };
                 }
             }
 

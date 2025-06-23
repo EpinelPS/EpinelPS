@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Simroom
 
             ResQuitSimRoom response = new()
             {
-                Result = SimRoomResult.SimRoomResultSuccess,
+                Result = SimRoomResult.Success,
             };
 
             user.ResetableData.SimRoomData.Entered = false;

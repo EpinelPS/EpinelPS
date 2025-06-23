@@ -65,7 +65,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\EpinelPS.Analyzers\EpinelPS.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+	  <ProjectReference Include="..\EpinelPS.Analyzers\EpinelPS.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<ItemGroup>

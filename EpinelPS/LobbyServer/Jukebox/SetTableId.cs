@@ -13,15 +13,15 @@ namespace EpinelPS.LobbyServer.Jukebox
 
             var response = new ResSetJukeboxBgmTableId();
 
-            if (req.Location == NetJukeboxLocation.NetJukeboxLocationCommanderRoom)
+            if (req.Location == NetJukeboxLocation.CommanderRoom)
             {
                 user.CommanderMusic.TableId = req.JukeboxTableId;
-                user.CommanderMusic.Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId;
+                user.CommanderMusic.Type = NetJukeboxBgmType.JukeboxTableId;
             }
-            else if (req.Location == NetJukeboxLocation.NetJukeboxLocationLobby)
+            else if (req.Location == NetJukeboxLocation.Lobby)
             {
                 user.LobbyMusic.TableId = req.JukeboxTableId;
-                user.LobbyMusic.Type = NetJukeboxBgmType.NetJukeboxBgmTypeJukeboxTableId;
+                user.LobbyMusic.Type = NetJukeboxBgmType.JukeboxTableId;
             }
             JsonDb.Save();
 

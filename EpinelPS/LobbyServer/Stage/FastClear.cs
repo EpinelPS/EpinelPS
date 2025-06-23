@@ -1,4 +1,5 @@
 using EpinelPS.Utils;
+using Google.Protobuf;
 
 namespace EpinelPS.LobbyServer.Stage
 {
@@ -19,10 +20,11 @@ namespace EpinelPS.LobbyServer.Stage
             {
                 OutpostBattle = rsp.OutpostBattle,
                 OutpostBattleLevelReward = rsp.OutpostBattleLevelReward,
-                OutpostTimeRewardBuff = rsp.OutpostTimeRewardBuff,
                 StageClearReward = rsp.StageClearReward,
                 UserLevelUpReward = rsp.UserLevelUpReward
             };
+
+            response.OutpostTimeRewardBuff.TimeRewardBuffs.AddRange(rsp.OutpostTimeRewardBuff.TimeRewardBuffs);
             
             await WriteDataAsync(response);
         }

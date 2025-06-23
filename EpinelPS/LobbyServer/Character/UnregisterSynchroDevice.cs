@@ -32,7 +32,7 @@ namespace EpinelPS.LobbyServer.Character
                             Csn = data.Csn,
                             CostumeId = data.CostumeId,
                             Grade = data.Grade,
-                            Level = data.Level,
+                            Lv = data.Level,
                             Skill1Lv = data.Skill1Lvl,
                             Skill2Lv = data.Skill2Lvl,
                             Tid = data.Tid,

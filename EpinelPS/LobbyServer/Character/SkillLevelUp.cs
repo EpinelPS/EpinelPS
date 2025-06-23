@@ -44,7 +44,7 @@ namespace EpinelPS.LobbyServer.Character
                     Count = item.Count,
                     Csn = item.Csn,
                     Corporation = item.Corp,
-                    Level = item.Level,
+                    Lv = item.Level,
                     Exp = item.Exp,
                     Position = item.Position
                 });
@@ -54,7 +54,7 @@ namespace EpinelPS.LobbyServer.Character
             {
                 CostumeId = character.CostumeId,
                 Csn = character.Csn,
-                Level = character.Level,
+                Lv = character.Level,
                 Grade = character.Grade,
                 Tid = character.Tid,
                 DispatchTid = character.Tid,

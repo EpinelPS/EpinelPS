@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Arena
             // TODO
             response.Schedule = new NetChampionArenaSchedule();
             response.NextSchedule = new NetChampionArenaSchedule();
-            response.ChampionArenaContentsState = ChampionArenaContentsState.ChampionArenaContentsStateClosed;
+            response.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
             response.CurrentOrLastSeasonStartAt = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(5));
 
             await WriteDataAsync(response);

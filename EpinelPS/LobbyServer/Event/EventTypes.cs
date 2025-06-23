@@ -46,5 +46,14 @@ namespace EpinelPS.LobbyServer.Event
         public const int MVGMiniGame = 38;
 		public const int DragonDungeonRunMiniGame = 39;
         public const int NewPlayerLottery = 40;
+        public const int PirateCafe = 41;
+        public const int CEEvaMiniGame = 42;
+        public const int BubbleMarchMiniGame = 43;
+        public const int CE006BossChallengeMiniGame = 44;
+        public const int SupportCharacterEvent = 45;
+        public const int GachaBoard = 46;
+        public const int FreeRewardPass = 47;
+        public const int GachaPayback = 48;
+        public const int FieldCollectEvent = 49;
     }
 }

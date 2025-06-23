@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Character
                             Csn = item.CharacterSerialNumber,
                             CostumeId = targetCharacter.CostumeId,
                             Grade = targetCharacter.Grade,
-                            Level = user.GetSynchroLevel(),
+                            Lv = user.GetSynchroLevel(),
                             Skill1Lv = targetCharacter.Skill1Lvl,
                             Skill2Lv = targetCharacter.Skill2Lvl,
                             Tid = targetCharacter.Tid,

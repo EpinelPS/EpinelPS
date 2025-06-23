@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Client
         {
             var req = await ReadData<ReqCheckClientVersion>();
             var response = new ResCheckClientVersion();
-            response.Availability = Availability.None;
+            response.Availability = ResCheckClientVersion.Types.Availability.None;
 
             await WriteDataAsync(response);
         }

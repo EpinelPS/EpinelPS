@@ -92,7 +92,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         CostumeId = character.CostumeId,
                         Csn = character.Csn,
                         Grade = character.Grade,
-                        Level = character.Level,
+                        Lv = character.Level,
                         UltiSkillLv = character.UltimateLevel,
                         Skill1Lv = character.Skill1Lvl,
                         Skill2Lv = character.Skill2Lvl,
@@ -141,7 +141,7 @@ namespace EpinelPS.LobbyServer.Gacha
                                 Tid = existingItem.ItemType,
                                 Csn = existingItem.Csn,
                                 Count = existingItem.Count,
-                                Level = existingItem.Level,
+                                Lv = existingItem.Level,
                                 Exp = existingItem.Exp,
                                 Position = existingItem.Position,
                                 Isn = existingItem.Isn
@@ -169,7 +169,7 @@ namespace EpinelPS.LobbyServer.Gacha
                                 Tid = newItem.ItemType,
                                 Csn = newItem.Csn,
                                 Count = newItem.Count,
-                                Level = newItem.Level,
+                                Lv = newItem.Level,
                                 Exp = newItem.Exp,
                                 Position = newItem.Position,
                                 Isn = newItem.Isn
@@ -193,7 +193,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         CostumeId = 0,
                         Csn = gacha.Sn,
                         Grade = 0,
-                        Level = 1,
+                        Lv = 1,
                         Skill1Lv = 1,
                         Skill2Lv = 1,
                         Tid = characterData.id,
@@ -213,13 +213,13 @@ namespace EpinelPS.LobbyServer.Gacha
                     });
 
                     // Add "New Character" Badge
-                    user.AddBadge(BadgeContents.BadgeContentsNikkeNew, characterData.name_code.ToString());
+                    user.AddBadge(BadgeContents.NikkeNew, characterData.name_code.ToString());
                     user.AddTrigger(TriggerType.ObtainCharacter, 1, characterData.name_code);
                     user.AddTrigger(TriggerType.ObtainCharacterNew, 1);
 
                     if (characterData.original_rare == "SSR" || characterData.original_rare == "SR")
                     {
-                        user.BondInfo.Add(new() { NameCode = characterData.name_code, Level = 1 });
+                        user.BondInfo.Add(new() { NameCode = characterData.name_code, Lv = 1 });
 
                     }
                 }

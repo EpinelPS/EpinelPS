@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Character
                 response.Attractives.Add(item);
                 item.CanCounselToday = true;
                 item.Exp = 9999; // TODO
-                item.Level = 10;
+                item.Lv = 10;
             }
 
 

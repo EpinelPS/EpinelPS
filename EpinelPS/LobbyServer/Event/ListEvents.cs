@@ -9,23 +9,24 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetEventList>();
+
             //types are defined in EventTypes.cs
             var response = new ResGetEventList();
 
-            // evangellion event again
+            // stellar blade event
             response.EventList.Add(new NetEventData()
             {
-                Id = 81900,
+                Id = 82100,
                 EventSystemType = FieldHubEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks
             });
-            response.EventList.Add(new NetEventData()
+           response.EventList.Add(new NetEventData()
             {
-                Id = 81902,
-                EventSystemType = ShopEvent,
+                Id = 82101,
+                EventSystemType = CE006BossChallengeMiniGame,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -58,10 +59,11 @@ namespace EpinelPS.LobbyServer.Event
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks
             });
+            
             response.EventList.Add(new NetEventData()
             {
-                Id = 70087,
-                EventSystemType = PickupGachaEvent,
+                Id = 82102,
+                EventSystemType = ShopEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -69,8 +71,8 @@ namespace EpinelPS.LobbyServer.Event
             });
             response.EventList.Add(new NetEventData()
             {
-                Id = 70088,
-                EventSystemType = PickupGachaEvent,
+                Id = 82104,
+                EventSystemType = FieldCollectEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -78,119 +80,67 @@ namespace EpinelPS.LobbyServer.Event
             });
             response.EventList.Add(new NetEventData()
             {
-                Id = 79001,
-                EventSystemType = PickupGachaEvent,
+                Id = 82105,
+                EventSystemType = LoginEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
                 EventDisableDate = DateTime.Now.AddDays(20).Ticks
             });
-
-
-            // footsteps walk run
-            //         response.EventList.Add(new NetEventData()
-            //         {
-            //             Id = 40066,
-            //             EventSystemType = StoryEvent,
-            //             EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //             EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //             EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //             EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //         });             
-            //response.EventList.Add(new NetEventData()
-            //         {
-            //             Id = 60066,
-            //             EventSystemType = ChallengeModeEvent,
-            //             EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //             EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //             EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //             EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //         });            
-            //// ssr rapi
-            //         response.EventList.Add(new NetEventData()
-            //         {
-            //             Id = 70077,
-            //             EventSystemType = PickupGachaEvent,
-            //             EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //             EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //             EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //             EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //         });            
-            //response.EventList.Add(new NetEventData()
-            //{
-            //	Id = 10046,
-            //	EventSystemType = LoginEvent,
-            //	EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //	EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //	EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //	EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //});
-
-            //response.EventList.Add(new NetEventData()
-            //{
-            //	Id = 20001,
-            //	EventSystemType = DailyMissionEvent,
-            //	EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //	EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //	EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //	EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //});
-            //response.EventList.Add(new NetEventData()
-            //{
-            //	Id = 20002,
-            //	EventSystemType = DailyMissionEvent,
-            //	EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //	EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //	EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //	EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //});
-
-            //response.EventList.Add(new NetEventData()
-            //{
-            //	Id = 70078,
-            //	EventSystemType = PickupGachaEvent,
-            //	EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //	EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //	EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //	EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //});
-            //response.EventList.Add(new NetEventData()
-            //{
-            //	Id = 70079,
-            //	EventSystemType = PickupGachaEvent,
-            //	EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-            //	EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-            //	EventEndDate = DateTime.Now.AddDays(20).Ticks,
-            //	EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            //});
-            //full burst day
-
-            /*
-			response.EventList.Add(new NetEventData()
-			{
-				Id = 140052,
-				EventSystemType = RewardUpEvent,
-				EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-				EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-				EventEndDate = DateTime.Now.AddDays(20).Ticks,
-				EventDisableDate = DateTime.Now.AddDays(20).Ticks
-			});
-			*/
-
-            //dailies reward up
-
-            /*
-			response.EventList.Add(new NetEventData()
-			{
-				Id = 170017,
-				EventSystemType = TriggerMissionEventReward,
-				EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-				EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-				EventEndDate = DateTime.Now.AddDays(20).Ticks,
-				EventDisableDate = DateTime.Now.AddDays(20).Ticks
-			});
-			*/
-
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 30068,
+                EventSystemType = CooperationEvent,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40079,
+                EventSystemType = StoryEvent,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 40080,
+                EventSystemType = StoryEvent,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 60079,
+                EventSystemType = ChallengeModeEvent,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 100029,
+                EventSystemType = EventPass,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
+            response.EventList.Add(new NetEventData()
+            {
+                Id = 100030,
+                EventSystemType = EventPass,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
+                EventEndDate = DateTime.Now.AddDays(20).Ticks,
+                EventDisableDate = DateTime.Now.AddDays(20).Ticks
+            });
 
             await WriteDataAsync(response);
         }

@@ -15,15 +15,11 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             var req = await ReadData<ReqSetProfileTeam>();
             var user = GetUser();
-            user.RepresentationTeamData = new NetWholeUserTeamData();
-            user.RepresentationTeamData.TeamNumber = req.Team.TeamNumber;
-            foreach (var item in req.Team.Slots)
+            for (int i = 0; i < req.Team.Slots.Count - 1; i++)
             {
-                var character = user.GetCharacterBySerialNumber(item.Value);
-                if (character != null)
-                {
-                    user.RepresentationTeamData.Slots.Add(new NetWholeTeamSlot() { Csn = item.Value, Slot = item.Slot, CostumeId = character.CostumeId, Level = character.Level, Tid = character.Tid });
-                }
+                var slot = req.Team.Slots[i];
+
+                user.RepresentationTeamDataNew[i] = slot.Value;
             }
 
             JsonDb.Save();

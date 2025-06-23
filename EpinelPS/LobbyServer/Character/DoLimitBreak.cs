@@ -47,7 +47,7 @@ namespace EpinelPS.LobbyServer.Character
                         Csn = req.Csn,
                         CostumeId = targetCharacter.CostumeId,
                         Grade = targetCharacter.Grade,
-                        Level = user.GetSynchroLevel(),
+                        Lv = user.GetSynchroLevel(),
                         Skill1Lv = targetCharacter.Skill1Lvl,
                         Skill2Lv = targetCharacter.Skill2Lvl,
                         Tid = targetCharacter.Tid,
@@ -58,27 +58,6 @@ namespace EpinelPS.LobbyServer.Character
                     var bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
                     user.RemoveItemBySerialNumber(req.Isn, 1);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
-
-                    // replace any reference to the old character to the new TID
-                    // Check if RepresentationTeamData exists and has slots
-                    if (user.RepresentationTeamData != null && user.RepresentationTeamData.Slots != null)
-                    {
-                        // Iterate through RepresentationTeamData slots
-                        foreach (var slot in user.RepresentationTeamData.Slots)
-                        {
-                            // Find the character in user's character list that matches the slot's Tid
-                            var correspondingCharacter = user.Characters.FirstOrDefault(c => c.Tid == slot.Tid);
-
-                            if (correspondingCharacter != null)
-                            {
-                                // Update the CSN value if it differs
-                                if (slot.Csn != correspondingCharacter.Csn)
-                                {
-                                    slot.Csn = correspondingCharacter.Csn;
-                                }
-                            }
-                        }
-                    }
 
                     JsonDb.Save();
                 }
