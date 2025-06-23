@@ -325,19 +325,25 @@ namespace EpinelPS.Data
         }
         #endregion
 
-        public async Task<T> LoadZip<T>(string entry, IProgress<double> bar)
+        public async Task<T> LoadZip<T>(string entry, IProgress<double> bar) where T : new()
         {
-            var mainQuestData = MainZip.GetEntry(entry) ?? throw new Exception(entry + " does not exist in static data");
-            using StreamReader mainQuestReader = new(MainZip.GetInputStream(mainQuestData));
-            var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
+            var fileEntry = MainZip.GetEntry(entry);
+            if (fileEntry == null)
+            {
+                Logging.WriteLine(entry + " does not exist in static data", LogType.Error);
+                return new T();
+            }
 
-            var questdata = JsonConvert.DeserializeObject<T>(mainQuestDataString);
-            if (questdata == null) throw new Exception("failed to parse " + entry);
+            using StreamReader fileReader = new(MainZip.GetInputStream(fileEntry));
+            string fileString = await fileReader.ReadToEndAsync();
+
+            T? deseralizedObject = JsonConvert.DeserializeObject<T>(fileString);
+            if (deseralizedObject == null) throw new Exception("failed to parse " + entry);
 
             currentFile++;
             bar.Report((double)currentFile / totalFiles);
 
-            return questdata;
+            return deseralizedObject;
         }
 
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
