@@ -204,7 +204,9 @@
   "config": {
     "server": {
       "title": "服务器配置",
-      "logLevel": "日志级别:"
+      "logLevel": "日志级别:",
+      "updateResources": "Update Resources",
+      "updateResourcesHint": "Downloads asset and static data info from official server."
     },
     "database": {
       "title": "数据库配置",

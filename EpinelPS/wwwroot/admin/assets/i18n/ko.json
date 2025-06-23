@@ -204,7 +204,9 @@
   "config": {
     "server": {
       "title": "서버 구성",
-      "logLevel": "로그 레벨:"
+      "logLevel": "로그 레벨:",
+      "updateResources": "리소스 업데이트",
+      "updateResourcesHint": "공식 서버에서 자산 및 정적 데이터 정보를 다운로드합니다."
     },
     "database": {
       "title": "데이터베이스 구성",

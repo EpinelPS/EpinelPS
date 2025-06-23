@@ -204,7 +204,9 @@
   "config": {
     "server": {
       "title": "Server Configuration",
-      "logLevel": "Log Level:"
+      "logLevel": "Log Level:",
+      "updateResources": "Update Resources",
+      "updateResourcesHint": "Downloads asset and static data info from official server."
     },
     "database": {
       "title": "Database Configuration",

@@ -26,7 +26,7 @@ namespace EpinelPS.Utils
 
                 if (CloudIp == null)
                 {
-                    CloudIp = await GetCloudIpAsync();
+                    CloudIp = await GetIpAsync("cloud.nikke-kr.com");
                 }
 
                 var requestUri = new Uri("https://" + CloudIp + "/" + rawUrl);
@@ -69,13 +69,13 @@ namespace EpinelPS.Utils
                 context.Response.StatusCode = 404;
         }
 
-        private static async Task<string> GetCloudIpAsync()
+        public static async Task<string> GetIpAsync(string query)
         {
             var lookup = new LookupClient();
-            var result = await lookup.QueryAsync("cloud.nikke-kr.com", QueryType.A);
+            var result = await lookup.QueryAsync(query, QueryType.A);
 
             var record = result.Answers.ARecords().FirstOrDefault();
-            var ip = record?.Address ?? throw new Exception("Failed to find IP address of cloud.nikke-kr.com, check your internet connection.");
+            var ip = record?.Address ?? throw new Exception($"Failed to find IP address of {query}, check your internet connection.");
 
             return ip.ToString();
         }

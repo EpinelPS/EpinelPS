@@ -21,7 +21,7 @@ namespace EpinelPS
             {
                 Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
                 Console.WriteLine("This software is licensed under the AGPL-3.0 License");
-                Console.WriteLine("Targeting game version " + GameConfig.Root.GameMaxVer);
+                Console.WriteLine("Targeting game version " + GameConfig.Root.TargetVersion);
 
                 GameData.Instance.GetAllCostumes(); // force static data to be loaded
 
@@ -101,6 +101,7 @@ namespace EpinelPS
                     app.MapGet("/prdenv/{**all}", AssetDownloadUtil.HandleReq);
                     app.MapGet("/PC/{**all}", AssetDownloadUtil.HandleReq);
                     app.MapGet("/media/{**all}", AssetDownloadUtil.HandleReq);
+                    app.MapPost("/rqd/sync", HandleRqd);
 
                     // NOTE: pub prefixes shows public (production server), local is local server (does not have any effect), dev is development server, etc.
                     // It does not have any effect, except for the publisher server, which adds a watermark?
@@ -187,6 +188,11 @@ namespace EpinelPS
                 Console.WriteLine("Press any key to exit");
                 Console.ReadKey();
             }
+        }
+
+        private static async Task HandleRqd(HttpContext context)
+        {
+            
         }
 
         private static void CliLoop()

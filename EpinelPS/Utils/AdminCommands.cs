@@ -1,15 +1,59 @@
+using System.Net;
+using System.Net.Security;
+using System.Net.Sockets;
 using DnsClient;
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer.Stage;
 using EpinelPS.Models.Admin;
-using System.Net;
+using Google.Protobuf;
 
 namespace EpinelPS.Utils
 {
     public class AdminCommands
     {
+        private static HttpClient client;
 
+        private static string serverUrl = "global-lobby.nikke-kr.com";
+        private static string connectingServer = serverUrl;
+        private static string? serverIp;
+        private static string? staticDataUrl;
+        private static string? resourcesUrl;
+        static AdminCommands()
+        {
+            // Use TLS 1.1 so that tencents cloudflare knockoff wont complain
+            var handler = new SocketsHttpHandler
+            {
+                ConnectCallback = async (context, cancellationToken) =>
+                {
+                    var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                    try
+                    {
+                        await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
+
+                        var sslStream = new SslStream(new NetworkStream(socket, ownsSocket: true));
+
+                        // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
+                        await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+                        {
+                            TargetHost = connectingServer,
+                            EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
+
+                        }, cancellationToken);
+
+                        return sslStream;
+                    }
+                    catch
+                    {
+                        socket.Dispose();
+                        throw;
+                    }
+                }
+            };
+
+            client = new(handler);
+            client.DefaultRequestHeaders.Add("Accept", "application/octet-stream+protobuf");
+        }
         public static RunCmdResponse CompleteStage(ulong userId, string input2)
         {
             var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
@@ -326,6 +370,73 @@ namespace EpinelPS.Utils
             Console.WriteLine($"Added {amount} of item {itemId} to user {user.Username}");
             JsonDb.Save();
             return RunCmdResponse.OK;
+        }
+
+        internal static async Task<RunCmdResponse> UpdateResources()
+        {
+            Logging.WriteLine("updating static data and resource info...", LogType.Info);
+            if (serverIp == null || staticDataUrl == null || resourcesUrl == null)
+            {
+                serverIp = await AssetDownloadUtil.GetIpAsync(serverUrl);
+                staticDataUrl = $"https://{serverIp}/v1/staticdatapack";
+                resourcesUrl = $"https://{serverIp}/v1/resourcehosts2";
+            }
+
+            if (serverIp == null)
+                return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
+
+            // Get latest static data info from server
+            ResStaticDataPackInfo? staticData = await FetchProtobuf<ResStaticDataPackInfo>(staticDataUrl);
+            if (staticData == null)
+            {
+                Logging.WriteLine("failed to fetch static data", LogType.Error);
+                return new RunCmdResponse() { error = "failed to fetch static data"};
+            }
+
+            ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2>(resourcesUrl);
+            if (resources == null)
+            {
+                Logging.WriteLine("failed to fetch resource data", LogType.Error);
+                return new RunCmdResponse() { error = "failed to fetch resource data" };
+            }
+
+            GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
+            GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
+            GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
+            GameConfig.Root.StaticData.Version = staticData.Version;
+            GameConfig.Root.StaticData.Url = staticData.Url;
+            GameConfig.Save();
+
+            return RunCmdResponse.OK;
+        }
+
+        private static async Task<T?> FetchProtobuf<T>(string url) where T : IMessage, new()
+        {
+            ByteArrayContent staticDataContent = new([]);
+            client.DefaultRequestHeaders.Host = serverUrl;
+            staticDataContent.Headers.Add("Content-Type", "application/octet-stream+protobuf");
+            connectingServer = serverUrl;
+            HttpResponseMessage? staticDataHttpResponse = await client.PostAsync(url, staticDataContent);
+            if (staticDataHttpResponse == null)
+            {
+                Console.WriteLine($"failed to post {url}");
+                return default(T);
+            }
+
+            if (!staticDataHttpResponse.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"POST {url} failed with {staticDataHttpResponse.StatusCode}");
+                return default(T);
+            }
+
+            byte[] staticDataHttpResponseBytes = await staticDataHttpResponse.Content.ReadAsByteArrayAsync();
+
+            // Parse response
+            T response = new();
+            response.MergeFrom(new CodedInputStream(staticDataHttpResponseBytes));
+
+
+            return response;
         }
     }
 }

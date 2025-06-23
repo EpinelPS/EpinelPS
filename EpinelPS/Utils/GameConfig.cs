@@ -60,5 +60,13 @@ namespace EpinelPS.Utils
                 return _root;
             }
         }
+
+        internal static void Save()
+        {
+            if (Root != null)
+            {
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonConvert.SerializeObject(Root, Formatting.Indented));
+            }
+        }
     }
 }

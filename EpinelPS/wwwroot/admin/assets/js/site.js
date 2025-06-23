@@ -1,7 +1,7 @@
 ﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
-// NIKKE管理控制台API通用工具函数
+// EpinelPS管理控制台API通用工具函数
 
 function runCmd(cmdName, cb, p1, p2)
 {
@@ -28,9 +28,9 @@ function runSimpleCmd(cmdName, p1, p2)
 {
   runCmd(cmdName, function(json){
     if (json.ok)
-      alert("操作已完成");
+      alert("Operation completed");
     else
-      alert("错误: " + json.error);
+      alert("Error: " + json.error);
   }, p1, p2);
 }
 

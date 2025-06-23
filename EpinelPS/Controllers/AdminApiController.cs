@@ -63,7 +63,7 @@ namespace EpinelPS.Controllers
         }
 
         [HttpPost("RunCmd")]
-        public RunCmdResponse RunCmd([FromBody] RunCmdRequest req)
+        public async Task<RunCmdResponse> RunCmd([FromBody] RunCmdRequest req)
         {
             if (!AdminController.CheckAuth(HttpContext)) return new RunCmdResponse() { error = "bad token" };
 
@@ -123,6 +123,10 @@ namespace EpinelPS.Controllers
 
                         var s = req.p2.Split("-");
                         return AdminCommands.AddItem(user, int.Parse(s[0]), int.Parse(s[1]));
+                    }
+                case "updateServer":
+                    {
+                        return await AdminCommands.UpdateResources();
                     }
             }
             return new RunCmdResponse() { error = "Not implemented" };

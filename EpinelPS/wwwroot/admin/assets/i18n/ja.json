@@ -204,7 +204,9 @@
   "config": {
     "server": {
       "title": "サーバー設定",
-      "logLevel": "ログレベル:"
+      "logLevel": "ログレベル:",
+      "updateResources": "リソースを更新する",
+      "updateResourcesHint": "公式サーバーからアセットと静的データ情報をダウンロードします。"
     },
     "database": {
       "title": "データベース設定",

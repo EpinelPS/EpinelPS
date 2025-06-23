@@ -13,7 +13,8 @@ namespace EpinelPS.LobbyServer.Event
 
             ResEnterEventField response = new()
             {
-                Field = new()
+                Field = new(),
+                Json = "{}"
             };
 
             // Retrieve collected objects
