@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Shop.PackageShop
 {
@@ -10,6 +11,11 @@ namespace EpinelPS.LobbyServer.Shop.PackageShop
             var req = await ReadData<ReqGetPopupPackageState>();
 
             var response = new ResGetPopupPackageState();
+
+            // disable ads
+            foreach (var item in GameData.Instance.PopupPackages)
+                response.AppearedList.Add(item.Key);
+
             await WriteDataAsync(response);
         }
     }

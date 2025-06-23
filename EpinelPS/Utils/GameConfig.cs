@@ -8,6 +8,10 @@ namespace EpinelPS.Utils
         public string ResourceBaseURL { get; set; } = "";
         public string GameMinVer { get; set; } = "";
         public string GameMaxVer { get; set; } = "";
+        /// <summary>
+        /// this is only for displaying the target version in admin console or cli
+        /// </summary>
+        public string TargetVersion { get; set; }
     }
 
     public class StaticData

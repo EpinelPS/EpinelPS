@@ -587,7 +587,6 @@ namespace EpinelPS.Database
         public List<AccessToken> LauncherAccessTokens = [];
         public Dictionary<string, ulong> AdminAuthTokens = new();
 
-        public string ServerName = "<color=\"green\">Private Server</color>";
         public byte[] LauncherTokenKey = [];
         public byte[] EncryptionTokenKey = [];
         public LogType LogLevel = LogType.Debug;
@@ -679,6 +678,45 @@ namespace EpinelPS.Database
                     }
                     Console.WriteLine("Database update completed");
                 }
+                if (Instance.DbVersion == 4)
+                {
+                    Console.WriteLine("Starting database update...");
+                    Instance.DbVersion = 5;
+                    // FieldInfoNew uses MapId instead of ChapterNum_ChapterDifficulty format
+                    foreach (var user in Instance.Users)
+                    {
+                        Dictionary<string, FieldInfoNew> info = new();
+                        foreach (var item in user.FieldInfoNew)
+                        {
+                            if (item.Key.EndsWith("_Normal") || item.Key.EndsWith("_Hard"))
+                            {
+                                var newKey = GameData.Instance.GetMapIdFromDBFieldName(item.Key);
+                                if (newKey != null)
+                                {
+                                    if (!info.ContainsKey(newKey))
+                                    {
+                                        info.Add(newKey, item.Value);
+                                    }
+                                    else
+                                    {
+                                        // overwrite old data
+                                        info[newKey] = item.Value;
+                                    }
+                                }
+                                else
+                                    Console.WriteLine("Unknown chapter/difficulty: " + item.Value + ", discarding");
+                            }
+                            else
+                            {
+                                if (!info.ContainsKey(item.Key))
+                                    info.Add(item.Key, item.Value);
+                            }
+                        }
+
+                        user.FieldInfoNew = info;
+                    }
+                    Console.WriteLine("Database update completed");
+                }
 
                 if (Instance.LauncherTokenKey.Length == 0)
                 {
@@ -699,6 +737,8 @@ namespace EpinelPS.Database
 
                 Save();
 
+                Logging.SetOutputLevel(Instance.LogLevel);
+
                 ValidateDb();
                 Console.WriteLine("JsonDb: Loaded");
             }
@@ -706,6 +746,7 @@ namespace EpinelPS.Database
             {
                 throw new Exception("Failed to read configuration json file");
             }
+
         }
 
         public static void Reload()

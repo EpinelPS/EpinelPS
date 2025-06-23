@@ -20,11 +20,13 @@ namespace EpinelPS
             try
             {
                 Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
-                Console.WriteLine("Targeting Game Version " + GameConfig.Root.GameMaxVer);
-                Console.WriteLine("Initializing database");
-                JsonDb.Save();
+                Console.WriteLine("This software is licensed under the AGPL-3.0 License");
+                Console.WriteLine("Targeting game version " + GameConfig.Root.GameMaxVer);
 
                 GameData.Instance.GetAllCostumes(); // force static data to be loaded
+
+                Console.WriteLine("Initializing database");
+                JsonDb.Save();
 
                 Logging.WriteLine("Register handlers");
                 LobbyHandler.Init();

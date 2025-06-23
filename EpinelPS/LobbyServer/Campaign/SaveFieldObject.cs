@@ -16,10 +16,7 @@ namespace EpinelPS.LobbyServer.Campaign
 
             Logging.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}", LogType.Debug);
 
-            var chapter = GameData.Instance.GetNormalChapterNumberFromFieldName(req.MapId);
-            var mod = req.MapId.Contains("hard") ? "Hard" : "Normal";
-            var key = chapter + "_" + mod;
-            var field = user.FieldInfoNew[key];
+            var field = user.FieldInfoNew[req.MapId];
 
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
             JsonDb.Save();

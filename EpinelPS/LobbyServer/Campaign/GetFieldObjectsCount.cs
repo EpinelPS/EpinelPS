@@ -19,7 +19,7 @@ namespace EpinelPS.LobbyServer.Campaign
             {
                 response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
                 {
-                    MapId = GameData.Instance.GetMapIdFromDBFieldName(map.Key),
+                    MapId = map.Key,
                     Count = map.Value.CompletedObjects.Count
                 });
             }

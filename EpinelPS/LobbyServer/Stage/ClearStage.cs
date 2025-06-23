@@ -31,14 +31,15 @@ namespace EpinelPS.LobbyServer.Stage
             var response = new ResClearStage();
             var clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
+            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            
             if (user.FieldInfoNew.Count == 0)
             {
-                user.FieldInfoNew.Add("0_" + clearedStage.chapter_mod, new FieldInfoNew() { });
+                user.FieldInfoNew.Add(stageMapId, new FieldInfoNew() { });
             }
 
             DoQuestSpecificUserOperations(user, StageId);
             var rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
-
 
             if (forceCompleteScenarios)
             {
@@ -144,13 +145,10 @@ namespace EpinelPS.LobbyServer.Stage
                     user.AddTrigger(TriggerType.ChapterClear, 1, clearedStage.chapter_id);
             }
 
-            // CreateClearInfo(user);
+            if (!user.FieldInfoNew.ContainsKey(stageMapId))
+                user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
 
-            var key = (clearedStage.chapter_id - 1) + "_" + clearedStage.chapter_mod;
-            if (!user.FieldInfoNew.ContainsKey(key))
-                user.FieldInfoNew.Add(key, new FieldInfoNew());
-
-            user.FieldInfoNew[key].CompletedStages.Add(StageId);
+            user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
             JsonDb.Save();
             return response;
         }

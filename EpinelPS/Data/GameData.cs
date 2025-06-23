@@ -163,6 +163,12 @@ namespace EpinelPS.Data
         [LoadRecord("ScenarioRewardsTable.json", "condition_id", typeof(ScenarioRewardTable))]
         public readonly Dictionary<string, ScenarioRewardRecord> ScenarioRewards = [];
 
+        // Note: same data types are intentional
+        [LoadRecord("ProductOfferTable.json", "id", typeof(ProductOfferTable))]
+        public readonly Dictionary<int, ProductOfferRecord> ProductOffers = [];
+
+        [LoadRecord("PopupPackageListTable.json", "id", typeof(ProductOfferTable))]
+        public readonly Dictionary<int, ProductOfferRecord> PopupPackages = [];
 
         static async Task<GameData> BuildAsync()
         {
@@ -585,6 +591,21 @@ namespace EpinelPS.Data
             }
 
             return false;
+        }
+
+        internal string GetMapIdFromChapter(int chapter, int mod)
+        {
+            CampaignChapterRecord data = ChapterCampaignData[chapter - 1];
+            if (mod != 0)
+                return data.hard_field_id;
+            else return data.field_id;
+        }
+        internal string GetMapIdFromChapter(int chapter, string mod)
+        {
+            CampaignChapterRecord data = ChapterCampaignData[chapter - 1];
+            if (mod == "Hard")
+                return data.hard_field_id;
+            else return data.field_id;
         }
     }
 }

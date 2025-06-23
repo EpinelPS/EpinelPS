@@ -760,4 +760,14 @@
     {
         public List<ScenarioRewardRecord> records = [];
     }
+
+    public class ProductOfferRecord
+    {
+        public int id;
+    }
+    public class ProductOfferTable
+    {
+        public List<ProductOfferRecord> records = [];
+    }
+
 }

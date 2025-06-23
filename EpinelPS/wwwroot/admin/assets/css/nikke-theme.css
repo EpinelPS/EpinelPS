@@ -138,7 +138,6 @@ a.nav-link:hover:after {
   width: 28px;
   height: 28px;
   margin-right: 10px;
-  background-image: url('/admin/assets/img/nikke-logo-icon.png');
   background-size: contain;
   background-repeat: no-repeat;
 }

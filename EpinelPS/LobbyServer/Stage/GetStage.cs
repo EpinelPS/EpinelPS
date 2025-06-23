@@ -1,4 +1,5 @@
-﻿using EpinelPS.Database;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Stage
@@ -11,9 +12,11 @@ namespace EpinelPS.LobbyServer.Stage
             ReqGetStageData req = await ReadData<ReqGetStageData>();
             var user = GetUser();
 
+            var mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, req.Mod);
+
             ResGetStageData response = new()
             {
-                Field = CreateFieldInfo(user, req.Chapter - 1, req.Mod == 0 ? "Normal" : "Hard", out bool bossEntered),
+                Field = CreateFieldInfo(user, mapId, out bool bossEntered),
                 HasChapterBossEntered = bossEntered,
                 SquadData = ""
             };
@@ -21,15 +24,14 @@ namespace EpinelPS.LobbyServer.Stage
             await WriteDataAsync(response);
         }
 
-        public static NetFieldObjectData CreateFieldInfo(Database.User user, int chapter, string mod, out bool BossEntered)
+        public static NetFieldObjectData CreateFieldInfo(User user, string mapId, out bool BossEntered)
         {
             var f = new NetFieldObjectData();
             bool found = false;
-            string key = chapter + "_" + mod;
             BossEntered = false;
             foreach (var item in user.FieldInfoNew)
             {
-                if (item.Key == key)
+                if (item.Key == mapId)
                 {
                     found = true;
                     foreach (var stage in item.Value.CompletedStages)
@@ -47,8 +49,8 @@ namespace EpinelPS.LobbyServer.Stage
 
             if (!found)
             {
-                user.FieldInfoNew.Add(key, new FieldInfoNew());
-                return CreateFieldInfo(user, chapter, mod, out BossEntered);
+                user.FieldInfoNew.Add(mapId, new FieldInfoNew());
+                return CreateFieldInfo(user, mapId, out BossEntered);
             }
 
             return f;

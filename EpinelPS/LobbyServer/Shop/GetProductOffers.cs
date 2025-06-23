@@ -1,3 +1,4 @@
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Shop
@@ -9,9 +10,12 @@ namespace EpinelPS.LobbyServer.Shop
         {
             var x = await ReadData<ReqListSeenProductOffer>();
 
-            // TODO: Figure out a way to disable ads
-
+            // Disable in game ads
             var response = new ResListSeenProductOffer();
+            foreach(var item in GameData.Instance.ProductOffers)
+            {
+                response.Result.Add(new NetUserProductOfferSeenHistory() { ProductOfferId = item.Key });
+            }
 
             await WriteDataAsync(response);
         }

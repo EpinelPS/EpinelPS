@@ -3,8 +3,13 @@ using EpinelPS.Database;
 
 namespace EpinelPS.Utils
 {
-    public class Logging
+    public static class Logging
     {
+        private static LogType LogLevel = LogType.Info;
+        public static void SetOutputLevel(LogType level)
+        {
+            LogLevel = level;
+        }
         public static void WriteLine(string msg, LogType level = LogType.Info)
         {
             var originalFG = Console.ForegroundColor;
@@ -13,7 +18,7 @@ namespace EpinelPS.Utils
             // todo write to some file
 
 
-            if (JsonDb.Instance.LogLevel <= level)
+            if (LogLevel <= level)
                 Console.WriteLine(msg);
 
             Console.ForegroundColor = originalFG;

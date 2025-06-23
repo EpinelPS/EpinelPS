@@ -1,8 +1,8 @@
 {
   "app": {
     "name": "胜利女神控制台",
-    "version": "版本 v2.5.3",
-    "footer": "© 2025 - NIKKE: 胜利女神 - 管理控制台"
+    "version": "版本 v1.0.0",
+    "footer": "© 2025 EpinelPS"
   },
   "auth": {
     "login": "登录",

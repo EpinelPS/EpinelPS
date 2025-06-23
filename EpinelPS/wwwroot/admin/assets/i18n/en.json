@@ -1,15 +1,15 @@
 {
   "app": {
-    "name": "NIKKE Admin Console",
-    "version": "Version v2.5.3",
-    "footer": "© 2025 - NIKKE: Goddess of Victory - Admin Console"
+    "name": "EpinelPS Admin Console",
+    "version": "Version v1.0.0",
+    "footer": "© 2025 EpinelPS"
   },
   "auth": {
     "login": "Login",
     "username": "Username",
     "password": "Password",
-    "enter": "Enter Console",
-    "welcome": "Please login to access admin features",
+    "enter": "Login",
+    "welcome": "Please login",
     "verifying": "Verifying...",
     "success": "Login successful",
     "error": {
@@ -49,7 +49,7 @@
   },
   "dashboard": {
     "title": "Console Overview",
-    "refresh": "Refresh Data",
+    "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "statsCards": {
       "users": "Registered Users",
