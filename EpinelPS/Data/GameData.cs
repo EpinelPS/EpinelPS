@@ -170,6 +170,14 @@ namespace EpinelPS.Data
         [LoadRecord("PopupPackageListTable.json", "id", typeof(ProductOfferTable))]
         public readonly Dictionary<int, ProductOfferRecord> PopupPackages = [];
 
+        [LoadRecord("InterceptNormalTable.json", "id", typeof(InterceptionTable))]
+        public readonly Dictionary<int, InterceptionRecord> InterceptNormal = [];
+
+        [LoadRecord("InterceptSpecialTable.json", "id", typeof(InterceptionTable))]
+        public readonly Dictionary<int, InterceptionRecord> InterceptSpecial = [];
+
+        [LoadRecord("ConditionRewardTable.json", "id", typeof(ConditionRewardTable))]
+        public readonly Dictionary<int, ConditionRewardRecord> ConditionRewards = [];
         static async Task<GameData> BuildAsync()
         {
             await Load();
@@ -337,13 +345,13 @@ namespace EpinelPS.Data
             using StreamReader fileReader = new(MainZip.GetInputStream(fileEntry));
             string fileString = await fileReader.ReadToEndAsync();
 
-            T? deseralizedObject = JsonConvert.DeserializeObject<T>(fileString);
-            if (deseralizedObject == null) throw new Exception("failed to parse " + entry);
+            T? deserializedObject = JsonConvert.DeserializeObject<T>(fileString);
+            if (deserializedObject == null) throw new Exception("failed to parse " + entry);
 
             currentFile++;
             bar.Report((double)currentFile / totalFiles);
 
-            return deseralizedObject;
+            return deserializedObject;
         }
 
         private async Task<JArray> LoadZip(string entry, ProgressBar bar)
@@ -612,6 +620,14 @@ namespace EpinelPS.Data
             if (mod == "Hard")
                 return data.hard_field_id;
             else return data.field_id;
+        }
+
+        internal int GetConditionReward(int groupId, long damage)
+        {
+            var results = ConditionRewards.Where(x => x.Value.group == groupId && x.Value.value_min <= damage && x.Value.value_max >= damage);
+            if (results.Any())
+                return results.FirstOrDefault().Value.reward_id;
+            else return 0;
         }
     }
 }

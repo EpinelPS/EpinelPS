@@ -769,5 +769,30 @@
     {
         public List<ProductOfferRecord> records = [];
     }
+    public class InterceptionRecord
+    {
+        public int id;
+        public int group;
+        public int condition_reward_group;
+        public int percent_condition_reward_group;
+        public long fixed_damage;
+    }
+    public class InterceptionTable
+    {
+        public List<InterceptionRecord> records = [];
+    }
+    public class ConditionRewardRecord
+    {
+        public int id;
+        public int group;
+        public int priority;
+        public long value_min;
+        public long value_max;
+        public int reward_id;
+    }
+    public class ConditionRewardTable
+    {
+        public List<ConditionRewardRecord> records = [];
+    }
 
 }
