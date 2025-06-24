@@ -178,6 +178,10 @@ namespace EpinelPS.Data
 
         [LoadRecord("ConditionRewardTable.json", "id", typeof(ConditionRewardTable))]
         public readonly Dictionary<int, ConditionRewardRecord> ConditionRewards = [];
+        [LoadRecord("ItemConsumeTable.json", "id", typeof(ItemConsumeTable))]
+        public readonly Dictionary<int, ItemConsumeRecord> ConsumableItems = [];
+        [LoadRecord("ItemRandomTable.json", "id", typeof(RandomItemTable))]
+        public readonly Dictionary<int, RandomItemRecord> RandomItem = [];
         static async Task<GameData> BuildAsync()
         {
             await Load();

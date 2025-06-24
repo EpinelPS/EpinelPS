@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.Utils
+﻿using EpinelPS.Data;
+
+namespace EpinelPS.Utils
 {
     public class Rng
     {
@@ -14,6 +16,30 @@
         public static int RandomId()
         {
             return random.Next();
+        } /// <summary>
+          /// Picks a random item. weights is a list of numbers which represents probability, table ids represent ID for weight
+          /// </summary>
+          /// <param name="weights"></param>
+          /// <param name="tableIds"></param>
+          /// <returns></returns>
+          /// <exception cref="Exception"></exception>
+        public static RandomItemRecord PickWeightedItem(RandomItemRecord[] records)
+        {
+            int totalWeight = 0;
+            foreach (var item in records)
+                totalWeight += item.ratio;
+
+            int randomNumber = random.Next(0, totalWeight);
+
+            int runningSum = 0;
+            for (int i = 0; i < records.Length; i++)
+            {
+                runningSum += records[i].ratio;
+                if (randomNumber < runningSum)
+                    return records[i];
+            }
+
+            throw new Exception("Weight distribution error.");
         }
     }
 }

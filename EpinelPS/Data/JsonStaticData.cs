@@ -794,5 +794,41 @@
     {
         public List<ConditionRewardRecord> records = [];
     }
-
+    public enum ItemSubType
+    {
+        BundleBox,
+        ItemRandomBoxList,
+        ItemRandomBoxNormal,
+        TimeReward,
+        Box,
+        ProfileRandomBox,
+        ArcadeItem,
+        EquipCombination
+    }
+    public class ItemConsumeRecord
+    {
+        public int id;
+        public string use_type = "";
+        public string item_type = "";
+        public ItemSubType item_sub_type;
+        public int use_id;
+    }
+    public class ItemConsumeTable
+    {
+        public List<ItemConsumeRecord> records = [];
+    }
+    public class RandomItemRecord
+    {
+        public int id;
+        public int group_id;
+        public string reward_type = "";
+        public int reward_id;
+        public int reward_value_min;
+        public int reward_value_max;
+        public int ratio;
+    }
+    public class RandomItemTable
+    {
+        public List<RandomItemRecord> records = [];
+    }
 }

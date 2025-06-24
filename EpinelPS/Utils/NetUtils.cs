@@ -1,7 +1,8 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Data;
-using Google.Protobuf.WellKnownTypes;
+﻿using System.Collections;
 using System.Collections.Generic;
+using EpinelPS.Data;
+using EpinelPS.Database;
+using Google.Protobuf.WellKnownTypes;
 using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace EpinelPS.Utils
@@ -43,6 +44,22 @@ namespace EpinelPS.Utils
             };
         }
 
+        internal static NetUserItemData UserItemDataToNet(ItemData item)
+        {
+            return new NetUserItemData()
+            {
+                Count = item.Count,
+                Tid = item.ItemType,
+                Csn = item.Csn,
+                Lv = item.Level,
+                Exp = item.Exp,
+                Corporation = item.Corp,
+                Isn = item.Isn,
+                Position = item.Position
+            };
+        }
+
+
         public static List<NetUserItemData> GetUserItems(User user)
         {
             List<NetUserItemData> ret = new();
@@ -58,33 +75,12 @@ namespace EpinelPS.Utils
                     }
                     else
                     {
-                        itemDictionary[item.ItemType] = new NetUserItemData()
-                        {
-                            Count = item.Count,
-                            Tid = item.ItemType,
-                            Csn = item.Csn,
-                            Lv = item.Level,
-                            Exp = item.Exp,
-                            Corporation = item.Corp,
-                            Isn = item.Isn,
-                            Position = item.Position
-                        };
+                        itemDictionary[item.ItemType] = UserItemDataToNet(item);
                     }
                 }
                 else
                 {
-                    var newItem = new NetUserItemData()
-                    {
-                        Count = item.Count,
-                        Tid = item.ItemType,
-                        Csn = item.Csn,
-                        Lv = item.Level,
-                        Exp = item.Exp,
-                        Corporation = item.Corp,
-                        Isn = item.Isn,
-                        Position = item.Position
-                    };
-                    itemDictionary[item.ItemType] = newItem;
+                    itemDictionary[item.ItemType] = UserItemDataToNet(item);
                 }
             }
 
@@ -374,6 +370,34 @@ namespace EpinelPS.Utils
             result.TeamCombat = totalCP;
 
             return result;
+        }
+
+        public static NetRewardData UseLootBox(User user, int boxId, int count)
+        {
+            ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == boxId).FirstOrDefault().Value ?? throw new Exception("cannot find box id " + boxId);
+
+            if (cItem.use_type != "ItemRandomBox") throw new Exception("expected random box");
+
+            // find matching probability entries
+            var probabilityEntries = GameData.Instance.RandomItem.Values.Where(x => x.group_id == cItem.use_id).ToArray();
+            if (!probabilityEntries.Any()) throw new Exception($"cannot find any probability entries with ID {cItem.use_id}, box ID: {cItem.id}");
+
+            // run probability as many times as needed
+            NetRewardData ret = new() { PassPoint = new() };
+            for (int i = 0; i < count; i++)
+            {
+                var winningRecord = Rng.PickWeightedItem(probabilityEntries);
+
+                if (winningRecord.reward_value_min  != winningRecord.reward_value_max)
+                {
+                    Logging.WriteLine("TODO: reward_value_max", LogType.Warning);
+                }
+
+                RewardUtils.AddSingleObject(user, ref ret, winningRecord.reward_id, winningRecord.reward_type, winningRecord.reward_value_min);
+            }
+            JsonDb.Save();
+
+            return ret;
         }
     }
 }

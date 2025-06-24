@@ -1,5 +1,6 @@
-using EpinelPS.Database;
 using EpinelPS.Data;
+using EpinelPS.Database;
+using Org.BouncyCastle.Ocsp;
 
 namespace EpinelPS.Utils
 {
@@ -56,12 +57,12 @@ namespace EpinelPS.Utils
                     BeforeExp = user.userPointData.ExperiencePoint,
                     BeforeLv = user.userPointData.UserLevel,
 
-                   // IncreaseExp = rewardData.user_exp,
+                    // IncreaseExp = rewardData.user_exp,
                     CurrentExp = newXp,
                     CurrentLv = newLevel,
 
                     GainExp = rewardData.user_exp,
-                    
+
                 };
                 user.userPointData.ExperiencePoint = newXp;
 
@@ -70,126 +71,167 @@ namespace EpinelPS.Utils
 
             foreach (var item in rewardData.rewards)
             {
-                if (item.reward_id != 0 || !string.IsNullOrEmpty(item.reward_type))
+                if (item.reward_percent != 1000000)
                 {
-                    if (string.IsNullOrEmpty(item.reward_type) || string.IsNullOrWhiteSpace(item.reward_type)) { }
-                    else if (item.reward_type == "Currency")
-                    {
-                        bool found = false;
-                        foreach (var currentReward in user.Currency)
-                        {
-                            if (currentReward.Key == (CurrencyType)item.reward_id)
-                            {
-                                user.Currency[currentReward.Key] += item.reward_value;
-
-                                ret.Currency.Add(new NetCurrencyData()
-                                {
-                                    FinalValue = user.Currency[currentReward.Key],
-                                    Value = item.reward_value,
-                                    Type = item.reward_id
-                                });
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (!found)
-                        {
-                            user.Currency.Add((CurrencyType)item.reward_id, item.reward_value);
-                            ret.Currency.Add(new NetCurrencyData()
-                            {
-                                FinalValue = item.reward_value,
-                                Value = item.reward_value,
-                                Type = item.reward_id
-                            });
-                        }
-                    }
-                    else if (item.reward_type == "Item")
-                    {
-                        // Check if user already has said item. If it is level 1, increase item count.
-                        // If user does not have item, generate a new item ID
-                        if (user.Items.Where(x => x.ItemType == item.reward_id && x.Level == 1).Any())
-                        {
-                            ItemData? newItem = user.Items.Where(x => x.ItemType == item.reward_id && x.Level == 1).FirstOrDefault();
-                            if (newItem != null)
-                            {
-                                newItem.Count += item.reward_value;
-
-                                // Tell the client the reward and its amount
-                                ret.Item.Add(new NetItemData()
-                                {
-                                    Count = item.reward_value,
-                                    Tid = item.reward_id,
-                                    //Isn = newItem.Isn
-                                });
-
-                                // Tell the client the new amount of this item
-                                ret.UserItems.Add(new NetUserItemData()
-                                {
-                                   Isn = newItem.Isn,
-                                   Tid = newItem.ItemType,
-                                   Count = newItem.Count
-                                });
-                            }
-                            else
-                            {
-                                throw new Exception("should not occur");
-                            }
-                        }
-                        else
-                        {
-
-                            var id = user.GenerateUniqueItemId();
-                            user.Items.Add(new ItemData() { ItemType = item.reward_id, Isn = id, Level = 1, Exp = 0, Count = item.reward_value });
-                            ret.Item.Add(new NetItemData()
-                            {
-                                Count = item.reward_value,
-                                Tid = item.reward_id,
-                                //Isn = id
-                            });
-
-                            // Tell the client the new amount of this item (which is the same as user did not have item previously)
-                            ret.UserItems.Add(new NetUserItemData()
-                            {
-                                Isn = id,
-                                Tid = item.reward_id,
-                                Count = item.reward_value
-                            });
-                        }
-                    }
-                    else if (item.reward_type == "Memorial")
-                    {
-                        if (!user.Memorial.Contains(item.reward_id))
-                        {
-                            ret.Memorial.Add(item.reward_id);
-                            user.Memorial.Add(item.reward_id);
-                        }
-                    }
-                    else if (item.reward_type == "Bgm")
-                    {
-                        if (!user.JukeboxBgm.Contains(item.reward_id))
-                        {
-                            ret.JukeboxBgm.Add(item.reward_id);
-                            user.JukeboxBgm.Add(item.reward_id);
-                        }
-                    }
-                    else if (item.reward_type == "InfraCoreExp")
-                    {
-                        ret.InfraCoreExp = new NetIncreaseExpData()
-                        {
-                            BeforeLv = user.InfraCoreLvl,
-                            BeforeExp = user.InfraCoreExp,
-                            // TODO
-                        };
-                    }
-                    else
-                    {
-                        Console.WriteLine("TODO: Reward type " + item.reward_type);
-                    }
+                    Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000 + ", item will be added anyways", LogType.Warning);
                 }
+
+                AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
             }
 
             return ret;
+        }
+        /// <summary>
+        /// Adds a single item to users inventory, and also adds it to ret parameter.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="ret"></param>
+        /// <param name="rewardId"></param>
+        /// <param name="rewardType"></param>
+        /// <param name="rewardCount"></param>
+        /// <exception cref="Exception"></exception>
+        public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, string rewardType, int rewardCount)
+        {
+            if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
+            {
+                if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
+                else if (rewardType == "Currency")
+                {
+                    bool found = false;
+                    foreach (var currentReward in user.Currency)
+                    {
+                        if (currentReward.Key == (CurrencyType)rewardId)
+                        {
+                            user.Currency[currentReward.Key] += rewardCount;
+
+                            ret.Currency.Add(new NetCurrencyData()
+                            {
+                                FinalValue = user.Currency[currentReward.Key],
+                                Value = rewardCount,
+                                Type = rewardId
+                            });
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        user.Currency.Add((CurrencyType)rewardId, rewardCount);
+                        ret.Currency.Add(new NetCurrencyData()
+                        {
+                            FinalValue = rewardCount,
+                            Value = rewardCount,
+                            Type = rewardId
+                        });
+                    }
+                }
+                else if (rewardType == "Item")
+                {
+                    // Check if user already has said item. If it is level 1, increase item count.
+                    // If user does not have item, generate a new item ID
+                    if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
+                    {
+                        ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).FirstOrDefault();
+                        if (newItem != null)
+                        {
+                            newItem.Count += rewardCount;
+
+                            // Tell the client the reward and its amount
+                            ret.Item.Add(new NetItemData()
+                            {
+                                Count = rewardCount,
+                                Tid = rewardId,
+                                //Isn = newItem.Isn
+                            });
+
+                            // Tell the client the new amount of this item
+                            ret.UserItems.Add(new NetUserItemData()
+                            {
+                                Isn = newItem.Isn,
+                                Tid = newItem.ItemType,
+                                Count = newItem.Count
+                            });
+                        }
+                        else
+                        {
+                            throw new Exception("should not occur");
+                        }
+                    }
+                    else
+                    {
+
+                        var id = user.GenerateUniqueItemId();
+                        user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
+                        ret.Item.Add(new NetItemData()
+                        {
+                            Count = rewardCount,
+                            Tid = rewardId,
+                            //Isn = id
+                        });
+
+                        // Tell the client the new amount of this item (which is the same as user did not have item previously)
+                        ret.UserItems.Add(new NetUserItemData()
+                        {
+                            Isn = id,
+                            Tid = rewardId,
+                            Count = rewardCount
+                        });
+                    }
+                }
+                else if (rewardType == "Memorial")
+                {
+                    if (!user.Memorial.Contains(rewardId))
+                    {
+                        ret.Memorial.Add(rewardId);
+                        user.Memorial.Add(rewardId);
+                    }
+                }
+                else if (rewardType == "Bgm")
+                {
+                    if (!user.JukeboxBgm.Contains(rewardId))
+                    {
+                        ret.JukeboxBgm.Add(rewardId);
+                        user.JukeboxBgm.Add(rewardId);
+                    }
+                }
+                else if (rewardType == "InfraCoreExp")
+                {
+                    ret.InfraCoreExp = new NetIncreaseExpData()
+                    {
+                        BeforeLv = user.InfraCoreLvl,
+                        BeforeExp = user.InfraCoreExp,
+                        // TODO
+                    };
+                }
+                else if (rewardType == "ItemRandomBox")
+                {
+                    ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == rewardId).FirstOrDefault().Value;
+
+                    if (cItem.item_sub_type == ItemSubType.ItemRandomBoxList)
+                    {
+                        NetRewardData reward = NetUtils.UseLootBox(user, rewardId, rewardCount);
+
+                        NetUtils.RegisterRewardsForUser(user, reward);
+                        ret = NetUtils.MergeRewards([ret, reward], user);
+                    }
+                    else
+                    {
+                        var itm = new NetItemData()
+                        {
+                            Count = rewardCount,
+                            Tid = cItem.id,
+                            Isn = user.GenerateUniqueItemId()
+                        };
+                        ret.Item.Add(itm);
+                        user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
+                    }
+                }
+                else
+                {
+                    Logging.WriteLine("TODO: Reward type " + rewardType, LogType.Warning);
+                }
+            }
         }
     }
 }
