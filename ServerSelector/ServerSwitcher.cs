@@ -177,9 +177,9 @@ namespace ServerSelector
                     if (backupExists) File.Delete(backupPath);
                     return true;
                 }
-                
+
                 // restore backup if it exists
-                if(backupExists)
+                if (backupExists)
                 {
                     File.Move(backupPath, dll, true);
                 }
@@ -294,11 +294,26 @@ namespace ServerSelector
 {HostsEndMarker}";
 
                 await RevertHostsFile(hostsFilePath);
-                if (!(await File.ReadAllTextAsync(hostsFilePath)).Contains("global-lobby.nikke-kr.com"))
+
+                try
                 {
-                    using StreamWriter w = File.AppendText(hostsFilePath);
-                    w.WriteLine();
-                    w.Write(hosts);
+                    FileInfo fi = new(hostsFilePath);
+                    if (fi.IsReadOnly)
+                    {
+                        // try to remove readonly flag
+                        fi.IsReadOnly = false;
+                    }
+
+                    if (!(await File.ReadAllTextAsync(hostsFilePath)).Contains("global-lobby.nikke-kr.com"))
+                    {
+                        using StreamWriter w = File.AppendText(hostsFilePath);
+                        w.WriteLine();
+                        w.Write(hosts);
+                    }
+                }
+                catch
+                {
+                    throw new Exception("cannot modify C:\\Windows\\System32\\drivers\\etc\\hosts file to redirect to server, check your antivirus software");
                 }
 
                 // Also change /etc/hosts if running on linux
