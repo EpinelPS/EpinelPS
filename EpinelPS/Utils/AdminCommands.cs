@@ -420,13 +420,13 @@ namespace EpinelPS.Utils
             if (staticDataHttpResponse == null)
             {
                 Console.WriteLine($"failed to post {url}");
-                return default(T);
+                return default;
             }
 
             if (!staticDataHttpResponse.IsSuccessStatusCode)
             {
                 Console.WriteLine($"POST {url} failed with {staticDataHttpResponse.StatusCode}");
-                return default(T);
+                return default;
             }
 
             byte[] staticDataHttpResponseBytes = await staticDataHttpResponse.Content.ReadAsByteArrayAsync();

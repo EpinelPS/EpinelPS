@@ -590,6 +590,8 @@ namespace EpinelPS.Database
         public byte[] LauncherTokenKey = [];
         public byte[] EncryptionTokenKey = [];
         public LogType LogLevel = LogType.Debug;
+
+        public int MaxInterceptionCount = 3;
     }
     internal class JsonDb
     {

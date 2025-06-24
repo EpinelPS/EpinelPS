@@ -1,3 +1,4 @@
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Intercept
@@ -11,9 +12,9 @@ namespace EpinelPS.LobbyServer.Intercept
 
             var response = new ResFastClearIntercept
             {
-                TicketCount = 3,
-                MaxTicketCount = 10,
-                Damage = 2
+                TicketCount = User.ResetableData.InterceptionTickets,
+                MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,
+                Damage = 0
             };
 
             await WriteDataAsync(response);

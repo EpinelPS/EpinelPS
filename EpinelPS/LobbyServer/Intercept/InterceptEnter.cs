@@ -8,8 +8,11 @@ namespace EpinelPS.LobbyServer.Intercept
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqEnterIntercept>();
+            var user = GetUser();
 
             var response = new ResEnterIntercept();
+
+            user.AddTrigger(Data.TriggerType.InterceptStart, 1);
 
             await WriteDataAsync(response);
         }

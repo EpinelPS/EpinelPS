@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Intercept
 {
@@ -12,9 +13,9 @@ namespace EpinelPS.LobbyServer.Intercept
             var response = new ResGetInterceptData
             {
                 NormalInterceptGroup = 1,
-                SpecialInterceptId = 1,
-                TicketCount = 5,
-                MaxTicketCount = 10
+                SpecialInterceptId = 1, // TODO switch this out each reset
+                TicketCount = User.ResetableData.InterceptionTickets,
+                MaxTicketCount = JsonDb.Instance.MaxInterceptionCount
             };
 
             await WriteDataAsync(response);

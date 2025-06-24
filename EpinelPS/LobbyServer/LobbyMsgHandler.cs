@@ -14,6 +14,16 @@ namespace EpinelPS.LobbyServer
         public byte[] ReturnBytes = [];
         public byte[] Contents = [];
 
+        public User User
+        {
+            get
+            {
+                if (UserId == 0) throw new UnauthorizedAccessException();
+
+                return JsonDb.GetUser(UserId) ?? throw new InvalidDataException();
+            }
+        }
+
         /// <summary>
         /// Call before calling HandleAsync
         /// </summary>

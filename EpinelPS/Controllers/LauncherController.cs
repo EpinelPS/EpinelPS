@@ -102,6 +102,7 @@ namespace EpinelPS.Controllers
         public class LauncherVersionRequest
         {
             public int game_id {get;set;}
+            public int branch_id { get; set; }
         }
     }
 }
