@@ -28,12 +28,7 @@ namespace EpinelPS.Utils
             var percentReward = GameData.Instance.GetConditionReward(record.percent_condition_reward_group, damage);
             if (percentReward != 0)
             {
-                var r = RewardUtils.RegisterRewardsForUser(user, normReward);
-                response.NormalReward = NetUtils.MergeRewards([response.NormalReward, r], user);
-            }
-            else
-            {
-                Logging.WriteLine($"unable to find reward which meets condition of damage {damage} and group {record.condition_reward_group}");
+                response.BonusReward = RewardUtils.RegisterRewardsForUser(user, percentReward);
             }
 
             JsonDb.Save();
@@ -45,5 +40,6 @@ namespace EpinelPS.Utils
     public class InterceptionClearResult
     {
         public NetRewardData NormalReward = new();
+        public NetRewardData BonusReward = new();
     }
 }

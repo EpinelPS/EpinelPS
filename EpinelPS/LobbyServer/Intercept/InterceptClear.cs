@@ -27,6 +27,7 @@ namespace EpinelPS.LobbyServer.Intercept
                 TicketCount = user.ResetableData.InterceptionTickets,
                 MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,
                 NormalReward = sRes.NormalReward,
+                BonusReward = sRes.BonusReward
             };
 
             user.AddTrigger(Data.TriggerType.InterceptClear, 1);
