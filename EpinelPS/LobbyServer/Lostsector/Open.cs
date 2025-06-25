@@ -14,15 +14,22 @@ namespace EpinelPS.LobbyServer.Lostsector
             var response = new ResOpenLostSector();
 
             if (!user.LostSectorData.ContainsKey(req.SectorId))
-                user.LostSectorData.Add(req.SectorId, new Database.LostSectorData()
+                user.LostSectorData.Add(req.SectorId, new LostSectorData()
                 {
                     IsOpen = true
                 });
 
+            var val = user.LostSectorData[req.SectorId];
             response.Lostsector = new NetUserLostSectorData()
             {
-                IsOpen = true,
+                IsOpen = val.IsOpen,
                 SectorId = req.SectorId,
+                IsPlaying = val.IsPlaying,
+                CurrentClearStageCount = val.ClearedStages.Count,
+                RewardCount = val.ObtainedRewards,
+                IsFinalReward = val.RecievedFinalReward,
+                IsPerfectReward = val.CompletedPerfectly,
+                MaxClearStageCount = 0, // TODO
             };
 
             JsonDb.Save();

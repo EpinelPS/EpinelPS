@@ -76,6 +76,8 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
+            response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
+            
             await WriteDataAsync(response);
         }
     }

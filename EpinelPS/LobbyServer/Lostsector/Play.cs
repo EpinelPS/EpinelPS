@@ -26,7 +26,12 @@ namespace EpinelPS.LobbyServer.Lostsector
             {
                 IsOpen = lostSectorData.IsOpen,
                 SectorId = req.SectorId,
-                IsPlaying = lostSectorData.IsPlaying
+                IsPlaying = lostSectorData.IsPlaying,
+                CurrentClearStageCount = lostSectorData.ClearedStages.Count,
+                RewardCount = lostSectorData.ObtainedRewards,
+                IsFinalReward = lostSectorData.RecievedFinalReward,
+                IsPerfectReward = lostSectorData.CompletedPerfectly,
+                MaxClearStageCount = 0, // TODO
             };
 
             JsonDb.Save();

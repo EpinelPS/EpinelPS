@@ -71,12 +71,15 @@ namespace EpinelPS.Utils
 
             foreach (var item in rewardData.rewards)
             {
-                if (item.reward_percent != 1000000)
+                if (!string.IsNullOrEmpty(item.reward_type))
                 {
-                    Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000 + ", item will be added anyways", LogType.Warning);
-                }
+                    if (item.reward_percent != 1000000)
+                    {
+                        Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                    }
 
-                AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                    AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                }
             }
 
             return ret;

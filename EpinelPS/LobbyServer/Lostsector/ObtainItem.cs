@@ -31,6 +31,7 @@ namespace EpinelPS.LobbyServer.Lostsector
 
             var positionReward = GameData.Instance.FieldItems[rewardEntry.itemId];
             response.Reward = RewardUtils.RegisterRewardsForUser(user, positionReward.type_value);
+            response.BoxCount = lostSectorUser.ObtainedRewards;
 
             if (positionReward.is_final_reward)
             {
