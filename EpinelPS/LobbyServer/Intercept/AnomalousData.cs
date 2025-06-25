@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Intercept
 
             var response = new ResInterceptAnomalousData
             {
-                InterceptAnomalousManagerId = 1,
+                InterceptAnomalousManagerId = 101,
                 RemainingTickets = 5
             };
 			response.ClearedInterceptAnomalousIds.Add(new[] { 1, 2, 3, 4, 5 });

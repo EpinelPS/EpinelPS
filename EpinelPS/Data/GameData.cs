@@ -31,126 +31,125 @@ namespace EpinelPS.Data
         private int totalFiles = 1;
         private int currentFile = 0;
 
-
+        public readonly Dictionary<string, MapInfo> MapData = [];
 
         [LoadRecord("MainQuestTable.json", "id", typeof(MainQuestCompletionTable))]
         public readonly Dictionary<int, MainQuestCompletionRecord> QuestDataRecords = [];
-        
+
         [LoadRecord("CampaignStageTable.json", "id", typeof(CampaignStageTable))]
         public readonly Dictionary<int, CampaignStageRecord> StageDataRecords = [];
-        
+
         [LoadRecord("RewardTable.json", "id", typeof(RewardTable))]
         public readonly Dictionary<int, RewardTableRecord> RewardDataRecords = [];
-        
+
         [LoadRecord("UserExpTable.json", "level", typeof(UserExpTable))]
         public readonly Dictionary<int, UserExpRecord> UserExpDataRecords = [];
-        
+
         [LoadRecord("CampaignChapterTable.json", "chapter", typeof(CampaignChapterTable))]
         public readonly Dictionary<int, CampaignChapterRecord> ChapterCampaignData = [];
-        
+
         [LoadRecord("CharacterCostumeTable.json", "id", typeof(CharacterCostumeTable))]
         public readonly Dictionary<int, CharacterCostumeRecord> CharacterCostumeTable = [];
-        
+
         [LoadRecord("CharacterTable.json", "id", typeof(CharacterTable))]
         public readonly Dictionary<int, CharacterRecord> CharacterTable = [];
-        
+
         [LoadRecord("ContentsTutorialTable.json", "id", typeof(TutorialTable))]
         public readonly Dictionary<int, ClearedTutorialData> TutorialTable = [];
         [LoadRecord("ItemEquipTable.json", "id", typeof(ItemEquipTable))]
 
         public readonly Dictionary<int, ItemEquipRecord> ItemEquipTable = [];
-        
+
         [LoadRecord("ItemMaterialTable.json", "id", typeof(ItemMaterialTable))]
         public readonly Dictionary<int, ItemMaterialRecord> itemMaterialTable = [];
-        
+
         [LoadRecord("ItemEquipExpTable.json", "id", typeof(ItemEquipExpTable))]
         public readonly Dictionary<int, ItemEquipExpRecord> itemEquipExpTable = [];
-        
+
         [LoadRecord("ItemEquipGradeExpTable.json", "id", typeof(ItemEquipGradeExpTable))]
         public readonly Dictionary<int, ItemEquipGradeExpRecord> ItemEquipGradeExpTable = [];
-        
+
         [LoadRecord("CharacterLevelTable.json", "level", typeof(CharacterLevelTable))]
         public readonly Dictionary<int, CharacterLevelData> LevelData = [];
-        
+
         [LoadRecord("TacticAcademyFunctionTable.json", "id", typeof(TacticAcademyLessonTable))]
         public readonly Dictionary<int, TacticAcademyLessonRecord> TacticAcademyLessons = [];
-        
+
         [LoadRecord("SideStoryStageTable.json", "id", typeof(SideStoryStageTable))]
         public readonly Dictionary<int, SideStoryStageRecord> SidestoryRewardTable = [];
-        public readonly Dictionary<string, int> PositionReward = [];
-        
+
         [LoadRecord("FieldItemTable.json", "id", typeof(FieldItemTable))]
         public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
-        
+
         [LoadRecord("OutpostBattleTable.json", "id", typeof(OutpostBattleTable))]
         public readonly Dictionary<int, OutpostBattleTableRecord> OutpostBattle = [];
-        
+
         [LoadRecord("JukeboxListTable.json", "id", typeof(JukeboxListTable))]
         public readonly Dictionary<int, JukeboxListRecord> jukeboxListDataRecords = [];
-        
+
         [LoadRecord("JukeboxThemeTable.json", "id", typeof(JukeboxThemeTable))]
         public readonly Dictionary<int, JukeboxThemeRecord> jukeboxThemeDataRecords = [];
-        
+
         [LoadRecord("GachaTypeTable.json", "id", typeof(GachaTypeTable))]
         public readonly Dictionary<int, GachaType> gachaTypes = [];
-        
+
         [LoadRecord("EventManagerTable.json", "id", typeof(EventManagerTable))]
         public readonly Dictionary<int, EventManager> eventManagers = [];
-        
+
         [LoadRecord("LiveWallpaperTable.json", "id", typeof(LiveWallpaperTable))]
         public readonly Dictionary<int, LiveWallpaperRecord> lwptablemgrs = [];
-        
+
         [LoadRecord("AlbumResourceTable.json", "id", typeof(AlbumResourceTable))]
         public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
-        
+
         [LoadRecord("UserFrameTable.json", "id", typeof(UserFrameTable))]
         public readonly Dictionary<int, UserFrameTableRecord> userFrameTable = [];
-        
+
         [LoadRecord("ArchiveRecordManagerTable.json", "id", typeof(ArchiveRecordManagerTable))]
         public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
-        
+
         [LoadRecord("ArchiveEventStoryTable.json", "id", typeof(ArchiveEventStoryTable))]
         public readonly Dictionary<int, ArchiveEventStoryRecord> archiveEventStoryRecords = [];
-        
+
         [LoadRecord("ArchiveEventQuestTable.json", "id", typeof(ArchiveEventQuestTable))]
         public readonly Dictionary<int, ArchiveEventQuestRecord> archiveEventQuestRecords = [];
-        
+
         [LoadRecord("ArchiveEventDungeonStageTable.json", "id", typeof(ArchiveEventDungeonStageTable))]
         public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
-        
+
         [LoadRecord("UserTitleTable.json", "id", typeof(UserTitleTable))]
         public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
-        
+
         [LoadRecord("ArchiveMessengerConditionTable.json", "id", typeof(ArchiveMessengerConditionTable))]
         public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
-        
+
         [LoadRecord("CharacterStatTable.json", "id", typeof(CharacterStatTable))]
         public readonly Dictionary<int, CharacterStatRecord> characterStatTable = [];
-        
+
         [LoadRecord("SkillInfoTable.json", "id", typeof(SkillInfoTable))]
         public readonly Dictionary<int, SkillInfoRecord> skillInfoTable = [];
-        
+
         [LoadRecord("CostTable.json", "id", typeof(CostTable))]
         public readonly Dictionary<int, CostRecord> costTable = [];
-        
+
         [LoadRecord("MidasProductTable.json", "midas_product_id_proximabeta", typeof(MidasProductTable))]
         public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
-        
+
         [LoadRecord("TowerTable.json", "id", typeof(TowerTable))]
         public readonly Dictionary<int, TowerRecord> towerTable = [];
-        
+
         [LoadRecord("TriggerTable.json", "id", typeof(TriggerTable))]
         public readonly Dictionary<int, TriggerRecord> TriggerTable = [];
-        
+
         [LoadRecord("InfraCoreGradeTable.json", "id", typeof(InfracoreTable))]
         public readonly Dictionary<int, InfracoreRecord> InfracoreTable = [];
-        
+
         [LoadRecord("AttractiveCounselCharacterTable.json", "name_code", typeof(AttractiveCounselCharacterTable))]
         public readonly Dictionary<int, AttractiveCounselCharacterRecord> AttractiveCounselCharacterTable = [];
-        
+
         [LoadRecord("AttractiveLevelRewardTable.json", "id", typeof(AttractiveLevelRewardTable))]
         public readonly Dictionary<int, AttractiveLevelRewardRecord> AttractiveLevelReward = [];
-        
+
         [LoadRecord("SubQuestTable.json", "id", typeof(SubquestTable))]
         public readonly Dictionary<int, SubquestRecord> Subquests = [];
 
@@ -182,6 +181,10 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, ItemConsumeRecord> ConsumableItems = [];
         [LoadRecord("ItemRandomTable.json", "id", typeof(RandomItemTable))]
         public readonly Dictionary<int, RandomItemRecord> RandomItem = [];
+        [LoadRecord("LostSectorTable.json", "id", typeof(LostSectorTable))]
+        public readonly Dictionary<int, LostSectorRecord> LostSector = [];
+        [LoadRecord("LostSectorStageTable.json", "id", typeof(LostSectorStageTable))]
+        public readonly Dictionary<int, LostSectorStageRecord> LostSectorStages = [];
         static async Task<GameData> BuildAsync()
         {
             await Load();
@@ -358,21 +361,6 @@ namespace EpinelPS.Data
             return deserializedObject;
         }
 
-        private async Task<JArray> LoadZip(string entry, ProgressBar bar)
-        {
-            var mainQuestData = MainZip.GetEntry(entry) ?? throw new Exception(entry + " does not exist in static data");
-            using StreamReader mainQuestReader = new(MainZip.GetInputStream(mainQuestData));
-            var mainQuestDataString = await mainQuestReader.ReadToEndAsync();
-
-            JObject questdata = JObject.Parse(mainQuestDataString) ?? throw new Exception("failed to parse " + entry);
-            JArray? records = (JArray?)questdata["records"] ?? throw new Exception(entry + " is missing records element");
-            currentFile++;
-
-            bar.Report((double)currentFile / totalFiles);
-
-            return records;
-        }
-
         public async Task Parse()
         {
             using var progress = new ProgressBar();
@@ -383,28 +371,20 @@ namespace EpinelPS.Data
 
             foreach (ZipEntry item in MainZip)
             {
-                if (item.Name.StartsWith("CampaignMap/") || item.Name.StartsWith("EventMap/"))
+                if (item.Name.StartsWith("CampaignMap/") ||
+                    item.Name.StartsWith("EventMap/") ||
+                    item.Name.StartsWith("LostSectorMap/")
+                   )
                 {
-                    var x = await LoadZip(item.Name, progress);
+                    var x = await LoadZip<MapInfoTable>(item.Name, progress);
 
-                    var items = x[0]["ItemSpawner"];
-
-                    if (items != null)
+                    foreach (var map in x.records)
                     {
-                        foreach (var item2 in items)
-                        {
-                            var posId = item2["positionId"] ?? throw new Exception("positionId cannot be null");
-                            var rewardObj = item2["itemId"] ?? throw new Exception("itemId cannot be null");
-
-                            var id = posId.ToObject<string>() ?? throw new Exception("positionId cannot be null");
-                            var reward = rewardObj.ToObject<int>();
-
-                            PositionReward.TryAdd(id, reward);
-                        }
+                        MapData.Add(map.id, map);
                     }
                 }
             }
-           
+
         }
 
         public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)

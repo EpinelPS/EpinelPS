@@ -1,9 +1,10 @@
-﻿using EpinelPS.Data;
+﻿using System.Globalization;
+using EpinelPS.Data;
 using EpinelPS.Utils;
-using Newtonsoft.Json;
-using Paseto.Builder;
-using Paseto;
 using Google.Protobuf;
+using Newtonsoft.Json;
+using Paseto;
+using Paseto.Builder;
 
 namespace EpinelPS.Database
 {
@@ -219,6 +220,18 @@ namespace EpinelPS.Database
         public string Id { get; set; } = "";
         public int State { get; set; }
     }
+    public class LostSectorData
+    {
+        public bool IsOpen { get; set; }
+        public bool IsPlaying { get; set; }
+        public string Json { get; set; } = "";
+        public Dictionary<string, NetLostSectorFieldObject> Objects { get; set; } = [];
+        public Dictionary<string, int> ClearedStages { get; set; } = [];
+        public List<NetLostSectorTeamPosition> TeamPositions { get; set; } = [];
+        public int ObtainedRewards { get; set; } = 0;
+        public bool RecievedFinalReward { get; set; }
+        public bool CompletedPerfectly { get; set; }
+    }
     public class User
     {
         // User info
@@ -304,6 +317,7 @@ namespace EpinelPS.Database
         public List<NetMessage> MessengerData = [];
         public ulong LastMessageId = 1;
         public long LastBadgeSeq = 1;
+        public Dictionary<int, LostSectorData> LostSectorData = [];
 
         // Event data
         public Dictionary<int, EventData> EventInfo = new();

@@ -137,7 +137,7 @@
         public int piece_id;
         public string original_rare = "";
         public string corporation = "";
-		public string corporation_sub_type = "";
+        public string corporation_sub_type = "";
         public int grade_core_id;
         public int name_code;
         public int grow_grade;
@@ -599,7 +599,7 @@
     }
     public class TowerTable
     {
-        public List<TowerRecord> records = []; 
+        public List<TowerRecord> records = [];
     }
 
     public class ItemEquipExpRecord
@@ -830,5 +830,57 @@
     public class RandomItemTable
     {
         public List<RandomItemRecord> records = [];
+    }
+    public enum ContentOpenType
+    {
+        Stage,
+        NonUpdate
+    }
+    public class LostSectorRecord
+    {
+        public int id;
+        public int sector;
+        public int exploration_reward;
+        public string field_id;
+        public int sector_clear_condition;
+        public ContentOpenType open_condition_type;
+        public int open_condition_value;
+
+    }
+    public class LostSectorTable
+    {
+        public List<LostSectorRecord> records = [];
+    }
+    public class LostSectorStageRecord
+    {
+        public int id;
+        public bool is_use_quick_battle;
+        public int sector;
+    }
+    public class LostSectorStageTable
+    {
+        public List<LostSectorStageRecord> records = [];
+    }
+
+    public class ItemSpawner
+    {
+        public string positionId = "";
+        public int itemId;
+        public bool isCompleteReward;
+    }
+    public class StageSpawner
+    {
+        public string positionId = "";
+        public int stageId;
+    }
+    public class MapInfo
+    {
+        public string id { get; set; } = "";
+        public List<ItemSpawner> ItemSpawner { get; set; } = [];
+        public List<StageSpawner> StageSpawner { get; set; } = [];
+    }
+    public class MapInfoTable
+    {
+        public List<MapInfo> records = [];
     }
 }

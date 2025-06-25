@@ -33,8 +33,11 @@ namespace EpinelPS.LobbyServer.Campaign
 
             // Register and return reward
 
-            if (!GameData.Instance.PositionReward.TryGetValue(req.FieldObject.PositionId, out int fieldReward)) throw new Exception("bad position id");
-            var positionReward = GameData.Instance.FieldItems[fieldReward];
+            var map = GameData.Instance.MapData[req.MapId];
+
+            var position = map.ItemSpawner.Where(x => x.positionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position id");
+
+            var positionReward = GameData.Instance.FieldItems[position.itemId];
             var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
