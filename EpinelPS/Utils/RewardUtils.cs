@@ -84,6 +84,25 @@ namespace EpinelPS.Utils
 
             return ret;
         }
+        public static void AddSingleCurrencyObject(User user, ref NetRewardData ret, CurrencyType currencyType, long rewardCount)
+        {
+            bool found = user.Currency.Any(pair => pair.Key == currencyType);
+
+            if (found)
+            {
+                user.Currency[currencyType] += rewardCount;
+            }
+            else
+            {
+                user.Currency.Add(currencyType, rewardCount);
+            }
+            ret.Currency.Add(new NetCurrencyData()
+            {
+                FinalValue = found ? user.Currency[currencyType] + rewardCount : rewardCount,
+                Value = rewardCount,
+                Type = (int)currencyType
+            });
+        }
         /// <summary>
         /// Adds a single item to users inventory, and also adds it to ret parameter.
         /// </summary>
@@ -98,37 +117,6 @@ namespace EpinelPS.Utils
             if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
             {
                 if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
-                else if (rewardType == "Currency")
-                {
-                    bool found = false;
-                    foreach (var currentReward in user.Currency)
-                    {
-                        if (currentReward.Key == (CurrencyType)rewardId)
-                        {
-                            user.Currency[currentReward.Key] += rewardCount;
-
-                            ret.Currency.Add(new NetCurrencyData()
-                            {
-                                FinalValue = user.Currency[currentReward.Key],
-                                Value = rewardCount,
-                                Type = rewardId
-                            });
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        user.Currency.Add((CurrencyType)rewardId, rewardCount);
-                        ret.Currency.Add(new NetCurrencyData()
-                        {
-                            FinalValue = rewardCount,
-                            Value = rewardCount,
-                            Type = rewardId
-                        });
-                    }
-                }
                 else if (rewardType == "Item")
                 {
                     // Check if user already has said item. If it is level 1, increase item count.

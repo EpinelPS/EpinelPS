@@ -812,6 +812,7 @@
         public string item_type = "";
         public ItemSubType item_sub_type;
         public int use_id;
+        public int use_value;
     }
     public class ItemConsumeTable
     {
