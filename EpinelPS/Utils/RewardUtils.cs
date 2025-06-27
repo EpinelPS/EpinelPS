@@ -129,7 +129,7 @@ namespace EpinelPS.Utils
                         });
                     }
                 }
-                else if (rewardType == "Item")
+                else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
                 {
                     // Check if user already has said item. If it is level 1, increase item count.
                     // If user does not have item, generate a new item ID
