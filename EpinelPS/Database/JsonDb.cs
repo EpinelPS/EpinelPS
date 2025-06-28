@@ -482,7 +482,7 @@ namespace EpinelPS.Database
                 var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
                 // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
-                return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).First();
+                return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).FirstOrDefault();
 
             }
             else

@@ -41,15 +41,54 @@ namespace EpinelPS.LobbyServer.Inventory
             var selectedCharacterGroups = Enumerable.Range(1, req.Count)
                 .Select(_ => SelectRandomCharacter(allCharacters, pItem.id))
                 .GroupBy(c => c.name_code);
+            var selectedCharacters = Enumerable.Range(1, req.Count)
+                .Select(_ => SelectRandomCharacter(allCharacters, pItem.id));
 
             int totalBodyLabels = 0;
-            foreach (var characterGroup in selectedCharacterGroups)
+            foreach (var character in selectedCharacters)
             {
-                CharacterRecord character = characterGroup.First();
                 ItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.piece_id);
 
-                bool isNewCharacter = !user.HasCharacter(character.id);
-                if (isNewCharacter)
+                if (user.GetCharacter(character.id) is Database.Character ownedCharacter)
+                {
+                    // If the character already exists, we can increase its piece count
+                    int maxLimitBroken = GetValueByRarity(character.original_rare, 0, 2, 11);
+                    bool canIncreaseItem = character.original_rare != "R" && ownedCharacter.Grade + (spareItem?.Count ?? 0) < maxLimitBroken;
+                    (int newSpareItemCount, int dissoluteCharacterCount) = canIncreaseItem ? (1, 0) : (0, 1);
+                    if (canIncreaseItem)
+                    {
+                        if (spareItem != null)
+                        {
+                            spareItem.Count = newSpareItemCount;
+                        }
+                        else
+                        {
+                            spareItem = new()
+                            {
+                                ItemType = character.piece_id,
+                                Csn = 0,
+                                Count = newSpareItemCount,
+                                Level = 0,
+                                Exp = 0,
+                                Position = 0,
+                                Corp = 0,
+                                Isn = user.GenerateUniqueItemId()
+                            };
+                            user.Items.Add(spareItem);
+                        }
+
+                        reward.UserItems.Add(NetUtils.UserItemDataToNet(spareItem));
+                        reward.Character.Add(GetNetCharacterData(ownedCharacter));
+                    }
+                    else
+                    {
+                        // If we cannot increase the item, we give body label instead
+                        int bodyLabel = GetValueByRarity(character.original_rare, 150, 200, 6000);
+                        totalBodyLabels += bodyLabel * dissoluteCharacterCount;
+                        reward.Character.Add(GetNetCharacterData(ownedCharacter, bodyLabel));
+                    }
+                }
+                else
                 {
                     var csn = user.GenerateUniqueCharacterId();
                     reward.UserCharacters.Add(new NetUserCharacterDefaultData
@@ -98,54 +137,8 @@ namespace EpinelPS.LobbyServer.Inventory
                     }
                 }
 
-                if (user.GetCharacter(character.id) is Database.Character ownedCharacter)
-                {
-                    // If the character already exists, we can increase its piece count
-                    int maxLimitBroken = GetValueByRarity(character.original_rare, 0, 2, 11);
-                    bool canIncreaseItem = character.original_rare != "R" && ownedCharacter.Grade + (spareItem?.Count ?? 0) < maxLimitBroken;
-                    (int newSpareItemCount, int dissoluteCharacterCount) = GetItemCount(
-                        canIncreaseItem,
-                        isNewCharacter ? characterGroup.Count() - 1 : characterGroup.Count(),
-                        spareItem?.Count ?? 0,
-                        ownedCharacter.Grade,
-                        maxLimitBroken);
-                    if (canIncreaseItem)
-                    {
-                        if (spareItem != null)
-                        {
-                            spareItem.Count = newSpareItemCount;
-                        }
-                        else
-                        {
-                            spareItem = new()
-                            {
-                                ItemType = character.piece_id,
-                                Csn = 0,
-                                Count = newSpareItemCount,
-                                Level = 0,
-                                Exp = 0,
-                                Position = 0,
-                                Corp = 0,
-                                Isn = user.GenerateUniqueItemId()
-                            };
-                            user.Items.Add(spareItem);
-                        }
-
-                        reward.UserItems.Add(NetUtils.UserItemDataToNet(spareItem));
-                        reward.Character.AddRange(GetNetCharacterDataList(ownedCharacter, newSpareItemCount));
-                    }
-
-                    Console.WriteLine($"dissoluteCharacterCount: {dissoluteCharacterCount}, newSpareItemCount: {newSpareItemCount}");
-                    if (dissoluteCharacterCount > 0)
-                    {
-                        // If we cannot increase the item, we give dissolution points instead
-                        int bodyLabel = GetValueByRarity(character.original_rare, 150, 200, 6000);
-                        totalBodyLabels += bodyLabel * dissoluteCharacterCount;
-                        reward.Character.AddRange(GetNetCharacterDataList(ownedCharacter, dissoluteCharacterCount, bodyLabel));
-                    }
-                }
+                user.AddTrigger(TriggerType.GachaCharacter, 0, 0);
             }
-            user.AddTrigger(TriggerType.GachaCharacter, 0, 0);
 
             reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.DissolutionPoint, Value = totalBodyLabels });
             user.AddCurrency(CurrencyType.DissolutionPoint, totalBodyLabels);
@@ -208,35 +201,15 @@ namespace EpinelPS.LobbyServer.Inventory
             _ => throw new Exception($"Unknown character rarity: {rarity}")
         };
 
-        // first: newSpareItemCount, second: dissoluteCharacterCount
-        private (int, int) GetItemCount(bool canIncrease, int pulledCharacterCount, int spareItemCount, int characterGrade, int maxLimitBroken)
+        private NetCharacterData GetNetCharacterData(Database.Character character, int bodyLabel = 0)
         {
-            if (!canIncrease)
+            return new NetCharacterData
             {
-                return (0, pulledCharacterCount);
-            }
-
-            int totalCombinedValue = characterGrade + spareItemCount + pulledCharacterCount;
-            if (totalCombinedValue >= maxLimitBroken)
-            {
-                return (maxLimitBroken - (characterGrade + spareItemCount), totalCombinedValue - maxLimitBroken);
-            }
-            else
-            {
-                return (pulledCharacterCount - (characterGrade + spareItemCount), 0);
-            }
-        }
-
-        private IEnumerable<NetCharacterData> GetNetCharacterDataList(Database.Character character, int count, int bodyLabel = 0)
-        {
-            return Enumerable.Range(1, count)
-                .Select(_ => new NetCharacterData
-                {
-                    Csn = character.Csn,
-                    Tid = character.Tid,
-                    PieceCount = bodyLabel == 0 ? 1 : 0,
-                    CurrencyValue = bodyLabel
-                });  
+                Csn = character.Csn,
+                Tid = character.Tid,
+                PieceCount = bodyLabel == 0 ? 1 : 0,
+                CurrencyValue = bodyLabel
+            };  
         }
     }
 
