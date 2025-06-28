@@ -25,8 +25,7 @@ namespace EpinelPS.LobbyServer.Inventory
             if (timeReward.Count == 0) user.Items.Remove(timeReward);
 
             ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems
-                .Where(x => x.Value.id == timeReward.ItemType)
-                .FirstOrDefault().Value
+                .FirstOrDefault(x => x.Value.id == timeReward.ItemType).Value
                 ?? throw new Exception("cannot find box id " + timeReward.ItemType);
 
             // TODO: find out where these numbers come from

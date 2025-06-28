@@ -303,6 +303,31 @@
         public List<GachaType> records = [];
     }
 
+    public class GachaGradeProbRecord
+    {
+        public int id;
+        public int group_id;
+        public string rare = ""; // TODO: should be enum
+        public int prob;
+        public int gacha_list_id;
+    }
+    public class GachaGradeProbTable
+    {
+        public List<GachaGradeProbRecord> records = [];
+    }
+
+    public class GachaListProbRecord
+    {
+        public int id;
+        public int group_id;
+        public int gacha_id;
+        public int prob;
+    }
+    public class GachaListProbTable
+    {
+        public List<GachaListProbRecord> records = [];
+    }
+
     public class EventManager
     {
         public int id;
@@ -817,6 +842,17 @@
     public class ItemConsumeTable
     {
         public List<ItemConsumeRecord> records = [];
+    }
+    public class ItemPieceRecord
+    {
+        public int id;
+        public string use_type = "";
+        public int use_id;
+        public int use_value;
+    }
+    public class  ItemPieceTable
+    {
+        public List<ItemPieceRecord> records = [];
     }
     public class RandomItemRecord
     {
