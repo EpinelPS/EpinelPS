@@ -117,7 +117,7 @@ namespace EpinelPS.Utils
             if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
             {
                 if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
-                else if (rewardType == "Item")
+                else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
                 {
                     // Check if user already has said item. If it is level 1, increase item count.
                     // If user does not have item, generate a new item ID
