@@ -307,7 +307,7 @@
     {
         public int id;
         public int group_id;
-        public string rare = ""; // TODO: should be enum
+        public string rare = "";
         public int prob;
         public int gacha_list_id;
     }
@@ -321,7 +321,6 @@
         public int id;
         public int group_id;
         public int gacha_id;
-        public int prob;
     }
     public class GachaListProbTable
     {
