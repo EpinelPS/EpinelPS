@@ -38,9 +38,6 @@ namespace EpinelPS.LobbyServer.Inventory
             var allCharacters = probList.SelectMany(e => GameData.Instance.CharacterTable.Values.Where(c => c.id == e.gacha_id));
 
             NetRewardData reward = new();
-            var selectedCharacterGroups = Enumerable.Range(1, req.Count)
-                .Select(_ => SelectRandomCharacter(allCharacters, pItem.id))
-                .GroupBy(c => c.name_code);
             var selectedCharacters = Enumerable.Range(1, req.Count)
                 .Select(_ => SelectRandomCharacter(allCharacters, pItem.id));
 
@@ -166,15 +163,11 @@ namespace EpinelPS.LobbyServer.Inventory
             }
             else if (0.0 < gradeProb.srProb && roll < gradeProb.rProb + gradeProb.srProb && srCharacters.Any())
             {
-                int randomValue = random.Next(srCharacters.Count());
-                Console.WriteLine($"Randomized Value: {randomValue}, Base: {srCharacters.Count()}");
-                return srCharacters.ElementAt(randomValue);
+                return srCharacters.ElementAt(random.Next(srCharacters.Count()));
             }
             else if (0.0 < gradeProb.ssrProb && roll < gradeProb.rProb + gradeProb.srProb + gradeProb.ssrProb && ssrCharacters.Any())
             {
-                int randomValue = random.Next(ssrCharacters.Count());
-                Console.WriteLine($"Randomized Value: {randomValue}, Base: {ssrCharacters.Count()}");
-                return ssrCharacters.ElementAt(randomValue);
+                return ssrCharacters.ElementAt(random.Next(ssrCharacters.Count());
             }
             else
             {
