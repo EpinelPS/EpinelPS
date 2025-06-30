@@ -191,6 +191,10 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, GachaGradeProbRecord> GachaGradeProb = [];
         [LoadRecord("GachaListProbTable.json", "id", typeof(GachaListProbTable))]
         public readonly Dictionary<int, GachaListProbRecord> GachaListProb = [];
+        [LoadRecord("RecycleResearchStatTable.json", "id", typeof(RecycleResearchStatTable))]
+        public readonly Dictionary<int, RecycleResearchStatRecord> RecycleResearchStats = [];
+        [LoadRecord("RecycleResearchLevelTable.json", "id", typeof(RecycleResearchLevelTable))]
+        public readonly Dictionary<int, RecycleResearchLevelRecord> RecycleResearchLevels = [];
 
         static async Task<GameData> BuildAsync()
         {

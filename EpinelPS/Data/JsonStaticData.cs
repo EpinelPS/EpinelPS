@@ -867,6 +867,33 @@
     {
         public List<RandomItemRecord> records = [];
     }
+    public class RecycleResearchStatRecord
+    {
+        public int id;
+        public string recycle_type = "";
+        public int unlock_condition_id;
+        public int unlock_level;
+        public int attack;
+        public int defense;
+        public int hp;
+    }
+    public class RecycleResearchStatTable
+    {
+        public List<RecycleResearchStatRecord> records = [];
+    }
+    public class RecycleResearchLevelRecord
+    {
+        public int id;
+        public string recycle_type = "";
+        public int recycle_level;
+        public int exp;
+        public int item_id;
+        public int item_value;
+    }
+    public class RecycleResearchLevelTable
+    {
+        public List<RecycleResearchLevelRecord> records = [];
+    }
     public enum ContentOpenType
     {
         Stage,

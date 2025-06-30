@@ -83,6 +83,15 @@ namespace EpinelPS.Database
         /// </summary>
         public long AvailableAt;
     }
+    public class RecycleRoomResearchProgress
+    {
+        public int Tid;
+        public int Level = 1;
+        public int Exp;
+        public int Attack;
+        public int Defense;
+        public int Hp;
+    }
     public class SimroomData
     {
         public int CurrentDifficulty;
@@ -266,6 +275,7 @@ namespace EpinelPS.Database
         public List<SynchroSlot> SynchroSlots = new List<SynchroSlot>();
         public bool SynchroDeviceUpgraded = false;
         public int SynchroDeviceLevel = 200;
+        public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress = [];
 
         public ResetableData ResetableData = new();
         public WeeklyResetableData WeeklyResetableData = new();

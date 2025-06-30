@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost
 {
@@ -8,11 +9,22 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetRecycleRoomData>();
-
-            // TODO: save these things
+            var user = GetUser();
             var response = new ResGetRecycleRoomData();
 
+            response.Recycle.AddRange(user.ResearchProgress.Select(progress => ToNetRecycleRoomData(progress.Value)));
+
             await WriteDataAsync(response);
+        }
+
+        private NetUserRecycleRoomData ToNetRecycleRoomData(RecycleRoomResearchProgress progress)
+        {
+            return new NetUserRecycleRoomData()
+            {
+                Tid = progress.Tid,
+                Lv = progress.Level,
+                Exp = progress.Exp
+            };
         }
     }
 }

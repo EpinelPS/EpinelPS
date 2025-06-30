@@ -167,7 +167,7 @@ namespace EpinelPS.LobbyServer.Inventory
             }
             else if (0.0 < gradeProb.ssrProb && roll < gradeProb.rProb + gradeProb.srProb + gradeProb.ssrProb && ssrCharacters.Any())
             {
-                return ssrCharacters.ElementAt(random.Next(ssrCharacters.Count());
+                return ssrCharacters.ElementAt(random.Next(ssrCharacters.Count()));
             }
             else
             {
@@ -206,5 +206,5 @@ namespace EpinelPS.LobbyServer.Inventory
         }
     }
 
-    internal record PieceGradeProb(double rProb, double srProb, double ssrProb);
+    internal record struct PieceGradeProb(double rProb, double srProb, double ssrProb);
 }
