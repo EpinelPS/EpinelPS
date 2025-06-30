@@ -206,5 +206,5 @@ namespace EpinelPS.LobbyServer.Inventory
         }
     }
 
-    internal record struct PieceGradeProb(double rProb, double srProb, double ssrProb);
+    internal record PieceGradeProb(double rProb, double srProb, double ssrProb);
 }

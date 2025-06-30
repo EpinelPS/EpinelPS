@@ -98,7 +98,7 @@ namespace EpinelPS.Utils
             }
             ret.Currency.Add(new NetCurrencyData()
             {
-                FinalValue = found ? user.Currency[currencyType] + rewardCount : rewardCount,
+                FinalValue = found ? user.Currency[currencyType] : rewardCount,
                 Value = rewardCount,
                 Type = (int)currencyType
             });
