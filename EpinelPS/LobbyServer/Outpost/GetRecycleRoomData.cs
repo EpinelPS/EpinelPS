@@ -12,16 +12,16 @@ namespace EpinelPS.LobbyServer.Outpost
             var user = GetUser();
             var response = new ResGetRecycleRoomData();
 
-            response.Recycle.AddRange(user.ResearchProgress.Select(progress => ToNetRecycleRoomData(progress.Value)));
+            response.Recycle.AddRange(user.ResearchProgress.Select(progress => ToNetRecycleRoomData(progress.Key, progress.Value)));
 
             await WriteDataAsync(response);
         }
 
-        private NetUserRecycleRoomData ToNetRecycleRoomData(RecycleRoomResearchProgress progress)
+        private NetUserRecycleRoomData ToNetRecycleRoomData(int tid, RecycleRoomResearchProgress progress)
         {
             return new NetUserRecycleRoomData()
             {
-                Tid = progress.Tid,
+                Tid = tid,
                 Lv = progress.Level,
                 Exp = progress.Exp
             };

@@ -85,7 +85,6 @@ namespace EpinelPS.Database
     }
     public class RecycleRoomResearchProgress
     {
-        public int Tid;
         public int Level = 1;
         public int Exp;
         public int Attack;
