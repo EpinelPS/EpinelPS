@@ -157,15 +157,15 @@ namespace EpinelPS.LobbyServer.Inventory
 
             double roll = random.NextDouble() * 100;
 
-            if (0.0 < gradeProb.rProb && roll < gradeProb.rProb && rCharacters.Any())
+            if (0.0 < gradeProb.RProb && roll < gradeProb.RProb && rCharacters.Any())
             {
                 return rCharacters.ElementAt(random.Next(rCharacters.Count()));
             }
-            else if (0.0 < gradeProb.srProb && roll < gradeProb.rProb + gradeProb.srProb && srCharacters.Any())
+            else if (0.0 < gradeProb.SRProb && roll < gradeProb.RProb + gradeProb.SRProb && srCharacters.Any())
             {
                 return srCharacters.ElementAt(random.Next(srCharacters.Count()));
             }
-            else if (0.0 < gradeProb.ssrProb && roll < gradeProb.rProb + gradeProb.srProb + gradeProb.ssrProb && ssrCharacters.Any())
+            else if (0.0 < gradeProb.SSRProb && roll < gradeProb.RProb + gradeProb.SRProb + gradeProb.SSRProb && ssrCharacters.Any())
             {
                 return ssrCharacters.ElementAt(random.Next(ssrCharacters.Count()));
             }
@@ -206,5 +206,5 @@ namespace EpinelPS.LobbyServer.Inventory
         }
     }
 
-    internal record PieceGradeProb(double rProb, double srProb, double ssrProb);
+    internal record PieceGradeProb(double RProb, double SRProb, double SSRProb);
 }

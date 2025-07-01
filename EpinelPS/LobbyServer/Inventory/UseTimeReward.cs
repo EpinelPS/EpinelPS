@@ -37,10 +37,10 @@ namespace EpinelPS.LobbyServer.Inventory
                 _ => throw new Exception("unknown use_id " + cItem.use_id)
             };
 
-            NetRewardData ret = new();
-            RewardUtils.AddSingleCurrencyObject(user, ref ret, itemType, amount);
+            NetRewardData reward = new();
+            RewardUtils.AddSingleCurrencyObject(user, ref reward, itemType, amount);
 
-            response.Reward = ret;
+            response.Reward = reward;
             // update client side item count
             response.Reward.UserItems.Add(NetUtils.UserItemDataToNet(timeReward));
 
