@@ -24,7 +24,6 @@ namespace EpinelPS.Utils
             {
                 var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
 
-                var oldXpData = GameData.Instance.GetUserLevelFromUserExp(user.userPointData.ExperiencePoint);
                 var newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
                 var newLevel = user.userPointData.UserLevel;
 
@@ -73,19 +72,12 @@ namespace EpinelPS.Utils
             {
                 if (!string.IsNullOrEmpty(item.reward_type))
                 {
-                    if (item.reward_type == "Currency")
+                    if (item.reward_percent != 1000000)
                     {
-                        AddSingleCurrencyObject(user, ref ret, (CurrencyType)item.reward_id, item.reward_value);
+                        Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
                     }
-                    else
-                    {
-                        if (item.reward_percent != 1000000)
-                        {
-                            Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
-                        }
 
-                        AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
-                    }
+                    AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
                 }
             }
 
@@ -124,6 +116,10 @@ namespace EpinelPS.Utils
             if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
             {
                 if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
+                else if (rewardType == "Currency")
+                {
+                    AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
+                }
                 else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
                 {
                     // Check if user already has said item. If it is level 1, increase item count.
@@ -210,7 +206,6 @@ namespace EpinelPS.Utils
                     {
                         NetRewardData reward = NetUtils.UseLootBox(user, rewardId, rewardCount);
 
-                        NetUtils.RegisterRewardsForUser(user, reward);
                         ret = NetUtils.MergeRewards([ret, reward], user);
                     }
                     else
@@ -222,6 +217,7 @@ namespace EpinelPS.Utils
                             Isn = user.GenerateUniqueItemId()
                         };
                         ret.Item.Add(itm);
+
                         user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
                     }
                 }
