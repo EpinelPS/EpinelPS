@@ -103,7 +103,6 @@ namespace EpinelPS.Utils
             {
                 user.Currency.Add(currencyType, rewardCount);
             }
-            var currency = new NetCurrencyData();
             ret.Currency.Add(new NetCurrencyData()
             {
                 FinalValue = found ? user.GetCurrencyVal(currencyType) : rewardCount,
