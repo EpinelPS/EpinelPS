@@ -303,6 +303,30 @@
         public List<GachaType> records = [];
     }
 
+    public class GachaGradeProbRecord
+    {
+        public int id;
+        public int group_id;
+        public string rare = "";
+        public int prob;
+        public int gacha_list_id;
+    }
+    public class GachaGradeProbTable
+    {
+        public List<GachaGradeProbRecord> records = [];
+    }
+
+    public class GachaListProbRecord
+    {
+        public int id;
+        public int group_id;
+        public int gacha_id;
+    }
+    public class GachaListProbTable
+    {
+        public List<GachaListProbRecord> records = [];
+    }
+
     public class EventManager
     {
         public int id;
@@ -812,10 +836,22 @@
         public string item_type = "";
         public ItemSubType item_sub_type;
         public int use_id;
+        public int use_value;
     }
     public class ItemConsumeTable
     {
         public List<ItemConsumeRecord> records = [];
+    }
+    public class ItemPieceRecord
+    {
+        public int id;
+        public string use_type = "";
+        public int use_id;
+        public int use_value;
+    }
+    public class  ItemPieceTable
+    {
+        public List<ItemPieceRecord> records = [];
     }
     public class RandomItemRecord
     {
@@ -830,6 +866,33 @@
     public class RandomItemTable
     {
         public List<RandomItemRecord> records = [];
+    }
+    public class RecycleResearchStatRecord
+    {
+        public int id;
+        public string recycle_type = "";
+        public int unlock_condition_id;
+        public int unlock_level;
+        public int attack;
+        public int defense;
+        public int hp;
+    }
+    public class RecycleResearchStatTable
+    {
+        public List<RecycleResearchStatRecord> records = [];
+    }
+    public class RecycleResearchLevelRecord
+    {
+        public int id;
+        public string recycle_type = "";
+        public int recycle_level;
+        public int exp;
+        public int item_id;
+        public int item_value;
+    }
+    public class RecycleResearchLevelTable
+    {
+        public List<RecycleResearchLevelRecord> records = [];
     }
     public enum ContentOpenType
     {

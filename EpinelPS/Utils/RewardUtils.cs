@@ -73,16 +73,42 @@ namespace EpinelPS.Utils
             {
                 if (!string.IsNullOrEmpty(item.reward_type))
                 {
-                    if (item.reward_percent != 1000000)
+                    if (item.reward_type == "Currency")
                     {
-                        Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                        AddSingleCurrencyObject(user, ref ret, (CurrencyType)item.reward_id, item.reward_value);
                     }
+                    else
+                    {
+                        if (item.reward_percent != 1000000)
+                        {
+                            Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                        }
 
-                    AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                        AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                    }
                 }
             }
 
             return ret;
+        }
+        public static void AddSingleCurrencyObject(User user, ref NetRewardData ret, CurrencyType currencyType, long rewardCount)
+        {
+            bool found = user.Currency.Any(pair => pair.Key == currencyType);
+
+            if (found)
+            {
+                user.Currency[currencyType] += rewardCount;
+            }
+            else
+            {
+                user.Currency.Add(currencyType, rewardCount);
+            }
+            ret.Currency.Add(new NetCurrencyData()
+            {
+                FinalValue = found ? user.GetCurrencyVal(currencyType) : rewardCount,
+                Value = rewardCount,
+                Type = (int)currencyType
+            });
         }
         /// <summary>
         /// Adds a single item to users inventory, and also adds it to ret parameter.
@@ -98,37 +124,6 @@ namespace EpinelPS.Utils
             if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
             {
                 if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
-                else if (rewardType == "Currency")
-                {
-                    bool found = false;
-                    foreach (var currentReward in user.Currency)
-                    {
-                        if (currentReward.Key == (CurrencyType)rewardId)
-                        {
-                            user.Currency[currentReward.Key] += rewardCount;
-
-                            ret.Currency.Add(new NetCurrencyData()
-                            {
-                                FinalValue = user.Currency[currentReward.Key],
-                                Value = rewardCount,
-                                Type = rewardId
-                            });
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        user.Currency.Add((CurrencyType)rewardId, rewardCount);
-                        ret.Currency.Add(new NetCurrencyData()
-                        {
-                            FinalValue = rewardCount,
-                            Value = rewardCount,
-                            Type = rewardId
-                        });
-                    }
-                }
                 else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
                 {
                     // Check if user already has said item. If it is level 1, increase item count.

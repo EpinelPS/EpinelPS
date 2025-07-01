@@ -83,6 +83,14 @@ namespace EpinelPS.Database
         /// </summary>
         public long AvailableAt;
     }
+    public class RecycleRoomResearchProgress
+    {
+        public int Level = 1;
+        public int Exp;
+        public int Attack;
+        public int Defense;
+        public int Hp;
+    }
     public class SimroomData
     {
         public int CurrentDifficulty;
@@ -266,6 +274,7 @@ namespace EpinelPS.Database
         public List<SynchroSlot> SynchroSlots = new List<SynchroSlot>();
         public bool SynchroDeviceUpgraded = false;
         public int SynchroDeviceLevel = 200;
+        public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress = [];
 
         public ResetableData ResetableData = new();
         public WeeklyResetableData WeeklyResetableData = new();
@@ -482,7 +491,7 @@ namespace EpinelPS.Database
                 var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
                 // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
-                return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).First();
+                return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).FirstOrDefault();
 
             }
             else

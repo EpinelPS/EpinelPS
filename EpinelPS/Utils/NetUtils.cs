@@ -393,7 +393,10 @@ namespace EpinelPS.Utils
                     Logging.WriteLine("TODO: reward_value_max", LogType.Warning);
                 }
 
-                RewardUtils.AddSingleObject(user, ref ret, winningRecord.reward_id, winningRecord.reward_type, winningRecord.reward_value_min);
+                if (winningRecord.reward_type == "Currency")
+                    RewardUtils.AddSingleCurrencyObject(user, ref ret, (CurrencyType)winningRecord.reward_id, winningRecord.reward_value_min);
+                else
+                    RewardUtils.AddSingleObject(user, ref ret, winningRecord.reward_id, winningRecord.reward_type, winningRecord.reward_value_min);
             }
             JsonDb.Save();
 

@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost
 {
@@ -8,9 +9,18 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetRecycleRoomData>();
-
-            // TODO: save these things
+            var user = GetUser();
             var response = new ResGetRecycleRoomData();
+
+            response.Recycle.AddRange(user.ResearchProgress.Select(progress =>
+            {
+                return new NetUserRecycleRoomData()
+                {
+                    Tid = progress.Key,
+                    Lv = progress.Value.Level,
+                    Exp = progress.Value.Exp
+                };
+            }));
 
             await WriteDataAsync(response);
         }
