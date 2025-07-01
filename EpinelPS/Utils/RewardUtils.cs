@@ -73,12 +73,19 @@ namespace EpinelPS.Utils
             {
                 if (!string.IsNullOrEmpty(item.reward_type))
                 {
-                    if (item.reward_percent != 1000000)
+                    if (item.reward_type == "Currency")
                     {
-                        Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                        AddSingleCurrencyObject(user, ref ret, (CurrencyType)item.reward_id, item.reward_value);
                     }
+                    else
+                    {
+                        if (item.reward_percent != 1000000)
+                        {
+                            Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                        }
 
-                    AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                        AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                    }
                 }
             }
 
@@ -96,9 +103,10 @@ namespace EpinelPS.Utils
             {
                 user.Currency.Add(currencyType, rewardCount);
             }
+            var currency = new NetCurrencyData();
             ret.Currency.Add(new NetCurrencyData()
             {
-                FinalValue = found ? user.Currency[currencyType] : rewardCount,
+                FinalValue = found ? user.GetCurrencyVal(currencyType) : rewardCount,
                 Value = rewardCount,
                 Type = (int)currencyType
             });
