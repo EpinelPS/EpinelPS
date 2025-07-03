@@ -20,9 +20,9 @@ namespace EpinelPS.Utils
             }
             Directory.CreateDirectory(targetDir);
 
+                Console.WriteLine("Download " + targetFile);
             if (!File.Exists(targetFile))
             {
-                Console.WriteLine("Download " + targetFile);
 
                 if (CloudIp == null)
                 {

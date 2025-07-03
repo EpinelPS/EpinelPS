@@ -190,7 +190,7 @@ public partial class MainView : UserControl
             // Start async operation to open the dialog.
             var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
-                Title = "Select game path (with game executable)",
+                Title = "Select game path, with launcher and game folder",
                 AllowMultiple = false
             });
 
