@@ -32,31 +32,5 @@ To access the admin panel, go to https://127.0.0.1/admin/ and sign in. Note that
 To skip stages, a basic command line interface is implemented.
 
 
-## TODO: 
- - [X] Campaign (Normal, Hard, Lost items, Rewards, Subquests)
- - [X] Lobby
- - [X] Save team info
- - [X] Profile UI
- - [X] Open Archives UI
- - [X] Inventory system
- - [X] Character level up
- - [X] Side story
- - [X] Archives
- - [X] Outpost Rewards
- - [X] Skill level up
- - [X] Daily, weekly missions etc
- - [X] Outpost jukebox
- - [X] Messenger
- - [ ] Simulation Room
- - [ ] Lost sector
- - [ ] Basic friend list support
- - [ ] Admin Panel
- - [ ] Change events in Admin Panel
- - [ ] Arcade
- - [ ] Limit temporary participation
- 
-## What is not working:
- - Events
- - Outpost buildings, recycle room, infrastructure core
- - Interception rewards, simulation room
- - And a lot more...
+## What is implemented or missing?
+See the todo list at https://github.com/orgs/EpinelPS/projects/1 and https://github.com/EpinelPS/EpinelPS/issues
