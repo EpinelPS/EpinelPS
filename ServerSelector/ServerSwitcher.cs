@@ -188,7 +188,7 @@ namespace ServerSelector
             return true;
         }
 
-        public static async Task<ServerSwitchResult> SaveCfg(bool useOffical, string gamePath, string launcherPath, string ip, bool offlineMode)
+        public static async Task<ServerSwitchResult> SaveCfg(bool useOffical, string gamePath, string? launcherPath, string ip, bool offlineMode)
         {
             string sodiumLib = AppDomain.CurrentDomain.BaseDirectory + "sodium.dll";
             string gameSodium = gamePath + "/nikke_Data/Plugins/x86_64/sodium.dll";
@@ -368,10 +368,13 @@ namespace ServerSelector
 
                 // update launcher/game ca cert list
 
-                var certList1 = await File.ReadAllTextAsync(launcherCertList);
-                certList1 += "\nGood SSL Ca\n===============================\n";
-                certList1 += CAcert;
-                await File.WriteAllTextAsync(launcherCertList, certList1);
+                if (launcherPath != null)
+                {
+                    var certList1 = await File.ReadAllTextAsync(launcherCertList);
+                    certList1 += "\nGood SSL Ca\n===============================\n";
+                    certList1 += CAcert;
+                    await File.WriteAllTextAsync(launcherCertList, certList1);
+                }
 
                 var certList2 = await File.ReadAllTextAsync(gameCertList);
                 certList2 += "\nGood SSL Ca\n===============================\n";
