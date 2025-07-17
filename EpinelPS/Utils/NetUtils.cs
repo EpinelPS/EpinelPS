@@ -354,11 +354,14 @@ namespace EpinelPS.Utils
         {
             NetWholeUserTeamData result = new() { TeamNumber = 1, Type = 2 };
 
-            result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[0], 1));
-            result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[1], 2));
-            result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[2], 3));
-            result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[3], 4));
-            result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[4], 5));
+            if (user.RepresentationTeamDataNew.Length == 5)
+            {
+                result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[0], 1));
+                result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[1], 2));
+                result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[2], 3));
+                result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[3], 4));
+                result.Slots.Add(LookupCharacter(user, user.RepresentationTeamDataNew[4], 5));
+            }
 
             int totalCP = 0;
 
@@ -388,7 +391,7 @@ namespace EpinelPS.Utils
             {
                 var winningRecord = Rng.PickWeightedItem(probabilityEntries);
 
-                if (winningRecord.reward_value_min  != winningRecord.reward_value_max)
+                if (winningRecord.reward_value_min != winningRecord.reward_value_max)
                 {
                     Logging.WriteLine("TODO: reward_value_max", LogType.Warning);
                 }
