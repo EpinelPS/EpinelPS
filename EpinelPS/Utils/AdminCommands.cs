@@ -22,36 +22,43 @@ namespace EpinelPS.Utils
         static AdminCommands()
         {
             // Use TLS 1.1 so that tencents cloudflare knockoff wont complain
-            var handler = new SocketsHttpHandler
+            if (!OperatingSystem.IsLinux())
             {
-                ConnectCallback = async (context, cancellationToken) =>
+                var handler = new SocketsHttpHandler
                 {
-                    var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-                    try
+                    ConnectCallback = async (context, cancellationToken) =>
                     {
-                        await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
-
-                        var sslStream = new SslStream(new NetworkStream(socket, ownsSocket: true));
-
-                        // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
-                        await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+                        var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                        try
                         {
-                            TargetHost = connectingServer,
-                            EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
+                            await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
 
-                        }, cancellationToken);
+                            var sslStream = new SslStream(new NetworkStream(socket, ownsSocket: true));
 
-                        return sslStream;
+                            // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
+                            await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
+                            {
+                                TargetHost = connectingServer,
+                                EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
+
+                            }, cancellationToken);
+
+                            return sslStream;
+                        }
+                        catch
+                        {
+                            socket.Dispose();
+                            throw;
+                        }
                     }
-                    catch
-                    {
-                        socket.Dispose();
-                        throw;
-                    }
-                }
-            };
+                };
 
-            client = new(handler);
+                client = new(handler);
+            }
+            else
+            {
+                client = new();
+            }
             client.DefaultRequestHeaders.Add("Accept", "application/octet-stream+protobuf");
         }
         public static RunCmdResponse CompleteStage(ulong userId, string input2)
@@ -390,7 +397,7 @@ namespace EpinelPS.Utils
             if (staticData == null)
             {
                 Logging.WriteLine("failed to fetch static data", LogType.Error);
-                return new RunCmdResponse() { error = "failed to fetch static data"};
+                return new RunCmdResponse() { error = "failed to fetch static data" };
             }
 
             ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2>(resourcesUrl);
