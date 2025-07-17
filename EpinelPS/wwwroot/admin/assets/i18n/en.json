@@ -6,14 +6,14 @@
   },
   "auth": {
     "login": "Login",
-    "username": "Username",
+    "username": "Email",
     "password": "Password",
     "enter": "Login",
     "welcome": "Please login",
     "verifying": "Verifying...",
     "success": "Login successful",
     "error": {
-      "required": "Please enter username and password",
+      "required": "Please enter email and password",
       "invalid": "Login failed, please check your credentials",
       "network": "Network error, please try again later"
     }
