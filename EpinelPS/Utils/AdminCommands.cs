@@ -393,14 +393,27 @@ namespace EpinelPS.Utils
                 return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
 
             // Get latest static data info from server
-            ResStaticDataPackInfo? staticData = await FetchProtobuf<ResStaticDataPackInfo>(staticDataUrl);
+            ResStaticDataPackInfo? staticData = await FetchProtobuf<ResStaticDataPackInfo, ReqStaticDataPackInfo>(staticDataUrl);
             if (staticData == null)
             {
                 Logging.WriteLine("failed to fetch static data", LogType.Error);
                 return new RunCmdResponse() { error = "failed to fetch static data" };
             }
 
-            ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2>(resourcesUrl);
+            // Get latest static data info from server
+            ResStaticDataPackInfoV2? staticData2 = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl.Replace("staticdatapack", "get-static-data-pack-info"),
+                new ReqStaticDataPackInfoV2()
+                {
+                    Type = StaticDataPackType.Mpk
+                });
+            if (staticData2 == null)
+            {
+                Logging.WriteLine("failed to fetch static data (2)", LogType.Error);
+                return new RunCmdResponse() { error = "failed to fetch static data (2)" };
+            }
+
+
+            ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl);
             if (resources == null)
             {
                 Logging.WriteLine("failed to fetch resource data", LogType.Error);
@@ -412,14 +425,31 @@ namespace EpinelPS.Utils
             GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
             GameConfig.Root.StaticData.Version = staticData.Version;
             GameConfig.Root.StaticData.Url = staticData.Url;
+
+            GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
+            GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
+            GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
+            GameConfig.Root.StaticDataMpk.Url = staticData2.Url;
             GameConfig.Save();
 
             return RunCmdResponse.OK;
         }
 
-        private static async Task<T?> FetchProtobuf<T>(string url) where T : IMessage, new()
+        private static async Task<T?> FetchProtobuf<T, I>(string url, IMessage? input = null) where T : IMessage, new() where I : IMessage, new()
         {
-            ByteArrayContent staticDataContent = new([]);
+            byte[] inputBytes = [];
+
+            if(input != null)
+            {
+                using MemoryStream ms = new();
+                CodedOutputStream stream = new CodedOutputStream(ms);
+                input.WriteTo(stream);
+                stream.Flush();
+
+                inputBytes = ms.ToArray();
+            }
+
+            ByteArrayContent staticDataContent = new(inputBytes);
             client.DefaultRequestHeaders.Host = serverUrl;
             staticDataContent.Headers.Add("Content-Type", "application/octet-stream+protobuf");
             connectingServer = serverUrl;
