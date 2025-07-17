@@ -55,5 +55,6 @@ namespace EpinelPS.LobbyServer.Event
         public const int FreeRewardPass = 47;
         public const int GachaPayback = 48;
         public const int FieldCollectEvent = 49;
+        public const int MiniGameBTG = 50;
     }
 }
