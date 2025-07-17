@@ -27,6 +27,7 @@
 		<PackageReference Include="Google.Api.CommonProtos" Version="2.17.0" />
 		<PackageReference Include="Google.Protobuf.Tools" Version="3.31.1" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+		<PackageReference Include="MemoryPack" Version="1.21.4" />
 		<PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Paseto.Core" Version="1.4.1" />

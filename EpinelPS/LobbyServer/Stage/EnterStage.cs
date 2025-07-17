@@ -15,9 +15,9 @@ namespace EpinelPS.LobbyServer.Stage
             var response = new ResEnterStage();
 
             var clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
-            var map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_id);
+            var map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.mod);
 
-            if (clearedStage.stage_category == "Boss")
+            if (clearedStage.stage_category ==  StageCategory.Boss)
             {
                 // When entering a boss stage, unlock boss information in campaign
                 if (!user.FieldInfoNew.ContainsKey(map))

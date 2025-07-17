@@ -42,12 +42,15 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         if (context.SemanticModel.GetDeclaredSymbol(variable) is not IFieldSymbol symbol)
             return null;
 
+        if (symbol.Type is not INamedTypeSymbol namedSymbol)
+            return null;
+
         foreach (var attr in symbol.GetAttributes())
         {
 
-            if (attr.ConstructorArguments.Length == 3)
+            if (attr.ConstructorArguments.Length == 2)
             {
-                if (attr.ConstructorArguments[0].Value is not string fileName || attr.ConstructorArguments[1].Value is not string key || attr.ConstructorArguments[2].Value is not INamedTypeSymbol recordType)
+                if (attr.ConstructorArguments[0].Value is not string fileName || attr.ConstructorArguments[1].Value is not string key)
                     return null;
 
                 return new LoadFieldInfo
@@ -56,7 +59,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
                     FieldName = symbol.Name,
                     FileName = fileName,
                     Key = key,
-                    RecordTypeName = recordType.ToDisplayString()
+                    RecordTypeName = namedSymbol.TypeArguments[1].Name
                 };
             }
         }
@@ -71,23 +74,24 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         sb.AppendLine("using System.Threading.Tasks;");
         sb.AppendLine();
         sb.AppendLine("namespace EpinelPS.Data;");
+        sb.AppendLine();
         sb.AppendLine("public static class GameDataInitializer");
         sb.AppendLine("{");
-        sb.AppendFormat($"public static int TotalFiles = {fieldInfos.Length};");
-        sb.AppendLine("    public static async Task InitializeGameData(IProgress<double> progress = null)");
-        sb.AppendLine("    {");
+        sb.AppendLine($"\tpublic static int TotalFiles = {fieldInfos.Length};");
+        sb.AppendLine("\tpublic static async Task InitializeGameData(IProgress<double> progress = null)");
+        sb.AppendLine("\t{");
 
         foreach (var info in fieldInfos)
         {
             var tempVar = $"data_{info.FieldName}";
-            sb.AppendLine($"        var {tempVar} = await {info.ContainingClass}.Instance.LoadZip<{info.RecordTypeName}>(\"{info.FileName}\", progress);");
-            sb.AppendLine($"        foreach (var obj in {tempVar}.records)");
-            sb.AppendLine("        {");
-            sb.AppendLine($"            {info.ContainingClass}.Instance.{info.FieldName}.Add(obj.{info.Key}, obj);");
-            sb.AppendLine("        }");
+            sb.AppendLine($"\t\tvar {tempVar} = await {info.ContainingClass}.Instance.LoadZip<{info.RecordTypeName}>(\"{info.FileName}\", progress);");
+            sb.AppendLine($"\t\tforeach (var obj in {tempVar})");
+            sb.AppendLine("\t\t{");
+            sb.AppendLine($"\t\t\t{info.ContainingClass}.Instance.{info.FieldName}.Add(obj.{info.Key}, obj);");
+            sb.AppendLine("\t\t}");
         }
 
-        sb.AppendLine("    }");
+        sb.AppendLine("\t}");
         sb.AppendLine("}");
 
         return sb.ToString();

@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Stage
             var response = new ResClearStage();
             var clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
-            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.mod);
             
             if (user.FieldInfoNew.Count == 0)
             {
@@ -89,33 +89,29 @@ namespace EpinelPS.LobbyServer.Stage
                 });
             }
 
-            if (clearedStage.stage_category == "Normal" || clearedStage.stage_category == "Boss" || clearedStage.stage_category == "Hard")
+            if (clearedStage.stage_category == StageCategory.Normal || clearedStage.stage_category == StageCategory.Boss || clearedStage.stage_category == StageCategory.Hard)
             {
-                if (clearedStage.chapter_mod == "Hard")
+                if (clearedStage.mod == ChapterMod.Hard)
                 {
                     if (StageId > user.LastHardStageCleared)
                         user.LastHardStageCleared = StageId;
                 }
-                else if (clearedStage.chapter_mod == "Normal")
+                else
                 {
                     if (StageId > user.LastNormalStageCleared)
                         user.LastNormalStageCleared = StageId;
                 }
-                else
-                {
-                    Console.WriteLine("Unknown chapter mod " + clearedStage.chapter_mod);
-                }
             }
-            else if (clearedStage.stage_category == "Extra")
+            else if (clearedStage.stage_category == StageCategory.Extra)
             {
-
+                // TODO
             }
             else
             {
                 Console.WriteLine("Unknown stage category " + clearedStage.stage_category);
             }
 
-            if (clearedStage.stage_type != "Sub")
+            if (clearedStage.stage_type != StageType.Sub)
             {
                 // add outpost reward level if unlocked
                 if (user.MainQuestData.TryGetValue(21, out bool _))
@@ -137,9 +133,9 @@ namespace EpinelPS.LobbyServer.Stage
 
 
             // Mark chapter as completed if boss stage was completed
-            if (clearedStage.stage_category == "Boss" && clearedStage.stage_type == "Main")
+            if (clearedStage.stage_category == StageCategory.Boss && clearedStage.stage_type == StageType.Main)
             {
-                if (clearedStage.chapter_mod == "Hard")
+                if (clearedStage.mod == ChapterMod.Hard)
                     user.AddTrigger(TriggerType.HardChapterClear, 1, clearedStage.chapter_id);
                 else
                     user.AddTrigger(TriggerType.ChapterClear, 1, clearedStage.chapter_id);

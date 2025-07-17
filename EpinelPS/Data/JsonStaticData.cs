@@ -1,50 +1,148 @@
-﻿namespace EpinelPS.Data
+﻿using System.Data;
+using MemoryPack;
+
+namespace EpinelPS.Data
 {
-    public class MainQuestCompletionRecord
+    public class DataTable<T>
+    {
+        public string version { get; set; } = "";
+        public List<T> records { get; set; } = [];
+    }
+    public enum Category
+    {
+        Campaign_View,
+        Outpost_View,
+        Ark_View,
+        Lobby_Enter,
+        Campaign_Enter,
+        Outpost_Building_Enter,
+        Ark_Marker,
+        Campaign_Clear,
+        Outpost_Select,
+        Tribe_Tower_Clear,
+        Tribe_Tower_Enter,
+        Tribe_Tower_View,
+        Run_Gacha,
+        Npc_Talk,
+        FieldObject_Collection,
+        End,
+        LostSector_View,
+        LostSector_Clear,
+        SimulationRoom_View,
+        EventQuest_Stage_Enter,
+        EventQuest_Stage_Clear,
+        EventQuest_Stage_Group_Clear,
+        EventQuest_Popup_Enter,
+        Normal_Chapter_View,
+        Field_Interaction_Action_Trigger,
+        FavoriteItemQuest_Stage_Enter,
+        FavoriteItemQuest_Stage_Clear,
+        FavoriteItemQuest_Stage_Group_Clear,
+        SimulationRoom_Select
+    }
+    public enum ScenarioType
+    {
+        None,
+        FieldTalk,
+        Dialog,
+        Balloon
+    }
+    public enum ChapterMod
+    {
+        Normal,
+        Hard
+    }
+    public enum StageCategory
+    {
+        Normal,
+        Story,
+        Hard,
+        Extra,
+        Boss
+    }
+    public enum StageType
+    {
+        None,
+        Main,
+        Sub,
+        Emergency,
+        EventQuest,
+        FavoriteItemQuest
+    }
+    public enum EquipmentRarityType
+    {
+        None,
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10
+    }
+    [MemoryPackable]
+    public partial class MainQuestCompletionRecord
     {
         public int id;
         public int group_id;
-        public string category = "";
+        public Category category;
         public int condition_id;
+        public string condition_ui_localkey = "";
+        public string shortcut_type = "";
+        public int shortcut_value;
+        public string name_localkey = "";
+        public string description_localkey = "";
         public int next_main_quest_id = 0;
         public int reward_id = 0;
+        public ScenarioType scenario_type;
+        public string episode_id = "";
         public int target_chapter_id;
+        public string header_bg_resource_id = "";
     }
-    public class MainQuestCompletionTable
-    {
-        public List<MainQuestCompletionRecord> records = [];
-    }
-    public class CampaignStageRecord
+    [MemoryPackable]
+    public partial class CampaignStageRecord
     {
         public int id;
         public int chapter_id;
-        public string stage_category = "";
+        public ChapterMod mod;
+        public int parent_id;
+        public int group_id;
+        public string name = "";
+        public StageCategory stage_category;
+        public StageType stage_type;
+        public bool allow_autobattle;
+        public int enter_condition;
+        public int monster_stage_level;
+        public int dynobj_stage_level;
+        public int standard_battle_power;
+        public int statinc_groupid;
+        public bool allow_quickbattle;
+        public int fieldmonster_id;
+        public int spotid;
         public int reward_id = 0;
-        /// <summary>
-        /// Can be Normal or Hard
-        /// </summary>
-        public string chapter_mod = "";
-        public string stage_type = "";
+        public ScenarioType enter_scenario_type;
         public string enter_scenario = "";
+        public ScenarioType exit_scenario_type;
         public string exit_scenario = "";
+        public int current_outpost_battle_id;
+        public int cleared_battleid;
+        public int fixedCharacterid;
+        public int characterLevel;
     }
-    public class CampaignStageTable
-    {
-        public List<CampaignStageRecord> records = [];
-    }
-    public class RewardTableRecord
+    [MemoryPackable]
+    public partial class RewardTableRecord
     {
         public int id;
         public int user_exp;
         public int character_exp;
         public RewardEntry[]? rewards;
     }
-    public class RewardTable
-    {
-        public List<RewardTableRecord> records = [];
-    }
 
-    public class RewardEntry
+    [MemoryPackable]
+    public partial class RewardEntry
     {
         /// <summary>
         /// example: 1000000
@@ -55,8 +153,6 @@
         public int reward_id;
         public int reward_value;
     }
-
-
     public class ClearedTutorialData
     {
         public int id;
@@ -66,12 +162,8 @@
         public int NextId;
         public bool SaveTutorial;
     }
-    public class TutorialTable
-    {
-        public List<ClearedTutorialData> records = [];
-    }
-
-    public class CharacterLevelData
+    [MemoryPackable]
+    public partial class CharacterLevelData
     {
         /// <summary>
         /// level
@@ -94,17 +186,13 @@
         /// </summary>
         public int character_exp2 = 0;
     }
-    public class CharacterLevelTable
-    {
-        public List<CharacterLevelData> records = [];
-    }
-
     public class TacticAcademyLessonReward
     {
         public int lesson_reward_id;
         public int lesson_reward_value;
     }
-    public class TacticAcademyLessonRecord
+    [MemoryPackable]
+    public partial class TacticAcademyLessonRecord
     {
         public int currency_id;
         public int currency_value;
@@ -114,24 +202,16 @@
         public TacticAcademyLessonReward[]? lesson_reward;
     }
 
-    public class TacticAcademyLessonTable
-    {
-        public List<TacticAcademyLessonRecord> records = [];
-    }
-
-    public class CampaignChapterRecord
+    [MemoryPackable]
+    public partial class CampaignChapterRecord
     {
         public int id;
         public int chapter;
         public string field_id = "";
         public string hard_field_id = "";
     }
-    public class CampaignChapterTable
-    {
-        public List<CampaignChapterRecord> records = [];
-    }
-
-    public class CharacterRecord
+    [MemoryPackable]
+    public partial class CharacterRecord
     {
         public int id;
         public int piece_id;
@@ -169,12 +249,9 @@
         public bool prism_is_active;
         public bool is_detail_close;
     }
-    public class CharacterTable
-    {
-        public List<CharacterRecord> records = [];
-    }
 
-    public class ItemEquipRecord
+    [MemoryPackable]
+    public partial class ItemEquipRecord
     {
         public int id;
         public string name_localkey = "";
@@ -204,12 +281,9 @@
         public int option_slot;
         public int option_slot_success_ratio;
     }
-    public class ItemEquipTable
-    {
-        public List<ItemEquipRecord> records = [];
-    }
 
-    public class FieldItemRecord
+    [MemoryPackable]
+    public partial class FieldItemRecord
     {
         public int id;
         public string item_type = "";
@@ -217,11 +291,9 @@
         public bool is_final_reward;
         public string difficulty = "";
     }
-    public class FieldItemTable
-    {
-        public List<FieldItemRecord> records = [];
-    }
-    public class JukeboxListRecord
+
+    [MemoryPackable]
+    public partial class JukeboxListRecord
     {
         public int id;
         public int theme;
@@ -235,12 +307,8 @@
         public string get_info_value = "";
     }
 
-    public class JukeboxListTable
-    {
-        public List<JukeboxListRecord> records = [];
-    }
-
-    public class JukeboxThemeRecord
+    [MemoryPackable]
+    public partial class JukeboxThemeRecord
     {
         public int id;
         public string name_localkey = "";
@@ -250,11 +318,8 @@
         public string bg_color = "";
     }
 
-    public class JukeboxThemeTable
-    {
-        public List<JukeboxThemeRecord> records = [];
-    }
-    public class OutpostBattleTableRecord
+    [MemoryPackable]
+    public partial class OutpostBattleTableRecord
     {
         public int id;
         public int credit;
@@ -262,12 +327,9 @@
         public int character_exp2;
         public int user_exp;
     }
-    public class OutpostBattleTable
-    {
-        public List<OutpostBattleTableRecord> records = [];
-    }
 
-    public class GachaPriceGroup
+    [MemoryPackable]
+    public partial class GachaPriceGroup
     {
         public int gacha_price_type;
         public int gacha_price_value_count_1;
@@ -275,7 +337,7 @@
         public int gacha_price_value_count_10;
     }
 
-    public class GachaType
+    public partial class GachaType
     {
         public int id;
         public string type = "";
@@ -298,12 +360,8 @@
         public int previous_gacha_id;
     }
 
-    public class GachaTypeTable
-    {
-        public List<GachaType> records = [];
-    }
-
-    public class GachaGradeProbRecord
+    [MemoryPackable]
+    public partial class GachaGradeProbRecord
     {
         public int id;
         public int group_id;
@@ -311,23 +369,16 @@
         public int prob;
         public int gacha_list_id;
     }
-    public class GachaGradeProbTable
-    {
-        public List<GachaGradeProbRecord> records = [];
-    }
-
-    public class GachaListProbRecord
+    [MemoryPackable]
+    public partial class GachaListProbRecord
     {
         public int id;
         public int group_id;
         public int gacha_id;
     }
-    public class GachaListProbTable
-    {
-        public List<GachaListProbRecord> records = [];
-    }
 
-    public class EventManager
+    [MemoryPackable]
+    public partial class EventManager
     {
         public int id;
         public string event_system_type = "";
@@ -348,23 +399,17 @@
         public string active_type = "";
         public string banner_print_type = "";
     }
+    [MemoryPackable]
+    
 
-    public class EventManagerTable
-    {
-        public List<EventManager> records = [];
-    }
-
-    public class LiveWallpaperRecord
+    public partial class LiveWallpaperRecord
     {
         public int id;
         public string livewallpaper_type = "";
     }
-
-    public class LiveWallpaperTable
-    {
-        public List<LiveWallpaperRecord> records = [];
-    }
-    public class AlbumResourceRecord
+    [MemoryPackable]
+    
+    public partial class AlbumResourceRecord
     {
         public int id;
         public int sub_category_id;
@@ -376,12 +421,9 @@
         public string dialogtype = "";
     }
 
-    public class AlbumResourceTable
-    {
-        public List<AlbumResourceRecord> records = [];
-    }
 
-    public class UserFrameTableRecord
+    [MemoryPackable]
+    public partial class UserFrameTableRecord
     {
         public int id;
         public string resource_id = "";
@@ -394,12 +436,9 @@
         public bool is_sub_resource_prism;
     }
 
-    public class UserFrameTable
-    {
-        public List<UserFrameTableRecord> records = [];
-    }
 
-    public class ArchiveRecordManagerRecord
+    [MemoryPackable]
+    public partial class ArchiveRecordManagerRecord
     {
         public int id;
         public string record_type = "";
@@ -416,12 +455,9 @@
         public string record_unlock_bg_addressable = "";
     }
 
-    public class ArchiveRecordManagerTable
-    {
-        public List<ArchiveRecordManagerRecord> records = [];
-    }
 
-    public class ArchiveEventStoryRecord
+    [MemoryPackable]
+    public partial class ArchiveEventStoryRecord
     {
         public int id;
         public int event_id;
@@ -433,12 +469,9 @@
         public int archive_currency_item_id;
     }
 
-    public class ArchiveEventStoryTable
-    {
-        public List<ArchiveEventStoryRecord> records = [];
-    }
 
-    public class ArchiveEventQuestRecord
+    [MemoryPackable]
+    public partial class ArchiveEventQuestRecord
     {
         public int id;
         public int event_quest_manager_id;
@@ -450,12 +483,9 @@
         public string end_scenario_id = "";
     }
 
-    public class ArchiveEventQuestTable
-    {
-        public List<ArchiveEventQuestRecord> records = [];
-    }
 
-    public class ArchiveEventDungeonStageRecord
+    [MemoryPackable]
+    public partial class ArchiveEventDungeonStageRecord
     {
         public int id;
         public int group;
@@ -466,11 +496,8 @@
         public bool is_repeat_clear;
     }
 
-    public class ArchiveEventDungeonStageTable
-    {
-        public List<ArchiveEventDungeonStageRecord> records = [];
-    }
-    public class UserTitleRecord
+    [MemoryPackable]
+    public partial class UserTitleRecord
     {
         public int id;
         public int order;
@@ -483,32 +510,23 @@
         public bool not_acquired_is_visible;
     }
 
-    public class UserTitleTable
-    {
-        public List<UserTitleRecord> records = [];
-    }
 
-    public class ArchiveMessengerConditionList
+    [MemoryPackable]
+    public partial class ArchiveMessengerConditionList
     {
         public string condition_type = "";
         public int condition_id;
     }
-
-    public class ArchiveMessengerConditionRecord
+    [MemoryPackable]
+    public partial class ArchiveMessengerConditionRecord
     {
         public int id;
         public int archive_messenger_group_id;
         public List<ArchiveMessengerConditionList> archive_messenger_condition_list = [];
         public string tid = "";
     }
-
-    public class ArchiveMessengerConditionTable
-    {
-        public string version = "";
-        public List<ArchiveMessengerConditionRecord> records = [];
-    }
-
-    public class CharacterStatRecord
+    [MemoryPackable]
+    public partial class CharacterStatRecord
     {
         public int id;
         public int group;
@@ -520,12 +538,8 @@
         public int level_bio_resist;
     }
 
-    public class CharacterStatTable
-    {
-        public List<CharacterStatRecord> records = [];
-    }
-
-    public class ItemMaterialRecord
+    [MemoryPackable]
+    public partial class ItemMaterialRecord
     {
         public int id;
         public string name_localkey = "";
@@ -540,12 +554,9 @@
         public int stack_max;
     }
 
-    public class ItemMaterialTable
-    {
-        public List<ItemMaterialRecord> records = [];
-    }
 
-    public class SkillInfoRecord
+    [MemoryPackable]
+    public partial class SkillInfoRecord
     {
         public int id;
         public int group_id;
@@ -564,11 +575,6 @@
         public string description_value = "";
     }
 
-    public class SkillInfoTable
-    {
-        public List<SkillInfoRecord> records = [];
-    }
-
     public class CostRecord
     {
         public int id;
@@ -582,11 +588,8 @@
         public int item_value;
     }
 
-    public class CostTable
-    {
-        public List<CostRecord> records = [];
-    }
-    public class MidasProductRecord
+    [MemoryPackable]
+    public partial class MidasProductRecord
     {
         public int id;
         public string product_type = "";
@@ -597,10 +600,7 @@
         public bool is_free;
         public string cost = "";
     }
-    public class MidasProductTable
-    {
-        public List<MidasProductRecord> records = [];
-    }
+    
     public enum ShopCategoryType
     {
         None = 0,
@@ -613,7 +613,8 @@
         Mileage = 7,
         Trade = 8
     }
-    public class TowerRecord
+    [MemoryPackable]
+    public partial class TowerRecord
     {
         public int id;
         public int floor;
@@ -621,12 +622,9 @@
         public int standard_battle_power;
         public int reward_id;
     }
-    public class TowerTable
-    {
-        public List<TowerRecord> records = [];
-    }
 
-    public class ItemEquipExpRecord
+    [MemoryPackable]
+    public partial class ItemEquipExpRecord
     {
         public int id;
         public int level;
@@ -635,56 +633,39 @@
         public int grade_core_id;
     }
 
-    public class ItemEquipExpTable
-    {
-        public List<ItemEquipExpRecord> records = [];
-    }
 
-    public class ItemEquipGradeExpRecord
+    [MemoryPackable]
+    public partial class ItemEquipGradeExpRecord
     {
         public int id;
-        public int exp;
-        public string item_rare = "";
+        public EquipmentRarityType item_rare;
         public int grade_core_id;
+        public int exp;
     }
-
-    public class ItemEquipGradeExpTable
-    {
-        public List<ItemEquipGradeExpRecord> records = [];
-    }
-
-    public class UserExpRecord
+    [MemoryPackable]
+    public partial class UserExpRecord
     {
         public int level;
         public int exp;
         public int reward_id;
     }
-    public class UserExpTable
-    {
-        public List<UserExpRecord> records = [];
-    }
 
-    public class CharacterCostumeRecord
+    [MemoryPackable]
+    public partial class CharacterCostumeRecord
     {
         public int id;
     }
-    public class CharacterCostumeTable
-    {
-        public List<CharacterCostumeRecord> records = [];
-    }
 
-    public class SideStoryStageRecord
+    [MemoryPackable]
+    public partial class SideStoryStageRecord
     {
         public int id;
         public int first_clear_reward;
     }
 
-    public class SideStoryStageTable
-    {
-        public List<SideStoryStageRecord> records = [];
-    }
 
-    public class TriggerRecord
+    [MemoryPackable]
+    public partial class TriggerRecord
     {
         public int id;
         public int condition_id;
@@ -694,15 +675,13 @@
         public bool print_value;
         public int before_trigger_id;
     }
-    public class TriggerTable
-    {
-        public List<TriggerRecord> records = [];
-    }
+    
     public class InfracoreFunction
     {
         public int function;
     }
-    public class InfracoreRecord
+    [MemoryPackable]
+    public partial class InfracoreRecord
     {
         public int id;
         public int grade;
@@ -710,22 +689,16 @@
         public int infra_core_exp;
         public List<InfracoreFunction> function_list = [];
     }
-    public class InfracoreTable
-    {
-        public List<InfracoreRecord> records = [];
-    }
-    public class AttractiveCounselCharacterRecord
+    [MemoryPackable]
+    public partial class AttractiveCounselCharacterRecord
     {
         public int id;
         public int name_code;
         public int collect_reward_id;
     }
-    public class AttractiveCounselCharacterTable
-    {
-        public List<AttractiveCounselCharacterRecord> records = [];
-    }
 
-    public class AttractiveLevelRewardRecord
+    [MemoryPackable]
+    public partial class AttractiveLevelRewardRecord
     {
         public int id;
         public int name_code;
@@ -733,11 +706,8 @@
         public int attractive_level;
         public int costume;
     }
-    public class AttractiveLevelRewardTable
-    {
-        public List<AttractiveLevelRewardRecord> records = [];
-    }
-    public class SubquestRecord
+    [MemoryPackable]
+    public partial class SubquestRecord
     {
         public int id;
         public int group_id;
@@ -747,11 +717,9 @@
         public string end_messenger_conversation_id = "";
         public int before_sub_quest_id;
     }
-    public class SubquestTable
-    {
-        public List<SubquestRecord> records = [];
-    }
-    public class MessengerDialogRecord
+
+    [MemoryPackable]
+    public partial class MessengerDialogRecord
     {
         public string id = "";
         public string conversation_id = "";
@@ -759,41 +727,36 @@
         public bool is_opener;
         public int reward_id;
     }
-    public class MessengerDialogTable
-    {
-        public List<MessengerDialogRecord> records = [];
-    }
-    public class MessengerMsgConditionRecord
+    [MemoryPackable]
+    public partial class MessengerMsgConditionRecord
     {
         public int id;
         public string tid = "";
         public int reward_id;
     }
-    public class MessengerMsgConditionTable
+    public enum ScenarioRewardCondition
     {
-        public List<MessengerMsgConditionRecord> records = [];
-    }
-    public class ScenarioRewardRecord
-    {
-        public int id;
-        public string condition_id = "";
-        public string condition_type = "";
-        public int reward_id;
-    }
-    public class ScenarioRewardTable
-    {
-        public List<ScenarioRewardRecord> records = [];
+        MainScenario,
+        AttractiveScenario
     }
 
-    public class ProductOfferRecord
+    [MemoryPackable]
+    public partial class ScenarioRewardRecord
+    {
+        public int id;
+        public ScenarioRewardCondition condition_type;
+        public string condition_id = "";
+        public int reward_id;
+    }
+
+    [MemoryPackable]
+    public partial class ProductOfferRecord
     {
         public int id;
     }
-    public class ProductOfferTable
-    {
-        public List<ProductOfferRecord> records = [];
-    }
-    public class InterceptionRecord
+
+    [MemoryPackable]
+    public partial class InterceptionRecord
     {
         public int id;
         public int group;
@@ -801,11 +764,9 @@
         public int percent_condition_reward_group;
         public long fixed_damage;
     }
-    public class InterceptionTable
-    {
-        public List<InterceptionRecord> records = [];
-    }
-    public class ConditionRewardRecord
+
+    [MemoryPackable]
+    public partial class ConditionRewardRecord
     {
         public int id;
         public int group;
@@ -814,10 +775,7 @@
         public long value_max;
         public int reward_id;
     }
-    public class ConditionRewardTable
-    {
-        public List<ConditionRewardRecord> records = [];
-    }
+    
     public enum ItemSubType
     {
         BundleBox,
@@ -829,7 +787,8 @@
         ArcadeItem,
         EquipCombination
     }
-    public class ItemConsumeRecord
+    [MemoryPackable]
+    public partial class ItemConsumeRecord
     {
         public int id;
         public string use_type = "";
@@ -838,22 +797,18 @@
         public int use_id;
         public int use_value;
     }
-    public class ItemConsumeTable
-    {
-        public List<ItemConsumeRecord> records = [];
-    }
-    public class ItemPieceRecord
+
+    [MemoryPackable]
+    public partial class ItemPieceRecord
     {
         public int id;
         public string use_type = "";
         public int use_id;
         public int use_value;
     }
-    public class  ItemPieceTable
-    {
-        public List<ItemPieceRecord> records = [];
-    }
-    public class RandomItemRecord
+
+    [MemoryPackable]
+    public partial class RandomItemRecord
     {
         public int id;
         public int group_id;
@@ -863,11 +818,9 @@
         public int reward_value_max;
         public int ratio;
     }
-    public class RandomItemTable
-    {
-        public List<RandomItemRecord> records = [];
-    }
-    public class RecycleResearchStatRecord
+
+    [MemoryPackable]
+    public partial class RecycleResearchStatRecord
     {
         public int id;
         public string recycle_type = "";
@@ -877,11 +830,9 @@
         public int defense;
         public int hp;
     }
-    public class RecycleResearchStatTable
-    {
-        public List<RecycleResearchStatRecord> records = [];
-    }
-    public class RecycleResearchLevelRecord
+
+    [MemoryPackable]
+    public partial class RecycleResearchLevelRecord
     {
         public int id;
         public string recycle_type = "";
@@ -890,16 +841,15 @@
         public int item_id;
         public int item_value;
     }
-    public class RecycleResearchLevelTable
-    {
-        public List<RecycleResearchLevelRecord> records = [];
-    }
+    
     public enum ContentOpenType
     {
         Stage,
         NonUpdate
     }
-    public class LostSectorRecord
+
+    [MemoryPackable]
+    public partial class LostSectorRecord
     {
         public int id;
         public int sector;
@@ -910,20 +860,14 @@
         public int open_condition_value;
 
     }
-    public class LostSectorTable
-    {
-        public List<LostSectorRecord> records = [];
-    }
-    public class LostSectorStageRecord
+    [MemoryPackable]
+    public partial class LostSectorStageRecord
     {
         public int id;
         public bool is_use_quick_battle;
         public int sector;
     }
-    public class LostSectorStageTable
-    {
-        public List<LostSectorStageRecord> records = [];
-    }
+    
 
     public class ItemSpawner
     {
@@ -936,14 +880,13 @@
         public string positionId = "";
         public int stageId;
     }
-    public class MapInfo
+
+    [MemoryPackable]
+    public partial class MapInfo
     {
         public string id { get; set; } = "";
         public List<ItemSpawner> ItemSpawner { get; set; } = [];
         public List<StageSpawner> StageSpawner { get; set; } = [];
     }
-    public class MapInfoTable
-    {
-        public List<MapInfo> records = [];
-    }
+    
 }

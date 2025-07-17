@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA5397: Do not use deprecated SslProtocols values
+dotnet_diagnostic.CA5397.severity = none

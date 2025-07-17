@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Stage
             ReqGetStageData req = await ReadData<ReqGetStageData>();
             var user = GetUser();
 
-            var mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, req.Mod);
+            var mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, (ChapterMod)req.Mod);
 
             ResGetStageData response = new()
             {
