@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using EpinelPS.Database;
 
 namespace EpinelPS.Utils
 {
@@ -12,7 +13,7 @@ namespace EpinelPS.Utils
         /// <summary>
         /// this is only for displaying the target version in admin console or cli
         /// </summary>
-        public string TargetVersion { get; set; }
+        public string TargetVersion { get; set; } = "";
     }
 
     public class StaticData
@@ -50,7 +51,7 @@ namespace EpinelPS.Utils
                     Console.WriteLine("Loaded game config");
 
 
-                    _root = JsonConvert.DeserializeObject<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));
+                    _root = JsonSerializer.Deserialize<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));
 
                     if (_root == null)
                     {
@@ -66,7 +67,7 @@ namespace EpinelPS.Utils
         {
             if (Root != null)
             {
-                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonConvert.SerializeObject(Root, Formatting.Indented));
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonSerializer.Serialize(Root, JsonDb.IndentedJson));
             }
         }
     }

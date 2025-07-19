@@ -5,7 +5,7 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Paseto.Builder;
 using Paseto;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace EpinelPS.LobbyServer.Auth
 {
@@ -39,7 +39,7 @@ namespace EpinelPS.LobbyServer.Auth
 
             var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                                .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                               .AddClaim("data", JsonConvert.SerializeObject(rsp))
+                               .AddClaim("data", JsonSerializer.Serialize(rsp))
                                .IssuedAt(DateTime.UtcNow)
                                .Expiration(DateTime.UtcNow.AddDays(2))
                                .Encode();

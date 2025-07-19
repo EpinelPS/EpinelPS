@@ -1,11 +1,11 @@
 ﻿using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Text.Json;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 using MemoryPack;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace EpinelPS.Data
 {
@@ -26,7 +26,7 @@ namespace EpinelPS.Data
         }
 
         public byte[] Sha256Hash;
-        public byte[] MpkHash;
+        public byte[] MpkHash = [];
         public int Size;
         public int MpkSize;
 
@@ -402,13 +402,8 @@ namespace EpinelPS.Data
                 }
                 else
                 {
-
-                    using StreamReader fileReader = new(MainZip.GetInputStream(fileEntry));
-                    string fileString = await fileReader.ReadToEndAsync();
-
-                    var obj = JsonConvert.DeserializeObject<DataTable<X>>(fileString);
-                    if (obj == null) throw new Exception("deserializeobject failed");
-                    deserializedObject = obj.records.ToArray();
+                    var obj = await JsonSerializer.DeserializeAsync<DataTable<X>>(MainZip.GetInputStream(fileEntry), JsonDb.IndentedJson) ?? throw new Exception("deserializeobject failed");
+                    deserializedObject = [.. obj.records];
                 }
 
                 if (deserializedObject == null) throw new Exception("failed to parse " + entry);

@@ -82,7 +82,8 @@ namespace EpinelPS.Utils
                         int target = 1;
                         foreach (var item in stages)
                         {
-                            if (!user.IsStageCompleted(item, true))
+                            var stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
+                            if (!user.IsStageCompleted(item) && stageData.chapter_mod == ChapterMod.Normal)
                             {
                                 Console.WriteLine("Completing stage " + item);
                                 ClearStage.CompleteStage(user, item, true);
@@ -121,6 +122,18 @@ namespace EpinelPS.Utils
                             {
                                 Console.WriteLine($"Stage {stage} is already completed");
                             }
+                        }
+                    }
+
+                    // get last quest data to remove any gaps
+                    if (user.MainQuestData.Count >= 2)
+                    {
+                        var last = user.MainQuestData.Last();
+                        Logging.WriteLine("last quest id: " + last.Key, LogType.Debug);
+                        for (int i = 0; i < last.Key; i++)
+                        {
+                            if (GameData.Instance.QuestDataRecords.ContainsKey(i))
+                                user.MainQuestData.TryAdd(i, false);
                         }
                     }
 
@@ -439,7 +452,7 @@ namespace EpinelPS.Utils
         {
             byte[] inputBytes = [];
 
-            if(input != null)
+            if (input != null)
             {
                 using MemoryStream ms = new();
                 CodedOutputStream stream = new CodedOutputStream(ms);

@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Lostsector
 
             foreach (var item in GameData.Instance.LostSector)
             {
-                if (item.Value.open_condition_type == ContentOpenType.Stage && user.IsStageCompleted(item.Value.open_condition_value, true))
+                if (item.Value.open_condition_type == ContentOpenType.Stage && user.IsStageCompleted(item.Value.open_condition_value))
                 {
                     response.ClearStages.Add(new NetFieldStageData() { StageId = item.Value.open_condition_value });
                 }
