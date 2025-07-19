@@ -10,6 +10,8 @@ namespace EpinelPS.LobbyServer.Mission.Rewards
             await ReadData<ReqGetDailyRewardedData>();
             var user = GetUser();
 
+            user.ResetDataIfNeeded();
+
             var response = new ResGetDailyRewardedData();
             response.Ids.Add(user.ResetableData.CompletedDailyMissions);
 

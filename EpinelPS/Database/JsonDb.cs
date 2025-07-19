@@ -261,6 +261,7 @@ namespace EpinelPS.Database
         public DateTime BanStart;
         public DateTime BanEnd;
         public int BanId = 0;
+        public DateTime LastReset = DateTime.MinValue;
 
         // Game data
         public List<string> CompletedScenarios = [];
@@ -411,7 +412,6 @@ namespace EpinelPS.Database
             foreach (var item in FieldInfoNew)
             {
                 if (item.Key.Contains("hard") && isNorm) continue;
-                if (item.Key.Contains("normal") && !isNorm) continue;
                 if (item.Value.CompletedStages.Contains(id))
                 {
                     return true;
@@ -601,6 +601,38 @@ namespace EpinelPS.Database
             MessengerData.Add(msg);
             return msg;
         }
+
+        private bool ShouldResetUser()
+        {
+            var nowLocal = DateTime.Now;
+
+            // Compute the last reset threshold (most recent 2 PM before or at nowLocal)
+            DateTime todayResetTime = new(
+                nowLocal.Year,
+                nowLocal.Month,
+                nowLocal.Day,
+                JsonDb.Instance.ResetHourLocalTime, 0, 0
+            );
+
+            if (nowLocal < todayResetTime)
+            {
+                todayResetTime = todayResetTime.AddDays(-1);
+            }
+
+            // If user's last reset was before the last scheduled 2 PM, they need reset
+            return LastReset < todayResetTime;
+        }
+
+        public void ResetDataIfNeeded()
+        {
+            if (!ShouldResetUser()) return;
+
+            Logging.WriteLine("Resetting user...", LogType.Warning);
+
+            LastReset = DateTime.Now;
+            ResetableData = new();
+            JsonDb.Save();
+        }
     }
     public class CoreInfo
     {
@@ -615,6 +647,7 @@ namespace EpinelPS.Database
         public LogType LogLevel = LogType.Debug;
 
         public int MaxInterceptionCount = 3;
+        public int ResetHourLocalTime = 14;
     }
     internal class JsonDb
     {

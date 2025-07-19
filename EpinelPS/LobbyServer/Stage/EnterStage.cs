@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Stage
             var response = new ResEnterStage();
 
             var clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
-            var map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.mod);
+            var map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
 
             if (clearedStage.stage_category ==  StageCategory.Boss)
             {
@@ -27,7 +27,7 @@ namespace EpinelPS.LobbyServer.Stage
                     info.BossEntered = true;
             }
 
-            user.AddTrigger(TriggerType.CampaignStart, 1);
+            user.AddTrigger(TriggerType.CampaignStart, 1, req.StageId);
 
             JsonDb.Save();
 

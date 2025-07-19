@@ -17,6 +17,8 @@ namespace EpinelPS.LobbyServer.Event
                 Json = "{}"
             };
 
+            
+
             // Retrieve collected objects
 
             if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))

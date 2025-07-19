@@ -45,14 +45,18 @@ namespace EpinelPS.LobbyServer.Auth
                                .Encode();
 
 
-            ResEnterServer response = new();
-         
-            response.GameClientToken = token;
-            response.FeatureDataInfo = new NetFeatureDataInfo() {  }; // TODO
-            response.Identifier = new NetLegacyUserIdentifier() { Server = 1000, Usn = (long)user.ID };
-            response.ShouldRestartAfter = Duration.FromTimeSpan(TimeSpan.FromSeconds(86400));
+            ResEnterServer response = new()
+            {
+                GameClientToken = token,
+                FeatureDataInfo = new NetFeatureDataInfo() { }, // TODO
+                Identifier = new NetLegacyUserIdentifier() { Server = 1000, Usn = (long)user.ID },
+                ShouldRestartAfter = Duration.FromTimeSpan(TimeSpan.FromSeconds(86400)),
+
+                EncryptionToken = ByteString.CopyFromUtf8(encryptionToken)
+            };
+
+            user.ResetDataIfNeeded();
             
-            response.EncryptionToken = ByteString.CopyFromUtf8(encryptionToken);
             await WriteDataAsync(response);
         }
     }

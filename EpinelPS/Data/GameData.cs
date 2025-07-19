@@ -450,10 +450,16 @@ namespace EpinelPS.Data
                 }
             }
 
+
+
+
+            // sanity checks
+            if (QuestDataRecords.Count == 0) throw new Exception("QuestDataRecords should not be empty");
         }
 
         public MainQuestCompletionRecord? GetMainQuestForStageClearCondition(int stage)
         {
+            if (QuestDataRecords.Count == 0) throw new Exception("QuestDataRecords should not be empty");
             foreach (var item in QuestDataRecords)
             {
                 if (item.Value.condition_id == stage)
@@ -581,7 +587,7 @@ namespace EpinelPS.Data
 
                 int chVal = data.chapter_id - 1;
 
-                if (chapterNumber == chVal && data.mod == mod && data.stage_type == StageType.Main)
+                if (chapterNumber == chVal && data.chapter_mod == mod && data.stage_type == StageType.Main)
                 {
                     yield return data.id;
                 }

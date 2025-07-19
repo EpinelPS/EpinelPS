@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Stage
             var response = new ResClearStage();
             var clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
-            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.mod);
+            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
             
             if (user.FieldInfoNew.Count == 0)
             {
@@ -91,7 +91,7 @@ namespace EpinelPS.LobbyServer.Stage
 
             if (clearedStage.stage_category == StageCategory.Normal || clearedStage.stage_category == StageCategory.Boss || clearedStage.stage_category == StageCategory.Hard)
             {
-                if (clearedStage.mod == ChapterMod.Hard)
+                if (clearedStage.chapter_mod == ChapterMod.Hard)
                 {
                     if (StageId > user.LastHardStageCleared)
                         user.LastHardStageCleared = StageId;
@@ -135,7 +135,7 @@ namespace EpinelPS.LobbyServer.Stage
             // Mark chapter as completed if boss stage was completed
             if (clearedStage.stage_category == StageCategory.Boss && clearedStage.stage_type == StageType.Main)
             {
-                if (clearedStage.mod == ChapterMod.Hard)
+                if (clearedStage.chapter_mod == ChapterMod.Hard)
                     user.AddTrigger(TriggerType.HardChapterClear, 1, clearedStage.chapter_id);
                 else
                     user.AddTrigger(TriggerType.ChapterClear, 1, clearedStage.chapter_id);
@@ -152,10 +152,11 @@ namespace EpinelPS.LobbyServer.Stage
         private static void DoQuestSpecificUserOperations(User user, int clearedStageId)
         {
             var quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
+
+            user.AddTrigger(TriggerType.CampaignClear, 1, clearedStageId);
             if (quest != null)
             {
                 user.SetQuest(quest.id, false);
-                user.AddTrigger(TriggerType.CampaignClear, 1, clearedStageId);
                 user.AddTrigger(TriggerType.MainQuestClear, 1, quest.id);
             }
 
@@ -181,7 +182,7 @@ namespace EpinelPS.LobbyServer.Stage
 
                 user.BondInfo.Add(new() { NameCode = 3001, Lv = 1 });
                 user.BondInfo.Add(new() { NameCode = 3005, Lv = 1 });
-                
+
                 user.AddTrigger(TriggerType.ObtainCharacter, 1, 3001);
                 user.AddTrigger(TriggerType.ObtainCharacter, 1, 1018);
                 user.AddTrigger(TriggerType.ObtainCharacter, 1, 1015);

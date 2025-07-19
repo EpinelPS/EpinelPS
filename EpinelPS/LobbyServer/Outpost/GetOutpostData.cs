@@ -10,6 +10,7 @@ namespace EpinelPS.LobbyServer.Outpost
         {
             var req = await ReadData<ReqGetOutpostData>();
             var user = GetUser();
+            user.ResetDataIfNeeded();
 
             var battleTime = DateTime.UtcNow - user.BattleTime;
             var battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);

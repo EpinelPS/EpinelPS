@@ -22,8 +22,8 @@ namespace EpinelPS.LobbyServer.Mission
             {
                 if (user.ResetableData.CompletedDailyMissions.Contains(item))
                 {
-                    Console.WriteLine("already completed daily mission");
-                     continue;
+                    Logging.WriteLine("already completed daily mission", LogType.Warning);
+                    continue;
                 }
 
                 if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
