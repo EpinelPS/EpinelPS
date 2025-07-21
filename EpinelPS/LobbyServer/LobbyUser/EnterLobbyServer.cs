@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             ResEnterLobbyServer response = new()
             {
                 User = LobbyHandler.CreateNetUserDataFromUser(user),
-                ResetHour = 20,
+                ResetHour = JsonDb.Instance.ResetHourUtcTime,
                 Nickname = user.Nickname,
                 SynchroLv = 1,
                 OutpostBattleLevel = user.OutpostBattleLevel,

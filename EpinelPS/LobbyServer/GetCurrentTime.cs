@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer
             ResGetNow response = new()
             {
                 Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                ResetHour = 1,
+                ResetHour = JsonDb.Instance.ResetHourUtcTime,
                 CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
             };
             // todo: validate response with actual server

@@ -601,14 +601,14 @@ namespace EpinelPS.Database
 
         private bool ShouldResetUser()
         {
-            var nowLocal = DateTime.Now;
+            var nowLocal = DateTime.UtcNow;
 
             // Compute the last reset threshold (most recent 2 PM before or at nowLocal)
             DateTime todayResetTime = new(
                 nowLocal.Year,
                 nowLocal.Month,
                 nowLocal.Day,
-                JsonDb.Instance.ResetHourLocalTime, 0, 0
+                JsonDb.Instance.ResetHourUtcTime, 0, 0
             );
 
             if (nowLocal < todayResetTime)
@@ -626,7 +626,7 @@ namespace EpinelPS.Database
 
             Logging.WriteLine("Resetting user...", LogType.Warning);
 
-            LastReset = DateTime.Now;
+            LastReset = DateTime.UtcNow;
             ResetableData = new();
             JsonDb.Save();
         }
@@ -644,7 +644,7 @@ namespace EpinelPS.Database
         public LogType LogLevel = LogType.Debug;
 
         public int MaxInterceptionCount = 3;
-        public int ResetHourLocalTime = 14;
+        public int ResetHourUtcTime = 20;
     }
     internal class JsonDb
     {
