@@ -8,8 +8,8 @@ namespace EpinelPS.LobbyServer.Trigger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSyncTrigger>();
-            var user = GetUser();
+            ReqSyncTrigger req = await ReadData<ReqSyncTrigger>();
+            User user = GetUser();
 
             // This request is responsible for fetching a log for
             // daily, weekly, challenge mission completion.
@@ -21,15 +21,15 @@ namespace EpinelPS.LobbyServer.Trigger
             // TODO: Is it necessary to store the entire account history each time a stage
             // is cleared, why does the official server do this?
 
-            var response = new ResSyncTrigger();
+            ResSyncTrigger response = new();
             Console.WriteLine("needs " + req.Seq);
 
             // Look for triggers past that amount
-            var newTriggers = user.Triggers.Where(x => x.Id > req.Seq).ToArray();
+            Database.Trigger[] newTriggers = [.. user.Triggers.Where(x => x.Id > req.Seq)];
 
             // Return all triggers
             int triggerCount = 0;
-            foreach (var item in newTriggers)
+            foreach (Database.Trigger? item in newTriggers)
             {
                 triggerCount++;
 

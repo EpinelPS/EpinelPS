@@ -15,31 +15,28 @@ namespace EpinelPS.LobbyServer.Trigger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainMainQuestReward>();
-            var user = GetUser();
+            ReqObtainMainQuestReward req = await ReadData<ReqObtainMainQuestReward>();
+            User user = GetUser();
 
             ResObtainMainQuestReward response = new();
             List<NetRewardData> rewards = [];
 
-            foreach (var item in user.MainQuestData)
+            foreach (KeyValuePair<int, bool> item in user.MainQuestData)
             {
                 // give only rewards for things that were completed and not claimed already
                 if (!item.Value && req.TidList.Contains(item.Key))
                 {
                     user.MainQuestData[item.Key] = true;
 
-                    var questInfo = GameData.Instance.GetMainQuestByTableId(item.Key);
-                    if (questInfo == null) throw new Exception("failed to lookup quest id " + item.Key);
-                    var reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id);
-                    if (reward == null) throw new Exception("failed to lookup reward id " + questInfo.reward_id);
-
+                    MainQuestCompletionRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest id " + item.Key);
+                    RewardTableRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id) ?? throw new Exception("failed to lookup reward id " + questInfo.reward_id);
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
                 }
             }
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
 
-            foreach (var item in response.Reward.Item)
+            foreach (NetItemData? item in response.Reward.Item)
             {
                 Console.WriteLine($"item: {item.Tid} {item.Isn} {item.Count}");
             }

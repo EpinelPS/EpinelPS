@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.InApp
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqGetInAppShopData>();
+            ReqGetInAppShopData x = await ReadData<ReqGetInAppShopData>();
 
-            var response = new ResGetInAppShopData();
+            ResGetInAppShopData response = new();
 
             response.InAppShopDataList.Add(new NetInAppShopData() { Id = 10001, StartDate = DateTime.Now.Ticks, EndDate = DateTime.Now.AddDays(2).Ticks });
 

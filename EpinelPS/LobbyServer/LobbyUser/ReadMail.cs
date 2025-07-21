@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqReadMail>();
+            ReqReadMail req = await ReadData<ReqReadMail>();
 
-            var r = new ResReadMail();
+            ResReadMail r = new();
             //TODO
             await WriteDataAsync(r);
         }

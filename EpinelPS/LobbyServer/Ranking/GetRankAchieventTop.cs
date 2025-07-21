@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Ranking
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetRankAchievementTop>();
+            ReqGetRankAchievementTop req = await ReadData<ReqGetRankAchievementTop>();
 
-            var response = new ResGetRankAchievementTop();
+            ResGetRankAchievementTop response = new();
 
             // TODO
 

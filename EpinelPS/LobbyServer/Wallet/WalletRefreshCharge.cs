@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Wallet
 {
@@ -7,8 +8,8 @@ namespace EpinelPS.LobbyServer.Wallet
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqRefreshChargeCurrencyData>();
-            var user = GetUser();
+            ReqRefreshChargeCurrencyData req = await ReadData<ReqRefreshChargeCurrencyData>();
+            Database.User user = GetUser();
 
             ResRefreshChargeCurrencyData response = new()
             {
@@ -16,7 +17,7 @@ namespace EpinelPS.LobbyServer.Wallet
                 ChargeCash = new() { Type = (int)CurrencyType.ChargeCash }
             };
 
-            foreach (var item in user.Currency)
+            foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
             {
                 if (item.Key == CurrencyType.FreeCash)
                 {

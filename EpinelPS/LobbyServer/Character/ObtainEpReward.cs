@@ -9,14 +9,14 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainAttractiveReward>();
-            var response = new ResObtainAttractiveReward();
-            var user = GetUser();
+            ReqObtainAttractiveReward req = await ReadData<ReqObtainAttractiveReward>();
+            ResObtainAttractiveReward response = new();
+            User user = GetUser();
 
             // look up ID from name code and level
-            var levelUpRecord = GameData.Instance.AttractiveLevelReward.Where(x => x.Value.attractive_level == req.Lv && x.Value.name_code == req.NameCode).FirstOrDefault();
+            KeyValuePair<int, AttractiveLevelRewardRecord> levelUpRecord = GameData.Instance.AttractiveLevelReward.Where(x => x.Value.attractive_level == req.Lv && x.Value.name_code == req.NameCode).FirstOrDefault();
 
-            foreach (var item in user.BondInfo)
+            foreach (NetUserAttractiveData item in user.BondInfo)
             {
                 if (item.NameCode == req.NameCode)
                 {
@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Character
                     {
                         item.ObtainedRewardLevels.Add(levelUpRecord.Value.id);
 
-                        var reward = GameData.Instance.GetRewardTableEntry(levelUpRecord.Value.reward_id) ?? throw new Exception("failed to get reward");
+                        RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(levelUpRecord.Value.reward_id) ?? throw new Exception("failed to get reward");
                         response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
                         JsonDb.Save();

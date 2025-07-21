@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -7,9 +8,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMailData>();
+            ReqGetMailData req = await ReadData<ReqGetMailData>();
 
-            var r = new ResGetMailData();
+            ResGetMailData r = new();
             r.Mail.Add(new NetUserMailData()
             {
 

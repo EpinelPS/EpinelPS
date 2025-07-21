@@ -7,7 +7,7 @@ namespace EpinelPS.LobbyServer.Inventory
     [PacketPath("/inventory/usepiece")]
     public class UsePiece : LobbyMsgHandler
     {
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         protected override async Task HandleAsync()
         {
@@ -17,11 +17,11 @@ namespace EpinelPS.LobbyServer.Inventory
              * Isn: long value, the item serial number of the piece
              * Count: int value, how many time
              */
-            var req = await ReadData<ReqUsePiece>();
-            var user = GetUser();
-            var response = new ResUsePiece();
+            ReqUsePiece req = await ReadData<ReqUsePiece>();
+            User user = GetUser();
+            ResUsePiece response = new();
 
-            var piece = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new InvalidDataException("cannot find piece with isn " + req.Isn);
+            ItemData piece = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new InvalidDataException("cannot find piece with isn " + req.Isn);
             if (req.Count * 50 > piece.Count) throw new Exception("count mismatch");
 
             piece.Count -= req.Count * 50;
@@ -31,18 +31,18 @@ namespace EpinelPS.LobbyServer.Inventory
                 .FirstOrDefault(x => x.Value.id == piece.ItemType).Value
                 ?? throw new Exception("cannot find piece id " + piece.ItemType);
 
-            var probList = GameData.Instance.GachaGradeProb
+            IEnumerable<GachaListProbRecord> probList = GameData.Instance.GachaGradeProb
                 .Where(x => x.Key == pItem.use_id)
                 .SelectMany(grade => GameData.Instance.GachaListProb.Where(list => list.Value.group_id == grade.Value.gacha_list_id))
                 .Select(i => i.Value);
-            var allCharacters = probList.SelectMany(e => GameData.Instance.CharacterTable.Values.Where(c => c.id == e.gacha_id));
+            IEnumerable<CharacterRecord> allCharacters = probList.SelectMany(e => GameData.Instance.CharacterTable.Values.Where(c => c.id == e.gacha_id));
 
             NetRewardData reward = new();
-            var selectedCharacters = Enumerable.Range(1, req.Count)
+            IEnumerable<CharacterRecord> selectedCharacters = Enumerable.Range(1, req.Count)
                 .Select(_ => SelectRandomCharacter(allCharacters, pItem.id));
 
             int totalBodyLabels = 0;
-            foreach (var character in selectedCharacters)
+            foreach (CharacterRecord? character in selectedCharacters)
             {
                 ItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.piece_id);
 
@@ -87,7 +87,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
                 else
                 {
-                    var csn = user.GenerateUniqueCharacterId();
+                    int csn = user.GenerateUniqueCharacterId();
                     reward.UserCharacters.Add(new NetUserCharacterDefaultData
                     {
                         CostumeId = 0,
@@ -150,10 +150,10 @@ namespace EpinelPS.LobbyServer.Inventory
 
         private CharacterRecord SelectRandomCharacter(IEnumerable<CharacterRecord> characters, int pieceId)
         {
-            var gradeProb = GetPieceGradeProb(pieceId);
-            var rCharacters = characters.Where(c => c.original_rare == "R");
-            var srCharacters = characters.Where(c => c.original_rare == "SR");
-            var ssrCharacters = characters.Where(c => c.original_rare == "SSR");
+            PieceGradeProb gradeProb = GetPieceGradeProb(pieceId);
+            IEnumerable<CharacterRecord> rCharacters = characters.Where(c => c.original_rare == "R");
+            IEnumerable<CharacterRecord> srCharacters = characters.Where(c => c.original_rare == "SR");
+            IEnumerable<CharacterRecord> ssrCharacters = characters.Where(c => c.original_rare == "SSR");
 
             double roll = random.NextDouble() * 100;
 

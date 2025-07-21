@@ -1,14 +1,14 @@
 using EpinelPS.Utils;
-namespace EpinelPS.LobbyServer.Event
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
 {
     [PacketPath("/event/minigame/islandadventure/get/currency")]
     public class MiniGameIslandAdventureCurrency : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMiniGameIslandAdventureCurrency>();
+            ReqGetMiniGameIslandAdventureCurrency req = await ReadData<ReqGetMiniGameIslandAdventureCurrency>();
 
-            var response = new ResGetMiniGameIslandAdventureCurrency
+            ResGetMiniGameIslandAdventureCurrency response = new()
             {
                 Currency = 90000  
             };

@@ -9,12 +9,12 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainLostSectorItem>();
-            var user = GetUser();
+            ReqObtainLostSectorItem req = await ReadData<ReqObtainLostSectorItem>();
+            User user = GetUser();
 
             ResObtainLostSectorItem response = new();
 
-            var lostSectorUser = user.LostSectorData[req.SectorId];
+            LostSectorData lostSectorUser = user.LostSectorData[req.SectorId];
             lostSectorUser.ObtainedRewards++;
 
             if (lostSectorUser.Objects.ContainsKey(req.Object.PositionId))
@@ -27,9 +27,9 @@ namespace EpinelPS.LobbyServer.Lostsector
             MapInfo map = GameData.Instance.MapData[GameData.Instance.LostSector[req.SectorId].field_id];
 
             // find reward
-            var rewardEntry = map.ItemSpawner.Where(x => x.positionId == req.Object.PositionId).FirstOrDefault() ?? throw new Exception("cannot find reward");
+            ItemSpawner rewardEntry = map.ItemSpawner.Where(x => x.positionId == req.Object.PositionId).FirstOrDefault() ?? throw new Exception("cannot find reward");
 
-            var positionReward = GameData.Instance.FieldItems[rewardEntry.itemId];
+            FieldItemRecord positionReward = GameData.Instance.FieldItems[rewardEntry.itemId];
             response.Reward = RewardUtils.RegisterRewardsForUser(user, positionReward.type_value);
             response.BoxCount = lostSectorUser.ObtainedRewards;
 

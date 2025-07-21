@@ -7,12 +7,12 @@ namespace EpinelPS.LobbyServer.Subquest
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSubQuestList>();
-            var user = GetUser();
+            ReqGetSubQuestList req = await ReadData<ReqGetSubQuestList>();
+            Database.User user = GetUser();
 
-            var response = new ResGetSubQuestList();
+            ResGetSubQuestList response = new();
 
-            foreach(var item in user.SubQuestData)
+            foreach(KeyValuePair<int, bool> item in user.SubQuestData)
             {
                 response.SubquestList.Add(new NetSubQuestData(){
                     CreatedAt = DateTime.UtcNow.Ticks, // TODO does this matter

@@ -10,10 +10,10 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearLostSectorStage>();
-            var user = GetUser();
+            ReqClearLostSectorStage req = await ReadData<ReqClearLostSectorStage>();
+            User user = GetUser();
 
-            var response = new ResClearLostSectorStage();
+            ResClearLostSectorStage response = new();
 
             if (req.BattleResult == 1)
             {
@@ -27,14 +27,14 @@ namespace EpinelPS.LobbyServer.Lostsector
         public static void ClearLostSectorStage(User user, int stageId)
         {
             // get lost sector id from stage id
-            var sector = GameData.Instance.LostSectorStages[stageId].sector;
+            int sector = GameData.Instance.LostSectorStages[stageId].sector;
 
             // get position ID from stage id in map data
 
-            var sectorData = GameData.Instance.LostSector[sector];
+            LostSectorRecord sectorData = GameData.Instance.LostSector[sector];
             MapInfo mapInfo = GameData.Instance.MapData[sectorData.field_id];
 
-            var stage = mapInfo.StageSpawner.Where(x => x.stageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
+            StageSpawner stage = mapInfo.StageSpawner.Where(x => x.stageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
 
             user.LostSectorData[sector].ClearedStages.Add(stage.positionId, stageId);
         }

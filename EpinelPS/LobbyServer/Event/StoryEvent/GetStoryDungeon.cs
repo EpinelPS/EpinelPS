@@ -1,16 +1,16 @@
 ﻿using EpinelPS.Utils;
 using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Event.EventStory
+namespace EpinelPS.LobbyServer.Event.StoryEvent
 {
     [PacketPath("/event/storydungeon/get")]
     public class GetStoryDungeon : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqStoryDungeonEventData>();
-            var evid = req.EventId;
-			var user = GetUser();
+            ReqStoryDungeonEventData req = await ReadData<ReqStoryDungeonEventData>();
+            int evid = req.EventId;
+            User user = GetUser();
 
 
             if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
@@ -18,14 +18,16 @@ namespace EpinelPS.LobbyServer.Event.EventStory
                 eventData = new();
             }
 
-            var response = new ResStoryDungeonEventData();
-            response.RemainTicket = 5;
+            ResStoryDungeonEventData response = new()
+            {
+                RemainTicket = 5,
 
-			response.TeamData = new NetUserTeamData()
-			{
-				LastContentsTeamNumber = 1,
-				Type = 20
-			};
+                TeamData = new NetUserTeamData()
+                {
+                    LastContentsTeamNumber = 1,
+                    Type = 20
+                }
+            };
             response.LastClearedEventStageList.Add(new NetLastClearedEventStageData()
             {
                 DifficultyId = eventData.Diff,

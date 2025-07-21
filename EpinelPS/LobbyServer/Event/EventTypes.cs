@@ -1,60 +1,57 @@
 namespace EpinelPS.LobbyServer.Event
 {
-    public static class EventConstants 
+    public enum EventType : int
     {
-		//bc enum needs casting in each entry in list events and get joined event
-		//and casting for each single entry would be more tedious that placing a variable here
-		//if there is a way to plainly write event type without casting to int or this tower of variables please do so 
-        public const int None = 0;
-        public const int DailyMissionEvent = 1;
-        public const int LoginEvent = 2;
-        public const int ViewShortCut = 3;
-        public const int CooperationEvent = 4;
-        public const int StoryEvent = 5;
-        public const int PickupGachaEvent = 6;
-        public const int PollEvent = 7;
-        public const int ComeBackUserEvent = 8;
-        public const int EventPass = 9;
-        public const int FieldHubEvent = 10;
-        public const int ShopEvent = 11;
-        public const int MissionEvent = 12;
-        public const int ChargeGachaEvent = 13;
-        public const int MiniGameSortOut = 14;
-        public const int CharacterSkillResetEvent = 15;
-        public const int EventQuest = 16;
-        public const int RewardUpEvent = 17;
-        public const int SDBattleEvent = 18;
-        public const int TextAdventure = 19;
-        public const int ChallengeModeEvent = 20;
-        public const int DailyFreeGachaEvent = 21;
-        public const int BoxGachaEvent = 22;
-        public const int DiceEvent = 23;
-        public const int BBQTycoon = 24;
-        public const int CE002MiniGame = 25;
-        public const int TriggerMissionEventReward = 26;
-        public const int ArenaRookieGroupShuffle = 27;
-        public const int ArenaSpecialGroupShuffle = 28;
-        public const int NKSMiniGame = 29;
-        public const int DatingSimulator = 30;
-        public const int DessertRush = 31;
-        public const int CE003MiniGame = 32;
-        public const int TowerDefense = 33;
-        public const int EventPlaySoda = 34;
-        public const int IslandAdventure = 35;
-        public const int MiniGameDD = 36;
-        public const int CE004MiniGame = 37;
-        public const int MVGMiniGame = 38;
-		public const int DragonDungeonRunMiniGame = 39;
-        public const int NewPlayerLottery = 40;
-        public const int PirateCafe = 41;
-        public const int CEEvaMiniGame = 42;
-        public const int BubbleMarchMiniGame = 43;
-        public const int CE006BossChallengeMiniGame = 44;
-        public const int SupportCharacterEvent = 45;
-        public const int GachaBoard = 46;
-        public const int FreeRewardPass = 47;
-        public const int GachaPayback = 48;
-        public const int FieldCollectEvent = 49;
-        public const int MiniGameBTG = 50;
+        None = 0,
+        DailyMissionEvent = 1,
+        LoginEvent = 2,
+        ViewShortCut = 3,
+        CooperationEvent = 4,
+        StoryEvent = 5,
+        PickupGachaEvent = 6,
+        PollEvent = 7,
+        ComeBackUserEvent = 8,
+        EventPass = 9,
+        FieldHubEvent = 10,
+        ShopEvent = 11,
+        MissionEvent = 12,
+        ChargeGachaEvent = 13,
+        MiniGameSortOut = 14,
+        CharacterSkillResetEvent = 15,
+        EventQuest = 16,
+        RewardUpEvent = 17,
+        SDBattleEvent = 18,
+        TextAdventure = 19,
+        ChallengeModeEvent = 20,
+        DailyFreeGachaEvent = 21,
+        BoxGachaEvent = 22,
+        DiceEvent = 23,
+        BBQTycoon = 24,
+        CE002MiniGame = 25,
+        TriggerMissionEventReward = 26,
+        ArenaRookieGroupShuffle = 27,
+        ArenaSpecialGroupShuffle = 28,
+        NKSMiniGame = 29,
+        DatingSimulator = 30,
+        DessertRush = 31,
+        CE003MiniGame = 32,
+        TowerDefense = 33,
+        EventPlaySoda = 34,
+        IslandAdventure = 35,
+        MiniGameDD = 36,
+        CE004MiniGame = 37,
+        MVGMiniGame = 38,
+        DragonDungeonRunMiniGame = 39,
+        NewPlayerLottery = 40,
+        PirateCafe = 41,
+        CEEvaMiniGame = 42,
+        BubbleMarchMiniGame = 43,
+        CE006BossChallengeMiniGame = 44,
+        SupportCharacterEvent = 45,
+        GachaBoard = 46,
+        FreeRewardPass = 47,
+        GachaPayback = 48,
+        FieldCollectEvent = 49,
+        MiniGameBTG = 50
     }
 }

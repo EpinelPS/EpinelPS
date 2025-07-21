@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Liberate
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetLiberateProgressList>();
-            var user = GetUser();
+            ReqGetLiberateProgressList req = await ReadData<ReqGetLiberateProgressList>();
+            Database.User user = GetUser();
 
-            var response = new ResGetLiberateProgressList();
+            ResGetLiberateProgressList response = new();
 
             // TODO
 

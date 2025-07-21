@@ -9,18 +9,18 @@ namespace EpinelPS.LobbyServer.Trigger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqFinMainQuest>();
-            var user = GetUser();
+            ReqFinMainQuest req = await ReadData<ReqFinMainQuest>();
+            User user = GetUser();
             Console.WriteLine("Complete quest: " + req.Tid);
             user.SetQuest(req.Tid, false);
 
-            var completedQuest = GameData.Instance.GetMainQuestByTableId(req.Tid) ?? throw new Exception("Quest not found");
+            MainQuestCompletionRecord completedQuest = GameData.Instance.GetMainQuestByTableId(req.Tid) ?? throw new Exception("Quest not found");
 
             user.AddTrigger(TriggerType.CampaignClear, 1, completedQuest.condition_id);
             user.AddTrigger(TriggerType.MainQuestClear, 1, completedQuest.id);
 
             JsonDb.Save();
-            var response = new ResFinMainQuest();
+            ResFinMainQuest response = new();
             await WriteDataAsync(response);
         }
     }

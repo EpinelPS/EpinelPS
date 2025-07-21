@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.FavoriteItem
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListFavoriteItem>();
-            var user = GetUser();
+            ReqListFavoriteItem req = await ReadData<ReqListFavoriteItem>();
+            Database.User user = GetUser();
 
-            var response = new ResListFavoriteItem();
+            ResListFavoriteItem response = new();
 
             await WriteDataAsync(response);
         }

@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetAllFeatureFlags>();
+            ReqGetAllFeatureFlags req = await ReadData<ReqGetAllFeatureFlags>();
 
-            var response = new ResGetAllFeatureFlags();
+            ResGetAllFeatureFlags response = new();
             response.Flags.AddRange([
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.UnionRaid, IsOpen = true },
                     new NetFeatureFlag() { FeatureKind = NetFeatureKind.CooperationEvent, IsOpen = true },

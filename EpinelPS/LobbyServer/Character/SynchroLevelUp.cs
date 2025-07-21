@@ -9,17 +9,17 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSynchroLevelUp>();
-            var user = GetUser();
+            ReqSynchroLevelUp req = await ReadData<ReqSynchroLevelUp>();
+            User user = GetUser();
 
-            var response = new ResSynchroLevelUp();
-            var data = GameData.Instance.GetCharacterLevelUpData();
+            ResSynchroLevelUp response = new();
+            Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
 
 
             int requiredCredit = 0;
             int requiredBattleData = 0;
             int requiredCoreDust = 0;
-            var levelUpData = data[user.SynchroDeviceLevel + 1];
+            CharacterLevelData levelUpData = data[user.SynchroDeviceLevel + 1];
             requiredCredit += levelUpData.gold;
             requiredBattleData += levelUpData.character_exp;
             requiredCoreDust += levelUpData.character_exp2;
@@ -41,7 +41,7 @@ namespace EpinelPS.LobbyServer.Character
             }
 
 
-            foreach (var currency in user.Currency)
+            foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
             {
                 response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
             }

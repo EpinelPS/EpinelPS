@@ -13,7 +13,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Step 1: Filter for field declarations with attributes
-        var fieldDeclarations = context.SyntaxProvider
+        IncrementalValueProvider<ImmutableArray<LoadFieldInfo?>> fieldDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: static (node, _) => node is FieldDeclarationSyntax fds && fds.AttributeLists.Count > 0,
                 transform: static (ctx, _) => GetTargetFieldInfo(ctx)
@@ -25,7 +25,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         // Step 2: Generate the code
         context.RegisterSourceOutput(fieldDeclarations, (spc, fieldInfos) =>
         {
-            var source = GenerateInitializerCode(fieldInfos!);
+            string source = GenerateInitializerCode(fieldInfos!);
             spc.AddSource("GameDataInitializer.g.cs", SourceText.From(source, Encoding.UTF8));
         });
     }
@@ -35,7 +35,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         if (context.Node is not FieldDeclarationSyntax fieldDecl)
             return null;
 
-        var variable = fieldDecl.Declaration.Variables.FirstOrDefault();
+        VariableDeclaratorSyntax? variable = fieldDecl.Declaration.Variables.FirstOrDefault();
         if (variable == null)
             return null;
 
@@ -45,7 +45,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         if (symbol.Type is not INamedTypeSymbol namedSymbol)
             return null;
 
-        foreach (var attr in symbol.GetAttributes())
+        foreach (AttributeData attr in symbol.GetAttributes())
         {
 
             if (attr.ConstructorArguments.Length == 2)
@@ -69,7 +69,7 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
 
     private static string GenerateInitializerCode(ImmutableArray<LoadFieldInfo> fieldInfos)
     {
-        var sb = new StringBuilder();
+        StringBuilder sb = new();
         sb.AppendLine("using System.Collections.Generic;");
         sb.AppendLine("using System.Threading.Tasks;");
         sb.AppendLine();
@@ -81,9 +81,9 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
         sb.AppendLine("\tpublic static async Task InitializeGameData(IProgress<double> progress = null)");
         sb.AppendLine("\t{");
 
-        foreach (var info in fieldInfos)
+        foreach (LoadFieldInfo info in fieldInfos)
         {
-            var tempVar = $"data_{info.FieldName}";
+            string tempVar = $"data_{info.FieldName}";
             sb.AppendLine($"\t\tvar {tempVar} = await {info.ContainingClass}.Instance.LoadZip<{info.RecordTypeName}>(\"{info.FileName}\", progress);");
             sb.AppendLine($"\t\tforeach (var obj in {tempVar})");
             sb.AppendLine("\t\t{");

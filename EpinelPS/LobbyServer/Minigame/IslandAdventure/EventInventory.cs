@@ -1,15 +1,15 @@
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Event
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
 {
     [PacketPath("/event/minigame/islandadventure/get/inventory")]
     public class MiniGameIslandAdventureInventory : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMiniGameIslandAdventureInventory>();
+            ReqGetMiniGameIslandAdventureInventory req = await ReadData<ReqGetMiniGameIslandAdventureInventory>();
 
-            var response = new ResGetMiniGameIslandAdventureInventory
+            ResGetMiniGameIslandAdventureInventory response = new()
             {
 
             };

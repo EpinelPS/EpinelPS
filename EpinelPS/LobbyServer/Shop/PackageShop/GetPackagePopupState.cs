@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Shop.PackageShop
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetPopupPackageState>();
+            ReqGetPopupPackageState req = await ReadData<ReqGetPopupPackageState>();
 
-            var response = new ResGetPopupPackageState();
+            ResGetPopupPackageState response = new();
 
             // disable ads
-            foreach (var item in GameData.Instance.PopupPackages)
+            foreach (KeyValuePair<int, ProductOfferRecord> item in GameData.Instance.PopupPackages)
                 response.AppearedList.Add(item.Key);
 
             await WriteDataAsync(response);

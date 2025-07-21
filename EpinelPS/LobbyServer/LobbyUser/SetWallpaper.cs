@@ -8,9 +8,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetWallpaper>();
-            var response = new ResSetWallpaper();
-            var user = GetUser();
+            ReqSetWallpaper req = await ReadData<ReqSetWallpaper>();
+            ResSetWallpaper response = new();
+            User user = GetUser();
             user.WallpaperList = [.. req.WallpaperList];
             user.WallpaperBackground = [.. req.WallpaperBackgroundList];
             user.WallpaperFavoriteList = [.. req.WallpaperFavoriteList];

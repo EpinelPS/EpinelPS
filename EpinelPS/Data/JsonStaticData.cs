@@ -95,8 +95,8 @@ namespace EpinelPS.Data
         public int shortcut_value;
         public string name_localkey = "";
         public string description_localkey = "";
-        public int next_main_quest_id = 0;
-        public int reward_id = 0;
+        public int next_main_quest_id;
+        public int reward_id;
         public ScenarioType scenario_type;
         public string episode_id = "";
         public int target_chapter_id;
@@ -156,7 +156,7 @@ namespace EpinelPS.Data
     public class ClearedTutorialData
     {
         public int id;
-        public int VersionGroup = 0;
+        public int VersionGroup;
         public int GroupId;
         public int ClearedStageId;
         public int NextId;
@@ -176,15 +176,15 @@ namespace EpinelPS.Data
         /// <summary>
         /// amount of credits required
         /// </summary>
-        public int gold = 0;
+        public int gold;
         /// <summary>
         /// amount of battle data required
         /// </summary>
-        public int character_exp = 0;
+        public int character_exp;
         /// <summary>
         /// amount of core dust required
         /// </summary>
-        public int character_exp2 = 0;
+        public int character_exp2;
     }
     public class TacticAcademyLessonReward
     {
@@ -854,7 +854,7 @@ namespace EpinelPS.Data
         public int id;
         public int sector;
         public int exploration_reward;
-        public string field_id;
+        public string field_id { get; set; } = "";
         public int sector_clear_condition;
         public ContentOpenType open_condition_type;
         public int open_condition_value;

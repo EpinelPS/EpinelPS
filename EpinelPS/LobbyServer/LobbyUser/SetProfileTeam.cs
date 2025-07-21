@@ -13,17 +13,17 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetProfileTeam>();
-            var user = GetUser();
+            ReqSetProfileTeam req = await ReadData<ReqSetProfileTeam>();
+            User user = GetUser();
             for (int i = 0; i < req.Team.Slots.Count - 1; i++)
             {
-                var slot = req.Team.Slots[i];
+                NetTeamSlot slot = req.Team.Slots[i];
 
                 user.RepresentationTeamDataNew[i] = slot.Value;
             }
 
             JsonDb.Save();
-            var response = new ResSetProfileTeam();
+            ResSetProfileTeam response = new();
 
             await WriteDataAsync(response);
         }

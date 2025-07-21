@@ -9,13 +9,13 @@ namespace EpinelPS.LobbyServer.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterMessengerDialog>();
-            var user = GetUser();
+            ReqEnterMessengerDialog req = await ReadData<ReqEnterMessengerDialog>();
+            User user = GetUser();
 
-            var response = new ResEnterMessengerDialog();
+            ResEnterMessengerDialog response = new();
 
-            var opener = GameData.Instance.MessageConditions[req.Tid];
-            var conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.tid && x.Value.is_opener).First();
+            MessengerMsgConditionRecord opener = GameData.Instance.MessageConditions[req.Tid];
+            KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.tid && x.Value.is_opener).First();
             
             response.Message = user.CreateMessage(conversation.Value);
 

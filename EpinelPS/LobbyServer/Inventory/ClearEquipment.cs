@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Inventory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearEquipment>();
-            var user = GetUser();
+            ReqClearEquipment req = await ReadData<ReqClearEquipment>();
+            User user = GetUser();
 
-            var response = new ResClearEquipment();
+            ResClearEquipment response = new();
 
-            foreach (var item in user.Items.ToArray())
+            foreach (ItemData item in user.Items.ToArray())
             {
                 if (item.Isn == req.Isn)
                 {

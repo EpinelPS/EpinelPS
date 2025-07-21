@@ -4,13 +4,12 @@ namespace EpinelPS.Utils
 {
     public class Rng
     {
-        private static Random random = new Random();
+        private static readonly Random random = new();
 
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string([.. Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)])]);
         }
 
         public static int RandomId()
@@ -26,7 +25,7 @@ namespace EpinelPS.Utils
         public static RandomItemRecord PickWeightedItem(RandomItemRecord[] records)
         {
             int totalWeight = 0;
-            foreach (var item in records)
+            foreach (RandomItemRecord item in records)
                 totalWeight += item.ratio;
 
             int randomNumber = random.Next(0, totalWeight);

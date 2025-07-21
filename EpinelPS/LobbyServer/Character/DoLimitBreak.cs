@@ -10,17 +10,17 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             // Read the incoming request that contains the current CSN and ISN
-            var req = await ReadData<ReqCharacterUpgrade>(); // Contains csn and isn (read-only)
-            var response = new ResCharacterUpgrade();
-            var user = GetUser();
+            ReqCharacterUpgrade req = await ReadData<ReqCharacterUpgrade>(); // Contains csn and isn (read-only)
+            ResCharacterUpgrade response = new();
+            User user = GetUser();
 
             // Get all character data from the game's character table
-            var fullchardata = GameData.Instance.CharacterTable.Values.ToList();
+            List<CharacterRecord> fullchardata = [.. GameData.Instance.CharacterTable.Values];
 
-            var targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
+            Database.Character targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
 
             // Find the element with the current csn from the request
-            var currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid) ?? throw new NullReferenceException();
+            CharacterRecord currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid) ?? throw new NullReferenceException();
 
             if (currentCharacter != null && targetCharacter != null)
             {
@@ -33,7 +33,7 @@ namespace EpinelPS.LobbyServer.Character
 
                 // Find a new CSN based on the `name_code` of the current character and `grade_core_id + 1`
                 // For some reason, there is a seperate character for each limit/core break value.
-                var newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
+                CharacterRecord? newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
 
 
                 if (newCharacter != null)
@@ -55,7 +55,7 @@ namespace EpinelPS.LobbyServer.Character
                     };
 
                     // remove spare body item
-                    var bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
+                    ItemData bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
                     user.RemoveItemBySerialNumber(req.Isn, 1);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
 

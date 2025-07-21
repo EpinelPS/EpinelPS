@@ -7,12 +7,14 @@ namespace EpinelPS.LobbyServer.Soloraid
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSoloRaidPeriod>();
+            ReqGetSoloRaidPeriod req = await ReadData<ReqGetSoloRaidPeriod>();
 
-            var response = new ResGetSoloRaidPeriod();
-            response.Period = new NetSoloRaidPeriodData
+            ResGetSoloRaidPeriod response = new()
             {
+                Period = new NetSoloRaidPeriodData
+                {
 
+                }
             };
             // TODO
             await WriteDataAsync(response);

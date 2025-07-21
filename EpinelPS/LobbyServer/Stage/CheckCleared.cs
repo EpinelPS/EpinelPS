@@ -7,14 +7,14 @@ namespace EpinelPS.LobbyServer.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCheckStageClear>();
+            ReqCheckStageClear req = await ReadData<ReqCheckStageClear>();
 
-            var response = new ResCheckStageClear();
-            var user = GetUser();
+            ResCheckStageClear response = new();
+            Database.User user = GetUser();
 
-            foreach (var fields in user.FieldInfoNew)
+            foreach (KeyValuePair<string, Database.FieldInfoNew> fields in user.FieldInfoNew)
             {
-                foreach (var stages in fields.Value.CompletedStages)
+                foreach (int stages in fields.Value.CompletedStages)
                 {
                     if (req.StageIds.Contains(stages))
                         response.ClearedStageIds.Add(stages);

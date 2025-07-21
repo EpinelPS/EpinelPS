@@ -7,16 +7,16 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqInterceptAnomalousData>();
+            ReqInterceptAnomalousData req = await ReadData<ReqInterceptAnomalousData>();
 
             // TODO
 
-            var response = new ResInterceptAnomalousData
+            ResInterceptAnomalousData response = new()
             {
                 InterceptAnomalousManagerId = 101,
                 RemainingTickets = 5
             };
-			response.ClearedInterceptAnomalousIds.Add(new[] { 1, 2, 3, 4, 5 });
+			response.ClearedInterceptAnomalousIds.Add([1, 2, 3, 4, 5]);
             await WriteDataAsync(response);
         }
     }

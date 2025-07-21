@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqAcquireUserTitle>();
-            var user = GetUser();
+            ReqAcquireUserTitle req = await ReadData<ReqAcquireUserTitle>();
+            Database.User user = GetUser();
 
-            var response = new ResAcquireUserTitle();
+            ResAcquireUserTitle response = new();
             
             // TODO
 

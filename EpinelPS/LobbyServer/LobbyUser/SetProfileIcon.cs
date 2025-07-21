@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetProfileIcon>();
-            var user = GetUser();
+            ReqSetProfileIcon req = await ReadData<ReqSetProfileIcon>();
+            User user = GetUser();
             user.ProfileIconId = req.Icon;
             user.ProfileIconIsPrism = req.IsPrism;
             JsonDb.Save();
-            var response = new ResSetProfileIcon();
+            ResSetProfileIcon response = new();
 
             await WriteDataAsync(response);
         }

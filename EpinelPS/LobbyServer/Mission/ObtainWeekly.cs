@@ -9,16 +9,16 @@ namespace EpinelPS.LobbyServer.Mission
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainWeeklyMissionReward>();
-            var user = GetUser();
+            ReqObtainWeeklyMissionReward req = await ReadData<ReqObtainWeeklyMissionReward>();
+            User user = GetUser();
 
-            var response = new ResObtainWeeklyMissionReward();
+            ResObtainWeeklyMissionReward response = new();
 
             List<NetRewardData> rewards = [];
 
             int total_points = 0;
 
-            foreach (var item in req.TidList)
+            foreach (int item in req.TidList)
             {
                 if (user.WeeklyResetableData.CompletedWeeklyMissions.Contains(item)) continue;
 
@@ -29,7 +29,7 @@ namespace EpinelPS.LobbyServer.Mission
                 if (key.reward_id != 0)
                 {
                     // Actual reward
-                    var rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                    RewardTableRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
                 }
                 else

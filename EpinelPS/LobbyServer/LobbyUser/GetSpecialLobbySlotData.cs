@@ -12,9 +12,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSpecialLobbySlotData>();
+            ReqGetSpecialLobbySlotData req = await ReadData<ReqGetSpecialLobbySlotData>();
 
-            var response = new ResGetSpecialLobbySlotData();
+            ResGetSpecialLobbySlotData response = new();
             // TODO
             await WriteDataAsync(response);
         }

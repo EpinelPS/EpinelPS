@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Inventory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqUseRandomBox>();
-            var user = GetUser();
+            ReqUseRandomBox req = await ReadData<ReqUseRandomBox>();
+            User user = GetUser();
 
-            var response = new ResUseRandomBox();
+            ResUseRandomBox response = new();
 
-            var box = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find box with isn " + req.Isn);
+            ItemData box = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find box with isn " + req.Isn);
             if (req.Count > box.Count) throw new Exception("count mismatch");
 
             box.Count -= req.Count;

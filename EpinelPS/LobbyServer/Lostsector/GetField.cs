@@ -7,17 +7,17 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetLostSectorFieldData>();
-            var user = GetUser();
+            ReqGetLostSectorFieldData req = await ReadData<ReqGetLostSectorFieldData>();
+            Database.User user = GetUser();
 
-            var f = user.LostSectorData[req.SectorId];
+            Database.LostSectorData f = user.LostSectorData[req.SectorId];
             ResGetLostSectorFieldData response = new()
             {
                 Field = new NetFieldObjectData(),
                 Json = f.Json
             };
 
-            foreach (var item in f.Objects)
+            foreach (KeyValuePair<string, NetLostSectorFieldObject> item in f.Objects)
                 response.Field.Objects.Add(new NetFieldObject()
                 {
                     ActionAt = item.Value.ActionAt,
@@ -27,7 +27,7 @@ namespace EpinelPS.LobbyServer.Lostsector
                 });
 
 
-            foreach (var item in f.ClearedStages)
+            foreach (KeyValuePair<string, int> item in f.ClearedStages)
                 response.Field.Stages.Add(new NetFieldStageData()
                 {
                     PositionId = item.Key,
@@ -35,8 +35,8 @@ namespace EpinelPS.LobbyServer.Lostsector
                 });
 
             // 10: lost sector team
-            if (user.UserTeams.ContainsKey(10))
-                response.Team = user.UserTeams[10];
+            if (user.UserTeams.TryGetValue(10, out NetUserTeamData? value))
+                response.Team = value;
             await WriteDataAsync(response);
         }
     }

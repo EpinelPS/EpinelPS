@@ -9,31 +9,31 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCharacterSkillLevelUp>();
-            var user = GetUser();
-            var response = new ResCharacterSkillLevelUp();
-            
-            var character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
+            ReqCharacterSkillLevelUp req = await ReadData<ReqCharacterSkillLevelUp>();
+            User user = GetUser();
+            ResCharacterSkillLevelUp response = new();
 
-            var charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
-            var skillIdMap = new Dictionary<int, int>
+            Database.Character character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
+
+            CharacterRecord charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
+            Dictionary<int, int> skillIdMap = new()
             {
                 { 1, charRecord.ulti_skill_id },
                 { 2, charRecord.skill1_id },
                 { 3, charRecord.skill2_id }
             };
-            var skillLevelMap = new Dictionary<int, int>
+            Dictionary<int, int> skillLevelMap = new()
             {
                 { 1, character.UltimateLevel },
                 { 2, character.Skill1Lvl },
                 { 3, character.Skill2Lvl }
             };
-            var skillRecord = GameData.Instance.skillInfoTable.Values.FirstOrDefault(s => s.id == skillIdMap[req.Category] + (skillLevelMap[req.Category] - 1)) ?? throw new Exception("cannot find character skill record");
-            var costRecord = GameData.Instance.costTable.Values.FirstOrDefault(c => c.id == skillRecord.level_up_cost_id) ?? throw new Exception("cannot find character cost record");
+            SkillInfoRecord skillRecord = GameData.Instance.skillInfoTable.Values.FirstOrDefault(s => s.id == skillIdMap[req.Category] + (skillLevelMap[req.Category] - 1)) ?? throw new Exception("cannot find character skill record");
+            CostRecord costRecord = GameData.Instance.costTable.Values.FirstOrDefault(c => c.id == skillRecord.level_up_cost_id) ?? throw new Exception("cannot find character cost record");
 
-            foreach (var cost in costRecord.costs.Where(i => i.item_type != "None"))
+            foreach (CostData? cost in costRecord.costs.Where(i => i.item_type != "None"))
             {
-                var item = user.Items.FirstOrDefault(i => i.ItemType == cost.item_id) ?? throw new NullReferenceException();
+                ItemData item = user.Items.FirstOrDefault(i => i.ItemType == cost.item_id) ?? throw new NullReferenceException();
 
                 item.Count -= cost.item_value;
 
@@ -50,7 +50,7 @@ namespace EpinelPS.LobbyServer.Character
                 });
             }
 
-            var newChar = new NetUserCharacterDefaultData
+            NetUserCharacterDefaultData newChar = new()
             {
                 CostumeId = character.CostumeId,
                 Csn = character.Csn,

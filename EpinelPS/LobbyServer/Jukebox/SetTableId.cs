@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.Jukebox
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetJukeboxBgmTableId>();
-            var user = GetUser();
+            ReqSetJukeboxBgmTableId req = await ReadData<ReqSetJukeboxBgmTableId>();
+            User user = GetUser();
 
-            var response = new ResSetJukeboxBgmTableId();
+            ResSetJukeboxBgmTableId response = new();
 
             if (req.Location == NetJukeboxLocation.CommanderRoom)
             {

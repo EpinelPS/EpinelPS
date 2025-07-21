@@ -14,11 +14,11 @@ namespace EpinelPS.LobbyServer.Inventory
              * Isn: long value
              * Count: int value, how many items to use
             */
-            var req = await ReadData<ReqUseTimeReward>();
-            var user = GetUser();
-            var response = new ResUseTimeReward();
+            ReqUseTimeReward req = await ReadData<ReqUseTimeReward>();
+            User user = GetUser();
+            ResUseTimeReward response = new();
 
-            var timeReward = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find time reward with isn " + req.Isn);
+            ItemData timeReward = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find time reward with isn " + req.Isn);
             if (req.Count > timeReward.Count) throw new Exception("count mismatch");
 
             timeReward.Count -= req.Count;

@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using static EpinelPS.LobbyServer.Event.EventConstants;
 namespace EpinelPS.LobbyServer.Event
 {
     [PacketPath("/event/getjoinedevent")]
@@ -7,16 +6,16 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetJoinedEvent>();
-			//types are defined in EventTypes.cs
-            var response = new ResGetJoinedEvent();
+            ReqGetJoinedEvent req = await ReadData<ReqGetJoinedEvent>();
+            //types are defined in EventTypes.cs
+            ResGetJoinedEvent response = new();
 
             response.EventWithJoinData.Add(new NetEventWithJoinData()
             {
                 EventData = new NetEventData()
                 {
                 Id = 20001,
-                EventSystemType = PickupGachaEvent,
+                EventSystemType = (int)EventType.PickupGachaEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -31,7 +30,7 @@ namespace EpinelPS.LobbyServer.Event
                 EventData = new NetEventData()
                 {
                 Id = 70077,
-                EventSystemType = PickupGachaEvent,
+                EventSystemType = (int)EventType.PickupGachaEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -44,7 +43,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 10046,
-					EventSystemType = LoginEvent,
+					EventSystemType = (int)EventType.LoginEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -57,7 +56,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 40066,
-					EventSystemType = StoryEvent,
+					EventSystemType = (int)EventType.StoryEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -70,7 +69,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 60066,
-					EventSystemType = ChallengeModeEvent,
+					EventSystemType = (int)EventType.ChallengeModeEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -83,7 +82,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 70078,
-					EventSystemType = PickupGachaEvent,
+					EventSystemType = (int)EventType.PickupGachaEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -96,7 +95,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 70079,
-					EventSystemType = PickupGachaEvent,
+					EventSystemType = (int)EventType.PickupGachaEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,

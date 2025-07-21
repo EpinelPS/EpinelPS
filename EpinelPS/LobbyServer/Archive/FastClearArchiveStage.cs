@@ -7,29 +7,22 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqFastClearArchiveStage>(); 
-            var evid = req.EventId;
-            var stgid = req.StageId;
+            ReqFastClearArchiveStage req = await ReadData<ReqFastClearArchiveStage>();
+            int evid = req.EventId;
+            int stgid = req.StageId;
 
-            var user = GetUser();
-
-            if (user == null)
-            {
-                throw new Exception("User not found.");
-            }
+            User user = GetUser() ?? throw new Exception("User not found.");
 
             // Check if the EventInfo exists for the given EventId
-            if (!user.EventInfo.ContainsKey(evid))
+            if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
             {
                 throw new Exception($"Event with ID {evid} not found.");
             }
-
-            var eventData = user.EventInfo[evid];
             // Update the LastStage in EventData
             eventData.LastStage = stgid;
 
 			JsonDb.Save();
-            var response = new ResFastClearArchiveStage();
+            ResFastClearArchiveStage response = new();
 
             // Send the response back to the client
             await WriteDataAsync(response);

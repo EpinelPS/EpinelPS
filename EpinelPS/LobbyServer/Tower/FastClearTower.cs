@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Tower
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqFastClearTower>();
+            ReqFastClearTower req = await ReadData<ReqFastClearTower>();
 
-            var response = new ResFastClearTower();
+            ResFastClearTower response = new();
 
             await WriteDataAsync(response);
         }

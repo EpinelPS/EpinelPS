@@ -150,7 +150,7 @@ public partial class MainView : UserControl
         SetLoadingScreenVisible(true);
         try
         {
-            var res = await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
+            ServerSwitchResult res = await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
 
             if (!res.IsSupported)
             {
@@ -183,12 +183,12 @@ public partial class MainView : UserControl
 
     private async void BtnSelectGamePath_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        var topLevel = TopLevel.GetTopLevel(this);
+        TopLevel? topLevel = TopLevel.GetTopLevel(this);
 
         if (topLevel != null)
         {
             // Start async operation to open the dialog.
-            var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            System.Collections.Generic.IReadOnlyList<IStorageFolder> files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
             {
                 Title = "Select game path, with launcher and game folder",
                 AllowMultiple = false

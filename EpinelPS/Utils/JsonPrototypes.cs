@@ -1,4 +1,4 @@
-﻿namespace EpinelPS
+﻿namespace EpinelPS.Utils
 {
     public class ChannelInfo
     {

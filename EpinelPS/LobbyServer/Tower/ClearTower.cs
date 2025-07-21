@@ -9,10 +9,10 @@ namespace EpinelPS.LobbyServer.Tower
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearTower>();
+            ReqClearTower req = await ReadData<ReqClearTower>();
 
-            var response = new ResClearTower();
-            var user = GetUser();
+            ResClearTower response = new();
+            User user = GetUser();
 
             if (req.BattleResult == 1)
             {
@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Tower
 
         public static ResClearTower CompleteTower(User user, int TowerId)
         {
-            var response = new ResClearTower();
+            ResClearTower response = new();
 
             if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with id " + TowerId);
 
@@ -63,7 +63,7 @@ namespace EpinelPS.LobbyServer.Tower
                 user.AddTrigger(TriggerType.TowerBasicClear, TowerId);
             }
 
-            var reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
+            RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
 

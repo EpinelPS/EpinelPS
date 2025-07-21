@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.PartyMatch
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListInvitation>();
-            var user = GetUser();
+            ReqListInvitation req = await ReadData<ReqListInvitation>();
+            Database.User user = GetUser();
 
-            var response = new ResListInvitation();
+            ResListInvitation response = new();
             // TODO
             await WriteDataAsync(response);
         }

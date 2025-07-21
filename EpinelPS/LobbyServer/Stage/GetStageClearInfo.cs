@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetStageClearInfo>();
-            var response = new ResGetStageClearInfo();
-            var user = GetUser();
+            ReqGetStageClearInfo req = await ReadData<ReqGetStageClearInfo>();
+            ResGetStageClearInfo response = new();
+            Database.User user = GetUser();
 
             response.Historys.AddRange(user.StageClearHistorys);
             

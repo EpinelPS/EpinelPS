@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterLostSectorStage>();
+            ReqEnterLostSectorStage req = await ReadData<ReqEnterLostSectorStage>();
 
-            var response = new ResEnterLostSectorStage();
+            ResEnterLostSectorStage response = new();
 
             await WriteDataAsync(response);
         }

@@ -10,13 +10,11 @@ namespace EpinelPS.Utils
     {
         public static async Task<PacketDecryptResponse> DecryptOrReturnContentAsync(HttpContext ctx)
         {
-            byte[] bin = [];
-
             using MemoryStream buffer = new();
 
-            var stream = ctx.Request.Body;
+            Stream stream = ctx.Request.Body;
 
-            var encoding = ctx.Request.Headers.ContentEncoding.FirstOrDefault();
+            string? encoding = ctx.Request.Headers.ContentEncoding.FirstOrDefault();
 
             Stream decryptedStream;
             switch (encoding)
@@ -32,33 +30,33 @@ namespace EpinelPS.Utils
                     decryptedStream = stream;
                     break;
                 case "gzip,enc":
-                    var responseLen = CBorReadItem(stream); // length of header (not including encrypted data)
+                    CBorItem responseLen = CBorReadItem(stream); // length of header (not including encrypted data)
                     stream.ReadByte(); // ignore padding
                     stream.ReadByte(); // ignore padding
 
-                    var decryptionToken = CBorReadString(stream);
-                    var nonce = CBorReadByteString(stream);
+                    string decryptionToken = CBorReadString(stream);
+                    byte[] nonce = CBorReadByteString(stream);
 
                     MemoryStream encryptedBytes = new();
                     stream.CopyTo(encryptedBytes);
 
-                    var bytes = encryptedBytes.ToArray();
+                    byte[] bytes = encryptedBytes.ToArray();
 
-                    var key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("Invalid decryption token");
-                    var additionalData = GenerateAdditionalData(decryptionToken, false);
+                    GameClientInfo key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("Invalid decryption token");
+                    byte[] additionalData = GenerateAdditionalData(decryptionToken, false);
 
-                    var x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
+                    byte[] x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
 
-                    var ms = new MemoryStream(x);
+                    MemoryStream ms = new(x);
 
-                    var unkVal1 = ms.ReadByte();
-                    var unkVal2 = ms.ReadByte();
-                    var sequenceNumber = ReadCborInteger(ms);
+                    int unkVal1 = ms.ReadByte();
+                    int unkVal2 = ms.ReadByte();
+                    ulong sequenceNumber = ReadCborInteger(ms);
 
 
-                    var startPos = (int)ms.Position;
+                    int startPos = (int)ms.Position;
 
-                    var contents = x.Skip(startPos).ToArray();
+                    byte[] contents = [.. x.Skip(startPos)];
                     if (contents.Length != 0 && contents[0] == 31)
                     {
                         //File.WriteAllBytes("contentsgzip", contents);
@@ -145,15 +143,15 @@ namespace EpinelPS.Utils
 
         public static byte[] EncryptData(byte[] message, string authToken)
         {
-            var key = LobbyHandler.GetInfo(authToken) ?? throw new BadHttpRequestException("Invalid decryption token");
+            GameClientInfo key = LobbyHandler.GetInfo(authToken) ?? throw new BadHttpRequestException("Invalid decryption token");
             MemoryStream m = new();
 
             m.WriteByte(89); // cbor ushort
 
             // 42bytes of data past header, 3 bytes for auth token bytestring, 2 bytes for nonce prefix, 24 bytes for nonce data
-            var headerLen = 2 + 3 + authToken.Length + 2 + 24;
+            int headerLen = 2 + 3 + authToken.Length + 2 + 24;
             byte[] headerLenBytes = BitConverter.GetBytes((ushort)headerLen);
-            if (BitConverter.IsLittleEndian) headerLenBytes = headerLenBytes.Reverse().ToArray();
+            if (BitConverter.IsLittleEndian) headerLenBytes = [.. headerLenBytes.Reverse()];
 
             m.Write(headerLenBytes, 0, headerLenBytes.Length);
 
@@ -163,12 +161,12 @@ namespace EpinelPS.Utils
 
             // write auth token len
             m.WriteByte(89); // cbor ushort
-            var authLenBytes = BitConverter.GetBytes((ushort)authToken.Length);
-            if (BitConverter.IsLittleEndian) authLenBytes = authLenBytes.Reverse().ToArray();
+            byte[] authLenBytes = BitConverter.GetBytes((ushort)authToken.Length);
+            if (BitConverter.IsLittleEndian) authLenBytes = [.. authLenBytes.Reverse()];
             m.Write(authLenBytes, 0, authLenBytes.Length);
 
             // write actual auth token
-            var authBytes = Encoding.UTF8.GetBytes(authToken);
+            byte[] authBytes = Encoding.UTF8.GetBytes(authToken);
             m.Write(authBytes, 0, authBytes.Length);
 
             // write nonce
@@ -183,7 +181,7 @@ namespace EpinelPS.Utils
             m.Write(nonce, 0, nonce.Length);
 
             // get additional data
-            var additionalData = GenerateAdditionalData(authToken, true);
+            byte[] additionalData = GenerateAdditionalData(authToken, true);
 
             // prep payload
             MemoryStream msm = new();
@@ -194,7 +192,7 @@ namespace EpinelPS.Utils
 
             msm.Write(message);
 
-            var encryptedBytes = SecretAeadXChaCha20Poly1305.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, [.. additionalData]);
+            byte[] encryptedBytes = SecretAeadXChaCha20Poly1305.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, [.. additionalData]);
 
             // write encrypted data
             m.Write(encryptedBytes);
@@ -217,14 +215,14 @@ namespace EpinelPS.Utils
             // write auth token len
             if (!encrypting)
             {
-                var authLen = BitConverter.GetBytes((ushort)authToken.Length);
+                byte[] authLen = BitConverter.GetBytes((ushort)authToken.Length);
                 if (BitConverter.IsLittleEndian)
-                    authLen = authLen.Reverse().ToArray();
+                    authLen = [.. authLen.Reverse()];
                 additionalData.WriteByte(89);
                 additionalData.Write(authLen, 0, authLen.Length);
 
                 // write our authentication token
-                var authBytes = Encoding.UTF8.GetBytes(authToken);
+                byte[] authBytes = Encoding.UTF8.GetBytes(authToken);
                 additionalData.Write(authBytes, 0, authBytes.Length);
             }
 
@@ -240,10 +238,10 @@ namespace EpinelPS.Utils
             }
             string resp = "";
 
-            var len = item.FullValue;
+            int len = item.FullValue;
             for (int i = 0; i < len; i++)
             {
-                var b = s.ReadByte();
+                int b = s.ReadByte();
                 if (b == -1) throw new EndOfStreamException();
 
                 resp += (char)b;
@@ -259,12 +257,12 @@ namespace EpinelPS.Utils
                 throw new Exception("invalid string");
             }
 
-            var len = item.FullValue;
+            int len = item.FullValue;
             byte[] resp = new byte[len];
 
             for (int i = 0; i < len; i++)
             {
-                var b = s.ReadByte();
+                int b = s.ReadByte();
                 if (b == -1) throw new EndOfStreamException();
 
                 resp[i] = (byte)b;
@@ -274,8 +272,8 @@ namespace EpinelPS.Utils
         }
         private static CBorItem CBorReadItem(Stream s)
         {
-            var b = s.ReadByte();
-            var type = b & 0x1f;
+            int b = s.ReadByte();
+            int type = b & 0x1f;
             CBorItem res = new()
             {
                 MajorType = (b >> 5) & 7
@@ -317,7 +315,7 @@ namespace EpinelPS.Utils
             {
                 if (i > buf.Length)
                     throw new ArgumentOutOfRangeException(nameof(buf));
-                var read = s.Read(buf, i, buf.Length - i);
+                int read = s.Read(buf, i, buf.Length - i);
                 if (read == 0)
                     break;
                 i += read;

@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Gacha
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListGachaPityProgress>();
+            ReqListGachaPityProgress req = await ReadData<ReqListGachaPityProgress>();
 
-            var response = new ResListGachaPityProgress();
+            ResListGachaPityProgress response = new();
 
             // TODO implement
 

@@ -36,32 +36,32 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Dashboard" ? "active" : "")" href="/admin/Dashboard">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Dashboard" ? "active" : "")" href="/admin/Dashboard">
                             <i class="fas fa-tachometer-alt me-1"></i> <span data-i18n="nav.dashboard">仪表盘</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Events" ? "active" : "")" href="/admin/Events">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Events" ? "active" : "")" href="/admin/Events">
                             <i class="fas fa-calendar-alt me-1"></i> <span data-i18n="nav.events">活动</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Users" ? "active" : "")" href="/admin/Users/">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Users" ? "active" : "")" href="/admin/Users/">
                             <i class="fas fa-users me-1"></i> <span data-i18n="nav.users">用户</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Mail" ? "active" : "")" href="/admin/Mail">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Mail" ? "active" : "")" href="/admin/Mail">
                             <i class="fas fa-envelope me-1"></i> <span data-i18n="nav.mail">邮件</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Configuration" ? "active" : "")" href="/admin/Configuration">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Configuration" ? "active" : "")" href="/admin/Configuration">
                             <i class="fas fa-cogs me-1"></i> <span data-i18n="nav.config">配置</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["action"].ToString() == "Database" ? "active" : "")" href="/admin/Database">
+                        <a class="nav-link @(ViewContext.RouteData.Values["action"] as string == "Database" ? "active" : "")" href="/admin/Database">
                             <i class="fas fa-database me-1"></i> <span data-i18n="nav.database">数据库</span>
                         </a>
                     </li>

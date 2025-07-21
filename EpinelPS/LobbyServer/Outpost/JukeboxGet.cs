@@ -1,7 +1,7 @@
 using EpinelPS.Utils;
 
 
-namespace EpinelPS.LobbyServer.Jukebox
+namespace EpinelPS.LobbyServer.Outpost
 {
     [PacketPath("/jukebox/playlist/get")]
     public class JukeboxPlaylistGet : LobbyMsgHandler
@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Jukebox
         protected override async Task HandleAsync()
         {
             // Prepare response with static data
-            var response = new ResGetJukeboxPlaylist
+            ResGetJukeboxPlaylist response = new()
             {
                 Playlists = {}, // Assuming Playlists is a list or similar collection type, you may want to add items here.
                 FavoriteSongs = new NetJukeboxFavorite

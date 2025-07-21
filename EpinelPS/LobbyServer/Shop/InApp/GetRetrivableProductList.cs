@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.InApp
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqGetInAppShopReceivableProductList>();
+            ReqGetInAppShopReceivableProductList x = await ReadData<ReqGetInAppShopReceivableProductList>();
 
-            var response = new ResGetInAppShopReceivableProductList();
+            ResGetInAppShopReceivableProductList response = new();
             // TODO
 
             await WriteDataAsync(response);

@@ -9,17 +9,17 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetNonResettableArchiveScenario>(); // req has EventId field
-            var evid = req.EventId;
-            var response = new ResGetNonResettableArchiveScenario();
+            ReqGetNonResettableArchiveScenario req = await ReadData<ReqGetNonResettableArchiveScenario>(); // req has EventId field
+            int evid = req.EventId;
+            ResGetNonResettableArchiveScenario response = new();
 
             // Access the GameData instance
-            var gameData = GameData.Instance;
+            GameData gameData = GameData.Instance;
 
             if (evid == 130002)
             {
                 // Directly use the archiveEventQuestRecords dictionary
-                foreach (var record in gameData.archiveEventQuestRecords.Values)
+                foreach (ArchiveEventQuestRecord record in gameData.archiveEventQuestRecords.Values)
                 {
                     if (record.event_quest_manager_id == evid)
                     {
@@ -34,7 +34,7 @@ namespace EpinelPS.LobbyServer.Archive
             else
             {
                 // Directly use the archiveEventStoryRecords dictionary
-                foreach (var record in gameData.archiveEventStoryRecords.Values)
+                foreach (ArchiveEventStoryRecord record in gameData.archiveEventStoryRecords.Values)
                 {
                     if (record.event_id == evid)
                     {

@@ -7,11 +7,12 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var r = new ResGetServerInfo();
-
-            // todo: reimplement this as well
-            r.MatchUrl = "https://global-match.nikke-kr.com";
-            r.WorldId = 84;
+            ResGetServerInfo r = new()
+            {
+                // todo: reimplement this as well
+                MatchUrl = "https://global-match.nikke-kr.com",
+                WorldId = 84
+            };
 
             await WriteDataAsync(r);
         }

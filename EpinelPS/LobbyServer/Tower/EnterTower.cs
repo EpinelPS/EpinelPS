@@ -9,10 +9,10 @@ namespace EpinelPS.LobbyServer.Tower
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterTower>();
-            var user = GetUser();
+            ReqEnterTower req = await ReadData<ReqEnterTower>();
+            User user = GetUser();
 
-            var response = new ResEnterTower();
+            ResEnterTower response = new();
 
 
             user.AddTrigger(TriggerType.TowerAllStart, 1);

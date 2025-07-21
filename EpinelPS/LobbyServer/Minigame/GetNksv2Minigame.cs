@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Minigame
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMiniGameNKSV2Data>();
+            ReqGetMiniGameNKSV2Data req = await ReadData<ReqGetMiniGameNKSV2Data>();
 
-            var response = new ResGetMiniGameNKSV2Data();
+            ResGetMiniGameNKSV2Data response = new();
             // TODO
             await WriteDataAsync(response);
         }

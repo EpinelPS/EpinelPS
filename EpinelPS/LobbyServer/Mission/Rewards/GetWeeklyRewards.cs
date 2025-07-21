@@ -8,11 +8,11 @@ namespace EpinelPS.LobbyServer.Mission.Rewards
         protected override async Task HandleAsync()
         {
             await ReadData<ReqGetWeeklyRewardedData>();
-            var user = GetUser();
+            Database.User user = GetUser();
 
             user.ResetDataIfNeeded();
 
-            var response = new ResGetWeeklyRewardedData();
+            ResGetWeeklyRewardedData response = new();
             response.Ids.Add(user.WeeklyResetableData.CompletedWeeklyMissions);
 
             await WriteDataAsync(response);

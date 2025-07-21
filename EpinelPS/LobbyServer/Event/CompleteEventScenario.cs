@@ -8,22 +8,21 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetEventScenarioComplete>();
-            var user = GetUser();
+            ReqSetEventScenarioComplete req = await ReadData<ReqSetEventScenarioComplete>();
+            User user = GetUser();
 
-            if (user.EventInfo.ContainsKey(req.EventId))
+            if (user.EventInfo.TryGetValue(req.EventId, out EventData? evt))
             {
-                var evt = user.EventInfo[req.EventId];
                 evt.CompletedScenarios.Add(req.ScenarioId);
             }
             else
             {
-                var evt = new EventData();
+                evt = new();
                 evt.CompletedScenarios.Add(req.ScenarioId);
                 user.EventInfo.Add(req.EventId, evt);
             }
 
-            var response = new ResSetEventScenarioComplete();
+            ResSetEventScenarioComplete response = new();
 
             // TODO reward
 

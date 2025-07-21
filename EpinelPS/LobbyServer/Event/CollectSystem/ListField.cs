@@ -1,5 +1,4 @@
 using EpinelPS.Utils;
-using static EpinelPS.LobbyServer.Event.EventConstants;
 
 namespace EpinelPS.LobbyServer.Event.CollectSystem
 {
@@ -8,10 +7,10 @@ namespace EpinelPS.LobbyServer.Event.CollectSystem
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListFieldEventCollectData>();
-            var user = GetUser();
+            ReqListFieldEventCollectData req = await ReadData<ReqListFieldEventCollectData>();
+            Database.User user = GetUser();
 
-            var response = new ResListFieldEventCollectData();
+            ResListFieldEventCollectData response = new();
 
             // TODO
 

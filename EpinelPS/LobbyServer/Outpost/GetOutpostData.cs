@@ -8,17 +8,17 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetOutpostData>();
-            var user = GetUser();
+            ReqGetOutpostData req = await ReadData<ReqGetOutpostData>();
+            User user = GetUser();
             user.ResetDataIfNeeded();
 
-            var battleTime = DateTime.UtcNow - user.BattleTime;
-            var battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
+            TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
+            long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
             long overBattleTime = battleTimeMs > 12096000000000 ? battleTimeMs - 12096000000000 : 0;
 
 
-            var response = new ResGetOutpostData
+            ResGetOutpostData response = new()
             {
                 OutpostBattleLevel = user.OutpostBattleLevel,
                 Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } }
@@ -28,9 +28,9 @@ namespace EpinelPS.LobbyServer.Outpost
             //response.Jukebox.List.AddRange([5, 9999901, 4001, 4002, 4003, 4004, 4005, 4006, 12, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033, 4034, 4036, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010, 5011, 5012]);
             //response.JukeboxV2.JukeboxTableIds.AddRange([5, 9999901, 4001, 4002, 4003, 4004, 4005, 4006, 12, 4007, 4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030, 4031, 4032, 4033, 4034, 4036, 5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010, 5011, 5012]);
 
- 
+
             // Directly use jukeboxListDataRecords
-            var jukeboxIds = GameData.Instance.jukeboxListDataRecords.Keys.ToList();
+            List<int> jukeboxIds = [.. GameData.Instance.jukeboxListDataRecords.Keys];
 
             // Update response lists with the IDs
             response.Jukeboxv2.JukeboxTableIds.AddRange(jukeboxIds);

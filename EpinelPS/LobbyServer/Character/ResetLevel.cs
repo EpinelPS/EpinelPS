@@ -9,12 +9,12 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCharacterGrowReset>();
-            var user = GetUser();
-            var response = new ResCharacterGrowReset();
-            var data = GameData.Instance.GetCharacterLevelUpData();
+            ReqCharacterGrowReset req = await ReadData<ReqCharacterGrowReset>();
+            User user = GetUser();
+            ResCharacterGrowReset response = new();
+            Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
 
-            foreach (var item in user.Characters.ToArray())
+            foreach (Database.Character item in user.Characters.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {
@@ -34,7 +34,7 @@ namespace EpinelPS.LobbyServer.Character
                     int requiredCoreDust = 0;
                     for (int i = 1; i < item.Level; i++)
                     {
-                        var levelUpData = data[i];
+                        CharacterLevelData levelUpData = data[i];
                         requiredCredit += levelUpData.gold;
                         requiredBattleData += levelUpData.character_exp;
                         requiredCoreDust += levelUpData.character_exp2;
@@ -56,16 +56,16 @@ namespace EpinelPS.LobbyServer.Character
                         Grade = item.Grade,
                         Tid = item.Tid
                     };
-                    var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+                    List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
                     response.SynchroLv = highestLevelCharacters.Last().Level;
 
-                    foreach (var c in highestLevelCharacters)
+                    foreach (Database.Character? c in highestLevelCharacters)
                     {
                         response.SynchroStandardCharacters.Add(c.Csn);
                     }
 
-                    foreach (var currency in user.Currency)
+                    foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
                     {
                         response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
                     }

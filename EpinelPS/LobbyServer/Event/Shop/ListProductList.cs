@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Event.Shop
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqShopProductList>();
-            var user = GetUser();
+            ReqShopProductList req = await ReadData<ReqShopProductList>();
+            Database.User user = GetUser();
 
-            var response = new ResShopProductList();
+            ResShopProductList response = new();
             response.Shops.Add(new NetShopProductData()
             {
 

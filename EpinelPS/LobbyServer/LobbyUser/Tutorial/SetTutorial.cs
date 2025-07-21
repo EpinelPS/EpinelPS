@@ -9,18 +9,18 @@ namespace EpinelPS.LobbyServer.LobbyUser.Tutorial
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetTutorial>();
-            var user = GetUser();
+            ReqSetTutorial req = await ReadData<ReqSetTutorial>();
+            User user = GetUser();
 
             if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
             {
-                var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
+                ClearedTutorialData cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
                 cleared.id = req.LastClearedTid;
                 user.ClearedTutorialData.Add(req.LastClearedTid, cleared);
             }
             JsonDb.Save();
 
-            var response = new ResSetTutorial();
+            ResSetTutorial response = new();
             await WriteDataAsync(response);
         }
     }

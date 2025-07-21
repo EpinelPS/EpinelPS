@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetProfileFrame>();
-            var response = new ResGetProfileFrame();
+            ReqGetProfileFrame req = await ReadData<ReqGetProfileFrame>();
+            ResGetProfileFrame response = new();
 
-            foreach (var frameRecord in GameData.Instance.userFrameTable.Values)
+            foreach (UserFrameTableRecord frameRecord in GameData.Instance.userFrameTable.Values)
             {
                 response.Frames.Add(frameRecord.id);
             }

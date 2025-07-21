@@ -10,60 +10,60 @@ namespace EpinelPS.LobbyServer.Gacha
     [PacketPath("/gacha/event/execute")]
     public class ExecuteEventGacha : LobbyMsgHandler
     {
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
-        private static readonly List<int> sickPullsExclusionList = new List<int> { 2500601 }; // Add more IDs as needed
-        private static readonly List<int> normalPullsExclusionList = new List<int> { 2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701 }; // Add more IDs as needed
+        private static readonly List<int> sickPullsExclusionList = [2500601]; // Add more IDs as needed
+        private static readonly List<int> normalPullsExclusionList = [2500601,422401,306201,399901,399902,399903,399904,201401,301501,112101,313201,319301,319401,320301,422601,426101,328301,328401,235101,235301,136101,339201,140001,140101,140201,580001,580101,580201,581001,581101,581201,582001,582101,582201,583001,583101,583201,583301,190101,290701]; // Add more IDs as needed
 
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqExecuteDailyFreeGacha>();
+            ReqExecuteDailyFreeGacha req = await ReadData<ReqExecuteDailyFreeGacha>();
             
             // Count determines whether we select 1 or 10 characters
-            int numberOfPulls =  1; 
+            int numberOfPulls =  1;
 
-            var user = GetUser();
-            var response = new ResExecuteDailyFreeGacha();
+            User user = GetUser();
+            ResExecuteDailyFreeGacha response = new();
 
-			var entireallCharacterData = GameData.Instance.CharacterTable.Values.ToList();
-			// Remove the .Values part since it's already a list.
-			// Group by name_code to treat same name_code as one character 
-			// Always add characters with grade_core_id == 1 and 101
-			var allCharacterData = entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999)).ToList(); 
+            List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
+            // Remove the .Values part since it's already a list.
+            // Group by name_code to treat same name_code as one character 
+            // Always add characters with grade_core_id == 1 and 101
+            List<CharacterRecord> allCharacterData = [.. entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))];
 
             // Separate characters by rarity categories
-            var rCharacters = allCharacterData.Where(c => c.original_rare == "R" ).ToList();
-            var srCharacters = allCharacterData.Where(c => c.original_rare == "SR").ToList();
-            
-            // Separate Pilgrim SSRs and non-Pilgrim SSRs
-            var pilgrimCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation == "PILGRIM").ToList();
-            var ssrCharacters = allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation != "PILGRIM").ToList();
+            List<CharacterRecord> rCharacters = [.. allCharacterData.Where(c => c.original_rare == "R" )];
+            List<CharacterRecord> srCharacters = [.. allCharacterData.Where(c => c.original_rare == "SR")];
 
-            var selectedCharacters = new List<CharacterRecord>();
+            // Separate Pilgrim SSRs and non-Pilgrim SSRs
+            List<CharacterRecord> pilgrimCharacters = [.. allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation == "PILGRIM")];
+            List<CharacterRecord> ssrCharacters = [.. allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation != "PILGRIM")];
+
+            List<CharacterRecord> selectedCharacters = [];
 
             // Check if user has 'sickpulls' set to true to use old method
             if (user.sickpulls)
             {
                 // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
-                selectedCharacters = allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.id)).OrderBy(x => random.Next()).Take(numberOfPulls).ToList(); // Exclude characters based on the exclusion list for sick pulls
+                selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
             }
             else
             {
                 // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
                 for (int i = 0; i < numberOfPulls; i++)
                 {
-                    var character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList);
+                    CharacterRecord character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList);
                     selectedCharacters.Add(character);
                 }
             }
 
-            var pieceIds = new List<Tuple<int, int>>(); // 2D array to store characterId and pieceId as Tuple
+            List<Tuple<int, int>> pieceIds = []; // 2D array to store characterId and pieceId as Tuple
             // Add each character's item to user.Items if the character exists in user.Characters
-			foreach (var characterData in selectedCharacters)
+			foreach (CharacterRecord characterData in selectedCharacters)
 			{
-				// Check if the item for this character already exists in user.Items based on ItemType
-				var existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
+                // Check if the item for this character already exists in user.Items based on ItemType
+                ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
 
 				if (existingItem != null)
 				{
@@ -84,8 +84,8 @@ namespace EpinelPS.LobbyServer.Gacha
 				}
 				else
 				{
-					// If the item does not exist, create a new item entry
-					var newItem = new ItemData()
+                    // If the item does not exist, create a new item entry
+                    ItemData newItem = new()
 					{
 						ItemType = characterData.piece_id,
 						Csn = 0,
@@ -113,14 +113,14 @@ namespace EpinelPS.LobbyServer.Gacha
 			}
 
             // Populate the 2D array with characterId and pieceId for each selected character
-            foreach (var characterData in selectedCharacters)
+            foreach (CharacterRecord characterData in selectedCharacters)
             {
-                var characterId = characterData.id;
-                var pieceId = characterData.piece_id;
+                int characterId = characterData.id;
+                int pieceId = characterData.piece_id;
 
                 // Store characterId and pieceId in the array
                 pieceIds.Add(Tuple.Create(characterId, pieceId));
-				var id = user.GenerateUniqueCharacterId();
+                int id = user.GenerateUniqueCharacterId();
                 response.Gacha.Add(new NetGachaEntityData()
                 {
                     Corporation = 1,
@@ -171,20 +171,20 @@ namespace EpinelPS.LobbyServer.Gacha
         private CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList)
         {
             // Remove excluded characters from each category
-            var availableRCharacters = rCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availableSRCharacters = srCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availableSSRCharacters = ssrCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
-            var availablePilgrimCharacters = pilgrimCharacters.Where(c => !exclusionList.Contains(c.id)).ToList();
+            List<CharacterRecord> availableRCharacters = [.. rCharacters.Where(c => !exclusionList.Contains(c.id))];
+            List<CharacterRecord> availableSRCharacters = [.. srCharacters.Where(c => !exclusionList.Contains(c.id))];
+            List<CharacterRecord> availableSSRCharacters = [.. ssrCharacters.Where(c => !exclusionList.Contains(c.id))];
+            List<CharacterRecord> availablePilgrimCharacters = [.. pilgrimCharacters.Where(c => !exclusionList.Contains(c.id))];
 
             // Each time we call this method, a new category will be selected for a single character
             double roll = random.NextDouble() * 100; // Roll from 0 to 100
 
-            if (roll < 53 && availableRCharacters.Any())
+            if (roll < 53 && availableRCharacters.Count != 0)
             {
                 // R category
                 return availableRCharacters[random.Next(availableRCharacters.Count)];
             }
-            else if (roll < 53 + 43 && availableSRCharacters.Any())
+            else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
             {
                 // SR category
                 return availableSRCharacters[random.Next(availableSRCharacters.Count)];
@@ -194,12 +194,12 @@ namespace EpinelPS.LobbyServer.Gacha
                 // SSR category
                 double ssrRoll = random.NextDouble() * 100;
 
-                if (ssrRoll < 4.55 && availablePilgrimCharacters.Any())
+                if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
                 {
                     // PILGRIM SSR
                     return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
                 }
-                else if (availableSSRCharacters.Any())
+                else if (availableSSRCharacters.Count != 0)
                 {
                     // Non-PILGRIM SSR
                     return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
@@ -207,7 +207,7 @@ namespace EpinelPS.LobbyServer.Gacha
             }
 
             // Fallback to a random R character if somehow no SSR characters are left after exclusion
-            if (!availableRCharacters.Any())
+            if (availableRCharacters.Count == 0)
             {
                 throw new InvalidOperationException("No available characters found for gacha pull");
             }

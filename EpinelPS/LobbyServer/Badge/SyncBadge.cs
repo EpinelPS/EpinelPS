@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Badge
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSyncBadge>();
-            var user = GetUser();
+            ReqSyncBadge req = await ReadData<ReqSyncBadge>();
+            Database.User user = GetUser();
 
-            var response = new ResSyncBadge();
+            ResSyncBadge response = new();
 
-            foreach (var item in user.Badges)
+            foreach (Database.Badge item in user.Badges)
             {
                 response.BadgeList.Add(item.ToNet());
             }

@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetNow>();
-            var response = new ResGetNow();
+            ReqGetNow req = await ReadData<ReqGetNow>();
+            ResGetNow response = new();
 
             await WriteDataAsync(response);
         }

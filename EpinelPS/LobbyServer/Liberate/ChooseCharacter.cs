@@ -7,13 +7,14 @@ namespace EpinelPS.LobbyServer.Liberate
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqChooseLiberateCharacter>();
-            var user = GetUser();
+            ReqChooseLiberateCharacter req = await ReadData<ReqChooseLiberateCharacter>();
+            Database.User user = GetUser();
 
-            var response = new ResChooseLiberateCharacter();
-
-            // TODO
-            response.Data = new NetLiberateData() { CharacterId = req.CharacterId };
+            ResChooseLiberateCharacter response = new()
+            {
+                // TODO
+                Data = new NetLiberateData() { CharacterId = req.CharacterId }
+            };
             response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 1 });
             response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 2 });
             response.Data.MissionData.Add(new NetLiberateMissionData() { MissionState = LiberateMissionState.Running, Id = 3 });

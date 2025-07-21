@@ -7,11 +7,11 @@ namespace EpinelPS.LobbyServer.Trigger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMainQuestData>();
-            var user = GetUser();
+            ReqGetMainQuestData req = await ReadData<ReqGetMainQuestData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetMainQuestData();
-            foreach (var item in user.MainQuestData)
+            ResGetMainQuestData response = new();
+            foreach (KeyValuePair<int, bool> item in user.MainQuestData)
             {
                 response.MainQuestList.Add(new NetMainQuestData() { IsReceived = item.Value, Tid = item.Key });
             }

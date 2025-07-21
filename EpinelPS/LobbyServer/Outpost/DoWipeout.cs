@@ -9,9 +9,9 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainFastBattleReward>();
-            var response = new ResObtainFastBattleReward();
-            var user = GetUser();
+            ReqObtainFastBattleReward req = await ReadData<ReqObtainFastBattleReward>();
+            ResObtainFastBattleReward response = new();
+            User user = GetUser();
 
             if (user.ResetableData.WipeoutCount >= 12)
             {
@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Outpost
             NetUtils.RegisterRewardsForUser(user, response.Reward);
 
             // TODO subtract currency as needed
-            foreach (var item in user.Currency)
+            foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
             {
                 response.Currencies.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value});
             }

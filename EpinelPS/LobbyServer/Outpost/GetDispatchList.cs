@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetDispatchList>();
+            ReqGetDispatchList req = await ReadData<ReqGetDispatchList>();
 
-            var response = new ResGetDispatchList();
+            ResGetDispatchList response = new();
             // TODO
             await WriteDataAsync(response);
         }

@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer.Guild
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqRecommendGuildList>();
-            var response = new ResRecommendGuildList();
+            ReqRecommendGuildList req = await ReadData<ReqRecommendGuildList>();
+            ResRecommendGuildList response = new();
 
 
             await WriteDataAsync(response);

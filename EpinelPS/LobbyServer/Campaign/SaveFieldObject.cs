@@ -9,14 +9,14 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSaveCampaignFieldObject>();
-            var user = GetUser();
+            ReqSaveCampaignFieldObject req = await ReadData<ReqSaveCampaignFieldObject>();
+            User user = GetUser();
 
-            var response = new ResSaveCampaignFieldObject();
+            ResSaveCampaignFieldObject response = new();
 
             Logging.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}", LogType.Debug);
 
-            var field = user.FieldInfoNew[req.MapId];
+            FieldInfoNew field = user.FieldInfoNew[req.MapId];
 
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
             JsonDb.Save();

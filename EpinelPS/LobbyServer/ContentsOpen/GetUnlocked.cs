@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.ContentsOpen
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetContentsOpenUnlockInfo>();
-            var user = GetUser();
+            ReqGetContentsOpenUnlockInfo req = await ReadData<ReqGetContentsOpenUnlockInfo>();
+            User user = GetUser();
 
             // This request is used for showing the "Collection Item Unlocked" Popup and button unlock animation
 
-            var response = new ResGetContentsOpenUnlockInfo();
+            ResGetContentsOpenUnlockInfo response = new();
 
             if (user.ContentsOpenUnlocked.Count == 0)
             {
@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.ContentsOpen
                 JsonDb.Save();
             }
 
-            foreach (var item in user.ContentsOpenUnlocked)
+            foreach (KeyValuePair<int, UnlockData> item in user.ContentsOpenUnlocked)
             {
                 response.ContentsOpenUnlockInfoList.Add(new NetContentsOpenUnlockInfo()
                 {

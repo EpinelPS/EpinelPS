@@ -9,13 +9,15 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqTacticAcademyClearLesson>();
-            var user = GetUser();
+            ReqTacticAcademyClearLesson req = await ReadData<ReqTacticAcademyClearLesson>();
+            User user = GetUser();
 
-            var response = new ResTacticAcademyClearLesson();
-            response.ClearLessonTid = req.LessonTid;
+            ResTacticAcademyClearLesson response = new()
+            {
+                ClearLessonTid = req.LessonTid
+            };
 
-            var x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
+            TacticAcademyLessonRecord x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
 
             if (user.CanSubtractCurrency((CurrencyType)x.currency_id, x.currency_value))
             {
@@ -25,7 +27,7 @@ namespace EpinelPS.LobbyServer.Outpost
 
                 ProcessLessonReward(user, x);
 
-                foreach (var currency in user.Currency)
+                foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
                 {
                     response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
                 }
@@ -38,7 +40,7 @@ namespace EpinelPS.LobbyServer.Outpost
             await WriteDataAsync(response);
         }
 
-        private void ProcessLessonReward(Database.User user, TacticAcademyLessonRecord r)
+        private static void ProcessLessonReward(Database.User user, TacticAcademyLessonRecord r)
         {
             if (r.lesson_reward == null)
             {
@@ -48,7 +50,7 @@ namespace EpinelPS.LobbyServer.Outpost
 
             if (r.lesson_type == "OutpostBattle")
             {
-                foreach (var item in r.lesson_reward)
+                foreach (TacticAcademyLessonReward item in r.lesson_reward)
                 {
                     if (item.lesson_reward_id != 0 && item.lesson_reward_value != 0)
                     {

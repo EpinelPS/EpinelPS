@@ -9,10 +9,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetScenarioComplete>();
-            var user = GetUser();
+            ReqSetScenarioComplete req = await ReadData<ReqSetScenarioComplete>();
+            User user = GetUser();
 
-            var response = new ResSetScenarioComplete
+            ResSetScenarioComplete response = new()
             {
                 Reward = new NetRewardData()
             };

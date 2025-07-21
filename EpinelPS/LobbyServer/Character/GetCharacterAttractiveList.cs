@@ -7,13 +7,15 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetAttractiveList>();
-            var user = GetUser();
+            ReqGetAttractiveList req = await ReadData<ReqGetAttractiveList>();
+            Database.User user = GetUser();
 
-            ResGetAttractiveList response = new();
-            response.CounselAvailableCount = 3; // TODO
+            ResGetAttractiveList response = new()
+            {
+                CounselAvailableCount = 3 // TODO
+            };
 
-            foreach(var item in user.BondInfo)
+            foreach (NetUserAttractiveData item in user.BondInfo)
             {
                 response.Attractives.Add(item);
                 item.CanCounselToday = true;

@@ -24,11 +24,11 @@ namespace EpinelPS.Controllers
         [Route("auth/login")]
         public string AuthLogin(string seq, [FromBody] LoginEndpoint1Req req)
         {
-            foreach (var tok in JsonDb.Instance.LauncherAccessTokens)
+            foreach (AccessToken tok in JsonDb.Instance.LauncherAccessTokens)
             {
                 if (tok.Token == req.channel_info.account_token)
                 {
-                    var user = JsonDb.Instance.Users.Find(x => x.ID == tok.UserID);
+                    User? user = JsonDb.Instance.Users.Find(x => x.ID == tok.UserID);
                     if (user != null)
                     {
                         // todo: they use another token here, but we will reuse the same one.

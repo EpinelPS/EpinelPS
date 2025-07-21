@@ -8,11 +8,11 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetNicknameInTutorial>();
-            var user = GetUser();
+            ReqSetNicknameInTutorial req = await ReadData<ReqSetNicknameInTutorial>();
+            User user = GetUser();
             user.Nickname = req.Nickname;
 
-            var response = new ResSetNicknameInTutorial
+            ResSetNicknameInTutorial response = new()
             {
                 Result = SetNicknameResult.Okay,
                 Nickname = req.Nickname

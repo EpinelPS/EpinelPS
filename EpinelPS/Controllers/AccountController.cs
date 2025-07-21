@@ -14,11 +14,11 @@ namespace EpinelPS.Controllers
         [Route("login")]
         public string Login(string seq, [FromBody] LoginEndpoint2Req req)
         {
-            foreach (var item in JsonDb.Instance.Users)
+            foreach (User item in JsonDb.Instance.Users)
             {
                 if (item.Username == req.account && item.Password == req.password)
                 {
-                    var tok = CreateLauncherTokenForUser(item);
+                    AccessToken tok = CreateLauncherTokenForUser(item);
                     item.LastLogin = DateTime.UtcNow;
                     JsonDb.Save();
 
@@ -70,7 +70,7 @@ namespace EpinelPS.Controllers
         public string RegisterAccount(string seq, [FromBody] RegisterEPReq req)
         {
             // check if the account already exists
-            foreach (var item in JsonDb.Instance.Users)
+            foreach (User item in JsonDb.Instance.Users)
             {
                 if (item.Username == req.account)
                 {
@@ -78,10 +78,10 @@ namespace EpinelPS.Controllers
                 }
             }
 
-            var uid = (ulong)new Random().Next(1, int.MaxValue);
+            ulong uid = (ulong)new Random().Next(1, int.MaxValue);
 
             // Check if we havent generated a UID that exists
-            foreach (var item in JsonDb.Instance.Users)
+            foreach (User item in JsonDb.Instance.Users)
             {
                 if (item.ID == uid)
                 {
@@ -89,7 +89,7 @@ namespace EpinelPS.Controllers
                 }
             }
 
-            var user = new User()
+            User user = new()
             {
                 ID = uid,
                 Password = req.password,
@@ -101,7 +101,7 @@ namespace EpinelPS.Controllers
 
             JsonDb.Instance.Users.Add(user);
 
-            var tok = CreateLauncherTokenForUser(user);
+            AccessToken tok = CreateLauncherTokenForUser(user);
 
             return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}";
         }

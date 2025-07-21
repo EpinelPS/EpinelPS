@@ -8,11 +8,13 @@ namespace EpinelPS.LobbyServer.Arena
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetArenaBanInfo>();
+            ReqGetArenaBanInfo req = await ReadData<ReqGetArenaBanInfo>();
 
-            var response = new ResGetArenaBanInfo();
-            response.RookieArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) };
-            response.SpecialArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) };
+            ResGetArenaBanInfo response = new()
+            {
+                RookieArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) },
+                SpecialArenaBanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) }
+            };
 
             await WriteDataAsync(response);
         }

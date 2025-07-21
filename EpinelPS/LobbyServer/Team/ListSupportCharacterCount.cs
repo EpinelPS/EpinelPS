@@ -7,12 +7,12 @@ namespace EpinelPS.LobbyServer.Team
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListSupportCharacterUsedCount>();
+            ReqListSupportCharacterUsedCount req = await ReadData<ReqListSupportCharacterUsedCount>();
 
-            var response = new ResListSupportCharacterUsedCount();
+            ResListSupportCharacterUsedCount response = new();
 
             // TODO: Limit temportary participation
-            foreach (var item in req.TeamTypeList)
+            foreach (int item in req.TeamTypeList)
             {
                 Console.WriteLine("support character used: " + item);
             }

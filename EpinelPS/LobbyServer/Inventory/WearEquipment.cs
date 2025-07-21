@@ -8,16 +8,16 @@ namespace EpinelPS.LobbyServer.Inventory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqWearEquipment>();
-            var user = GetUser();
+            ReqWearEquipment req = await ReadData<ReqWearEquipment>();
+            User user = GetUser();
 
-            var response = new ResWearEquipment();
+            ResWearEquipment response = new();
 
-            var pos = NetUtils.GetItemPos(user, req.Isn);
+            int pos = NetUtils.GetItemPos(user, req.Isn);
 
             // unequip old item
 
-            foreach (var item in user.Items.ToArray())
+            foreach (ItemData item in user.Items.ToArray())
             {
                 if (item.Csn == req.Csn && item.Position == pos)
                 {
@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
             }
 
-            foreach (var item in user.Items.ToArray())
+            foreach (ItemData item in user.Items.ToArray())
             {
                 if (item.Isn == req.Isn)
                 {

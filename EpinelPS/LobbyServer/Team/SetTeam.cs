@@ -8,26 +8,25 @@ namespace EpinelPS.LobbyServer.Team
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetTeam>();
-            var user = GetUser();
+            ReqSetTeam req = await ReadData<ReqSetTeam>();
+            User user = GetUser();
 
             // TODO is this right
-            var response = new ResSetTeam();
-            response.Type = req.Type;
+            ResSetTeam response = new()
+            {
+                Type = req.Type
+            };
             response.Teams.AddRange(req.Teams.ToArray());
 
             // Add team data to user data
-            var teamData = new NetUserTeamData() { LastContentsTeamNumber = req.ContentsId + 1, Type = req.Type };
+            NetUserTeamData teamData = new() { LastContentsTeamNumber = req.ContentsId + 1, Type = req.Type };
             teamData.Teams.AddRange(req.Teams);
 
-            if (user.UserTeams.ContainsKey(req.Type))
+            if (!user.UserTeams.TryAdd(req.Type, teamData))
             {
                 user.UserTeams[req.Type] = teamData;
             }
-            else
-            {
-                user.UserTeams.Add(req.Type, teamData);
-            }
+
             JsonDb.Save();
 
             await WriteDataAsync(response);

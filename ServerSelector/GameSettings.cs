@@ -33,10 +33,7 @@ namespace ServerSelector
 
                 }
 
-                if (_settings == null)
-                {
-                    _settings = new();
-                }
+                _settings ??= new();
 
                 return _settings;
             }

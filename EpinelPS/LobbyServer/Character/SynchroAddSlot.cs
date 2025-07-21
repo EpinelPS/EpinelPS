@@ -8,11 +8,11 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSynchroAddSlot>();
-            var user = GetUser();
-            var response = new ResSynchroAddSlot();
+            ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
+            User user = GetUser();
+            ResSynchroAddSlot response = new();
 
-            var slot = user.SynchroSlots.FirstOrDefault(x => x.Slot == req.Slot);
+            SynchroSlot? slot = user.SynchroSlots.FirstOrDefault(x => x.Slot == req.Slot);
             if (slot != null)
             {
                 response.Slot = new NetSynchroSlot
@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Character
             }
             else
             {
-                var newSlot = new NetSynchroSlot
+                NetSynchroSlot newSlot = new()
                 {
                     Csn = 0,
                     Slot = req.Slot,

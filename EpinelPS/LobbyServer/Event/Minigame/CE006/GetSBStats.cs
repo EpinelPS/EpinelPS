@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Event.Minigame.CE006
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetStellarBladeStatistics>();
-            var user = GetUser();
+            ReqGetStellarBladeStatistics req = await ReadData<ReqGetStellarBladeStatistics>();
+            Database.User user = GetUser();
 
-            var response = new ResGetStellarBladeStatistics();
+            ResGetStellarBladeStatistics response = new();
 
             // TODO implement
 

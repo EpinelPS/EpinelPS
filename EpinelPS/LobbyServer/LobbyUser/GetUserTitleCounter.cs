@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetUserTitleCounterList>();
+            ReqGetUserTitleCounterList req = await ReadData<ReqGetUserTitleCounterList>();
 
-            var r = new ResGetUserTitleCounterList();
+            ResGetUserTitleCounterList r = new();
 
             await WriteDataAsync(r);
         }

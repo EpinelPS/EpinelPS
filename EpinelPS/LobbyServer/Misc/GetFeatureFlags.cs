@@ -7,10 +7,12 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetFeatureFlag>();
+            ReqGetFeatureFlag req = await ReadData<ReqGetFeatureFlag>();
 
-            var r = new ResGetFeatureFlag();
-            r.IsOpen = true;
+            ResGetFeatureFlag r = new()
+            {
+                IsOpen = true
+            };
 
             await WriteDataAsync(r);
         }

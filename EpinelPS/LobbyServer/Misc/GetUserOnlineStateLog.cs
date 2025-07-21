@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqUserOnlineStateLog>();
-            var user = GetUser();
+            ReqUserOnlineStateLog req = await ReadData<ReqUserOnlineStateLog>();
+            Database.User user = GetUser();
 
-            var response = new ResUserOnlineStateLog();
+            ResUserOnlineStateLog response = new();
             user.LastLogin = DateTime.UtcNow;
             await WriteDataAsync(response);
         }

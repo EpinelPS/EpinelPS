@@ -9,10 +9,10 @@ namespace EpinelPS.LobbyServer.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearStage>();
+            ReqClearStage req = await ReadData<ReqClearStage>();
 
-            var response = new ResClearStage();
-            var user = GetUser();
+            ResClearStage response = new();
+            User user = GetUser();
 
             Console.WriteLine($"Stage " + req.StageId + " completed, result is " + req.BattleResult);
 
@@ -28,10 +28,10 @@ namespace EpinelPS.LobbyServer.Stage
 
         public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
         {
-            var response = new ResClearStage();
-            var clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
+            ResClearStage response = new();
+            CampaignStageRecord clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
-            var stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            string stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
             
             if (user.FieldInfoNew.Count == 0)
             {
@@ -39,7 +39,7 @@ namespace EpinelPS.LobbyServer.Stage
             }
 
             DoQuestSpecificUserOperations(user, StageId);
-            var rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
+            RewardTableRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
 
             if (forceCompleteScenarios)
             {
@@ -53,8 +53,8 @@ namespace EpinelPS.LobbyServer.Stage
                 }
             }
 
-            var oldLevel = user.userPointData.UserLevel;
-            var oldOutpostLevel = user.OutpostBattleLevel.Level;
+            int oldLevel = user.userPointData.UserLevel;
+            int oldOutpostLevel = user.OutpostBattleLevel.Level;
 
             if (rewardData != null)
                 response.StageClearReward = RewardUtils.RegisterRewardsForUser(user, rewardData);
@@ -102,13 +102,9 @@ namespace EpinelPS.LobbyServer.Stage
                         user.LastNormalStageCleared = StageId;
                 }
             }
-            else if (clearedStage.stage_category == StageCategory.Extra)
-            {
-                // TODO
-            }
             else
             {
-                Console.WriteLine("Unknown stage category " + clearedStage.stage_category);
+                Logging.Warn("Unknown stage category " + clearedStage.stage_category);
             }
 
             if (clearedStage.stage_type != StageType.Sub)
@@ -151,7 +147,7 @@ namespace EpinelPS.LobbyServer.Stage
 
         private static void DoQuestSpecificUserOperations(User user, int clearedStageId)
         {
-            var quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
+            MainQuestCompletionRecord? quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
 
             user.AddTrigger(TriggerType.CampaignClear, 1, clearedStageId);
             if (quest != null)
@@ -168,7 +164,7 @@ namespace EpinelPS.LobbyServer.Stage
                 // CSN: Character Serial Number
 
                 // create a squad with first 5 characters
-                var team1 = new NetUserTeamData
+                NetUserTeamData team1 = new()
                 {
                     Type = 1,
                     LastContentsTeamNumber = 1
@@ -197,7 +193,7 @@ namespace EpinelPS.LobbyServer.Stage
 
                 for (int i = 1; i < 6; i++)
                 {
-                    var character = user.Characters[i - 1];
+                    Database.Character character = user.Characters[i - 1];
                     team1Sub.Slots.Add(new NetTeamSlot() { Slot = i, Value = character.Csn });
                 }
                 team1.Teams.Add(team1Sub);

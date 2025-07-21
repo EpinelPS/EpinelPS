@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using static EpinelPS.LobbyServer.Event.EventConstants;
 
 namespace EpinelPS.LobbyServer.Event
 {
@@ -8,16 +7,16 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetEventList>();
+            ReqGetEventList req = await ReadData<ReqGetEventList>();
 
             // types are defined in EventTypes.cs
-            var response = new ResGetEventList();
+            ResGetEventList response = new();
 
             // Boom! The Ghost! summer event
             response.EventList.Add(new NetEventData()
             {
                 Id = 82400,
-                EventSystemType = FieldHubEvent,
+                EventSystemType = (int)EventType.FieldHubEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -26,7 +25,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 82401,
-                EventSystemType = MiniGameBTG,
+                EventSystemType = (int)EventType.MiniGameBTG,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -35,7 +34,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 82402,
-                EventSystemType = ShopEvent,
+                EventSystemType = (int)EventType.ShopEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -44,7 +43,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 40084,
-                EventSystemType = StoryEvent,
+                EventSystemType = (int)EventType.StoryEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -53,7 +52,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 40085,
-                EventSystemType = StoryEvent,
+                EventSystemType = (int)EventType.StoryEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -62,7 +61,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 60084,
-                EventSystemType = ChallengeModeEvent,
+                EventSystemType = (int)EventType.ChallengeModeEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -71,7 +70,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 100032,
-                EventSystemType = EventPass,
+                EventSystemType = (int)EventType.EventPass,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -80,7 +79,7 @@ namespace EpinelPS.LobbyServer.Event
             response.EventList.Add(new NetEventData()
             {
                 Id = 82403,
-                EventSystemType = LoginEvent,
+                EventSystemType = (int)EventType.LoginEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,

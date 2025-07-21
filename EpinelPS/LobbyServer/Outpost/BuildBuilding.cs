@@ -12,11 +12,13 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqBuilding>();
+            ReqBuilding req = await ReadData<ReqBuilding>();
 
-            var response = new ResBuilding();
-            response.StartAt = DateTime.UtcNow.Ticks;
-            response.CompleteAt = DateTime.UtcNow.AddDays(1).Ticks;
+            ResBuilding response = new()
+            {
+                StartAt = DateTime.UtcNow.Ticks,
+                CompleteAt = DateTime.UtcNow.AddDays(1).Ticks
+            };
             // TODO
             await WriteDataAsync(response);
         }

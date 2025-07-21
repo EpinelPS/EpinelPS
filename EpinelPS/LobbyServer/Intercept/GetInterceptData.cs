@@ -8,9 +8,9 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetInterceptData>();
+            ReqGetInterceptData req = await ReadData<ReqGetInterceptData>();
 
-            var response = new ResGetInterceptData
+            ResGetInterceptData response = new()
             {
                 NormalInterceptGroup = 1,
                 SpecialInterceptId = 1, // TODO switch this out each reset

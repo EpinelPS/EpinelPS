@@ -8,32 +8,34 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSynchroData>();
-            var user = GetUser();
+            ReqGetSynchroData req = await ReadData<ReqGetSynchroData>();
+            User user = GetUser();
 
             if (user.SynchroSlots.Count == 0)
             {
 
-                user.SynchroSlots = new()   {
+                user.SynchroSlots = [
                     new SynchroSlot() { Slot = 1 },
             new SynchroSlot() { Slot = 2},
             new SynchroSlot() { Slot = 3 },
             new SynchroSlot() { Slot = 4 },
             new SynchroSlot() { Slot = 5 },
-        };
+        ];
             }
 
-            var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+            List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
-            var response = new ResGetSynchroData();
-            response.Synchro = new NetUserSynchroData();
-            
-            foreach (var item in highestLevelCharacters)
+            ResGetSynchroData response = new()
+            {
+                Synchro = new NetUserSynchroData()
+            };
+
+            foreach (Database.Character? item in highestLevelCharacters)
             {
                 response.Synchro.StandardCharacters.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel }, IsSynchro = user.GetSynchro(item.Csn) });
             }
 
-            foreach (var item in user.SynchroSlots)
+            foreach (SynchroSlot item in user.SynchroSlots)
             {
                 response.Synchro.Slots.Add(new NetSynchroSlot() { Slot = item.Slot, AvailableRegisterAt = 1, Csn = item.CharacterSerialNumber });
             }

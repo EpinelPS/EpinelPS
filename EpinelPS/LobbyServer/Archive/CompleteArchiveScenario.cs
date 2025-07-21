@@ -9,15 +9,15 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCompleteArchiveScenario>(); // req has EventId, ScenarioId, DialogType fields
-            var evid = req.EventId;
-            var scenid = req.ScenarioId;
-            var dialtyp = req.DialogType;
+            ReqCompleteArchiveScenario req = await ReadData<ReqCompleteArchiveScenario>(); // req has EventId, ScenarioId, DialogType fields
+            int evid = req.EventId;
+            string scenid = req.ScenarioId;
+            int dialtyp = req.DialogType;
 
-            var user = GetUser();
+            User user = GetUser();
 
             // Ensure we are working with the user's EventInfo and not CompletedScenarios
-            if (!user.EventInfo.TryGetValue(evid, out var evt))
+            if (!user.EventInfo.TryGetValue(evid, out EventData? evt))
             {
                 // Create a new EventData if the event doesn't exist
                 evt = new EventData();
@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Archive
             }
 			JsonDb.Save();
             // Prepare and send the response
-            var response = new ResCompleteArchiveScenario();
+            ResCompleteArchiveScenario response = new();
             await WriteDataAsync(response);
         }
     }

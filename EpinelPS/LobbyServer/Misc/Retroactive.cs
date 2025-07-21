@@ -12,10 +12,10 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqRetroactive>();
-            var user = GetUser();
+            ReqRetroactive req = await ReadData<ReqRetroactive>();
+            Database.User user = GetUser();
 
-            var response = new ResRetroactive();
+            ResRetroactive response = new();
             await WriteDataAsync(response);
         }
     }

@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Sidestory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListSideStory>();
-            var user = GetUser();
+            ReqListSideStory req = await ReadData<ReqListSideStory>();
+            Database.User user = GetUser();
 
-            var response = new ResListSideStory();
+            ResListSideStory response = new();
 
-            foreach (var item in user.CompletedSideStoryStages)
+            foreach (int item in user.CompletedSideStoryStages)
             {
                 // TODO cleared at
                 response.SideStoryStageDataList.Add(new NetSideStoryStageData() { SideStoryStageId = item, ClearedAt = Timestamp.FromDateTime(DateTime.UtcNow) });

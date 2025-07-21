@@ -4,12 +4,8 @@
     /// Represents that this class handles a message
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class PacketPathAttribute : Attribute
+    public class PacketPathAttribute(string url) : Attribute
     {
-        public string Url { get; set; }
-        public PacketPathAttribute(string url)
-        {
-            Url = url;
-        }
+        public string Url { get; set; } = url;
     }
 }

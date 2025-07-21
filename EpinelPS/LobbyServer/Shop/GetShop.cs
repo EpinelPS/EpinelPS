@@ -7,13 +7,16 @@ namespace EpinelPS.LobbyServer.Shop
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqGetShop>();
+            ReqGetShop x = await ReadData<ReqGetShop>();
 
-            var response = new ResGetShop();
+            ResGetShop response = new()
+            {
+                Shop = new NetShopProductData
+                {
+                    ShopCategory = x.ShopCategory
+                }
+            };
 
-            response.Shop = new NetShopProductData();
-            response.Shop.ShopCategory = x.ShopCategory;
-        
             // TODO
 
             await WriteDataAsync(response);

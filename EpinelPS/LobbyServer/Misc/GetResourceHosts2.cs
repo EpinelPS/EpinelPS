@@ -7,11 +7,13 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetResourceHosts2>();
+            ReqGetResourceHosts2 req = await ReadData<ReqGetResourceHosts2>();
 
-            var r = new ResGetResourceHosts2();
-            r.BaseUrl = GameConfig.Root.ResourceBaseURL;
-            r.Version = req.Version;
+            ResGetResourceHosts2 r = new()
+            {
+                BaseUrl = GameConfig.Root.ResourceBaseURL,
+                Version = req.Version
+            };
 
             await WriteDataAsync(r);
         }

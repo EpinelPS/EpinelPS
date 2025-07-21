@@ -15,17 +15,12 @@ namespace EpinelPS.Controllers.AdminPanel
 
         public static bool CheckAuth(HttpContext context)
         {
-            string? token = context.Request.Cookies["token"];
-            if (token == null)
-            {
-                token = context.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
-            }
+            string? token = context.Request.Cookies["token"] ?? context.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
 
             // TODO better authentication
-            if (JsonDb.Instance.AdminAuthTokens.ContainsKey(token))
+            if (JsonDb.Instance.AdminAuthTokens.TryGetValue(token, out ulong userId))
             {
-                ulong userId = JsonDb.Instance.AdminAuthTokens[token];
-                var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+                User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
                 if (user != null && user.IsAdmin)
                     return true;
             }

@@ -7,11 +7,11 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqExistEventScenario>();
+            ReqExistEventScenario req = await ReadData<ReqExistEventScenario>();
 
-            var response = new ResExistEventScenario();
+            ResExistEventScenario response = new();
 
-            foreach (var item in req.ScenarioGroupIds)
+            foreach (string? item in req.ScenarioGroupIds)
             response.ExistGroupIds.Add(item);
 
   

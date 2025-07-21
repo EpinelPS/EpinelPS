@@ -8,18 +8,19 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqLoginEventData>();
-			var evid = req.EventId;
-            var response = new ResLoginEventData(); // fields "EndDate", "DisableDate", "RewardHistories", "LastAttendance"
-
-            response.EndDate = DateTime.Now.AddDays(13).Ticks;
-            response.DisableDate = DateTime.Now.AddDays(13).Ticks;
-			response.LastAttendance = new LoginEventAttendance
+            ReqLoginEventData req = await ReadData<ReqLoginEventData>();
+            int evid = req.EventId;
+            ResLoginEventData response = new()
             {
-                Day = 14, // Example day value, adjust as needed
-                AttendanceDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks // Assign Ticks here
-            };
-			response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = true, Day = 1 } );
+                EndDate = DateTime.Now.AddDays(13).Ticks,
+                DisableDate = DateTime.Now.AddDays(13).Ticks,
+                LastAttendance = new LoginEventAttendance
+                {
+                    Day = 14, // Example day value, adjust as needed
+                    AttendanceDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks // Assign Ticks here
+                }
+            }; // fields "EndDate", "DisableDate", "RewardHistories", "LastAttendance"
+            response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = true, Day = 1 } );
 			response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = true, Day = 2 } );
 			response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = true, Day = 3 } );
 			response.RewardHistories.Add(new LoginEventRewardHistory() { IsReceived = true, Day = 4 } );

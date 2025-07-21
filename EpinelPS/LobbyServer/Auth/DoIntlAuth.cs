@@ -9,11 +9,11 @@ namespace EpinelPS.LobbyServer.Auth
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqAuthIntl>();
-            var response = new ResAuth();
+            ReqAuthIntl req = await ReadData<ReqAuthIntl>();
+            ResAuth response = new();
 
             UsedAuthToken = req.Token;
-            foreach (var item in JsonDb.Instance.LauncherAccessTokens)
+            foreach (AccessToken item in JsonDb.Instance.LauncherAccessTokens)
             {
                 if (item.Token == UsedAuthToken)
                 {
@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Auth
             }
             else
             {
-                var user = GetUser();
+                User user = GetUser();
 
                 if (user.IsBanned && user.BanEnd < DateTime.UtcNow)
                 {

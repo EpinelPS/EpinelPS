@@ -12,12 +12,12 @@ namespace EpinelPS.LobbyServer.Shop
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqGetJupiterProductList>();
+            ReqGetJupiterProductList x = await ReadData<ReqGetJupiterProductList>();
 
-            var response = new ResGetJupiterProductList();
-            foreach (var item in x.ProductIdList)
+            ResGetJupiterProductList response = new();
+            foreach (string? item in x.ProductIdList)
             {
-                var product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
+                IEnumerable<KeyValuePair<string, MidasProductRecord>> product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
 
                 if (product.Any())
                 {

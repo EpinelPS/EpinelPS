@@ -10,18 +10,18 @@ namespace EpinelPS.LobbyServer.Sidestory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearSideStoryStage>();
-            var user = GetUser();
+            ReqClearSideStoryStage req = await ReadData<ReqClearSideStoryStage>();
+            User user = GetUser();
 
-            var response = new ResClearSideStoryStage();
+            ResClearSideStoryStage response = new();
 
             if (!user.CompletedSideStoryStages.Contains(req.SideStoryStageId))
             {
                 user.CompletedSideStoryStages.Add(req.SideStoryStageId);
 
-                if (GameData.Instance.SidestoryRewardTable.ContainsKey(req.SideStoryStageId))
+                if (GameData.Instance.SidestoryRewardTable.TryGetValue(req.SideStoryStageId, out SideStoryStageRecord? value))
                 {
-                    var rewardData = GameData.Instance.GetRewardTableEntry(GameData.Instance.SidestoryRewardTable[req.SideStoryStageId].first_clear_reward);
+                    RewardTableRecord? rewardData = GameData.Instance.GetRewardTableEntry(value.first_clear_reward);
 
                     if (rewardData != null)
                         response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);

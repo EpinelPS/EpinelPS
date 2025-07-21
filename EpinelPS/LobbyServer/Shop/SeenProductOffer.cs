@@ -7,11 +7,11 @@ namespace EpinelPS.LobbyServer.Shop
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqSetSetSeenProductOffer>();
+            ReqSetSetSeenProductOffer x = await ReadData<ReqSetSetSeenProductOffer>();
 
             // TODO: Figure out a way to disable ads
 
-            var response = new ResSetSetSeenProductOffer();
+            ResSetSetSeenProductOffer response = new();
 
             await WriteDataAsync(response);
         }

@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSaveLostSectorFieldObject>();
-            var user = GetUser();
+            ReqSaveLostSectorFieldObject req = await ReadData<ReqSaveLostSectorFieldObject>();
+            Database.User user = GetUser();
 
-            var response = new ResSaveLostSectorFieldObject();
+            ResSaveLostSectorFieldObject response = new();
 
             if (user.LostSectorData[req.SectorId].Objects.ContainsKey(req.Object.PositionId))
                 user.LostSectorData[req.SectorId].Objects[req.Object.PositionId] = req.Object;

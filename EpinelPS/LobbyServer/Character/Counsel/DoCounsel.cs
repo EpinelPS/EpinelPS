@@ -1,3 +1,4 @@
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -8,17 +9,17 @@ public class DoCounsel : LobbyMsgHandler
 {
     protected override async Task HandleAsync()
     {
-        var req = await ReadData<ReqCharacterCounsel>();
-        var user = GetUser();
+        ReqCharacterCounsel req = await ReadData<ReqCharacterCounsel>();
+        User user = GetUser();
 
         ResCharacterCounsel response = new();
 
-        foreach (var currency in user.Currency)
+        foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
         {
             response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
         }
 
-        var currentBondInfo = user.BondInfo.Where(x => x.NameCode == req.NameCode);
+        IEnumerable<NetUserAttractiveData> currentBondInfo = user.BondInfo.Where(x => x.NameCode == req.NameCode);
 
         NetUserAttractiveData data;
 

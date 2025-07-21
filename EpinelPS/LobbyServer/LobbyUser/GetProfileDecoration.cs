@@ -7,12 +7,16 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqProfileCardDecorationLayout>();
+            ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
 
-            var r = new ResProfileCardDecorationLayout();
-            r.Layout = new ProfileCardDecorationLayout();
-            r.Layout.BackgroundId = 101002;
-			r.Layout.ShowCharacterSpine = true;
+            ResProfileCardDecorationLayout r = new()
+            {
+                Layout = new ProfileCardDecorationLayout
+                {
+                    BackgroundId = 101002,
+                    ShowCharacterSpine = true
+                }
+            };
             await WriteDataAsync(r);
         }
     }

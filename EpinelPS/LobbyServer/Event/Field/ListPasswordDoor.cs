@@ -1,17 +1,16 @@
 using EpinelPS.Utils;
-using static EpinelPS.LobbyServer.Event.EventConstants;
 
-namespace EpinelPS.LobbyServer.Event
+namespace EpinelPS.LobbyServer.Event.Field
 {
     [PacketPath("/event/field/password-door/list")]
     public class ListPasswordDoor : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListFieldPasswordDoorData>();
-            var user = GetUser();
+            ReqListFieldPasswordDoorData req = await ReadData<ReqListFieldPasswordDoorData>();
+            Database.User user = GetUser();
 
-            var response = new ResListFieldPasswordDoorData();
+            ResListFieldPasswordDoorData response = new();
 
             // TODO
 

@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer.Antibot
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqBattleReportData>();
-            var response = new ResBattleReportData();
+            ReqBattleReportData req = await ReadData<ReqBattleReportData>();
+            ResBattleReportData response = new();
 
             // this is responsible for server side anticheat
 

@@ -8,12 +8,14 @@ namespace EpinelPS.LobbyServer
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetNow>();
+            ReqGetNow req = await ReadData<ReqGetNow>();
 
-            var response = new ResGetNow();
-            response.Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            response.ResetHour = 1;
-            response.CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0));
+            ResGetNow response = new()
+            {
+                Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                ResetHour = 1,
+                CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
+            };
             // todo: validate response with actual server
 
             await WriteDataAsync(response);

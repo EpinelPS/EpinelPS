@@ -41,7 +41,7 @@ namespace EpinelPS.LobbyServer
             this.ctx = ctx;
             if (ctx.Request.Headers.ContainsKey("Authorization"))
             {
-                var token = ctx.Request.Headers.Authorization.FirstOrDefault();
+                string? token = ctx.Request.Headers.Authorization.FirstOrDefault();
                 if (token != null)
                 {
                     UsedAuthToken = token;
@@ -54,7 +54,7 @@ namespace EpinelPS.LobbyServer
         {
             this.UsedAuthToken = authToken;
 
-            var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+            PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                              .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
@@ -69,7 +69,7 @@ namespace EpinelPS.LobbyServer
 
         private static void PrintMessage<T>(T data) where T : IMessage, new()
         {
-            var str = (string?)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
+            string? str = (string?)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
             if (str != null)
                 Logging.WriteLine(str, LogType.Debug);
         }
@@ -81,8 +81,8 @@ namespace EpinelPS.LobbyServer
 
             if (ctx == null)
             {
-                var ms = new MemoryStream();
-                var x2 = new CodedOutputStream(ms);
+                MemoryStream ms = new();
+                CodedOutputStream x2 = new(ms);
                 data.WriteTo(x2);
                 x2.Flush();
                 ReturnBytes = ms.ToArray();
@@ -94,8 +94,8 @@ namespace EpinelPS.LobbyServer
                 ctx.Response.ContentLength = data.CalculateSize();
                 bool encrypted = ctx.Request.Headers.ContentEncoding.Contains("enc");
                 encrypted = false; //TODO implement, although client does not complain
-                var responseBytes = encrypted ? new MemoryStream() : ctx.Response.Body;
-                var x = new CodedOutputStream(responseBytes);
+                Stream responseBytes = encrypted ? new MemoryStream() : ctx.Response.Body;
+                CodedOutputStream x = new(responseBytes);
                 data.WriteTo(x);
 
                 x.Flush();
@@ -103,7 +103,7 @@ namespace EpinelPS.LobbyServer
                 if (encrypted)
                 {
                     ctx.Response.Headers.ContentEncoding = new Microsoft.Extensions.Primitives.StringValues("gzip,enc");
-                    var enc = PacketDecryption.EncryptData(((MemoryStream)responseBytes).ToArray(), UsedAuthToken);
+                    byte[] enc = PacketDecryption.EncryptData(((MemoryStream)responseBytes).ToArray(), UsedAuthToken);
                     await ctx.Response.Body.WriteAsync(enc);
                 }
             }
@@ -127,7 +127,7 @@ namespace EpinelPS.LobbyServer
                 T msg = new();
                 Logging.WriteLine("Reading " + msg.GetType().Name, LogType.Debug);
 
-                var bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
+                PacketDecryptResponse bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
                 msg.MergeFrom(bin.Contents);
 
                 PrintMessage(msg);

@@ -8,14 +8,14 @@ namespace EpinelPS.LobbyServer.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMessages>();
-            var user = GetUser();
+            ReqGetMessages req = await ReadData<ReqGetMessages>();
+            User user = GetUser();
 
-            var response = new ResGetMessages();
+            ResGetMessages response = new();
 
-            var newMessages = user.MessengerData.Where(x => x.Seq >= req.Seq);
+            IEnumerable<NetMessage> newMessages = user.MessengerData.Where(x => x.Seq >= req.Seq);
 
-            foreach (var item in newMessages)
+            foreach (NetMessage? item in newMessages)
             {
                 response.Messages.Add(item);
             }

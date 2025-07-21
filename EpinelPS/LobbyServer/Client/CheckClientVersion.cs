@@ -7,9 +7,11 @@ namespace EpinelPS.LobbyServer.Client
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCheckClientVersion>();
-            var response = new ResCheckClientVersion();
-            response.Availability = ResCheckClientVersion.Types.Availability.None;
+            ReqCheckClientVersion req = await ReadData<ReqCheckClientVersion>();
+            ResCheckClientVersion response = new()
+            {
+                Availability = ResCheckClientVersion.Types.Availability.None
+            };
 
             await WriteDataAsync(response);
         }

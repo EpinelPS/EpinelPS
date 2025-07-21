@@ -8,12 +8,14 @@ namespace EpinelPS.LobbyServer.Arena
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSpecialArena>();
-            var user = GetUser();
+            ReqGetSpecialArena req = await ReadData<ReqGetSpecialArena>();
+            Database.User user = GetUser();
 
-            var response = new ResGetSpecialArena();
-            response.BanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) };
-            response.User = new NetArenaData() {User = LobbyHandler.CreateWholeUserDataFromDbUser(user) };
+            ResGetSpecialArena response = new()
+            {
+                BanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) },
+                User = new NetArenaData() { User = LobbyHandler.CreateWholeUserDataFromDbUser(user) }
+            };
 
             await WriteDataAsync(response);
         }

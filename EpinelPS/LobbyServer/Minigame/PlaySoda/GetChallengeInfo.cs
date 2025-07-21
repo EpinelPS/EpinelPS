@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetPlaySodaChallengeModeInfo>();
+            ReqGetPlaySodaChallengeModeInfo req = await ReadData<ReqGetPlaySodaChallengeModeInfo>();
 
-            var response = new ResGetPlaySodaChallengeModeInfo();
+            ResGetPlaySodaChallengeModeInfo response = new();
             // TODO
             await WriteDataAsync(response);
         }

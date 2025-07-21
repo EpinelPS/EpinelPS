@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.PackageShop
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetPopupPackageState>();
+            ReqSetPopupPackageState req = await ReadData<ReqSetPopupPackageState>();
 
-            var response = new ResSetPopupPackageState();
+            ResSetPopupPackageState response = new();
             await WriteDataAsync(response);
         }
     }

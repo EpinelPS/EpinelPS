@@ -9,7 +9,7 @@ namespace EpinelPS.Utils
     {
         public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
         {
-            var rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
+            RewardTableRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
             return RegisterRewardsForUser(user, rewardData);
         }
         public static NetRewardData RegisterRewardsForUser(User user, RewardTableRecord rewardData)
@@ -22,10 +22,10 @@ namespace EpinelPS.Utils
 
             if (rewardData.user_exp != 0)
             {
-                var newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
+                int newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
 
-                var newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
-                var newLevel = user.userPointData.UserLevel;
+                int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
+                int newLevel = user.userPointData.UserLevel;
 
                 if (newLevelExp == -1)
                 {
@@ -68,7 +68,7 @@ namespace EpinelPS.Utils
                 user.userPointData.UserLevel = newLevel;
             }
 
-            foreach (var item in rewardData.rewards)
+            foreach (RewardEntry item in rewardData.rewards)
             {
                 if (!string.IsNullOrEmpty(item.reward_type))
                 {
@@ -155,7 +155,7 @@ namespace EpinelPS.Utils
                     else
                     {
 
-                        var id = user.GenerateUniqueItemId();
+                        int id = user.GenerateUniqueItemId();
                         user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
                         ret.Item.Add(new NetItemData()
                         {
@@ -210,7 +210,7 @@ namespace EpinelPS.Utils
                     }
                     else
                     {
-                        var itm = new NetItemData()
+                        NetItemData itm = new()
                         {
                             Count = rewardCount,
                             Tid = cItem.id,

@@ -10,12 +10,12 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetCampaignFieldObjectItemsNum>();
-            var user = GetUser();
+            ReqGetCampaignFieldObjectItemsNum req = await ReadData<ReqGetCampaignFieldObjectItemsNum>();
+            User user = GetUser();
 
-            var response = new ResGetCampaignFieldObjectItemsNum();
+            ResGetCampaignFieldObjectItemsNum response = new();
 
-            foreach (var map in user.FieldInfoNew)
+            foreach (KeyValuePair<string, FieldInfoNew> map in user.FieldInfoNew)
             {
                 response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
                 {

@@ -7,7 +7,7 @@ namespace EpinelPS.LobbyServer.Pass
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetActiveFreeRewardPassData>();
+            ReqGetActiveFreeRewardPassData req = await ReadData<ReqGetActiveFreeRewardPassData>();
             ResGetActiveFreeRewardPassData response = new();
 
             await WriteDataAsync(response);

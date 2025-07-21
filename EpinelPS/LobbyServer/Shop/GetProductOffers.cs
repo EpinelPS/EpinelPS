@@ -8,11 +8,11 @@ namespace EpinelPS.LobbyServer.Shop
     {
         protected override async Task HandleAsync()
         {
-            var x = await ReadData<ReqListSeenProductOffer>();
+            ReqListSeenProductOffer x = await ReadData<ReqListSeenProductOffer>();
 
             // Disable in game ads
-            var response = new ResListSeenProductOffer();
-            foreach(var item in GameData.Instance.ProductOffers)
+            ResListSeenProductOffer response = new();
+            foreach(KeyValuePair<int, ProductOfferRecord> item in GameData.Instance.ProductOffers)
             {
                 response.Result.Add(new NetUserProductOfferSeenHistory() { ProductOfferId = item.Key });
             }

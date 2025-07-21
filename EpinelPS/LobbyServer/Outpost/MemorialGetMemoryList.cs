@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMemoryList>();
-            var user = GetUser();
+            ReqGetMemoryList req = await ReadData<ReqGetMemoryList>();
+            Database.User user = GetUser();
 
-            var response = new ResGetMemoryList();
+            ResGetMemoryList response = new();
 
             response.MemoryList.AddRange(user.Memorial);
 

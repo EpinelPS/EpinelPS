@@ -34,10 +34,10 @@ namespace EpinelPS
                 Logging.WriteLine("Starting ASP.NET core on port 443");
                 new Thread(() =>
                 {
-                    var builder = WebApplication.CreateBuilder(args);
+                    WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
                     // Configure HTTPS
-                    var httpsConnectionAdapterOptions = new HttpsConnectionAdapterOptions
+                    HttpsConnectionAdapterOptions httpsConnectionAdapterOptions = new()
                     {
                         SslProtocols = System.Security.Authentication.SslProtocols.Tls12,
                         ClientCertificateMode = ClientCertificateMode.AllowCertificate,
@@ -75,7 +75,7 @@ namespace EpinelPS
                     });
 
 
-                    var app = builder.Build();
+                    WebApplication app = builder.Build();
 
                     app.UseDefaultFiles();
                     app.UseStaticFiles();
@@ -190,7 +190,7 @@ namespace EpinelPS
             }
         }
 
-        private static async Task HandleRqd(HttpContext context)
+        private static void HandleRqd(HttpContext context)
         {
             
         }
@@ -203,9 +203,9 @@ namespace EpinelPS
             {
                 Console.Write(prompt);
 
-                var input = Console.ReadLine();
+                string? input = Console.ReadLine();
                 if (input == null) break;
-                var args = input.Split(' ');
+                string[] args = input.Split(' ');
                 if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
                 {
 
@@ -236,7 +236,7 @@ namespace EpinelPS
                 else if (input == "show users")
                 {
                     Console.WriteLine("Id,Username,Nickname");
-                    foreach (var item in JsonDb.Instance.Users)
+                    foreach (User item in JsonDb.Instance.Users)
                     {
                         Console.WriteLine($"{item.ID},{item.Username},{item.Nickname}");
                     }
@@ -248,7 +248,7 @@ namespace EpinelPS
                         if (ulong.TryParse(args[1], out ulong id))
                         {
                             // check if user id exists
-                            var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+                            User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
                             if (user != null)
                             {
                                 selectedUser = user.ID;
@@ -280,7 +280,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -289,7 +289,7 @@ namespace EpinelPS
                         }
                         else
                         {
-                            var rsp = AdminCommands.AddAllCharacters(user);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllCharacters(user);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                     }
@@ -302,7 +302,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -317,7 +317,7 @@ namespace EpinelPS
                                 amount = parsedAmount;
                             }
 
-                            var rsp = AdminCommands.AddAllMaterials(user, amount);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllMaterials(user, amount);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                     }
@@ -330,7 +330,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -339,7 +339,7 @@ namespace EpinelPS
                         }
                         else
                         {
-                            var rsp = AdminCommands.FinishAllTutorials(user);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.FinishAllTutorials(user);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                     }
@@ -352,7 +352,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -361,7 +361,7 @@ namespace EpinelPS
                         }
                         else if (args.Length == 2 && int.TryParse(args[1], out int inputGrade) && inputGrade >= 0 && inputGrade <= 11)
                         {
-                            var rsp = AdminCommands.SetCoreLevel(user, inputGrade);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.SetCoreLevel(user, inputGrade);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                         else
@@ -382,7 +382,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -417,7 +417,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -426,7 +426,7 @@ namespace EpinelPS
                         }
                         else if (args.Length == 2 && int.TryParse(args[1], out int level) && level >= 1 && level <= 999)
                         {
-                            var rsp = AdminCommands.SetCharacterLevel(user, level);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.SetCharacterLevel(user, level);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                         else
@@ -446,7 +446,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -455,7 +455,7 @@ namespace EpinelPS
                         }
                         else if (args.Length == 2 && int.TryParse(args[1], out int skillLevel) && skillLevel >= 1 && skillLevel <= 10)
                         {
-                            var rsp = AdminCommands.SetSkillLevel(user, skillLevel);
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.SetSkillLevel(user, skillLevel);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                         else
@@ -473,7 +473,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -483,7 +483,7 @@ namespace EpinelPS
                         else
                         {
                             Console.Write("Are you sure you want to delete user " + user.Username + "? (y/n) ");
-                            var confirm = Console.ReadLine();
+                            string? confirm = Console.ReadLine();
                             if (confirm == "y")
                             {
                                 JsonDb.Instance.Users.Remove(user);
@@ -509,8 +509,8 @@ namespace EpinelPS
                     {
                         if (args.Length == 2)
                         {
-                            var input2 = args[1];
-                            var rsp = AdminCommands.CompleteStage(selectedUser, input2);
+                            string input2 = args[1];
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.CompleteStage(selectedUser, input2);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                         else
@@ -527,7 +527,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -540,7 +540,7 @@ namespace EpinelPS
                             {
                                 if (int.TryParse(args[1], out int itemId) && int.TryParse(args[2], out int amount))
                                 {
-                                    var rsp = AdminCommands.AddItem(user, itemId, amount);
+                                    Models.Admin.RunCmdResponse rsp = AdminCommands.AddItem(user, itemId, amount);
                                     if (!rsp.ok) Console.WriteLine(rsp.error);
                                 }
                                 else
@@ -563,7 +563,7 @@ namespace EpinelPS
                     }
                     else
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
                         if (user == null)
                         {
                             Console.WriteLine("Selected user does not exist");
@@ -576,7 +576,7 @@ namespace EpinelPS
                             {
                                 if (int.TryParse(args[1], out int characterId))
                                 {
-                                    var rsp = AdminCommands.AddCharacter(user, characterId);
+                                    Models.Admin.RunCmdResponse rsp = AdminCommands.AddCharacter(user, characterId);
                                     if (!rsp.ok) Console.WriteLine(rsp.error);
                                 }
                                 else
@@ -610,7 +610,7 @@ namespace EpinelPS
 
         private static async Task HandleBatchRequests(HttpContext ctx)
         {
-            var theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
+            PacketDecryptResponse theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
 
             // this actually uses gzip compression, unlike other requests.
 
@@ -620,7 +620,7 @@ namespace EpinelPS
             content.Headers.TryAddWithoutValidation("Content-Type", (string?)ctx.Request.Headers["Content-Type"]);
 
             // we have the form contents, 
-            var multipart = await content.ReadAsMultipartAsync();
+            MultipartMemoryStreamProvider multipart = await content.ReadAsMultipartAsync();
 
             HttpClient cl = new();
 
@@ -628,17 +628,17 @@ namespace EpinelPS
             List<byte> response = [.. Encoding.UTF8.GetBytes("--f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\r\n")];
 
             int i = 0;
-            foreach (var item in multipart.Contents)
+            foreach (HttpContent? item in multipart.Contents)
             {
                 i++;
                 response.AddRange(Encoding.UTF8.GetBytes("Content-Type: application/http\r\n"));
                 response.AddRange(Encoding.UTF8.GetBytes($"Content-ID: {item.Headers.NonValidated["Content-ID"]}\r\n"));
                 response.AddRange(Encoding.UTF8.GetBytes("\r\n"));
 
-                var bin = await item.ReadAsByteArrayAsync();
+                byte[] bin = await item.ReadAsByteArrayAsync();
                 try
                 {
-                    var res = await SendReqLocalAndReadResponseAsync(bin);
+                    byte[]? res = await SendReqLocalAndReadResponseAsync(bin);
 
                     if (res != null)
                     {
@@ -685,7 +685,7 @@ namespace EpinelPS
 
             }
 
-            var responseBytes = response.ToArray();
+            byte[] responseBytes = [.. response];
             ctx.Response.ContentType = "multipart/mixed; boundary=\"f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\"";
             ctx.Response.Body.Write(responseBytes);
         }
@@ -695,14 +695,14 @@ namespace EpinelPS
         }
         private static (string key, string value) GetHeader(string line)
         {
-            var pieces = line.Split([':'], 2);
+            string[] pieces = line.Split([':'], 2);
 
             return (pieces[0].Trim(), pieces[1].Trim());
         }
         private static async Task<byte[]?> SendReqLocalAndReadResponseAsync(byte[] bytes)
         {
             int line = 0;
-            var bodyStartStr = Encoding.UTF8.GetString(bytes);
+            string bodyStartStr = Encoding.UTF8.GetString(bytes);
 
             string method;
             string url = "";
@@ -712,11 +712,11 @@ namespace EpinelPS
 
             int currentByte = 0;
 
-            foreach (var item in bodyStartStr.Split("\r\n"))
+            foreach (string item in bodyStartStr.Split("\r\n"))
             {
                 if (line == 0)
                 {
-                    var parts = item.Split(" ");
+                    string[] parts = item.Split(" ");
                     method = parts[0];
                     url = parts[1];
                     httpVer = parts[2];
@@ -728,7 +728,7 @@ namespace EpinelPS
                 }
                 else
                 {
-                    var (key, value) = GetHeader(item);
+                    (string key, string value) = GetHeader(item);
                     headers.Add(new NameValueHeaderValue(key, value));
 
                     if (key == "Authorization")
@@ -747,7 +747,7 @@ namespace EpinelPS
             }
             else
             {
-                body = bytes.Skip(currentByte).ToArray();
+                body = [.. bytes.Skip(currentByte)];
             }
 
             if (!url.StartsWith("/v1/"))
@@ -760,7 +760,7 @@ namespace EpinelPS
             // find appropriate handler
             Logging.WriteLine("BATCH " + url, LogType.Info);
 
-            foreach (var item in LobbyHandler.Handlers)
+            foreach (KeyValuePair<string, LobbyMsgHandler> item in LobbyHandler.Handlers)
             {
                 if (item.Key == url)
                 {

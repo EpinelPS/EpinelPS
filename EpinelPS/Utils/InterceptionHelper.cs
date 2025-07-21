@@ -13,9 +13,9 @@ namespace EpinelPS.Utils
 
             Dictionary<int, InterceptionRecord> records = type == 0 ? GameData.Instance.InterceptNormal : GameData.Instance.InterceptSpecial;
 
-            var record = records[id];
+            InterceptionRecord record = records[id];
 
-            var normReward = GameData.Instance.GetConditionReward(record.condition_reward_group, damage);
+            int normReward = GameData.Instance.GetConditionReward(record.condition_reward_group, damage);
             if (normReward != 0)
             {
                 response.NormalReward = RewardUtils.RegisterRewardsForUser(user, normReward);
@@ -25,7 +25,7 @@ namespace EpinelPS.Utils
                 Logging.WriteLine($"unable to find reward which meets condition of damage {damage} and group {record.condition_reward_group}");
             }
 
-            var percentReward = GameData.Instance.GetConditionReward(record.percent_condition_reward_group, damage);
+            int percentReward = GameData.Instance.GetConditionReward(record.percent_condition_reward_group, damage);
             if (percentReward != 0)
             {
                 response.BonusReward = RewardUtils.RegisterRewardsForUser(user, percentReward);

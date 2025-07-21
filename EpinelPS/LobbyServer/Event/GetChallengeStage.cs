@@ -7,15 +7,17 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqChallengeEventStageData>();
-            var user = GetUser();
+            ReqChallengeEventStageData req = await ReadData<ReqChallengeEventStageData>();
+            Database.User user = GetUser();
 
-            var response = new ResChallengeEventStageData();
-            response.RemainTicket = 3;
-            response.TeamData = user.UserTeams[1];
+            ResChallengeEventStageData response = new()
+            {
+                RemainTicket = 3,
+                TeamData = user.UserTeams[1]
+            };
 
             // TODO implement properly
-  
+
             await WriteDataAsync(response);
         }
     }

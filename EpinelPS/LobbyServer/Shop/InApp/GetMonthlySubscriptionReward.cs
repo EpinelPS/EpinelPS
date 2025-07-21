@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.InApp
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetMonthlySubscriptionReward>();
+            ReqGetMonthlySubscriptionReward req = await ReadData<ReqGetMonthlySubscriptionReward>();
 
-            var response = new ResGetMonthlySubscriptionReward();
+            ResGetMonthlySubscriptionReward response = new();
 
             // TODO: Validate response from real server
             await WriteDataAsync(response);

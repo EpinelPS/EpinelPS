@@ -10,9 +10,13 @@ namespace EpinelPS.Utils
         {
             LogLevel = level;
         }
+        public static void Warn(string msg)
+        {
+            WriteLine(msg, LogType.Warning);
+        }
         public static void WriteLine(string msg, LogType level = LogType.Info)
         {
-            var originalFG = Console.ForegroundColor;
+            ConsoleColor originalFG = Console.ForegroundColor;
             Console.ForegroundColor = GetColorForLevel(level);
 
             // todo write to some file
@@ -27,15 +31,15 @@ namespace EpinelPS.Utils
 
         private static ConsoleColor GetColorForLevel(LogType level)
         {
-            switch (level)
+            return level switch
             {
-                case LogType.Debug: return ConsoleColor.DarkGray;
-                case LogType.Info: return ConsoleColor.Gray;
-                case LogType.Warning: return ConsoleColor.Yellow;
-                case LogType.WarningAntiCheat: return ConsoleColor.DarkMagenta;
-                case LogType.Error: return ConsoleColor.Red;
-                default: return ConsoleColor.White;
-            }
+                LogType.Debug => ConsoleColor.DarkGray,
+                LogType.Info => ConsoleColor.Gray,
+                LogType.Warning => ConsoleColor.Yellow,
+                LogType.WarningAntiCheat => ConsoleColor.DarkMagenta,
+                LogType.Error => ConsoleColor.Red,
+                _ => ConsoleColor.White,
+            };
         }
     }
 

@@ -64,7 +64,7 @@ namespace EpinelPS.Database
     }
     public class EventData
     {
-        public List<string> CompletedScenarios = new();
+        public List<string> CompletedScenarios = [];
         public int Diff = 0; // Default value for Diff
         public int LastStage = 0; // Default value for LastStage
     }
@@ -114,10 +114,10 @@ namespace EpinelPS.Database
     }
     public class OutpostBuffs
     {
-        public List<int> CreditPercentages = new List<int>();
-        public List<int> CoreDustPercentages = new List<int>();
-        public List<int> BattleDataPercentages = new List<int>();
-        public List<int> UserExpPercentages = new List<int>();
+        public List<int> CreditPercentages = [];
+        public List<int> CoreDustPercentages = [];
+        public List<int> BattleDataPercentages = [];
+        public List<int> UserExpPercentages = [];
 
         public List<int> GetPercentages(CurrencyType currency)
         {
@@ -182,7 +182,7 @@ namespace EpinelPS.Database
             Location = badge.Location;
             Seq = badge.Seq;
             BadgeContent = badge.BadgeContent;
-            BadgeGuid = new Guid(badge.BadgeGuid.ToArray()).ToString();
+            BadgeGuid = new Guid([.. badge.BadgeGuid]).ToString();
         }
 
         public NetBadge ToNet()
@@ -244,14 +244,14 @@ namespace EpinelPS.Database
     public class User
     {
         // User info
-        public string Username = "";
-        public string Password = "";
-        public string PlayerName = "";
+        public string? Username;
+        public string? Password;
+        public string? PlayerName;
         public ulong ID;
         public long RegisterTime;
         public int LastNormalStageCleared;
         public int LastHardStageCleared;
-        public string Nickname = "SomePlayer";
+        public string? Nickname;
         public int ProfileIconId = 39900;
         public bool ProfileIconIsPrism = false;
         public int ProfileFrame = 25;
@@ -273,14 +273,14 @@ namespace EpinelPS.Database
         public Dictionary<CurrencyType, long> Currency = new() {
             { CurrencyType.ContentStamina, 2 }
         };
-        public List<SynchroSlot> SynchroSlots = new List<SynchroSlot>();
+        public List<SynchroSlot> SynchroSlots = [];
         public bool SynchroDeviceUpgraded = false;
         public int SynchroDeviceLevel = 200;
         public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress = [];
 
         public ResetableData ResetableData = new();
         public WeeklyResetableData WeeklyResetableData = new();
-        public List<ItemData> Items = new();
+        public List<ItemData> Items = [];
         public List<Character> Characters = [];
         public long[] RepresentationTeamDataNew = [];
         public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
@@ -293,9 +293,9 @@ namespace EpinelPS.Database
         public List<int> LobbyDecoBackgroundList = [];
 
 
-        public Dictionary<int, NetUserTeamData> UserTeams = new Dictionary<int, NetUserTeamData>();
-        public Dictionary<int, bool> MainQuestData = new();
-        public Dictionary<int, bool> SubQuestData = new();
+        public Dictionary<int, NetUserTeamData> UserTeams = [];
+        public Dictionary<int, bool> MainQuestData = [];
+        public Dictionary<int, bool> SubQuestData = [];
         public int InfraCoreExp = 0;
         public int InfraCoreLvl = 1;
         public UserPointData userPointData = new();
@@ -305,17 +305,17 @@ namespace EpinelPS.Database
         public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
         public int GachaTutorialPlayCount = 0;
         public List<int> CompletedTacticAcademyLessons = [];
-        public List<int> CompletedSideStoryStages = new();
+        public List<int> CompletedSideStoryStages = [];
 
-        public List<int> Memorial = new();
-        public List<int> JukeboxBgm = new List<int>();
+        public List<int> Memorial = [];
+        public List<int> JukeboxBgm = [];
 
-        public Dictionary<int, int> TowerProgress = new Dictionary<int, int>();
+        public Dictionary<int, int> TowerProgress = [];
 
         public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
         public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
         public OutpostBuffs OutpostBuffs = new();
-        public Dictionary<int, UnlockData> ContentsOpenUnlocked = new();
+        public Dictionary<int, UnlockData> ContentsOpenUnlocked = [];
 
         public List<NetStageClearInfo> StageClearHistorys = [];
 
@@ -331,7 +331,7 @@ namespace EpinelPS.Database
         public Dictionary<int, LostSectorData> LostSectorData = [];
 
         // Event data
-        public Dictionary<int, EventData> EventInfo = new();
+        public Dictionary<int, EventData> EventInfo = [];
         public MogMinigameInfo MogInfo = new();
 
         public Trigger AddTrigger(TriggerType type, int value, int conditionId = 0)
@@ -423,8 +423,8 @@ namespace EpinelPS.Database
 
         public long GetCurrencyVal(CurrencyType type)
         {
-            if (Currency.ContainsKey(type))
-                return Currency[type];
+            if (Currency.TryGetValue(type, out long value))
+                return value;
             else
             {
                 Currency.Add(type, 0);
@@ -433,8 +433,7 @@ namespace EpinelPS.Database
         }
         public void AddCurrency(CurrencyType type, long val)
         {
-            if (Currency.ContainsKey(type)) Currency[type] += val;
-            else Currency.Add(type, val);
+            if (!Currency.TryAdd(type, val)) Currency[type] += val;
         }
         public bool SubtractCurrency(CurrencyType type, long val)
         {
@@ -508,13 +507,11 @@ namespace EpinelPS.Database
 
         internal bool GetSynchro(long csn)
         {
-            return SynchroSlots.Where(x => x.CharacterSerialNumber == csn).Count() >= 1;
+            return SynchroSlots.Where(x => x.CharacterSerialNumber == csn).Any();
         }
         internal int GetCharacterLevel(int csn)
         {
-            var c = GetCharacterBySerialNumber(csn);
-            if (c == null) throw new Exception("failed to lookup character");
-
+            var c = GetCharacterBySerialNumber(csn) ?? throw new Exception("failed to lookup character");
             return GetCharacterLevel(csn, c.Level);
         }
         internal int GetCharacterLevel(int csn, int characterLevel)
@@ -640,7 +637,7 @@ namespace EpinelPS.Database
         public List<User> Users = [];
 
         public List<AccessToken> LauncherAccessTokens = [];
-        public Dictionary<string, ulong> AdminAuthTokens = new();
+        public Dictionary<string, ulong> AdminAuthTokens = [];
 
         public byte[] LauncherTokenKey = [];
         public byte[] EncryptionTokenKey = [];
@@ -745,7 +742,7 @@ namespace EpinelPS.Database
                     // FieldInfoNew uses MapId instead of ChapterNum_ChapterDifficulty format
                     foreach (var user in Instance.Users)
                     {
-                        Dictionary<string, FieldInfoNew> info = new();
+                        Dictionary<string, FieldInfoNew> info = [];
                         foreach (var item in user.FieldInfoNew)
                         {
                             if (item.Key.EndsWith("_Normal") || item.Key.EndsWith("_Hard"))
@@ -865,7 +862,7 @@ namespace EpinelPS.Database
                     //in the file when its set in public List<int> JukeboxBgm = new List<int>(); 
                     //delete when or if it gets fixed
 
-                    user.JukeboxBgm = new List<int> { 2, 5 };
+                    user.JukeboxBgm = [2, 5];
                 }
 
                 activeJukeboxBgm.AddRange(user.JukeboxBgm);

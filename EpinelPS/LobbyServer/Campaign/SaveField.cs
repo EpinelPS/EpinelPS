@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSaveCampaignField>();
-            var user = GetUser();
+            ReqSaveCampaignField req = await ReadData<ReqSaveCampaignField>();
+            Database.User user = GetUser();
 
-            var response = new ResSaveCampaignField();
+            ResSaveCampaignField response = new();
 
             if (!user.MapJson.ContainsKey(req.MapId))
             {

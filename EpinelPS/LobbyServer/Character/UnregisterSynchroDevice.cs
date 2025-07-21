@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSynchroUnregist>();
-            var user = GetUser();
+            ReqSynchroUnregist req = await ReadData<ReqSynchroUnregist>();
+            User user = GetUser();
 
-            var response = new ResSynchroUnregist();
+            ResSynchroUnregist response = new();
 
-            foreach (var item in user.SynchroSlots)
+            foreach (SynchroSlot item in user.SynchroSlots)
             {
                 if (item.Slot == req.Slot)
                 {
@@ -23,9 +23,9 @@ namespace EpinelPS.LobbyServer.Character
                     }
                     else
                     {
-                        var oldCSN = item.CharacterSerialNumber;
+                        long oldCSN = item.CharacterSerialNumber;
                         item.CharacterSerialNumber = 0;
-                        var data = user.GetCharacterBySerialNumber(oldCSN) ?? throw new Exception("failed to lookup character");
+                        Database.Character data = user.GetCharacterBySerialNumber(oldCSN) ?? throw new Exception("failed to lookup character");
 
                         response.Character = new NetUserCharacterDefaultData()
                         {
@@ -41,10 +41,10 @@ namespace EpinelPS.LobbyServer.Character
                         response.Slot = new NetSynchroSlot() { AvailableRegisterAt = item.AvailableAt, Csn = item.CharacterSerialNumber, Slot = item.Slot };
 
                         response.IsSynchro = false;
-                        var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+                        List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
 
-                        foreach (var item2 in highestLevelCharacters)
+                        foreach (Database.Character? item2 in highestLevelCharacters)
                         {
                             response.SynchroStandardCharacters.Add(item2.Csn);
                         }

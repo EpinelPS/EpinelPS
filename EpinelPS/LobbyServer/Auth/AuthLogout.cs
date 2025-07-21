@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Auth
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqLogout>();
+            ReqLogout req = await ReadData<ReqLogout>();
 
             // TODO remove UsedAuthToken
 

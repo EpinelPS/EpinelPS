@@ -13,15 +13,15 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSynchroChange>();
-            var user = GetUser();
+            ReqSynchroChange req = await ReadData<ReqSynchroChange>();
+            User user = GetUser();
 
-            var response = new ResSynchroChange();
+            ResSynchroChange response = new();
 
-            var highestLevelCharacters = user.Characters.OrderByDescending(x => x.Level).Take(5).ToList();
+            List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
             int slot = 1;
-            foreach (var item in highestLevelCharacters)
+            foreach (Database.Character? item in highestLevelCharacters)
             {
                 if (item.Level != 200)
                 {
@@ -32,7 +32,7 @@ namespace EpinelPS.LobbyServer.Character
 
 
 
-                foreach (var s in user.SynchroSlots)
+                foreach (SynchroSlot s in user.SynchroSlots)
                 {
                     if (s.Slot == slot)
                     {
@@ -45,7 +45,7 @@ namespace EpinelPS.LobbyServer.Character
 
             user.SynchroDeviceUpgraded = true;
 
-            foreach (var item in user.SynchroSlots)
+            foreach (SynchroSlot item in user.SynchroSlots)
             {
                 response.Slots.Add(new NetSynchroSlot() { Slot = item.Slot, AvailableRegisterAt = item.AvailableAt, Csn = item.CharacterSerialNumber });
             }

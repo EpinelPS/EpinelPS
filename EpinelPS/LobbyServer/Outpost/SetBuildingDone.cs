@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqBuildingIsDone>();
-            var user = GetUser();
+            ReqBuildingIsDone req = await ReadData<ReqBuildingIsDone>();
+            Database.User user = GetUser();
 
-            var response = new ResBuildingIsDone();
+            ResBuildingIsDone response = new();
           
 
 

@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGachaGetAllShutdownFlags>();
-            var user = GetUser();
+            ReqGachaGetAllShutdownFlags req = await ReadData<ReqGachaGetAllShutdownFlags>();
+            Database.User user = GetUser();
 
-            var response = new ResGachaGetAllShutdownFlags();
+            ResGachaGetAllShutdownFlags response = new();
             if (user.GachaTutorialPlayCount > 0)
                 response.Unavailables.Add(3);
 

@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Utils;
 using EpinelPS.Database;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -8,12 +9,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetUserData>();
-            var response = new ResGetUserData();
-            var user = GetUser();
+            ReqGetUserData req = await ReadData<ReqGetUserData>();
+            ResGetUserData response = new();
+            User user = GetUser();
 
-            var battleTime = DateTime.UtcNow - user.BattleTime;
-            var battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
+            TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
+            long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
 
             response.User = LobbyHandler.CreateNetUserDataFromUser(user);
@@ -22,7 +23,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             response.OutpostBattleLevel = user.OutpostBattleLevel;
             response.IsSimple = req.IsSimple;
 
-            foreach (var item in user.Currency)
+            foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
@@ -31,7 +32,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-            foreach (var item in user.ClearedTutorialData)
+            foreach (KeyValuePair<int, Data.ClearedTutorialData> item in user.ClearedTutorialData)
             {
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;

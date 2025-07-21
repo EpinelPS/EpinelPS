@@ -9,19 +9,21 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetCampaignFieldData>();
-            var user = GetUser();
+            ReqGetCampaignFieldData req = await ReadData<ReqGetCampaignFieldData>();
+            Database.User user = GetUser();
 
             Console.WriteLine("Map ID: " + req.MapId);
 
-            var response = new ResGetCampaignFieldData();
-            response.Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered);
+            ResGetCampaignFieldData response = new()
+            {
+                Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered),
 
-            // todo save this data
-            response.Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 };
+                // todo save this data
+                Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 }
+            };
             if (user.LastNormalStageCleared >= 6000003)
             {
-                var team = new NetTeamData() { TeamNumber = 1 };
+                NetTeamData team = new() { TeamNumber = 1 };
                 team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
                 team.Slots.Add(new NetTeamSlot() { Slot = 2, Value = 47263456 });
                 team.Slots.Add(new NetTeamSlot() { Slot = 3, Value = 47263457 });
@@ -33,14 +35,14 @@ namespace EpinelPS.LobbyServer.Campaign
             }
 
             string resultingJson;
-            if (!user.MapJson.ContainsKey(req.MapId))
+            if (!user.MapJson.TryGetValue(req.MapId, out string? value))
             {
                 resultingJson = "";
                 user.MapJson.Add(req.MapId, resultingJson);
             }
             else
             {
-                resultingJson = user.MapJson[req.MapId];
+                resultingJson = value;
             }
 
             response.Json = resultingJson;

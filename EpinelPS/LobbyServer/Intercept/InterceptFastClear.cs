@@ -8,9 +8,9 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqFastClearIntercept>();
+            ReqFastClearIntercept req = await ReadData<ReqFastClearIntercept>();
 
-            var response = new ResFastClearIntercept
+            ResFastClearIntercept response = new()
             {
                 TicketCount = User.ResetableData.InterceptionTickets,
                 MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,

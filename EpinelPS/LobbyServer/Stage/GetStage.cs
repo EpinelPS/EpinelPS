@@ -10,9 +10,9 @@ namespace EpinelPS.LobbyServer.Stage
         protected override async Task HandleAsync()
         {
             ReqGetStageData req = await ReadData<ReqGetStageData>();
-            var user = GetUser();
+            User user = GetUser();
 
-            var mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, (ChapterMod)req.Mod);
+            string mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, (ChapterMod)req.Mod);
 
             ResGetStageData response = new()
             {
@@ -26,19 +26,19 @@ namespace EpinelPS.LobbyServer.Stage
 
         public static NetFieldObjectData CreateFieldInfo(User user, string mapId, out bool BossEntered)
         {
-            var f = new NetFieldObjectData();
+            NetFieldObjectData f = new();
             bool found = false;
             BossEntered = false;
-            foreach (var item in user.FieldInfoNew)
+            foreach (KeyValuePair<string, FieldInfoNew> item in user.FieldInfoNew)
             {
                 if (item.Key == mapId)
                 {
                     found = true;
-                    foreach (var stage in item.Value.CompletedStages)
+                    foreach (int stage in item.Value.CompletedStages)
                     {
                         f.Stages.Add(new NetFieldStageData() { StageId = stage });
                     }
-                    foreach (var obj in item.Value.CompletedObjects)
+                    foreach (NetFieldObject obj in item.Value.CompletedObjects)
                     {
                         f.Objects.Add(obj);
                     }

@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer.Friend
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetFriendData>();
-            var response = new ResGetFriendData();
+            ReqGetFriendData req = await ReadData<ReqGetFriendData>();
+            ResGetFriendData response = new();
 
 
             await WriteDataAsync(response);

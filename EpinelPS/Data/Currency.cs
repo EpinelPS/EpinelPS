@@ -1,4 +1,4 @@
-namespace EpinelPS
+namespace EpinelPS.Data
 {
     public enum CurrencyType
     {

@@ -8,9 +8,9 @@ namespace EpinelPS.LobbyServer.Pass
 		//broken game wont boot if not empty not sure how to implement this one
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetActiveEventPassData>(); // no fields
+            ReqGetActiveEventPassData req = await ReadData<ReqGetActiveEventPassData>(); // no fields
 
-            var response = new ResGetActiveEventPassData(); // fields PassList = NetPassInfo
+            ResGetActiveEventPassData response = new(); // fields PassList = NetPassInfo
 
 
 

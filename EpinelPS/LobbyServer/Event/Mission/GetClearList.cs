@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Event.Mission
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetEventMissionClearList>();
+            ReqGetEventMissionClearList req = await ReadData<ReqGetEventMissionClearList>();
 
-            var response = new ResGetEventMissionClearList(); //field ResGetEventMissionClearMap data type NestEventMissionClear field NestEventMissionClear data type NetEventMissionClearData fields EventId EventMissionId CreatedAt
+            ResGetEventMissionClearList response = new(); //field ResGetEventMissionClearMap data type NestEventMissionClear field NestEventMissionClear data type NetEventMissionClearData fields EventId EventMissionId CreatedAt
 
             // TOOD
 

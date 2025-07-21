@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Wallet
 {
@@ -7,12 +8,12 @@ namespace EpinelPS.LobbyServer.Wallet
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetCurrencyData>();
-            var user = GetUser();
+            ReqGetCurrencyData req = await ReadData<ReqGetCurrencyData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetCurrencyData();
+            ResGetCurrencyData response = new();
 
-            foreach (var currency in user.Currency)
+            foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
             {
                 response.Currency.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
             }

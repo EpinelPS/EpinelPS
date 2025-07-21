@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.Simroom
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetSimRoom>();
-            var user = GetUser();
+            ReqGetSimRoom req = await ReadData<ReqGetSimRoom>();
+            Database.User user = GetUser();
 
-            var response = new ResGetSimRoom
+            ResGetSimRoom response = new()
             {
                 OverclockData = new NetSimRoomOverclockData
                 {

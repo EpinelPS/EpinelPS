@@ -8,9 +8,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqBuyLobbyDecoBackground>();
-            var response = new ResBuyLobbyDecoBackground();
-            var user = GetUser();
+            ReqBuyLobbyDecoBackground req = await ReadData<ReqBuyLobbyDecoBackground>();
+            ResBuyLobbyDecoBackground response = new();
+            User user = GetUser();
             
             user.LobbyDecoBackgroundList.Add(req.LobbyDecoBackgroundId);
 

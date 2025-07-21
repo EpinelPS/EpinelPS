@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Pass
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqBuyPassRank>(); //fields "PassId", "TargetPassRank"
-			
-            var response = new ResBuyPassRank(); // fields "PassRank", "PassPoint", "Currencies"
+            ReqBuyPassRank req = await ReadData<ReqBuyPassRank>(); //fields "PassId", "TargetPassRank"
+
+            ResBuyPassRank response = new(); // fields "PassRank", "PassPoint", "Currencies"
 
            
 		   await WriteDataAsync(response);

@@ -8,8 +8,8 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterEventField>();
-            var user = GetUser();
+            ReqEnterEventField req = await ReadData<ReqEnterEventField>();
+            User user = GetUser();
 
             ResEnterEventField response = new()
             {
@@ -27,11 +27,11 @@ namespace EpinelPS.LobbyServer.Event
                 user.FieldInfoNew.Add(req.MapId, field);
             }
 
-            foreach (var stage in field.CompletedStages)
+            foreach (int stage in field.CompletedStages)
             {
                 response.Field.Stages.Add(new NetFieldStageData() { StageId = stage });
             }
-            foreach (var obj in field.CompletedObjects)
+            foreach (NetFieldObject obj in field.CompletedObjects)
             {
                 response.Field.Objects.Add(obj);
             }

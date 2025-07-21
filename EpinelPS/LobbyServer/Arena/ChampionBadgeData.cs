@@ -8,14 +8,15 @@ namespace EpinelPS.LobbyServer.Arena
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetChampionArenaDataByBadge>();
-            var response = new ResGetChampionArenaDataByBadge();
-           
-            // TODO
-            response.Schedule = new NetChampionArenaSchedule();
-            response.NextSchedule = new NetChampionArenaSchedule();
-            response.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
-            response.CurrentOrLastSeasonStartAt = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(5));
+            ReqGetChampionArenaDataByBadge req = await ReadData<ReqGetChampionArenaDataByBadge>();
+            ResGetChampionArenaDataByBadge response = new()
+            {
+                // TODO
+                Schedule = new NetChampionArenaSchedule(),
+                NextSchedule = new NetChampionArenaSchedule(),
+                ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed,
+                CurrentOrLastSeasonStartAt = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(5))
+            };
 
             await WriteDataAsync(response);
         }

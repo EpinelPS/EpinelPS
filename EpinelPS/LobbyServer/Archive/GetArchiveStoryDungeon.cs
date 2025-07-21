@@ -8,33 +8,33 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetArchiveStoryDungeon>(); // has EventId field
-            var evid = req.EventId;
-            var user = GetUser();
+            ReqGetArchiveStoryDungeon req = await ReadData<ReqGetArchiveStoryDungeon>(); // has EventId field
+            int evid = req.EventId;
+            User user = GetUser();
 
             // Ensure the EventInfo dictionary contains the requested EventId
-            if (!user.EventInfo.ContainsKey(evid))
+            if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
             {
-                // Create a new default entry for the missing EventId
-                user.EventInfo[evid] = new EventData
+                eventData = new EventData
                 {
-                    CompletedScenarios = new List<string>(), // Initialize empty list
+                    CompletedScenarios = [], // Initialize empty list
                     Diff = 0,                                // Default difficulty
                     LastStage = 0                            // Default last cleared stage
                 };
+                // Create a new default entry for the missing EventId
+                user.EventInfo[evid] = eventData;
 				JsonDb.Save();
             }
 
-            var eventData = user.EventInfo[evid];
-
             // Prepare the response
-            var response = new ResGetArchiveStoryDungeon();
-
-            // Populate team data
-            response.TeamData = new NetUserTeamData
+            ResGetArchiveStoryDungeon response = new()
             {
-                LastContentsTeamNumber = 1,
-                Type = 1
+                // Populate team data
+                TeamData = new NetUserTeamData
+                {
+                    LastContentsTeamNumber = 1,
+                    Type = 1
+                }
             };
 
             // Populate the last cleared stage

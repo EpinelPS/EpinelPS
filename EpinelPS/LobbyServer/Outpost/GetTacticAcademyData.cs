@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetTacticAcademyData>();
-            var user = GetUser();
+            ReqGetTacticAcademyData req = await ReadData<ReqGetTacticAcademyData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetTacticAcademyData();
+            ResGetTacticAcademyData response = new();
             response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
 
             await WriteDataAsync(response);

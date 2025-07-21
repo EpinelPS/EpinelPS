@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetIslandAdventureMissionProgress>();
+            ReqGetIslandAdventureMissionProgress req = await ReadData<ReqGetIslandAdventureMissionProgress>();
 
-            var response = new ResGetIslandAdventureMissionProgress();
+            ResGetIslandAdventureMissionProgress response = new();
             // TODO
             await WriteDataAsync(response);
         }

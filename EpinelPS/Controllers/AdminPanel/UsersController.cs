@@ -24,7 +24,7 @@ namespace EpinelPS.Controllers.AdminPanel
         {
             if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-            var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+            User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
             if (user == null)
             {
                 return NotFound();
@@ -35,9 +35,9 @@ namespace EpinelPS.Controllers.AdminPanel
                 {
                     IsAdmin = user.IsAdmin,
                     IsBanned = user.IsBanned,
-                    Nickname = user.Nickname,
+                    Nickname = user.Nickname ?? "Unknown nickname",
                     sickpulls = user.sickpulls,
-                    Username = user.Username,
+                    Username = user.Username ?? "Unknown username",
                     ID = user.ID
                 }
             );
@@ -52,7 +52,7 @@ namespace EpinelPS.Controllers.AdminPanel
 
             if (!ModelState.IsValid) throw new Exception("model state invalid");
 
-            var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+            User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
             if (user == null)
             {
                 return NotFound();
@@ -84,7 +84,7 @@ namespace EpinelPS.Controllers.AdminPanel
         {
             if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-            var user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+            User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
             if (user == null)
             {
                 return NotFound();
@@ -115,10 +115,10 @@ namespace EpinelPS.Controllers.AdminPanel
             {
                 return BadRequest();
             }
-            
+
             // TODO: use bcrypt
 
-            var userToUpdate = JsonDb.Instance.Users.Where(s => s.ID == id).FirstOrDefault();
+            User? userToUpdate = JsonDb.Instance.Users.Where(s => s.ID == id).FirstOrDefault();
             if (userToUpdate == null)
             {
                 return NotFound();

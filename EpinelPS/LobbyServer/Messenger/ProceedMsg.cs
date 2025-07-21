@@ -10,11 +10,11 @@ namespace EpinelPS.LobbyServer.Messenger
         protected override async Task HandleAsync()
         {
             // This request handles saving user choices
-            var req = await ReadData<ReqProceedMessage>();
+            ReqProceedMessage req = await ReadData<ReqProceedMessage>();
             ResProceedMessage response = new();
-            var user = GetUser();
+            User user = GetUser();
 
-            var msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
+            KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
 
             response.Message = user.CreateMessage(msgToSave.Value.conversation_id, req.MessageId);
 

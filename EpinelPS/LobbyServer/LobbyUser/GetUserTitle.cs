@@ -8,13 +8,13 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetUserTitleList>();
-            var r = new ResGetUserTitleList();
+            ReqGetUserTitleList req = await ReadData<ReqGetUserTitleList>();
+            ResGetUserTitleList r = new();
 
             // Access GameData and get all UserTitle IDs
-            var userTitleRecords = GameData.Instance.userTitleRecords;
+            Dictionary<int, UserTitleRecord> userTitleRecords = GameData.Instance.userTitleRecords;
 
-            foreach (var titleId in userTitleRecords.Keys)
+            foreach (int titleId in userTitleRecords.Keys)
             {
                 r.UserTitleList.Add(new ResGetUserTitleList.Types.NetUserTitle() { UserTitleId = titleId });
             }

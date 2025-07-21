@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetGachaData>();
-            var user = GetUser();
+            ReqGetGachaData req = await ReadData<ReqGetGachaData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetGachaData();
+            ResGetGachaData response = new();
 
             // TODO: should not return anything when not completed chatper 2
 

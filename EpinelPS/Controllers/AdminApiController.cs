@@ -27,9 +27,9 @@ namespace EpinelPS.Controllers
                 string passwordHash = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(b.Password))).ToLower();
                 foreach (User item in JsonDb.Instance.Users)
                 {
-                    if (item.Username == b.Username)
+                    if (item.Username == b.Username && item.Password != null)
                     {
-                        if (item.Password.ToLower() == passwordHash)
+                        if (item.Password.Equals(passwordHash, StringComparison.OrdinalIgnoreCase))
                         {
                             user = item;
                         }
@@ -76,52 +76,52 @@ namespace EpinelPS.Controllers
                     return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
                 case "addallcharacters":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.AddAllCharacters(user);
                     }
                 case "addallmaterials":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.AddAllMaterials(user, int.Parse(req.p2));
                     }
                 case "SetLevel":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.SetCharacterLevel(user, int.Parse(req.p2));
                     }
                 case "SetSkillLevel":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.SetSkillLevel(user, int.Parse(req.p2));
                     }
                 case "SetCoreLevel":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.SetCoreLevel(user, int.Parse(req.p2));
                     }
                 case "finishalltutorials":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.FinishAllTutorials(user);
                     }
                 case "AddCharacter":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                         return AdminCommands.AddCharacter(user, int.Parse(req.p2));
                     }
                 case "AddItem":
                     {
-                        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                         if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
 
-                        var s = req.p2.Split("-");
+                        string[] s = req.p2.Split("-");
                         return AdminCommands.AddItem(user, int.Parse(s[0]), int.Parse(s[1]));
                     }
                 case "updateServer":

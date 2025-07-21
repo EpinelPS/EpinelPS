@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.InApp
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetCustomPackageSetupData>();
+            ReqGetCustomPackageSetupData req = await ReadData<ReqGetCustomPackageSetupData>();
 
-            var response = new ResGetCustomPackageSetupData();
+            ResGetCustomPackageSetupData response = new();
 
             // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);

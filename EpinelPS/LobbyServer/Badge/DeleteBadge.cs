@@ -8,12 +8,12 @@ namespace EpinelPS.LobbyServer.Badge
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqDeleteBadge>();
-            var user = GetUser();
+            ReqDeleteBadge req = await ReadData<ReqDeleteBadge>();
+            User user = GetUser();
 
-            var response = new ResDeleteBadge();
+            ResDeleteBadge response = new();
 
-            foreach (var badgeId in req.BadgeSeqList)
+            foreach (long badgeId in req.BadgeSeqList)
             {
                 user.Badges.RemoveAll(x => x.Seq == badgeId);
             }

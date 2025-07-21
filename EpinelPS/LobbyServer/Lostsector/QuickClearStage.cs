@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqFastClearLostSectorStage>();
-            var user = GetUser();
+            ReqFastClearLostSectorStage req = await ReadData<ReqFastClearLostSectorStage>();
+            User user = GetUser();
 
-            var response = new ResFastClearLostSectorStage();
+            ResFastClearLostSectorStage response = new();
 
             ClearStage.ClearLostSectorStage(user, req.StageId);
             JsonDb.Save();

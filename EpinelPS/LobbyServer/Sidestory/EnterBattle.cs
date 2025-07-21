@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Sidestory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterSideStoryCutForBattle>();
-            var user = GetUser();
+            ReqEnterSideStoryCutForBattle req = await ReadData<ReqEnterSideStoryCutForBattle>();
+            Database.User user = GetUser();
 
-            var response = new ResEnterSideStoryCutForBattle();
+            ResEnterSideStoryCutForBattle response = new();
 
             await WriteDataAsync(response);
         }

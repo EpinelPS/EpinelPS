@@ -4,22 +4,20 @@ using EpinelPS.Utils;
 using Google.Protobuf;
 using Paseto.Builder;
 using Paseto;
-using EpinelPS.LobbyServer.Stage;
-using EpinelPS.LobbyServer.Event.EventStory;
 using System.Text.Json;
 
 namespace EpinelPS.LobbyServer
 {
     public static class LobbyHandler
     {
-        public static readonly Dictionary<string, LobbyMsgHandler> Handlers = new Dictionary<string, LobbyMsgHandler>();
+        public static readonly Dictionary<string, LobbyMsgHandler> Handlers = [];
         static LobbyHandler()
         {
             foreach (System.Type type in typeof(LobbyMsgHandler).Assembly.GetTypes())
             {
                 if (type.GetCustomAttributes(typeof(PacketPathAttribute), true).Length > 0)
                 {
-                    var attrib = (PacketPathAttribute?)Attribute.GetCustomAttribute(type, typeof(PacketPathAttribute));
+                    PacketPathAttribute? attrib = (PacketPathAttribute?)Attribute.GetCustomAttribute(type, typeof(PacketPathAttribute));
                     if (attrib == null)
                     {
                         Logging.WriteLine("WARNING: Failed to get attribute for " + type.FullName, LogType.Warning);
@@ -27,7 +25,7 @@ namespace EpinelPS.LobbyServer
                     }
 
 
-                    var instance = Activator.CreateInstance(type);
+                    object? instance = Activator.CreateInstance(type);
                     if (instance is LobbyMsgHandler handler)
                     {
                         Handlers.Add(attrib.Url, handler);
@@ -46,7 +44,7 @@ namespace EpinelPS.LobbyServer
             string fullPath = ctx.Request.Path.Value ?? throw new Exception();
             string path = fullPath.Replace("/v1", "");
             
-            foreach (var item in Handlers)
+            foreach (KeyValuePair<string, LobbyMsgHandler> item in Handlers)
             {
                 if (path == item.Key)
                 {
@@ -79,11 +77,11 @@ namespace EpinelPS.LobbyServer
         /// <returns></returns>
         public static GameClientInfo GenGameClientTok(ByteString publicKey, ulong userid)
         {
-            var token = Rng.RandomString(381);
+            string token = Rng.RandomString(381);
 
-            var info = new GameClientInfo() { ClientPublicKey = publicKey.ToArray() };
+            GameClientInfo info = new() { ClientPublicKey = [.. publicKey] };
 
-            var box = SodiumKeyExchange.CalculateServerSharedSecret(JsonDb.ServerPublicKey, JsonDb.ServerPrivateKey, publicKey.ToArray());
+            SodiumKeyExchangeSharedSecretBox box = SodiumKeyExchange.CalculateServerSharedSecret(JsonDb.ServerPublicKey, JsonDb.ServerPrivateKey, [.. publicKey]);
 
             info.Keys = box;
             info.ClientAuthToken = token;
@@ -98,12 +96,12 @@ namespace EpinelPS.LobbyServer
 
         public static GameClientInfo? GetInfo(string token)
         {
-            var encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+            PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                              .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true }) ?? throw new Exception("failed to decrypt");
-            var elem = (encryptionToken.Paseto.Payload["data"] as System.Text.Json.JsonElement?) ?? throw new Exception("expected data field in auth token");
+            JsonElement elem = (encryptionToken.Paseto.Payload["data"] as System.Text.Json.JsonElement?) ?? throw new Exception("expected data field in auth token");
 
-            var p = elem.GetString() ?? throw new Exception("auth token cannot be null");
+            string p = elem.GetString() ?? throw new Exception("auth token cannot be null");
 
             return JsonSerializer.Deserialize<GameClientInfo>(p ?? throw new Exception("data cannot be null"));
         }
@@ -129,7 +127,7 @@ namespace EpinelPS.LobbyServer
 
 
             // Restore completed tutorials.
-            foreach (var item in user.ClearedTutorialData)
+            foreach (KeyValuePair<int, Data.ClearedTutorialData> item in user.ClearedTutorialData)
             {
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;
@@ -141,7 +139,7 @@ namespace EpinelPS.LobbyServer
         }
         public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
         {
-            var ret = new NetWholeUserData()
+            NetWholeUserData ret = new()
             {
                 Lv = user.userPointData.UserLevel,
                 Frame = user.ProfileFrame,

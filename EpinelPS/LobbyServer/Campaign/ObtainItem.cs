@@ -10,10 +10,10 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainCampaignItem>();
-            var user = GetUser();
+            ReqObtainCampaignItem req = await ReadData<ReqObtainCampaignItem>();
+            User user = GetUser();
 
-            var response = new ResObtainCampaignItem();
+            ResObtainCampaignItem response = new();
 
             if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
             {
@@ -22,7 +22,7 @@ namespace EpinelPS.LobbyServer.Campaign
             }
 
 
-            foreach (var item in field.CompletedObjects)
+            foreach (NetFieldObject item in field.CompletedObjects)
             {
                 if (item.PositionId == req.FieldObject.PositionId)
                 {
@@ -33,12 +33,12 @@ namespace EpinelPS.LobbyServer.Campaign
 
             // Register and return reward
 
-            var map = GameData.Instance.MapData[req.MapId];
+            MapInfo map = GameData.Instance.MapData[req.MapId];
 
-            var position = map.ItemSpawner.Where(x => x.positionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position id");
+            ItemSpawner position = map.ItemSpawner.Where(x => x.positionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position id");
 
-            var positionReward = GameData.Instance.FieldItems[position.itemId];
-            var reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
+            FieldItemRecord positionReward = GameData.Instance.FieldItems[position.itemId];
+            RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
             // Hide it from the field

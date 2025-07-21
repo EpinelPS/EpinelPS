@@ -23,7 +23,7 @@ public static class PatchUtility
             byte[] searchBytes = HexStringToBytes(searchPatterns[k]);
 
             // Find the index of the first occurrence of the search pattern in the file data using another helper method
-            var results = FindPatternIndex(fileData, searchBytes);
+            List<int> results = FindPatternIndex(fileData, searchBytes);
             if (results.Count <= 1) return false;
 
             Console.WriteLine("offset: " + results[1].ToString("X"));
@@ -72,7 +72,7 @@ public static class PatchUtility
                 // Note: game versions 124 - 133 have 2 matches, 2nd one is the correct one
                 //       game version 134 - ? has 1 match which is correct
                 int index = -1;
-                var indexes = FindPatternIndex(fileData, searchBytes);
+                List<int> indexes = FindPatternIndex(fileData, searchBytes);
                 if (indexes.Count == 1)
                     index = indexes[0];
                 else index = indexes[1];
@@ -125,10 +125,9 @@ public static class PatchUtility
     private static byte[] HexStringToBytes(string hex)
     {
         hex = hex.Replace(" ", "").Replace("??", "FF"); // Replace ?? with FF for wildcards
-        return Enumerable.Range(0, hex.Length)
+        return [.. Enumerable.Range(0, hex.Length)
             .Where(x => x % 2 == 0) // Take every second character in the string
-            .Select(x => Convert.ToByte(hex.Substring(x, 2), 16)) // Convert each pair of characters to a byte value in base 16
-            .ToArray(); // Convert the result to an array of bytes
+            .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))]; // Convert the result to an array of bytes
     }
 
     // This helper method finds the index of the first occurrence of a pattern in a data array

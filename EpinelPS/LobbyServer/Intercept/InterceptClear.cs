@@ -8,19 +8,19 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearIntercept>();
-            var user = GetUser();
+            ReqClearIntercept req = await ReadData<ReqClearIntercept>();
+            User user = GetUser();
 
             if (user.ResetableData.InterceptionTickets == 0)
             {
                 Logging.WriteLine("Attempted to clear interception when 0 tickets remain", LogType.WarningAntiCheat);
                
             }
-         
-            var sRes = InterceptionHelper.Clear(user, req.Intercept, req.InterceptId, req.Damage);
+
+            InterceptionClearResult sRes = InterceptionHelper.Clear(user, req.Intercept, req.InterceptId, req.Damage);
 
             user.ResetableData.InterceptionTickets--;
-            var response = new ResClearIntercept
+            ResClearIntercept response = new()
             {
                 Intercept = req.Intercept,
                 InterceptId = req.InterceptId,

@@ -1,16 +1,16 @@
 using EpinelPS.Utils;
 using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Event.EventStory
+namespace EpinelPS.LobbyServer.Event.StoryEvent
 {
     [PacketPath("/event/storydungeon/enterstage")]
     public class EnterEventStoryStage : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterEventStage>();
-			var user = GetUser();
-            var response = new ResEnterEventStage();
+            ReqEnterEventStage req = await ReadData<ReqEnterEventStage>();
+            User user = GetUser();
+            ResEnterEventStage response = new();
 
             await WriteDataAsync(response);
         }

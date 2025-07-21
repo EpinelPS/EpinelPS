@@ -9,24 +9,24 @@ namespace EpinelPS.LobbyServer.Mission
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqObtainAchievementReward>();
-            var user = GetUser();
+            ReqObtainAchievementReward req = await ReadData<ReqObtainAchievementReward>();
+            User user = GetUser();
 
-            var response = new ResObtainAchievementReward();
+            ResObtainAchievementReward response = new();
 
             List<NetRewardData> rewards = [];
 
             int total_points = 0;
 
-            foreach (var item in req.TidList)
+            foreach (int item in req.TidList)
             {
                 if (user.CompletedAchievements.Contains(item)) continue;
 
                 if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-                var rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                RewardTableRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
 
-                var reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
+                NetRewardData reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
                 rewards.Add(reward);
 
                 user.CompletedAchievements.Add(item);

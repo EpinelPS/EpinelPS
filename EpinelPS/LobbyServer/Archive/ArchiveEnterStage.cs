@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterArchiveStage>();// has fields EventId StageId TeamNumber
-			var evid = req.EventId;
-			
-            var response = new ResEnterArchiveStage();
+            ReqEnterArchiveStage req = await ReadData<ReqEnterArchiveStage>();// has fields EventId StageId TeamNumber
+            int evid = req.EventId;
+
+            ResEnterArchiveStage response = new();
 
             await WriteDataAsync(response);
         }

@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Shop.PackageShop
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetCampaignPackage>();
+            ReqGetCampaignPackage req = await ReadData<ReqGetCampaignPackage>();
 
-            var response = new ResGetCampaignPackage();
+            ResGetCampaignPackage response = new();
 
             // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);

@@ -7,15 +7,15 @@ namespace EpinelPS.LobbyServer.Team
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetTeamData>();
-            var user = GetUser();
+            ReqGetTeamData req = await ReadData<ReqGetTeamData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetTeamData();
+            ResGetTeamData response = new();
 
             // NOTE: Keep this in sync with EnterLobbyServer code
             if (user.Characters.Count > 0)
             {
-                foreach (var item in user.UserTeams)
+                foreach (KeyValuePair<int, NetUserTeamData> item in user.UserTeams)
                 {
                     response.TypeTeams.Add(item.Value);
                 }

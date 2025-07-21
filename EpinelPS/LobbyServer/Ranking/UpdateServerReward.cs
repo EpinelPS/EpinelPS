@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer.Ranking
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqUpdateRankingServerReward>();
-            var response = new ResUpdateRankingServerReward();
+            ReqUpdateRankingServerReward req = await ReadData<ReqUpdateRankingServerReward>();
+            ResUpdateRankingServerReward response = new();
 
 
             await WriteDataAsync(response);

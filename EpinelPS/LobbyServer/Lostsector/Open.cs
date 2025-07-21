@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqOpenLostSector>();
-            var user = GetUser();
+            ReqOpenLostSector req = await ReadData<ReqOpenLostSector>();
+            User user = GetUser();
 
-            var response = new ResOpenLostSector();
+            ResOpenLostSector response = new();
 
             if (!user.LostSectorData.ContainsKey(req.SectorId))
                 user.LostSectorData.Add(req.SectorId, new LostSectorData()
@@ -19,7 +19,7 @@ namespace EpinelPS.LobbyServer.Lostsector
                     IsOpen = true
                 });
 
-            var val = user.LostSectorData[req.SectorId];
+            LostSectorData val = user.LostSectorData[req.SectorId];
             response.Lostsector = new NetUserLostSectorData()
             {
                 IsOpen = val.IsOpen,

@@ -7,14 +7,14 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetWallpaperInventory>();
+            ReqGetWallpaperInventory req = await ReadData<ReqGetWallpaperInventory>();
 
             // Prepare the response
-            var r = new ResGetWallpaperInventory();
+            ResGetWallpaperInventory r = new();
 
             // Fetch all the wallpaper IDs from the LiveWallpaperTable,
             // excluding records where livewallpaper_type is "SkillCutScene"
-            var wallpaperIds = GameData.Instance.lwptablemgrs.Where(w => w.Value.livewallpaper_type != "SkillCutScene").Select(w => w.Key).ToList();
+            List<int> wallpaperIds = [.. GameData.Instance.lwptablemgrs.Where(w => w.Value.livewallpaper_type != "SkillCutScene").Select(w => w.Key)];
 
             // Add the filtered wallpaper IDs to the LivewallpaperIds field
             r.LivewallpaperIds.AddRange(wallpaperIds);

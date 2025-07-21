@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqExistScenarioBookmark>();
+            ReqExistScenarioBookmark req = await ReadData<ReqExistScenarioBookmark>();
 
-            var response = new ResExistScenarioBookmark();
+            ResExistScenarioBookmark response = new();
 
          // TODO
   

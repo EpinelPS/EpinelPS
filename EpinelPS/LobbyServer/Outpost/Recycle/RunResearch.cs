@@ -9,16 +9,16 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqRecycleRunResearch>();
-            var user = GetUser();
-            var response = new ResRecycleRunResearch();
+            ReqRecycleRunResearch req = await ReadData<ReqRecycleRunResearch>();
+            User user = GetUser();
+            ResRecycleRunResearch response = new();
 
-            user.ResearchProgress.TryGetValue(req.Tid, out var progress);
+            user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);
 
             // Check progress is null, non-null means research is already unlocked.
             if (progress is null)
             {
-                var researchRecord = GameData.Instance.RecycleResearchStats.Values.FirstOrDefault(e => e.id == req.Tid)
+                RecycleResearchStatRecord researchRecord = GameData.Instance.RecycleResearchStats.Values.FirstOrDefault(e => e.id == req.Tid)
                     ?? throw new Exception("not found research record with tid " + req.Tid);
                 progress = new()
                 {

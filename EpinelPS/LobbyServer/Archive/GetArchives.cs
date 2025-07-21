@@ -8,19 +8,19 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetArchiveRecord>();
+            ReqGetArchiveRecord req = await ReadData<ReqGetArchiveRecord>();
 
-            var response = new ResGetArchiveRecord();
+            ResGetArchiveRecord response = new();
 
             // Explicitly select IDs from the records
-            var allIds = GameData.Instance.archiveRecordManagerTable.Values.Select(record => record.id).ToList();
+            List<int> allIds = [.. GameData.Instance.archiveRecordManagerTable.Values.Select(record => record.id)];
 
             // Add the IDs to the response lists
             response.ArchiveRecordManagerList.AddRange(allIds);
             response.UnlockedArchiveRecordList.AddRange(allIds);
 
             // Get entries with record_type "EventQuest"
-            var eventQuestRecords = GameData.Instance.archiveRecordManagerTable.Values.Where(record => record.record_type == "EventQuest").ToList();
+            List<ArchiveRecordManagerRecord> eventQuestRecords = [.. GameData.Instance.archiveRecordManagerTable.Values.Where(record => record.record_type == "EventQuest")];
 
             response.ArchiveEventQuest = new();
             response.ArchiveEventQuest.UnlockedArchiveRecordManagerEventQuestIdList.AddRange(eventQuestRecords.Select(record => record.id));

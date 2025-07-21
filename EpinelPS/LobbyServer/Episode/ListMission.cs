@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Episode
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqListValidEpMission>();
+            ReqListValidEpMission req = await ReadData<ReqListValidEpMission>();
 
-            var response = new ResListValidEpMission();
+            ResListValidEpMission response = new();
 
             // TOOD
 

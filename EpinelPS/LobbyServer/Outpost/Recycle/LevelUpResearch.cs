@@ -14,11 +14,11 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
              * Tid: int value, research tid
              * Items: int value, used items.
              */
-            var req = await ReadData<ReqRecycleLevelUpResearch>();
-            var user = GetUser();
-            var response = new ResRecycleLevelUpResearch();
+            ReqRecycleLevelUpResearch req = await ReadData<ReqRecycleLevelUpResearch>();
+            User user = GetUser();
+            ResRecycleLevelUpResearch response = new();
 
-            user.ResearchProgress.TryGetValue(req.Tid, out var progress);
+            user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);
 
             // Check progress is null, null means research is not unlocked.
             if (progress != null)
@@ -31,19 +31,19 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
             await WriteDataAsync(response);
         }
 
-        private void AddProgressToResearch(ResRecycleLevelUpResearch response, User user, RecycleRoomResearchProgress progress, ReqRecycleLevelUpResearch req)
+        private static void AddProgressToResearch(ResRecycleLevelUpResearch response, User user, RecycleRoomResearchProgress progress, ReqRecycleLevelUpResearch req)
         {
-            GameData.Instance.RecycleResearchStats.TryGetValue(req.Tid, out var statRecord);
+            GameData.Instance.RecycleResearchStats.TryGetValue(req.Tid, out RecycleResearchStatRecord? statRecord);
             if (statRecord is null)
                 return;
-            var levelRecord = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.recycle_type == statRecord.recycle_type)
+            RecycleResearchLevelRecord? levelRecord = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.recycle_type == statRecord.recycle_type)
                 .FirstOrDefault(e => e.recycle_level == progress.Level);
             if (levelRecord is null)
                 return;
 
             if (statRecord.recycle_type == "Personal") // main research
             {
-                var usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.item_id); // item_id equals level-up item's tid.
+                ItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.item_id); // item_id equals level-up item's tid.
                 if (usedItem is null || usedItem.Count < levelRecord.item_value)
                     return;
 
@@ -60,8 +60,8 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
             }
             else if (statRecord.recycle_type == "Class" || statRecord.recycle_type == "Corporation") // class research or corporation research
             {
-                var netItem = req.Items.Single();
-                var usedItem = user.Items.FirstOrDefault(e => e.ItemType == netItem.Tid);
+                NetItemData netItem = req.Items.Single();
+                ItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == netItem.Tid);
                 if (usedItem is null)
                     return;
 
@@ -84,12 +84,12 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
         }
 
         // First: level, Second: exp
-        private (int, int) CalcCorpAndClassLevelUp(string researchType, int itemCount, int startLevel = 1, int startExp = 0)
+        private static (int, int) CalcCorpAndClassLevelUp(string researchType, int itemCount, int startLevel = 1, int startExp = 0)
         {
             // levelRecord.exp is required exp to level up.
-            var levelRecords = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.recycle_type == researchType && e.recycle_level > startLevel);
+            IEnumerable<RecycleResearchLevelRecord> levelRecords = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.recycle_type == researchType && e.recycle_level > startLevel);
 
-            foreach (var record in levelRecords)
+            foreach (RecycleResearchLevelRecord? record in levelRecords)
             {
                 if (itemCount < record.exp)
                 {

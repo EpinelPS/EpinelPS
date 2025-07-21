@@ -7,17 +7,17 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqExistScenario>();
+            ReqExistScenario req = await ReadData<ReqExistScenario>();
 
             // TODO: Check response from real server
 
-            var response = new ResExistScenario();
+            ResExistScenario response = new();
 
-            var user = GetUser();
+            Database.User user = GetUser();
 
-            foreach (var item in req.ScenarioGroupIds)
+            foreach (string? item in req.ScenarioGroupIds)
             {
-                foreach (var completed in user.CompletedScenarios)
+                foreach (string completed in user.CompletedScenarios)
                 {
                     // story thingy was completed
                     if (completed == item)

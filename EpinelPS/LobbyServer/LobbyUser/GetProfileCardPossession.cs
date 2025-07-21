@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqProfileCardObjectList>();
+            ReqProfileCardObjectList req = await ReadData<ReqProfileCardObjectList>();
 
-            var response = new ResProfileCardObjectList();
+            ResProfileCardObjectList response = new();
             // TODO
             await WriteDataAsync(response);
         }

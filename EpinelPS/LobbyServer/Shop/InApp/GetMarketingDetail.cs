@@ -7,9 +7,11 @@ namespace EpinelPS.LobbyServer.Shop.InApp
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetJupiterMarketingDetail>();
-            var response = new ResGetJupiterMarketingDetail();
-            response.MarketingDetail = "{}";
+            ReqGetJupiterMarketingDetail req = await ReadData<ReqGetJupiterMarketingDetail>();
+            ResGetJupiterMarketingDetail response = new()
+            {
+                MarketingDetail = "{}"
+            };
 
             await WriteDataAsync(response);
         }

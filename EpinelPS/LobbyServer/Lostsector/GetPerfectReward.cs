@@ -9,17 +9,16 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqLostSectorPerfectReward>();
-            var user = GetUser();
+            ReqLostSectorPerfectReward req = await ReadData<ReqLostSectorPerfectReward>();
+            User user = GetUser();
 
-            var response = new ResLostSectorPerfectReward();
+            ResLostSectorPerfectReward response = new();
 
-            if (user.LostSectorData.ContainsKey(req.SectorId))
+            if (user.LostSectorData.TryGetValue(req.SectorId, out LostSectorData? lostSectorData))
             {
-                var lostSectorData = user.LostSectorData[req.SectorId];
                 lostSectorData.CompletedPerfectly = true;
 
-                var sectorInfo = GameData.Instance.LostSector[req.SectorId];
+                LostSectorRecord sectorInfo = GameData.Instance.LostSector[req.SectorId];
 
                 response.Reward = RewardUtils.RegisterRewardsForUser(user, sectorInfo.exploration_reward);
             }

@@ -7,8 +7,8 @@ namespace EpinelPS.LobbyServer.Outpost
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCheckReceiveInfraCoreReward>();
-            var response = new ResCheckReceiveInfraCoreReward();
+            ReqCheckReceiveInfraCoreReward req = await ReadData<ReqCheckReceiveInfraCoreReward>();
+            ResCheckReceiveInfraCoreReward response = new();
 
             // TODO
 

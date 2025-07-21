@@ -7,18 +7,18 @@ namespace EpinelPS.LobbyServer.Tower
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetTowerData>();
+            ReqGetTowerData req = await ReadData<ReqGetTowerData>();
 
-            var response = new ResGetTowerData();
+            ResGetTowerData response = new();
 
-            var user = GetUser();
+            Database.User user = GetUser();
 
             // TODO: Load remain count for these
-            var t0 = new NetTowerData() { Type = 1, RemainCount = 3 };
-            var t1 = new NetTowerData() { Type = 2, RemainCount = 3 };
-            var t2 = new NetTowerData() { Type = 3, RemainCount = 3 };
-            var t3 = new NetTowerData() { Type = 4, RemainCount = 3 };
-            var t4 = new NetTowerData() { Type = 5 };
+            NetTowerData t0 = new() { Type = 1, RemainCount = 3 };
+            NetTowerData t1 = new() { Type = 2, RemainCount = 3 };
+            NetTowerData t2 = new() { Type = 3, RemainCount = 3 };
+            NetTowerData t3 = new() { Type = 4, RemainCount = 3 };
+            NetTowerData t4 = new() { Type = 5 };
 
             // setup schedules
             t0.Schedules.Add(new NetSchedule() { DayOfWeek = new() { DayOfWeeks = { 1, 4, 6 }, StartTime = 720000000000, Duration = 863990000000 } });

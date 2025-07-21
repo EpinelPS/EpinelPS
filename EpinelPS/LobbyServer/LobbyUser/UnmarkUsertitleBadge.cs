@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqUnMarkUserTitleBadge>();
-            var user = GetUser();
+            ReqUnMarkUserTitleBadge req = await ReadData<ReqUnMarkUserTitleBadge>();
+            Database.User user = GetUser();
 
-            var response = new ResUnMarkUserTitleBadge();
+            ResUnMarkUserTitleBadge response = new();
 
             // TODO
 

@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Campaign
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCampaignPackageGetAllShutdownFlags>();
+            ReqCampaignPackageGetAllShutdownFlags req = await ReadData<ReqCampaignPackageGetAllShutdownFlags>();
 
-            var response = new ResCampaignPackageGetAllShutdownFlags();
+            ResCampaignPackageGetAllShutdownFlags response = new();
             // TODO
 
             await WriteDataAsync(response);

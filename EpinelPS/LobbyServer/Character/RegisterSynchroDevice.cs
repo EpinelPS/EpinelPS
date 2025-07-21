@@ -8,13 +8,11 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSynchroRegister>();
-            var user = GetUser();
-            var targetCharacter = user.GetCharacterBySerialNumber(req.Csn);
-            if (targetCharacter == null) throw new Exception("target character does not exist");
-
-            var response = new ResSynchroRegister();
-            foreach (var item in user.SynchroSlots)
+            ReqSynchroRegister req = await ReadData<ReqSynchroRegister>();
+            User user = GetUser();
+            Database.Character? targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new Exception("target character does not exist");
+            ResSynchroRegister response = new();
+            foreach (SynchroSlot item in user.SynchroSlots)
             {
                 if (item.Slot == req.Slot)
                 {

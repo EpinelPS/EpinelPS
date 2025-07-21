@@ -7,11 +7,11 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetResettableArchiveScenario>(); 
-            var response = new ResGetResettableArchiveScenario(); // has ScenarioIdList field that takes in strings
-            
+            ReqGetResettableArchiveScenario req = await ReadData<ReqGetResettableArchiveScenario>();
+            ResGetResettableArchiveScenario response = new(); // has ScenarioIdList field that takes in strings
+
             // Retrieve stage IDs from GameData
-            var stageIds = GameData.Instance.archiveEventDungeonStageRecords.Values.Select(record => record.stage_id.ToString()).ToList();
+            List<string> stageIds = [.. GameData.Instance.archiveEventDungeonStageRecords.Values.Select(record => record.stage_id.ToString())];
 
             // Add them to the response
             response.ScenarioIdList.Add(stageIds);

@@ -9,13 +9,13 @@ namespace EpinelPS.LobbyServer.Messenger
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterSubQuestFinMessengerDialog>();
-            var user = GetUser();
+            ReqEnterSubQuestFinMessengerDialog req = await ReadData<ReqEnterSubQuestFinMessengerDialog>();
+            User user = GetUser();
 
-            var response = new ResEnterSubQuestFinMessengerDialog();
+            ResEnterSubQuestFinMessengerDialog response = new();
 
-            var opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-            var conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.Value.end_messenger_conversation_id && x.Value.is_opener).First();
+            KeyValuePair<int, SubquestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
+            KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.Value.end_messenger_conversation_id && x.Value.is_opener).First();
             
             response.Message = user.CreateMessage(conversation.Value, 1);
             JsonDb.Save();

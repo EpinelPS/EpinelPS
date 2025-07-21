@@ -7,11 +7,12 @@ namespace EpinelPS.LobbyServer.Archive
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetArchiveMiniGameData>();
+            ReqGetArchiveMiniGameData req = await ReadData<ReqGetArchiveMiniGameData>();
 
-            var response = new ResGetArchiveMiniGameData();
-
-            response.Json = "{}";
+            ResGetArchiveMiniGameData response = new()
+            {
+                Json = "{}"
+            };
             // TODO
 
             await WriteDataAsync(response);

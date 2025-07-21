@@ -9,13 +9,13 @@ namespace EpinelPS.LobbyServer.Stage
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterStage>();
-            var user = GetUser();
+            ReqEnterStage req = await ReadData<ReqEnterStage>();
+            User user = GetUser();
 
-            var response = new ResEnterStage();
+            ResEnterStage response = new();
 
-            var clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
-            var map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            CampaignStageRecord clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
+            string map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
 
             if (clearedStage.stage_category ==  StageCategory.Boss)
             {

@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqEnterInterceptAnomalous>();
+            ReqEnterInterceptAnomalous req = await ReadData<ReqEnterInterceptAnomalous>();
 
-            var response = new ResEnterInterceptAnomalous();
+            ResEnterInterceptAnomalous response = new();
 
             await WriteDataAsync(response);
         }

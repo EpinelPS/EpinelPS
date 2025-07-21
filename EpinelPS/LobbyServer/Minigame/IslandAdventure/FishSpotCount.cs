@@ -1,15 +1,15 @@
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Event
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
 {
     [PacketPath("/event/minigame/islandadventure/get/fish/spotcount")]
     public class MiniGameIslandAdventureFishingSpotCountHistory : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqMiniGameIslandAdventureFishingSpotCountHistory>();
+            ReqMiniGameIslandAdventureFishingSpotCountHistory req = await ReadData<ReqMiniGameIslandAdventureFishingSpotCountHistory>();
 
-            var response = new ResMiniGameIslandAdventureFishingSpotCountHistory
+            ResMiniGameIslandAdventureFishingSpotCountHistory response = new()
             {
 
             };

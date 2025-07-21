@@ -8,10 +8,10 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetCharacterCostume>();
-            var user = GetUser();
+            ReqSetCharacterCostume req = await ReadData<ReqSetCharacterCostume>();
+            User user = GetUser();
 
-            foreach (var item in user.Characters)
+            foreach (Database.Character item in user.Characters)
             {
                 if (item.Csn == req.Csn)
                 {
@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Character
             }
             JsonDb.Save();
 
-            var response = new ResSetCharacterCostume();
+            ResSetCharacterCostume response = new();
 
             await WriteDataAsync(response);
         }

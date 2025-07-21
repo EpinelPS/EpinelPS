@@ -9,10 +9,10 @@ namespace EpinelPS.LobbyServer.Subquest
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetTriggerFromSubQuest>();
-            var user = GetUser();
+            ReqSetTriggerFromSubQuest req = await ReadData<ReqSetTriggerFromSubQuest>();
+            User user = GetUser();
 
-            var response = new ResSetTriggerFromSubQuest();
+            ResSetTriggerFromSubQuest response = new();
 
             if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubquestRecord? record))
                 throw new Exception("no such subquest: " + req.SubquestId);

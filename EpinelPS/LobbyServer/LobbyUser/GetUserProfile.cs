@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetProfileData>();
-            var callingUser = GetUser();
-            var user = GetUser((ulong)req.TargetUsn);
-            var response = new ResGetProfileData();
+            ReqGetProfileData req = await ReadData<ReqGetProfileData>();
+            Database.User callingUser = GetUser();
+            Database.User? user = GetUser((ulong)req.TargetUsn);
+            ResGetProfileData response = new();
           
             if (user != null)
             {
@@ -28,7 +28,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
                 for (int i = 0; i < user.RepresentationTeamDataNew.Length; i++)
                 {
                     long csn = user.RepresentationTeamDataNew[i];
-                    var c = user.GetCharacterBySerialNumber(csn);
+                    Database.Character? c = user.GetCharacterBySerialNumber(csn);
 
                     if (c != null)
                     {

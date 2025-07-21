@@ -7,10 +7,10 @@ namespace EpinelPS.LobbyServer.Sidestory
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqClearSideStoryCutForScenario>();
-            var user = GetUser();
+            ReqClearSideStoryCutForScenario req = await ReadData<ReqClearSideStoryCutForScenario>();
+            Database.User user = GetUser();
 
-            var response = new ResClearSideStoryCutForScenario();
+            ResClearSideStoryCutForScenario response = new();
 
             // TODO
 

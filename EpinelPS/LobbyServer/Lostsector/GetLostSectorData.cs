@@ -8,22 +8,21 @@ namespace EpinelPS.LobbyServer.Lostsector
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetLostSectorData>();
-            var user = GetUser();
+            ReqGetLostSectorData req = await ReadData<ReqGetLostSectorData>();
+            Database.User user = GetUser();
 
-            var response = new ResGetLostSectorData();
+            ResGetLostSectorData response = new();
 
-            foreach (var item in GameData.Instance.LostSector)
+            foreach (KeyValuePair<int, LostSectorRecord> item in GameData.Instance.LostSector)
             {
                 if (item.Value.open_condition_type == ContentOpenType.Stage && user.IsStageCompleted(item.Value.open_condition_value))
                 {
                     response.ClearStages.Add(new NetFieldStageData() { StageId = item.Value.open_condition_value });
                 }
 
-                if (user.LostSectorData.ContainsKey(item.Key))
+                if (user.LostSectorData.TryGetValue(item.Key, out Database.LostSectorData? val))
                 {
-                    var map = GameData.Instance.MapData[item.Value.field_id];
-                    var val = user.LostSectorData[item.Key];
+                    MapInfo map = GameData.Instance.MapData[item.Value.field_id];
                     response.LostSector.Add(new NetUserLostSectorData()
                     {
                         IsOpen = val.IsOpen,

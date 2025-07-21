@@ -8,14 +8,14 @@ namespace EpinelPS.LobbyServer.ContentsOpen
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqSetContentsOpenUnlockButtonPlay>();
-            var user = GetUser();
+            ReqSetContentsOpenUnlockButtonPlay req = await ReadData<ReqSetContentsOpenUnlockButtonPlay>();
+            User user = GetUser();
 
-            var response = new ResSetContentsOpenUnlockButtonPlay();
+            ResSetContentsOpenUnlockButtonPlay response = new();
 
             // Unlock button animation completed
 
-            foreach (var item in req.ContentsOpenTableIds)
+            foreach (int item in req.ContentsOpenTableIds)
             {
                 if (user.ContentsOpenUnlocked.TryGetValue(item, out UnlockData? data))
                 {

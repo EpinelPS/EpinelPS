@@ -7,9 +7,9 @@ namespace EpinelPS.LobbyServer.Intercept
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqCheckClearInterceptToday>();
+            ReqCheckClearInterceptToday req = await ReadData<ReqCheckClearInterceptToday>();
 
-            var response = new ResCheckClearInterceptToday
+            ResCheckClearInterceptToday response = new()
             {
                 Clear = true
             };

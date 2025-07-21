@@ -15,11 +15,11 @@ namespace EpinelPS.Utils
                 throw new Exception("missing auth token");
 
 
-            foreach (var tok in JsonDb.Instance.LauncherAccessTokens)
+            foreach (AccessToken tok in JsonDb.Instance.LauncherAccessTokens)
             {
                 if (tok.Token == tokToCheck)
                 {
-                    var user = JsonDb.Instance.Users.Find(x => x.ID == tok.UserID);
+                    User? user = JsonDb.Instance.Users.Find(x => x.ID == tok.UserID);
                     if (user != null)
                     {
                         return (user, tok);
@@ -62,16 +62,16 @@ namespace EpinelPS.Utils
 
         public static List<NetUserItemData> GetUserItems(User user)
         {
-            List<NetUserItemData> ret = new();
-            Dictionary<int, NetUserItemData> itemDictionary = new Dictionary<int, NetUserItemData>();
+            List<NetUserItemData> ret = [];
+            Dictionary<int, NetUserItemData> itemDictionary = [];
 
-            foreach (var item in user.Items.ToList())
+            foreach (ItemData? item in user.Items.ToList())
             {
                 if (item.Csn == 0)
                 {
-                    if (itemDictionary.ContainsKey(item.ItemType))
+                    if (itemDictionary.TryGetValue(item.ItemType, out NetUserItemData? value))
                     {
-                        itemDictionary[item.ItemType].Count++;
+                        value.Count++;
                     }
                     else
                     {
@@ -89,11 +89,11 @@ namespace EpinelPS.Utils
 
         public static int GetItemPos(User user, long isn)
         {
-            foreach (var item in user.Items)
+            foreach (ItemData item in user.Items)
             {
                 if (item.Isn == isn)
                 {
-                    var subType = GameData.Instance.GetItemSubType(item.ItemType);
+                    string? subType = GameData.Instance.GetItemSubType(item.ItemType);
                     switch (subType)
                     {
                         case "Module_A":
@@ -129,7 +129,7 @@ namespace EpinelPS.Utils
 
             foreach (NetRewardData reward in rewards)
             {
-                foreach (var c in reward.Currency)
+                foreach (NetCurrencyData? c in reward.Currency)
                 {
                     if (currencyDict.ContainsKey(c.Type))
                         currencyDict[c.Type] += c.Value;
@@ -137,23 +137,23 @@ namespace EpinelPS.Utils
                         currencyDict.Add(c.Type, c.Value);
                 }
 
-                foreach (var item in reward.Item)
+                foreach (NetItemData? item in reward.Item)
                 {
                     items.Add(item);
                 }
 
-                foreach (var item in reward.UserItems)
+                foreach (NetUserItemData? item in reward.UserItems)
                 {
                     // TODO: do these need to be combined?
                     result.UserItems.Add(item);
                 }
 
-                foreach (var item in reward.Point)
+                foreach (NetPointData? item in reward.Point)
                 {
                     result.Point.Add(item);
                 }
 
-                foreach (var c in reward.Character)
+                foreach (NetCharacterData? c in reward.Character)
                 {
                     Logging.WriteLine("MergeRewards - TODO Character", LogType.Error);
                 }
@@ -162,13 +162,13 @@ namespace EpinelPS.Utils
                     result.InfraCoreExp = reward.InfraCoreExp;
             }
 
-            foreach (var c in currencyDict)
+            foreach (KeyValuePair<int, long> c in currencyDict)
             {
                 result.Currency.Add(new NetCurrencyData() { Value = c.Value, Type = c.Key, FinalValue = user.Currency[(CurrencyType)c.Key] });
             }
 
             // TODO is this right?
-            foreach (var c in items)
+            foreach (NetItemData c in items)
             {
                 result.Item.Add(c);
             }
@@ -191,7 +191,7 @@ namespace EpinelPS.Utils
 
         public static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost)
         {
-            var battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+            OutpostBattleTableRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
 
             int value = 0;
             double ratio = 0;
@@ -226,7 +226,7 @@ namespace EpinelPS.Utils
             //duration = TimeSpan.FromHours(1);
             NetRewardData result = new();
 
-            var battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+            OutpostBattleTableRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
 
             result.Currency.Add(new NetCurrencyData()
             {
@@ -261,7 +261,7 @@ namespace EpinelPS.Utils
 
         public static void RegisterRewardsForUser(User user, NetRewardData rewardData)
         {
-            foreach (var item in rewardData.Currency)
+            foreach (NetCurrencyData? item in rewardData.Currency)
             {
                 user.AddCurrency((CurrencyType)item.Type, item.Value);
             }
@@ -271,53 +271,53 @@ namespace EpinelPS.Utils
 
         internal static List<NetTimeReward> GetOutpostTimeReward(User user)
         {
-            List<NetTimeReward> res = new List<NetTimeReward>();
+            List<NetTimeReward> res = [];
 
             // NetTimeRewardBuff
             // FunctionType: 1: value increase, 2: percentage increase
             // Tid: Outpost building ID
 
-            var goldBuff = new NetTimeReward()
+            NetTimeReward goldBuff = new()
             {
                 UseId = 1,
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, false) * 10000
             };
-            foreach (var item in user.OutpostBuffs.CreditPercentages)
+            foreach (int item in user.OutpostBuffs.CreditPercentages)
             {
                 goldBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
             }
 
 
-            var battleDataBuff = new NetTimeReward()
+            NetTimeReward battleDataBuff = new()
             {
                 UseId = 2,
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, false) * 10000
             };
-            foreach (var item in user.OutpostBuffs.BattleDataPercentages)
+            foreach (int item in user.OutpostBuffs.BattleDataPercentages)
             {
                 battleDataBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
             }
 
-            var xpBuff = new NetTimeReward()
+            NetTimeReward xpBuff = new()
             {
                 UseId = 3,
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, true) * 10000,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, false) * 10000
             };
-            foreach (var item in user.OutpostBuffs.UserExpPercentages)
+            foreach (int item in user.OutpostBuffs.UserExpPercentages)
             {
                 xpBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
             }
 
-            var coredustBuff = new NetTimeReward()
+            NetTimeReward coredustBuff = new()
             {
                 UseId = 4,
                 ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, true) * 100,
                 ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, false) * 100
             };
-            foreach (var item in user.OutpostBuffs.CoreDustPercentages)
+            foreach (int item in user.OutpostBuffs.CoreDustPercentages)
             {
                 coredustBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
             }
@@ -334,9 +334,9 @@ namespace EpinelPS.Utils
         {
             if (csn == 0) return new() { Slot = slot };
 
-            var result = new NetWholeTeamSlot();
+            NetWholeTeamSlot result = new();
 
-            var c = user.GetCharacterBySerialNumber(csn);
+            Character? c = user.GetCharacterBySerialNumber(csn);
             if (c == null) return new() { Slot = slot };
 
             return new NetWholeTeamSlot()
@@ -365,7 +365,7 @@ namespace EpinelPS.Utils
 
             int totalCP = 0;
 
-            foreach (var item in user.RepresentationTeamDataNew)
+            foreach (long item in user.RepresentationTeamDataNew)
             {
                 totalCP += FormulaUtils.CalculateCP(user, item);
             }
@@ -382,14 +382,14 @@ namespace EpinelPS.Utils
             if (cItem.use_type != "ItemRandomBox") throw new Exception("expected random box");
 
             // find matching probability entries
-            var probabilityEntries = GameData.Instance.RandomItem.Values.Where(x => x.group_id == cItem.use_id).ToArray();
-            if (!probabilityEntries.Any()) throw new Exception($"cannot find any probability entries with ID {cItem.use_id}, box ID: {cItem.id}");
+            RandomItemRecord[] probabilityEntries = [.. GameData.Instance.RandomItem.Values.Where(x => x.group_id == cItem.use_id)];
+            if (probabilityEntries.Length == 0) throw new Exception($"cannot find any probability entries with ID {cItem.use_id}, box ID: {cItem.id}");
 
             // run probability as many times as needed
             NetRewardData ret = new() { PassPoint = new() };
             for (int i = 0; i < count; i++)
             {
-                var winningRecord = Rng.PickWeightedItem(probabilityEntries);
+                RandomItemRecord winningRecord = Rng.PickWeightedItem(probabilityEntries);
 
                 if (winningRecord.reward_value_min != winningRecord.reward_value_max)
                 {

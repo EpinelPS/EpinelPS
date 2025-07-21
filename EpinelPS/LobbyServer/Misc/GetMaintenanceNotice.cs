@@ -7,18 +7,18 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqMaintenanceNotice>(); // field string OpenId
-            var oid = req.OpenId;
+            ReqMaintenanceNotice req = await ReadData<ReqMaintenanceNotice>(); // field string OpenId
+            string oid = req.OpenId;
 
             // Create a new instance of ResMaintenanceNotice
-            var r = new ResMaintenanceNotice
+            ResMaintenanceNotice r = new()
             {
                 IsWhitelisted = true
             };
 
             // Define maintenance window timestamps
-            var maintenanceFrom = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-2)); // Example: 2 hour ago
-            var maintenanceTo = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1));   // Example: 1 hour ago
+            Google.Protobuf.WellKnownTypes.Timestamp maintenanceFrom = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-2)); // Example: 2 hour ago
+            Google.Protobuf.WellKnownTypes.Timestamp maintenanceTo = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1));   // Example: 1 hour ago
 
             // Add a new maintenance window
             r.MaintenanceWindow = new NetMaintenanceWindow

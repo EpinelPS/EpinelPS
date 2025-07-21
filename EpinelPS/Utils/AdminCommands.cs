@@ -12,7 +12,7 @@ namespace EpinelPS.Utils
 {
     public class AdminCommands
     {
-        private static HttpClient client;
+        private static readonly HttpClient client;
 
         private static string serverUrl = "global-lobby.nikke-kr.com";
         private static string connectingServer = serverUrl;
@@ -24,16 +24,16 @@ namespace EpinelPS.Utils
             // Use TLS 1.1 so that tencents cloudflare knockoff wont complain
             if (!OperatingSystem.IsLinux())
             {
-                var handler = new SocketsHttpHandler
+                SocketsHttpHandler handler = new()
                 {
-                    ConnectCallback = async (context, cancellationToken) =>
+                    ConnectCallback = static async (context, cancellationToken) =>
                     {
-                        var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                        Socket socket = new(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
                         try
                         {
                             await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
 
-                            var sslStream = new SslStream(new NetworkStream(socket, ownsSocket: true));
+                            SslStream sslStream = new(new NetworkStream(socket, ownsSocket: true));
 
                             // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
                             await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
@@ -63,13 +63,13 @@ namespace EpinelPS.Utils
         }
         public static RunCmdResponse CompleteStage(ulong userId, string input2)
         {
-            var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+            User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
             if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
 
             try
             {
-                var chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
-                var stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
+                bool chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
+                bool stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
 
                 if (chapterParsed && stageParsed)
                 {
@@ -78,11 +78,11 @@ namespace EpinelPS.Utils
                     // Complete main stages
                     for (int i = 0; i <= chapterNumber; i++)
                     {
-                        var stages = GameData.Instance.GetStageIdsForChapter(i, true);
+                        IEnumerable<int> stages = GameData.Instance.GetStageIdsForChapter(i, true);
                         int target = 1;
-                        foreach (var item in stages)
+                        foreach (int item in stages)
                         {
-                            var stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
+                            CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
                             if (!user.IsStageCompleted(item) && stageData.chapter_mod == ChapterMod.Normal)
                             {
                                 Console.WriteLine("Completing stage " + item);
@@ -105,13 +105,11 @@ namespace EpinelPS.Utils
                     {
                         Console.WriteLine($"Processing chapter: {chapter}");
 
-                        var stages = GameData.Instance.GetScenarioStageIdsForChapter(chapter)
-                            .Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))
-                            .ToList();
+                        List<string> stages = [.. GameData.Instance.GetScenarioStageIdsForChapter(chapter).Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))];
 
                         Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
 
-                        foreach (var stage in stages)
+                        foreach (string? stage in stages)
                         {
                             if (!user.CompletedScenarios.Contains(stage))
                             {
@@ -128,7 +126,7 @@ namespace EpinelPS.Utils
                     // get last quest data to remove any gaps
                     if (user.MainQuestData.Count >= 2)
                     {
-                        var last = user.MainQuestData.Last();
+                        KeyValuePair<int, bool> last = user.MainQuestData.Last();
                         Logging.WriteLine("last quest id: " + last.Key, LogType.Debug);
                         for (int i = 0; i < last.Key; i++)
                         {
@@ -156,12 +154,11 @@ namespace EpinelPS.Utils
         public static RunCmdResponse AddAllCharacters(User user)
         {
             // Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
-            var allCharacters = GameData.Instance.CharacterTable.Values
+            List<CharacterRecord> allCharacters = [.. GameData.Instance.CharacterTable.Values
                 .GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
-                .SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))  // Always add characters with grade_core_id == 11 and 103
-                .ToList();
+                .SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))];
 
-            foreach (var character in allCharacters)
+            foreach (CharacterRecord? character in allCharacters)
             {
                 if (!user.HasCharacter(character.id))
                 {
@@ -190,7 +187,7 @@ namespace EpinelPS.Utils
 
         public static RunCmdResponse AddAllMaterials(User user, int amount)
         {
-            foreach (var tableItem in GameData.Instance.itemMaterialTable.Values)
+            foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
             {
                 ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.id);
 
@@ -218,7 +215,7 @@ namespace EpinelPS.Utils
 
         public static RunCmdResponse FinishAllTutorials(User user)
         {
-            foreach (var tutorial in GameData.Instance.TutorialTable.Values)
+            foreach (ClearedTutorialData tutorial in GameData.Instance.TutorialTable.Values)
             {
                 if (!user.ClearedTutorialData.ContainsKey(tutorial.id))
                 {
@@ -235,13 +232,13 @@ namespace EpinelPS.Utils
         {
             if (!(inputGrade >= 0 && inputGrade <= 11)) return new RunCmdResponse() { error = "core level out of range, must be between 0-12" };
 
-            foreach (var character in user.Characters)
+            foreach (Character character in user.Characters)
             {
                 // Get current character's Tid
                 int tid = character.Tid;
 
                 // Get the character data from the character table
-                if (!GameData.Instance.CharacterTable.TryGetValue(tid, out var charData))
+                if (!GameData.Instance.CharacterTable.TryGetValue(tid, out CharacterRecord? charData))
                 {
                     Console.WriteLine($"Character data not found for Tid {tid}");
                     continue;
@@ -269,7 +266,7 @@ namespace EpinelPS.Utils
                     int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
 
                     // Find the character with the same name_code and new grade_core_id
-                    var newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
+                    CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
                         c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
                     if (newCharData != null)
@@ -290,7 +287,7 @@ namespace EpinelPS.Utils
                     int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
 
                     // Find the character with the same name_code and new grade_core_id
-                    var newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
+                    CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
                         c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
 
                     if (newCharData != null)
@@ -313,7 +310,7 @@ namespace EpinelPS.Utils
         public static RunCmdResponse SetCharacterLevel(User user, int level)
         {
             if (level > 999 || level <= 0) return new RunCmdResponse() { error = "level must be between 1-999" };
-            foreach (var character in user.Characters)
+            foreach (Character character in user.Characters)
             {
                 character.Level = level;
             }
@@ -325,7 +322,7 @@ namespace EpinelPS.Utils
         public static RunCmdResponse SetSkillLevel(User user, int skillLevel)
         {
             if (skillLevel > 10 || skillLevel < 0) return new RunCmdResponse() { error = "level must be between 1-10" };
-            foreach (var character in user.Characters)
+            foreach (Character character in user.Characters)
             {
                 character.UltimateLevel = skillLevel;
                 character.Skill1Lvl = skillLevel;
@@ -455,7 +452,7 @@ namespace EpinelPS.Utils
             if (input != null)
             {
                 using MemoryStream ms = new();
-                CodedOutputStream stream = new CodedOutputStream(ms);
+                CodedOutputStream stream = new(ms);
                 input.WriteTo(stream);
                 stream.Flush();
 

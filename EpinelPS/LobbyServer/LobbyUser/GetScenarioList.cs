@@ -7,14 +7,14 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            var req = await ReadData<ReqGetScenarioList>();
-            var user = GetUser();
+            ReqGetScenarioList req = await ReadData<ReqGetScenarioList>();
+            Database.User user = GetUser();
 
             // todo what are bookmark scenarios?
 
             // this returns a list of scenarios that user has completed
-            var response = new ResGetScenarioList();
-            foreach (var item in user.CompletedScenarios)
+            ResGetScenarioList response = new();
+            foreach (string item in user.CompletedScenarios)
             {
                 response.ScenarioList.Add(item);
             }
