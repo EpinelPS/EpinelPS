@@ -1,5 +1,4 @@
 using EpinelPS.Utils;
-using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Event.StoryEvent
 {

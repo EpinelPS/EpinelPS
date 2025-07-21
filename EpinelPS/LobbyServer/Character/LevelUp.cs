@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Character
             ResCharacterLevelUp response = new();
             Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
 
-            foreach (Database.Character item in user.Characters.ToArray())
+            foreach (CharacterModel item in user.Characters.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {
@@ -55,11 +55,11 @@ namespace EpinelPS.LobbyServer.Character
                         Grade = item.Grade,
                         Tid = item.Tid
                     };
-                    List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
+                    List<CharacterModel> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
                     response.SynchroLv = user.GetSynchroLevel();
 
-                    foreach (Database.Character? c in highestLevelCharacters)
+                    foreach (CharacterModel? c in highestLevelCharacters)
                     {
                         response.SynchroStandardCharacters.Add(c.Csn);
                     }

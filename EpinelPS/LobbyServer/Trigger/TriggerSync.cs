@@ -1,5 +1,4 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Trigger
 {
@@ -25,11 +24,11 @@ namespace EpinelPS.LobbyServer.Trigger
             Console.WriteLine("needs " + req.Seq);
 
             // Look for triggers past that amount
-            Database.Trigger[] newTriggers = [.. user.Triggers.Where(x => x.Id > req.Seq)];
+            TriggerModel[] newTriggers = [.. user.Triggers.Where(x => x.Id > req.Seq)];
 
             // Return all triggers
             int triggerCount = 0;
-            foreach (Database.Trigger? item in newTriggers)
+            foreach (TriggerModel item in newTriggers)
             {
                 triggerCount++;
 

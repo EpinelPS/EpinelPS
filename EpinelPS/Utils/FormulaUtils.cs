@@ -4,9 +4,9 @@ namespace EpinelPS.Utils
 {
     public class FormulaUtils
     {
-        public static int CalculateCP(Database.User user, long csn)
+        public static int CalculateCP(User user, long csn)
         {
-            Database.Character? character = user.Characters.FirstOrDefault(c => c.Csn == csn);
+            CharacterModel? character = user.Characters.FirstOrDefault(c => c.Csn == csn);
             if (character == null) return 0;
 
             CharacterRecord? charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid);

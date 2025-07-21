@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Liberate
         protected override async Task HandleAsync()
         {
             ReqGetLiberateData req = await ReadData<ReqGetLiberateData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetLiberateData response = new() { };
 

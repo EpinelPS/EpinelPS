@@ -40,7 +40,7 @@ namespace EpinelPS.LobbyServer.Outpost
             await WriteDataAsync(response);
         }
 
-        private static void ProcessLessonReward(Database.User user, TacticAcademyLessonRecord r)
+        private static void ProcessLessonReward(User user, TacticAcademyLessonRecord r)
         {
             if (r.lesson_reward == null)
             {

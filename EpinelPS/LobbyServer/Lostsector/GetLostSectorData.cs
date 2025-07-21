@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Lostsector
         protected override async Task HandleAsync()
         {
             ReqGetLostSectorData req = await ReadData<ReqGetLostSectorData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetLostSectorData response = new();
 
@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Lostsector
                     response.ClearStages.Add(new NetFieldStageData() { StageId = item.Value.open_condition_value });
                 }
 
-                if (user.LostSectorData.TryGetValue(item.Key, out Database.LostSectorData? val))
+                if (user.LostSectorData.TryGetValue(item.Key, out LostSectorData? val))
                 {
                     MapInfo map = GameData.Instance.MapData[item.Value.field_id];
                     response.LostSector.Add(new NetUserLostSectorData()

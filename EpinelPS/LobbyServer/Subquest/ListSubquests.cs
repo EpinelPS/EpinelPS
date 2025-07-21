@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Subquest
         protected override async Task HandleAsync()
         {
             ReqGetSubQuestList req = await ReadData<ReqGetSubQuestList>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetSubQuestList response = new();
 

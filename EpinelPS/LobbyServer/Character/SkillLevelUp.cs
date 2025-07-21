@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Character
             User user = GetUser();
             ResCharacterSkillLevelUp response = new();
 
-            Database.Character character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
+            CharacterModel character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
 
             CharacterRecord charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
             Dictionary<int, int> skillIdMap = new()

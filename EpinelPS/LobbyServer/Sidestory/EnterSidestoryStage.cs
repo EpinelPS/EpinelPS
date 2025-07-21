@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Sidestory
         protected override async Task HandleAsync()
         {
             ReqEnterSideStoryStage req = await ReadData<ReqEnterSideStoryStage>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResEnterSideStoryStage response = new();
 

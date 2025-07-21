@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Character
         {
             ReqSynchroRegister req = await ReadData<ReqSynchroRegister>();
             User user = GetUser();
-            Database.Character? targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new Exception("target character does not exist");
+            CharacterModel? targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new Exception("target character does not exist");
             ResSynchroRegister response = new();
             foreach (SynchroSlot item in user.SynchroSlots)
             {

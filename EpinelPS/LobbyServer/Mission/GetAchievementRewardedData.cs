@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Mission
         protected override async Task HandleAsync()
         {
             await ReadData<ReqGetAchievementRewardedData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetAchievementRewardedData response = new();
             response.Ids.AddRange(user.CompletedAchievements);

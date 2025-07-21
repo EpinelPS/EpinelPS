@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Misc
         protected override async Task HandleAsync()
         {
             ReqUserOnlineStateLog req = await ReadData<ReqUserOnlineStateLog>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResUserOnlineStateLog response = new();
             user.LastLogin = DateTime.UtcNow;

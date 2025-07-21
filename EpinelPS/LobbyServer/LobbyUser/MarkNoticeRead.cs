@@ -1,5 +1,4 @@
 using EpinelPS.Utils;
-using EpinelPS.Data; // For GameData access
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -10,7 +9,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqRecordNoticeLog req = await ReadData<ReqRecordNoticeLog>();
             ResRecordNoticeLog r = new();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             // TODO
 

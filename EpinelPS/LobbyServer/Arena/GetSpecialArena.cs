@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Arena
         protected override async Task HandleAsync()
         {
             ReqGetSpecialArena req = await ReadData<ReqGetSpecialArena>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetSpecialArena response = new()
             {

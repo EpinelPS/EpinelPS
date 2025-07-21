@@ -146,7 +146,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         UltiSkillLv = 1
                     });
 
-                    user.Characters.Add(new Database.Character()
+                    user.Characters.Add(new CharacterModel()
                     {
                         CostumeId = 0,
                         Csn = id,

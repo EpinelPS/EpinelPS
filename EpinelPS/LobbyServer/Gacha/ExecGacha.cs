@@ -83,7 +83,7 @@ namespace EpinelPS.LobbyServer.Gacha
 
                 if (user.HasCharacter(characterData.id))
                 {
-                    Database.Character character = user.GetCharacter(characterData.id) ?? throw new Exception("HasCharacter() returned true, however character was null");
+                    CharacterModel character = user.GetCharacter(characterData.id) ?? throw new Exception("HasCharacter() returned true, however character was null");
 
                     ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
 
@@ -200,7 +200,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         UltiSkillLv = 1
                     });
 
-                    user.Characters.Add(new Database.Character()
+                    user.Characters.Add(new CharacterModel()
                     {
                         CostumeId = 0,
                         Csn = (int)gacha.Sn,

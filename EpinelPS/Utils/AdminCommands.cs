@@ -162,7 +162,7 @@ namespace EpinelPS.Utils
             {
                 if (!user.HasCharacter(character.id))
                 {
-                    user.Characters.Add(new Database.Character()
+                    user.Characters.Add(new CharacterModel()
                     {
                         CostumeId = 0,
                         Csn = user.GenerateUniqueCharacterId(),
@@ -232,7 +232,7 @@ namespace EpinelPS.Utils
         {
             if (!(inputGrade >= 0 && inputGrade <= 11)) return new RunCmdResponse() { error = "core level out of range, must be between 0-12" };
 
-            foreach (Character character in user.Characters)
+            foreach (CharacterModel character in user.Characters)
             {
                 // Get current character's Tid
                 int tid = character.Tid;
@@ -310,7 +310,7 @@ namespace EpinelPS.Utils
         public static RunCmdResponse SetCharacterLevel(User user, int level)
         {
             if (level > 999 || level <= 0) return new RunCmdResponse() { error = "level must be between 1-999" };
-            foreach (Character character in user.Characters)
+            foreach (CharacterModel character in user.Characters)
             {
                 character.Level = level;
             }
@@ -322,7 +322,7 @@ namespace EpinelPS.Utils
         public static RunCmdResponse SetSkillLevel(User user, int skillLevel)
         {
             if (skillLevel > 10 || skillLevel < 0) return new RunCmdResponse() { error = "level must be between 1-10" };
-            foreach (Character character in user.Characters)
+            foreach (CharacterModel character in user.Characters)
             {
                 character.UltimateLevel = skillLevel;
                 character.Skill1Lvl = skillLevel;
@@ -337,7 +337,7 @@ namespace EpinelPS.Utils
         {
             if (!user.HasCharacter(characterId))
             {
-                user.Characters.Add(new Database.Character()
+                user.Characters.Add(new CharacterModel()
                 {
                     CostumeId = 0,
                     Csn = user.GenerateUniqueCharacterId(),

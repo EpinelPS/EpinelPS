@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             ReqChallengeEventStageData req = await ReadData<ReqChallengeEventStageData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResChallengeEventStageData response = new()
             {

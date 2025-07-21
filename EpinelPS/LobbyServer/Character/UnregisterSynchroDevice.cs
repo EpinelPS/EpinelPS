@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Character
                     {
                         long oldCSN = item.CharacterSerialNumber;
                         item.CharacterSerialNumber = 0;
-                        Database.Character data = user.GetCharacterBySerialNumber(oldCSN) ?? throw new Exception("failed to lookup character");
+                        CharacterModel data = user.GetCharacterBySerialNumber(oldCSN) ?? throw new Exception("failed to lookup character");
 
                         response.Character = new NetUserCharacterDefaultData()
                         {
@@ -41,10 +41,10 @@ namespace EpinelPS.LobbyServer.Character
                         response.Slot = new NetSynchroSlot() { AvailableRegisterAt = item.AvailableAt, Csn = item.CharacterSerialNumber, Slot = item.Slot };
 
                         response.IsSynchro = false;
-                        List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
+                        List<CharacterModel> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
 
-                        foreach (Database.Character? item2 in highestLevelCharacters)
+                        foreach (CharacterModel? item2 in highestLevelCharacters)
                         {
                             response.SynchroStandardCharacters.Add(item2.Csn);
                         }

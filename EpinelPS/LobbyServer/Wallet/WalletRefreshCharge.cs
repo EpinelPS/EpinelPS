@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Wallet
         protected override async Task HandleAsync()
         {
             ReqRefreshChargeCurrencyData req = await ReadData<ReqRefreshChargeCurrencyData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResRefreshChargeCurrencyData response = new()
             {

@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Liberate
         protected override async Task HandleAsync()
         {
             ReqChooseLiberateCharacter req = await ReadData<ReqChooseLiberateCharacter>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResChooseLiberateCharacter response = new()
             {

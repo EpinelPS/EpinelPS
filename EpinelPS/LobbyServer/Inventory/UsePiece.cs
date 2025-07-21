@@ -46,7 +46,7 @@ namespace EpinelPS.LobbyServer.Inventory
             {
                 ItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.piece_id);
 
-                if (user.GetCharacter(character.id) is Database.Character ownedCharacter)
+                if (user.GetCharacter(character.id) is CharacterModel ownedCharacter)
                 {
                     // If the character already exists, we can increase its piece count
                     int maxLimitBroken = GetValueByRarity(character.original_rare, 0, 2, 11);
@@ -104,7 +104,7 @@ namespace EpinelPS.LobbyServer.Inventory
                         Csn = user.GenerateUniqueCharacterId(),
                         Tid = character.id,
                     });
-                    user.Characters.Add(new Database.Character
+                    user.Characters.Add(new CharacterModel
                     {
                         CostumeId = 0,
                         Csn = csn,
@@ -194,7 +194,7 @@ namespace EpinelPS.LobbyServer.Inventory
             _ => throw new Exception($"Unknown character rarity: {rarity}")
         };
 
-        private NetCharacterData GetNetCharacterData(Database.Character character, int bodyLabel = 0)
+        private NetCharacterData GetNetCharacterData(CharacterModel character, int bodyLabel = 0)
         {
             return new NetCharacterData
             {

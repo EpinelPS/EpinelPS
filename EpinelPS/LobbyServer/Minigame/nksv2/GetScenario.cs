@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Minigame.nksv2
         protected override async Task HandleAsync()
         {
             ReqGetNKSV2Scenario req = await ReadData<ReqGetNKSV2Scenario>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetNKSV2Scenario response = new();
             response.ScenarioIdList.Add(user.MogInfo.CompletedScenarios);

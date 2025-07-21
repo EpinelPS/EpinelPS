@@ -8,8 +8,8 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqGetProfileData req = await ReadData<ReqGetProfileData>();
-            Database.User callingUser = GetUser();
-            Database.User? user = GetUser((ulong)req.TargetUsn);
+            User callingUser = GetUser();
+            User? user = GetUser((ulong)req.TargetUsn);
             ResGetProfileData response = new();
           
             if (user != null)
@@ -28,7 +28,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
                 for (int i = 0; i < user.RepresentationTeamDataNew.Length; i++)
                 {
                     long csn = user.RepresentationTeamDataNew[i];
-                    Database.Character? c = user.GetCharacterBySerialNumber(csn);
+                    CharacterModel? c = user.GetCharacterBySerialNumber(csn);
 
                     if (c != null)
                     {

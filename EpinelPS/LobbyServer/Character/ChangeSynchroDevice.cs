@@ -18,10 +18,10 @@ namespace EpinelPS.LobbyServer.Character
 
             ResSynchroChange response = new();
 
-            List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
+            List<CharacterModel> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
             int slot = 1;
-            foreach (Database.Character? item in highestLevelCharacters)
+            foreach (CharacterModel? item in highestLevelCharacters)
             {
                 if (item.Level != 200)
                 {

@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event.Field
         protected override async Task HandleAsync()
         {
             ReqListFieldPasswordDoorData req = await ReadData<ReqListFieldPasswordDoorData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResListFieldPasswordDoorData response = new();
 

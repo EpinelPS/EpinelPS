@@ -23,14 +23,14 @@ namespace EpinelPS.LobbyServer.Character
         ];
             }
 
-            List<Database.Character> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
+            List<CharacterModel> highestLevelCharacters = [.. user.Characters.OrderByDescending(x => x.Level).Take(5)];
 
             ResGetSynchroData response = new()
             {
                 Synchro = new NetUserSynchroData()
             };
 
-            foreach (Database.Character? item in highestLevelCharacters)
+            foreach (CharacterModel? item in highestLevelCharacters)
             {
                 response.Synchro.StandardCharacters.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel }, IsSynchro = user.GetSynchro(item.Csn) });
             }

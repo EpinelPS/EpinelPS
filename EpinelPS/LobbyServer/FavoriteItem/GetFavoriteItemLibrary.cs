@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             ReqGetFavoriteItemLibrary req = await ReadData<ReqGetFavoriteItemLibrary>();
 
             ResGetFavoriteItemLibrary response = new();
-            Database.User user = GetUser();
+            User user = GetUser();
 
 
             await WriteDataAsync(response);

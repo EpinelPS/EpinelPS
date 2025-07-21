@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Character
             // Get all character data from the game's character table
             List<CharacterRecord> fullchardata = [.. GameData.Instance.CharacterTable.Values];
 
-            Database.Character targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
+            CharacterModel targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
 
             // Find the element with the current csn from the request
             CharacterRecord? currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid);

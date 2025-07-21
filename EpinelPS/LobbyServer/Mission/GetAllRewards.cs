@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Mission
         protected override async Task HandleAsync()
         {
             ReqGetRewardedData req = await ReadData<ReqGetRewardedData>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetRewardedData response = new();
 

@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.CE006
         protected override async Task HandleAsync()
         {
             ReqGetStellarBladeStatistics req = await ReadData<ReqGetStellarBladeStatistics>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetStellarBladeStatistics response = new();
 

@@ -170,11 +170,11 @@ namespace EpinelPS.LobbyServer.Stage
                     LastContentsTeamNumber = 1
                 };
 
-                user.Characters.Add(new Database.Character() { Csn = 47263455, Tid = 201001 });
-                user.Characters.Add(new Database.Character() { Csn = 47273456, Tid = 330501 });
-                user.Characters.Add(new Database.Character() { Csn = 47263457, Tid = 130201 });
-                user.Characters.Add(new Database.Character() { Csn = 47263458, Tid = 230101 });
-                user.Characters.Add(new Database.Character() { Csn = 47263459, Tid = 301201 });
+                user.Characters.Add(new CharacterModel() { Csn = 47263455, Tid = 201001 });
+                user.Characters.Add(new CharacterModel() { Csn = 47273456, Tid = 330501 });
+                user.Characters.Add(new CharacterModel() { Csn = 47263457, Tid = 130201 });
+                user.Characters.Add(new CharacterModel() { Csn = 47263458, Tid = 230101 });
+                user.Characters.Add(new CharacterModel() { Csn = 47263459, Tid = 301201 });
 
                 user.BondInfo.Add(new() { NameCode = 3001, Lv = 1 });
                 user.BondInfo.Add(new() { NameCode = 3005, Lv = 1 });
@@ -193,7 +193,7 @@ namespace EpinelPS.LobbyServer.Stage
 
                 for (int i = 1; i < 6; i++)
                 {
-                    Database.Character character = user.Characters[i - 1];
+                    CharacterModel character = user.Characters[i - 1];
                     team1Sub.Slots.Add(new NetTeamSlot() { Slot = i, Value = character.Csn });
                 }
                 team1.Teams.Add(team1Sub);

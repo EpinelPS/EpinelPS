@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             ResExistScenario response = new();
 
-            Database.User user = GetUser();
+            User user = GetUser();
 
             foreach (string? item in req.ScenarioGroupIds)
             {

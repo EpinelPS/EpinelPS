@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Tower
 
             ResGetTowerData response = new();
 
-            Database.User user = GetUser();
+            User user = GetUser();
 
             // TODO: Load remain count for these
             NetTowerData t0 = new() { Type = 1, RemainCount = 3 };

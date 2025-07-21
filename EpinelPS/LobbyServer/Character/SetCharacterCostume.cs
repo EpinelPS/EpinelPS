@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Character
             ReqSetCharacterCostume req = await ReadData<ReqSetCharacterCostume>();
             User user = GetUser();
 
-            foreach (Database.Character item in user.Characters)
+            foreach (CharacterModel item in user.Characters)
             {
                 if (item.Csn == req.Csn)
                 {

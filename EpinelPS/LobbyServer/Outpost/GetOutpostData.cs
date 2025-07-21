@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-using EpinelPS.Database;
 using EpinelPS.Data;
 namespace EpinelPS.LobbyServer.Outpost
 {

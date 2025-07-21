@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Misc
         protected override async Task HandleAsync()
         {
             ReqGachaGetAllShutdownFlags req = await ReadData<ReqGachaGetAllShutdownFlags>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGachaGetAllShutdownFlags response = new();
             if (user.GachaTutorialPlayCount > 0)

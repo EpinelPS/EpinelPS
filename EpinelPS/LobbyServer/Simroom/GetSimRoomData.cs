@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             ReqGetSimRoom req = await ReadData<ReqGetSimRoom>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetSimRoom response = new()
             {

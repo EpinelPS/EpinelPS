@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Lostsector
             ResPlayLostSector response = new();
 
             if (!user.LostSectorData.ContainsKey(req.SectorId))
-                user.LostSectorData.Add(req.SectorId, new Database.LostSectorData()
+                user.LostSectorData.Add(req.SectorId, new LostSectorData()
                 {
                     IsPlaying = true
                 });

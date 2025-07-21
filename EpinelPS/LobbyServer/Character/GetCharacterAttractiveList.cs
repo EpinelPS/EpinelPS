@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqGetAttractiveList req = await ReadData<ReqGetAttractiveList>();
-            Database.User user = GetUser();
+            User user = GetUser();
 
             ResGetAttractiveList response = new()
             {

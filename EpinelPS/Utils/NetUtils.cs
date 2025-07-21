@@ -336,7 +336,7 @@ namespace EpinelPS.Utils
 
             NetWholeTeamSlot result = new();
 
-            Character? c = user.GetCharacterBySerialNumber(csn);
+            CharacterModel? c = user.GetCharacterBySerialNumber(csn);
             if (c == null) return new() { Slot = slot };
 
             return new NetWholeTeamSlot()
