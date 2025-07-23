@@ -139,7 +139,7 @@ namespace ServerSelector
         public static bool PatchGameAssembly(string dll, bool install)
         {
             // v124 introduced check to ensure that sodium dll is not changed.
-#if GameAssemblyNeedsPatch
+#if !GameAssemblyNeedsPatch
             return true;
 #else
             string backupPath = dll + ".bak";
