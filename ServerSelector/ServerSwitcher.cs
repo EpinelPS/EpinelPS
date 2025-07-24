@@ -9,6 +9,7 @@ namespace ServerSelector
     public class ServerSwitcher
     {
         private static readonly string[] GameAssemblySodiumIntegrityFuncHint = ["40 53 56 57 41 54 41 55 41 56 41 57 48 81 EC C0 00 00 00 80 3d ?? ?? ?? ?? 00 0f 85 ?? 00 00 00 48"];
+        private static readonly string[] GameAssemblySodiumIntegrityFuncPatched = ["b0 01 c3 90 90 54 41 55 41 56 41 57 48 81 EC C0 00 00 00 80 3d ?? ?? ?? ?? 00 0f 85 ?? 00 00 00 48"];
         private static readonly string[] GameAssemblySodiumIntegrityFuncPatch = ["b0 01 c3 90 90"];
         private const string HostsStartMarker = "# begin ServerSelector entries";
         private const string HostsEndMarker = "# end ServerSelector entries";
@@ -165,6 +166,12 @@ namespace ServerSelector
                 {
                     // game was likely updated, delete backup
                     File.Delete(backupPath);
+                }
+
+                if (PatchUtility.CanFindOffset(dll, GameAssemblySodiumIntegrityFuncPatched))
+                {
+                    // already patched
+                    return true;
                 }
 
                 // patch assembly
