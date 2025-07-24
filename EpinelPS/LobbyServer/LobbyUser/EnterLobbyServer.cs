@@ -17,6 +17,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             // NOTE: Keep this in sync with GetUser code
 
+            if (user.Nickname == null)
+            {
+                user.Nickname = "Unknown";
+                JsonDb.Save();
+            }
+
             ResEnterLobbyServer response = new()
             {
                 User = LobbyHandler.CreateNetUserDataFromUser(user),
