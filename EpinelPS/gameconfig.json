@@ -1,18 +1,18 @@
-﻿{
+{
   "StaticData": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/135-c05aac789a/staticdata/data/qa-250717-07b/420309/StaticData.pack",
-    "Version": "data/qa-250717-07b/420309",
-    "Salt1": "AZy7b2AFXgG9iMXkU5G64\u002BxNdV7zw0BglZiMoeSK5Yc=",
-    "Salt2": "q\u002BpCKGf2uWh8pXXrVZwKQzQA0RzUIhtNXTR/DucJh54="
+    "Url": "https://cloud.nikke-kr.com/prdenv/136-cb1eefafb4/staticdata/data/qa-250807-08b/444053/StaticData.pack",
+    "Version": "data/qa-250807-08b/444053",
+    "Salt1": "Ks/g6yRqSCqkqBKPUXjlolTjzk2WUSt\u002Bzjf/1bXZ5oo=",
+    "Salt2": "a6JwwehBZ0lFWNeeKHTOlzxVJhHOniPPsc5mJM8AgzU="
   },
   "StaticDataMpk": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/135-c05aac789a/staticdata/data/qa-250717-07b/420309/mpk/StaticData.pack",
-    "Version": "data/qa-250717-07b/420309",
-    "Salt1": "3K6fVUgfahmo59HfmPVeDv9PB2Vf2WdA6jGgzlNkluM=",
-    "Salt2": "rqJrGTPJsHAoFOI61XOpnsT2DZPcJp8uWCJqt\u002BiU\u002BaM="
+    "Url": "https://cloud.nikke-kr.com/prdenv/136-cb1eefafb4/staticdata/data/qa-250807-08b/444053/mpk/StaticData.pack",
+    "Version": "data/qa-250807-08b/444053",
+    "Salt1": "jhyRvuMHw953Q/VNe4EQ/w4wgYhIx\u002BlhCXRv9gdH5p8=",
+    "Salt2": "jPYpFlCVXQcIFUtX22y98VLjmj247wGm4nh39b4aCNA="
   },
-  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/135-bd156d2b15/{Platform}",
+  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/136-bd5c8f1084/{Platform}",
   "GameMinVer": "100.0.1",
   "GameMaxVer": "150.0.2",
-  "TargetVersion": "135.8.9"
+  "TargetVersion": "136.8.9"
 }
