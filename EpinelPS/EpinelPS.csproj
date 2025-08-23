@@ -36,7 +36,8 @@
 		<PackageReference Include="PeterO.Cbor" Version="4.5.5" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
 		<PackageReference Include="Sodium.Core" Version="1.4.0" />
-		<PackageReference Include="System.Text.Json" Version="9.0.8" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
 	</ItemGroup>
 
 	<ItemGroup>

@@ -61,6 +61,9 @@ namespace EpinelPS.Models
         public int Position;
         public int Corp;
         public long Isn;
+
+        // For harmony cubes that can be equipped to multiple characters
+        public List<long> CsnList = [];
     }
     public class EventData
     {
@@ -106,6 +109,9 @@ namespace EpinelPS.Models
         public List<int> CompletedDailyMissions = [];
         public int DailyMissionPoints;
         public SimroomData SimRoomData = new();
+        
+        public bool UnlimitedCounseling = false;
+        public Dictionary<int, int> DailyCounselCount = [];
     }
     public class WeeklyResetableData
     {

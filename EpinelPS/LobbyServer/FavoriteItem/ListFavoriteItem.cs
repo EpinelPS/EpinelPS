@@ -12,6 +12,12 @@ namespace EpinelPS.LobbyServer.FavoriteItem
 
             ResListFavoriteItem response = new();
 
+            // Add all user's favorite items to the response
+            foreach (NetUserFavoriteItemData favoriteItem in user.FavoriteItems)
+            {
+                response.FavoriteItems.Add(favoriteItem);
+            }
+
             await WriteDataAsync(response);
         }
     }

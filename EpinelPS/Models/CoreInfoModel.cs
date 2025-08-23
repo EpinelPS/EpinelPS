@@ -3,7 +3,7 @@ using EpinelPS.Utils;
 namespace EpinelPS.Models;
 public class CoreInfo
 {
-    public int DbVersion = 3;
+    public int DbVersion = 5;
     public List<User> Users = [];
 
     public List<AccessToken> LauncherAccessTokens = [];

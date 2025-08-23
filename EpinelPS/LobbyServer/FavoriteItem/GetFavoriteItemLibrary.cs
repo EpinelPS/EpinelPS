@@ -12,6 +12,15 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             ResGetFavoriteItemLibrary response = new();
             User user = GetUser();
 
+            foreach (NetUserFavoriteItemData favoriteItem in user.FavoriteItems)
+            {
+                NetFavoriteItemLibraryElement libraryElement = new NetFavoriteItemLibraryElement
+                {
+                    Tid = favoriteItem.Tid,
+                    ReceivedAt = DateTime.UtcNow.Ticks // Use current time as received time
+                };
+                response.FavoriteItemLibrary.Add(libraryElement);
+            }
 
             await WriteDataAsync(response);
         }

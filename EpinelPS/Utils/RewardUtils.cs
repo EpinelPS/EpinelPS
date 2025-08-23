@@ -191,11 +191,32 @@ namespace EpinelPS.Utils
                 }
                 else if (rewardType == "InfraCoreExp")
                 {
+                    user.InfraCoreExp += rewardCount;
+                    
+                    // Check for level ups
+                    Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
+                    int newLevel = user.InfraCoreLvl;
+                    
+                    foreach (InfracoreRecord grade in gradeTable.Values)
+                    {
+                        if (user.InfraCoreExp >= grade.infra_core_exp && grade.grade >= newLevel)
+                        {
+                            newLevel = grade.grade + 1; // Grade is 0-based, so add 1 for actual level
+                        }
+                    }
+                    
+                    if (newLevel > user.InfraCoreLvl)
+                    {
+                        user.InfraCoreLvl = newLevel;
+                    }
+                    
                     ret.InfraCoreExp = new NetIncreaseExpData()
                     {
                         BeforeLv = user.InfraCoreLvl,
                         BeforeExp = user.InfraCoreExp,
-                        // TODO
+                        CurrentLv = user.InfraCoreLvl,
+                        CurrentExp = user.InfraCoreExp,
+                        GainExp = rewardCount
                     };
                 }
                 else if (rewardType == "ItemRandomBox")
@@ -220,6 +241,32 @@ namespace EpinelPS.Utils
 
                         user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
                     }
+                }
+                else if (rewardType == "FavoriteItem")
+                {
+
+                    NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+                    {
+                        FavoriteItemId = user.GenerateUniqueItemId(),
+                        Tid = rewardId,
+                        Csn = 0, 
+                        Lv = 0,  
+                        Exp = 0  
+                    };
+                    user.FavoriteItems.Add(newFavoriteItem);
+
+                    ret.UserFavoriteItems.Add(newFavoriteItem);
+
+                    NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
+                    {
+                        FavoriteItemId = newFavoriteItem.FavoriteItemId,
+                        Tid = newFavoriteItem.Tid,
+                        Csn = newFavoriteItem.Csn,
+                        Lv = newFavoriteItem.Lv,
+                        Exp = newFavoriteItem.Exp
+                    };
+                    ret.FavoriteItems.Add(favoriteItemData);
+
                 }
                 else
                 {

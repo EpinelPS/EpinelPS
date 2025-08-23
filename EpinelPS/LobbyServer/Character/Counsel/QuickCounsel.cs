@@ -4,41 +4,41 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Character.Counsel
 {
-    [PacketPath("/character/attractive/counsel")]
-    public class DoCounsel : LobbyMsgHandler
+    [PacketPath("/character/counsel/quick")]
+    public class QuickCounsel : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            ReqCharacterCounsel req = await ReadData<ReqCharacterCounsel>();
+            ReqCharacterQuickCounsel req = await ReadData<ReqCharacterQuickCounsel>();
             User user = GetUser();
 
-            ResCharacterCounsel response = new();
+            ResCharacterQuickCounsel response = new ResCharacterQuickCounsel();
 
             foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
             {
                 response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
             }
 
-            NetUserAttractiveData? currentBondInfo = user.BondInfo.FirstOrDefault(x => x.NameCode == req.NameCode);
+            NetUserAttractiveData? bondInfo = user.BondInfo.FirstOrDefault(x => x.NameCode == req.NameCode);
 
-            if (currentBondInfo != null)
+            if (bondInfo != null)
             {
-                int beforeLv = currentBondInfo.Lv;
-                int beforeExp = currentBondInfo.Exp;
+                int beforeLv = bondInfo.Lv;
+                int beforeExp = bondInfo.Exp;
 
-                currentBondInfo.Exp += 100;
-                currentBondInfo.CounseledCount++;
-                currentBondInfo.CanCounselToday = true; // Always allow counseling
-                UpdateAttractiveLevel(currentBondInfo);
+                bondInfo.Exp += 100;
+                bondInfo.CounseledCount++;
+                bondInfo.CanCounselToday = true; // Always allow counseling
+                UpdateAttractiveLevel(bondInfo);
 
-                response.Attractive = currentBondInfo;
+                response.Attractive = bondInfo;
                 response.Exp = new NetIncreaseExpData
                 {
-                    NameCode = currentBondInfo.NameCode,
+                    NameCode = bondInfo.NameCode,
                     BeforeLv = beforeLv,
                     BeforeExp = beforeExp,
-                    CurrentLv = currentBondInfo.Lv,
-                    CurrentExp = currentBondInfo.Exp,
+                    CurrentLv = bondInfo.Lv,
+                    CurrentExp = bondInfo.Exp,
                     GainExp = 100
                 };
             }
@@ -76,7 +76,7 @@ namespace EpinelPS.LobbyServer.Character.Counsel
         {
             while (attractiveData.Lv < 40)
             {
-                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.FirstOrDefault(x => x.Value.attractive_level == attractiveData.Lv).Value;
+                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.Values.FirstOrDefault(x => x.attractive_level == attractiveData.Lv);
 
                 if (levelInfo == null)
                 {

@@ -1,9 +1,8 @@
-﻿using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Globalization;
 using EpinelPS.Data;
 using EpinelPS.Utils;
 using Google.Protobuf;
+using Newtonsoft.Json;
 using Paseto;
 using Paseto.Builder;
 
@@ -12,7 +11,6 @@ namespace EpinelPS.Database
     internal class JsonDb
     {
         public static CoreInfo Instance { get; internal set; }
-        public static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true, IncludeFields = true };
 
         // Note: change this in sodium
         public static byte[] ServerPrivateKey = Convert.FromBase64String("FSUY8Ohd942n5LWAfxn6slK3YGwc8OqmyJoJup9nNos=");
@@ -20,7 +18,6 @@ namespace EpinelPS.Database
 
         static JsonDb()
         {
-            IndentedJson.Converters.Add(new JsonStringEnumConverter());
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/db.json"))
             {
                 Console.WriteLine("users: warning: configuration not found, writing default data");
@@ -28,7 +25,7 @@ namespace EpinelPS.Database
                 Save();
             }
 
-            var j = JsonSerializer.Deserialize<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"), IndentedJson);
+            var j = JsonConvert.DeserializeObject<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
             if (j != null)
             {
                 Instance = j;
@@ -80,7 +77,7 @@ namespace EpinelPS.Database
                 Save();
             }
 
-            var j = JsonSerializer.Deserialize<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
+            var j = JsonConvert.DeserializeObject<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
             if (j != null)
             {
                 Instance = j;
@@ -112,7 +109,7 @@ namespace EpinelPS.Database
         {
             if (Instance != null)
             {
-                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonSerializer.Serialize(Instance, IndentedJson));
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
             }
         }
         public static int CurrentJukeboxBgm(int position)

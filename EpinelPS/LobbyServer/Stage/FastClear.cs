@@ -21,10 +21,14 @@ namespace EpinelPS.LobbyServer.Stage
                 OutpostBattle = rsp.OutpostBattle,
                 OutpostBattleLevelReward = rsp.OutpostBattleLevelReward,
                 StageClearReward = rsp.StageClearReward,
-                UserLevelUpReward = rsp.UserLevelUpReward
+                UserLevelUpReward = rsp.UserLevelUpReward,
+                OutpostTimeRewardBuff = new()
             };
 
-            response.OutpostTimeRewardBuff.TimeRewardBuffs.AddRange(rsp.OutpostTimeRewardBuff.TimeRewardBuffs);
+            if (rsp.OutpostTimeRewardBuff != null)
+            {
+                response.OutpostTimeRewardBuff.TimeRewardBuffs.AddRange(rsp.OutpostTimeRewardBuff.TimeRewardBuffs);
+            }
             
             await WriteDataAsync(response);
         }
