@@ -191,17 +191,24 @@ namespace EpinelPS.Utils
                 }
                 else if (rewardType == "InfraCoreExp")
                 {
+                    int beforeLv = user.InfraCoreLvl;
+                    int beforeExp = user.InfraCoreExp;
+
                     user.InfraCoreExp += rewardCount;
                     
                     // Check for level ups
                     Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
                     int newLevel = user.InfraCoreLvl;
                     
-                    foreach (InfracoreRecord grade in gradeTable.Values)
+                    foreach (InfracoreRecord grade in gradeTable.Values.OrderBy(g => g.grade))
                     {
-                        if (user.InfraCoreExp >= grade.infra_core_exp && grade.grade >= newLevel)
+                        if (user.InfraCoreExp >= grade.infra_core_exp)
                         {
-                            newLevel = grade.grade + 1; // Grade is 0-based, so add 1 for actual level
+                            newLevel = grade.grade + 1;
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                     
@@ -212,8 +219,8 @@ namespace EpinelPS.Utils
                     
                     ret.InfraCoreExp = new NetIncreaseExpData()
                     {
-                        BeforeLv = user.InfraCoreLvl,
-                        BeforeExp = user.InfraCoreExp,
+                        BeforeLv = beforeLv,
+                        BeforeExp = beforeExp,
                         CurrentLv = user.InfraCoreLvl,
                         CurrentExp = user.InfraCoreExp,
                         GainExp = rewardCount
