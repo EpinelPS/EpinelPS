@@ -60,23 +60,23 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 NetUserFavoriteItemData? existingEquippedItem = user.FavoriteItems.FirstOrDefault(f => f.Csn == characterCsn);
                 if (existingEquippedItem != null)
                 {
-                    existingEquippedItem.Csn = 0; // Unequip existing item
+                    user.FavoriteItems.Remove(existingEquippedItem);
                 }
             }
 
-            NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+            NetRewardData finalRewardData = RewardUtils.RegisterRewardsForUser(user, reward);
+            
+            if (character != null && finalRewardData.UserFavoriteItems.Count > 0)
             {
-                FavoriteItemId = user.GenerateUniqueItemId(), // Use system's unique ID generator
-                Tid = newItemTid,
-                Csn = characterCsn, // Equip item by setting Csn
-                Lv = 0,
-                Exp = 0
-            };
-            user.FavoriteItems.Add(newFavoriteItem);
+                var newFavoriteItem = user.FavoriteItems.LastOrDefault(f => f.Tid == newItemTid);
+                if (newFavoriteItem != null)
+                {
+                    newFavoriteItem.Csn = characterCsn; // Equip item by setting Csn
+                }
+            }
 
             userQuest.Received = true;
 
-            NetRewardData finalRewardData = RewardUtils.RegisterRewardsForUser(user, reward);
             ResObtainFavoriteItemQuestReward response = new ResObtainFavoriteItemQuestReward { UserReward = finalRewardData };
 
             JsonDb.Save();

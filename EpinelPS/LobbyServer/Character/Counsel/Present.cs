@@ -28,7 +28,7 @@ namespace EpinelPS.LobbyServer.Character.Counsel
                 ItemMaterialRecord? materialInfo = GameData.Instance.itemMaterialTable.GetValueOrDefault(item.Tid);
                 if (materialInfo != null && materialInfo.item_sub_type == "AttractiveMaterial")
                 {
-                    int expGained = materialInfo.item_value;
+                    int expGained = materialInfo.item_value * (int)item.Count;
 
                     if (characterRecord != null)
                     {
