@@ -395,7 +395,7 @@ namespace EpinelPS.Utils
             if (serverIp == null || staticDataUrl == null || resourcesUrl == null)
             {
                 serverIp = await AssetDownloadUtil.GetIpAsync(serverUrl);
-                staticDataUrl = $"https://{serverIp}/v1/get-static-data-pack-info";
+                staticDataUrl = $"https://{serverIp}/v1/staticdatapack";
                 resourcesUrl = $"https://{serverIp}/v1/resourcehosts2";
             }
 
@@ -403,10 +403,7 @@ namespace EpinelPS.Utils
                 return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
 
             // Get latest static data info from server
-            ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
-                {
-                    Type = StaticDataPackType.Json
-                });
+            ResStaticDataPackInfo? staticData = await FetchProtobuf<ResStaticDataPackInfo, ReqStaticDataPackInfo>(staticDataUrl);
             if (staticData == null)
             {
                 Logging.WriteLine("failed to fetch static data", LogType.Error);
@@ -414,7 +411,7 @@ namespace EpinelPS.Utils
             }
 
             // Get latest static data info from server
-            ResStaticDataPackInfoV2? staticData2 = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl,
+            ResStaticDataPackInfoV2? staticData2 = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl.Replace("staticdatapack", "get-static-data-pack-info"),
                 new ReqStaticDataPackInfoV2()
                 {
                     Type = StaticDataPackType.Mpk
