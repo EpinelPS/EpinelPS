@@ -104,6 +104,8 @@ namespace EpinelPS.Utils
                             return 2;
                         case "Module_D":
                             return 3;
+                        case "HarmonyCube":
+                            return GetHarmonyCubePosition(item.ItemType);
                         default:
                             Console.WriteLine("Unknown item subtype: " + subType);
                             break;
@@ -113,6 +115,15 @@ namespace EpinelPS.Utils
             }
 
             return 0;
+        }
+
+        public static int GetHarmonyCubePosition(int itemType)
+        {
+            if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(itemType, out ItemHarmonyCubeRecord? harmonyCube))
+            {
+                return harmonyCube.location_id;
+            }
+            return 1; 
         }
         /// <summary>
         /// Takes multiple NetRewardData objects and merges it into one. Note that this function expects that rewards are already applied to user object.
@@ -390,6 +401,8 @@ namespace EpinelPS.Utils
             for (int i = 0; i < count; i++)
             {
                 RandomItemRecord winningRecord = Rng.PickWeightedItem(probabilityEntries);
+
+                Logging.WriteLine($"LootBox {boxId}: Won item - Type: {winningRecord.reward_type}, ID: {winningRecord.reward_id}, Value: {winningRecord.reward_value_min}", LogType.Info);
 
                 if (winningRecord.reward_value_min != winningRecord.reward_value_max)
                 {

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using MemoryPack;
 
 namespace EpinelPS.Data
@@ -685,7 +685,7 @@ namespace EpinelPS.Data
     {
         public int id;
         public int grade;
-        public int reard_id;
+        public int reward_id;
         public int infra_core_exp;
         public List<InfracoreFunction> function_list = [];
     }
@@ -705,6 +705,32 @@ namespace EpinelPS.Data
         public int reward_id;
         public int attractive_level;
         public int costume;
+    }
+
+    [MemoryPackable]
+    public partial class AttractiveLevelRecord
+    {
+        public int id;
+        public int attractive_level;
+        public int attractive_point;
+        public int attacker_hp_rate;
+        public int attacker_attack_rate;
+        public int attacker_defence_rate;
+        public int attacker_energy_resist_rate;
+        public int attacker_metal_resist_rate;
+        public int attacker_bio_resist_rate;
+        public int defender_hp_rate;
+        public int defender_attack_rate;
+        public int defender_defence_rate;
+        public int defender_energy_resist_rate;
+        public int defender_metal_resist_rate;
+        public int defender_bio_resist_rate;
+        public int supporter_hp_rate;
+        public int supporter_attack_rate;
+        public int supporter_defence_rate;
+        public int supporter_energy_resist_rate;
+        public int supporter_metal_resist_rate;
+        public int supporter_bio_resist_rate;
     }
     [MemoryPackable]
     public partial class SubquestRecord
@@ -731,9 +757,23 @@ namespace EpinelPS.Data
     public partial class MessengerMsgConditionRecord
     {
         public int id;
+        public List<MessengerConditionTriggerList> trigger_list = [];
+        public string message_type = "";
         public string tid = "";
+        public int resource_id;
+        public int stamina_value;
         public int reward_id;
     }
+
+    [MemoryPackable]
+    public partial class MessengerConditionTriggerList
+    {
+        public string trigger = "";
+        public int condition_id;
+        public int condition_value;
+    }
+
+
     public enum ScenarioRewardCondition
     {
         MainScenario,
@@ -888,5 +928,166 @@ namespace EpinelPS.Data
         public List<ItemSpawner> ItemSpawner { get; set; } = [];
         public List<StageSpawner> StageSpawner { get; set; } = [];
     }
-    
+
+    // Harmony Cube  Data Structures
+    [MemoryPackable]
+    public partial class ItemHarmonyCubeRecord
+    {
+        public int id;
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public int location_id;
+        public string location_localkey = "";
+        public int order;
+        public int resource_id;
+        public string bg = "";
+        public string bg_color = "";
+        public string item_type = "";
+        public string item_sub_type = "";
+        public string item_rare = "";
+        public string @class = "";
+        public int level_enhance_id;
+        public List<HarmonyCubeSkillGroup> harmonycube_skill_group = [];
+    }
+
+    [MemoryPackable]
+    public partial class ItemHarmonyCubeLevelRecord
+    {
+        public int id;
+        public int level_enhance_id;
+        public int level;
+        public List<HarmonyCubeSkillLevel> skill_levels = [];
+        public int material_id;
+        public int material_value;
+        public int gold_value;
+        public int slot;
+        public List<HarmonyCubeStat> harmonycube_stats = [];
+    }
+
+    public class HarmonyCubeSkillGroup
+    {
+        public int skill_group_id;
+    }
+
+    public class HarmonyCubeSkillLevel
+    {
+        public int skill_level;
+    }
+
+    public class HarmonyCubeStat
+    {
+        public string stat_type = "";
+        public int stat_rate;
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemRecord
+    {
+        public int id;
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public string icon_resource_id = "";
+        public string img_resource_id = "";
+        public string prop_resource_id = "";
+        public int order;
+        public string favorite_rare = "";
+        public string favorite_type = "";
+        public string weapon_type = "";
+        public int name_code;
+        public int max_level;
+        public int level_enhance_id;
+        public int probability_group;
+        public int albumcategory_id;
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemExpRecord
+    {
+        public int id;
+        public string favorite_rare = "";
+        public int level;
+        public int need_exp;
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemLevelRecord
+    {
+        public int id;
+        public int level_enhance_id;
+        public int grade;
+        public int level;
+        public List<FavoriteItemStatData> favoriteitem_stat_data = [];
+        public List<CollectionSkillLevelData> collection_skill_level_data = [];
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemProbabilityRecord
+    {
+        public int id;
+        public int probability_group;
+        public int level_min;
+        public int level_max;
+        public int need_item_id;
+        public int need_item_count;
+        public int exp;
+        public int great_success_rate;
+        public int great_success_level;
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemQuestRecord
+    {
+        public int id;
+        public int name_code;
+        public string condition_type = "";
+        public int condition_value;
+        public string quest_thumbnail_resource_id = "";
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public int next_quest_id;
+        public string end_scenario_id = "";
+        public int reward_id;
+    }
+
+    public class FavoriteItemStatData
+    {
+        public string stat_type = "";
+        public int stat_value;
+    }
+
+    public class CollectionSkillLevelData
+    {
+        public int collection_skill_level;
+    }
+
+    [MemoryPackable]
+    public partial class FavoriteItemQuestStageRecord
+    {
+        public int id;
+        public int group_id;
+        public int chapter_id;
+        public string chapter_mod = "";
+        public int name_code;
+        public int spawn_condition_favoriteitem_quest_id;
+        public int spawn_condition_campaign_stage_id;
+        public int enter_condition_favoriteitem_quest_id;
+        public int enter_condition_campaign_stage_id;
+        public string name_localkey = "";
+        public string stage_category = "";
+        public bool spot_autocontrol;
+        public int monster_stage_lv;
+        public int dynamic_object_stage_lv;
+        public int standard_battle_power;
+        public int stage_stat_increase_group_id;
+        public bool is_use_quick_battle;
+        public int field_monster_id;
+        public int spot_id;
+        public int state_effect_function_id;
+        public int reward_id;
+        public string enter_scenario_type = "";
+        public string enter_scenario = "";
+        public int fixed_play_character_id;
+        public int spawn_condition_favoriteitem_quest_stage_id;
+        public int enter_condition_favoriteitem_quest_stage_id;
+    }
 }

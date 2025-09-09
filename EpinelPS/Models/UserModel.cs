@@ -48,6 +48,9 @@ public class User
     public long[] RepresentationTeamDataNew = [];
     public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
 
+    // Outpost buildings data
+    public List<NetUserOutpostData> OutpostBuildings = [];
+
     public NetWallpaperData[] WallpaperList = [];
     public NetWallpaperBackground[] WallpaperBackground = [];
     public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
@@ -61,6 +64,7 @@ public class User
     public Dictionary<int, bool> SubQuestData = [];
     public int InfraCoreExp = 0;
     public int InfraCoreLvl = 1;
+    public Dictionary<int, bool> InfraCoreRewardReceived = [];
     public UserPointData userPointData = new();
     public DateTime LastLogin = DateTime.UtcNow;
     public DateTime BattleTime = DateTime.UtcNow;
@@ -72,7 +76,9 @@ public class User
 
     public List<int> Memorial = [];
     public List<int> JukeboxBgm = [];
+    public List<NetUserFavoriteItemData> FavoriteItems = [];
 
+    public List<NetUserFavoriteItemQuestData> FavoriteItemQuests = [];
     public Dictionary<int, int> TowerProgress = [];
 
     public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };

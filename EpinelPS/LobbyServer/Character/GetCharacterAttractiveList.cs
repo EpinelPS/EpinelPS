@@ -1,4 +1,4 @@
-﻿using EpinelPS.Utils;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Character
 {
@@ -19,10 +19,8 @@ namespace EpinelPS.LobbyServer.Character
             {
                 response.Attractives.Add(item);
                 item.CanCounselToday = true;
-                item.Exp = 9999; // TODO
-                item.Lv = 10;
+                
             }
-
 
             // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);

@@ -28,7 +28,10 @@ namespace EpinelPS.LobbyServer.Stage
 
         public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
         {
-            ResClearStage response = new();
+            ResClearStage response = new()
+            {
+                OutpostTimeRewardBuff = new()
+            };
             CampaignStageRecord clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
             string stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);

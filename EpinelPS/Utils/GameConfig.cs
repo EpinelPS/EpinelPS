@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
 using EpinelPS.Database;
+using Newtonsoft.Json;
 
 namespace EpinelPS.Utils
 {
@@ -51,7 +51,7 @@ namespace EpinelPS.Utils
                     Console.WriteLine("Loaded game config");
 
 
-                    _root = JsonSerializer.Deserialize<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));
+                    _root = JsonConvert.DeserializeObject<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));
 
                     if (_root == null)
                     {
@@ -67,7 +67,7 @@ namespace EpinelPS.Utils
         {
             if (Root != null)
             {
-                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonSerializer.Serialize(Root, JsonDb.IndentedJson));
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonConvert.SerializeObject(Root, Formatting.Indented));
             }
         }
     }

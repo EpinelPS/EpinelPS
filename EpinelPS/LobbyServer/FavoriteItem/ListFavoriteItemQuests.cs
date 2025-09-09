@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+using EpinelPS.Utils;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.FavoriteItem
 {
@@ -9,8 +10,18 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         {
             ReqListFavoriteItemQuest req = await ReadData<ReqListFavoriteItemQuest>();
             User user = GetUser();
-
+            
             ResListFavoriteItemQuest response = new();
+            
+            if (user.FavoriteItemQuests == null)
+            {
+                user.FavoriteItemQuests = new List<NetUserFavoriteItemQuestData>();
+            }
+            
+            foreach (NetUserFavoriteItemQuestData quest in user.FavoriteItemQuests)
+            {
+                response.FavoriteItemQuests.Add(quest);
+            }
 
             await WriteDataAsync(response);
         }
