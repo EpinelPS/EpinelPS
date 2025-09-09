@@ -1,4 +1,4 @@
-﻿#define GameAssemblyNeedsPatch // remove if running on versions before v124
+﻿//#define GameAssemblyNeedsPatch // remove if running on versions before v124 or on v137+
 using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
