@@ -229,6 +229,19 @@ namespace EpinelPS.Data
         [LoadRecord("FavoriteItemQuestStageTable.json", "id")]
         public readonly Dictionary<int, FavoriteItemQuestStageRecord> FavoriteItemQuestStageTable = [];
 
+        // Tables related to PlaySoda Arcade's event.
+
+        [LoadRecord("EventPlaySodaManagerTable.json", "id")]
+        public readonly Dictionary<int, EventPlaySodaManagerRecord> EventPlaySodaManagerTable = [];
+
+        [LoadRecord("EventPlaySodaStoryModeTable.json", "id")]
+        public readonly Dictionary<int, EventPlaySodaStoryModeRecord> EventPlaySodaStoryModeTable = [];
+
+        [LoadRecord("EventPlaySodaChallengeModeTable.json", "id")]
+        public readonly Dictionary<int, EventPlaySodaChallengeModeRecord> EventPlaySodaChallengeModeTable = [];
+
+        [LoadRecord("EventPlaySodaPointRewardTable.json", "id")]
+        public readonly Dictionary<int, EventPlaySodaPointRewardRecord> EventPlaySodaPointRewardTable = [];
 
         static async Task<GameData> BuildAsync()
         {
