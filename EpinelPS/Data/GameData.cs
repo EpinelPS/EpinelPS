@@ -1,7 +1,8 @@
 using System.Data;
 using System.Diagnostics;
+using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
-using EpinelPS.Database;
+using System.Text;
 using EpinelPS.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 using MemoryPack;
@@ -60,9 +61,12 @@ namespace EpinelPS.Data
 
         [LoadRecord("ContentsTutorialTable.json", "id")]
         public readonly Dictionary<int, ClearedTutorialData> TutorialTable = [];
-        [LoadRecord("ItemEquipTable.json", "id")]
 
+        [LoadRecord("ItemEquipTable.json", "id")]
         public readonly Dictionary<int, ItemEquipRecord> ItemEquipTable = [];
+
+        [LoadRecord("EquipmentOptionTable.json", "id")]
+        public readonly Dictionary<int, EquipmentOptionRecord> EquipmentOptionTable = [];
 
         [LoadRecord("ItemMaterialTable.json", "id")]
         public readonly Dictionary<int, ItemMaterialRecord> itemMaterialTable = [];
@@ -229,8 +233,10 @@ namespace EpinelPS.Data
         [LoadRecord("FavoriteItemQuestStageTable.json", "id")]
         public readonly Dictionary<int, FavoriteItemQuestStageRecord> FavoriteItemQuestStageTable = [];
 
-        // Tables related to PlaySoda Arcade's event.
+        [LoadRecord("ProfileCardObjectTable.json", "id")]
+        public readonly Dictionary<int, ProfileCardObjectTableRecord> ProfileCardObjectTable = [];
 
+        // Tables related to PlaySoda Arcade's event.
         [LoadRecord("EventPlaySodaManagerTable.json", "id")]
         public readonly Dictionary<int, EventPlaySodaManagerRecord> EventPlaySodaManagerTable = [];
 
@@ -729,7 +735,7 @@ namespace EpinelPS.Data
 
         public FavoriteItemQuestRecord? GetFavoriteItemQuestTableData(int questId)
         {
-            FavoriteItemQuestTable.TryGetValue(questId, out FavoriteItemQuestRecord?data);
+            FavoriteItemQuestTable.TryGetValue(questId, out FavoriteItemQuestRecord? data);
             return data;
         }
 
@@ -737,6 +743,23 @@ namespace EpinelPS.Data
         {
             FavoriteItemQuestStageTable.TryGetValue(stageId, out FavoriteItemQuestStageRecord? data);
             return data;
+        }
+
+        public ProfileCardObjectTableRecord? GetProfileCardObjectTableData(int objectId)
+        {
+            ProfileCardObjectTable.TryGetValue(objectId, out ProfileCardObjectTableRecord? data);
+            return data;
+        }
+
+        public string ObjectToJson(object obj)
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
+            MemoryStream stream = new MemoryStream();
+            serializer.WriteObject(stream, obj);
+            byte[] dataBytes = new byte[stream.Length];
+            stream.Position = 0;
+            stream.Read(dataBytes, 0, (int)stream.Length);
+            return Encoding.UTF8.GetString(dataBytes);
         }
     }
 }

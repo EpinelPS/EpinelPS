@@ -1,10 +1,5 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -15,13 +10,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqSetProfileTeam req = await ReadData<ReqSetProfileTeam>();
             User user = GetUser();
-            for (int i = 0; i < req.Team.Slots.Count - 1; i++)
+            List<long> values = [];
+            foreach (NetTeamSlot slot in req.Team.Slots)
             {
-                NetTeamSlot slot = req.Team.Slots[i];
-
-                user.RepresentationTeamDataNew[i] = slot.Value;
+                values.Add(slot.Value);
             }
-
+            user.RepresentationTeamDataNew = [.. values];
             JsonDb.Save();
             ResSetProfileTeam response = new();
 

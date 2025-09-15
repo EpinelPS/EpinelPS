@@ -104,6 +104,13 @@ public class User
     public MogMinigameInfo MogInfo = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
 
+    public ReqSaveProfileCardDecorationLayout ProfileCardDecoration = new();
+    public ReqSetProfileRepresentativeFrame ProfileRepresentativeFrame = new();
+
+    public Dictionary<long, AwakeningOption> EquipmentAwakeningOptions = [];
+    public ResetAwakeningOption ResetAwakeningOption = new();
+
+
     public TriggerModel AddTrigger(TriggerType type, int value, int conditionId = 0)
     {
         TriggerModel t = new()

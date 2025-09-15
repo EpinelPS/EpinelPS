@@ -29,6 +29,10 @@ namespace EpinelPS.LobbyServer.Character.Counsel
                 currentBondInfo.Exp += 100;
                 currentBondInfo.CounseledCount++;
                 currentBondInfo.CanCounselToday = true; // Always allow counseling
+                if (!currentBondInfo.CounselDialogCompleteIds.Contains(req.CounselTid))
+                {
+                    currentBondInfo.CounselDialogCompleteIds.Add(req.CounselTid);
+                }
                 UpdateAttractiveLevel(currentBondInfo);
 
                 response.Attractive = currentBondInfo;
