@@ -1212,4 +1212,26 @@ namespace EpinelPS.Data
         public int step;
         public int reward_id;
     }
+
+    [MemoryPackable]
+    public partial class OutpostConditionTrigger
+    {
+        public int id;
+        public List<Trigger> trigger_list = [];
+        public string event_type = "";
+        public int tid;
+        public int resource_id;
+        public string name_localkey = "";
+        public string enter_scenario_id = "";
+        public int stamina_value;
+        public int reward_id;
+    }
+
+    public class Trigger
+    {
+        public string trigger = "";
+        public int condition_id;
+        public int condition_value;
+    }
+
 }

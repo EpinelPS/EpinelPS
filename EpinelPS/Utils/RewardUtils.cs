@@ -156,11 +156,13 @@ namespace EpinelPS.Utils
                     {
 
                         int id = user.GenerateUniqueItemId();
-                        user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
+                        int crop = user.GetCorporationId();
+                        user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount, Corp = crop });
                         ret.Item.Add(new NetItemData()
                         {
                             Count = rewardCount,
                             Tid = rewardId,
+                            Corporation = crop
                             //Isn = id
                         });
 
@@ -169,7 +171,8 @@ namespace EpinelPS.Utils
                         {
                             Isn = id,
                             Tid = rewardId,
-                            Count = rewardCount
+                            Count = rewardCount,
+                            Corporation = crop
                         });
                     }
                 }

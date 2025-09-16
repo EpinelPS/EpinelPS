@@ -248,6 +248,9 @@ namespace EpinelPS.Data
 
         [LoadRecord("EventPlaySodaPointRewardTable.json", "id")]
         public readonly Dictionary<int, EventPlaySodaPointRewardRecord> EventPlaySodaPointRewardTable = [];
+        
+        [LoadRecord("OutpostConditionTriggerTable.json", "id")]
+        public readonly Dictionary<int, OutpostConditionTrigger> OutpostConditionTriggerTable = [];
 
         static async Task<GameData> BuildAsync()
         {
@@ -442,6 +445,7 @@ namespace EpinelPS.Data
                 {
                     using var streamReader = new System.IO.StreamReader(MainZip.GetInputStream(fileEntry));
                     var json = await streamReader.ReadToEndAsync();
+                    // if("ScenarioRewardsTable.json".Equals(entry)) Logging.WriteLine($"json data = {System.Text.RegularExpressions.Regex.Replace(json, @"\s+", "")} ");
                     DataTable<X> obj = JsonConvert.DeserializeObject<DataTable<X>>(json) ?? throw new Exception("deserializeobject failed");
                     deserializedObject = [.. obj.records];
                 }
@@ -453,7 +457,7 @@ namespace EpinelPS.Data
 
                 return deserializedObject;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logging.WriteLine($"Failed to parse {entry}:\n{ex}\n", LogType.Error);
                 return [];

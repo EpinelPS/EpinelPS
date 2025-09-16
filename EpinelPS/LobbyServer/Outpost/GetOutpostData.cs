@@ -76,6 +76,12 @@ namespace EpinelPS.LobbyServer.Outpost
 
             response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
 
+            // condition triggers
+            foreach (var trigger in GameData.Instance.OutpostConditionTriggerTable.Values)
+            {
+                if (user.CompletedScenarios.Contains(trigger.enter_scenario_id))
+                    response.ConditionTriggerTidList.Add(trigger.id);
+            }
             // TODO
             await WriteDataAsync(response);
         }

@@ -407,4 +407,13 @@ public class User
         ResetableData = new();
         JsonDb.Save();
     }
+
+    public int GetCorporationId()
+    {
+        List<int> crops = [0, 1, 2, 3, 4, 7];
+        var random = new Random();
+        int index = random.Next(crops.Count); // 随机生成索引
+        return crops[index];
+    }
+
 }
