@@ -1234,4 +1234,38 @@ namespace EpinelPS.Data
         public int condition_value;
     }
 
+    [MemoryPackable]
+    public partial class BundleBox
+    {
+        public int id;
+        public int user_exp;
+        public int character_exp;
+        public bool is_mail;
+        public List<Reward> rewards = [];
+    }
+
+    public class Reward
+    {
+        public int reward_percent;
+        public string percent_display_type = "";
+        public string reward_type = "";
+        public int reward_id;
+        public int reward_value;
+    }
+
+
+    [MemoryPackable]
+    public partial class ItemSelectOption
+    {
+        public int id;
+        public List<SelectOption> select_option = [];
+    }
+
+    public class SelectOption
+    {
+        public string select_type = "";
+        public int select_id;
+        public int select_value;
+    }
+
 }

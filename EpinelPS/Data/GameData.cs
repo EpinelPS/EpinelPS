@@ -251,6 +251,12 @@ namespace EpinelPS.Data
         
         [LoadRecord("OutpostConditionTriggerTable.json", "id")]
         public readonly Dictionary<int, OutpostConditionTrigger> OutpostConditionTriggerTable = [];
+        
+        [LoadRecord("BundleBoxTable.json", "id")]
+        public readonly Dictionary<int, BundleBox> BundleBoxTable = [];
+        
+        [LoadRecord("ItemSelectOptionTable.json", "id")]
+        public readonly Dictionary<int, ItemSelectOption> ItemSelectOptionTable = [];
 
         static async Task<GameData> BuildAsync()
         {

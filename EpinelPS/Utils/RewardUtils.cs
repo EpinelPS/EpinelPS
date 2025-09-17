@@ -1,6 +1,4 @@
 using EpinelPS.Data;
-using EpinelPS.Database;
-using Org.BouncyCastle.Ocsp;
 
 namespace EpinelPS.Utils
 {
@@ -113,6 +111,7 @@ namespace EpinelPS.Utils
         /// <exception cref="Exception"></exception>
         public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, string rewardType, int rewardCount)
         {
+            Logging.WriteLine($"AddSingleObject: rewardId={rewardId}, rewardType={rewardType}, rewardCount={rewardCount}", LogType.Debug);
             if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
             {
                 if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
@@ -122,15 +121,24 @@ namespace EpinelPS.Utils
                 }
                 else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
                 {
-                    // Check if user already has said item. If it is level 1, increase item count.
+                    // Check if user already has said item.
                     // If user does not have item, generate a new item ID
-                    if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
+                    if (user.Items.Where(x => x.ItemType == rewardId).Any()
+                        && !GameData.Instance.ItemEquipTable.TryGetValue(rewardId, out _)) // Equipment items do not stack
                     {
-                        ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).FirstOrDefault();
+                        ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId).FirstOrDefault();
                         if (newItem != null)
                         {
-                            newItem.Count += rewardCount;
-
+                            // Increase item count
+                            // Except if it's a harmony cube, those do not stack
+                            if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(rewardId, out _))
+                            {
+                                newItem.Count = rewardCount;
+                            }
+                            else
+                            {
+                                newItem.Count += rewardCount;
+                            }
                             // Tell the client the reward and its amount
                             ret.Item.Add(new NetItemData()
                             {
@@ -140,40 +148,31 @@ namespace EpinelPS.Utils
                             });
 
                             // Tell the client the new amount of this item
-                            ret.UserItems.Add(new NetUserItemData()
-                            {
-                                Isn = newItem.Isn,
-                                Tid = newItem.ItemType,
-                                Count = newItem.Count
-                            });
+                            ret.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
                         }
                         else
                         {
-                            throw new Exception("should not occur");
+                            Logging.WriteLine($"ERROR: failed to find item {rewardId} in user inventory after confirming it exists", LogType.Error);
                         }
                     }
                     else
                     {
-
-                        int id = user.GenerateUniqueItemId();
-                        int crop = user.GetCorporationId();
-                        user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount, Corp = crop });
-                        ret.Item.Add(new NetItemData()
+                        // Add new item to user inventory
+                        ItemData newItem = new()
                         {
+                            ItemType = rewardId,
+                            Isn = user.GenerateUniqueItemId(),
+                            Level = 1,
+                            Exp = 0,
                             Count = rewardCount,
-                            Tid = rewardId,
-                            Corporation = crop
-                            //Isn = id
-                        });
+                            Corp = user.GetCorporationId(rewardType)
+                        };
+
+                        user.Items.Add(newItem);
+                        ret.Item.Add(NetUtils.ItemDataToNet(newItem));
 
                         // Tell the client the new amount of this item (which is the same as user did not have item previously)
-                        ret.UserItems.Add(new NetUserItemData()
-                        {
-                            Isn = id,
-                            Tid = rewardId,
-                            Count = rewardCount,
-                            Corporation = crop
-                        });
+                        ret.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
                     }
                 }
                 else if (rewardType == "Memorial")
@@ -198,11 +197,11 @@ namespace EpinelPS.Utils
                     int beforeExp = user.InfraCoreExp;
 
                     user.InfraCoreExp += rewardCount;
-                    
+
                     // Check for level ups
                     Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
                     int newLevel = user.InfraCoreLvl;
-                    
+
                     foreach (InfracoreRecord grade in gradeTable.Values.OrderBy(g => g.grade))
                     {
                         if (user.InfraCoreExp >= grade.infra_core_exp)
@@ -214,12 +213,12 @@ namespace EpinelPS.Utils
                             break;
                         }
                     }
-                    
+
                     if (newLevel > user.InfraCoreLvl)
                     {
                         user.InfraCoreLvl = newLevel;
                     }
-                    
+
                     ret.InfraCoreExp = new NetIncreaseExpData()
                     {
                         BeforeLv = beforeLv,
@@ -259,9 +258,9 @@ namespace EpinelPS.Utils
                     {
                         FavoriteItemId = user.GenerateUniqueItemId(),
                         Tid = rewardId,
-                        Csn = 0, 
-                        Lv = 0,  
-                        Exp = 0  
+                        Csn = 0,
+                        Lv = 0,
+                        Exp = 0
                     };
                     user.FavoriteItems.Add(newFavoriteItem);
 
@@ -280,7 +279,7 @@ namespace EpinelPS.Utils
                 }
                 else
                 {
-                    Logging.WriteLine("TODO: Reward type " + rewardType, LogType.Warning);
+                    Logging.WriteLine($"WARNING: unknown reward type {rewardType}, id {rewardId}, count {rewardCount}", LogType.Warning);
                 }
             }
         }

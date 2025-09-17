@@ -408,12 +408,25 @@ public class User
         JsonDb.Save();
     }
 
+    public int GetCorporationId(string type) => type switch
+    {
+        "Equipment_None" => 0,
+        "Equipment_ELYSION" => 1,
+        "Equipment_MISSILIS" => 2,
+        "Equipment_TETRA" => 3,
+        "Equipment_PILGRIM" => 4,
+        "Equipment_ABNORMAL" => 7,
+        "Equipment_Random_03" => GetCorporationId(),
+        _ => 0,
+    };
+
     public int GetCorporationId()
     {
-        List<int> crops = [0, 1, 2, 3, 4, 7];
+        List<int> crops = [1, 2, 3, 4, 7];
         var random = new Random();
         int index = random.Next(crops.Count); // 随机生成索引
         return crops[index];
     }
+
 
 }

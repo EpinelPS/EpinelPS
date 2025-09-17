@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Database;
-using Google.Protobuf.WellKnownTypes;
-using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace EpinelPS.Utils
 {
@@ -56,6 +52,17 @@ namespace EpinelPS.Utils
                 Corporation = item.Corp,
                 Isn = item.Isn,
                 Position = item.Position
+            };
+        }
+
+        internal static NetItemData ItemDataToNet(ItemData item)
+        {
+            return new NetItemData()
+            {
+                Count = item.Count,
+                Tid = item.ItemType,
+                Corporation = item.Corp,
+                Isn = item.Isn,
             };
         }
 
