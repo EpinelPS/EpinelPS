@@ -36,12 +36,14 @@ namespace EpinelPS.Utils
                             SslStream sslStream = new(new NetworkStream(socket, ownsSocket: true));
 
                             // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
+                            #pragma warning disable SYSLIB0039 // 类型或成员已过时
                             await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
                             {
                                 TargetHost = connectingServer,
                                 EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
 
                             }, cancellationToken);
+                            #pragma warning restore SYSLIB0039 // 类型或成员已过时
 
                             return sslStream;
                         }

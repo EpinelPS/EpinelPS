@@ -8,14 +8,11 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
+            User user = GetUser();
 
             ResProfileCardDecorationLayout r = new()
             {
-                Layout = new ProfileCardDecorationLayout
-                {
-                    BackgroundId = 101002,
-                    ShowCharacterSpine = true
-                }
+                Layout = user.ProfileCardDecoration.Layout
             };
             await WriteDataAsync(r);
         }

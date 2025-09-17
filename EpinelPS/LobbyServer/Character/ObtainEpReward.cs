@@ -20,9 +20,9 @@ namespace EpinelPS.LobbyServer.Character
             {
                 if (item.NameCode == req.NameCode)
                 {
-                    if (!item.ObtainedRewardLevels.Contains(levelUpRecord.Value.id))
+                    if (!item.ObtainedRewardLevels.Contains(req.Lv))
                     {
-                        item.ObtainedRewardLevels.Add(levelUpRecord.Value.id);
+                        item.ObtainedRewardLevels.Add(req.Lv);
 
                         RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(levelUpRecord.Value.reward_id) ?? throw new Exception("failed to get reward");
                         response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);

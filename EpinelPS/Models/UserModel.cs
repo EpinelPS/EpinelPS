@@ -104,6 +104,13 @@ public class User
     public MogMinigameInfo MogInfo = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
 
+    public ReqSaveProfileCardDecorationLayout ProfileCardDecoration = new();
+    public ReqSetProfileRepresentativeFrame ProfileRepresentativeFrame = new();
+
+    public Dictionary<long, AwakeningOption> EquipmentAwakeningOptions = [];
+    public ResetAwakeningOption ResetAwakeningOption = new();
+
+
     public TriggerModel AddTrigger(TriggerType type, int value, int conditionId = 0)
     {
         TriggerModel t = new()
@@ -400,4 +407,26 @@ public class User
         ResetableData = new();
         JsonDb.Save();
     }
+
+    public int GetCorporationId(string type) => type switch
+    {
+        "Equipment_None" => 0,
+        "Equipment_ELYSION" => 1,
+        "Equipment_MISSILIS" => 2,
+        "Equipment_TETRA" => 3,
+        "Equipment_PILGRIM" => 4,
+        "Equipment_ABNORMAL" => 7,
+        "Equipment_Random_03" => GetCorporationId(),
+        _ => 0,
+    };
+
+    public int GetCorporationId()
+    {
+        List<int> crops = [1, 2, 3, 4, 7];
+        var random = new Random();
+        int index = random.Next(crops.Count); // 随机生成索引
+        return crops[index];
+    }
+
+
 }

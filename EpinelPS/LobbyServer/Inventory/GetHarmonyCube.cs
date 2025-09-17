@@ -1,4 +1,3 @@
-using EpinelPS.Database;
 using EpinelPS.Utils;
 using EpinelPS.Data;
 
@@ -13,9 +12,8 @@ namespace EpinelPS.LobbyServer.Inventory
             User user = GetUser();
 
             ResGetHarmonyCube response = new();
-
-            List<ItemData> harmonyCubes = user.Items.Where(item => 
-                GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
+            List<ItemData> harmonyCubes = [.. user.Items.Where(item =>
+                GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType))];
 
             foreach (ItemData harmonyCube in harmonyCubes)
             {
