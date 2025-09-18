@@ -164,6 +164,11 @@ namespace EpinelPS.Utils
                     result.Point.Add(item);
                 }
 
+                foreach (int item in reward.JukeboxBgm)
+                {
+                    result.JukeboxBgm.Add(item);
+                }
+
                 foreach (NetCharacterData? c in reward.Character)
                 {
                     Logging.WriteLine("MergeRewards - TODO Character", LogType.Error);
