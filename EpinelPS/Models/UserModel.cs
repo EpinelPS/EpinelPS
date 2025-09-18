@@ -103,6 +103,7 @@ public class User
     public Dictionary<int, EventData> EventInfo = [];
     public MogMinigameInfo MogInfo = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
+    public NetArcadeMvgData ArcadeInTheMirrorData = new();
 
     public TriggerModel AddTrigger(TriggerType type, int value, int conditionId = 0)
     {
