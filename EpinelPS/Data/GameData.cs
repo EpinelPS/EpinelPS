@@ -243,6 +243,17 @@ namespace EpinelPS.Data
         [LoadRecord("EventPlaySodaPointRewardTable.json", "id")]
         public readonly Dictionary<int, EventPlaySodaPointRewardRecord> EventPlaySodaPointRewardTable = [];
 
+        // Tables related to InTheMirror Arcade's event.
+
+        [LoadRecord("EventMvgQuestTable.json", "id")]
+        public readonly Dictionary<int, EventMVGQuestRecord_Raw> EventMvgQuestTable = [];
+
+        [LoadRecord("EventMvgQuestTable.json", "id")]
+        public readonly Dictionary<int, EventMVGShopRecord_Raw> EventMvgShopTable = [];
+
+        [LoadRecord("EventMVGMissionTable.json", "id")]
+        public readonly Dictionary<int, EventMVGMissionRecord_Raw> EventMvgMissionTable = [];
+
         static async Task<GameData> BuildAsync()
         {
             await Load();
