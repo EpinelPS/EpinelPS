@@ -1,5 +1,6 @@
-using System.Data;
 using MemoryPack;
+using System.Data;
+using System.Runtime.Serialization;
 
 namespace EpinelPS.Data
 {
@@ -1174,5 +1175,126 @@ namespace EpinelPS.Data
         public EventPlaySodaGameType game_type;
         public int step;
         public int reward_id;
+    }
+
+    [MemoryPackable]
+    public partial class EventMVGQuestRecord_Raw
+    {
+        public int id;
+        public int condition_id;
+        public int next_quest_id;
+        public int parents_quest_id;
+        public int time_line_group_id;
+        public int reward_id;
+        public EventMVGQuestConditionType condition_type;
+        public int condition_value_1;
+        public string condition_value_2 = "";
+        public string description_localkey = "";
+        public string name_localkey = "";
+        public MVGQuestTargetType quest_target_type;
+        public MVGQuestType quest_type;
+    }
+
+    public enum EventMVGQuestConditionType
+    {
+        StartMission,
+        EndMission,
+        KillMonster,
+        MissionTargetPoint,
+        ClearMultiCondition,
+        GetCollectable,
+        GetCurrency,
+        PlatformSwitchInteraction,
+        ConditionCheckSwitchInteraction,
+        TeleportDeviceInteraction
+    }
+
+    public enum MVGQuestTargetType
+    {
+        First,
+        Loop
+    }
+
+    public enum MVGQuestType
+    {
+        Normal,
+        MotherMission,
+        ChildMission
+    }
+
+    [MemoryPackable]
+    public partial class EventMVGShopRecord_Raw
+    {
+        public int id;
+        public int group_id;
+        public int itemId;
+        public string desc = "";
+        public int itemSlot;
+        public EventMVGShopItemTypeData itemType;
+        public EventMVGQuestConditionType condition_type;
+        public int order;
+        //public List<  condition_value_2 = "";
+        public string description_localkey = "";
+        public string name_localkey = "";
+        public MVGQuestTargetType quest_target_type;
+        public MVGQuestType quest_type;
+    }
+
+    public enum EventMVGShopItemTypeData
+    {
+        Collectable,
+        Module,
+        None
+    }
+
+    [MemoryPackable]
+    public partial class EventMVGMissionRecord_Raw
+    {
+        public int id;
+        public int mvg_id;
+        public int condition_id;
+        public int condition_value;
+        public int order;
+        public string name_localkey = "";
+        public EventMVGMissionType mission_type;
+        public EventMVGMIssionSubType mission_sub_type;
+        public EventMVGMissionConditionType condition_type;
+        public bool display_type;
+        public bool is_reset;
+        public int reward_id;
+        public int point_value;
+    }
+
+    public enum EventMVGMissionType
+    {
+        Daily,
+        Achievement
+    }
+
+    public enum EventMVGMIssionSubType
+    {
+        None,
+        MonsterKill,
+        BossMonsterKill,
+        GetItem,
+        ChapterClear,
+        Explorer
+    }
+
+    public enum EventMVGMissionConditionType
+    {
+        KillMonster,
+        KillBossMonster,
+        GetCurrency,
+        GetCollectable,
+        None,
+        ClearAchievement,
+        TargetPoint,
+        ClearMap,
+        GetUpgradeMax,
+        GetModule,
+        UseKey,
+        GetMemory,
+        PlayMVG,
     }
 }
