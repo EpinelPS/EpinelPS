@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Database;
-using Google.Protobuf.WellKnownTypes;
-using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace EpinelPS.Utils
 {
@@ -56,6 +52,17 @@ namespace EpinelPS.Utils
                 Corporation = item.Corp,
                 Isn = item.Isn,
                 Position = item.Position
+            };
+        }
+
+        internal static NetItemData ItemDataToNet(ItemData item)
+        {
+            return new NetItemData()
+            {
+                Count = item.Count,
+                Tid = item.ItemType,
+                Corporation = item.Corp,
+                Isn = item.Isn,
             };
         }
 
@@ -123,7 +130,7 @@ namespace EpinelPS.Utils
             {
                 return harmonyCube.location_id;
             }
-            return 1; 
+            return 1;
         }
         /// <summary>
         /// Takes multiple NetRewardData objects and merges it into one. Note that this function expects that rewards are already applied to user object.
@@ -272,6 +279,15 @@ namespace EpinelPS.Utils
                 Value = CalcOutpostRewardAmount(battleData.user_exp, 3, 1, duration.TotalMinutes)
             });
 
+            // 领取前哨基地产出时用户升级 不知道啥有啥意义
+            foreach (NetCurrencyData? item in result.Currency)
+            {
+                if ((CurrencyType)item.Type == CurrencyType.UserExp)
+                {
+                    RegisterRewardsForUser(user, result, (int)item.Value);
+                }
+            }
+
             return result;
         }
 
@@ -283,6 +299,44 @@ namespace EpinelPS.Utils
             }
 
             // TODO: other things that are used by the function above
+        }
+
+        private static void RegisterRewardsForUser(User user, NetRewardData result, int exp)
+        {
+            if (exp != 0)
+            {
+                int newXp = exp + user.userPointData.ExperiencePoint;
+
+                int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
+                int newLevel = user.userPointData.UserLevel;
+
+                if (newLevelExp == -1)
+                {
+                    Console.WriteLine("Unknown user level value for xp " + newXp);
+                }
+
+
+                while (newXp >= newLevelExp)
+                {
+                    newLevel++;
+                    newXp -= newLevelExp;
+                    newLevelExp = GameData.Instance.GetUserMinXpForLevel(newLevel);
+                }
+                result.UserExp = new NetIncreaseExpData()
+                {
+                    BeforeExp = user.userPointData.ExperiencePoint,
+                    BeforeLv = user.userPointData.UserLevel,
+
+                    // IncreaseExp = rewardData.user_exp,
+                    CurrentExp = newXp,
+                    CurrentLv = newLevel,
+
+                    GainExp = exp,
+
+                };
+                user.userPointData.ExperiencePoint = newXp;
+                user.userPointData.UserLevel = newLevel;
+            }
         }
 
         internal static List<NetTimeReward> GetOutpostTimeReward(User user)
@@ -423,5 +477,22 @@ namespace EpinelPS.Utils
 
             return ret;
         }
+        
+        public static NetEquipmentAwakeningOption AwakeningOptionToNet(ResetAwakeningOption option)
+        {
+            return new()
+            {
+                Option1Id = option.Option1Id,
+                Option2Id = option.Option2Id,
+                Option3Id = option.Option3Id,
+                Option1Lock = option.Option1Lock,
+                Option2Lock = option.Option2Lock,
+                Option3Lock = option.Option3Lock,
+                IsOption1DisposableLock = option.IsOption1DisposableLock,
+                IsOption2DisposableLock = option.IsOption2DisposableLock,
+                IsOption3DisposableLock = option.IsOption3DisposableLock,
+            };
+        }
+
     }
 }

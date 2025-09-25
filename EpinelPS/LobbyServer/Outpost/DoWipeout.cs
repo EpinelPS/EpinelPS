@@ -27,7 +27,7 @@ namespace EpinelPS.LobbyServer.Outpost
             // TODO subtract currency as needed
             foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
             {
-                response.Currencies.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value});
+                response.Currencies.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
             }
 
             user.AddTrigger(TriggerType.OutpostFastBattleReward, 1);

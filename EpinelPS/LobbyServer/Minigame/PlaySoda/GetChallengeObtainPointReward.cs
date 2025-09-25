@@ -34,7 +34,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
 
         public static int[] GetPointValues(int challengeStageId)
         {
-            var s = (int)EventPlaySodaGameType.Smash;
+            // var s = (int)EventPlaySodaGameType.Smash;
             if (challengeStageId == (int)EventPlaySodaGameType.CatchCoin)
             {
                 return [300000, 600000, 1000000];

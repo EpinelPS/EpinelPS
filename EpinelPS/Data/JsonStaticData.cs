@@ -284,6 +284,24 @@ namespace EpinelPS.Data
     }
 
     [MemoryPackable]
+    public partial class EquipmentOptionRecord
+    {
+        public int id;
+        public string description_localkey = "";
+        public int equipment_option_group_id;
+        public int option_group_ratio;
+        public int state_effect_group_id;
+        public List<StateEffect> state_effect_list = null!;
+        public int option_ratio;
+    }
+
+    public class StateEffect
+    {
+        public int state_effect_id;
+        public int state_effect_level;
+    }
+
+    [MemoryPackable]
     public partial class FieldItemRecord
     {
         public int id;
@@ -401,7 +419,7 @@ namespace EpinelPS.Data
         public string banner_print_type = "";
     }
     [MemoryPackable]
-    
+
 
     public partial class LiveWallpaperRecord
     {
@@ -409,7 +427,7 @@ namespace EpinelPS.Data
         public string livewallpaper_type = "";
     }
     [MemoryPackable]
-    
+
     public partial class AlbumResourceRecord
     {
         public int id;
@@ -601,7 +619,7 @@ namespace EpinelPS.Data
         public bool is_free;
         public string cost = "";
     }
-    
+
     public enum ShopCategoryType
     {
         None = 0,
@@ -676,7 +694,7 @@ namespace EpinelPS.Data
         public bool print_value;
         public int before_trigger_id;
     }
-    
+
     public class InfracoreFunction
     {
         public int function;
@@ -816,7 +834,7 @@ namespace EpinelPS.Data
         public long value_max;
         public int reward_id;
     }
-    
+
     public enum ItemSubType
     {
         BundleBox,
@@ -882,7 +900,7 @@ namespace EpinelPS.Data
         public int item_id;
         public int item_value;
     }
-    
+
     public enum ContentOpenType
     {
         Stage,
@@ -908,7 +926,7 @@ namespace EpinelPS.Data
         public bool is_use_quick_battle;
         public int sector;
     }
-    
+
 
     public class ItemSpawner
     {
@@ -1090,6 +1108,25 @@ namespace EpinelPS.Data
         public int fixed_play_character_id;
         public int spawn_condition_favoriteitem_quest_stage_id;
         public int enter_condition_favoriteitem_quest_stage_id;
+    }
+
+    [MemoryPackable]
+    public partial class ProfileCardObjectTableRecord
+    {
+        public int id;
+        public string object_type = "";
+        public string object_sub_type = "";
+        public string grade_type = "";
+        public int order;
+        public string resource_id = "";
+        public string si_resource_id = "";
+        public string name_localkey = "";
+        public string description_localkey = "";
+        public int exchange_item_id;
+        public int exchange_item_value;
+        public int require_item_id;
+        public int require_item_value;
+        public bool is_hidden;
     }
 
     [MemoryPackable]
@@ -1297,4 +1334,60 @@ namespace EpinelPS.Data
         GetMemory,
         PlayMVG,
     }
+
+    [MemoryPackable]
+    public partial class OutpostConditionTrigger
+    {
+        public int id;
+        public List<Trigger> trigger_list = [];
+        public string event_type = "";
+        public int tid;
+        public int resource_id;
+        public string name_localkey = "";
+        public string enter_scenario_id = "";
+        public int stamina_value;
+        public int reward_id;
+    }
+
+    public class Trigger
+    {
+        public string trigger = "";
+        public int condition_id;
+        public int condition_value;
+    }
+
+    [MemoryPackable]
+    public partial class BundleBox
+    {
+        public int id;
+        public int user_exp;
+        public int character_exp;
+        public bool is_mail;
+        public List<Reward> rewards = [];
+    }
+
+    public class Reward
+    {
+        public int reward_percent;
+        public string percent_display_type = "";
+        public string reward_type = "";
+        public int reward_id;
+        public int reward_value;
+    }
+
+
+    [MemoryPackable]
+    public partial class ItemSelectOption
+    {
+        public int id;
+        public List<SelectOption> select_option = [];
+    }
+
+    public class SelectOption
+    {
+        public string select_type = "";
+        public int select_id;
+        public int select_value;
+    }
+
 }
