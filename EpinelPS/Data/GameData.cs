@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using EpinelPS.Database;
@@ -33,7 +33,7 @@ namespace EpinelPS.Data
         private int currentFile;
 
         // TODO: all of the data types need to be changed to match the game
-        private bool UseMemoryPack = false;
+        private bool UseMemoryPack = true;
 
         public readonly Dictionary<string, MapInfo> MapData = [];
 

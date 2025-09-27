@@ -1,4 +1,4 @@
-using MemoryPack;
+﻿using MemoryPack;
 using System.Data;
 using System.Runtime.Serialization;
 
@@ -323,10 +323,17 @@ namespace EpinelPS.Data
     public partial class OutpostBattleTableRecord
     {
         public int id;
+        public int battle_box_level;
+        public int main_stage_clear_count;
+        public int reward_id;
         public int credit;
+        public int time_credit;
         public int character_exp1;
-        public int character_exp2;
+        public int time_charexp1;
         public int user_exp;
+        public int time_user_exp;
+        public int character_exp2;
+        public int time_charexp2;
     }
 
     [MemoryPackable]

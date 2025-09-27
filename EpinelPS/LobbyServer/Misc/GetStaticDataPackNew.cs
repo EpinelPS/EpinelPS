@@ -4,7 +4,7 @@ using Google.Protobuf;
 
 namespace EpinelPS.LobbyServer.Misc
 {
-    [PacketPath("/get-static-data-pack-info")]
+    [PacketPath("/get-static-data-pack-info-mpk")]
     public class GetStaticDataPackNew : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
@@ -13,14 +13,14 @@ namespace EpinelPS.LobbyServer.Misc
 
             Console.WriteLine("Requesting " + req.Type);
 
-            StaticData data = req.Type == StaticDataPackType.Mpk ? GameConfig.Root.StaticDataMpk : GameConfig.Root.StaticData;
+            StaticData data = GameConfig.Root.StaticDataMpk;
 
             ResStaticDataPackInfoV2 r = new()
             {
                 Url = data.Url,
                 Version = data.Version,
-                Size = req.Type == StaticDataPackType.Mpk ? GameData.Instance.MpkSize : GameData.Instance.Size,
-                Sha256Sum = ByteString.CopyFrom(req.Type == StaticDataPackType.Mpk ? GameData.Instance.MpkHash : GameData.Instance.Sha256Hash),
+                Size = GameData.Instance.MpkSize,
+                Sha256Sum = ByteString.CopyFrom(GameData.Instance.MpkHash),
                 Salt1 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt1)),
                 Salt2 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt2))
             };

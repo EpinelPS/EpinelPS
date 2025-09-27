@@ -403,7 +403,7 @@ namespace EpinelPS.Utils
                 return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
 
             // Get latest static data info from server
-            ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
+            /*ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
                 {
                     Type = StaticDataPackType.Json
                 });
@@ -411,7 +411,7 @@ namespace EpinelPS.Utils
             {
                 Logging.WriteLine("failed to fetch static data", LogType.Error);
                 return new RunCmdResponse() { error = "failed to fetch static data" };
-            }
+            }*/
 
             // Get latest static data info from server
             ResStaticDataPackInfoV2? staticData2 = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl,
@@ -434,10 +434,10 @@ namespace EpinelPS.Utils
             }
 
             GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
-            GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
+            /*GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
             GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
             GameConfig.Root.StaticData.Version = staticData.Version;
-            GameConfig.Root.StaticData.Url = staticData.Url;
+            GameConfig.Root.StaticData.Url = staticData.Url;*/
 
             GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
             GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
