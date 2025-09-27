@@ -319,6 +319,23 @@ namespace EpinelPS.Data
         public string bg_color = "";
     }
 
+    public enum PrepareRewardType
+    {
+        None,
+        Currency,
+        ItemRandom
+    }
+
+    [MemoryPackable]
+    public partial class OutpostBattle_Data
+    {
+        public int view_item_id;
+        public PrepareRewardType type;
+        public int item_id;
+        public int item_value;
+        public int item_sec;
+    }
+
     [MemoryPackable]
     public partial class OutpostBattleTableRecord
     {
@@ -334,6 +351,7 @@ namespace EpinelPS.Data
         public int time_user_exp;
         public int character_exp2;
         public int time_charexp2;
+        public List<OutpostBattle_Data> RewardList = [];
     }
 
     [MemoryPackable]

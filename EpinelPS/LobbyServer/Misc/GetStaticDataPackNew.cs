@@ -9,13 +9,11 @@ namespace EpinelPS.LobbyServer.Misc
     {
         protected override async Task HandleAsync()
         {
-            ReqStaticDataPackInfoV2 req = await ReadData<ReqStaticDataPackInfoV2>();
-
-            Console.WriteLine("Requesting " + req.Type);
+            ReqStaticDataPackInfoMpk req = await ReadData<ReqStaticDataPackInfoMpk>();
 
             StaticData data = GameConfig.Root.StaticDataMpk;
 
-            ResStaticDataPackInfoV2 r = new()
+            ResStaticDataPackInfoMpk r = new()
             {
                 Url = data.Url,
                 Version = data.Version,

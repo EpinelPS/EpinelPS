@@ -414,11 +414,7 @@ namespace EpinelPS.Utils
             }*/
 
             // Get latest static data info from server
-            ResStaticDataPackInfoV2? staticData2 = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl,
-                new ReqStaticDataPackInfoV2()
-                {
-                    Type = StaticDataPackType.Mpk
-                });
+            ResStaticDataPackInfoMpk? staticData2 = await FetchProtobuf<ResStaticDataPackInfoMpk, ReqStaticDataPackInfoMpk>(staticDataUrl, new ReqStaticDataPackInfoMpk());
             if (staticData2 == null)
             {
                 Logging.WriteLine("failed to fetch static data (2)", LogType.Error);
