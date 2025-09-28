@@ -174,7 +174,7 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, ProductOfferRecord> ProductOffers = [];
 
         [LoadRecord("PopupPackageListTable.json", "Id")]
-        public readonly Dictionary<int, ProductOfferRecord> PopupPackages = [];
+        public readonly Dictionary<int, PopupPackageListRecord> PopupPackages = [];
 
         [LoadRecord("InterceptNormalTable.json", "Id")]
         public readonly Dictionary<int, InterceptNormalRecord> InterceptNormal = [];
@@ -248,7 +248,7 @@ namespace EpinelPS.Data
         [LoadRecord("EventMvgQuestTable.json", "Id")]
         public readonly Dictionary<int, EventMVGQuestRecord_Raw> EventMvgQuestTable = [];
 
-        [LoadRecord("EventMvgQuestTable.json", "Id")]
+        [LoadRecord("EventMvgShopTable.json", "Id")]
         public readonly Dictionary<int, EventMVGShopRecord_Raw> EventMvgShopTable = [];
 
         [LoadRecord("EventMVGMissionTable.json", "Id")]

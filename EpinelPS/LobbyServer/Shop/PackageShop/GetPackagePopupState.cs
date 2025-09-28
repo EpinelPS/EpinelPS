@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Shop.PackageShop
             ResGetPopupPackageState response = new();
 
             // disable ads
-            foreach (KeyValuePair<int, ProductOfferRecord> item in GameData.Instance.PopupPackages)
+            foreach (KeyValuePair<int, PopupPackageListRecord> item in GameData.Instance.PopupPackages)
                 response.AppearedList.Add(item.Key);
 
             await WriteDataAsync(response);
