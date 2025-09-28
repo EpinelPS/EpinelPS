@@ -4,272 +4,272 @@ using MemoryPack;
 [MemoryPackable]
 public partial class ScenarioDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? TitleLocalkey;
+    public string? Id;
+    public string? GroupId;
+    public string? TitleLocalkey;
     public SpeechWindowType SpeechWindow;
-    public String? Highlight;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Boolean PlayLipSync;
+    public string? Highlight;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public bool PlayLipSync;
     public List<ScenarioCharacterData>? Characters;
-    public String? SetBackground;
-    public String? SetLight;
-    public String? ConversationId;
-    public String? SetImage;
-    public String? SetObject;
-    public String? SetObjectPosition;
-    public String? SetStartCamera;
-    public String? SetEndCamera;
-    public Double SetCameraDuration;
-    public String? PlayMovie;
-    public String? PlaySound;
-    public String? PlayAmbient;
-    public Int32 AmbientVolume;
-    public String? PlayBgm;
+    public string? SetBackground;
+    public string? SetLight;
+    public string? ConversationId;
+    public string? SetImage;
+    public string? SetObject;
+    public string? SetObjectPosition;
+    public string? SetStartCamera;
+    public string? SetEndCamera;
+    public double SetCameraDuration;
+    public string? PlayMovie;
+    public string? PlaySound;
+    public string? PlayAmbient;
+    public int AmbientVolume;
+    public string? PlayBgm;
     public List<ScenarioEffectData>? Effects;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
     public FilterType SetFilter01;
     public FilterType SetFilter02;
-    public String? JumpTarget;
+    public string? JumpTarget;
     public ScenarioFadeType Fade;
-    public Boolean IsExitScenario;
+    public bool IsExitScenario;
 }
 
 [MemoryPackable]
 public partial class AttractiveScenarioDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? TitleLocalkey;
+    public string? Id;
+    public string? GroupId;
+    public string? TitleLocalkey;
     public SpeechWindowType SpeechWindow;
-    public String? Highlight;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Boolean PlayLipSync;
+    public string? Highlight;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public bool PlayLipSync;
     public List<ScenarioCharacterData>? Characters;
-    public String? SetBackground;
-    public String? SetLight;
-    public String? ConversationId;
-    public String? SetImage;
-    public String? SetObject;
-    public String? SetObjectPosition;
-    public String? SetStartCamera;
-    public String? SetEndCamera;
-    public Double SetCameraDuration;
-    public String? PlaySound;
-    public String? PlayBgm;
+    public string? SetBackground;
+    public string? SetLight;
+    public string? ConversationId;
+    public string? SetImage;
+    public string? SetObject;
+    public string? SetObjectPosition;
+    public string? SetStartCamera;
+    public string? SetEndCamera;
+    public double SetCameraDuration;
+    public string? PlaySound;
+    public string? PlayBgm;
     public List<ScenarioEffectData>? Effects;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
     public FilterType SetFilter01;
     public FilterType SetFilter02;
-    public String? JumpTarget;
+    public string? JumpTarget;
     public ScenarioFadeType Fade;
-    public Boolean IsExitScenario;
+    public bool IsExitScenario;
 }
 
 [MemoryPackable]
 public partial class AttractiveCounselDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? TitleLocalkey;
+    public string? Id;
+    public string? GroupId;
+    public string? TitleLocalkey;
     public SpeechWindowType SpeechWindow;
-    public Int32 AttractivePoint;
-    public String? Highlight;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Boolean PlayLipSync;
+    public int AttractivePoint;
+    public string? Highlight;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public bool PlayLipSync;
     public List<ScenarioCharacterData>? Characters;
-    public String? SetBackground;
-    public String? SetLight;
-    public String? ConversationId;
-    public String? SetImage;
-    public String? SetObject;
-    public String? SetObjectPosition;
-    public String? SetStartCamera;
-    public String? SetEndCamera;
-    public Double SetCameraDuration;
-    public String? PlaySound;
-    public String? PlayBgm;
+    public string? SetBackground;
+    public string? SetLight;
+    public string? ConversationId;
+    public string? SetImage;
+    public string? SetObject;
+    public string? SetObjectPosition;
+    public string? SetStartCamera;
+    public string? SetEndCamera;
+    public double SetCameraDuration;
+    public string? PlaySound;
+    public string? PlayBgm;
     public List<ScenarioEffectData>? Effects;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
     public FilterType SetFilter01;
     public FilterType SetFilter02;
-    public String? JumpTarget;
+    public string? JumpTarget;
 }
 
 [MemoryPackable]
 public partial class EventScenarioDialogRecord
 {
-    public String? Id;
-    public Int32 EventId;
-    public String? GroupId;
-    public String? TitleLocalkey;
+    public string? Id;
+    public int EventId;
+    public string? GroupId;
+    public string? TitleLocalkey;
     public SpeechWindowType SpeechWindow;
-    public String? Highlight;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Boolean PlayLipSync;
+    public string? Highlight;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public bool PlayLipSync;
     public List<ScenarioCharacterData>? Characters;
-    public String? SetBackground;
-    public String? SetLight;
-    public String? ConversationId;
-    public String? SetImage;
-    public String? SetObject;
-    public String? SetObjectPosition;
-    public String? SetStartCamera;
-    public String? SetEndCamera;
-    public Double SetCameraDuration;
-    public String? PlayMovie;
-    public String? PlaySound;
-    public String? PlayAmbient;
-    public Int32 AmbientVolume;
-    public String? PlayBgm;
+    public string? SetBackground;
+    public string? SetLight;
+    public string? ConversationId;
+    public string? SetImage;
+    public string? SetObject;
+    public string? SetObjectPosition;
+    public string? SetStartCamera;
+    public string? SetEndCamera;
+    public double SetCameraDuration;
+    public string? PlayMovie;
+    public string? PlaySound;
+    public string? PlayAmbient;
+    public int AmbientVolume;
+    public string? PlayBgm;
     public List<ScenarioEffectData>? Effects;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
     public FilterType SetFilter01;
     public FilterType SetFilter02;
-    public String? JumpTarget;
+    public string? JumpTarget;
     public ScenarioFadeType Fade;
-    public Boolean IsExitScenario;
+    public bool IsExitScenario;
 }
 
 [MemoryPackable]
 public partial class SideStorySpotDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? PortraitId;
-    public String? NameLocalkey;
-    public String? ScenarioLocalkey;
-    public String? PlayVoice;
+    public string? Id;
+    public string? GroupId;
+    public string? PortraitId;
+    public string? NameLocalkey;
+    public string? ScenarioLocalkey;
+    public string? PlayVoice;
     public DialogPositionType SetDialogPosition;
     public PortraitPositionType SetPortraitPosition;
     public CameraFocusType SetCameraFocus;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
 }
 
 [MemoryPackable]
 public partial class SideStoryScenarioDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? TitleLocalkey;
+    public string? Id;
+    public string? GroupId;
+    public string? TitleLocalkey;
     public SpeechWindowType SpeechWindow;
-    public String? Highlight;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Boolean PlayLipSync;
+    public string? Highlight;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public bool PlayLipSync;
     public List<ScenarioCharacterData>? Characters;
-    public String? SetBackground;
-    public String? SetLight;
-    public String? ConversationId;
-    public String? SetImage;
-    public String? SetObject;
-    public String? SetObjectPosition;
-    public String? SetStartCamera;
-    public String? SetEndCamera;
-    public Double SetCameraDuration;
-    public String? PlayMovie;
-    public String? PlaySound;
-    public String? PlayAmbient;
-    public Int32 AmbientVolume;
-    public String? PlayBgm;
+    public string? SetBackground;
+    public string? SetLight;
+    public string? ConversationId;
+    public string? SetImage;
+    public string? SetObject;
+    public string? SetObjectPosition;
+    public string? SetStartCamera;
+    public string? SetEndCamera;
+    public double SetCameraDuration;
+    public string? PlayMovie;
+    public string? PlaySound;
+    public string? PlayAmbient;
+    public int AmbientVolume;
+    public string? PlayBgm;
     public List<ScenarioEffectData>? Effects;
-    public String? SetCameraShake;
+    public string? SetCameraShake;
     public FilterType SetFilter01;
     public FilterType SetFilter02;
-    public String? JumpTarget;
+    public string? JumpTarget;
     public ScenarioFadeType Fade;
-    public Boolean IsExitScenario;
+    public bool IsExitScenario;
 }
 
 [MemoryPackable]
 public partial class MainQuestRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public Category Category;
-    public Int32 ConditionId;
-    public String? ConditionUiLocalkey;
-    public String? ShortcutType;
-    public Int32 ShortcutValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 NextMainQuestId;
-    public Int32 RewardId;
+    public int ConditionId;
+    public string? ConditionUiLocalkey;
+    public string? ShortcutType;
+    public int ShortcutValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int NextMainQuestId;
+    public int RewardId;
     public ScenarioType ScenarioType;
-    public String? EpisodeId;
-    public Int32 TargetChapterId;
-    public String? HeaderBgResourceId;
+    public string? EpisodeId;
+    public int TargetChapterId;
+    public string? HeaderBgResourceId;
 }
 
 [MemoryPackable]
 public partial class RewardRecord
 {
-    public Int32 Id;
-    public Int32 UserExp;
-    public Int32 CharacterExp;
-    public List<RewardEntry>? Rewards;
+    public int Id;
+    public int UserExp;
+    public int CharacterExp;
+    public List<Reward_Data>? Rewards;
 }
 
 [MemoryPackable]
 public partial class ConfigBattleRecord
 {
-    public String? Id;
-    public String? Value;
+    public string? Id;
+    public string? Value;
 }
 
 [MemoryPackable]
 public partial class MailSenderRecord
 {
-    public Int32 Id;
-    public String? NameLocaltable;
-    public String? NameLocalkey;
-    public Int32 ResourceId;
+    public int Id;
+    public string? NameLocaltable;
+    public string? NameLocalkey;
+    public int ResourceId;
 }
 
 [MemoryPackable]
 public partial class LanguageRecord
 {
-    public String? Key;
-    public Int32 Order;
-    public String? NameLocalkey;
+    public string? Key;
+    public int Order;
+    public string? NameLocalkey;
 }
 
 [MemoryPackable]
 public partial class ContentsTutorialRecord
 {
-    public Int32 Id;
-    public Int32 VersionGroup;
-    public Int32 GroupId;
+    public int Id;
+    public int VersionGroup;
+    public int GroupId;
     public ContentsTutorialSubGroup SubGroupId;
-    public Boolean IsShow;
-    public Int32 ClearedStageId;
-    public Int32 CloseStageId;
+    public bool IsShow;
+    public int ClearedStageId;
+    public int CloseStageId;
     public ContentsTutorialTriggerValue TriggerValue;
-    public String? TriggerValueExtraKey;
+    public string? TriggerValueExtraKey;
     public ContentsTutorialTriggerValue CloseValue;
-    public String? CloseValueExtraKey;
-    public String? CharResourceId;
-    public String? TitleTextLocale;
-    public String? TextLocale;
+    public string? CloseValueExtraKey;
+    public string? CharResourceId;
+    public string? TitleTextLocale;
+    public string? TextLocale;
     public ContentsTutorialTextLocation TextLocation;
-    public Int32 Background;
-    public List<String>? AddonResource;
-    public Boolean FieldMovingRouteControl;
-    public List<String>? MarkHiddenItemId;
-    public String? HiddenItemMarkResource;
-    public Boolean UnmaskControl;
-    public List<String>? UnmaskKeyList;
-    public String? UnmaskTextLocale;
-    public Boolean UnmaskInputControl;
-    public Int32 NextId;
-    public Boolean SaveTutorial;
-    public Int32 ReconnectionTutorialId;
+    public int Background;
+    public List<string>? AddonResource;
+    public bool FieldMovingRouteControl;
+    public List<string>? MarkHiddenItemId;
+    public string? HiddenItemMarkResource;
+    public bool UnmaskControl;
+    public List<string>? UnmaskKeyList;
+    public string? UnmaskTextLocale;
+    public bool UnmaskInputControl;
+    public int NextId;
+    public bool SaveTutorial;
+    public int ReconnectionTutorialId;
     public ContentsTutorialTriggerValue ReconnectionTriggerValue;
-    public Boolean SkipButtonControl;
+    public bool SkipButtonControl;
 }
 
 [MemoryPackable]
@@ -277,499 +277,499 @@ public partial class ContentsOpenRecord
 {
     public ContentsOpen Id;
     public ContentsOpenCondition ViewConditionType;
-    public Int32 ViewConditionValue;
+    public int ViewConditionValue;
     public List<OpenConditionData>? OpenCondition;
-    public String? ConditionLocalkey;
-    public Boolean EnableUnlockPlayPopup;
-    public Boolean EnableUnlockPlayButton;
+    public string? ConditionLocalkey;
+    public bool EnableUnlockPlayPopup;
+    public bool EnableUnlockPlayButton;
 }
 
 [MemoryPackable]
 public partial class NpcRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? NpcPrefab;
-    public Int32 InteractionDistance;
+    public int Id;
+    public string? NameLocalkey;
+    public string? NpcPrefab;
+    public int InteractionDistance;
     public ChapterMod ChapterMod;
-    public Int32 ShortCut;
+    public int ShortCut;
     public StageType QuestType;
-    public Int32 InteractionQuestId;
-    public Int32 ShowConditionQuestId;
-    public Int32 HideConditionQuestId;
+    public int InteractionQuestId;
+    public int ShowConditionQuestId;
+    public int HideConditionQuestId;
     public ScenarioType ScenarioType;
-    public String? ScenarioId;
+    public string? ScenarioId;
     public ScenarioPlayType ScenarioPlayType;
     public ScenarioType FixedScenarioType;
-    public String? FixedScenarioId;
-    public String? BalloonAlwaysId;
+    public string? FixedScenarioId;
+    public string? BalloonAlwaysId;
     public BalloonPlayType BalloonAlwaysPlayType;
-    public Int32 BalloonAlwaysCycle;
+    public int BalloonAlwaysCycle;
     public BalloonEndType BalloonAlwaysEndCondition;
 }
 
 [MemoryPackable]
 public partial class InteractionObjectRecord
 {
-    public Int32 Id;
-    public String? InteractionobjectPrefab;
-    public Int32 InteractionDistance;
+    public int Id;
+    public string? InteractionobjectPrefab;
+    public int InteractionDistance;
     public FieldInteractionObjectState ChangeState;
-    public Boolean IsPassable;
-    public Boolean IsUseTrigger;
-    public Int32 MemberCount;
+    public bool IsPassable;
+    public bool IsUseTrigger;
+    public int MemberCount;
     public InteractionObjectIsDestroyable IsDestroyable;
-    public Boolean IsPickupable;
-    public Boolean IsExplosive;
-    public Int32 ExplosiveRange;
-    public Int32 ExplosiveDelay;
-    public Boolean IsHackable;
-    public Boolean IsHackingOnLoad;
-    public Int32 HackedTime;
-    public Boolean IsHackingTrigger;
-    public Boolean IsRespawnObject;
-    public Int32 RespawnTime;
+    public bool IsPickupable;
+    public bool IsExplosive;
+    public int ExplosiveRange;
+    public int ExplosiveDelay;
+    public bool IsHackable;
+    public bool IsHackingOnLoad;
+    public int HackedTime;
+    public bool IsHackingTrigger;
+    public bool IsRespawnObject;
+    public int RespawnTime;
 }
 
 [MemoryPackable]
 public partial class QuestObjectRecord
 {
-    public Int32 Id;
-    public String? QuestobjectPrefab;
-    public Int32 InteractionDistance;
-    public Single InteractionTime;
+    public int Id;
+    public string? QuestobjectPrefab;
+    public int InteractionDistance;
+    public float InteractionTime;
     public ChapterMod ChapterMod;
-    public Int32 ShortCut;
+    public int ShortCut;
     public StageType QuestType;
-    public Int32 InteractionQuestId;
-    public Int32 ShowConditionQuestId;
+    public int InteractionQuestId;
+    public int ShowConditionQuestId;
 }
 
 [MemoryPackable]
 public partial class LiveWallpaperRecord
 {
-    public Int32 Id;
+    public int Id;
     public Livewallpaper_type LivewallpaperType;
     public Sub_type SubType;
-    public Int32 Order;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? LiveWallpaperResourceId;
-    public String? ThumbnailResourceId;
-    public String? SiResourceId;
-    public String? BgmResourceId;
-    public Boolean IsSecret;
+    public int Order;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? LiveWallpaperResourceId;
+    public string? ThumbnailResourceId;
+    public string? SiResourceId;
+    public string? BgmResourceId;
+    public bool IsSecret;
     public Condition_type ConditionType;
-    public Int32 ConditionResourceId;
-    public Int32 ConditionId;
+    public int ConditionResourceId;
+    public int ConditionId;
 }
 
 [MemoryPackable]
 public partial class BaseDefenseRecord
 {
-    public String? PresetName;
-    public Int32 UserGainPoint;
-    public Int32 EnemyGainPointStep1;
-    public Int32 EnemyGainPointStep2;
-    public Int32 ThrashPoint;
-    public Int32 MinionPoint;
-    public Int32 ElitePoint;
-    public Int32 CenturionPoint;
+    public string? PresetName;
+    public int UserGainPoint;
+    public int EnemyGainPointStep1;
+    public int EnemyGainPointStep2;
+    public int ThrashPoint;
+    public int MinionPoint;
+    public int ElitePoint;
+    public int CenturionPoint;
 }
 
 [MemoryPackable]
 public partial class ShakeDataRecord
 {
-    public Int32 Id;
-    public Single Duration;
-    public Int32 FrequencyX;
-    public Single AmplitudeX;
-    public Int32 FrequencyY;
-    public Single AmplitudeY;
-    public Int32 FrequencyZ;
-    public Single AmplitudeZ;
-    public Int32 RenewalPercent;
-    public Single SizeCorrectionMedium;
-    public Single SizeCorrectionLarge;
-    public Single SizeCorrectionHuge;
+    public int Id;
+    public float Duration;
+    public int FrequencyX;
+    public float AmplitudeX;
+    public int FrequencyY;
+    public float AmplitudeY;
+    public int FrequencyZ;
+    public float AmplitudeZ;
+    public int RenewalPercent;
+    public float SizeCorrectionMedium;
+    public float SizeCorrectionLarge;
+    public float SizeCorrectionHuge;
 }
 
 [MemoryPackable]
 public partial class LoadingTipRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public String? Tip;
+    public int Id;
+    public int Group;
+    public string? Tip;
 }
 
 [MemoryPackable]
 public partial class BuffRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public StatType StatType;
     public FunctionValueType FunctionValueType;
-    public Int32 StatValue;
-    public String? BuffIcon;
+    public int StatValue;
+    public string? BuffIcon;
 }
 
 [MemoryPackable]
 public partial class StageStatIncreaseRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 BattlePowerRatioMin;
-    public Int32 BattlePowerRatioMax;
-    public Int32 StatIncrease;
-    public String? Textcolor;
+    public int Id;
+    public int GroupId;
+    public int BattlePowerRatioMin;
+    public int BattlePowerRatioMax;
+    public int StatIncrease;
+    public string? Textcolor;
 }
 
 [MemoryPackable]
 public partial class QTEColPresetTableRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ColIndex;
-    public Int32 TimeLimit;
+    public int Id;
+    public int GroupId;
+    public int ColIndex;
+    public int TimeLimit;
     public ColType ColType;
-    public Int32 Order;
-    public List<Int32>? Chain;
-    public Int32 DelayTime;
-    public Boolean FirstCol;
-    public List<Double>? ColPosition;
-    public Int32 HpRatio;
-    public Int32 DefRatio;
+    public int Order;
+    public List<int>? Chain;
+    public int DelayTime;
+    public bool FirstCol;
+    public List<double>? ColPosition;
+    public int HpRatio;
+    public int DefRatio;
 }
 
 [MemoryPackable]
 public partial class QuickTimeEventRecord
 {
-    public Int32 Id;
-    public List<Int64>? MonsterId;
-    public String? QtePrefab;
-    public List<Int32>? GroupId;
-    public Boolean RandomPreset;
-    public Int32 TimeLimit;
-    public Int32 FirstColAnimTime;
-    public Int32 ElementId;
+    public int Id;
+    public List<long>? MonsterId;
+    public string? QtePrefab;
+    public List<int>? GroupId;
+    public bool RandomPreset;
+    public int TimeLimit;
+    public int FirstColAnimTime;
+    public int ElementId;
 }
 
 [MemoryPackable]
 public partial class TransformationRecord
 {
-    public Int32 Id;
-    public Int32 ResourceId;
-    public Int32 NumberOfStep;
+    public int Id;
+    public int ResourceId;
+    public int NumberOfStep;
 }
 
 [MemoryPackable]
 public partial class TowerInfoRecord
 {
     public CorporationTowerType Id;
-    public String? Name;
-    public String? NameEnglish;
-    public Int32 Order;
+    public string? Name;
+    public string? NameEnglish;
+    public int Order;
     public TeamType TeamType;
-    public List<Int32>? DayOfWeek;
-    public Int32 ClearLimit;
-    public String? CoreResource;
-    public String? CorpIcon;
+    public List<int>? DayOfWeek;
+    public int ClearLimit;
+    public string? CoreResource;
+    public string? CorpIcon;
 }
 
 [MemoryPackable]
 public partial class MonsterStatEnhanceRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Lv;
-    public Int64 LevelHp;
-    public Int32 LevelAttack;
-    public Int32 LevelDefence;
-    public Int32 LevelStatdamageratio;
-    public Int32 LevelEnergyResist;
-    public Int32 LevelMetalResist;
-    public Int32 LevelBioResist;
-    public Int32 LevelProjectileHp;
-    public Int64 LevelBrokenHp;
+    public int Id;
+    public int GroupId;
+    public int Lv;
+    public long LevelHp;
+    public int LevelAttack;
+    public int LevelDefence;
+    public int LevelStatdamageratio;
+    public int LevelEnergyResist;
+    public int LevelMetalResist;
+    public int LevelBioResist;
+    public int LevelProjectileHp;
+    public long LevelBrokenHp;
 }
 
 [MemoryPackable]
 public partial class ObjectStatEnhanceRecord
 {
-    public Int32 Id;
+    public int Id;
     public SpotObjectRank Grade;
-    public Int32 Lv;
-    public Int64 LevelHp;
-    public Int32 LevelDefence;
+    public int Lv;
+    public long LevelHp;
+    public int LevelDefence;
 }
 
 [MemoryPackable]
 public partial class CoverStatEnhanceRecord
 {
-    public Int32 Id;
-    public Int32 Lv;
-    public Int64 LevelHp;
-    public Int32 LevelDefence;
+    public int Id;
+    public int Lv;
+    public long LevelHp;
+    public int LevelDefence;
 }
 
 [MemoryPackable]
 public partial class GuildEmblemRecord
 {
-    public Int32 Id;
-    public Int32 Grade;
-    public Int32 ResourceId;
+    public int Id;
+    public int Grade;
+    public int ResourceId;
 }
 
 [MemoryPackable]
 public partial class MessengerRoomRecord
 {
-    public String? Id;
+    public string? Id;
     public MessengerRoom Type;
     public Squad UnlockConditionSquad;
-    public Int32 UnlockConditionCharacter;
-    public String? NameLocale;
-    public String? ThumbnailImage;
-    public List<String>? Members;
+    public int UnlockConditionCharacter;
+    public string? NameLocale;
+    public string? ThumbnailImage;
+    public List<string>? Members;
 }
 
 [MemoryPackable]
 public partial class MessengerMemberRecord
 {
-    public String? Id;
+    public string? Id;
     public MessengerMember Type;
-    public String? NameLocale;
-    public String? StatusMessageLocale;
-    public String? ProfileImage;
-    public String? BackgroundImage;
+    public string? NameLocale;
+    public string? StatusMessageLocale;
+    public string? ProfileImage;
+    public string? BackgroundImage;
 }
 
 [MemoryPackable]
 public partial class TriggerRecord
 {
-    public Int32 Id;
+    public int Id;
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public Int32 BeforeTriggerId;
+    public int ConditionId;
+    public int ConditionValue;
+    public int BeforeTriggerId;
     public HandlerType HandlerType;
-    public Boolean PrintValue;
-    public String? ShortcutType;
-    public Int32 ShortcutValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 PointValue;
-    public Int32 RewardId;
+    public bool PrintValue;
+    public string? ShortcutType;
+    public int ShortcutValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int PointValue;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class JukeboxThemeRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 Order;
-    public String? ThemeResource;
-    public String? BgColor;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int Order;
+    public string? ThemeResource;
+    public string? BgColor;
 }
 
 [MemoryPackable]
 public partial class SpotTutorialRecord
 {
-    public Int32 Id;
-    public Int32 WaveNum;
-    public Boolean SpotTimeControl;
-    public Boolean NoinputControl;
+    public int Id;
+    public int WaveNum;
+    public bool SpotTimeControl;
+    public bool NoinputControl;
     public SpotTutorialTriggerType TriggerType;
-    public Int32 TriggerTimeValue;
+    public int TriggerTimeValue;
     public SpotTutorialTriggerValue TriggerEnumValue;
-    public Int64 TriggerEnumValueId;
+    public long TriggerEnumValueId;
     public SpotTutorialCloseType CloseType;
-    public Int32 CloseTimeValue;
+    public int CloseTimeValue;
     public SpotTutorialCloseValue CloseValue;
     public TutorialFunctionType TutorialFunctionType;
-    public String? CharResourceId;
-    public String? TitleTextLocale;
-    public String? TextLocale;
+    public string? CharResourceId;
+    public string? TitleTextLocale;
+    public string? TextLocale;
     public SpootTutorialTextLocation TextLocation;
-    public Int32 Background;
-    public String? AddonResource;
-    public List<String>? UnmaskKeyList;
-    public List<String>? UnmaskKeyListNoinput;
-    public Int64 MarkMonsterId;
-    public String? MonsterMarkResource;
-    public String? EffectList;
-    public Boolean SkipButtonControl;
+    public int Background;
+    public string? AddonResource;
+    public List<string>? UnmaskKeyList;
+    public List<string>? UnmaskKeyListNoinput;
+    public long MarkMonsterId;
+    public string? MonsterMarkResource;
+    public string? EffectList;
+    public bool SkipButtonControl;
     public SpotKeyBoardInputTrigger KeyBoardInputTrigger;
-    public Int32 NextId;
+    public int NextId;
 }
 
 [MemoryPackable]
 public partial class FieldTutorialRecord
 {
-    public Int32 Id;
-    public Int32 ClearedStageId;
-    public Int32 CloseStageId;
-    public String? CharResourceId;
-    public String? TitleTextLocale;
-    public String? TextLocale;
-    public Int32 Background;
-    public List<String>? AddonResource;
-    public Boolean FieldMovingRouteControl;
-    public List<String>? MarkHiddenItemId;
-    public String? HiddenItemMarkResource;
-    public Boolean UnmaskControl;
-    public List<String>? UnmaskKeyList;
-    public Boolean UnmaskInputControl;
-    public Int32 NextId;
-    public Int32 ReconnectionTutorialId;
+    public int Id;
+    public int ClearedStageId;
+    public int CloseStageId;
+    public string? CharResourceId;
+    public string? TitleTextLocale;
+    public string? TextLocale;
+    public int Background;
+    public List<string>? AddonResource;
+    public bool FieldMovingRouteControl;
+    public List<string>? MarkHiddenItemId;
+    public string? HiddenItemMarkResource;
+    public bool UnmaskControl;
+    public List<string>? UnmaskKeyList;
+    public bool UnmaskInputControl;
+    public int NextId;
+    public int ReconnectionTutorialId;
 }
 
 [MemoryPackable]
 public partial class AutoChargeRecord
 {
-    public Int32 Id;
+    public int Id;
     public RewardType ItemType;
-    public Int32 ItemId;
-    public Int32 AutoChargePlus;
-    public Int32 AutoChargeMax;
+    public int ItemId;
+    public int AutoChargePlus;
+    public int AutoChargeMax;
 }
 
 [MemoryPackable]
 public partial class ItemExchangeRecord
 {
-    public Int32 Id;
+    public int Id;
     public RewardType FrequencyItemType;
-    public Int32 FrequencyItemId;
-    public Int32 FrequencyItemCount;
+    public int FrequencyItemId;
+    public int FrequencyItemCount;
     public RewardType ExchangeItemType;
-    public Int32 ExchangeItemId;
-    public Int32 ExchangeItemCount;
-    public String? MailKey;
+    public int ExchangeItemId;
+    public int ExchangeItemCount;
+    public string? MailKey;
 }
 
 [MemoryPackable]
 public partial class PassManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public PassType PassType;
-    public Int32 EventId;
+    public int EventId;
     public PassCategory PassCategory;
-    public Int32 PassPointId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int PassPointId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public DateTime SeasonStartDate;
     public DateTime SeasonEndDate;
-    public Int32 NextSeasonId;
-    public Int32 MidasProductId;
-    public Int32 InfracorePoint;
-    public String? PassPremiumNameLocalkey;
-    public String? PassPremiumDescriptionLocalkey;
-    public Int32 RankSkipId;
-    public String? PassLogoResourceId;
-    public String? PassLobbyButtonResourceId;
-    public Int32 ShopNpcResourceId;
-    public Int32 NpcCostumeId;
+    public int NextSeasonId;
+    public int MidasProductId;
+    public int InfracorePoint;
+    public string? PassPremiumNameLocalkey;
+    public string? PassPremiumDescriptionLocalkey;
+    public int RankSkipId;
+    public string? PassLogoResourceId;
+    public string? PassLobbyButtonResourceId;
+    public int ShopNpcResourceId;
+    public int NpcCostumeId;
 }
 
 [MemoryPackable]
 public partial class LobbyPrivateBannerRecord
 {
-    public Int32 Id;
+    public int Id;
     public DateTime StartDate;
     public DateTime EndDate;
-    public String? PrivateBannerResource;
-    public Int32 PrivateBannerOrder;
-    public Int32 PrivateBannerShowDuration;
-    public Int32 EventId;
+    public string? PrivateBannerResource;
+    public int PrivateBannerOrder;
+    public int PrivateBannerShowDuration;
+    public int EventId;
 }
 
 [MemoryPackable]
 public partial class UserExpRecord
 {
-    public Int32 Level;
-    public Int32 Exp;
-    public Int32 RewardId;
+    public int Level;
+    public int Exp;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class UserFrameRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
-    public String? SubResourceId;
+    public int Id;
+    public string? ResourceId;
+    public string? SubResourceId;
     public TabType TabType;
     public UserProfileType UserProfileType;
     public UserFrameFilterType FilterType;
-    public Int32 Order;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Boolean IsSubResourcePrism;
+    public int Order;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public bool IsSubResourcePrism;
 }
 
 [MemoryPackable]
 public partial class ScenarioRewardsRecord
 {
-    public Int32 Id;
+    public int Id;
     public Condition ConditionType;
-    public String? ConditionId;
-    public Int32 RewardId;
+    public string? ConditionId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class ContentsFirstScenarioRecord
 {
-    public Int32 Id;
-    public String? ViewType;
-    public Int32 ViewValue;
-    public String? EnterScenario;
+    public int Id;
+    public string? ViewType;
+    public int ViewValue;
+    public string? EnterScenario;
 }
 
 [MemoryPackable]
 public partial class MonsterSkillRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? SkillIcon;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? SkillIcon;
     public SkillAniNumberType SkillAniNumber;
     public WeaponType WeaponType;
     public AttackType AttackType;
     public FireType FireType;
-    public Int32 ShotCount;
+    public int ShotCount;
     public ShotTimingType ShotTiming;
-    public Int32 Penetration;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileHpRatio;
-    public Int32 ProjectileDefRatio;
-    public Int32 ProjectileRadiusObject;
-    public Int32 ProjectileRadius;
-    public Int32 SpotExplosionRange;
-    public Boolean IsDestroyableProjectile;
-    public Boolean RelateAnim;
-    public Int32 DecelerationRate;
-    public Int32 CastingTime;
-    public List<String>? BreakObject;
-    public Int32 BreakObjectHpRaito;
-    public List<String>? MoveObject;
-    public Int32 DelayTime;
+    public int Penetration;
+    public int ProjectileSpeed;
+    public int ProjectileHpRatio;
+    public int ProjectileDefRatio;
+    public int ProjectileRadiusObject;
+    public int ProjectileRadius;
+    public int SpotExplosionRange;
+    public bool IsDestroyableProjectile;
+    public bool RelateAnim;
+    public int DecelerationRate;
+    public int CastingTime;
+    public List<string>? BreakObject;
+    public int BreakObjectHpRaito;
+    public List<string>? MoveObject;
+    public int DelayTime;
     public MonsterSkillValueType SkillValueType01;
-    public Int64 SkillValue01;
+    public long SkillValue01;
     public MonsterSkillValueType SkillValueType02;
-    public Int64 SkillValue02;
-    public Int32 TargetCharacterRatio;
-    public Int32 TargetCoverRatio;
-    public Int32 TargetNothingRatio;
+    public long SkillValue02;
+    public int TargetCharacterRatio;
+    public int TargetCoverRatio;
+    public int TargetNothingRatio;
     public WeaponObjectEnum WeaponObjectEnum;
-    public Int32 CallingGroupId;
+    public int CallingGroupId;
     public PreferTargetType PreferTarget;
-    public Boolean ShowLockOn;
-    public Int32 TargetCount;
-    public List<String>? ObjectResource;
+    public bool ShowLockOn;
+    public int TargetCount;
+    public List<string>? ObjectResource;
     public ObjectPositionType ObjectPositionType;
-    public List<Double>? ObjectPosition;
-    public Boolean IsUsingTimeline;
-    public Int32 ControlGauge;
+    public List<double>? ObjectPosition;
+    public bool IsUsingTimeline;
+    public int ControlGauge;
     public List<PartsType>? ControlParts;
     public CancelType CancelType;
     public PartsType LinkedParts;
@@ -778,474 +778,474 @@ public partial class MonsterSkillRecord
 [MemoryPackable]
 public partial class ItemConsumeRecord
 {
-    public Int32 Id;
+    public int Id;
     public UseCondition UseConditionType;
-    public Int32 UseConditionValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public int UseConditionValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
     public ItemType ItemType;
     public ItemSubType ItemSubType;
     public OriginalRareType ItemRare;
     public ItemUseType UseType;
-    public Int32 UseId;
+    public int UseId;
     public PercentDisplayType PercentDisplayType;
-    public Int32 UseValue;
-    public Int32 UseFragCost;
-    public Boolean UseLimitCount;
-    public Int32 UseLimitCountValue;
-    public Int32 StackMax;
+    public int UseValue;
+    public int UseFragCost;
+    public bool UseLimitCount;
+    public int UseLimitCountValue;
+    public int StackMax;
 }
 
 [MemoryPackable]
 public partial class ItemHarmonyCubeRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 LocationId;
-    public String? LocationLocalkey;
-    public Int32 Order;
-    public Int32 ResourceId;
-    public String? Bg;
-    public String? BgColor;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int LocationId;
+    public string? LocationLocalkey;
+    public int Order;
+    public int ResourceId;
+    public string? Bg;
+    public string? BgColor;
     public ItemType ItemType;
     public ItemSubType ItemSubType;
     public OriginalRareType ItemRare;
     public CharacterClassType Class;
-    public Int32 LevelEnhanceId;
+    public int LevelEnhanceId;
     public List<HarmonyCubeSkillGroupData>? HarmonycubeSkillGroup;
 }
 
 [MemoryPackable]
 public partial class ItemHarmonyCubeLevelRecord
 {
-    public Int32 Id;
-    public Int32 LevelEnhanceId;
-    public Int32 Level;
+    public int Id;
+    public int LevelEnhanceId;
+    public int Level;
     public List<SkillLevelData>? SkillLevels;
-    public Int32 MaterialId;
-    public Int32 MaterialValue;
-    public Int32 GoldValue;
-    public Int32 Slot;
+    public int MaterialId;
+    public int MaterialValue;
+    public int GoldValue;
+    public int Slot;
     public List<HarmonyCubeStatData>? HarmonycubeStats;
 }
 
 [MemoryPackable]
 public partial class BundleBoxRecord
 {
-    public Int32 Id;
-    public Int32 UserExp;
-    public Int32 CharacterExp;
-    public Boolean IsMail;
-    public List<RewardEntry>? Rewards;
+    public int Id;
+    public int UserExp;
+    public int CharacterExp;
+    public bool IsMail;
+    public List<Reward_Data>? Rewards;
 }
 
 [MemoryPackable]
 public partial class CashShopRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
-    public Int32 ProductOrder;
-    public Int32 ProductDisplayStep;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
+    public int ProductOrder;
+    public int ProductDisplayStep;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
+    public bool IsLimit;
+    public int BuyLimitCount;
     public CashShopProductType ProductType;
-    public Int32 ProductId;
-    public Int32 ProductValue;
-    public Int32 MidasProductId;
-    public Int32 InfracorePoint;
-    public Boolean IsActive;
+    public int ProductId;
+    public int ProductValue;
+    public int MidasProductId;
+    public int InfracorePoint;
+    public bool IsActive;
 }
 
 [MemoryPackable]
 public partial class CostumeShopRecord
 {
-    public Int32 Id;
-    public Int32 ShopGroupId;
-    public Int32 PackageGroupId;
+    public int Id;
+    public int ShopGroupId;
+    public int PackageGroupId;
     public DateTime StartDate;
     public DateTime EndDate;
     public CostumePriceType DiscountControl;
-    public Int32 CostumeThemeGroupId;
-    public Int32 ProductGrade;
-    public Int32 CostumeId;
+    public int CostumeThemeGroupId;
+    public int ProductGrade;
+    public int CostumeId;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
-    public Int32 MidasProductId;
-    public Boolean IsActive;
+    public bool IsLimit;
+    public int BuyLimitCount;
+    public int MidasProductId;
+    public bool IsActive;
 }
 
 [MemoryPackable]
 public partial class MonthlyAmountRecord
 {
-    public Int32 Id;
-    public Int32 OrderGroupId;
-    public Int32 ProductEfficiency;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? DailyRewardInfo;
-    public String? ProductResourceId;
-    public Int32 BuyPackageGroupId;
-    public Int32 DailyPackageGroupId;
-    public Int32 Period;
-    public Int32 PeriodWarningNoticeDay;
-    public Int32 InfracorePoint;
-    public Int32 MidasProductId;
+    public int Id;
+    public int OrderGroupId;
+    public int ProductEfficiency;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? DailyRewardInfo;
+    public string? ProductResourceId;
+    public int BuyPackageGroupId;
+    public int DailyPackageGroupId;
+    public int Period;
+    public int PeriodWarningNoticeDay;
+    public int InfracorePoint;
+    public int MidasProductId;
 }
 
 [MemoryPackable]
 public partial class CampaignPackageShopRecord
 {
-    public Int32 Id;
-    public Int32 OrderGroupId;
-    public Int32 PackageOrder;
-    public Int32 PackageGroupId;
-    public Int32 ProductEfficiency;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
-    public Int32 InfracorePoint;
-    public Int32 MidasProductId;
-    public String? ShopDescriptionLocalkey01;
-    public String? ShopDescriptionLocalkey02;
+    public int Id;
+    public int OrderGroupId;
+    public int PackageOrder;
+    public int PackageGroupId;
+    public int ProductEfficiency;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
+    public int InfracorePoint;
+    public int MidasProductId;
+    public string? ShopDescriptionLocalkey01;
+    public string? ShopDescriptionLocalkey02;
 }
 
 [MemoryPackable]
 public partial class CharacterCostumeThemeRecord
 {
-    public Int32 Id;
-    public String? CostumeThemeNameLocale;
-    public String? CostumeThemeDescriptionLocale;
+    public int Id;
+    public string? CostumeThemeNameLocale;
+    public string? CostumeThemeDescriptionLocale;
 }
 
 [MemoryPackable]
 public partial class CharacterStatEnhanceRecord
 {
-    public Int32 Id;
-    public Int32 GradeRatio;
-    public Int64 GradeHp;
-    public Int32 GradeAttack;
-    public Int32 GradeDefence;
-    public Int32 GradeEnergyResist;
-    public Int32 GradeMetalResist;
-    public Int32 GradeBioResist;
-    public Int64 CoreHp;
-    public Int32 CoreAttack;
-    public Int32 CoreDefence;
-    public Int32 CoreEnergyResist;
-    public Int32 CoreMetalResist;
-    public Int32 CoreBioResist;
+    public int Id;
+    public int GradeRatio;
+    public long GradeHp;
+    public int GradeAttack;
+    public int GradeDefence;
+    public int GradeEnergyResist;
+    public int GradeMetalResist;
+    public int GradeBioResist;
+    public long CoreHp;
+    public int CoreAttack;
+    public int CoreDefence;
+    public int CoreEnergyResist;
+    public int CoreMetalResist;
+    public int CoreBioResist;
 }
 
 [MemoryPackable]
 public partial class CharacterShotRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? CameraWork;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? CameraWork;
     public WeaponType WeaponType;
     public FireType FireType;
     public AttackType AttackType;
     public CounterEnermy CounterEnermy;
     public InputType InputType;
-    public Boolean IsTargeting;
+    public bool IsTargeting;
     public PreferTargetType PreferTarget;
     public PreferTargetconditionType PreferTargetCondition;
-    public Int32 Damage;
-    public Int32 ShotCount;
-    public Int32 MuzzleCount;
-    public Int32 MultiTargetCount;
-    public Int32 CenterShotCount;
+    public int Damage;
+    public int ShotCount;
+    public int MuzzleCount;
+    public int MultiTargetCount;
+    public int CenterShotCount;
     public ShotTimingType ShotTiming;
-    public Int32 MaxAmmo;
-    public Int32 MaintainFireStance;
-    public Int32 UptypeFireTiming;
-    public Int32 ReloadTime;
-    public Int32 ReloadBullet;
-    public Int32 ReloadStartAmmo;
-    public Int32 RateOfFireResetTime;
-    public Int32 RateOfFire;
-    public Int32 EndRateOfFire;
-    public Int32 RateOfFireChangePershot;
-    public Int32 BurstEnergyPershot;
-    public Int32 TargetBurstEnergyPershot;
-    public Int32 Penetration;
-    public Int32 SpotFirstDelay;
-    public Int32 SpotLastDelay;
-    public Int32 StartAccuracyCircleScale;
-    public Int32 EndAccuracyCircleScale;
-    public Int32 AccuracyChangePershot;
-    public Int32 AccuracyChangeSpeed;
-    public Int32 AutoStartAccuracyCircleScale;
-    public Int32 AutoEndAccuracyCircleScale;
-    public Int32 AutoAccuracyChangePershot;
-    public Int32 AutoAccuracyChangeSpeed;
-    public Int32 ZoomRate;
-    public Int32 MultiAimRange;
-    public Int32 SpotProjectileSpeed;
-    public Int32 ChargeTime;
-    public Int32 FullChargeDamage;
-    public Int32 FullChargeBurstEnergy;
-    public Int32 SpotRadiusObject;
-    public Int32 SpotRadius;
-    public Int32 SpotExplosionRange;
-    public String? HomingScript;
-    public Int32 CoreDamageRate;
-    public List<Int32>? UseFunctionIdList;
-    public List<Int32>? HurtFunctionIdList;
-    public Int32 ShakeId;
+    public int MaxAmmo;
+    public int MaintainFireStance;
+    public int UptypeFireTiming;
+    public int ReloadTime;
+    public int ReloadBullet;
+    public int ReloadStartAmmo;
+    public int RateOfFireResetTime;
+    public int RateOfFire;
+    public int EndRateOfFire;
+    public int RateOfFireChangePershot;
+    public int BurstEnergyPershot;
+    public int TargetBurstEnergyPershot;
+    public int Penetration;
+    public int SpotFirstDelay;
+    public int SpotLastDelay;
+    public int StartAccuracyCircleScale;
+    public int EndAccuracyCircleScale;
+    public int AccuracyChangePershot;
+    public int AccuracyChangeSpeed;
+    public int AutoStartAccuracyCircleScale;
+    public int AutoEndAccuracyCircleScale;
+    public int AutoAccuracyChangePershot;
+    public int AutoAccuracyChangeSpeed;
+    public int ZoomRate;
+    public int MultiAimRange;
+    public int SpotProjectileSpeed;
+    public int ChargeTime;
+    public int FullChargeDamage;
+    public int FullChargeBurstEnergy;
+    public int SpotRadiusObject;
+    public int SpotRadius;
+    public int SpotExplosionRange;
+    public string? HomingScript;
+    public int CoreDamageRate;
+    public List<int>? UseFunctionIdList;
+    public List<int>? HurtFunctionIdList;
+    public int ShakeId;
     public CameraShakeType ShakeType;
-    public Int32 ShakeWeight;
-    public String? AimPrefab;
+    public int ShakeWeight;
+    public string? AimPrefab;
 }
 
 [MemoryPackable]
 public partial class GachaGradeProbRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public OriginalRareType Rare;
-    public Int32 Prob;
-    public Int32 ProbMaxCount;
-    public Int32 GachaListId;
-    public Int32 CustomizeListId;
+    public int Prob;
+    public int ProbMaxCount;
+    public int GachaListId;
+    public int CustomizeListId;
 }
 
 [MemoryPackable]
 public partial class MultiRaidRecord
 {
-    public Int32 Id;
-    public String? Name;
-    public Int32 PlayerCount;
-    public Int32 CharacterSelectTimeLimit;
-    public Int32 CharacterLv;
-    public Int32 StageLevel;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Int32 MonsterStageLvChangeGroup;
-    public Int32 SpotId;
-    public Int32 MonsterStageLvChangeGroupEasy;
-    public Int32 SpotIdEasy;
-    public Int32 ConditionRewardGroup;
-    public Int32 RewardLimitCount;
-    public Int32 RankConditionRewardGroup;
+    public int Id;
+    public string? Name;
+    public int PlayerCount;
+    public int CharacterSelectTimeLimit;
+    public int CharacterLv;
+    public int StageLevel;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public int MonsterStageLvChangeGroup;
+    public int SpotId;
+    public int MonsterStageLvChangeGroupEasy;
+    public int SpotIdEasy;
+    public int ConditionRewardGroup;
+    public int RewardLimitCount;
+    public int RankConditionRewardGroup;
 }
 
 [MemoryPackable]
 public partial class InterceptSpecialRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public String? Name;
-    public String? ShortName;
-    public String? Description;
-    public String? Thumbnail;
-    public String? MonsterSpine;
-    public Int32 MonsterSpineScale;
-    public Int32 Order;
-    public Int32 CharacterLv;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Int32 MonsterStageLvChangeGroup;
+    public int Id;
+    public int Group;
+    public string? Name;
+    public string? ShortName;
+    public string? Description;
+    public string? Thumbnail;
+    public string? MonsterSpine;
+    public int MonsterSpineScale;
+    public int Order;
+    public int CharacterLv;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public int MonsterStageLvChangeGroup;
     public InterceptSpotType SpotType;
-    public Int32 SpotId;
-    public Int32 DummySpotId;
-    public Int32 AutoChargeId;
-    public Int32 TicketCount;
-    public Int32 ConditionRewardGroup;
-    public Int32 PercentConditionRewardGroup;
-    public Boolean UseRewardPriority;
-    public Int32 PriorityGrade;
-    public Boolean UseFixedResult;
-    public Int32 FixedDamage;
-    public Int32 ResultCharacterResourceId;
+    public int SpotId;
+    public int DummySpotId;
+    public int AutoChargeId;
+    public int TicketCount;
+    public int ConditionRewardGroup;
+    public int PercentConditionRewardGroup;
+    public bool UseRewardPriority;
+    public int PriorityGrade;
+    public bool UseFixedResult;
+    public int FixedDamage;
+    public int ResultCharacterResourceId;
 }
 
 [MemoryPackable]
 public partial class ArenaRewardRecord
 {
-    public Int32 MinRank;
-    public Int32 MaxRank;
-    public Int32 DailyRewardId;
-    public Int32 SeasonRewardId;
-    public Int32 WinRewardValue;
+    public int MinRank;
+    public int MaxRank;
+    public int DailyRewardId;
+    public int SeasonRewardId;
+    public int WinRewardValue;
 }
 
 [MemoryPackable]
 public partial class ArenaRecord
 {
-    public Int32 Id;
+    public int Id;
     public ArenaType ArenaType;
-    public String? Name;
-    public Int32 Order;
-    public String? Thumbnail;
-    public Int32 FreePlayCount;
-    public Int32 TicketId;
-    public Int32 TicketValue;
-    public Int32 TicketBuyCurrencyType;
-    public Int32 TicketBuyCurrencyValue;
-    public Int32 RecordMaxCount;
-    public Int32 Round;
-    public Int32 TimeLimit;
+    public string? Name;
+    public int Order;
+    public string? Thumbnail;
+    public int FreePlayCount;
+    public int TicketId;
+    public int TicketValue;
+    public int TicketBuyCurrencyType;
+    public int TicketBuyCurrencyValue;
+    public int RecordMaxCount;
+    public int Round;
+    public int TimeLimit;
     public ThemeType Theme;
     public ThemeTimeType ThemeTime;
-    public Int32 ConditionRewardGroup;
-    public Int32 VerificationTimeServer;
-    public Int32 VerificationTimeClient;
+    public int ConditionRewardGroup;
+    public int VerificationTimeServer;
+    public int VerificationTimeClient;
 }
 
 [MemoryPackable]
 public partial class ArenaChampionRecord
 {
-    public Int32 Id;
-    public Int32 CharacterLv;
-    public Int32 BettingRewardId;
-    public String? BettingRewardMailKey;
-    public Int32 TeamCount;
+    public int Id;
+    public int CharacterLv;
+    public int BettingRewardId;
+    public string? BettingRewardMailKey;
+    public int TeamCount;
 }
 
 [MemoryPackable]
 public partial class FieldTalkRecord
 {
-    public String? Id;
-    public String? FieldPosition;
-    public String? Position1;
-    public String? Position2;
-    public String? Position3;
-    public String? Position4;
-    public String? Position5;
-    public String? Position6;
-    public String? FieldTalkDialogGroupId;
+    public string? Id;
+    public string? FieldPosition;
+    public string? Position1;
+    public string? Position2;
+    public string? Position3;
+    public string? Position4;
+    public string? Position5;
+    public string? Position6;
+    public string? FieldTalkDialogGroupId;
 }
 
 [MemoryPackable]
 public partial class AssistSquadRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
+    public int Id;
+    public string? NameLocalkey;
     public AssistSquadType AssistsquadType;
-    public Int32 AssistsquadDistance;
-    public Int32 AssistsquadMembercount;
-    public String? AssistsquadPrefab;
+    public int AssistsquadDistance;
+    public int AssistsquadMembercount;
+    public string? AssistsquadPrefab;
     public AssistSquadMoveType AssistsquadMovetype;
     public AssistSquadControlType AssistsquadControltype;
-    public Int32 AssistsquadSpeedRatio;
-    public Int32 MarkerPosition;
+    public int AssistsquadSpeedRatio;
+    public int MarkerPosition;
 }
 
 [MemoryPackable]
 public partial class OutpostBuildingSlotRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<BuildingCategory>? BanBuildingCategory;
 }
 
 [MemoryPackable]
 public partial class OutpostBattleRecord
 {
-    public Int32 Id;
-    public Int32 BattleBoxLevel;
-    public Int32 MainStageClearCount;
-    public Int32 RewardId;
-    public Int32 Credit;
-    public Int32 TimeCredit;
-    public Int32 CharacterExp1;
-    public Int32 TimeCharexp1;
-    public Int32 UserExp;
-    public Int32 TimeUserExp;
-    public Int32 CharacterExp2;
-    public Int32 TimeCharexp2;
+    public int Id;
+    public int BattleBoxLevel;
+    public int MainStageClearCount;
+    public int RewardId;
+    public int Credit;
+    public int TimeCredit;
+    public int CharacterExp1;
+    public int TimeCharexp1;
+    public int UserExp;
+    public int TimeUserExp;
+    public int CharacterExp2;
+    public int TimeCharexp2;
     public List<OutpostBattle_Data>? OutpostRewardList;
 }
 
 [MemoryPackable]
 public partial class OutpostBattleBoxSettingRecord
 {
-    public Int32 Id;
-    public Int32 RewardStepTime;
-    public String? BuildingResourceId;
+    public int Id;
+    public int RewardStepTime;
+    public string? BuildingResourceId;
 }
 
 [MemoryPackable]
 public partial class TacticAcademyFunctionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? NameLocalkey;
-    public String? FunctionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? NameLocalkey;
+    public string? FunctionLocalkey;
     public LessonType LessonType;
     public List<LessonRewardData>? LessonReward;
-    public Int32 CharacterConditionValue1;
-    public Int32 CharacterConditionValue2;
-    public Int32 CharacterConditionValue3;
+    public int CharacterConditionValue1;
+    public int CharacterConditionValue2;
+    public int CharacterConditionValue3;
     public List<LessonConditionData>? LessonCondition;
-    public Int32 CurrencyId;
-    public Int32 CurrencyValue;
+    public int CurrencyId;
+    public int CurrencyValue;
 }
 
 [MemoryPackable]
 public partial class TacticAcademyClassRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
+    public int Id;
+    public string? NameLocalkey;
 }
 
 [MemoryPackable]
 public partial class LiberateTypeRecord
 {
-    public Int32 Id;
-    public String? Name;
+    public int Id;
+    public string? Name;
     public TypeOpenCondition TypeOpenCondition;
-    public Int32 TypeOpenConditionId;
-    public Int32 TypeOpenConditionValue;
-    public String? ScenarioId;
-    public Boolean IsHidden;
+    public int TypeOpenConditionId;
+    public int TypeOpenConditionValue;
+    public string? ScenarioId;
+    public bool IsHidden;
 }
 
 [MemoryPackable]
 public partial class AlbumInfoRecord
 {
-    public Int32 Id;
-    public Int32 CategoryGroupId;
-    public Int32 SubCategoryId;
-    public String? SubCategoryNameLocaltable;
-    public String? SubCategoryNameLocalkey;
-    public String? SubCategoryThumbnail;
-    public String? AlbumListThumbnail;
-    public Boolean IsHidden;
-    public Boolean IsPlayNextScenario;
+    public int Id;
+    public int CategoryGroupId;
+    public int SubCategoryId;
+    public string? SubCategoryNameLocaltable;
+    public string? SubCategoryNameLocalkey;
+    public string? SubCategoryThumbnail;
+    public string? AlbumListThumbnail;
+    public bool IsHidden;
+    public bool IsPlayNextScenario;
 }
 
 [MemoryPackable]
 public partial class OutpostConditionTriggerRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<TriggerData>? TriggerList;
     public EventType EventType;
-    public Int32 Tid;
-    public Int32 ResourceId;
-    public String? NameLocalkey;
-    public String? EnterScenarioId;
-    public String? ExitScenarioId;
-    public Int32 StaminaValue;
-    public Int32 RewardId;
+    public int Tid;
+    public int ResourceId;
+    public string? NameLocalkey;
+    public string? EnterScenarioId;
+    public string? ExitScenarioId;
+    public int StaminaValue;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class ArenaFieldResourceRecord
 {
-    public Int32 Id;
+    public int Id;
     public ArenaType ArenaType;
-    public Int32 TimeLimit;
-    public String? FieldResource;
+    public int TimeLimit;
+    public string? FieldResource;
     public ThemeType Theme;
     public ThemeTimeType ThemeTime;
 }
@@ -1253,45 +1253,45 @@ public partial class ArenaFieldResourceRecord
 [MemoryPackable]
 public partial class CooperationEventDailyRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Day;
+    public int Id;
+    public int Group;
+    public int Day;
     public List<buff_data>? BuffData;
 }
 
 [MemoryPackable]
 public partial class CooperationEventReportRecord
 {
-    public Int32 Id;
+    public int Id;
     public CooperationEventReportType ReportType;
-    public Int32 ReportCheckTime;
-    public Int32 ReportTotalTime;
-    public String? DescriptionLocalkey;
+    public int ReportCheckTime;
+    public int ReportTotalTime;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimDialogConditionRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public String? EventPortraitResource;
+    public string? Id;
+    public int ManagerId;
+    public string? EventPortraitResource;
     public List<DialogAppearDialogConditionListData>? DialogAppearDialogConditionList;
     public List<DialogAppearSelectionConditionListData>? DialogAppearSelectionConditionList;
-    public String? DialogEventId;
-    public Boolean IsShowStaminaConsumeIcon;
-    public Boolean IsTurnOffOtherEvents;
+    public string? DialogEventId;
+    public bool IsShowStaminaConsumeIcon;
+    public bool IsTurnOffOtherEvents;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimSelectionEventRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public String? DialogEventId;
-    public String? SelectionDialogGroupId;
-    public String? SelectionDialogId;
-    public Boolean IsConsumeStamina;
-    public Boolean IsUseSelectCondition;
+    public string? Id;
+    public int ManagerId;
+    public string? DialogEventId;
+    public string? SelectionDialogGroupId;
+    public string? SelectionDialogId;
+    public bool IsConsumeStamina;
+    public bool IsUseSelectCondition;
     public List<SelectConditionListData>? SelectConditionList;
     public List<SelectDialogConditionListData>? SelectDialogConditionList;
     public EventDatingSimSelectionEventType SelectionEventType;
@@ -1301,1004 +1301,1004 @@ public partial class EventDatingSimSelectionEventRecord
 [MemoryPackable]
 public partial class ArchiveProgressEventRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 EventId;
+    public int Id;
+    public int GroupId;
+    public int EventId;
     public FieldProgressEventTarget EventTarget;
-    public Int32 ConditionMissionclear;
-    public Int32 ConditionStageclear;
+    public int ConditionMissionclear;
+    public int ConditionStageclear;
     public DateTime ConditionTime;
     public FieldProgressEventType EventType;
-    public String? EventValue;
+    public string? EventValue;
     public FieldProgressEventCheckCondition EventCheckCondition;
 }
 
 [MemoryPackable]
 public partial class EventFieldNPCRecord
 {
-    public Int32 Id;
-    public Int32 ListButtonIndex;
-    public Int32 EventFieldId;
-    public String? NpcLocalkeyName;
-    public String? NpcLocalkeyContents;
+    public int Id;
+    public int ListButtonIndex;
+    public int EventFieldId;
+    public string? NpcLocalkeyName;
+    public string? NpcLocalkeyContents;
     public EventFieldNPCType NpcType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public String? ForcedNameTagResource;
+    public int ResourceId;
+    public int CostumeIndex;
+    public string? ForcedNameTagResource;
     public List<EventFieldNPCEventData>? EventFieldNpcEventDataList;
     public EventFieldNPCInteractionType InteractionType;
-    public Int32 InteractionDistance;
-    public String? ForcedInteractionMarker;
-    public Boolean IsInteractionAfterEnd;
-    public Int32 ProgressEventGroupId;
-    public Boolean IsUseBalloonTalk;
-    public String? BalloonAlwaysId;
+    public int InteractionDistance;
+    public string? ForcedInteractionMarker;
+    public bool IsInteractionAfterEnd;
+    public int ProgressEventGroupId;
+    public bool IsUseBalloonTalk;
+    public string? BalloonAlwaysId;
     public BalloonPlayType BalloonAlwaysPlayType;
-    public Int32 BalloonAlwaysCycle;
+    public int BalloonAlwaysCycle;
 }
 
 [MemoryPackable]
 public partial class ProgressEventRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 EventId;
+    public int Id;
+    public int GroupId;
+    public int EventId;
     public FieldProgressEventTarget EventTarget;
-    public Int32 ConditionMissionclear;
-    public Int32 ConditionStageclear;
+    public int ConditionMissionclear;
+    public int ConditionStageclear;
     public DateTime ConditionTime;
     public FieldProgressEventType EventType;
-    public String? EventValue;
+    public string? EventValue;
     public FieldProgressEventCheckCondition EventCheckCondition;
 }
 
 [MemoryPackable]
 public partial class AlbumCategoryRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Boolean IsOutpost;
-    public String? CategoryNameLocalkey;
-    public String? CategoryDescriptionLocalkey;
-    public String? NameTagLocalkey;
-    public Boolean IsShowTotalCount;
+    public int Id;
+    public int Group;
+    public bool IsOutpost;
+    public string? CategoryNameLocalkey;
+    public string? CategoryDescriptionLocalkey;
+    public string? NameTagLocalkey;
+    public bool IsShowTotalCount;
 }
 
 [MemoryPackable]
 public partial class AlbumResourceRecord
 {
-    public Int32 Id;
-    public Int32 SubCategoryId;
-    public String? ScenarioNameLocaltable;
+    public int Id;
+    public int SubCategoryId;
+    public string? ScenarioNameLocaltable;
     public ScenarioDialogTableType OverwriteScenarioDialogTableType;
-    public String? ScenarioNameLocalkey;
-    public String? ScenarioGroupId;
-    public Int32 TargetChapter;
-    public Boolean IsHidden;
+    public string? ScenarioNameLocalkey;
+    public string? ScenarioGroupId;
+    public int TargetChapter;
+    public bool IsHidden;
     public DialogType Dialogtype;
 }
 
 [MemoryPackable]
 public partial class ArcadeConfigRecord_Raw
 {
-    public String? Id;
-    public String? Value;
+    public string? Id;
+    public string? Value;
 }
 
 [MemoryPackable]
 public partial class ArcadeManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 TimeReferenceIdForActivate;
-    public Int32 Order;
-    public Boolean HasUnionRanking;
-    public String? GameButtonResourceId;
-    public String? GameImageResourceId;
-    public String? GameUnionBannerResourceId;
-    public String? GameTitleLocale;
+    public int Id;
+    public int TimeReferenceIdForActivate;
+    public int Order;
+    public bool HasUnionRanking;
+    public string? GameButtonResourceId;
+    public string? GameImageResourceId;
+    public string? GameUnionBannerResourceId;
+    public string? GameTitleLocale;
     public ArcadeGameType GameType;
-    public Int32 GameManagerId;
+    public int GameManagerId;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventDungeonDifficultRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public String? Name;
+    public int Id;
+    public int Group;
+    public int Order;
+    public string? Name;
     public EventDungeonOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Int32 StageGroup;
+    public int OpenConditionValue;
+    public int StageGroup;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventDungeonSpotBattleRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<EventDungeonOpenConditionObject>? OpenConditionList;
-    public String? ShortName;
+    public string? ShortName;
     public RewardType TicketItemType;
-    public Int32 TicketItemId;
-    public Int32 TicketItemCount;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Boolean SpotAutocontrol;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Int32 SpotId;
-    public Int32 FirstClearRewardId;
-    public Int32 ClearRewardId;
-    public String? EnterScenario;
-    public String? ExitScenario;
-    public Int32 FixedPlayCharacterId;
-    public Int32 CharacterLv;
+    public int TicketItemId;
+    public int TicketItemCount;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public bool SpotAutocontrol;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public int SpotId;
+    public int FirstClearRewardId;
+    public int ClearRewardId;
+    public string? EnterScenario;
+    public string? ExitScenario;
+    public int FixedPlayCharacterId;
+    public int CharacterLv;
     public QuickBattleType QuickBattleType;
-    public Int32 QuickBattleTryMaxCount;
+    public int QuickBattleTryMaxCount;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventDungeonStageRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Step;
-    public String? StageName;
+    public int Id;
+    public int Group;
+    public int Step;
+    public string? StageName;
     public EventDungeonContentsType StageContentsType;
-    public Int32 StageId;
-    public Boolean IsRepeatClear;
-    public Boolean IsGuideFieldChange;
-    public String? MapChangeGuideLocalkey;
-    public String? NpcChangeGuideLocalkey;
+    public int StageId;
+    public bool IsRepeatClear;
+    public bool IsGuideFieldChange;
+    public string? MapChangeGuideLocalkey;
+    public string? NpcChangeGuideLocalkey;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventDungeonRecord
 {
-    public Int32 Id;
-    public String? PartName;
-    public Int32 DifficultGroup;
+    public int Id;
+    public string? PartName;
+    public int DifficultGroup;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventFieldCharCustomRecord
 {
-    public Int32 Id;
-    public String? VoiceFieldGoSoundCue;
-    public String? VoiceFieldTouchSoundCue;
+    public int Id;
+    public string? VoiceFieldGoSoundCue;
+    public string? VoiceFieldTouchSoundCue;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventFieldCooperationRecord
 {
-    public Int32 Id;
-    public String? MonsterNameLocalkey;
-    public String? MonsterImage;
-    public Int32 ElementId;
+    public int Id;
+    public string? MonsterNameLocalkey;
+    public string? MonsterImage;
+    public int ElementId;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventFieldFixedSDCharRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventFieldSDCharacterUsageType UsageType;
-    public Int32 Slot;
+    public int Slot;
     public FieldFixedSDCharacterReferenceType TableReferenceType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public String? ScenarioCharacterId;
-    public Int32 CharacterCustomId;
+    public int ResourceId;
+    public int CostumeIndex;
+    public string? ScenarioCharacterId;
+    public int CharacterCustomId;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventFieldNPCRecord
 {
-    public Int32 Id;
-    public Int32 ListButtonIndex;
-    public Int32 EventFieldId;
-    public String? NpcLocalkeyName;
-    public String? NpcLocalkeyContents;
+    public int Id;
+    public int ListButtonIndex;
+    public int EventFieldId;
+    public string? NpcLocalkeyName;
+    public string? NpcLocalkeyContents;
     public EventFieldNPCType NpcType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public String? ForcedNameTagResource;
+    public int ResourceId;
+    public int CostumeIndex;
+    public string? ForcedNameTagResource;
     public List<ArchiveEventFieldNPCEventData>? EventFieldNpcEventDataList;
     public EventFieldNPCInteractionType InteractionType;
-    public Int32 InteractionDistance;
-    public String? ForcedInteractionMarker;
-    public Boolean IsInteractionAfterEnd;
-    public Boolean IsNotUsedInArchive;
-    public Int32 ProgressEventGroupId;
-    public Boolean IsUseBalloonTalk;
-    public String? BalloonAlwaysId;
+    public int InteractionDistance;
+    public string? ForcedInteractionMarker;
+    public bool IsInteractionAfterEnd;
+    public bool IsNotUsedInArchive;
+    public int ProgressEventGroupId;
+    public bool IsUseBalloonTalk;
+    public string? BalloonAlwaysId;
     public BalloonPlayType BalloonAlwaysPlayType;
-    public Int32 BalloonAlwaysCycle;
+    public int BalloonAlwaysCycle;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventFieldRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? FieldDesignMap;
-    public String? FieldArtMapStandard;
-    public String? FieldHud;
-    public String? FieldFirstEntryResource;
-    public Int32 LinkEventPassId;
-    public Int32 ProgressEventGroupId;
-    public Boolean IsUseRoamingNpc;
-    public Int32 RoamingNpcLimit;
+    public int Id;
+    public int EventId;
+    public string? FieldDesignMap;
+    public string? FieldArtMapStandard;
+    public string? FieldHud;
+    public string? FieldFirstEntryResource;
+    public int LinkEventPassId;
+    public int ProgressEventGroupId;
+    public bool IsUseRoamingNpc;
+    public int RoamingNpcLimit;
     public EventFieldRoamingNPCType RoamingNpcType;
-    public Int32 RoamingNpcFixedSdCharacterGroupId;
-    public Int32 RoamingNpcSpeedMinimum;
-    public Int32 RoamingNpcSpeedMaximum;
+    public int RoamingNpcFixedSdCharacterGroupId;
+    public int RoamingNpcSpeedMinimum;
+    public int RoamingNpcSpeedMaximum;
     public FieldPlayerSquadType PlayerSquadType;
-    public Int32 PlayerSquadValue;
-    public Int32 PlayerSquadSpeed;
-    public Int32 SdCharacterSize;
-    public Int32 EventMissionGroup;
-    public Int32 RecollectionHubGroupId;
-    public String? FieldEnterScenario;
-    public Int32 FieldEnterScenarioStoryArchiveId;
+    public int PlayerSquadValue;
+    public int PlayerSquadSpeed;
+    public int SdCharacterSize;
+    public int EventMissionGroup;
+    public int RecollectionHubGroupId;
+    public string? FieldEnterScenario;
+    public int FieldEnterScenarioStoryArchiveId;
     public List<EventFieldCurrencyData>? EventFieldCurrencyList;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public EventSystemType EventSystemType;
-    public Boolean HasArcadeShortcutWithoutField;
-    public Int32 ArcadeManagerId;
-    public String? EventShortcutId;
-    public Int32 ArchiveMatchEventId;
-    public Int32 ArchiveStoryProgressGroupOrder;
-    public String? ArchiveStoryProgressLocale;
+    public bool HasArcadeShortcutWithoutField;
+    public int ArcadeManagerId;
+    public string? EventShortcutId;
+    public int ArchiveMatchEventId;
+    public int ArchiveStoryProgressGroupOrder;
+    public string? ArchiveStoryProgressLocale;
     public DateTime EventStartDate;
     public DateTime EventEndDate;
-    public Int32 ParentsEventId;
+    public int ParentsEventId;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventMapChangePresetRecord
 {
-    public Int32 Id;
-    public String? ArtMapChangeValue;
-    public String? HudChangeValue;
-    public String? InteractionMarkerChangeValue;
-    public String? NameTagChangeValue;
-    public String? SkyBoxChangeValue;
-    public String? PpChangeValue;
+    public int Id;
+    public string? ArtMapChangeValue;
+    public string? HudChangeValue;
+    public string? InteractionMarkerChangeValue;
+    public string? NameTagChangeValue;
+    public string? SkyBoxChangeValue;
+    public string? PpChangeValue;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventQuestManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EventNameLocalkey;
-    public Int32 AlbumCategoryGroupId;
-    public String? UiPrefab;
+    public int Id;
+    public int EventId;
+    public string? EventNameLocalkey;
+    public int AlbumCategoryGroupId;
+    public string? UiPrefab;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventQuestRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventQuestManagerId;
+    public int Id;
+    public int EventQuestManagerId;
     public Category ConditionType;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 NextQuestId;
-    public String? EndScenarioId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int NextQuestId;
+    public string? EndScenarioId;
 }
 
 [MemoryPackable]
 public partial class ArchiveEventStoryRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? PrologueScenario;
-    public Int32 DungeonId;
-    public Int32 AlbumCategoryGroup;
-    public String? UiPrefab;
-    public Int32 ArchiveTicketItemId;
-    public Int32 ArchiveCurrencyItemId;
+    public int Id;
+    public int EventId;
+    public string? PrologueScenario;
+    public int DungeonId;
+    public int AlbumCategoryGroup;
+    public string? UiPrefab;
+    public int ArchiveTicketItemId;
+    public int ArchiveCurrencyItemId;
 }
 
 [MemoryPackable]
 public partial class ArchiveIncludedContentsGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ContentTypeLocale;
-    public Int32 Order;
-    public Int32 TagInfoMinigameTutorialId;
-    public String? TagResourceId;
-    public String? UseRecommendedIconId;
+    public int Id;
+    public int GroupId;
+    public string? ContentTypeLocale;
+    public int Order;
+    public int TagInfoMinigameTutorialId;
+    public string? TagResourceId;
+    public string? UseRecommendedIconId;
 }
 
 [MemoryPackable]
 public partial class ArchiveMessengerConditionRecord
 {
-    public Int32 Id;
-    public Int32 ArchiveMessengerGroupId;
+    public int Id;
+    public int ArchiveMessengerGroupId;
     public List<ArchiveMessengerConditionObject>? ArchiveMessengerConditionList;
-    public String? Tid;
+    public string? Tid;
 }
 
 [MemoryPackable]
 public partial class ArchiveRecommendedStoryListRecord
 {
-    public Int32 Id;
-    public Int32 ListId;
-    public String? RecommendedStoryTitleLocale;
+    public int Id;
+    public int ListId;
+    public string? RecommendedStoryTitleLocale;
     public ShortCutsInteractionType ShortcutsInteractionType;
-    public Int32 StoryAlbumInfoId;
-    public Int32 StoryArchiveRecordId;
+    public int StoryAlbumInfoId;
+    public int StoryArchiveRecordId;
 }
 
 [MemoryPackable]
 public partial class ArchiveRecordManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public ArchiveRecordType RecordType;
-    public String? RecordTitleLocale;
-    public Int32 RecordMainArchiveEventId;
-    public Int32 RecordListOrder;
-    public Int32 UnlockTicketId;
-    public Int32 UnlockTicketCount;
-    public Int32 RewardInfoListId;
-    public Int32 EventQuestClearRewardId;
-    public Int32 RecommendedStoryListId;
-    public Int32 MessengerGroupId;
-    public Int32 IncludedContentsGroupId;
-    public String? RecordSlotBgAddressable;
-    public String? EventQuestBannerTable;
-    public String? EventQuestBannerId;
-    public String? RecordUnlockBgAddressable;
+    public string? RecordTitleLocale;
+    public int RecordMainArchiveEventId;
+    public int RecordListOrder;
+    public int UnlockTicketId;
+    public int UnlockTicketCount;
+    public int RewardInfoListId;
+    public int EventQuestClearRewardId;
+    public int RecommendedStoryListId;
+    public int MessengerGroupId;
+    public int IncludedContentsGroupId;
+    public string? RecordSlotBgAddressable;
+    public string? EventQuestBannerTable;
+    public string? EventQuestBannerId;
+    public string? RecordUnlockBgAddressable;
 }
 
 [MemoryPackable]
 public partial class ArchiveRewardInfoListRecord
 {
-    public Int32 Id;
-    public Int32 ListId;
-    public String? RewardInfoTabLocale;
+    public int Id;
+    public int ListId;
+    public string? RewardInfoTabLocale;
     public RewardDataLoadType RewardDataLoadType;
-    public Int32 RewardDataLoadSubId;
+    public int RewardDataLoadSubId;
 }
 
 [MemoryPackable]
 public partial class ArenaChampionTotalRankRecord
 {
-    public Int32 Id;
-    public Int32 Priority;
+    public int Id;
+    public int Priority;
     public ArenaChampionTotalRankConditionType ConditionType;
-    public Int32 ConditionValue;
-    public String? Description;
-    public Int32 RewardId;
-    public String? MailKey;
+    public int ConditionValue;
+    public string? Description;
+    public int RewardId;
+    public string? MailKey;
 }
 
 [MemoryPackable]
 public partial class ArenaChampionUnionRankRecord
 {
-    public Int32 Id;
-    public Int32 Priority;
+    public int Id;
+    public int Priority;
     public ArenaChampionUnionRankConditionType Condition;
-    public String? Description;
-    public Int32 RewardId;
-    public String? MailKey;
+    public string? Description;
+    public int RewardId;
+    public string? MailKey;
 }
 
 [MemoryPackable]
 public partial class AttractiveCounselCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 NameCode;
-    public Int32 CollectRewardId;
-    public String? CollectCharacterExpression;
+    public int Id;
+    public int NameCode;
+    public int CollectRewardId;
+    public string? CollectCharacterExpression;
 }
 
 [MemoryPackable]
 public partial class AttractiveCounselRecord
 {
-    public Int32 Id;
-    public Int32 NameCode;
-    public Int32 AttractiveLevelMin;
-    public Int32 AttractiveLevelMax;
-    public String? CounselGroupId;
-    public String? CounselNameLocalkey;
+    public int Id;
+    public int NameCode;
+    public int AttractiveLevelMin;
+    public int AttractiveLevelMax;
+    public string? CounselGroupId;
+    public string? CounselNameLocalkey;
 }
 
 [MemoryPackable]
 public partial class AttractiveLevelRewardRecord
 {
-    public Int32 Id;
-    public Int32 NameCode;
-    public Int32 AttractiveLevel;
-    public String? ConditionScenarioGroupId;
-    public String? ScenarioTitleLoacle;
-    public String? AttractiveScenarioGroupId;
-    public Int32 RewardId;
-    public Int32 Costume;
+    public int Id;
+    public int NameCode;
+    public int AttractiveLevel;
+    public string? ConditionScenarioGroupId;
+    public string? ScenarioTitleLoacle;
+    public string? AttractiveScenarioGroupId;
+    public int RewardId;
+    public int Costume;
 }
 
 [MemoryPackable]
 public partial class AttractiveLevelRecord
 {
-    public Int32 Id;
-    public Int32 AttractiveLevel;
-    public Int32 AttractivePoint;
-    public Int32 AttackerHpRate;
-    public Int32 AttackerAttackRate;
-    public Int32 AttackerDefenceRate;
-    public Int32 AttackerEnergyResistRate;
-    public Int32 AttackerMetalResistRate;
-    public Int32 AttackerBioResistRate;
-    public Int32 DefenderHpRate;
-    public Int32 DefenderAttackRate;
-    public Int32 DefenderDefenceRate;
-    public Int32 DefenderEnergyResistRate;
-    public Int32 DefenderMetalResistRate;
-    public Int32 DefenderBioResistRate;
-    public Int32 SupporterHpRate;
-    public Int32 SupporterAttackRate;
-    public Int32 SupporterDefenceRate;
-    public Int32 SupporterEnergyResistRate;
-    public Int32 SupporterMetalResistRate;
-    public Int32 SupporterBioResistRate;
+    public int Id;
+    public int AttractiveLevel;
+    public int AttractivePoint;
+    public int AttackerHpRate;
+    public int AttackerAttackRate;
+    public int AttackerDefenceRate;
+    public int AttackerEnergyResistRate;
+    public int AttackerMetalResistRate;
+    public int AttackerBioResistRate;
+    public int DefenderHpRate;
+    public int DefenderAttackRate;
+    public int DefenderDefenceRate;
+    public int DefenderEnergyResistRate;
+    public int DefenderMetalResistRate;
+    public int DefenderBioResistRate;
+    public int SupporterHpRate;
+    public int SupporterAttackRate;
+    public int SupporterDefenceRate;
+    public int SupporterEnergyResistRate;
+    public int SupporterMetalResistRate;
+    public int SupporterBioResistRate;
 }
 
 [MemoryPackable]
 public partial class BannerRecord
 {
-    public Int32 Id;
+    public int Id;
     public BannerSystemType BannerSystemType;
-    public String? BannerSystemSubId;
+    public string? BannerSystemSubId;
     public DateTime BannerVisibleDate;
     public DateTime BannerStartDate;
     public DateTime BannerEndDate;
     public DateTime BannerDisableDate;
-    public String? BannerThumbnailResourceTable;
-    public String? BannerThumbnailResourceId;
-    public String? BannerResourceTable;
-    public String? BannerResourceId;
-    public Int32 EventOrder;
+    public string? BannerThumbnailResourceTable;
+    public string? BannerThumbnailResourceId;
+    public string? BannerResourceTable;
+    public string? BannerResourceId;
+    public int EventOrder;
     public BannerPrintType BannerPrintType;
-    public String? BannerThumbnailColor;
+    public string? BannerThumbnailColor;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonCartoonCutSceneRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? CartoonCutscene;
-    public String? CartoonCutsceneDescription;
-    public Boolean IsAppearInFRank;
-    public Boolean IsAppearInDRank;
-    public Boolean IsAppearInCRank;
-    public Boolean IsAppearInBRank;
-    public Boolean IsAppearInARank;
-    public Boolean IsAppearInSRank;
+    public int Id;
+    public int GroupId;
+    public string? CartoonCutscene;
+    public string? CartoonCutsceneDescription;
+    public bool IsAppearInFRank;
+    public bool IsAppearInDRank;
+    public bool IsAppearInCRank;
+    public bool IsAppearInBRank;
+    public bool IsAppearInARank;
+    public bool IsAppearInSRank;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonCustomerRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? CustomerNameLocalkey;
-    public String? CustomerResourcePrefab;
-    public Int32 CustomerDifficulty;
-    public Int32 CustomerLimitTime;
+    public int Id;
+    public int GroupId;
+    public string? CustomerNameLocalkey;
+    public string? CustomerResourcePrefab;
+    public int CustomerDifficulty;
+    public int CustomerLimitTime;
     public EventBBQTycoonCustomerBonusType BonusType;
-    public Int32 CustomerAppearanceRate;
-    public Int32 ConditionStageEventId;
-    public Int32 CustomerAppearanceStageCondition;
-    public Int32 SkewerStuffId1;
-    public Int32 SkewerStuffId2;
-    public Int32 SkewerStuffId3;
-    public Int32 SkewerStuffId4;
-    public Int32 SkewerStuffId5;
+    public int CustomerAppearanceRate;
+    public int ConditionStageEventId;
+    public int CustomerAppearanceStageCondition;
+    public int SkewerStuffId1;
+    public int SkewerStuffId2;
+    public int SkewerStuffId3;
+    public int SkewerStuffId4;
+    public int SkewerStuffId5;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiPrefab;
-    public Int32 CustomerGroupId;
-    public Int32 SkewerStuffGroupId;
-    public Int32 TimeLimit;
-    public Int32 CustomerVisitRate;
-    public Int32 CustomerVisitRateDifficulty1Ratio;
-    public Int32 CustomerVisitRateDifficulty2Ratio;
-    public Int32 CustomerVisitRateDifficulty3Ratio;
-    public Int32 PointStandard;
-    public Int32 PointGradeRatioGreat;
-    public Int32 PointGradeRatioGood;
-    public Int32 PointGradeRatioBad;
-    public Int32 FeverTargetGauge;
-    public Int32 FeverStandardIncrease;
-    public Int32 FeverGradeRatioGreat;
-    public Int32 FeverGradeRatioGood;
-    public Int32 FeverGradeRatioBad;
-    public Int32 FeverTime;
-    public Int32 FeverSkewerRoastDelay;
-    public Int32 FirepowerIncreasePerTouch;
-    public Int32 FirepowerDecreasePerSecond;
-    public Int32 MaxFirepower;
-    public Int32 MaxFirepowerRoastSpeedRatio;
-    public Int32 TimeToBurnSkewer;
-    public Int32 GrillMaxOverheatingTime;
-    public Int32 GameStartActionTimeControl;
-    public Int32 FeverStartActionTimeControl;
-    public Int32 EndImminentAlertStartTime;
-    public Int32 DailyRewardTargetPoint;
-    public Int32 DailyRewardId;
-    public Int32 StepUpRewardGroupId;
-    public Int32 Difficulty2StartPoint;
-    public Int32 Difficulty3StartPoint;
-    public Int32 DRankTargetPoint;
-    public Int32 CRankTargetPoint;
-    public Int32 BRankTargetPoint;
-    public Int32 ARankTargetPoint;
-    public Int32 SRankTargetPoint;
-    public String? FirstEnterScenarioGroupId;
-    public Int32 CartoonCutsceneGroupId;
-    public Int32 AlbumCategoryId;
-    public String? AlbumDescriptionLocalkey;
-    public Int32 ScenarioGroupId;
-    public Int32 CustomerLimitExpireAlertTime;
-    public Int32 CustomerExitDelayTime;
-    public Int32 CustomerExitTime;
-    public Int32 TutorialGroupId;
+    public int Id;
+    public int EventId;
+    public string? UiPrefab;
+    public int CustomerGroupId;
+    public int SkewerStuffGroupId;
+    public int TimeLimit;
+    public int CustomerVisitRate;
+    public int CustomerVisitRateDifficulty1Ratio;
+    public int CustomerVisitRateDifficulty2Ratio;
+    public int CustomerVisitRateDifficulty3Ratio;
+    public int PointStandard;
+    public int PointGradeRatioGreat;
+    public int PointGradeRatioGood;
+    public int PointGradeRatioBad;
+    public int FeverTargetGauge;
+    public int FeverStandardIncrease;
+    public int FeverGradeRatioGreat;
+    public int FeverGradeRatioGood;
+    public int FeverGradeRatioBad;
+    public int FeverTime;
+    public int FeverSkewerRoastDelay;
+    public int FirepowerIncreasePerTouch;
+    public int FirepowerDecreasePerSecond;
+    public int MaxFirepower;
+    public int MaxFirepowerRoastSpeedRatio;
+    public int TimeToBurnSkewer;
+    public int GrillMaxOverheatingTime;
+    public int GameStartActionTimeControl;
+    public int FeverStartActionTimeControl;
+    public int EndImminentAlertStartTime;
+    public int DailyRewardTargetPoint;
+    public int DailyRewardId;
+    public int StepUpRewardGroupId;
+    public int Difficulty2StartPoint;
+    public int Difficulty3StartPoint;
+    public int DRankTargetPoint;
+    public int CRankTargetPoint;
+    public int BRankTargetPoint;
+    public int ARankTargetPoint;
+    public int SRankTargetPoint;
+    public string? FirstEnterScenarioGroupId;
+    public int CartoonCutsceneGroupId;
+    public int AlbumCategoryId;
+    public string? AlbumDescriptionLocalkey;
+    public int ScenarioGroupId;
+    public int CustomerLimitExpireAlertTime;
+    public int CustomerExitDelayTime;
+    public int CustomerExitTime;
+    public int TutorialGroupId;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonScenarioRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ScenarioDialogGroupId;
-    public Int32 ScenarioOutputCondition;
+    public int Id;
+    public int GroupId;
+    public string? ScenarioDialogGroupId;
+    public int ScenarioOutputCondition;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonSkewerStuffRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 UiIndex;
-    public String? StuffNameLocalkey;
-    public String? UiPortraitImage;
-    public String? StuffResourcePrefab;
+    public int Id;
+    public int GroupId;
+    public int UiIndex;
+    public string? StuffNameLocalkey;
+    public string? UiPortraitImage;
+    public string? StuffResourcePrefab;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonStepUpRewardRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Step;
-    public Int32 TargetPoint;
-    public Int32 RewardId;
+    public int Id;
+    public int GroupId;
+    public int Step;
+    public int TargetPoint;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonTutorialRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? TutorialResource;
-    public String? TutorialDescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? TutorialResource;
+    public string? TutorialDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class BGMShopRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public BGMShopType Shop;
-    public String? BgmLoop;
+    public string? BgmLoop;
 }
 
 [MemoryPackable]
 public partial class BGMSpotThemeRecord
 {
-    public Int32 Id;
+    public int Id;
     public ThemeType Theme;
-    public String? BgmLoop;
+    public string? BgmLoop;
 }
 
 [MemoryPackable]
 public partial class BGMTriggerRecord
 {
-    public Int32 Id;
+    public int Id;
     public BGMType BgmType;
     public BGMSubType BgmSubType;
-    public String? TypeValue;
-    public Int32 EventId;
-    public Boolean Default;
+    public string? TypeValue;
+    public int EventId;
+    public bool Default;
     public BGMTriggerEventType BgmTriggerEventType;
-    public Int32 BgmTriggerEventValue;
-    public String? BgmLoop;
+    public int BgmTriggerEventValue;
+    public string? BgmLoop;
 }
 
 [MemoryPackable]
 public partial class BonusRewardCharacterRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public Int32 CharacterNameCode;
-    public Int32 BonusPercent;
+    public int Id;
+    public int Group;
+    public int Order;
+    public int CharacterNameCode;
+    public int BonusPercent;
 }
 
 [MemoryPackable]
 public partial class BotCharacterRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public BotCategory BotCategory;
-    public Int32 Slot;
-    public Int32 CharacterId;
-    public Int32 CharacterLevel;
-    public Int32 AttractiveLevel;
+    public int Slot;
+    public int CharacterId;
+    public int CharacterLevel;
+    public int AttractiveLevel;
     public List<bot_equipment_data>? EquipmentArray;
-    public Int32 HarmonycubeId;
-    public Int32 HarmonycubeLevel;
-    public Int32 SkillLevel1;
-    public Int32 SkillLevel2;
-    public Int32 SkillLevel3;
-    public Int32 RecycleLevelPersonal;
-    public Int32 RecycleLevelCorporation;
-    public Int32 RecycleLevelClass;
-    public Int32 UserLevel;
-    public Int32 NormalStageInfo;
-    public Int32 HardStageInfo;
-    public Int32 TowerInfo;
+    public int HarmonycubeId;
+    public int HarmonycubeLevel;
+    public int SkillLevel1;
+    public int SkillLevel2;
+    public int SkillLevel3;
+    public int RecycleLevelPersonal;
+    public int RecycleLevelCorporation;
+    public int RecycleLevelClass;
+    public int UserLevel;
+    public int NormalStageInfo;
+    public int HardStageInfo;
+    public int TowerInfo;
 }
 
 [MemoryPackable]
 public partial class CampaignChapterRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 World;
-    public Int32 Chapter;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int World;
+    public int Chapter;
     public OpenType OpenType;
     public DateTime OpenTime;
     public ChapterGuideType ChapterGuide;
-    public String? ChapterImage;
-    public String? HardChapterImage;
-    public String? FieldId;
-    public String? HardFieldId;
+    public string? ChapterImage;
+    public string? HardChapterImage;
+    public string? FieldId;
+    public string? HardFieldId;
 }
 
 [MemoryPackable]
 public partial class CampaignPackageGroupRecord
 {
-    public Int32 Id;
-    public Int32 PackageGroupId;
+    public int Id;
+    public int PackageGroupId;
     public CampaignPackageRewardType RewardType;
-    public Int32 RewardOrder;
-    public Boolean IsGoal;
+    public int RewardOrder;
+    public bool IsGoal;
     public Trigger Trigger;
-    public Int32 TriggerConditionId;
-    public Int32 TriggerConditionValue;
+    public int TriggerConditionId;
+    public int TriggerConditionValue;
     public RewardType ProductType;
-    public Int32 ProductId;
-    public Int32 ProductValue;
+    public int ProductId;
+    public int ProductValue;
 }
 
 [MemoryPackable]
 public partial class CampaignStageRecord
 {
-    public Int32 Id;
-    public Int32 ChapterId;
+    public int Id;
+    public int ChapterId;
     public ChapterMod ChapterMod;
-    public Int32 ParentsId;
-    public Int32 GroupId;
-    public String? NameLocalkey;
+    public int ParentsId;
+    public int GroupId;
+    public string? NameLocalkey;
     public StageCategory StageCategory;
     public StageType StageType;
-    public Boolean SpotAutocontrol;
-    public Int32 EnterCondition;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Int32 FieldMonsterId;
-    public Int32 SpotId;
-    public Int32 RewardId;
+    public bool SpotAutocontrol;
+    public int EnterCondition;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public int FieldMonsterId;
+    public int SpotId;
+    public int RewardId;
     public ScenarioType EnterScenarioType;
-    public String? EnterScenario;
+    public string? EnterScenario;
     public ScenarioType ExitScenarioType;
-    public String? ExitScenario;
-    public Int32 CurrentOutpostBattleId;
-    public Int32 ClearedOutpostBattleId;
-    public Int32 FixedPlayCharacterId;
-    public Int32 CharacterLv;
+    public string? ExitScenario;
+    public int CurrentOutpostBattleId;
+    public int ClearedOutpostBattleId;
+    public int FixedPlayCharacterId;
+    public int CharacterLv;
 }
 
 [MemoryPackable]
 public partial class CharacterCostumeRecord
 {
-    public Int32 Id;
-    public Int32 CostumeThemeGroupId;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public List<String>? AdditionalSkins;
+    public int Id;
+    public int CostumeThemeGroupId;
+    public int ResourceId;
+    public int CostumeIndex;
+    public List<string>? AdditionalSkins;
     public CostumeGrade CostumeGradeId;
-    public String? CostumeNameLocale;
-    public String? CostumeDescriptionLocale;
+    public string? CostumeNameLocale;
+    public string? CostumeDescriptionLocale;
     public CostumeShopType CostumeShopType;
-    public Int32 CostumeShopPriceId;
-    public Boolean IsHidden;
+    public int CostumeShopPriceId;
+    public bool IsHidden;
 }
 
 [MemoryPackable]
 public partial class CharacterLevelRecord
 {
-    public Int32 Level;
+    public int Level;
     public CharacterLevelType Type;
-    public Int32 NeedSynchroLvMin;
-    public Int32 Gold;
-    public Int32 CharacterExp;
-    public Int32 CharacterExp2;
+    public int NeedSynchroLvMin;
+    public int Gold;
+    public int CharacterExp;
+    public int CharacterExp2;
 }
 
 [MemoryPackable]
 public partial class CharacterReactionRecord
 {
-    public Int32 Id;
+    public int Id;
     public CharacterReactionType ReactionType;
-    public Int32 SpecialLobbyChangeStep;
-    public Int32 CameraShake;
-    public Int32 AttractiveLevelMin;
-    public Int32 AttractiveLevelMax;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public Int32 EventlobbyId;
-    public String? AnimationClip;
-    public String? SpeechLocalkey;
-    public String? RectionVoice;
-    public Double Probability;
+    public int SpecialLobbyChangeStep;
+    public int CameraShake;
+    public int AttractiveLevelMin;
+    public int AttractiveLevelMax;
+    public int ResourceId;
+    public int CostumeIndex;
+    public int EventlobbyId;
+    public string? AnimationClip;
+    public string? SpeechLocalkey;
+    public string? RectionVoice;
+    public double Probability;
 }
 
 [MemoryPackable]
 public partial class CharacterShotTutorialRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public WeaponType WeaponType;
-    public String? WeaponNameLocalkey;
-    public String? WeaponInfoLocalkey;
-    public String? TutorialVideo;
-    public String? MaxLoadInfoLocalkey;
-    public String? ReloadTimeInfoLocalkey;
-    public String? ShotSpeedInfoLocalkey;
-    public String? EffectiveRangeInfoLocalkey;
-    public String? OperationTypeInfoLocalkey;
+    public string? WeaponNameLocalkey;
+    public string? WeaponInfoLocalkey;
+    public string? TutorialVideo;
+    public string? MaxLoadInfoLocalkey;
+    public string? ReloadTimeInfoLocalkey;
+    public string? ShotSpeedInfoLocalkey;
+    public string? EffectiveRangeInfoLocalkey;
+    public string? OperationTypeInfoLocalkey;
 }
 
 [MemoryPackable]
 public partial class CharacterSkillRecord
 {
-    public Int32 Id;
+    public int Id;
     public AttackType AttackType;
     public CounterType CounterType;
     public PreferTargetType PreferTarget;
     public PreferTargetconditionType PreferTargetCondition;
-    public Int32 SkillCooltime;
+    public int SkillCooltime;
     public CharacterSkillType SkillType;
     public List<SkillValueData>? SkillValueData;
     public DurationType DurationType;
-    public Int32 DurationValue;
-    public List<Int32>? BeforeUseFunctionIdList;
-    public List<Int32>? BeforeHurtFunctionIdList;
-    public List<Int32>? AfterUseFunctionIdList;
-    public List<Int32>? AfterHurtFunctionIdList;
-    public String? ResourceName;
-    public Int32 ShakeId;
-    public String? Icon;
+    public int DurationValue;
+    public List<int>? BeforeUseFunctionIdList;
+    public List<int>? BeforeHurtFunctionIdList;
+    public List<int>? AfterUseFunctionIdList;
+    public List<int>? AfterHurtFunctionIdList;
+    public string? ResourceName;
+    public int ShakeId;
+    public string? Icon;
 }
 
 [MemoryPackable]
 public partial class CharacterStatRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Level;
-    public Int64 LevelHp;
-    public Int32 LevelAttack;
-    public Int32 LevelDefence;
-    public Int32 LevelEnergyResist;
-    public Int32 LevelMetalResist;
-    public Int32 LevelBioResist;
+    public int Id;
+    public int Group;
+    public int Level;
+    public long LevelHp;
+    public int LevelAttack;
+    public int LevelDefence;
+    public int LevelEnergyResist;
+    public int LevelMetalResist;
+    public int LevelBioResist;
 }
 
 [MemoryPackable]
 public partial class CharacterRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ResourceId;
-    public List<String>? AdditionalSkins;
-    public Int32 NameCode;
-    public Int32 Order;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ResourceId;
+    public List<string>? AdditionalSkins;
+    public int NameCode;
+    public int Order;
     public OriginalRareType OriginalRare;
-    public Int32 GradeCoreId;
-    public Int32 GrowGrade;
-    public Int32 StatEnhanceId;
+    public int GradeCoreId;
+    public int GrowGrade;
+    public int StatEnhanceId;
     public CorporationType Corporation;
     public CorporationSubType CorporationSubType;
     public CharacterClassType Class;
-    public Int32 SurfaceCategory;
-    public List<Int32>? ElementId;
-    public Int32 CriticalRatio;
-    public Int32 CriticalDamage;
-    public Int32 ShotId;
-    public Int32 BonusrangeMin;
-    public Int32 BonusrangeMax;
+    public int SurfaceCategory;
+    public List<int>? ElementId;
+    public int CriticalRatio;
+    public int CriticalDamage;
+    public int ShotId;
+    public int BonusrangeMin;
+    public int BonusrangeMax;
     public BurstStep UseBurstSkill;
     public BurstStep ChangeBurstStep;
-    public Int32 BurstApplyDelay;
-    public Int32 BurstDuration;
-    public Int32 UltiSkillId;
-    public Int32 Skill1Id;
+    public int BurstApplyDelay;
+    public int BurstDuration;
+    public int UltiSkillId;
+    public int Skill1Id;
     public TableType Skill1Table;
-    public Int32 Skill2Id;
+    public int Skill2Id;
     public TableType Skill2Table;
     public CategoryType EffCategoryType;
-    public Int32 EffCategoryValue;
+    public int EffCategoryValue;
     public CategoryType CategoryType1;
     public CategoryType CategoryType2;
     public CategoryType CategoryType3;
-    public String? CvLocalkey;
+    public string? CvLocalkey;
     public Squad Squad;
-    public Int32 PieceId;
-    public Boolean IsVisible;
-    public Boolean PrismIsActive;
-    public Boolean IsDetailClose;
+    public int PieceId;
+    public bool IsVisible;
+    public bool PrismIsActive;
+    public bool IsDetailClose;
 }
 
 [MemoryPackable]
 public partial class CharacterVoiceCategoryRecord
 {
-    public Int32 Id;
-    public Int32 Order;
-    public String? CategoryDescription;
+    public int Id;
+    public int Order;
+    public string? CategoryDescription;
 }
 
 [MemoryPackable]
 public partial class CharacterVoiceGroupRecord
 {
-    public Int32 Id;
-    public Int32 SpeechGroupId;
-    public Int32 CategoryGroup;
-    public Int32 Order;
-    public Boolean IsTeaser;
-    public String? VoiceDescription;
-    public Int32 ConditionAttractiveLevel;
-    public String? SpeechId;
-    public String? SpeechLocalkey;
+    public int Id;
+    public int SpeechGroupId;
+    public int CategoryGroup;
+    public int Order;
+    public bool IsTeaser;
+    public string? VoiceDescription;
+    public int ConditionAttractiveLevel;
+    public string? SpeechId;
+    public string? SpeechLocalkey;
 }
 
 [MemoryPackable]
 public partial class CharacterVoiceRecord
 {
-    public Int32 Id;
+    public int Id;
     public VoiceTargetType VoiceType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
+    public int ResourceId;
+    public int CostumeIndex;
 }
 
 [MemoryPackable]
 public partial class ConditionRewardRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Priority;
+    public int Id;
+    public int Group;
+    public int Priority;
     public RewardConditionType Type;
-    public Int64 ValueMin;
-    public Int64 ValueMax;
-    public Int32 RewardId;
+    public long ValueMin;
+    public long ValueMax;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class ContentsShopCurrencyOrderRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
+    public int Id;
+    public int Group;
+    public int Order;
     public PriceType PriceType;
-    public Int32 PriceId;
+    public int PriceId;
 }
 
 [MemoryPackable]
 public partial class ContentsShopInfoRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public ContentsShopDescriptionType DescriptionType;
-    public String? DescriptionLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class ContentsShopProductRecord
 {
-    public Int32 Id;
-    public Int32 BundleId;
-    public Int32 ProductOrder;
-    public Int32 ProductProb;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
+    public int Id;
+    public int BundleId;
+    public int ProductOrder;
+    public int ProductProb;
+    public bool IsLimit;
+    public int BuyLimitCount;
     public RewardType GoodsType;
-    public Int32 GoodsId;
-    public Int32 GoodsValue;
+    public int GoodsId;
+    public int GoodsValue;
     public PriceType PriceType;
-    public Int32 PriceId;
-    public Int32 PriceValue;
-    public Int32 DiscountProbId;
+    public int PriceId;
+    public int PriceValue;
+    public int DiscountProbId;
     public add_mark AddMark;
 }
 
 [MemoryPackable]
 public partial class ContentsShopRenewRecord
 {
-    public Int32 Id;
-    public Int32 RenewGroupId;
-    public Int32 RenewStep;
+    public int Id;
+    public int RenewGroupId;
+    public int RenewStep;
     public CurrencyType PriceId;
-    public Int32 PriceValue;
+    public int PriceValue;
 }
 
 [MemoryPackable]
 public partial class ContentsShopRecord
 {
-    public Int32 Id;
+    public int Id;
     public ShopType ShopType;
     public ShopCategoryType ShopCategory;
-    public Int32 ShopNpcResourceId;
-    public String? PriceColorNormal;
-    public Boolean CurrencyInfoDisplayControl;
+    public int ShopNpcResourceId;
+    public string? PriceColorNormal;
+    public bool CurrencyInfoDisplayControl;
     public ContentsOpen OpenContents;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public RenewType RenewType;
-    public Int32 RenewValue;
-    public Int32 RenewGroupId;
-    public Boolean IsRenewTimeDisplay;
-    public Int32 StageId;
-    public Int32 BundleId;
-    public Int32 ShopInfoGroupId;
-    public String? LogoResourceId;
-    public String? BgResourceId;
-    public Boolean IsBatchPurchase;
-    public Int32 CurrencyOrderGroupId;
+    public int RenewValue;
+    public int RenewGroupId;
+    public bool IsRenewTimeDisplay;
+    public int StageId;
+    public int BundleId;
+    public int ShopInfoGroupId;
+    public string? LogoResourceId;
+    public string? BgResourceId;
+    public bool IsBatchPurchase;
+    public int CurrencyOrderGroupId;
 }
 
 [MemoryPackable]
 public partial class CooperationEventRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Thumbnail;
+    public int Id;
+    public int EventId;
+    public string? Thumbnail;
     public CooperationEventContentsType ContentsType;
-    public Int32 ContentsValue;
-    public Int32 CooperationDailyGroup;
-    public List<Int32>? CurrencyId;
-    public String? UiPrefab;
+    public int ContentsValue;
+    public int CooperationDailyGroup;
+    public List<int>? CurrencyId;
+    public string? UiPrefab;
 }
 
 [MemoryPackable]
@@ -2306,15 +2306,15 @@ public partial class CorporationInfoRecord
 {
     public CorporationType Corporation;
     public CorporationSubType CorporationSubType;
-    public String? CorporationName;
-    public String? CorporationDescription;
-    public String? ResourceId;
+    public string? CorporationName;
+    public string? CorporationDescription;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class CostRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<CostData>? Costs;
 }
 
@@ -2322,516 +2322,516 @@ public partial class CostRecord
 public partial class CurrencyRecord
 {
     public CurrencyType Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ResourceId;
-    public Boolean IsVisibleToInventory;
-    public Int64 MaxValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ResourceId;
+    public bool IsVisibleToInventory;
+    public long MaxValue;
 }
 
 [MemoryPackable]
 public partial class CustomPackageGroupRecord
 {
-    public Int32 Id;
-    public Int32 CustomGroupId;
-    public Int32 SlotNumber;
+    public int Id;
+    public int CustomGroupId;
+    public int SlotNumber;
     public RewardType ProductType;
-    public Int32 ProductId;
-    public Int32 ProductValue;
+    public int ProductId;
+    public int ProductValue;
 }
 
 [MemoryPackable]
 public partial class CustomPackageShopRecord
 {
-    public Int32 Id;
-    public Int32 CustomShopId;
-    public Int32 CustomOrder;
-    public Int32 PackageGroupId;
-    public Int32 CustomGroupId;
-    public Int32 CustomGroupCount;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
+    public int Id;
+    public int CustomShopId;
+    public int CustomOrder;
+    public int PackageGroupId;
+    public int CustomGroupId;
+    public int CustomGroupCount;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
-    public Boolean IsFree;
-    public Int32 MidasProductId;
+    public bool IsLimit;
+    public int BuyLimitCount;
+    public bool IsFree;
+    public int MidasProductId;
 }
 
 [MemoryPackable]
 public partial class DailyEventRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public EventPhaseType EventPhaseType;
-    public Int32 EventPhaseGroupId;
+    public int EventPhaseGroupId;
     public EventTargetType TargetType;
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public Boolean IgnoreEventPeriod;
-    public Boolean IsStack;
+    public int ConditionId;
+    public int ConditionValue;
+    public bool IgnoreEventPeriod;
+    public bool IsStack;
     public EventSystemType ShortcutType;
-    public Int32 ShortcutId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 PointValue;
-    public Int32 RewardId;
-    public Boolean IsMain;
+    public int ShortcutId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int PointValue;
+    public int RewardId;
+    public bool IsMain;
 }
 
 [MemoryPackable]
 public partial class DailyMissionEventSettingRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 OpenConditionDailyEventId;
-    public String? LocaleButtonText;
-    public String? ViewPrefabId;
+    public int Id;
+    public int EventId;
+    public int OpenConditionDailyEventId;
+    public string? LocaleButtonText;
+    public string? ViewPrefabId;
 }
 
 [MemoryPackable]
 public partial class DispatchBoardRecord
 {
-    public Int32 Id;
+    public int Id;
     public DispatchType DispatchType;
-    public Int32 DispatchBoardLv;
-    public String? DispatchBoardDescription;
-    public Int32 DispatchMax;
+    public int DispatchBoardLv;
+    public string? DispatchBoardDescription;
+    public int DispatchMax;
     public List<DispatchBoardData>? DispatchList;
 }
 
 [MemoryPackable]
 public partial class DispatchRecord
 {
-    public Int32 Id;
+    public int Id;
     public DispatchType DispatchType;
-    public Int32 DispatchGroup;
+    public int DispatchGroup;
     public SelectType SelectType;
-    public Int32 SelectOrder;
-    public Int32 DispatchGradeId;
-    public String? DispatchName;
-    public String? DispatchDescription;
-    public Int32 SlotMax;
+    public int SelectOrder;
+    public int DispatchGradeId;
+    public string? DispatchName;
+    public string? DispatchDescription;
+    public int SlotMax;
     public List<DispatchGrade_Data>? DispatchSlotArray;
-    public Int32 RewardId;
-    public Int32 TimeMin;
+    public int RewardId;
+    public int TimeMin;
 }
 
 [MemoryPackable]
 public partial class DrawRewardPoolRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PoolId;
+    public int Id;
+    public int PoolId;
     public RewardType RewardType;
-    public Int32 RewardId;
-    public Int32 RewardCnt;
-    public Int32 Weight;
-    public Int32 MaxCnt;
-    public Int32 MaxDrawCnt;
+    public int RewardId;
+    public int RewardCnt;
+    public int Weight;
+    public int MaxCnt;
+    public int MaxDrawCnt;
 }
 
 [MemoryPackable]
 public partial class EchoDialogFieldTriggerRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EchoDialogFieldType FieldType;
     public EchoDialogFieldDifficultyType FieldDifficulty;
-    public Int32 FieldId;
-    public Boolean IsArchiveData;
+    public int FieldId;
+    public bool IsArchiveData;
     public EchoDialogTriggerType TriggerType;
-    public Boolean IsShowApproachSignal;
-    public String? MarkerResource;
-    public String? DialogFilterResource;
-    public Int32 DialogGroupId;
-    public Int32 DialogGroupStartDelay;
-    public Int32 DialogGroupEndDelay;
-    public Boolean IsAwakeLoad;
-    public Int32 SpawnConditionStage;
-    public Int32 ConditionCheckStageEventId;
+    public bool IsShowApproachSignal;
+    public string? MarkerResource;
+    public string? DialogFilterResource;
+    public int DialogGroupId;
+    public int DialogGroupStartDelay;
+    public int DialogGroupEndDelay;
+    public bool IsAwakeLoad;
+    public int SpawnConditionStage;
+    public int ConditionCheckStageEventId;
     public DateTime SpawnConditionTime;
-    public Int32 SpawnConditionEchoTrigger;
-    public Boolean IsChangeJukebox;
-    public Int32 JukeboxId;
-    public Int32 JukeboxStartPosition;
-    public Int32 EnvironmentalSoundDecrease;
+    public int SpawnConditionEchoTrigger;
+    public bool IsChangeJukebox;
+    public int JukeboxId;
+    public int JukeboxStartPosition;
+    public int EnvironmentalSoundDecrease;
 }
 
 [MemoryPackable]
 public partial class EchoDialogNPCRecord_Raw
 {
-    public String? Id;
-    public String? NpcPrefab;
-    public String? NpcName;
-    public Boolean IsAlwaysSpawn;
-    public String? NpcSpawnEffect;
-    public String? NpcDespawnEffect;
+    public string? Id;
+    public string? NpcPrefab;
+    public string? NpcName;
+    public bool IsAlwaysSpawn;
+    public string? NpcSpawnEffect;
+    public string? NpcDespawnEffect;
 }
 
 [MemoryPackable]
 public partial class EchoDialogRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? EchoDialogNpcId;
-    public String? NameTagColor;
-    public String? DialogLocalkey;
-    public Int32 DialogPrintTiming;
-    public String? BalloonResource;
-    public String? Voice;
-    public String? PlaySfx;
+    public int Id;
+    public int GroupId;
+    public string? EchoDialogNpcId;
+    public string? NameTagColor;
+    public string? DialogLocalkey;
+    public int DialogPrintTiming;
+    public string? BalloonResource;
+    public string? Voice;
+    public string? PlaySfx;
 }
 
 [MemoryPackable]
 public partial class ElementRecord
 {
-    public Int32 Id;
+    public int Id;
     public AttackType Element;
-    public Int32 GroupId;
-    public Int32 WeakElementId;
-    public String? ElementNameLocalekey;
-    public String? ElementCodeNameLocalekey;
-    public String? ElementDescLocalekey;
-    public String? ElementIcon;
-    public String? ElementDescSurfaceLocalekey;
+    public int GroupId;
+    public int WeakElementId;
+    public string? ElementNameLocalekey;
+    public string? ElementCodeNameLocalekey;
+    public string? ElementDescLocalekey;
+    public string? ElementIcon;
+    public string? ElementDescSurfaceLocalekey;
 }
 
 [MemoryPackable]
 public partial class EquipmentOptionCostRecord
 {
-    public Int32 Id;
-    public Int32 CostGroupId;
-    public Int32 CostLevel;
-    public Int32 DisposableFixCostLevel;
-    public Int32 CostId;
-    public Int32 DisposableFixCostId;
+    public int Id;
+    public int CostGroupId;
+    public int CostLevel;
+    public int DisposableFixCostLevel;
+    public int CostId;
+    public int DisposableFixCostId;
 }
 
 [MemoryPackable]
 public partial class EquipmentOptionRecord
 {
-    public Int32 Id;
-    public String? DescriptionLocalkey;
-    public Int32 EquipmentOptionGroupId;
-    public Int32 OptionGroupRatio;
-    public Int32 StateEffectGroupId;
+    public int Id;
+    public string? DescriptionLocalkey;
+    public int EquipmentOptionGroupId;
+    public int OptionGroupRatio;
+    public int StateEffectGroupId;
     public List<StateEffectList>? StateEffectList;
-    public Int32 OptionRatio;
+    public int OptionRatio;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonArcadeManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ArcadeEventId;
-    public Int32 ExistManagerId;
-    public Int32 StepUpRewardGroupId;
-    public Int32 HelpTipViewSubId;
+    public int Id;
+    public int ArcadeEventId;
+    public int ExistManagerId;
+    public int StepUpRewardGroupId;
+    public int HelpTipViewSubId;
 }
 
 [MemoryPackable]
 public partial class EventBBQTycoonArchiveManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 ExistManagerId;
-    public Int32 HelpTipViewSubId;
+    public int Id;
+    public int EventId;
+    public int ExistManagerId;
+    public int HelpTipViewSubId;
 }
 
 [MemoryPackable]
 public partial class EventBHBackGroundRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? BackgroundResource;
-    public List<String>? UseFog;
-    public String? BarricadeResource;
-    public Int32 ChangeBackgroundWaveId;
+    public int Id;
+    public int GroupId;
+    public string? BackgroundResource;
+    public List<string>? UseFog;
+    public string? BarricadeResource;
+    public int ChangeBackgroundWaveId;
 }
 
 [MemoryPackable]
 public partial class EventBHCharacterLevelRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Lv;
-    public Boolean MinLv;
-    public Boolean MaxLv;
-    public Int32 Exp;
-    public Int32 LevelUpSelectPassiveId;
+    public int Id;
+    public int GroupId;
+    public int Lv;
+    public bool MinLv;
+    public bool MaxLv;
+    public int Exp;
+    public int LevelUpSelectPassiveId;
 }
 
 [MemoryPackable]
 public partial class EventBHCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? UiCharacterResource;
-    public String? CharacterResource;
-    public String? CharacterWeaponResource;
-    public String? NameLocale;
-    public String? SkillNameLocale;
-    public String? SkillDescriptionLocale;
-    public String? SkillIcon;
-    public Int32 OpenDate;
-    public String? OpenConditionLocale;
-    public Int32 StartHp;
-    public Int32 CharacterExpGroup;
+    public int Id;
+    public int GroupId;
+    public string? UiCharacterResource;
+    public string? CharacterResource;
+    public string? CharacterWeaponResource;
+    public string? NameLocale;
+    public string? SkillNameLocale;
+    public string? SkillDescriptionLocale;
+    public string? SkillIcon;
+    public int OpenDate;
+    public string? OpenConditionLocale;
+    public int StartHp;
+    public int CharacterExpGroup;
     public BHCharacterSkillType SkillType;
     public List<BHSkillValueData_Raw>? SkillValue;
     public List<SkillResourceData_Raw>? SkillResource;
-    public Boolean SkillInfinity;
-    public Int32 SkillUseCount;
-    public Int32 SkillCooltime;
-    public Int32 DefaultWeapon;
-    public Int32 InventoryGroupId;
+    public bool SkillInfinity;
+    public int SkillUseCount;
+    public int SkillCooltime;
+    public int DefaultWeapon;
+    public int InventoryGroupId;
 }
 
 [MemoryPackable]
 public partial class EventBHCollectionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 WeaponId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int WeaponId;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class EventBHInGamePassiveRecord_Raw
 {
-    public Int32 Id;
-    public List<Int32>? FirstSlotUsePassiveGroupId;
-    public List<Int32>? SecondSlotUsePassiveGroupId;
-    public List<Int32>? ThirdSlotUsePassiveGroupId;
-    public List<Int32>? FourthSlotUsePassiveGroupId;
+    public int Id;
+    public List<int>? FirstSlotUsePassiveGroupId;
+    public List<int>? SecondSlotUsePassiveGroupId;
+    public List<int>? ThirdSlotUsePassiveGroupId;
+    public List<int>? FourthSlotUsePassiveGroupId;
 }
 
 [MemoryPackable]
 public partial class EventBHInventoryRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 RowNumber;
+    public int Id;
+    public int GroupId;
+    public int RowNumber;
     public List<InventorySlotData_Raw>? Slot;
 }
 
 [MemoryPackable]
 public partial class EventBHManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EnterScenario;
-    public Boolean IsArchive;
-    public Int32 CharacterGroupId;
-    public Int32 UseWaveGroupId;
-    public Int32 BackgroundGroupId;
-    public String? BarricadeResource;
-    public String? BackgroundFogResource;
-    public Int32 CharacterMonsterMinDistance;
-    public Int32 DefaultExpRatio;
-    public Int32 MinionExp;
-    public Int32 EliteExp;
-    public Int32 BossExp;
-    public Int32 MinionPoint;
-    public Int32 ElitePoint;
-    public Int32 BossPoint;
-    public Int32 MinionDropGold;
-    public Int32 EliteDropGold;
-    public Int32 BossDropGold;
-    public Int32 CriticalProbability;
-    public Int32 CriticalDamageRatio;
-    public Int32 SameWeaponGroupShootDelay;
-    public Int32 DefaultShopItemCount;
-    public Int32 MaximumKeepWeaponCount;
-    public Int32 DefaultRerollCount;
-    public Int32 GoldRerollUseGold;
-    public Int32 DefaultBanWeaponCount;
-    public Int32 MinReloadCooltime;
-    public Int32 EnhanceGroupId;
-    public Int32 CollectionGroupId;
-    public Int32 IngamePassiveSelectRow;
-    public Int32 IngamePassiveAddRow;
-    public String? StartBackgroundResource;
-    public Int32 MinionKnockBackCooltime;
-    public Int32 EliteKnockBackCooltime;
-    public Int32 BossKnockBackCooltime;
-    public Int32 DailyMissionPoint;
-    public Int32 DailyMissionReward;
-    public Int32 ScoreLimitPerGame;
+    public int Id;
+    public int EventId;
+    public string? EnterScenario;
+    public bool IsArchive;
+    public int CharacterGroupId;
+    public int UseWaveGroupId;
+    public int BackgroundGroupId;
+    public string? BarricadeResource;
+    public string? BackgroundFogResource;
+    public int CharacterMonsterMinDistance;
+    public int DefaultExpRatio;
+    public int MinionExp;
+    public int EliteExp;
+    public int BossExp;
+    public int MinionPoint;
+    public int ElitePoint;
+    public int BossPoint;
+    public int MinionDropGold;
+    public int EliteDropGold;
+    public int BossDropGold;
+    public int CriticalProbability;
+    public int CriticalDamageRatio;
+    public int SameWeaponGroupShootDelay;
+    public int DefaultShopItemCount;
+    public int MaximumKeepWeaponCount;
+    public int DefaultRerollCount;
+    public int GoldRerollUseGold;
+    public int DefaultBanWeaponCount;
+    public int MinReloadCooltime;
+    public int EnhanceGroupId;
+    public int CollectionGroupId;
+    public int IngamePassiveSelectRow;
+    public int IngamePassiveAddRow;
+    public string? StartBackgroundResource;
+    public int MinionKnockBackCooltime;
+    public int EliteKnockBackCooltime;
+    public int BossKnockBackCooltime;
+    public int DailyMissionPoint;
+    public int DailyMissionReward;
+    public int ScoreLimitPerGame;
 }
 
 [MemoryPackable]
 public partial class EventBHMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
+    public int Id;
+    public int ManagerId;
     public EventBHConditionType ConditionType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 Order;
-    public Int32 RewardId;
+    public int ConditionId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int Order;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventBHMonsterRecord_Raw
 {
-    public Int32 Id;
-    public String? MonsterResource;
-    public Int32 MonsterSize;
+    public int Id;
+    public string? MonsterResource;
+    public int MonsterSize;
     public BHMonsterType MonsterType;
     public BHMonsterAttackType MonsterAtkType;
     public BHMonsterSkillType MonsterSkillType;
     public List<MonsterSkillValueData_Raw>? MonsterSkillValue;
-    public String? ProjectileResource;
-    public Int32 ProjectileSpeed;
-    public Int32 MonsterMoveSpeed;
-    public Int32 MonsterHp;
-    public Boolean ShowHp;
-    public Int32 MonsterAtk;
-    public Int32 MonsterDef;
-    public Int32 MonsterAtkCooltime;
-    public Int32 MonsterAtkRange;
-    public String? DeadFxResource;
+    public string? ProjectileResource;
+    public int ProjectileSpeed;
+    public int MonsterMoveSpeed;
+    public int MonsterHp;
+    public bool ShowHp;
+    public int MonsterAtk;
+    public int MonsterDef;
+    public int MonsterAtkCooltime;
+    public int MonsterAtkRange;
+    public string? DeadFxResource;
 }
 
 [MemoryPackable]
 public partial class EventBHOutGamePassiveRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 UsePassiveGroupId;
+    public int Id;
+    public int GroupId;
+    public int UsePassiveGroupId;
 }
 
 [MemoryPackable]
 public partial class EventBHPassiveRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public BHPassiveType PassiveType;
-    public String? PassiveIcon;
-    public String? NameLocale;
+    public string? PassiveIcon;
+    public string? NameLocale;
     public BHPassiveSkillType SkillType;
     public List<PassiveSkillValueData_Raw>? PassiveSkillValue;
-    public String? SkillLocale;
-    public List<Int32>? LinkWeaponGroupId;
-    public Int32 PassiveLevel;
-    public Boolean MaxLevel;
-    public Int32 LevelUpCost;
-    public Boolean RepeatedAcquisition;
-    public Int32 AppearanceAbleCharacterLevel;
-    public Int32 AppearanceValue;
-    public Int32 AddAppearanceValue;
+    public string? SkillLocale;
+    public List<int>? LinkWeaponGroupId;
+    public int PassiveLevel;
+    public bool MaxLevel;
+    public int LevelUpCost;
+    public bool RepeatedAcquisition;
+    public int AppearanceAbleCharacterLevel;
+    public int AppearanceValue;
+    public int AddAppearanceValue;
 }
 
 [MemoryPackable]
 public partial class EventBHShopRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 UseWeaponId;
-    public Int32 WeaponAppearanceValue;
-    public Int32 Level1AppearanceValue;
-    public Int32 Level2AppearanceValue;
-    public Int32 Level3AppearanceValue;
-    public Int32 Level4AppearanceValue;
-    public Int32 AddWeaponAppearanceValue;
+    public int Id;
+    public int GroupId;
+    public int UseWeaponId;
+    public int WeaponAppearanceValue;
+    public int Level1AppearanceValue;
+    public int Level2AppearanceValue;
+    public int Level3AppearanceValue;
+    public int Level4AppearanceValue;
+    public int AddWeaponAppearanceValue;
 }
 
 [MemoryPackable]
 public partial class EventBHTutorialRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 TutorialPageId;
+    public int Id;
+    public int ManagerId;
+    public int TutorialPageId;
     public BHTutorialOutputType TutorialOutputType;
-    public Int32 TutorialOutputValue;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public int TutorialOutputValue;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class EventBHWavePresetRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SpawnMonsterId;
-    public Boolean RandomSpawn;
-    public Int32 SpawnPoint;
-    public Boolean BossSpawn;
-    public Int32 MonsterSpawnTime;
-    public Int32 MonsterHpRatio;
-    public Int32 MonsterAtkRatio;
-    public Int32 MonsterDefRatio;
-    public Int32 MonsterMoveSpeedRatio;
+    public int Id;
+    public int GroupId;
+    public int SpawnMonsterId;
+    public bool RandomSpawn;
+    public int SpawnPoint;
+    public bool BossSpawn;
+    public int MonsterSpawnTime;
+    public int MonsterHpRatio;
+    public int MonsterAtkRatio;
+    public int MonsterDefRatio;
+    public int MonsterMoveSpeedRatio;
 }
 
 [MemoryPackable]
 public partial class EventBHWaveRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Boolean IsSettingStep;
-    public Boolean IsFinalWave;
-    public Int32 WaveOrder;
-    public Int32 WavePresetGroupId;
-    public Boolean WaveRepeat;
-    public Int32 WaveRepeatCount;
-    public Boolean IsInventoryUpgrade;
-    public Int32 InventoryUpgradePoint;
-    public Boolean IsOpenShop;
-    public Int32 ShopGroupId;
-    public Int32 PointAndGoldRatio;
+    public int Id;
+    public int GroupId;
+    public bool IsSettingStep;
+    public bool IsFinalWave;
+    public int WaveOrder;
+    public int WavePresetGroupId;
+    public bool WaveRepeat;
+    public int WaveRepeatCount;
+    public bool IsInventoryUpgrade;
+    public int InventoryUpgradePoint;
+    public bool IsOpenShop;
+    public int ShopGroupId;
+    public int PointAndGoldRatio;
 }
 
 [MemoryPackable]
 public partial class EventBHWeaponShapeRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 RowNumber;
+    public int Id;
+    public int GroupId;
+    public int RowNumber;
     public List<SlotData_Raw>? Slot;
 }
 
 [MemoryPackable]
 public partial class EventBHWeaponRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? NameLocale;
-    public String? DescriptionLocale;
-    public String? WeaponResource;
-    public String? WeaponIcon;
-    public Int32 WeaponSize;
-    public Int32 WeaponOpenDate;
-    public Int32 WeaponLevel;
-    public Boolean MaxLevel;
+    public int Id;
+    public int GroupId;
+    public string? NameLocale;
+    public string? DescriptionLocale;
+    public string? WeaponResource;
+    public string? WeaponIcon;
+    public int WeaponSize;
+    public int WeaponOpenDate;
+    public int WeaponLevel;
+    public bool MaxLevel;
     public EventBHWeaponType WeaponType;
     public EventBHFocusTargetType FocusTargetType;
     public EventBHWeaponAtkType WeaponAtkType;
     public EventBHWeaponTagType WeaponTag;
-    public String? ProjResource;
-    public String? ProjHitResource;
-    public Int32 ProjLifeTime;
-    public Int32 ProjSpeed;
-    public Int32 ProjSize;
-    public Int32 OneShotProjAmount;
-    public Int32 TotalProjAmount;
-    public Int32 ProjAtkTerm;
-    public Boolean ProjPierce;
-    public Int32 ProjKnockbackValue;
-    public Boolean ContactExplosion;
-    public Int32 ExplosionRange;
-    public String? ExplosionResource;
-    public String? RangeAtkResource;
-    public Int32 RangeAtkRange;
-    public Int32 RangeAtkDuration;
-    public Int32 RangeAtkTerm;
-    public Int32 RangeAtkAngle;
-    public Int32 WeaponAtk;
-    public Int32 WeaponReloadTime;
-    public Int32 AtkStartRange;
+    public string? ProjResource;
+    public string? ProjHitResource;
+    public int ProjLifeTime;
+    public int ProjSpeed;
+    public int ProjSize;
+    public int OneShotProjAmount;
+    public int TotalProjAmount;
+    public int ProjAtkTerm;
+    public bool ProjPierce;
+    public int ProjKnockbackValue;
+    public bool ContactExplosion;
+    public int ExplosionRange;
+    public string? ExplosionResource;
+    public string? RangeAtkResource;
+    public int RangeAtkRange;
+    public int RangeAtkDuration;
+    public int RangeAtkTerm;
+    public int RangeAtkAngle;
+    public int WeaponAtk;
+    public int WeaponReloadTime;
+    public int AtkStartRange;
     public List<SkillData01_Raw>? SkillData01;
     public List<SkillData02_Raw>? SkillData02;
 }
@@ -2839,2584 +2839,2584 @@ public partial class EventBHWeaponRecord_Raw
 [MemoryPackable]
 public partial class EventBoxGachaPriceRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Count;
+    public int Id;
+    public int Group;
+    public int Count;
     public RewardType ItemType;
-    public Int32 ItemId;
-    public Int32 ItemCount;
+    public int ItemId;
+    public int ItemCount;
 }
 
 [MemoryPackable]
 public partial class EventBoxGachaProbRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Count;
-    public Int32 Order;
-    public Int32 Rate;
+    public int Id;
+    public int Group;
+    public int Count;
+    public int Order;
+    public int Rate;
 }
 
 [MemoryPackable]
 public partial class EventBoxGachaRewardRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public Int32 Tier;
+    public int Id;
+    public int Group;
+    public int Order;
+    public int Tier;
     public RewardType ItemType;
-    public Int32 ItemId;
-    public Int32 ItemCount;
+    public int ItemId;
+    public int ItemCount;
 }
 
 [MemoryPackable]
 public partial class EventBoxGachaRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Name;
-    public String? Description;
-    public Boolean OnInfo;
-    public String? InfoDescription;
+    public int Id;
+    public int EventId;
+    public string? Name;
+    public string? Description;
+    public bool OnInfo;
+    public string? InfoDescription;
     public RewardType EventItemType;
-    public Int32 FreeTicketItemId;
-    public Int32 EventItemId;
-    public Int32 PriceGroup;
-    public Int32 ProbGroup;
-    public Int32 GachaRewardGroup;
-    public Int32 ShopId;
-    public String? UiPrefab;
-    public String? GachaMovie;
-    public String? RemainPeriodTextColor;
+    public int FreeTicketItemId;
+    public int EventItemId;
+    public int PriceGroup;
+    public int ProbGroup;
+    public int GachaRewardGroup;
+    public int ShopId;
+    public string? UiPrefab;
+    public string? GachaMovie;
+    public string? RemainPeriodTextColor;
 }
 
 [MemoryPackable]
 public partial class EventBTGBgRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Order;
-    public String? BgConditionMapId;
-    public String? BgMiResourceId;
-    public String? BgResourceId;
-    public String? BgNameLocalkey;
-    public String? BgDescriptionLocalkey;
+    public int Id;
+    public int ManagerId;
+    public int Order;
+    public string? BgConditionMapId;
+    public string? BgMiResourceId;
+    public string? BgResourceId;
+    public string? BgNameLocalkey;
+    public string? BgDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventBTGConfigRecord_Raw
 {
-    public String? Id;
-    public String? Value;
+    public string? Id;
+    public string? Value;
 }
 
 [MemoryPackable]
 public partial class EventBTGCutSceneRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Order;
+    public int Id;
+    public int ManagerId;
+    public int Order;
     public CutSceneConditionType CutsceneConditionType;
-    public String? CutsceneResourceId;
-    public String? CutsceneNameLocalkey;
-    public String? CutsceneDescriptionLocalkey;
+    public string? CutsceneResourceId;
+    public string? CutsceneNameLocalkey;
+    public string? CutsceneDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventBTGManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EnterScenario;
-    public Int32 DailyRewardPoint;
-    public Int32 DailyRewardId;
-    public Int32 TutorialId;
-    public Int32 CGradeMin;
-    public Int32 BGradeMin;
-    public Int32 AGradeMin;
-    public Int32 SGradeMin;
-    public Int32 BtgScoreLimitPerGame;
-    public String? UiPrefab;
+    public int Id;
+    public int EventId;
+    public string? EnterScenario;
+    public int DailyRewardPoint;
+    public int DailyRewardId;
+    public int TutorialId;
+    public int CGradeMin;
+    public int BGradeMin;
+    public int AGradeMin;
+    public int SGradeMin;
+    public int BtgScoreLimitPerGame;
+    public string? UiPrefab;
 }
 
 [MemoryPackable]
 public partial class EventBTGMapRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 ConditionValue;
-    public Int32 Order;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
-    public String? SiResourceId;
-    public Int32 Size;
+    public int Id;
+    public int ManagerId;
+    public int ConditionValue;
+    public int Order;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
+    public string? SiResourceId;
+    public int Size;
 }
 
 [MemoryPackable]
 public partial class EventBTGMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
+    public int Id;
+    public int ManagerId;
     public EventBTGMissionConditionType ConditionType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 Order;
-    public Int32 RewardId;
+    public int ConditionId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int Order;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventBTGMuzzleSetRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 SetScore;
+    public int Id;
+    public int ManagerId;
+    public int SetScore;
     public List<ObjectId_Raw>? ObjectIdList;
 }
 
 [MemoryPackable]
 public partial class EventBTGObjectInfoRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 ChangeTo;
-    public Int32 MergePoint;
-    public Int32 Size;
-    public Int32 WeightLevel;
-    public Int32 SkillBTargetLevel;
-    public String? ResourceId;
-    public Int32 Bounciness;
-    public Boolean IsStratched;
+    public int Id;
+    public int ManagerId;
+    public int ChangeTo;
+    public int MergePoint;
+    public int Size;
+    public int WeightLevel;
+    public int SkillBTargetLevel;
+    public string? ResourceId;
+    public int Bounciness;
+    public bool IsStratched;
 }
 
 [MemoryPackable]
 public partial class EventBTGSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
+    public int Id;
+    public int ManagerId;
     public BTGSkillType SkillType;
-    public Int32 SkillUseValue;
+    public int SkillUseValue;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchAdvantageDamageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 AdvantageCharacterGroup;
-    public Int32 AdvantageMonsterGroup;
-    public Int32 AdvantageDamageValue;
+    public int Id;
+    public int AdvantageCharacterGroup;
+    public int AdvantageMonsterGroup;
+    public int AdvantageDamageValue;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchBuffRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? BuffDescriptionLocalkey;
-    public String? ResourceId;
-    public Int32 SlotOrder;
-    public Int32 BuffLevel;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? BuffDescriptionLocalkey;
+    public string? ResourceId;
+    public int SlotOrder;
+    public int BuffLevel;
     public EBMBuffType BuffType;
-    public Int32 BuffValue;
-    public Int32 UpgradeCostCurrencyId;
-    public Int32 UpgradeCostCurrencyValue;
+    public int BuffValue;
+    public int UpgradeCostCurrencyId;
+    public int UpgradeCostCurrencyValue;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCharacterLevelRecord_Raw
 {
-    public Int32 Id;
-    public Int32 LevelGroup;
-    public Int32 LevelMin;
-    public Int32 LevelMax;
-    public Int32 SummonCost;
-    public Int32 NeedCost;
-    public Int32 IncreaseAttack;
-    public Int32 IncreaseHp;
-    public Int32 BubbleCount;
+    public int Id;
+    public int LevelGroup;
+    public int LevelMin;
+    public int LevelMax;
+    public int SummonCost;
+    public int NeedCost;
+    public int IncreaseAttack;
+    public int IncreaseHp;
+    public int BubbleCount;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCharacterSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SkillGroup;
-    public String? DescriptionLocalkey;
-    public Int32 BattleRadius;
+    public int Id;
+    public int SkillGroup;
+    public string? DescriptionLocalkey;
+    public int BattleRadius;
     public EBMCharacterSkillTargetType Target;
     public EBMCharacterSkillTargetPositionType TargetPosition;
-    public Int32 TargetPositionValue1;
-    public Int32 TargetPositionValue2;
+    public int TargetPositionValue1;
+    public int TargetPositionValue2;
     public EBMCharacterSkillType SkillType;
-    public Int32 SkillValue;
-    public Int32 SkillHitCount;
-    public Int32 KnockBackDamage;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileParabolaHeight;
-    public Int32 RemainTime;
-    public Int32 CoolTime;
-    public String? AnimationSkill;
-    public Int32 AnimationSkillSpeed;
-    public String? EffectMuzzle;
-    public String? EffectProjectile;
-    public String? EffectSkill;
-    public String? EffectImpact;
-    public Int32 EffectImpactScale;
-    public String? EffectHit;
-    public String? EffectHitDefault;
+    public int SkillValue;
+    public int SkillHitCount;
+    public int KnockBackDamage;
+    public int ProjectileSpeed;
+    public int ProjectileParabolaHeight;
+    public int RemainTime;
+    public int CoolTime;
+    public string? AnimationSkill;
+    public int AnimationSkillSpeed;
+    public string? EffectMuzzle;
+    public string? EffectProjectile;
+    public string? EffectSkill;
+    public string? EffectImpact;
+    public int EffectImpactScale;
+    public string? EffectHit;
+    public string? EffectHitDefault;
     public EBMCharacterSkillAreaType AreaType;
-    public Int32 AreaRemainTime;
-    public Int32 AreaActionTime;
+    public int AreaRemainTime;
+    public int AreaActionTime;
     public EBMCharacterSkillType AreaSkillType;
-    public Int32 AreaSkillValue;
-    public String? EffectArea;
-    public Int32 EffectAreaScale;
+    public int AreaSkillValue;
+    public string? EffectArea;
+    public int EffectAreaScale;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 CharacterGroup;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public int CharacterGroup;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public EBMCharacterType CharacterType;
     public EBMCharacterGradeType Grade;
-    public Int32 TeamSetOrder;
-    public String? ResourceId;
-    public String? CharacterPrefab;
-    public Int32 LevelGroup;
-    public Int32 SkillGroup;
-    public Int32 AdvantageGroup;
-    public Int32 Attack;
-    public Int32 Hp;
-    public Int32 KnockBackMax;
-    public Int32 MoveSpeed;
-    public Int32 SummonCooltime;
-    public Int32 SummonStack;
-    public Int32 Scale;
-    public Int32 ShadowScale;
-    public Int32 PrefabHeightPosition;
+    public int TeamSetOrder;
+    public string? ResourceId;
+    public string? CharacterPrefab;
+    public int LevelGroup;
+    public int SkillGroup;
+    public int AdvantageGroup;
+    public int Attack;
+    public int Hp;
+    public int KnockBackMax;
+    public int MoveSpeed;
+    public int SummonCooltime;
+    public int SummonStack;
+    public int Scale;
+    public int ShadowScale;
+    public int PrefabHeightPosition;
     public EBMSearchTargetType SearchTargetType;
-    public Int32 SearchRadius;
+    public int SearchRadius;
     public EBMCharacterDiscoverType DiscoverType;
-    public Int32 DiscoverValue;
-    public String? AnimationSummon;
-    public String? AnimationStand;
-    public String? AnimationMove;
-    public Int32 AnimationMoveSpeed;
-    public String? AnimationKnockBack;
-    public Int32 AnimationKnockBackDistance;
-    public String? AnimationDeath;
-    public String? EffectSummon;
-    public String? EffectDeath;
-    public String? EffectEdge;
+    public int DiscoverValue;
+    public string? AnimationSummon;
+    public string? AnimationStand;
+    public string? AnimationMove;
+    public int AnimationMoveSpeed;
+    public string? AnimationKnockBack;
+    public int AnimationKnockBackDistance;
+    public string? AnimationDeath;
+    public string? EffectSummon;
+    public string? EffectDeath;
+    public string? EffectEdge;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCharacterUnlockRecord_Raw
 {
-    public Int32 Id;
-    public Int32 CategoryGroupId;
-    public String? CategoryLocalkey;
-    public Int32 SlotOrder;
-    public Boolean UseUnlockCondition;
-    public Int32 UnlockCharacterId;
-    public Int32 UnlockConditionCharacter;
-    public Int32 UnlockConditionDay;
-    public Int32 UnlockCurrencyId;
-    public Int32 UnlockCurrencyValue;
+    public int Id;
+    public int CategoryGroupId;
+    public string? CategoryLocalkey;
+    public int SlotOrder;
+    public bool UseUnlockCondition;
+    public int UnlockCharacterId;
+    public int UnlockConditionCharacter;
+    public int UnlockConditionDay;
+    public int UnlockCurrencyId;
+    public int UnlockCurrencyValue;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCurrencyLevelRecord_Raw
 {
-    public Int32 Id;
-    public Int32 LevelGroup;
-    public Int32 LevelMin;
-    public Int32 LevelMax;
-    public Int32 NeedCost;
-    public Int32 IncreaseCurrencyCount;
+    public int Id;
+    public int LevelGroup;
+    public int LevelMin;
+    public int LevelMax;
+    public int NeedCost;
+    public int IncreaseCurrencyCount;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchCurrencyRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
-    public Boolean IsServer;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
+    public bool IsServer;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchLoadingRecord_Raw
 {
-    public Int32 Id;
-    public String? LoadingTipLocalkey;
-    public Int32 Order;
+    public int Id;
+    public string? LoadingTipLocalkey;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public MiniGameSystemType MinigameType;
-    public String? UiPrefab;
-    public String? EnterScenario;
-    public Int32 HelptipHubGroup;
-    public Int32 SummonCurrencyId;
-    public Int32 SummonCurrencyLevelGroup;
-    public Int32 SummonCurrencyCount;
-    public Int32 TimeScale;
-    public Int32 ZoomInValue;
-    public Int32 SingleTargetMissRange;
-    public Int32 StageManagerGroup;
-    public Int32 CharacterGroup;
-    public Int32 MissionGroup;
-    public Int32 ChallengeLastWaveOrder;
-    public Int32 ChallengeRepeatWaveOrder;
-    public Int32 ChallengeWaveMax;
-    public Int32 ChallengeRepeatSummonTimeStartWave;
-    public Int32 ChallengeRepeatSummonTimeGroup;
-    public Int32 ChallengeRepeatSummonTimeValue;
-    public Boolean IsStackMinion;
+    public string? UiPrefab;
+    public string? EnterScenario;
+    public int HelptipHubGroup;
+    public int SummonCurrencyId;
+    public int SummonCurrencyLevelGroup;
+    public int SummonCurrencyCount;
+    public int TimeScale;
+    public int ZoomInValue;
+    public int SingleTargetMissRange;
+    public int StageManagerGroup;
+    public int CharacterGroup;
+    public int MissionGroup;
+    public int ChallengeLastWaveOrder;
+    public int ChallengeRepeatWaveOrder;
+    public int ChallengeWaveMax;
+    public int ChallengeRepeatSummonTimeStartWave;
+    public int ChallengeRepeatSummonTimeGroup;
+    public int ChallengeRepeatSummonTimeValue;
+    public bool IsStackMinion;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 MissionGroup;
+    public int Id;
+    public int MissionGroup;
     public EventBubbleMarchMissionType MissionType;
     public EventBubbleMarchMissionConditionType ConditionType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 PointValue;
-    public Int32 Order;
-    public Int32 RewardId;
+    public int ConditionId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int PointValue;
+    public int Order;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchMonsterLevelRecord_Raw
 {
-    public Int32 Id;
-    public Int32 LevelGroup;
-    public Int32 LevelMin;
-    public Int32 LevelMax;
-    public Int32 SummonCurrencyReward;
-    public Int32 IncreaseAttack;
-    public Int32 IncreaseHp;
-    public Int32 BubbleCount;
+    public int Id;
+    public int LevelGroup;
+    public int LevelMin;
+    public int LevelMax;
+    public int SummonCurrencyReward;
+    public int IncreaseAttack;
+    public int IncreaseHp;
+    public int BubbleCount;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchMonsterSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SkillGroup;
-    public Int32 BattleRadius;
+    public int Id;
+    public int SkillGroup;
+    public int BattleRadius;
     public EBMCharacterSkillTargetType Target;
     public EBMCharacterSkillTargetPositionType TargetPosition;
-    public Int32 TargetPositionValue1;
-    public Int32 TargetPositionValue2;
+    public int TargetPositionValue1;
+    public int TargetPositionValue2;
     public EBMCharacterSkillType SkillType;
-    public Int32 SkillValue;
-    public Int32 SkillHitCount;
-    public Int32 KnockBackDamage;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileParabolaHeight;
-    public Int32 RemainTime;
-    public Int32 CoolTime;
-    public String? AnimationSkill;
-    public Int32 AnimationSkillSpeed;
-    public String? EffectMuzzle;
-    public String? EffectProjectile;
-    public String? EffectSkill;
-    public String? EffectImpact;
-    public Int32 EffectImpactScale;
-    public String? EffectHit;
-    public String? EffectHitDefault;
+    public int SkillValue;
+    public int SkillHitCount;
+    public int KnockBackDamage;
+    public int ProjectileSpeed;
+    public int ProjectileParabolaHeight;
+    public int RemainTime;
+    public int CoolTime;
+    public string? AnimationSkill;
+    public int AnimationSkillSpeed;
+    public string? EffectMuzzle;
+    public string? EffectProjectile;
+    public string? EffectSkill;
+    public string? EffectImpact;
+    public int EffectImpactScale;
+    public string? EffectHit;
+    public string? EffectHitDefault;
     public EBMCharacterSkillAreaType AreaType;
-    public Int32 AreaRemainTime;
-    public Int32 AreaActionTime;
+    public int AreaRemainTime;
+    public int AreaActionTime;
     public EBMCharacterSkillType AreaSkillType;
-    public Int32 AreaSkillValue;
-    public String? EffectArea;
-    public Int32 EffectAreaScale;
+    public int AreaSkillValue;
+    public string? EffectArea;
+    public int EffectAreaScale;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchMonsterRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public EBMMonsterType MonsterType;
     public EBMMonsterPositionType MonsterPosition;
-    public Int32 HeightPosition;
+    public int HeightPosition;
     public EBMMonsterAttackType MonsterAttackType;
-    public String? ResourceId;
-    public String? MonsterPrefab;
-    public Int32 LevelGroup;
-    public Int32 SkillGroup;
-    public Int32 AdvantageGroup;
-    public Int32 Attack;
-    public Int32 Hp;
-    public Int32 KnockBackMax;
-    public Int32 MoveSpeed;
-    public Int32 Scale;
-    public Int32 ShadowScale;
-    public Int32 PrefabHeightPosition;
+    public string? ResourceId;
+    public string? MonsterPrefab;
+    public int LevelGroup;
+    public int SkillGroup;
+    public int AdvantageGroup;
+    public int Attack;
+    public int Hp;
+    public int KnockBackMax;
+    public int MoveSpeed;
+    public int Scale;
+    public int ShadowScale;
+    public int PrefabHeightPosition;
     public EBMSearchTargetType SearchTargetType;
-    public Int32 SearchRadius;
+    public int SearchRadius;
     public EBMCharacterDiscoverType DiscoverType;
-    public Int32 DiscoverValue;
-    public String? AnimationSummon;
-    public String? AnimationStand;
-    public String? AnimationMove;
-    public Int32 AnimationMoveSpeed;
-    public String? AnimationKnockBack;
-    public Int32 AnimationKnockBackDistance;
-    public String? AnimationDeath;
-    public String? EffectSummon;
-    public String? EffectDeath;
+    public int DiscoverValue;
+    public string? AnimationSummon;
+    public string? AnimationStand;
+    public string? AnimationMove;
+    public int AnimationMoveSpeed;
+    public string? AnimationKnockBack;
+    public int AnimationKnockBackDistance;
+    public string? AnimationDeath;
+    public string? EffectSummon;
+    public string? EffectDeath;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchSpawnPositionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 XPosition;
-    public Int32 YPosition;
+    public int Id;
+    public int XPosition;
+    public int YPosition;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchStageManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StageManagerGroup;
+    public int Id;
+    public int StageManagerGroup;
     public EBMDifficultyType DifficultyType;
-    public Int32 DifficultyGroupId;
-    public String? NameLocalkey;
-    public Int32 OpenConditionStage;
-    public Int32 OpenConditionDay;
+    public int DifficultyGroupId;
+    public string? NameLocalkey;
+    public int OpenConditionStage;
+    public int OpenConditionDay;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchStageSummonSeedRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SeedGroup;
+    public int Id;
+    public int SeedGroup;
     public List<EBMSummonGroupData_Raw>? EbmSummonGroupData;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchStageSummonTimeRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SummonTimeGroup;
+    public int Id;
+    public int SummonTimeGroup;
     public EBMSummonTimeRepeatType RepeatType;
-    public Int32 TimeCondition;
-    public Int32 SeedGroup;
+    public int TimeCondition;
+    public int SeedGroup;
     public EBMSummonSeedType SummonSeedType;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchStageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 DifficultyGroupId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 StageOrder;
-    public Int32 WaveGroup;
-    public Int32 MonsterLevelBase;
-    public Int32 CharacterMaxLevel;
-    public Int32 SummonCurrencyMaxLevel;
-    public Int32 SummonCurrencyGetSecond;
-    public Int32 TimeLimit;
-    public Int32 FriendlyTowerId;
-    public Int32 FriendlyTowerLevel;
-    public Int32 OpenConditionStage;
-    public Int32 OpenConditionDay;
-    public Int32 FirstRewardCurrencyId;
-    public Int32 FirstRewardCurrencyValue;
-    public Int32 RepeatRewardCurrencyId;
-    public Int32 RepeatRewardCurrencyValue;
-    public Int32 TutorialId;
+    public int Id;
+    public int DifficultyGroupId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int StageOrder;
+    public int WaveGroup;
+    public int MonsterLevelBase;
+    public int CharacterMaxLevel;
+    public int SummonCurrencyMaxLevel;
+    public int SummonCurrencyGetSecond;
+    public int TimeLimit;
+    public int FriendlyTowerId;
+    public int FriendlyTowerLevel;
+    public int OpenConditionStage;
+    public int OpenConditionDay;
+    public int FirstRewardCurrencyId;
+    public int FirstRewardCurrencyValue;
+    public int RepeatRewardCurrencyId;
+    public int RepeatRewardCurrencyValue;
+    public int TutorialId;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchStageWaveRecord_Raw
 {
-    public Int32 Id;
-    public Int32 WaveGroup;
-    public Int32 WaveOrder;
-    public String? WaveResourcePrefab;
-    public String? WaveFrontResource;
-    public Int32 WaveResourceLength;
-    public Int32 SummonCurrencyGetValue;
-    public Int32 WaveSkipConditionStage;
-    public Int32 WaveSkipGiveCurrency;
-    public Int32 SummonTimeGroup;
-    public Int32 SummonMaxCount;
+    public int Id;
+    public int WaveGroup;
+    public int WaveOrder;
+    public string? WaveResourcePrefab;
+    public string? WaveFrontResource;
+    public int WaveResourceLength;
+    public int SummonCurrencyGetValue;
+    public int WaveSkipConditionStage;
+    public int WaveSkipGiveCurrency;
+    public int SummonTimeGroup;
+    public int SummonMaxCount;
     public EBMEnemyTargetType EnemyTargetType;
-    public Int32 EnemyTargetId;
-    public Int32 EnemyTargetLevelAdd;
-    public Int32 MonsterLevelAdd;
-    public Int32 FriendlyTowerLevelAdd;
+    public int EnemyTargetId;
+    public int EnemyTargetLevelAdd;
+    public int MonsterLevelAdd;
+    public int FriendlyTowerLevelAdd;
 }
 
 [MemoryPackable]
 public partial class EventBubbleMarchTutorialRecord_Raw
 {
-    public Int32 Id;
-    public Int32 HelptipId;
+    public int Id;
+    public int HelptipId;
     public EventBubbleMarchTutorialCondition HelptipActiveCondition;
 }
 
 [MemoryPackable]
 public partial class EventCanCollectListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 FieldItemId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? IconResource;
-    public Int32 Order;
-    public Int32 CollectRank;
-    public Int32 PlayAnim1;
-    public Int32 PlayAnim1Ratio;
-    public Int32 PlayAnim2;
-    public Int32 PlayAnim2Ratio;
-    public Int32 PlayAnim3;
-    public Int32 PlayAnim3Ratio;
-    public Int32 PlayAnim4;
-    public Int32 PlayAnim4Ratio;
-    public Int32 PlayAnim5;
-    public Int32 PlayAnim5Ratio;
-    public Int32 CamBlendTime;
-    public Int32 CamEndDelay;
-    public String? CollectSpawnHint;
+    public int Id;
+    public int ManagerId;
+    public int FieldItemId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? IconResource;
+    public int Order;
+    public int CollectRank;
+    public int PlayAnim1;
+    public int PlayAnim1Ratio;
+    public int PlayAnim2;
+    public int PlayAnim2Ratio;
+    public int PlayAnim3;
+    public int PlayAnim3Ratio;
+    public int PlayAnim4;
+    public int PlayAnim4Ratio;
+    public int PlayAnim5;
+    public int PlayAnim5Ratio;
+    public int CamBlendTime;
+    public int CamEndDelay;
+    public string? CollectSpawnHint;
 }
 
 [MemoryPackable]
 public partial class EventCanCollectProgressRewardRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Order;
-    public Int32 GoalValue;
-    public Int32 RewardId;
-    public String? RewardDescription;
+    public int Id;
+    public int ManagerId;
+    public int Order;
+    public int GoalValue;
+    public int RewardId;
+    public string? RewardDescription;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinChallengeStageRecord
 {
-    public Int32 Id;
-    public Int32 CharacterId;
-    public Int32 TimeDifficultGroup;
-    public Int32 Life;
-    public String? Resource;
-    public Int32 PointLimit;
+    public int Id;
+    public int CharacterId;
+    public int TimeDifficultGroup;
+    public int Life;
+    public string? Resource;
+    public int PointLimit;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinCharacterRecord
 {
-    public Int32 Id;
-    public String? Resource;
-    public Int32 MoveSpeed;
-    public Int32 DashRange;
-    public Int32 DashSpeed;
+    public int Id;
+    public string? Resource;
+    public int MoveSpeed;
+    public int DashRange;
+    public int DashSpeed;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinObjectGroupRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 ObjectId;
-    public Int32 SpawnRate;
+    public int Id;
+    public int Group;
+    public int ObjectId;
+    public int SpawnRate;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinObjectRecord
 {
-    public Int32 Id;
-    public String? Resource;
+    public int Id;
+    public string? Resource;
     public EventCatchCoinObjectType Type;
-    public Int32 TypeValue;
-    public Int32 BaseFallSpeed;
+    public int TypeValue;
+    public int BaseFallSpeed;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 CharacterId;
-    public Int32 ClearPoint;
-    public String? ClearConditionDesc;
-    public Int32 TimeDifficultGroup;
-    public Int32 Life;
-    public String? Resource;
+    public int Id;
+    public int CharacterId;
+    public int ClearPoint;
+    public string? ClearConditionDesc;
+    public int TimeDifficultGroup;
+    public int Life;
+    public string? Resource;
 }
 
 [MemoryPackable]
 public partial class EventCatchCoinTimeDifficultRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Lv;
-    public Int32 PlayTimeMin;
-    public Int32 PlayTimeMax;
-    public Int32 SpawnTick;
-    public Int32 SpawnGroup;
-    public Int32 SpawnCountMin;
-    public Int32 SpawnCountMax;
-    public Int32 ObjectFallSpeedRate;
+    public int Id;
+    public int Group;
+    public int Lv;
+    public int PlayTimeMin;
+    public int PlayTimeMax;
+    public int SpawnTick;
+    public int SpawnGroup;
+    public int SpawnCountMin;
+    public int SpawnCountMax;
+    public int ObjectFallSpeedRate;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameArchiveRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ArchiveName;
-    public String? ArchiveDescription;
-    public String? ArchiveImageResource;
+    public int Id;
+    public int GroupId;
+    public string? ArchiveName;
+    public string? ArchiveDescription;
+    public string? ArchiveImageResource;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameDataRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public List<EventCE002MiniGameDataOpenConditionObject>? OpenConditionList;
-    public String? Ce002MinigameDataName;
-    public Int32 FieldNpcId;
-    public String? FieldNpcLocationName;
-    public String? FieldNpcHintResource;
-    public Int32 IndicatorDelayTime;
-    public Int32 StageId;
-    public Int32 EndArchive;
+    public string? Ce002MinigameDataName;
+    public int FieldNpcId;
+    public string? FieldNpcLocationName;
+    public string? FieldNpcHintResource;
+    public int IndicatorDelayTime;
+    public int StageId;
+    public int EndArchive;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiPrefab;
-    public String? EnterScenario;
-    public Int32 Ce002MinigameDataGroup;
-    public Int32 EndAlertStartTime;
-    public String? PlayerFullResource;
-    public String? PlayerHit1Resource;
-    public String? PlayerHit2Resource;
-    public Int32 PlayerHp;
-    public Int32 PlayerSizeRatio;
-    public Int32 PlayerMoveSpeed;
-    public Int32 PlayerAngleRotationalPerSec;
-    public Int32 EnermySearchDistance;
-    public Int32 HitDamageImmuneTime;
-    public Int32 PlayerProjectileDamage;
-    public Int32 PlayerProjectilePerSec;
-    public Int32 PlayerProjectileSpeed;
-    public Int32 PlayerProjectileDuration;
-    public Boolean EnermyProjectileAutotarget;
-    public Int32 TutorialGroupId;
+    public int Id;
+    public int EventId;
+    public string? UiPrefab;
+    public string? EnterScenario;
+    public int Ce002MinigameDataGroup;
+    public int EndAlertStartTime;
+    public string? PlayerFullResource;
+    public string? PlayerHit1Resource;
+    public string? PlayerHit2Resource;
+    public int PlayerHp;
+    public int PlayerSizeRatio;
+    public int PlayerMoveSpeed;
+    public int PlayerAngleRotationalPerSec;
+    public int EnermySearchDistance;
+    public int HitDamageImmuneTime;
+    public int PlayerProjectileDamage;
+    public int PlayerProjectilePerSec;
+    public int PlayerProjectileSpeed;
+    public int PlayerProjectileDuration;
+    public bool EnermyProjectileAutotarget;
+    public int TutorialGroupId;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameMonsterRecord
 {
-    public Int32 Id;
-    public String? MonsterResource;
+    public int Id;
+    public string? MonsterResource;
     public CE002MiniGameMonsterType Ce002MinigameMonsterType;
-    public Int32 MonsterSizeRatio;
-    public Int32 MonsterHp;
-    public Int32 MoveSpeed;
-    public Int32 AngleRotationalPerSec;
-    public Boolean FocusMuzzleTarget;
-    public Int32 EnermySearchDistance;
-    public Int32 EnermyShotDistance;
-    public Boolean AutoTarget;
-    public String? HitEffect;
-    public String? DeadEffect;
+    public int MonsterSizeRatio;
+    public int MonsterHp;
+    public int MoveSpeed;
+    public int AngleRotationalPerSec;
+    public bool FocusMuzzleTarget;
+    public int EnermySearchDistance;
+    public int EnermyShotDistance;
+    public bool AutoTarget;
+    public string? HitEffect;
+    public string? DeadEffect;
     public CE002MiniGameProjectileType ProjectileType;
-    public Int32 ProjectileDamage;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileHp;
-    public Int32 ProjectileDuration;
+    public int ProjectileDamage;
+    public int ProjectileSpeed;
+    public int ProjectileHp;
+    public int ProjectileDuration;
     public ShotTimingType ShotTiming;
-    public Int32 Cooltime;
-    public Int32 ShotDelay;
+    public int Cooltime;
+    public int ShotDelay;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameNPCRecord
 {
-    public Int32 Id;
-    public Int32 EventFieldId;
-    public String? ResourceId;
-    public Int32 InteractionDistance;
-    public String? InteractionMarker;
-    public Int32 StageId;
-    public Int32 ConditionQuestId;
-    public Int32 MinimapHintRadius;
-    public Int32 MoveXCoordinate;
-    public Int32 MoveZCoordinate;
+    public int Id;
+    public int EventFieldId;
+    public string? ResourceId;
+    public int InteractionDistance;
+    public string? InteractionMarker;
+    public int StageId;
+    public int ConditionQuestId;
+    public int MinimapHintRadius;
+    public int MoveXCoordinate;
+    public int MoveZCoordinate;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameStageRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 StageIndex;
-    public String? StagePrefab;
-    public Int32 TimeLimit;
-    public Int32 WaveDataId;
-    public Int32 ClearRewardId;
+    public int Id;
+    public int GroupId;
+    public int StageIndex;
+    public string? StagePrefab;
+    public int TimeLimit;
+    public int WaveDataId;
+    public int ClearRewardId;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameTutorialRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? TutorialResource;
-    public String? TutorialDescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? TutorialResource;
+    public string? TutorialDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventCE002MiniGameWaveDataRecord
 {
-    public Int32 Id;
-    public Int32 WaveId;
-    public Int32 SpawnerIndex;
-    public Int32 MonsterGroup;
-    public Int32 MonsterId;
-    public Boolean TargetMonster;
-    public Int32 SpawnMonsterGroupDead;
-    public Int32 SpawnAreaCondition;
-    public Int32 DespawnMonsterGroupDead;
-    public Int32 DelayTime;
+    public int Id;
+    public int WaveId;
+    public int SpawnerIndex;
+    public int MonsterGroup;
+    public int MonsterId;
+    public bool TargetMonster;
+    public int SpawnMonsterGroupDead;
+    public int SpawnAreaCondition;
+    public int DespawnMonsterGroupDead;
+    public int DelayTime;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameCharacterRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ResourceId;
-    public String? SiResourceId;
-    public Int32 MoveSpeed;
-    public Int32 ServingMoveSpeed;
-    public Int32 Hp;
-    public Int32 HpAutoRecoverConditionTime;
-    public Int32 HpAutoRecoverValue;
-    public Int32 HpZeroStunTime;
-    public Int32 HpZeroStunRecoverConditionTime;
-    public Int32 HpZeroStunRecoverValue;
-    public Int32 CharacterReturnTime;
-    public Int32 CharacterLocationIndex;
+    public int Id;
+    public int GroupId;
+    public string? ResourceId;
+    public string? SiResourceId;
+    public int MoveSpeed;
+    public int ServingMoveSpeed;
+    public int Hp;
+    public int HpAutoRecoverConditionTime;
+    public int HpAutoRecoverValue;
+    public int HpZeroStunTime;
+    public int HpZeroStunRecoverConditionTime;
+    public int HpZeroStunRecoverValue;
+    public int CharacterReturnTime;
+    public int CharacterLocationIndex;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameEventGameNoteRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 GoodNoteStart;
-    public Int32 GreatNoteStart;
-    public Int32 PerfectNoteStart;
-    public Int32 PerfectNoteEnd;
-    public Int32 GreatNoteEnd;
-    public Int32 GoodNoteEnd;
+    public int Id;
+    public int GroupId;
+    public int GoodNoteStart;
+    public int GreatNoteStart;
+    public int PerfectNoteStart;
+    public int PerfectNoteEnd;
+    public int GreatNoteEnd;
+    public int GoodNoteEnd;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameEventGameRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 NoteSet1;
-    public Int32 NoteSet2;
-    public Int32 NoteSet3;
-    public Int32 PerfectConditionPoint;
-    public Int32 GreatConditionPoint;
-    public Int32 GoodConditionPoint;
-    public Int32 AdditionalPoint;
-    public Int32 PerfectGetPoint;
-    public Int32 PerfectGetHp;
-    public Int32 GreatGetPoint;
-    public Int32 GreatGetHp;
-    public Int32 GoodGetPoint;
-    public Int32 GoodGetHp;
-    public Int32 StartIdleCount;
-    public Int32 TimingBarMoveTime;
-    public Int32 EndIdleCount;
-    public Int32 Ratio;
+    public int Id;
+    public int GroupId;
+    public int NoteSet1;
+    public int NoteSet2;
+    public int NoteSet3;
+    public int PerfectConditionPoint;
+    public int GreatConditionPoint;
+    public int GoodConditionPoint;
+    public int AdditionalPoint;
+    public int PerfectGetPoint;
+    public int PerfectGetHp;
+    public int GreatGetPoint;
+    public int GreatGetHp;
+    public int GoodGetPoint;
+    public int GoodGetHp;
+    public int StartIdleCount;
+    public int TimingBarMoveTime;
+    public int EndIdleCount;
+    public int Ratio;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameHelpTipRecord
 {
-    public Int32 Id;
-    public String? ViewId;
-    public String? PrefabId;
-    public Int32 GroupId;
-    public Int32 PageNumber;
-    public String? HelpTipTitle;
-    public String? HelpTipImage;
-    public String? HelpTipDescription;
+    public int Id;
+    public string? ViewId;
+    public string? PrefabId;
+    public int GroupId;
+    public int PageNumber;
+    public string? HelpTipTitle;
+    public string? HelpTipImage;
+    public string? HelpTipDescription;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiPrefab;
-    public Int32 DailyRewardConditionValue;
-    public Int32 DailyRewardId;
-    public String? FirstEnterScenarioGroupId;
-    public Int32 HelpTipGroupId;
-    public Int32 CookSpeedSet;
-    public Int32 EventGamePerfectPoint;
-    public Int32 EventGameGreatPoint;
-    public Int32 EventGameGoodPoint;
-    public Int32 StartCutSceneStartTime;
-    public Int32 EventGameStartCutSceneTime;
-    public Int32 EventGameEndCutSceneTime;
-    public Int32 GameEndAlertStartTime;
-    public Int32 DefaultCookSlotCount;
-    public Int32 MaidCallRatioValue;
+    public int Id;
+    public int EventId;
+    public string? UiPrefab;
+    public int DailyRewardConditionValue;
+    public int DailyRewardId;
+    public string? FirstEnterScenarioGroupId;
+    public int HelpTipGroupId;
+    public int CookSpeedSet;
+    public int EventGamePerfectPoint;
+    public int EventGameGreatPoint;
+    public int EventGameGoodPoint;
+    public int StartCutSceneStartTime;
+    public int EventGameStartCutSceneTime;
+    public int EventGameEndCutSceneTime;
+    public int GameEndAlertStartTime;
+    public int DefaultCookSlotCount;
+    public int MaidCallRatioValue;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameMenuGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 MenuId;
-    public Boolean IsEventGameActive;
-    public Int32 OrderRatio;
+    public int Id;
+    public int GroupId;
+    public int MenuId;
+    public bool IsEventGameActive;
+    public int OrderRatio;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameMenuRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
-    public Int32 CookTime;
+    public int Id;
+    public string? ResourceId;
+    public int CookTime;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameMissionRecord
 {
-    public Int32 Id;
+    public int Id;
     public EventCe003MiniGameMissionType MissionType;
     public EventCE003MiniGameConditionsType ConditionType;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 Order;
-    public Int32 RewardId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int Order;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameNpcSpawnGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 CoolTimeSetStartTime;
-    public Int32 VisitCoolTimeMin;
-    public Int32 VisitCoolTimeMax;
-    public Int32 EventNpcActiveProb;
-    public Int32 EventNpcForceVisitLimitTime;
-    public Int32 EventNpcForceVisitProb;
-    public Int32 CoolTimeSetEndTime;
-    public Int32 CallNpcGroupId;
-    public Int32 CallEventNpcGroupId;
+    public int Id;
+    public int GroupId;
+    public int CoolTimeSetStartTime;
+    public int VisitCoolTimeMin;
+    public int VisitCoolTimeMax;
+    public int EventNpcActiveProb;
+    public int EventNpcForceVisitLimitTime;
+    public int EventNpcForceVisitProb;
+    public int CoolTimeSetEndTime;
+    public int CallNpcGroupId;
+    public int CallEventNpcGroupId;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameNpcRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public NpcType NpcType;
-    public String? ResourceId;
-    public Int32 OrderMenuGroup;
-    public Int32 MoveSpeed;
-    public Int32 WaitTimeServing;
-    public Int32 WaitTimeEating;
-    public Int32 ServingReduceHpValue;
-    public Int32 ServingGreatReactionGetPoint;
-    public Int32 ServingGoodReactionGetPoint;
-    public Int32 ServingBadReactionGetPoint;
+    public string? ResourceId;
+    public int OrderMenuGroup;
+    public int MoveSpeed;
+    public int WaitTimeServing;
+    public int WaitTimeEating;
+    public int ServingReduceHpValue;
+    public int ServingGreatReactionGetPoint;
+    public int ServingGoodReactionGetPoint;
+    public int ServingBadReactionGetPoint;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameSkillRecord
 {
-    public Int32 Id;
-    public Int32 SkillRank;
-    public Int32 ActiveConditionValue;
+    public int Id;
+    public int SkillRank;
+    public int ActiveConditionValue;
     public EventCE003MiniGameSkillType SkillType;
-    public Int32 SkillValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int SkillValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventCE003MiniGameStageRecord
 {
-    public Int32 Id;
-    public Int32 StageLevel;
-    public Int32 EnterConditionValue;
-    public String? StageLevelName;
-    public String? StageLevelDesc;
-    public String? StageLevelImg;
-    public Int32 TimeLimit;
-    public Int32 UseMaidGroup;
-    public Int32 NpcVisitSetGroupId;
-    public Int32 EventNpcVisitUpgradeSetGroupId;
-    public Int32 EventGameGroupId;
-    public Int32 CleanRatio;
-    public Int32 CleanReduceHpValue;
-    public Int32 CleanGetPoint;
-    public Int32 CleanTime;
+    public int Id;
+    public int StageLevel;
+    public int EnterConditionValue;
+    public string? StageLevelName;
+    public string? StageLevelDesc;
+    public string? StageLevelImg;
+    public int TimeLimit;
+    public int UseMaidGroup;
+    public int NpcVisitSetGroupId;
+    public int EventNpcVisitUpgradeSetGroupId;
+    public int EventGameGroupId;
+    public int CleanRatio;
+    public int CleanReduceHpValue;
+    public int CleanGetPoint;
+    public int CleanTime;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameBuffRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public int Id;
+    public int ManagerId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
     public CE004BuffCategory Category;
-    public Int32 Slot;
-    public Int32 BuffGroup;
-    public Int32 BuffLevel;
+    public int Slot;
+    public int BuffGroup;
+    public int BuffLevel;
     public CE004BuffType BuffType;
-    public Int32 BuffValue;
-    public Int32 NeedUpgradeCurrency;
-    public Int32 ConditionSkillId;
+    public int BuffValue;
+    public int NeedUpgradeCurrency;
+    public int ConditionSkillId;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? NameShortLocalkey;
-    public String? ResourceId;
-    public String? CharacterPrefab;
-    public String? FailSpeechBubble;
-    public Int32 Attack;
-    public Int32 Hp;
-    public Int32 SkillGroup;
-    public Int32 EventDay;
-    public Int32 MiniGameStageClear;
+    public int Id;
+    public int ManagerId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? NameShortLocalkey;
+    public string? ResourceId;
+    public string? CharacterPrefab;
+    public string? FailSpeechBubble;
+    public int Attack;
+    public int Hp;
+    public int SkillGroup;
+    public int EventDay;
+    public int MiniGameStageClear;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameChaSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SkillGroup;
+    public int Id;
+    public int SkillGroup;
     public CE004SkillType SkillType;
-    public Int32 SkillDamage;
-    public String? MuzzleEffect;
-    public String? SkillEffect;
-    public String? HitEffect;
-    public Int32 HitCount;
+    public int SkillDamage;
+    public string? MuzzleEffect;
+    public string? SkillEffect;
+    public string? HitEffect;
+    public int HitCount;
     public HitTiming HitTiming;
     public CE004MonsterPosition TargetPosition;
-    public String? CutscenePrefab;
+    public string? CutscenePrefab;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameHelpTipListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 HelpTipGroupId;
-    public String? HelpTipTitleLocalkey;
+    public int Id;
+    public int ManagerId;
+    public int HelpTipGroupId;
+    public string? HelpTipTitleLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiPrefab;
-    public String? EnterScenario;
-    public Int32 HelpTipId;
-    public Int32 DailyRewardPoint;
-    public Int32 DailyRewardId;
-    public String? UpgradeCurrencyResource;
-    public String? UpgradeCurrencyName;
-    public String? UpgradeCurrencyDescription;
-    public String? CharacterSpawnPosition;
-    public Int32 BurstMax;
-    public Int32 BurstChargeMin;
-    public Int32 BurstChargeMax;
-    public Int32 BurstPushTime;
-    public Int32 ChargingIncreaseAttack;
-    public Int32 ChallengeLastStageLevel;
-    public Int32 ChallengeRepeatStageLevel;
-    public Int32 ChallengeIncreaseMonsterAttack;
-    public Int32 ChallengeIncreaseMonsterHp;
-    public Int32 ChallengeWaveInterval;
-    public Int32 SkillMixCondition;
-    public Int32 SkillMixValue;
-    public Int32 SkillMixTime;
-    public Int32 SpeedControlStage;
-    public Int32 MaxPoint;
-    public Int32 HintBetweenTime;
-    public Boolean IsArchive;
+    public int Id;
+    public int EventId;
+    public string? UiPrefab;
+    public string? EnterScenario;
+    public int HelpTipId;
+    public int DailyRewardPoint;
+    public int DailyRewardId;
+    public string? UpgradeCurrencyResource;
+    public string? UpgradeCurrencyName;
+    public string? UpgradeCurrencyDescription;
+    public string? CharacterSpawnPosition;
+    public int BurstMax;
+    public int BurstChargeMin;
+    public int BurstChargeMax;
+    public int BurstPushTime;
+    public int ChargingIncreaseAttack;
+    public int ChallengeLastStageLevel;
+    public int ChallengeRepeatStageLevel;
+    public int ChallengeIncreaseMonsterAttack;
+    public int ChallengeIncreaseMonsterHp;
+    public int ChallengeWaveInterval;
+    public int SkillMixCondition;
+    public int SkillMixValue;
+    public int SkillMixTime;
+    public int SpeedControlStage;
+    public int MaxPoint;
+    public int HintBetweenTime;
+    public bool IsArchive;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int ManagerId;
+    public string? MissionLocalkey;
     public CE004MissionCategory MissionCategory;
     public CE004MissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
+    public int MissionTargetId;
+    public int MissionCount;
     public CE004MissionRewardType RewardType;
-    public Int32 RewardValue;
+    public int RewardValue;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameMonSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SkillGroup;
+    public int Id;
+    public int SkillGroup;
     public CE004SkillType SkillType;
-    public Int32 SkillDamage;
-    public String? SkillEffect;
-    public String? HitEffect;
-    public String? HintEffect;
+    public int SkillDamage;
+    public string? SkillEffect;
+    public string? HitEffect;
+    public string? HintEffect;
     public CE004MonsterPosition HintPosition;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameMonsterRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? MonsterPrefab;
-    public Int32 Attack;
-    public Int32 Hp;
-    public Int32 SkillGroup;
-    public String? DeadEffect;
+    public int Id;
+    public string? NameLocalkey;
+    public string? MonsterPrefab;
+    public int Attack;
+    public int Hp;
+    public int SkillGroup;
+    public string? DeadEffect;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameSkillPositionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public String? PositionLocalkey;
+    public int Id;
+    public int Group;
+    public int Order;
+    public string? PositionLocalkey;
     public List<CE004SkillPositionGroupData_Raw>? Ce004SkillPositionGroupData;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameSkillTypeRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public CE004SkillCategory Category;
     public CE004SkillType SkillType;
-    public String? NameLocalkey;
-    public String? ResourceId;
+    public string? NameLocalkey;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameStageSeedRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 HintCount;
+    public int Id;
+    public int Group;
+    public int HintCount;
     public List<CE004SeedSkillTypeGroupData_Raw>? Ce004SeedSkillTypeGroupData;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameStageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
+    public int Id;
+    public int ManagerId;
     public CE004StageDifficulty StageDifficulty;
-    public Int32 StageLevel;
-    public String? ButtonLocalkey;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
-    public String? StagePrefab;
-    public String? MainCamera;
-    public String? EnemyCamera;
-    public Int32 BattleActionZoomInFov;
-    public Int32 OutQuadTime;
+    public int StageLevel;
+    public string? ButtonLocalkey;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
+    public string? StagePrefab;
+    public string? MainCamera;
+    public string? EnemyCamera;
+    public int BattleActionZoomInFov;
+    public int OutQuadTime;
     public List<CE004OpenConditionTypeGroupData_Raw>? Ce004OpenConditionTypeGroupData;
-    public String? MonsterSpawnPosition;
-    public Int32 SpawnMonsterId;
-    public Int32 SpawnMonsterScale;
-    public Int32 ClearRewardCount;
-    public Int32 DelayTime;
-    public Int32 HintTime;
-    public Int32 BattleTime;
-    public Int32 BurstTime;
-    public Int32 TimeGroup;
+    public string? MonsterSpawnPosition;
+    public int SpawnMonsterId;
+    public int SpawnMonsterScale;
+    public int ClearRewardCount;
+    public int DelayTime;
+    public int HintTime;
+    public int BattleTime;
+    public int BurstTime;
+    public int TimeGroup;
     public CE004StageSeedType SeedType;
-    public Int32 SeedGroup;
-    public Int32 HelpTipId;
-    public Int32 SkillPositionGroup;
+    public int SeedGroup;
+    public int HelpTipId;
+    public int SkillPositionGroup;
 }
 
 [MemoryPackable]
 public partial class EventCE004MiniGameStageTimeRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
+    public int Id;
+    public int Group;
     public CE004StageSeedRepeatType RepeatType;
-    public Int32 BattleCountCondition;
-    public Int32 HintTimeValue;
-    public Int32 BattleTimeValue;
-    public Int32 BurstTimeValue;
+    public int BattleCountCondition;
+    public int HintTimeValue;
+    public int BattleTimeValue;
+    public int BurstTimeValue;
 }
 
 [MemoryPackable]
 public partial class EventClimbingChallengeStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Single DefaultObjectSpeed;
-    public Int32 DefaultObtainPoint;
-    public Int32 Life;
-    public Int32 HitImmuneTimeMs;
-    public Int32 JumpMotionLengthMs;
-    public Single JumpHeight;
-    public Int32 AutoIncreaseDifficultySecond;
-    public Int32 FirstObjectGenerateDistance;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public float DefaultObjectSpeed;
+    public int DefaultObtainPoint;
+    public int Life;
+    public int HitImmuneTimeMs;
+    public int JumpMotionLengthMs;
+    public float JumpHeight;
+    public int AutoIncreaseDifficultySecond;
+    public int FirstObjectGenerateDistance;
 }
 
 [MemoryPackable]
 public partial class EventClimbingStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Int32 ClearTimeSecond;
-    public Single DefaultObjectSpeed;
-    public Int32 DefaultObtainPoint;
-    public Int32 Life;
-    public Int32 HitImmuneTimeMs;
-    public Int32 JumpMotionLengthMs;
-    public Single JumpHeight;
-    public Int32 AutoIncreaseDifficultySecond;
-    public Int32 FirstObjectGenerateDistance;
-    public String? ClearConditionDesc;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public int ClearTimeSecond;
+    public float DefaultObjectSpeed;
+    public int DefaultObtainPoint;
+    public int Life;
+    public int HitImmuneTimeMs;
+    public int JumpMotionLengthMs;
+    public float JumpHeight;
+    public int AutoIncreaseDifficultySecond;
+    public int FirstObjectGenerateDistance;
+    public string? ClearConditionDesc;
 }
 
 [MemoryPackable]
 public partial class EventClimbingTimeDifficultRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 DifficultyStep;
-    public Int32 PlayTimeMin;
-    public Int32 PlayTimeMax;
-    public Int32 SpawnDistanceMin;
-    public Int32 SpawnDistanceMax;
-    public Int32 SpawnLine0Ratio;
-    public Int32 SpawnLine1Ratio;
-    public Int32 SpawnLine2Ratio;
-    public Single DifficultyPlaySpeed;
-    public Single AutoIncreasePlaySpeed;
+    public int Id;
+    public int GroupId;
+    public int DifficultyStep;
+    public int PlayTimeMin;
+    public int PlayTimeMax;
+    public int SpawnDistanceMin;
+    public int SpawnDistanceMax;
+    public int SpawnLine0Ratio;
+    public int SpawnLine1Ratio;
+    public int SpawnLine2Ratio;
+    public float DifficultyPlaySpeed;
+    public float AutoIncreasePlaySpeed;
 }
 
 [MemoryPackable]
 public partial class EventCollectManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public FieldCollectContentsType ContentsType;
-    public String? UiPrefab;
+    public string? UiPrefab;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimAlbumRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Order;
+    public int Id;
+    public int ManagerId;
+    public int Order;
     public EventDatingSimAlbumCategory Category;
-    public Int32 CategoryValue;
-    public String? AlbumName;
-    public String? AlbumDescription;
+    public int CategoryValue;
+    public string? AlbumName;
+    public string? AlbumDescription;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimArchiveManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 ExistManagerId;
+    public int Id;
+    public int EventId;
+    public int ExistManagerId;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimDialogEventRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public Int32 Order;
+    public string? Id;
+    public int ManagerId;
+    public int Order;
     public EventDatingSimDialogEventType DialogEventType;
     public EventDatingSimDialogSceneType DialogType;
-    public String? ScenarioTitleLocalkey;
-    public String? ScenarioDialogId;
-    public String? CutsceneImageForUi;
-    public Int32 SpawnLostItemId;
-    public Int32 HeroineAlbumId;
+    public string? ScenarioTitleLocalkey;
+    public string? ScenarioDialogId;
+    public string? CutsceneImageForUi;
+    public int SpawnLostItemId;
+    public int HeroineAlbumId;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimDialogScheduleRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Day;
-    public String? Location;
-    public String? DialogEventAppearDaytime;
-    public String? DialogEventAppearEvening;
-    public String? DialogEventAppearNight;
+    public int Id;
+    public int ManagerId;
+    public int Day;
+    public string? Location;
+    public string? DialogEventAppearDaytime;
+    public string? DialogEventAppearEvening;
+    public string? DialogEventAppearNight;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHelpMessageRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
+    public string? Id;
+    public int ManagerId;
     public EventDatingSimHelpMessagePageType PageType;
     public EventDatingSimHelpMessageType HelpMessageType;
-    public String? HelpMessageIconResource;
-    public String? HelpMessageLocale;
+    public string? HelpMessageIconResource;
+    public string? HelpMessageLocale;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineAlbumRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ManagerId;
-    public Int32 Order;
-    public Boolean IsHeroineGroup;
-    public String? TargetHeroineId;
-    public Int32 CompleteReward;
+    public int Id;
+    public int GroupId;
+    public int ManagerId;
+    public int Order;
+    public bool IsHeroineGroup;
+    public string? TargetHeroineId;
+    public int CompleteReward;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineConditionRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public Boolean IsHeroineGroup;
-    public String? TargetHeroineId;
-    public Int32 EventConditionDay;
+    public string? Id;
+    public int ManagerId;
+    public bool IsHeroineGroup;
+    public string? TargetHeroineId;
+    public int EventConditionDay;
     public EventDatingSimTime EventConditionTime;
-    public String? EventConditionLocation;
-    public Int32 EventConditionRelationLvMin;
-    public Int32 EventConditionRelationLvMax;
-    public String? EventConditionDialogEvent;
-    public String? EventConditionSelectionEvent;
-    public String? DialogEventId;
+    public string? EventConditionLocation;
+    public int EventConditionRelationLvMin;
+    public int EventConditionRelationLvMax;
+    public string? EventConditionDialogEvent;
+    public string? EventConditionSelectionEvent;
+    public string? DialogEventId;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineGroupRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public String? HeroineGroupName;
-    public String? HeroineGroupPortraitResource;
-    public String? HeroineGroupPortraitSmallResource;
-    public String? GroupIcon;
+    public string? Id;
+    public int ManagerId;
+    public string? HeroineGroupName;
+    public string? HeroineGroupPortraitResource;
+    public string? HeroineGroupPortraitSmallResource;
+    public string? GroupIcon;
     public List<HeroineIdListData>? HeroineIdList;
     public List<IsGroupEventRelationLVListData>? IsGroupEventRelationLvList;
-    public Boolean IsGroupEventHiddenEnding;
+    public bool IsGroupEventHiddenEnding;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineLVRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 RelationLevel;
-    public Int32 TargetRelationPoint;
+    public int Id;
+    public int ManagerId;
+    public int RelationLevel;
+    public int TargetRelationPoint;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineScheduleRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Day;
-    public String? Location;
-    public Boolean IsHeroineGroupDaytime;
-    public String? HeroineAppearDaytime;
-    public Boolean IsHeroineGroupEvening;
-    public String? HeroineAppearEvening;
-    public Boolean IsHeroineGroupNight;
-    public String? HeroineAppearNight;
+    public int Id;
+    public int ManagerId;
+    public int Day;
+    public string? Location;
+    public bool IsHeroineGroupDaytime;
+    public string? HeroineAppearDaytime;
+    public bool IsHeroineGroupEvening;
+    public string? HeroineAppearEvening;
+    public bool IsHeroineGroupNight;
+    public string? HeroineAppearNight;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimHeroineRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public Int32 Order;
-    public String? PortraitResource;
-    public String? SmallPortraitResource;
-    public String? HeroineName;
-    public Int32 MaxRelationLv;
-    public Int32 RelationOverflowTargetPoint;
-    public Boolean IsContainInGroup;
-    public String? RelationSubtitleLv0;
+    public string? Id;
+    public int ManagerId;
+    public int Order;
+    public string? PortraitResource;
+    public string? SmallPortraitResource;
+    public string? HeroineName;
+    public int MaxRelationLv;
+    public int RelationOverflowTargetPoint;
+    public bool IsContainInGroup;
+    public string? RelationSubtitleLv0;
     public List<RelationSubtitleLVListData>? RelationSubtitleLvList;
-    public String? RelationSubtitleLvMax;
+    public string? RelationSubtitleLvMax;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimLocationRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public Int32 Index;
-    public String? LocationName;
-    public String? LocationResource;
-    public String? LocationOpenDialogEvent;
+    public string? Id;
+    public int ManagerId;
+    public int Index;
+    public string? LocationName;
+    public string? LocationResource;
+    public string? LocationOpenDialogEvent;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimLostItemRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? LostItemName;
-    public String? LostItemDescription;
-    public String? LostItemHint;
-    public String? LostItemResource;
-    public String? LostItemFieldResource;
-    public Int32 InteractionDistance;
-    public String? InteractionMarker;
-    public Int32 MinimapGuideRadius;
-    public Int32 MinimapGuideTransformXCoordinate;
-    public Int32 MinimapGuideTransformYCoordinate;
+    public int Id;
+    public int ManagerId;
+    public string? LostItemName;
+    public string? LostItemDescription;
+    public string? LostItemHint;
+    public string? LostItemResource;
+    public string? LostItemFieldResource;
+    public int InteractionDistance;
+    public string? InteractionMarker;
+    public int MinimapGuideRadius;
+    public int MinimapGuideTransformXCoordinate;
+    public int MinimapGuideTransformYCoordinate;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiPrefabKeyword;
-    public String? EventTransition;
-    public Int32 TotalDay;
+    public int Id;
+    public int EventId;
+    public string? UiPrefabKeyword;
+    public string? EventTransition;
+    public int TotalDay;
     public DateTime StartDateForUi;
-    public Int32 StaminaAutoChargeId;
+    public int StaminaAutoChargeId;
     public DateTime InfinityModActiveRealtime;
-    public Int32 DailyRewardRequireStamina;
-    public Int32 DailyRewardId;
-    public String? SpecialCutscenePrefab;
-    public Int32 SpecialCutsceneCompleteRewardWallpaperId;
-    public String? FirstEnterScenario;
-    public String? DefaultDialogEvent;
-    public String? ForcedMyroomReturnDialogEvent;
-    public String? DefaultMyroomHomecomingDialogEvent;
-    public String? EpilogueDialogEvent;
+    public int DailyRewardRequireStamina;
+    public int DailyRewardId;
+    public string? SpecialCutscenePrefab;
+    public int SpecialCutsceneCompleteRewardWallpaperId;
+    public string? FirstEnterScenario;
+    public string? DefaultDialogEvent;
+    public string? ForcedMyroomReturnDialogEvent;
+    public string? DefaultMyroomHomecomingDialogEvent;
+    public string? EpilogueDialogEvent;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimMyroomScheduleRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Day;
-    public String? MyroomEventAwake;
-    public String? MyroomEventOuting;
-    public String? MyroomEventHomecoming;
+    public int Id;
+    public int ManagerId;
+    public int Day;
+    public string? MyroomEventAwake;
+    public string? MyroomEventOuting;
+    public string? MyroomEventHomecoming;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimPhotoAlbumRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ManagerId;
-    public Int32 Order;
-    public String? CutsceneResource;
-    public String? CutsceneTitleLocalkey;
-    public String? UnlockConditionDialogEvent;
+    public int Id;
+    public int GroupId;
+    public int ManagerId;
+    public int Order;
+    public string? CutsceneResource;
+    public string? CutsceneTitleLocalkey;
+    public string? UnlockConditionDialogEvent;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimRelationConditionRecord
 {
-    public String? Id;
-    public Int32 ManagerId;
-    public Boolean IsConsumeStamina;
-    public Boolean IsHeroineGroup;
-    public String? TargetHeroineId;
+    public string? Id;
+    public int ManagerId;
+    public bool IsConsumeStamina;
+    public bool IsHeroineGroup;
+    public string? TargetHeroineId;
     public List<RelationAppearHeroineConditionListData>? RelationAppearHeroineConditionList;
     public List<RelationAppearDialogConditionListData>? RelationAppearDialogConditionList;
     public List<RelationAppearSelectionConditionListData>? RelationAppearSelectionConditionList;
-    public Int32 ForcedAppearStartDay;
-    public String? ForcedAppearLocation;
+    public int ForcedAppearStartDay;
+    public string? ForcedAppearLocation;
     public EventDatingSimTime ForcedAppearTime;
-    public String? DialogEventId;
-    public Boolean IsUseLostItem;
-    public Int32 LostItemId;
-    public String? LostItemOccurDialogEventId;
-    public String? LostItemRequireDialogEventId;
+    public string? DialogEventId;
+    public bool IsUseLostItem;
+    public int LostItemId;
+    public string? LostItemOccurDialogEventId;
+    public string? LostItemRequireDialogEventId;
     public EventDatingSimRelationResultEventType RelationResultEventType;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimSpecialCutSceneRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 Index;
-    public String? HeroineResourceStep2ChangeCondition;
-    public String? HeroineResourceStep3ChangeCondition;
+    public int Id;
+    public int ManagerId;
+    public int Index;
+    public string? HeroineResourceStep2ChangeCondition;
+    public string? HeroineResourceStep3ChangeCondition;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimTutorialPageRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ManagerId;
-    public Int32 ArchiveManagerId;
-    public Int32 PageOrder;
-    public String? ImageResource;
-    public String? PageTitleLocalkey;
-    public String? TutorialLocalkey;
+    public int Id;
+    public int GroupId;
+    public int ManagerId;
+    public int ArchiveManagerId;
+    public int PageOrder;
+    public string? ImageResource;
+    public string? PageTitleLocalkey;
+    public string? TutorialLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDatingSimTutorialRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 ArchiveManagerId;
-    public Int32 TutorialPageGroupId;
+    public int Id;
+    public int ManagerId;
+    public int ArchiveManagerId;
+    public int TutorialPageGroupId;
     public EventDatingSimTutorialType TutorialType;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class EventDessertRushManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchiveEvent;
-    public Int32 OpenCondition;
-    public String? EnterScenario;
-    public Int32 DailyRewardPoint;
-    public Int32 DailyRewardId;
-    public Int32 StepUpRewardGroupId;
-    public Int32 TutorialGroupId;
-    public Int32 TimeLimit;
-    public Int32 GainPoint;
-    public Int32 GainPointX2Combo;
-    public Int32 GainPointX3Combo;
-    public Int32 GainPointX4Combo;
-    public Int32 GainPointX5Combo;
-    public Int32 GainFeverGauge;
-    public Int32 MaxFeverGauge;
-    public Int32 DecreaseFeverGauge;
-    public Int32 NextFeverNeedCount;
-    public Int32 FeverLv1Ratio;
-    public Int32 FeverLv2Ratio;
-    public Int32 FeverLv3Ratio;
-    public Int32 FeverLv4Ratio;
-    public Int32 PenaltyTime;
-    public Int32 SpecialSpawnCount;
-    public Int32 SpecialSpawnPrepare;
-    public Int32 SpawnSpecialId;
-    public Int32 SpecialChangeDessertCount;
-    public Int32 EndImminentAlertStartTime;
-    public Int32 Level01StartComboCount;
-    public Int32 Level01WaveId;
-    public Int32 Level02StartComboCount;
-    public Int32 Level02WaveId;
-    public Int32 Level03StartComboCount;
-    public Int32 Level03WaveId;
-    public Int32 Level04StartComboCount;
-    public Int32 Level04WaveId;
-    public Int32 Level05StartComboCount;
-    public Int32 Level05WaveId;
-    public Int32 DRankTargetPoint;
-    public Int32 CRankTargetPoint;
-    public Int32 BRankTargetPoint;
-    public Int32 ARankTargetPoint;
-    public Int32 SRankTargetPoint;
+    public int Id;
+    public int EventId;
+    public bool IsArchiveEvent;
+    public int OpenCondition;
+    public string? EnterScenario;
+    public int DailyRewardPoint;
+    public int DailyRewardId;
+    public int StepUpRewardGroupId;
+    public int TutorialGroupId;
+    public int TimeLimit;
+    public int GainPoint;
+    public int GainPointX2Combo;
+    public int GainPointX3Combo;
+    public int GainPointX4Combo;
+    public int GainPointX5Combo;
+    public int GainFeverGauge;
+    public int MaxFeverGauge;
+    public int DecreaseFeverGauge;
+    public int NextFeverNeedCount;
+    public int FeverLv1Ratio;
+    public int FeverLv2Ratio;
+    public int FeverLv3Ratio;
+    public int FeverLv4Ratio;
+    public int PenaltyTime;
+    public int SpecialSpawnCount;
+    public int SpecialSpawnPrepare;
+    public int SpawnSpecialId;
+    public int SpecialChangeDessertCount;
+    public int EndImminentAlertStartTime;
+    public int Level01StartComboCount;
+    public int Level01WaveId;
+    public int Level02StartComboCount;
+    public int Level02WaveId;
+    public int Level03StartComboCount;
+    public int Level03WaveId;
+    public int Level04StartComboCount;
+    public int Level04WaveId;
+    public int Level05StartComboCount;
+    public int Level05WaveId;
+    public int DRankTargetPoint;
+    public int CRankTargetPoint;
+    public int BRankTargetPoint;
+    public int ARankTargetPoint;
+    public int SRankTargetPoint;
 }
 
 [MemoryPackable]
 public partial class EventDessertRushObject
 {
-    public Int32 Id;
-    public Int32 Group;
-    public String? ResourceId01;
-    public String? ResourceId02;
+    public int Id;
+    public int Group;
+    public string? ResourceId01;
+    public string? ResourceId02;
 }
 
 [MemoryPackable]
 public partial class EventDessertRushStepUpRewardRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Step;
-    public Int32 TargetPoint;
-    public Int32 RewardId;
+    public int Id;
+    public int GroupId;
+    public int Step;
+    public int TargetPoint;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventDessertRushTutorialRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? TutorialResource;
-    public String? TutorialDescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? TutorialResource;
+    public string? TutorialDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDessertRushWaveRecord
 {
-    public Int32 Id;
-    public Int32 Object01Id;
-    public Int32 Object01AppearanceProbability;
-    public Int32 Object02Id;
-    public Int32 Object02AppearanceProbability;
-    public Int32 Object03Id;
-    public Int32 Object03AppearanceProbability;
-    public Int32 Object04Id;
-    public Int32 Object04AppearanceProbability;
-    public Int32 Object05Id;
-    public Int32 Object05AppearanceProbability;
-    public Int32 Object06Id;
-    public Int32 Object06AppearanceProbability;
-    public Int32 Object07Id;
-    public Int32 Object07AppearanceProbability;
-    public Int32 Object08Id;
-    public Int32 Object08AppearanceProbability;
-    public Int32 Object09Id;
-    public Int32 Object09AppearanceProbability;
+    public int Id;
+    public int Object01Id;
+    public int Object01AppearanceProbability;
+    public int Object02Id;
+    public int Object02AppearanceProbability;
+    public int Object03Id;
+    public int Object03AppearanceProbability;
+    public int Object04Id;
+    public int Object04AppearanceProbability;
+    public int Object05Id;
+    public int Object05AppearanceProbability;
+    public int Object06Id;
+    public int Object06AppearanceProbability;
+    public int Object07Id;
+    public int Object07AppearanceProbability;
+    public int Object08Id;
+    public int Object08AppearanceProbability;
+    public int Object09Id;
+    public int Object09AppearanceProbability;
 }
 
 [MemoryPackable]
 public partial class EventDiceBoardRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SlotId;
+    public int Id;
+    public int GroupId;
+    public int SlotId;
     public DiceEventRotationType MoveRotation;
     public DiceEventRotationType MoveRotationReverse;
     public DiceEventEventType EventType;
-    public Int32 GoTo;
-    public Int32 RewardId;
-    public Int32 GetHeropower1;
-    public Int32 GetHeropower2;
-    public Int32 GetHeropower3;
-    public Int32 GetHeropower1Rate;
-    public Int32 GetHeropower2Rate;
-    public Int32 GetHeropower3Rate;
+    public int GoTo;
+    public int RewardId;
+    public int GetHeropower1;
+    public int GetHeropower2;
+    public int GetHeropower3;
+    public int GetHeropower1Rate;
+    public int GetHeropower2Rate;
+    public int GetHeropower3Rate;
 }
 
 [MemoryPackable]
 public partial class EventDiceResourceRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? SlotType;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? AniResource;
-    public String? ImageResource;
+    public int Id;
+    public int GroupId;
+    public string? SlotType;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? AniResource;
+    public string? ImageResource;
 }
 
 [MemoryPackable]
 public partial class EventDiceRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? AlbumName;
-    public String? AlbumDescription;
-    public Boolean IsArchive;
-    public Int32 BoardId;
-    public Int32 ResourceId;
-    public Int32 EventId;
-    public String? UiPrefab;
-    public String? FirstEnterScenarioGroupId;
-    public Int32 EventItemId;
-    public Int32 AlbumCategoryGroup;
-    public Int32 HelpTipViewSubId;
-    public Int32 MaxGauge;
-    public Int32 MaxClear;
-    public Int32 DiceConsume;
-    public Int32 PlayerMoveTime;
-    public Int32 BoardFinishGauge;
+    public int Id;
+    public string? NameLocalkey;
+    public string? AlbumName;
+    public string? AlbumDescription;
+    public bool IsArchive;
+    public int BoardId;
+    public int ResourceId;
+    public int EventId;
+    public string? UiPrefab;
+    public string? FirstEnterScenarioGroupId;
+    public int EventItemId;
+    public int AlbumCategoryGroup;
+    public int HelpTipViewSubId;
+    public int MaxGauge;
+    public int MaxClear;
+    public int DiceConsume;
+    public int PlayerMoveTime;
+    public int BoardFinishGauge;
     public List<DiceClearRewardData>? DiceClearRewardList;
-    public Int32 ClearRewardIdRepeat;
+    public int ClearRewardIdRepeat;
     public List<DiceClearScenarioGroupData>? DiceClearScenarioGroupList;
-    public String? MaxgaugeStepLocalkey;
-    public String? MaxgaugeStepRepeatLocalkey;
+    public string? MaxgaugeStepLocalkey;
+    public string? MaxgaugeStepRepeatLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDiceTileLocaleRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? SlotType;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? SlotType;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? NameLocale;
-    public String? OutgameCharacterResource;
-    public String? CharacterResource;
-    public String? SkillNameLocale;
-    public String? SkillDescriptionLocale;
-    public String? CharacterIcon;
-    public String? SkillIcon;
-    public Int32 OpenDate;
+    public int Id;
+    public int GroupId;
+    public string? NameLocale;
+    public string? OutgameCharacterResource;
+    public string? CharacterResource;
+    public string? SkillNameLocale;
+    public string? SkillDescriptionLocale;
+    public string? CharacterIcon;
+    public string? SkillIcon;
+    public int OpenDate;
     public EventDragonDungeonRunCharacterUnlockType OpenCondition;
-    public Int32 OpenConditionValue;
-    public String? OpenConditionLocale;
-    public Int32 StartHp;
+    public int OpenConditionValue;
+    public string? OpenConditionLocale;
+    public int StartHp;
     public EventDragonDungeonRunCharacterSkillType SkillType;
-    public Int32 SkillUseCount;
-    public Int32 SkillFadeInTime;
-    public Int32 SkillDuration;
-    public Int32 SkillFadeOutTime;
-    public Int32 SkillCooltime;
-    public String? SkillFxResource;
-    public String? ProjectileResource;
-    public Int32 ProjectileSpeed;
+    public int SkillUseCount;
+    public int SkillFadeInTime;
+    public int SkillDuration;
+    public int SkillFadeOutTime;
+    public int SkillCooltime;
+    public string? SkillFxResource;
+    public string? ProjectileResource;
+    public int ProjectileSpeed;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunCutSceneRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? CutsceneResource;
-    public String? CutsceneName;
-    public String? CutsceneDescription;
+    public int Id;
+    public int GroupId;
+    public string? CutsceneResource;
+    public string? CutsceneName;
+    public string? CutsceneDescription;
     public EventDragonDungeonRunCutScenePrintTiming CutscenePrintTiming;
     public EventDragonDungeonRunDeadCutScenePrintType CutscenePrintType;
-    public Boolean IsAppearInFRank;
-    public Boolean IsAppearInDRank;
-    public Boolean IsAppearInCRank;
-    public Boolean IsAppearInBRank;
-    public Boolean IsAppearInARank;
-    public Boolean IsAppearInSRank;
+    public bool IsAppearInFRank;
+    public bool IsAppearInDRank;
+    public bool IsAppearInCRank;
+    public bool IsAppearInBRank;
+    public bool IsAppearInARank;
+    public bool IsAppearInSRank;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EnterScenario;
-    public Int32 DailyRewardPoint;
-    public Int32 DailyRewardId;
-    public Int32 MissionGroupId;
-    public Int32 TutorialId;
-    public Int32 CutsceneGroupId;
-    public Int32 ScenarioGroupId;
-    public Int32 UseCharacterGroupId;
-    public Int32 UseWaveGroupId;
-    public Int32 SkipEarlyPhase01OpenDate;
-    public Int32 SkipEarlyPhase01OpenDistance;
-    public Int32 SkipEarlyPhase01AdjustDistance;
-    public Int32 SkipEarlyPhase01AdjustGold;
-    public Int32 SkipEarlyPhase01StartWave;
-    public Int32 SkipEarlyPhase02OpenDate;
-    public Int32 SkipEarlyPhase02OpenDistance;
-    public Int32 SkipEarlyPhase02AdjustDistance;
-    public Int32 SkipEarlyPhase02AdjustGold;
-    public Int32 SkipEarlyPhase02StartWave;
-    public Int32 CharacterSpeedTilePerSecond;
-    public Int32 KnockBackDelayTime;
-    public Int32 SkillDelayTime;
-    public Int32 InvincibleTime;
-    public Int32 ChaseMonsterDeadDistance;
-    public Int32 DragonSpawnDistance;
-    public Int32 WaitingDragonBreathObjectId;
-    public Int32 DragonSpawnTime;
-    public Int32 PresetPreWarmTime;
-    public Int32 MoveMimicSpeedTilePerSecond;
-    public Int32 TrackMonsterDeadTime;
-    public Int32 DeadCutscenePrintTime;
-    public Int32 DeadCutsceneSkipAbleTime;
-    public Int32 DRankTargetPoint;
-    public Int32 CRankTargetPoint;
-    public Int32 BRankTargetPoint;
-    public Int32 ARankTargetPoint;
-    public Int32 SRankTargetPoint;
+    public int Id;
+    public int EventId;
+    public string? EnterScenario;
+    public int DailyRewardPoint;
+    public int DailyRewardId;
+    public int MissionGroupId;
+    public int TutorialId;
+    public int CutsceneGroupId;
+    public int ScenarioGroupId;
+    public int UseCharacterGroupId;
+    public int UseWaveGroupId;
+    public int SkipEarlyPhase01OpenDate;
+    public int SkipEarlyPhase01OpenDistance;
+    public int SkipEarlyPhase01AdjustDistance;
+    public int SkipEarlyPhase01AdjustGold;
+    public int SkipEarlyPhase01StartWave;
+    public int SkipEarlyPhase02OpenDate;
+    public int SkipEarlyPhase02OpenDistance;
+    public int SkipEarlyPhase02AdjustDistance;
+    public int SkipEarlyPhase02AdjustGold;
+    public int SkipEarlyPhase02StartWave;
+    public int CharacterSpeedTilePerSecond;
+    public int KnockBackDelayTime;
+    public int SkillDelayTime;
+    public int InvincibleTime;
+    public int ChaseMonsterDeadDistance;
+    public int DragonSpawnDistance;
+    public int WaitingDragonBreathObjectId;
+    public int DragonSpawnTime;
+    public int PresetPreWarmTime;
+    public int MoveMimicSpeedTilePerSecond;
+    public int TrackMonsterDeadTime;
+    public int DeadCutscenePrintTime;
+    public int DeadCutsceneSkipAbleTime;
+    public int DRankTargetPoint;
+    public int CRankTargetPoint;
+    public int BRankTargetPoint;
+    public int ARankTargetPoint;
+    public int SRankTargetPoint;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? MissionLocalkey;
     public EventDragonDungeonRunMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
-    public Int32 RewardId;
+    public int MissionTargetId;
+    public int MissionCount;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunObjectRecord_Raw
 {
-    public Int32 Id;
-    public String? ObjectResource;
+    public int Id;
+    public string? ObjectResource;
     public EventDragonDungeonRunObjectType ObjectType;
-    public Int32 ObjectColliderLeftSize;
-    public Int32 ObjectColliderRightSize;
-    public Int32 ObjectColliderUpSize;
-    public Int32 ObjectColliderDownSize;
-    public Int32 MovestepstoneSize;
-    public Int32 SpawnObjectId;
-    public Int32 PreactionTime;
-    public Int32 DragonFireTime;
-    public Int32 ObjectDamage;
+    public int ObjectColliderLeftSize;
+    public int ObjectColliderRightSize;
+    public int ObjectColliderUpSize;
+    public int ObjectColliderDownSize;
+    public int MovestepstoneSize;
+    public int SpawnObjectId;
+    public int PreactionTime;
+    public int DragonFireTime;
+    public int ObjectDamage;
     public EventDragonDungeonRunKnockBackDirection KnockBackDirection;
-    public Int32 NeedleUpTime;
-    public Int32 NeedleUpToDownTime;
-    public Int32 NeedleDownTime;
-    public Int32 NeedleDownToUpTime;
-    public Int32 GuardRange;
-    public Int32 ChaseDelayTime;
-    public Int32 GiveGoldAmount;
-    public Int32 AppearancePercent;
+    public int NeedleUpTime;
+    public int NeedleUpToDownTime;
+    public int NeedleDownTime;
+    public int NeedleDownToUpTime;
+    public int GuardRange;
+    public int ChaseDelayTime;
+    public int GiveGoldAmount;
+    public int AppearancePercent;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunPresetRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 RawOrder;
-    public List<String>? TileResource;
-    public Boolean FallableTile;
-    public Int32 TileO1UseSpawnerGroupId;
-    public Int32 Tile01UseObjectId;
-    public Int32 Tile02UseObjectId;
-    public Int32 Tile03UseObjectId;
-    public Int32 Tile04UseObjectId;
-    public Int32 Tile05UseObjectId;
-    public Int32 Tile06UseObjectId;
-    public Int32 Tile07UseObjectId;
-    public Int32 TileO2UseSpawnerGroupId;
+    public int Id;
+    public int GroupId;
+    public int RawOrder;
+    public List<string>? TileResource;
+    public bool FallableTile;
+    public int TileO1UseSpawnerGroupId;
+    public int Tile01UseObjectId;
+    public int Tile02UseObjectId;
+    public int Tile03UseObjectId;
+    public int Tile04UseObjectId;
+    public int Tile05UseObjectId;
+    public int Tile06UseObjectId;
+    public int Tile07UseObjectId;
+    public int TileO2UseSpawnerGroupId;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunScenarioRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ScenarioDialogGroupId;
-    public Int32 ScenarioUnlockDay;
+    public int Id;
+    public int GroupId;
+    public string? ScenarioDialogGroupId;
+    public int ScenarioUnlockDay;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunSpawnerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 UseObjectId01;
-    public Int32 UseObjectId02;
-    public Int32 UseObjectId03;
-    public Int32 ObjectSpeedTilePerSecond;
-    public Boolean UseWarningSign;
-    public Int32 WarningSignTime;
-    public Int32 ObjectRepeatIntervalMin;
-    public Int32 ObjectRepeatIntervalMax;
+    public int Id;
+    public int GroupId;
+    public int UseObjectId01;
+    public int UseObjectId02;
+    public int UseObjectId03;
+    public int ObjectSpeedTilePerSecond;
+    public bool UseWarningSign;
+    public int WarningSignTime;
+    public int ObjectRepeatIntervalMin;
+    public int ObjectRepeatIntervalMax;
 }
 
 [MemoryPackable]
 public partial class EventDragonDungeonRunWaveRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Boolean IsInfinity;
-    public Boolean IsRepeat;
-    public Int32 RepeatCount;
-    public String? LevelUpLocale;
+    public int Id;
+    public int GroupId;
+    public bool IsInfinity;
+    public bool IsRepeat;
+    public int RepeatCount;
+    public string? LevelUpLocale;
     public List<PresetGroupData_Raw>? PresetGroupData;
 }
 
 [MemoryPackable]
 public partial class EventDungeonDifficultRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public String? Name;
+    public int Id;
+    public int Group;
+    public int Order;
+    public string? Name;
     public EventDungeonOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Int32 StageGroup;
+    public int OpenConditionValue;
+    public int StageGroup;
 }
 
 [MemoryPackable]
 public partial class EventDungeonSpotBattleRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<EventDungeonOpenConditionObject>? OpenConditionList;
-    public String? ShortName;
+    public string? ShortName;
     public RewardType TicketItemType;
-    public Int32 TicketItemId;
-    public Int32 TicketItemCount;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Boolean SpotAutocontrol;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Int32 SpotId;
-    public Int32 FirstClearRewardId;
-    public Int32 ClearRewardId;
-    public String? EnterScenario;
-    public String? ExitScenario;
-    public Int32 FixedPlayCharacterId;
-    public Int32 CharacterLv;
+    public int TicketItemId;
+    public int TicketItemCount;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public bool SpotAutocontrol;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public int SpotId;
+    public int FirstClearRewardId;
+    public int ClearRewardId;
+    public string? EnterScenario;
+    public string? ExitScenario;
+    public int FixedPlayCharacterId;
+    public int CharacterLv;
     public QuickBattleType QuickBattleType;
-    public Int32 QuickBattleTryMaxCount;
+    public int QuickBattleTryMaxCount;
 }
 
 [MemoryPackable]
 public partial class EventDungeonStageRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Step;
-    public String? StageName;
+    public int Id;
+    public int Group;
+    public int Step;
+    public string? StageName;
     public EventDungeonContentsType StageContentsType;
-    public Int32 StageId;
-    public Boolean IsRepeatClear;
-    public Boolean IsGuideFieldChange;
-    public String? MapChangeGuideLocalkey;
-    public String? NpcChangeGuideLocalkey;
+    public int StageId;
+    public bool IsRepeatClear;
+    public bool IsGuideFieldChange;
+    public string? MapChangeGuideLocalkey;
+    public string? NpcChangeGuideLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventDungeonRecord
 {
-    public Int32 Id;
-    public String? PartName;
-    public Int32 BonusRewardCharacterGroup;
-    public Int32 BonusRewardId;
-    public Int32 DifficultGroup;
+    public int Id;
+    public string? PartName;
+    public int BonusRewardCharacterGroup;
+    public int BonusRewardId;
+    public int DifficultGroup;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameActivityConfigRecord_Raw
 {
-    public Int32 EventId;
-    public Int32 ChgLobbyBgWhenPassStoryId;
-    public Int32 DefaultMecha;
-    public Int32 DefaultWingman;
-    public String? FirstEnterScenarioGroupId;
+    public int EventId;
+    public int ChgLobbyBgWhenPassStoryId;
+    public int DefaultMecha;
+    public int DefaultWingman;
+    public string? FirstEnterScenarioGroupId;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameBookProcessRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public EvaBookType BookType;
-    public Int32 Num;
-    public Int32 RewardId;
+    public int Num;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameBookRecord_Raw
 {
-    public Int32 BookId;
-    public Int32 EventId;
+    public int BookId;
+    public int EventId;
     public EvaBookType BookType;
-    public Int32 BookGroup;
-    public Int32 StageId;
-    public Int32 DetailinfoId;
+    public int BookGroup;
+    public int StageId;
+    public int DetailinfoId;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Name;
-    public String? Description;
-    public List<String>? IconAsset;
-    public List<String>? CharacterAsset;
-    public String? UnlockLevel;
-    public String? UnlockDescription;
-    public List<String>? WeaponSets;
-    public String? CharacterSkill;
-    public List<String>? SkillParams;
-    public List<Int32>? SkillPower;
-    public Double DamageCoefficient;
-    public List<Double>? FluctuationCoefficient;
+    public int Id;
+    public int EventId;
+    public string? Name;
+    public string? Description;
+    public List<string>? IconAsset;
+    public List<string>? CharacterAsset;
+    public string? UnlockLevel;
+    public string? UnlockDescription;
+    public List<string>? WeaponSets;
+    public string? CharacterSkill;
+    public List<string>? SkillParams;
+    public List<int>? SkillPower;
+    public double DamageCoefficient;
+    public List<double>? FluctuationCoefficient;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameCollectionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Name;
-    public String? LockName;
-    public String? UiDescription;
-    public String? UiLockDescription;
-    public String? UiIcon;
+    public int Id;
+    public int EventId;
+    public string? Name;
+    public string? LockName;
+    public string? UiDescription;
+    public string? UiLockDescription;
+    public string? UiIcon;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameEnemySkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? UiIcon;
-    public String? UiVideo;
-    public String? Description;
-    public String? GunAsset;
+    public int Id;
+    public int EventId;
+    public string? UiIcon;
+    public string? UiVideo;
+    public string? Description;
+    public string? GunAsset;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameEnemyRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Name;
-    public String? Description;
-    public String? IconAsset;
-    public String? CharacterAsset;
-    public Int32 UnlockLevel;
-    public String? UnlockDescription;
-    public Boolean Boss;
-    public String? UiDescription;
-    public String? UiIcon;
-    public List<Int32>? Skills;
-    public Int32 Hp;
-    public Int32 Score;
-    public String? ScoreLoot;
-    public String? BuffLoot;
-    public String? BuffLootWeightAsset;
-    public List<String>? PreviewSkillIcons;
-    public List<String>? PreviewSkills;
-    public List<String>? PreviewSkillNames;
+    public int Id;
+    public int EventId;
+    public string? Name;
+    public string? Description;
+    public string? IconAsset;
+    public string? CharacterAsset;
+    public int UnlockLevel;
+    public string? UnlockDescription;
+    public bool Boss;
+    public string? UiDescription;
+    public string? UiIcon;
+    public List<int>? Skills;
+    public int Hp;
+    public int Score;
+    public string? ScoreLoot;
+    public string? BuffLoot;
+    public string? BuffLootWeightAsset;
+    public List<string>? PreviewSkillIcons;
+    public List<string>? PreviewSkills;
+    public List<string>? PreviewSkillNames;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameItemRecord_Raw
 {
-    public Int32 ItemId;
-    public Int32 EventId;
+    public int ItemId;
+    public int EventId;
     public EvaItemType ItemType;
-    public String? ItemResource;
-    public String? ItemName;
-    public String? ItemDescription;
-    public String? ItemDescriptionPlay;
-    public Int32 UnlockStage;
-    public String? UiCode;
-    public List<String>? PreviewSkillNames;
+    public string? ItemResource;
+    public string? ItemName;
+    public string? ItemDescription;
+    public string? ItemDescriptionPlay;
+    public int UnlockStage;
+    public string? UiCode;
+    public List<string>? PreviewSkillNames;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameMissionRecord_Raw
 {
-    public Int32 MissionId;
-    public Int32 EventId;
-    public String? MissionLocalkey;
+    public int MissionId;
+    public int EventId;
+    public string? MissionLocalkey;
     public EvaMissionCategory MissionCategory;
     public EvaMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
+    public int MissionTargetId;
+    public int MissionCount;
     public EvaMissionRewardType RewardType;
-    public Int32 RewardValue;
+    public int RewardValue;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameSkillEffectRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EvaSkillEffectType EffectType;
-    public Int32 StrengthenSize;
+    public int StrengthenSize;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameSkillRecord_Raw
 {
-    public Int32 SkillId;
-    public Int32 EventId;
-    public Int32 SkillGroup;
+    public int SkillId;
+    public int EventId;
+    public int SkillGroup;
     public List<need_skill_Raw>? NeedSkillArray;
-    public Int32 CostId;
-    public Int32 CostNum;
-    public Int32 Lv;
-    public List<Int32>? Effect;
-    public String? UiName;
-    public String? UiDes;
-    public String? UiIcon;
+    public int CostId;
+    public int CostNum;
+    public int Lv;
+    public List<int>? Effect;
+    public string? UiName;
+    public string? UiDes;
+    public string? UiIcon;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameStageRecord_Raw
 {
-    public Int32 StageId;
-    public Int32 EventId;
+    public int StageId;
+    public int EventId;
     public DateTime StartDate;
     public DateTime EndDate;
     public EvaStageType StageType;
-    public Int32 NeedStageId;
-    public Int32 OpenConditionEventStoryStage;
-    public Int32 OneStarScore;
-    public Int32 TwoStarScore;
-    public Int32 ThreeStarScore;
+    public int NeedStageId;
+    public int OpenConditionEventStoryStage;
+    public int OneStarScore;
+    public int TwoStarScore;
+    public int ThreeStarScore;
     public List<fix_reward_Raw>? FixRewardArray;
     public List<first_reward_Raw>? FirstRewardArray;
-    public String? NameLocalkey;
-    public String? BossIcon;
-    public String? LevelAssetName;
-    public String? EnterScenario;
-    public String? ExitScenario;
+    public string? NameLocalkey;
+    public string? BossIcon;
+    public string? LevelAssetName;
+    public string? EnterScenario;
+    public string? ExitScenario;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameTutorialRecord_Raw
 {
-    public Int32 Id;
-    public String? Title;
-    public String? Description;
-    public String? ShowAsset;
-    public Int32 MinUnlockedLevel;
+    public int Id;
+    public string? Title;
+    public string? Description;
+    public string? ShowAsset;
+    public int MinUnlockedLevel;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameWingmanRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? CharacterAsset;
-    public List<Int32>? WeaponSets;
+    public int Id;
+    public int EventId;
+    public string? CharacterAsset;
+    public List<int>? WeaponSets;
 }
 
 [MemoryPackable]
 public partial class EventEvaMiniGameWingmanTeamRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? Name;
-    public String? Description;
-    public String? IconAsset;
-    public String? UnlockLevel;
-    public String? UnlockDescription;
-    public String? Demonstration;
-    public String? Group;
-    public Double DamageCoefficient;
-    public List<Double>? FluctuationCoefficient;
+    public int Id;
+    public int EventId;
+    public string? Name;
+    public string? Description;
+    public string? IconAsset;
+    public string? UnlockLevel;
+    public string? UnlockDescription;
+    public string? Demonstration;
+    public string? Group;
+    public double DamageCoefficient;
+    public List<double>? FluctuationCoefficient;
 }
 
 [MemoryPackable]
 public partial class EventFieldCharacterCustomRecord
 {
-    public Int32 Id;
-    public String? VoiceFieldGoSoundCue;
-    public String? VoiceFieldTouchSoundCue;
+    public int Id;
+    public string? VoiceFieldGoSoundCue;
+    public string? VoiceFieldTouchSoundCue;
 }
 
 [MemoryPackable]
 public partial class EventFieldCooperationRecord
 {
-    public Int32 Id;
-    public String? MonsterNameLocalkey;
-    public String? MonsterImage;
-    public Int32 ElementId;
+    public int Id;
+    public string? MonsterNameLocalkey;
+    public string? MonsterImage;
+    public int ElementId;
 }
 
 [MemoryPackable]
 public partial class EventFieldEventTargetRecord
 {
-    public Int32 Id;
-    public Int32 EventFieldId;
-    public String? NpcLocalkeyName;
-    public String? NpcLocalkeyContents;
+    public int Id;
+    public int EventFieldId;
+    public string? NpcLocalkeyName;
+    public string? NpcLocalkeyContents;
     public EventFieldNPCType NpcType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public String? ForcedNameTagResource;
+    public int ResourceId;
+    public int CostumeIndex;
+    public string? ForcedNameTagResource;
     public EventTargetEventType ContentsType;
-    public Int32 ContentsId;
-    public Boolean DailyRespawn;
-    public Int32 DespawnNpcRespawnTime;
-    public Int32 InteractionDistance;
-    public String? ForcedInteractionMarker;
+    public int ContentsId;
+    public bool DailyRespawn;
+    public int DespawnNpcRespawnTime;
+    public int InteractionDistance;
+    public string? ForcedInteractionMarker;
 }
 
 [MemoryPackable]
 public partial class EventFieldFixedSDCharacterRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventFieldSDCharacterUsageType UsageType;
-    public Int32 Slot;
+    public int Slot;
     public FieldFixedSDCharacterReferenceType TableReferenceType;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public String? ScenarioCharacterId;
-    public Int32 CharacterCustomId;
+    public int ResourceId;
+    public int CostumeIndex;
+    public string? ScenarioCharacterId;
+    public int CharacterCustomId;
 }
 
 [MemoryPackable]
 public partial class EventFieldNoticePopupRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventFieldId;
+    public int Id;
+    public int EventFieldId;
     public EventFieldNoticePopupPrintConditionType PrintConditionType;
-    public Int32 PrintConditionValue;
-    public String? PopupUiPrefab;
-    public String? TitleLocalkey;
-    public String? SubTitleLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ImageResource;
+    public int PrintConditionValue;
+    public string? PopupUiPrefab;
+    public string? TitleLocalkey;
+    public string? SubTitleLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ImageResource;
 }
 
 [MemoryPackable]
 public partial class EventFieldRecollectionHubRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventFieldRecollectionCategoryType RecollectionCategoryType;
     public EventFieldRecollectionScenarioContentsType ScenarioContentsType;
-    public Int32 ScenarioEventId;
-    public Int32 ArchiveEventId;
-    public Int32 RecollectionValue;
-    public String? RecollectionNameLocalkey;
-    public String? RecollectionDescriptionLocalkey;
-    public String? RecollectionResource;
-    public String? AlbumPageResource;
+    public int ScenarioEventId;
+    public int ArchiveEventId;
+    public int RecollectionValue;
+    public string? RecollectionNameLocalkey;
+    public string? RecollectionDescriptionLocalkey;
+    public string? RecollectionResource;
+    public string? AlbumPageResource;
 }
 
 [MemoryPackable]
 public partial class EventFieldRecollectionMemorialRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 MemorialSeriesId;
+    public int Id;
+    public int GroupId;
+    public int MemorialSeriesId;
     public MemorialSeriesCategory MemorialCategoryIconResource;
 }
 
 [MemoryPackable]
 public partial class EventFieldRidingPresetRecord
 {
-    public Int32 Id;
-    public Int32 EventFieldId;
-    public Int32 ChangeProgressEvent;
-    public Int32 ChangeRidingValue;
+    public int Id;
+    public int EventFieldId;
+    public int ChangeProgressEvent;
+    public int ChangeRidingValue;
 }
 
 [MemoryPackable]
 public partial class EventFieldRidingRecord
 {
-    public Int32 Id;
+    public int Id;
     public NaviType NaviType;
-    public Boolean SquadRidingTogether;
-    public String? SquadChangeRidingEffect;
-    public String? RidingChangeSquadEffect;
+    public bool SquadRidingTogether;
+    public string? SquadChangeRidingEffect;
+    public string? RidingChangeSquadEffect;
     public FieldPlayerSquadType RidingPlayerSquadType;
-    public Int32 RidingPlayerSquadValue;
-    public Int32 RidingPlayerSquadSpeed;
-    public Int32 RidingSdCharacterSize;
-    public Int32 ChangeDelayTime;
-    public String? RidingResource;
-    public Int32 RidingResourceSize;
+    public int RidingPlayerSquadValue;
+    public int RidingPlayerSquadSpeed;
+    public int RidingSdCharacterSize;
+    public int ChangeDelayTime;
+    public string? RidingResource;
+    public int RidingResourceSize;
     public List<riding_contents_value>? ContentsValue;
 }
 
 [MemoryPackable]
 public partial class EventFieldRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? FieldDesignMap;
-    public String? FieldArtMapStandard;
-    public String? FieldHud;
-    public String? FieldFirstEntryResource;
-    public Int32 LinkEventPassId;
-    public Int32 ProgressEventGroupId;
-    public Boolean IsUseRoamingNpc;
-    public Int32 RoamingNpcLimit;
+    public int Id;
+    public int EventId;
+    public string? FieldDesignMap;
+    public string? FieldArtMapStandard;
+    public string? FieldHud;
+    public string? FieldFirstEntryResource;
+    public int LinkEventPassId;
+    public int ProgressEventGroupId;
+    public bool IsUseRoamingNpc;
+    public int RoamingNpcLimit;
     public EventFieldRoamingNPCType RoamingNpcType;
-    public Int32 RoamingNpcFixedSdCharacterGroupId;
-    public Int32 RoamingNpcSpeedMinimum;
-    public Int32 RoamingNpcSpeedMaximum;
+    public int RoamingNpcFixedSdCharacterGroupId;
+    public int RoamingNpcSpeedMinimum;
+    public int RoamingNpcSpeedMaximum;
     public FieldPlayerSquadType PlayerSquadType;
-    public Int32 PlayerSquadValue;
-    public Int32 PlayerSquadSpeed;
-    public Int32 SdCharacterSize;
-    public Int32 EventMissionGroup;
-    public Int32 RecollectionHubGroupId;
-    public String? FieldEnterScenario;
-    public Int32 FieldEnterScenarioStoryEventId;
+    public int PlayerSquadValue;
+    public int PlayerSquadSpeed;
+    public int SdCharacterSize;
+    public int EventMissionGroup;
+    public int RecollectionHubGroupId;
+    public string? FieldEnterScenario;
+    public int FieldEnterScenarioStoryEventId;
     public List<EventFieldCurrencyData>? EventFieldCurrencyList;
 }
 
 [MemoryPackable]
 public partial class EventGachaBoardBoardRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 HorizontalSlotValue;
-    public Int32 VerticalSlotValue;
-    public Int32 Number;
-    public Boolean IsRepeat;
-    public Int32 SlotRewardGroupId;
-    public Int32 RewardId;
+    public int Id;
+    public int Group;
+    public int HorizontalSlotValue;
+    public int VerticalSlotValue;
+    public int Number;
+    public bool IsRepeat;
+    public int SlotRewardGroupId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventGachaBoardfeverRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Number;
-    public Int32 SlotOpenValue;
-    public Int32 BonusValue;
+    public int Id;
+    public int Group;
+    public int Number;
+    public int SlotOpenValue;
+    public int BonusValue;
 }
 
 [MemoryPackable]
 public partial class EventGachaBoardManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 TicketItemId;
-    public Int32 TicketItemCount;
-    public Int32 BoardGroupId;
-    public Int32 BoardChangeCount;
-    public Int32 DailyRewardValue;
-    public Int32 MissionGroupId;
-    public Int32 MultiReceiveCount;
-    public String? UiPrefab;
-    public Int32 FeverGroupId;
+    public int Id;
+    public int EventId;
+    public int TicketItemId;
+    public int TicketItemCount;
+    public int BoardGroupId;
+    public int BoardChangeCount;
+    public int DailyRewardValue;
+    public int MissionGroupId;
+    public int MultiReceiveCount;
+    public string? UiPrefab;
+    public int FeverGroupId;
 }
 
 [MemoryPackable]
 public partial class EventGachaBoardMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
+    public int Id;
+    public int Group;
+    public int Order;
     public EventGachaBoardMissionMissionCondition MissionCondition;
-    public Int32 MissionConditionTarget;
-    public Int32 MissionConditionValue;
-    public String? DescriptionLocalkey;
-    public Int32 RewardId;
+    public int MissionConditionTarget;
+    public int MissionConditionValue;
+    public string? DescriptionLocalkey;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventGachaBoardRewardRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Rank;
-    public Int32 SlotCount;
-    public Int32 Order;
-    public Int32 RewardId;
+    public int Id;
+    public int Group;
+    public int Rank;
+    public int SlotCount;
+    public int Order;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventInAppShopProductRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public Int32 PackageGroupId;
+    public int Id;
+    public int Group;
+    public int Order;
+    public int PackageGroupId;
     public ShopBuyLimitType BuyLimitType;
-    public Int32 BuyLimitCount;
-    public Boolean IsFree;
-    public Int32 MidasProductId;
+    public int BuyLimitCount;
+    public bool IsFree;
+    public int MidasProductId;
 }
 
 [MemoryPackable]
 public partial class EventInAppShopRecord
 {
-    public Int32 Id;
-    public String? Name;
-    public String? Description;
+    public int Id;
+    public string? Name;
+    public string? Description;
     public RewardType ShopItemType;
-    public Int32 ShopItemId;
-    public Int32 ProductGroup;
-    public String? BgResourceTable;
-    public String? BgResourceId;
+    public int ShopItemId;
+    public int ProductGroup;
+    public string? BgResourceTable;
+    public string? BgResourceId;
 }
 
 [MemoryPackable]
 public partial class EventManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public EventSystemType EventSystemType;
-    public String? EventShortcutId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public string? EventShortcutId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public ScheduleType ScheduleType;
-    public String? ScheduleValue;
-    public String? EventDisableLocale;
-    public String? EventResourceId;
-    public String? EventThumbnailResourceTable;
-    public String? EventThumbnailResourceId;
-    public String? ThumbnailColor;
-    public String? EventBannerResourceTable;
-    public String? EventBannerResourceId;
-    public Int32 EventOrder;
-    public Boolean IsPopup;
+    public string? ScheduleValue;
+    public string? EventDisableLocale;
+    public string? EventResourceId;
+    public string? EventThumbnailResourceTable;
+    public string? EventThumbnailResourceId;
+    public string? ThumbnailColor;
+    public string? EventBannerResourceTable;
+    public string? EventBannerResourceId;
+    public int EventOrder;
+    public bool IsPopup;
     public EventActiveType ActiveType;
-    public Boolean IsHidden;
-    public Int32 ParentsEventId;
-    public Int32 SetField;
+    public bool IsHidden;
+    public int ParentsEventId;
+    public int SetField;
     public BannerPrintType BannerPrintType;
 }
 
 [MemoryPackable]
 public partial class EventMapChangePresetRecord
 {
-    public Int32 Id;
-    public String? ArtMapChangeValue;
-    public String? HudChangeValue;
-    public String? InteractionMarkerChangeValue;
-    public String? NameTagChangeValue;
-    public String? SkyBoxChangeValue;
-    public String? PpChangeValue;
+    public int Id;
+    public string? ArtMapChangeValue;
+    public string? HudChangeValue;
+    public string? InteractionMarkerChangeValue;
+    public string? NameTagChangeValue;
+    public string? SkyBoxChangeValue;
+    public string? PpChangeValue;
 }
 
 [MemoryPackable]
 public partial class EventMissionCategoryRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
-    public String? Name;
-    public String? Description;
-    public Int32 MissionListGroup;
-    public String? PointResource;
+    public int Id;
+    public int Group;
+    public int Order;
+    public string? Name;
+    public string? Description;
+    public int MissionListGroup;
+    public string? PointResource;
     public EventMissionInitType InitType;
 }
 
 [MemoryPackable]
 public partial class EventMissionInfoRecord
 {
-    public Int32 Id;
-    public String? UiPrefab;
+    public int Id;
+    public string? UiPrefab;
 }
 
 [MemoryPackable]
 public partial class EventMissionListRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Boolean IsMain;
-    public Int32 Order;
-    public Int32 Step;
+    public int Id;
+    public int Group;
+    public bool IsMain;
+    public int Order;
+    public int Step;
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public Boolean PrintValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 RewardPointValue;
-    public Int32 RewardId;
-    public Boolean IsStack;
+    public int ConditionId;
+    public int ConditionValue;
+    public bool PrintValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int RewardPointValue;
+    public int RewardId;
+    public bool IsStack;
 }
 
 [MemoryPackable]
 public partial class EventMVGBalloonRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventMVGBalloonTypeData BalloonType;
-    public Int32 Order;
-    public Boolean Randomize;
-    public Int32 BalloonShowTime;
-    public Int32 WaitTimeAfterEndBalloon;
-    public String? LocaleName;
-    public String? LocaleKey;
+    public int Order;
+    public bool Randomize;
+    public int BalloonShowTime;
+    public int WaitTimeAfterEndBalloon;
+    public string? LocaleName;
+    public string? LocaleKey;
 }
 
 [MemoryPackable]
 public partial class EventMVGChallengeLevelSettingRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ChallengeStep;
-    public Int32 LevelId;
+    public int Id;
+    public int ChallengeStep;
+    public int LevelId;
 }
 
 [MemoryPackable]
 public partial class EventMVGChapterInfoRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ChapterId;
-    public String? ChapterName;
-    public String? ChapterImg;
+    public int Id;
+    public int ChapterId;
+    public string? ChapterName;
+    public string? ChapterImg;
 }
 
 [MemoryPackable]
 public partial class EventMVGCharacterCustomActionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TimelineValue;
+    public int Id;
+    public int GroupId;
+    public int TimelineValue;
     public EventMVGCharacterCustomActionTypeData ActionType;
     public List<EventMVGCharacterCustomActionValueData_Raw>? ActionValue;
-    public String? SetMuzzleFx;
+    public string? SetMuzzleFx;
     public EventMVGCharacterCustomActionMuzzleTypeData SetMuzzle;
-    public String? ProjResourceId;
-    public String? ProjResourceHitId;
+    public string? ProjResourceId;
+    public string? ProjResourceHitId;
     public EventMVGCharacterCustomActionProjectileTypeData ProjType;
     public List<EventMVGCharacterCustomActionProjTypeValueData_Raw>? ProjTypeValue;
-    public Int32 ProjAmount;
-    public Int32 ProjDuration;
-    public String? AfterDurationFx;
-    public Int32 ProjAfterCollide;
-    public Int32 ProjDmgCount;
-    public Int32 ProjDmgDelay;
-    public Int32 ProjPierce;
-    public Double ProjSize;
-    public Double ProjSpd;
-    public Int32 ProjAtk;
+    public int ProjAmount;
+    public int ProjDuration;
+    public string? AfterDurationFx;
+    public int ProjAfterCollide;
+    public int ProjDmgCount;
+    public int ProjDmgDelay;
+    public int ProjPierce;
+    public double ProjSize;
+    public double ProjSpd;
+    public int ProjAtk;
 }
 
 [MemoryPackable]
 public partial class EventMVGCharacterCustomRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventMVGCustomTypeMainData CustomTypeMain;
     public EventMVGCharacterCustomSubTypeData CustomTypeSub;
     public EventMVGCharacterCustomLockTypeData SkillLockType;
-    public Boolean AttackKeep;
-    public Int32 Lv;
-    public Int32 ActionGroupId;
-    public Int32 CoolDownTime;
-    public Int32 GlobalCoolDownTime;
-    public Boolean IgnoreGlobalCoolDownTime;
+    public bool AttackKeep;
+    public int Lv;
+    public int ActionGroupId;
+    public int CoolDownTime;
+    public int GlobalCoolDownTime;
+    public bool IgnoreGlobalCoolDownTime;
     public List<EventMVGCharacterCustomCustomVariablesData_Raw>? CustomVariablesData;
 }
 
 [MemoryPackable]
 public partial class EventMVGCharacterSettingRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StatHp;
-    public Int32 StatAtk;
-    public Int32 MaxAbsorbGauge;
-    public Int32 MaxModuleSlot;
-    public Int32 SkillCSetSearchPointLength;
-    public Int32 DefaultSkillALv;
-    public Int32 SkillAIdSet;
-    public Int32 SkillBIdSet;
-    public Int32 SkillCIdSet;
-    public Int32 SkillDIdSet;
-    public Int32 SkillBurstAIdSet;
-    public Int32 SkillBurstBIdSet;
-    public Int32 SkillBurstCIdSet;
-    public Int32 SkillBurstDIdSet;
-    public String? BurstAnim;
-    public String? BurstCharacterFx;
+    public int Id;
+    public int StatHp;
+    public int StatAtk;
+    public int MaxAbsorbGauge;
+    public int MaxModuleSlot;
+    public int SkillCSetSearchPointLength;
+    public int DefaultSkillALv;
+    public int SkillAIdSet;
+    public int SkillBIdSet;
+    public int SkillCIdSet;
+    public int SkillDIdSet;
+    public int SkillBurstAIdSet;
+    public int SkillBurstBIdSet;
+    public int SkillBurstCIdSet;
+    public int SkillBurstDIdSet;
+    public string? BurstAnim;
+    public string? BurstCharacterFx;
 }
 
 [MemoryPackable]
 public partial class EventMVGCollectableRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGCollectableCategoryData Category;
-    public String? IconResource;
-    public Int32 Order;
-    public String? CollectableName;
-    public String? CollectableDesc;
-    public String? CollectableDescShort;
-    public String? AdditionalGetInfo;
-    public Boolean IsReset;
+    public string? IconResource;
+    public int Order;
+    public string? CollectableName;
+    public string? CollectableDesc;
+    public string? CollectableDescShort;
+    public string? AdditionalGetInfo;
+    public bool IsReset;
 }
 
 [MemoryPackable]
 public partial class EventMVGCommonSettingsRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchive;
-    public Int32 RoomChangeInvincibleTime;
-    public Double CamMoveEaseTime;
-    public Double CamZoonAdjustEaseTime;
-    public Double CamShakeDecreaseTime;
-    public Int32 GameStartChapterId;
-    public String? GameStartRoomName;
-    public Int32 GameStartSocketId;
-    public Int32 LaserLimitLength;
-    public Int32 TeleportTransitionIn;
-    public Int32 TeleportTransitionOut;
-    public Int32 DropItemDeleteTime;
-    public String? DropObjectDisappearFx;
-    public Int32 MapCount;
-    public Int32 EndGameStartChapterId;
-    public String? EndGameStartRoomName;
+    public int Id;
+    public int EventId;
+    public bool IsArchive;
+    public int RoomChangeInvincibleTime;
+    public double CamMoveEaseTime;
+    public double CamZoonAdjustEaseTime;
+    public double CamShakeDecreaseTime;
+    public int GameStartChapterId;
+    public string? GameStartRoomName;
+    public int GameStartSocketId;
+    public int LaserLimitLength;
+    public int TeleportTransitionIn;
+    public int TeleportTransitionOut;
+    public int DropItemDeleteTime;
+    public string? DropObjectDisappearFx;
+    public int MapCount;
+    public int EndGameStartChapterId;
+    public string? EndGameStartRoomName;
 }
 
 [MemoryPackable]
 public partial class EventMVGCurrencyRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGCurrencyTypeData Category;
-    public String? IconResource;
+    public string? IconResource;
 }
 
 [MemoryPackable]
 public partial class EventMVGDirectorRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public EventMVGDirectorTimeLineActionTypeData TimelineAction;
     public List<EventMVGDirectorTimelineValueData_Raw>? TimelineValue;
 }
@@ -5424,342 +5424,342 @@ public partial class EventMVGDirectorRecord_Raw
 [MemoryPackable]
 public partial class EventMVGLoadingRecord_Raw
 {
-    public Int32 Id;
-    public String? LoadingTipLocalkey;
-    public Int32 Order;
+    public int Id;
+    public string? LoadingTipLocalkey;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class EventMVGMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 MvgId;
+    public int Id;
+    public int MvgId;
     public EventMVGMissionType MissionType;
     public EventMVGMIssionSubType MissionSubType;
     public EventMVGMissionConditionType ConditionType;
-    public Boolean DisplayType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public Int32 Order;
-    public String? NameLocalkey;
-    public Int32 PointValue;
-    public Boolean IsReset;
-    public Int32 RewardId;
+    public bool DisplayType;
+    public int ConditionId;
+    public int ConditionValue;
+    public int Order;
+    public string? NameLocalkey;
+    public int PointValue;
+    public bool IsReset;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventMVGModuleRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGModuleCategoryData Category;
-    public String? IconResource;
-    public Int32 Order;
-    public String? ModuleName;
-    public String? ModuleDesc;
-    public String? ModuleDescShort;
-    public Int32 ModuleUseValue;
-    public Int32 SkillId;
+    public string? IconResource;
+    public int Order;
+    public string? ModuleName;
+    public string? ModuleDesc;
+    public string? ModuleDescShort;
+    public int ModuleUseValue;
+    public int SkillId;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterAttackTierRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGMonsterAttackTiertierTypeData Tier;
-    public Int32 AttackPoint;
-    public Int32 EnergyEductedTier;
+    public int AttackPoint;
+    public int EnergyEductedTier;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterDropItemRecord_Raw
 {
-    public Int32 Id;
-    public String? Desc;
+    public int Id;
+    public string? Desc;
     public EventMVGCurrencyType CurrencyType;
-    public Int32 CurrencyValue;
-    public String? CurrencyResource;
+    public int CurrencyValue;
+    public string? CurrencyResource;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterDropListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ChallengeStep;
-    public String? Desc;
+    public int Id;
+    public int ChallengeStep;
+    public string? Desc;
     public List<EventMVGMonsterDropListSettingData_Raw>? DropSetting;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterLevelRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StendardAttackTierId;
-    public Single AttackSpeed;
-    public Single ChaseSpeed;
-    public Int32 Thrash;
-    public Int32 Normal;
-    public Int32 Elite;
-    public Int32 Special;
-    public Int32 Centurion;
-    public Int32 Boss;
+    public int Id;
+    public int StendardAttackTierId;
+    public float AttackSpeed;
+    public float ChaseSpeed;
+    public int Thrash;
+    public int Normal;
+    public int Elite;
+    public int Special;
+    public int Centurion;
+    public int Boss;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterSettingRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? MonsterModelId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? MonsterModelId;
     public EventMVGMonsterSettinggradeTypeData Grade;
     public EventMVGMonsterSettingmonstertypeTypeData Type;
-    public String? DeadEffect;
-    public String? Reward;
-    public Int32 DeathChargeBurstgauge;
-    public Int32 RankPoint;
-    public Int32 HpRatio;
-    public Int32 EnergyEductedRatio;
-    public Int32 AttackSpeedRatio;
-    public Int32 FirstRecognitionRange;
-    public Single RoamingSpeed;
-    public Single RoamingAcceleration;
-    public Int32 ChaseRange;
-    public Int32 ChaseSpeedRatio;
-    public Int32 ReturnRange;
-    public Int32 BattleStartRange;
-    public Int32 RespawnTime;
-    public String? SpotBt;
-    public Int32 SkillId01;
-    public Int32 SkillId02;
-    public Int32 SkillId03;
-    public Int32 SkillId04;
-    public Int32 SkillId05;
-    public Int32 SkillId06;
-    public Int32 SkillId07;
-    public Int32 SkillId08;
-    public Int32 SkillId09;
-    public Int32 SkillId10;
-    public Int32 SkillId11;
-    public Int32 SkillId12;
-    public Int32 SkillId13;
-    public Int32 SkillId14;
-    public Int32 SkillId15;
+    public string? DeadEffect;
+    public string? Reward;
+    public int DeathChargeBurstgauge;
+    public int RankPoint;
+    public int HpRatio;
+    public int EnergyEductedRatio;
+    public int AttackSpeedRatio;
+    public int FirstRecognitionRange;
+    public float RoamingSpeed;
+    public float RoamingAcceleration;
+    public int ChaseRange;
+    public int ChaseSpeedRatio;
+    public int ReturnRange;
+    public int BattleStartRange;
+    public int RespawnTime;
+    public string? SpotBt;
+    public int SkillId01;
+    public int SkillId02;
+    public int SkillId03;
+    public int SkillId04;
+    public int SkillId05;
+    public int SkillId06;
+    public int SkillId07;
+    public int SkillId08;
+    public int SkillId09;
+    public int SkillId10;
+    public int SkillId11;
+    public int SkillId12;
+    public int SkillId13;
+    public int SkillId14;
+    public int SkillId15;
 }
 
 [MemoryPackable]
 public partial class EventMVGMonsterSkillRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGMonsterSkillskilltypeTypeData SkillType;
-    public Int32 AttackTierId;
-    public Int32 CoolTime;
-    public Single ProjectileSpeed;
-    public Int32 ProjectileHitNum;
-    public String? ProjectileModelResource;
-    public String? ProjectileMuzResource;
-    public String? ProjectileHitResource;
-    public String? ProjectileCastingResource;
-    public Boolean Absorbable;
-    public Int32 ChargeBurstgauge;
-    public Boolean ProjectileExtinction;
-    public Int32 ProjectileHeight;
-    public Int32 ProjectileWidth;
-    public Int32 ChaseAngle;
-    public Int32 ChaseTime;
-    public Int32 ShotLineAngle;
-    public Int32 LaserAttackDelay;
-    public Int32 LaserAttackInterval;
-    public Int32 LaserDuration;
-    public Boolean ProjectileExplosive;
-    public Int32 ExplosionHeight;
-    public Int32 ExplosionWidth;
+    public int AttackTierId;
+    public int CoolTime;
+    public float ProjectileSpeed;
+    public int ProjectileHitNum;
+    public string? ProjectileModelResource;
+    public string? ProjectileMuzResource;
+    public string? ProjectileHitResource;
+    public string? ProjectileCastingResource;
+    public bool Absorbable;
+    public int ChargeBurstgauge;
+    public bool ProjectileExtinction;
+    public int ProjectileHeight;
+    public int ProjectileWidth;
+    public int ChaseAngle;
+    public int ChaseTime;
+    public int ShotLineAngle;
+    public int LaserAttackDelay;
+    public int LaserAttackInterval;
+    public int LaserDuration;
+    public bool ProjectileExplosive;
+    public int ExplosionHeight;
+    public int ExplosionWidth;
 }
 
 [MemoryPackable]
 public partial class EventMVGQuestRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public MVGQuestTargetType QuestTargetType;
     public MVGQuestType QuestType;
-    public Int32 ParentsQuestId;
+    public int ParentsQuestId;
     public EventMVGQuestConditionType ConditionType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue1;
-    public String? ConditionValue2;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 TimeLineGroupId;
-    public Int32 RewardId;
-    public Int32 NextQuestId;
+    public int ConditionId;
+    public int ConditionValue1;
+    public string? ConditionValue2;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int TimeLineGroupId;
+    public int RewardId;
+    public int NextQuestId;
 }
 
 [MemoryPackable]
 public partial class EventMVGResourceSettingRecord_Raw
 {
-    public Int32 Id;
-    public String? ResourceCategory;
+    public int Id;
+    public string? ResourceCategory;
     public EventMVGResourceTypeData ResourceType;
-    public String? ResourceValue;
-    public String? ActiveFxResource;
-    public String? AnimGoOn;
-    public String? AnimOn;
-    public String? AnimGoOff;
-    public String? AnimOff;
+    public string? ResourceValue;
+    public string? ActiveFxResource;
+    public string? AnimGoOn;
+    public string? AnimOn;
+    public string? AnimGoOff;
+    public string? AnimOff;
 }
 
 [MemoryPackable]
 public partial class EventMVGShopRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public String? Desc;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public string? Desc;
     public EventMVGShopTypeData ShopType;
-    public String? ShopIcon;
-    public String? ShopName;
-    public String? ShopTxt;
-    public Int32 ItemSlot;
+    public string? ShopIcon;
+    public string? ShopName;
+    public string? ShopTxt;
+    public int ItemSlot;
     public EventMVGShopItemTypeData ItemType;
-    public Int32 ItemId;
+    public int ItemId;
     public List<EventMVGShopRequireCurrencyTypeData_Raw>? RequireCurrency;
 }
 
 [MemoryPackable]
 public partial class EventMVGTeleportRecord_Raw
 {
-    public Int32 Id;
-    public String? RoomAddressableName;
-    public Int32 SocketPointId;
-    public String? LocaleName;
-    public String? ResourceImage;
+    public int Id;
+    public string? RoomAddressableName;
+    public int SocketPointId;
+    public string? LocaleName;
+    public string? ResourceImage;
 }
 
 [MemoryPackable]
 public partial class EventMVGTutorialConditionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 HelptipId;
+    public int Id;
+    public int HelptipId;
     public MVGTutorialConditionType HelptipActiveCondition;
-    public Int32 HelptipActiveConditionId;
-    public Int32 HelptipActiveConditionValue;
+    public int HelptipActiveConditionId;
+    public int HelptipActiveConditionValue;
 }
 
 [MemoryPackable]
 public partial class EventMVGUnlockRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGUnlockFunctionTYpe TargetFunctionType;
     public EventMVGUnlockConditionType UnlockConditionType;
-    public Int32 UnlockConditionId;
-    public String? UnlockNameLocalkey;
-    public String? UnlockDescriptionLocalkey;
-    public String? UnlockResourceId;
-    public Int32 DisplayHelptipGroupId;
+    public int UnlockConditionId;
+    public string? UnlockNameLocalkey;
+    public string? UnlockDescriptionLocalkey;
+    public string? UnlockResourceId;
+    public int DisplayHelptipGroupId;
 }
 
 [MemoryPackable]
 public partial class EventMVGUpgradeShopRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventMVGStatUpgradeType UpgradeType;
-    public Int32 UpgradeCount;
-    public Boolean IsMaxLevel;
-    public Int32 UpgradeTargetGroupId;
-    public Int32 ConditionCurrencyId1;
-    public Int32 ConditionCurrencyValue1;
-    public Int32 ConditionCurrencyId2;
-    public Int32 ConditionCurrencyValue2;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int UpgradeCount;
+    public bool IsMaxLevel;
+    public int UpgradeTargetGroupId;
+    public int ConditionCurrencyId1;
+    public int ConditionCurrencyValue1;
+    public int ConditionCurrencyId2;
+    public int ConditionCurrencyValue2;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventNewPlayerLotteryRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 DrawCnt;
-    public Int32 DrawCntMax;
-    public Int32 RewardPool;
+    public int Id;
+    public int EventId;
+    public int DrawCnt;
+    public int DrawCntMax;
+    public int RewardPool;
 }
 
 [MemoryPackable]
 public partial class EventNKSBalloonRecord
 {
-    public Int32 Id;
-    public String? GroupId;
+    public int Id;
+    public string? GroupId;
     public EventNKSDialogTypeData DialogType;
-    public Int32 Priority;
+    public int Priority;
     public EventNKSDialogPrintTypeData PrintType;
-    public String? PortraitId;
-    public String? NameLocalkey;
-    public String? ScenarioLocalkey;
-    public String? PlaySound;
-    public Int32 Duration;
-    public Int32 ExecuteDelayTime;
-    public Int32 ExecuteRate;
-    public Boolean FirstShowCheck;
+    public string? PortraitId;
+    public string? NameLocalkey;
+    public string? ScenarioLocalkey;
+    public string? PlaySound;
+    public int Duration;
+    public int ExecuteDelayTime;
+    public int ExecuteRate;
+    public bool FirstShowCheck;
     public List<BallonConditionData>? ConditionData;
 }
 
 [MemoryPackable]
 public partial class EventNKSCharacterBurstRecord
 {
-    public Int32 Id;
-    public Int32 CharacterId;
-    public Int32 ItemsActionGroupId;
-    public Int32 BurstActiveTime;
-    public Int32 CooldownTime;
-    public Int32 KillCooldownSubTime;
+    public int Id;
+    public int CharacterId;
+    public int ItemsActionGroupId;
+    public int BurstActiveTime;
+    public int CooldownTime;
+    public int KillCooldownSubTime;
 }
 
 [MemoryPackable]
 public partial class EventNKSCharacterLevelRecord
 {
-    public Int32 Id;
-    public Int32 Lv;
-    public Int32 Exp;
-    public Boolean Loop;
+    public int Id;
+    public int Lv;
+    public int Exp;
+    public bool Loop;
 }
 
 [MemoryPackable]
 public partial class EventNKSCharacterSkillTreeRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TreeLevel;
-    public Int32 Line;
+    public int Id;
+    public int GroupId;
+    public int TreeLevel;
+    public int Line;
     public List<SlotItemData>? SlotData;
 }
 
 [MemoryPackable]
 public partial class EventNKSCharacterRecord
 {
-    public Int32 Id;
-    public Int32 CommonSettingsId;
-    public String? NameLocalkey;
-    public String? ResourceId;
-    public String? UiResourceId;
-    public String? UiLobbyCharacter;
-    public Int32 CharacterSkillTreeGroupId;
-    public Int32 ReqStgClear;
-    public Int32 ReqItemCurrency;
-    public Int32 ReqItemId;
-    public Int32 StatMvSpd;
-    public Int32 MinMvSpd;
-    public Int32 StatHp;
-    public Int32 MinHp;
-    public Int32 StatAtk;
-    public Int32 MinAtk;
-    public Int32 StatAtkspd;
-    public Int32 MinAtkspd;
-    public Int32 StatProjSize;
-    public Int32 MinProjSize;
-    public Int32 StatProjSpd;
-    public Int32 MinProjSpd;
-    public Int32 StatDef;
-    public Int32 MinDef;
-    public Int32 StatMagnet;
-    public Int32 MinMagnet;
+    public int Id;
+    public int CommonSettingsId;
+    public string? NameLocalkey;
+    public string? ResourceId;
+    public string? UiResourceId;
+    public string? UiLobbyCharacter;
+    public int CharacterSkillTreeGroupId;
+    public int ReqStgClear;
+    public int ReqItemCurrency;
+    public int ReqItemId;
+    public int StatMvSpd;
+    public int MinMvSpd;
+    public int StatHp;
+    public int MinHp;
+    public int StatAtk;
+    public int MinAtk;
+    public int StatAtkspd;
+    public int MinAtkspd;
+    public int StatProjSize;
+    public int MinProjSize;
+    public int StatProjSpd;
+    public int MinProjSpd;
+    public int StatDef;
+    public int MinDef;
+    public int StatMagnet;
+    public int MinMagnet;
     public List<WeaponDefaultData>? WeaponDefault;
     public List<ModuleDefaultData>? ModuleDefault;
 }
@@ -5767,184 +5767,184 @@ public partial class EventNKSCharacterRecord
 [MemoryPackable]
 public partial class EventNKSCoinSkillSlotRecord
 {
-    public Int32 Id;
-    public Int32 SlotGroupId;
-    public Int32 Grade;
-    public Int32 GradeUigauge;
-    public Int32 CoinAmount;
+    public int Id;
+    public int SlotGroupId;
+    public int Grade;
+    public int GradeUigauge;
+    public int CoinAmount;
 }
 
 [MemoryPackable]
 public partial class EventNKSCoinSkillStoreRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SecondGroupId;
-    public Int32 Grade;
-    public Int32 GroupRate;
+    public int Id;
+    public int GroupId;
+    public int SecondGroupId;
+    public int Grade;
+    public int GroupRate;
     public EventNKSItemsStatType StatType1;
     public EventNKSItemsStatCalcType StatCalcType1;
-    public Double StatValue1;
-    public String? LocaleName;
-    public String? IconResource;
+    public double StatValue1;
+    public string? LocaleName;
+    public string? IconResource;
 }
 
 [MemoryPackable]
 public partial class EventNKSCoinStoreRecord
 {
-    public Int32 Id;
+    public int Id;
     public EventNKSCoinStoreType StoreType;
-    public Int32 Count;
-    public Int32 CoinAmount;
+    public int Count;
+    public int CoinAmount;
 }
 
 [MemoryPackable]
 public partial class EventNKSCollectionRecord
 {
-    public Int32 Id;
+    public int Id;
     public EventNKSCollectionTypeData CollectionCategory;
     public EventNKSVersionType VersionType;
-    public Int32 ItemId;
-    public String? Particle;
-    public String? CollectionHintLocale;
+    public int ItemId;
+    public string? Particle;
+    public string? CollectionHintLocale;
 }
 
 [MemoryPackable]
 public partial class EventNKSCommonSettingsRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 EventId;
+    public int Id;
+    public int GroupId;
+    public int EventId;
     public EventNKSVersionType VersionType;
-    public Boolean IsSpecialMode;
-    public Boolean IsArchiveEvent;
-    public Int32 CheckBoss;
-    public String? EnterScenario;
-    public Int32 FieldItemAutoDisappearTime;
-    public Int32 AutoSaveTimer;
-    public Double ItemCalcWeight;
-    public Int32 PcInvincibleTime;
-    public Int32 MagnetMoveToPlayerCharacterSpd;
-    public String? MonsterCommonAppearEffect;
-    public String? MonsterCommonDeathEffectId;
-    public Int32 SetBossDeathEffectTime;
-    public Int32 MonsterCommonKnockbackDelay;
-    public Int32 MonsterCommonWhiteBlinkDelay;
-    public Int32 BounceDefaultWidth;
-    public Int32 BounceDefaultHeight;
-    public Int32 PlayableCharacterBurstFadeTime;
-    public Double PlayableCharacterBurstInterval;
-    public Int32 CoinSkillStoreReRollAmount;
-    public Int32 CoinSkillStoreLockAddAmount;
-    public Int32 CoinReviveMaxCount;
-    public Int32 LevelupSlotMaxRerollCount;
-    public Int32 MaxCombineWeapon;
-    public Int32 MaxCombineModule;
+    public bool IsSpecialMode;
+    public bool IsArchiveEvent;
+    public int CheckBoss;
+    public string? EnterScenario;
+    public int FieldItemAutoDisappearTime;
+    public int AutoSaveTimer;
+    public double ItemCalcWeight;
+    public int PcInvincibleTime;
+    public int MagnetMoveToPlayerCharacterSpd;
+    public string? MonsterCommonAppearEffect;
+    public string? MonsterCommonDeathEffectId;
+    public int SetBossDeathEffectTime;
+    public int MonsterCommonKnockbackDelay;
+    public int MonsterCommonWhiteBlinkDelay;
+    public int BounceDefaultWidth;
+    public int BounceDefaultHeight;
+    public int PlayableCharacterBurstFadeTime;
+    public double PlayableCharacterBurstInterval;
+    public int CoinSkillStoreReRollAmount;
+    public int CoinSkillStoreLockAddAmount;
+    public int CoinReviveMaxCount;
+    public int LevelupSlotMaxRerollCount;
+    public int MaxCombineWeapon;
+    public int MaxCombineModule;
 }
 
 [MemoryPackable]
 public partial class EventNKSDialogRecord
 {
-    public Int32 Id;
-    public Boolean IsDialogFirstPoint;
-    public String? GroupId;
-    public Int32 Priority;
+    public int Id;
+    public bool IsDialogFirstPoint;
+    public string? GroupId;
+    public int Priority;
     public EventNKSDialogPrintTypeData PrintType;
-    public String? PortraitId;
-    public String? NameLocalkey;
-    public String? ScenarioLocalkey;
-    public String? PlaySound;
-    public String? PlayBgm;
-    public Int32 Duration;
-    public String? SetBackground;
-    public String? HideBackground;
-    public Int32 SetBackgroundCordX;
-    public Int32 SetBackgroundCordY;
-    public Double SetBackgroundScale;
+    public string? PortraitId;
+    public string? NameLocalkey;
+    public string? ScenarioLocalkey;
+    public string? PlaySound;
+    public string? PlayBgm;
+    public int Duration;
+    public string? SetBackground;
+    public string? HideBackground;
+    public int SetBackgroundCordX;
+    public int SetBackgroundCordY;
+    public double SetBackgroundScale;
     public List<SpineResourceData>? SpineData;
     public EventNKSDialogEffectTypeData ScenarioEffectType;
-    public String? ScenarioEffectValue;
-    public Int32 ExecuteDelayTime;
-    public Int32 ExecuteRate;
-    public Boolean FirstShowCheck;
+    public string? ScenarioEffectValue;
+    public int ExecuteDelayTime;
+    public int ExecuteRate;
+    public bool FirstShowCheck;
     public List<DialogConditionData>? ConditionData;
 }
 
 [MemoryPackable]
 public partial class EventNKSDropListRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ItemId;
+    public int Id;
+    public int GroupId;
+    public int ItemId;
 }
 
 [MemoryPackable]
 public partial class EventNKSGachaBoxRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
-    public Int32 Grade;
-    public Int32 GachaListGroupId;
-    public Int32 Rate;
-    public Int32 MaxSlot;
+    public int Id;
+    public string? ResourceId;
+    public int Grade;
+    public int GachaListGroupId;
+    public int Rate;
+    public int MaxSlot;
     public List<EventNKSGachaBonusData>? BonusSlotData;
 }
 
 [MemoryPackable]
 public partial class EventNKSGachaListRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ItemId;
-    public Int32 Rate;
+    public int Id;
+    public int GroupId;
+    public int ItemId;
+    public int Rate;
 }
 
 [MemoryPackable]
 public partial class EventNKSGuideRecord
 {
-    public Int32 Id;
-    public Int32 TutorialViewId;
-    public Int32 GroupId;
-    public String? GuideResourceId;
-    public String? GuideTitleLocalkey;
-    public String? GuideSubTitleLocalkey;
-    public String? GuideDescriptionLocalkey;
+    public int Id;
+    public int TutorialViewId;
+    public int GroupId;
+    public string? GuideResourceId;
+    public string? GuideTitleLocalkey;
+    public string? GuideSubTitleLocalkey;
+    public string? GuideDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventNKSItemsActionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Boolean TimelineLoop;
-    public Int32 TimelineLoopDelay;
-    public Int32 TimelineValue;
-    public String? ProjResourceId;
-    public String? ProjResourceHitId;
-    public String? ProjType;
+    public int Id;
+    public int GroupId;
+    public bool TimelineLoop;
+    public int TimelineLoopDelay;
+    public int TimelineValue;
+    public string? ProjResourceId;
+    public string? ProjResourceHitId;
+    public string? ProjType;
     public List<EventNKSProjectileTypeValueData>? ProjTypeValue;
-    public String? ProjValueStack;
-    public Int32 ProjAmount;
-    public Int32 ProjDuration;
-    public Int32 ProjAfterDuration;
-    public Int32 ProjAfterCollide;
-    public Int32 ProjAfterCollideStat;
-    public Int32 ProjDmgCount;
-    public Int32 ProjDmgDelay;
-    public Int32 ProjPierce;
-    public Double ProjSize;
-    public Double ProjSpd;
+    public string? ProjValueStack;
+    public int ProjAmount;
+    public int ProjDuration;
+    public int ProjAfterDuration;
+    public int ProjAfterCollide;
+    public int ProjAfterCollideStat;
+    public int ProjDmgCount;
+    public int ProjDmgDelay;
+    public int ProjPierce;
+    public double ProjSize;
+    public double ProjSpd;
     public List<EventNKSProjectileAtkRangeData>? ProjAtkRange;
-    public Int32 ProjKnockbackValue;
+    public int ProjKnockbackValue;
 }
 
 [MemoryPackable]
 public partial class EventNKSItemsStatRecord
 {
-    public Int32 Id;
-    public Int32 StatTimeDuration;
-    public String? StatMarkerResourceId;
-    public Int32 ProjStatTimeDeath;
+    public int Id;
+    public int StatTimeDuration;
+    public string? StatMarkerResourceId;
+    public int ProjStatTimeDeath;
     public EventNKSBuffTypeData BuffType;
     public List<NKSStatData>? Stat;
 }
@@ -5952,112 +5952,112 @@ public partial class EventNKSItemsStatRecord
 [MemoryPackable]
 public partial class EventNKSItemsRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Boolean IsCombine;
+    public int Id;
+    public int GroupId;
+    public bool IsCombine;
     public List<ItemConditionIdData>? ItemConditionId;
-    public Int32 Lv;
-    public List<Int32>? LockCharacterId;
-    public List<Int32>? DisableCharacterId;
-    public Int32 LvMax;
-    public String? IconResourceId;
+    public int Lv;
+    public List<int>? LockCharacterId;
+    public List<int>? DisableCharacterId;
+    public int LvMax;
+    public string? IconResourceId;
     public EventNKSItemCategoryType ItemCategory;
-    public Double FieldItemScale;
+    public double FieldItemScale;
     public EventNKSItemPassiveSpecialTypeData PassiveSpecial;
     public EventNKSFieldItemType FieldItemType;
-    public String? ItemNameLocale;
-    public String? ItemDescLocale;
-    public Int32 ItemRating;
-    public Int32 ItemRatio;
-    public Int32 ItemStatId;
-    public Int32 ItemActionId;
-    public Int32 ItemValue;
-    public Boolean LevelUpOnly;
-    public Boolean CanMagnet;
-    public Int32 ItemConditionTime;
-    public Boolean IsBonus;
-    public Int32 ItemUnlockConditionMissionId;
+    public string? ItemNameLocale;
+    public string? ItemDescLocale;
+    public int ItemRating;
+    public int ItemRatio;
+    public int ItemStatId;
+    public int ItemActionId;
+    public int ItemValue;
+    public bool LevelUpOnly;
+    public bool CanMagnet;
+    public int ItemConditionTime;
+    public bool IsBonus;
+    public int ItemUnlockConditionMissionId;
     public List<DescriptionValueData>? DescriptionValue;
 }
 
 [MemoryPackable]
 public partial class EventNKSMissionRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public Int32 CommonSettingsId;
+    public int Id;
+    public string? NameLocalkey;
+    public int CommonSettingsId;
     public EventNKSMissionCategoryData MissionCategory;
     public EventNKSMissionTargetTypeData TargetType;
-    public Int32 TargetId;
-    public Int32 MissionCount;
+    public int TargetId;
+    public int MissionCount;
     public List<NKSMissionValueData>? MissionValue;
     public EventNKSMissionRewardTypeData RewardType;
-    public Int32 RewardValue;
+    public int RewardValue;
 }
 
 [MemoryPackable]
 public partial class EventNKSMonsterActionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Boolean TimelineLoop;
-    public Int32 TimelineLoopDelay;
-    public Int32 TimelineValue;
+    public int Id;
+    public int GroupId;
+    public bool TimelineLoop;
+    public int TimelineLoopDelay;
+    public int TimelineValue;
     public EventNKSMonsterActionType ActionType;
-    public Boolean ActionKnockback;
+    public bool ActionKnockback;
     public List<ActionValueData>? ActionValue;
-    public String? ProjResourceId;
-    public String? ProjType;
+    public string? ProjResourceId;
+    public string? ProjType;
     public List<EventNKSProjectileTypeValueData>? ProjTypeValue;
-    public Int32 ProjAmount;
-    public Int32 ProjDuration;
-    public Int32 ProjAfterDuration;
-    public Int32 ProjAfterCollide;
-    public Int32 ProjAfterCollideStat;
-    public Int32 ProjDmgCount;
-    public Int32 ProjDmgDelay;
-    public Double ProjSize;
-    public Double ProjSpd;
+    public int ProjAmount;
+    public int ProjDuration;
+    public int ProjAfterDuration;
+    public int ProjAfterCollide;
+    public int ProjAfterCollideStat;
+    public int ProjDmgCount;
+    public int ProjDmgDelay;
+    public double ProjSize;
+    public double ProjSpd;
     public List<EventNKSProjectileAtkRangeData>? ProjAtkRange;
 }
 
 [MemoryPackable]
 public partial class EventNKSMonsterRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
-    public Double MonsterScale;
-    public Boolean IsCollide;
+    public int Id;
+    public string? ResourceId;
+    public double MonsterScale;
+    public bool IsCollide;
     public EventNKSMonsterColType ColType;
     public EventNKSMonsterGradeType Grade;
-    public String? BehaviorTree;
-    public Int32 MonsterActionGroupId;
-    public Double StatMvSpd;
-    public Int32 StatHp;
-    public Int32 StatAtk;
-    public Int32 StatDef;
-    public Int32 StatProjSpd;
-    public Int32 StatProjSize;
-    public Int32 StatColDmg;
+    public string? BehaviorTree;
+    public int MonsterActionGroupId;
+    public double StatMvSpd;
+    public int StatHp;
+    public int StatAtk;
+    public int StatDef;
+    public int StatProjSpd;
+    public int StatProjSize;
+    public int StatColDmg;
     public List<DropItemData>? DropItem;
-    public Int32 RandomDropGroupId;
-    public Int32 RandomDropAmount;
-    public Int32 DropRadius;
-    public Int32 DeathActionGroupId;
-    public String? SpawnEffectResourceId;
-    public String? HitEffectResourceId;
-    public String? DeathEffectResourceId;
-    public Boolean ResistanceAttract;
-    public Boolean ResistanceKnockBack;
-    public Boolean ResistanceParalysis;
+    public int RandomDropGroupId;
+    public int RandomDropAmount;
+    public int DropRadius;
+    public int DeathActionGroupId;
+    public string? SpawnEffectResourceId;
+    public string? HitEffectResourceId;
+    public string? DeathEffectResourceId;
+    public bool ResistanceAttract;
+    public bool ResistanceKnockBack;
+    public bool ResistanceParalysis;
 }
 
 [MemoryPackable]
 public partial class EventNKSSpawnGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TimelineValue;
+    public int Id;
+    public int GroupId;
+    public int TimelineValue;
     public EventNKSStageTimelineActionType TimelineActionType;
     public List<EventNKSTimeLineActionTypeValue>? TimelineActionTypeValue;
 }
@@ -6065,13 +6065,13 @@ public partial class EventNKSSpawnGroupRecord
 [MemoryPackable]
 public partial class EventNKSSpawnTimelineRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TimelineValue;
-    public Boolean TimelineIsLoop;
-    public Int32 TimelineSpawnGroup;
-    public Int32 TimelineLoopCount;
-    public Int32 TimelineLoopInterval;
+    public int Id;
+    public int GroupId;
+    public int TimelineValue;
+    public bool TimelineIsLoop;
+    public int TimelineSpawnGroup;
+    public int TimelineLoopCount;
+    public int TimelineLoopInterval;
     public EventNKSStageTimelineActionType TimelineActionType;
     public List<EventNKSTimeLineActionTypeValue>? TimelineActionTypeValue;
 }
@@ -6079,743 +6079,743 @@ public partial class EventNKSSpawnTimelineRecord
 [MemoryPackable]
 public partial class EventNKSStageRecord
 {
-    public Int32 Id;
-    public Int32 CommonSettingsId;
-    public Int32 StageGroup;
-    public Int32 StageOpenCondition;
-    public Boolean CanRepeat;
-    public Boolean IsChallenge;
-    public Int32 MapWidth;
-    public Int32 MapHeight;
-    public Int32 TileSetId;
-    public Int32 StageTimelineGroupId;
-    public Int32 ClearReward;
-    public String? EnterScenario;
-    public String? LoseScenario;
-    public String? WinScenario;
-    public String? StageNameLocale;
-    public String? StageDescLocale;
-    public List<String>? BgMset;
-    public Int32 UiDifficult;
-    public String? UiTheme;
-    public String? UiThemeLocalKey;
-    public Int32 DecoTileAmount;
-    public Int32 DecoTileXoffset;
-    public Int32 DecoTileYoffset;
+    public int Id;
+    public int CommonSettingsId;
+    public int StageGroup;
+    public int StageOpenCondition;
+    public bool CanRepeat;
+    public bool IsChallenge;
+    public int MapWidth;
+    public int MapHeight;
+    public int TileSetId;
+    public int StageTimelineGroupId;
+    public int ClearReward;
+    public string? EnterScenario;
+    public string? LoseScenario;
+    public string? WinScenario;
+    public string? StageNameLocale;
+    public string? StageDescLocale;
+    public List<string>? BgMset;
+    public int UiDifficult;
+    public string? UiTheme;
+    public string? UiThemeLocalKey;
+    public int DecoTileAmount;
+    public int DecoTileXoffset;
+    public int DecoTileYoffset;
 }
 
 [MemoryPackable]
 public partial class EventNKSStageTileSetRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ResourceId;
+    public int Id;
+    public int GroupId;
+    public string? ResourceId;
     public EventNKSTileTypeData TileType;
-    public Boolean BasicTile;
+    public bool BasicTile;
 }
 
 [MemoryPackable]
 public partial class EventPassManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 PassPointId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 MidasProductId;
-    public Int32 InfracorePoint;
-    public String? PassPremiumNameLocalkey;
-    public String? PassPremiumDescriptionLocalkey;
-    public Int32 RankSkipId;
-    public String? PassLogoResourceId;
-    public String? PassLobbyButtonResourceId;
-    public Boolean IsCharacterActive;
-    public Int32 ShopNpcResourceId;
-    public Int32 NpcCostumeId;
-    public String? ProductInfoDescription;
-    public Boolean UsePlaceholder;
-    public String? PrefabId;
-    public Boolean IsDisplayLobby;
+    public int Id;
+    public int EventId;
+    public int PassPointId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int MidasProductId;
+    public int InfracorePoint;
+    public string? PassPremiumNameLocalkey;
+    public string? PassPremiumDescriptionLocalkey;
+    public int RankSkipId;
+    public string? PassLogoResourceId;
+    public string? PassLobbyButtonResourceId;
+    public bool IsCharacterActive;
+    public int ShopNpcResourceId;
+    public int NpcCostumeId;
+    public string? ProductInfoDescription;
+    public bool UsePlaceholder;
+    public string? PrefabId;
+    public bool IsDisplayLobby;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventPirateCafeCharacterType CharacterType;
-    public String? ResourceId;
-    public String? SiResourceId;
+    public string? ResourceId;
+    public string? SiResourceId;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeDialogGroupRecord_Raw
 {
-    public Int32 Id;
-    public Int32 DialogGroupId;
-    public Int32 DialogId;
+    public int Id;
+    public int DialogGroupId;
+    public int DialogId;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeDialogRecord_Raw
 {
-    public Int32 Id;
-    public String? PortraitId;
-    public String? Locale;
-    public String? VoiceKey;
+    public int Id;
+    public string? PortraitId;
+    public string? Locale;
+    public string? VoiceKey;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 OpenCondition;
-    public Int32 DailyRewardConditionValue;
-    public Int32 DailyRewardId;
-    public String? FirstEnterScenarioGroupId;
-    public Int32 MissionGroupId;
-    public Int32 SkillGroupId;
-    public Int32 HelpTipGroupId;
-    public Int32 GameEndAlertStartTime;
-    public Int32 FeverDirectionMaidMoveSpeed;
-    public Int32 FeverDirectionNpcMoveSpeed;
-    public Int32 FeverObjectInvisibleDirectionTime;
-    public Int32 FeverDirectionNpcSpawnStartTime;
-    public Int32 NpcSpawnCooltime;
-    public Int32 SpecialIdleConditionTime;
-    public Int32 AnticheatMaxPoint;
+    public int Id;
+    public int EventId;
+    public int OpenCondition;
+    public int DailyRewardConditionValue;
+    public int DailyRewardId;
+    public string? FirstEnterScenarioGroupId;
+    public int MissionGroupId;
+    public int SkillGroupId;
+    public int HelpTipGroupId;
+    public int GameEndAlertStartTime;
+    public int FeverDirectionMaidMoveSpeed;
+    public int FeverDirectionNpcMoveSpeed;
+    public int FeverObjectInvisibleDirectionTime;
+    public int FeverDirectionNpcSpawnStartTime;
+    public int NpcSpawnCooltime;
+    public int SpecialIdleConditionTime;
+    public int AnticheatMaxPoint;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeMenuRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? TableResourceId;
-    public String? ButtonResourceId;
-    public String? BubbleResourceId;
+    public int Id;
+    public int GroupId;
+    public string? TableResourceId;
+    public string? ButtonResourceId;
+    public string? BubbleResourceId;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public EventPirateCafeMissionType MissionType;
     public EventPirateCafeConditionsType ConditionType;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 RewardId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeNpcRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventPirateCafeNpcType NpcType;
-    public String? ResourceId;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SkillRank;
-    public Int32 ActiveConditionValue;
+    public int Id;
+    public int GroupId;
+    public int SkillRank;
+    public int ActiveConditionValue;
     public EventPirateCafeSkillType SkillType;
-    public Int32 SkillValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int SkillValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventPirateCafeStageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StageLevel;
-    public Int32 EnterConditionValue;
-    public String? StageLevelName;
-    public String? StageLevelDesc;
-    public String? StageLevelImg;
-    public Int32 TimeLimit;
-    public Int32 FeverGaugeMax;
-    public Int32 FeverPlayTime;
-    public Int32 UseMaidGroupId;
-    public Int32 NormalMaidReturnTime;
-    public Int32 FeverMaidReturnTime;
-    public Int32 CleanTime;
-    public Int32 CleanGetPoint;
-    public Int32 NormalMaidServingFailTime;
-    public Int32 NormalMaidMoveSpeed;
-    public Int32 NormalMaidServingMoveSpeed;
-    public Int32 FeverMaidServingFailTime;
-    public Int32 FeverMaidMoveSpeed;
-    public Int32 FeverMaidServingMoveSpeed;
-    public Int32 NormalMenuGroupId;
-    public Int32 FeverMenuId;
-    public Int32 UseNpcGroupId;
-    public Int32 NormalOrder1Weight;
-    public Int32 NormalOrder2Weight;
-    public Int32 NormalOrder3Weight;
-    public Int32 NormalOrder1GetPoint;
-    public Int32 NormalOrder2GetPoint;
-    public Int32 NormalOrder3GetPoint;
-    public Int32 NormalOrder1WaitTimeServing;
-    public Int32 NormalOrder2WaitTimeServing;
-    public Int32 NormalOrder3WaitTimeServing;
-    public Int32 NormalWaitTimeEating;
-    public Int32 NormalNpcMoveSpeed;
-    public Int32 NormalNpcGetFeverGauge;
-    public Boolean UseEventNpc;
-    public Int32 EventNpcTurnCount;
-    public Int32 EventOrderCount;
-    public Int32 EventOrderGetPoint;
-    public Int32 EventWaitTimeServing;
-    public Int32 EventWaitTimeEating;
-    public Int32 EventNpcMoveSpeed;
-    public Int32 EventNpcGetFeverGauge;
-    public Int32 FeverOrderGetPoint;
-    public Int32 FeverWaitTimeEating;
-    public Int32 FeverNpcMoveSpeed;
-    public Int32 NormalNpcSpawnTime;
-    public Int32 FeverNpcSpawnTime;
-    public Int32 FeverEndNpcSpawnTime;
-    public Int32 FeverEndNpcSpawnAmount;
-    public Int32 FeverOrderCount;
-    public Int32 DialogGroup1;
-    public Int32 DialogGroup2;
-    public Int32 DialogGroup3;
-    public Int32 DialogGroup1MaxPoint;
-    public Int32 DialogGroup2MaxPoint;
+    public int Id;
+    public int StageLevel;
+    public int EnterConditionValue;
+    public string? StageLevelName;
+    public string? StageLevelDesc;
+    public string? StageLevelImg;
+    public int TimeLimit;
+    public int FeverGaugeMax;
+    public int FeverPlayTime;
+    public int UseMaidGroupId;
+    public int NormalMaidReturnTime;
+    public int FeverMaidReturnTime;
+    public int CleanTime;
+    public int CleanGetPoint;
+    public int NormalMaidServingFailTime;
+    public int NormalMaidMoveSpeed;
+    public int NormalMaidServingMoveSpeed;
+    public int FeverMaidServingFailTime;
+    public int FeverMaidMoveSpeed;
+    public int FeverMaidServingMoveSpeed;
+    public int NormalMenuGroupId;
+    public int FeverMenuId;
+    public int UseNpcGroupId;
+    public int NormalOrder1Weight;
+    public int NormalOrder2Weight;
+    public int NormalOrder3Weight;
+    public int NormalOrder1GetPoint;
+    public int NormalOrder2GetPoint;
+    public int NormalOrder3GetPoint;
+    public int NormalOrder1WaitTimeServing;
+    public int NormalOrder2WaitTimeServing;
+    public int NormalOrder3WaitTimeServing;
+    public int NormalWaitTimeEating;
+    public int NormalNpcMoveSpeed;
+    public int NormalNpcGetFeverGauge;
+    public bool UseEventNpc;
+    public int EventNpcTurnCount;
+    public int EventOrderCount;
+    public int EventOrderGetPoint;
+    public int EventWaitTimeServing;
+    public int EventWaitTimeEating;
+    public int EventNpcMoveSpeed;
+    public int EventNpcGetFeverGauge;
+    public int FeverOrderGetPoint;
+    public int FeverWaitTimeEating;
+    public int FeverNpcMoveSpeed;
+    public int NormalNpcSpawnTime;
+    public int FeverNpcSpawnTime;
+    public int FeverEndNpcSpawnTime;
+    public int FeverEndNpcSpawnAmount;
+    public int FeverOrderCount;
+    public int DialogGroup1;
+    public int DialogGroup2;
+    public int DialogGroup3;
+    public int DialogGroup1MaxPoint;
+    public int DialogGroup2MaxPoint;
 }
 
 [MemoryPackable]
 public partial class EventPlaySodaChallengeModeRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public EventDungeonOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
     public EventPlaySodaGameType GameType;
-    public String? GameTitle;
-    public String? GameTitleEn;
-    public Int32 StageHelptipId;
-    public String? StageImage;
-    public String? GameModeResource;
-    public Int32 StageDataId;
+    public string? GameTitle;
+    public string? GameTitleEn;
+    public int StageHelptipId;
+    public string? StageImage;
+    public string? GameModeResource;
+    public int StageDataId;
 }
 
 [MemoryPackable]
 public partial class EventPlaySodaManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public MiniGameSystemType MinigameType;
-    public Int32 StoryGroupId;
-    public Int32 ChallengeGroupId;
-    public Int32 PlayHelptipId;
-    public Int32 DailyRewardId;
-    public Int32 TotalPointRewardGroupId;
-    public String? UiPrefabKeyword;
-    public Int32 IngamePauseSecond;
+    public int StoryGroupId;
+    public int ChallengeGroupId;
+    public int PlayHelptipId;
+    public int DailyRewardId;
+    public int TotalPointRewardGroupId;
+    public string? UiPrefabKeyword;
+    public int IngamePauseSecond;
 }
 
 [MemoryPackable]
 public partial class EventPlaySodaPointRewardRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventPlaySodaGameType GameType;
-    public Int32 Step;
-    public Int32 PointValue;
-    public Int32 RewardId;
+    public int Step;
+    public int PointValue;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventPlaySodaStoryModeRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public EventDungeonOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
     public EventPlaySodaGameType GameType;
-    public String? ShortName;
-    public String? GameTitle;
-    public Int32 StageHelptipId;
-    public String? StageImage;
-    public Int32 StageDataId;
-    public Int32 ClearRewardId;
-    public String? EnterScenario;
-    public String? ExitScenario;
+    public string? ShortName;
+    public string? GameTitle;
+    public int StageHelptipId;
+    public string? StageImage;
+    public int StageDataId;
+    public int ClearRewardId;
+    public string? EnterScenario;
+    public string? ExitScenario;
 }
 
 [MemoryPackable]
 public partial class EventQuestManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EventNameLocalkey;
-    public Int32 AlbumCategoryGroupId;
-    public String? EventQuestAlbumDescription;
-    public String? UiPrefab;
-    public String? HeaderBgResourceId;
-    public String? QuestActivateResourceId;
+    public int Id;
+    public int EventId;
+    public string? EventNameLocalkey;
+    public int AlbumCategoryGroupId;
+    public string? EventQuestAlbumDescription;
+    public string? UiPrefab;
+    public string? HeaderBgResourceId;
+    public string? QuestActivateResourceId;
 }
 
 [MemoryPackable]
 public partial class EventQuestStageRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventQuestStageModeType StageMode;
     public EventQuestMiniGameType MinigameType;
-    public Int32 MinigameStageId;
-    public Int32 ChapterId;
+    public int MinigameStageId;
+    public int ChapterId;
     public ChapterMod ChapterMod;
-    public Int32 EventQuestManagerId;
-    public Int32 ArchiveEventQuestManagerId;
-    public Int32 SpawnConditionEventQuestId;
-    public Int32 SpawnConditionArchiveEventQuestId;
-    public Int32 SpawnConditionEventQuestStageId;
-    public Int32 SpawnConditionCampaignStageId;
-    public Int32 EnterConditionEventQuestId;
-    public Int32 EnterConditionArchiveEventQuestId;
-    public Int32 EnterConditionEventQuestStageId;
-    public Int32 EnterConditionCampaignStageId;
-    public String? NameLocalkey;
+    public int EventQuestManagerId;
+    public int ArchiveEventQuestManagerId;
+    public int SpawnConditionEventQuestId;
+    public int SpawnConditionArchiveEventQuestId;
+    public int SpawnConditionEventQuestStageId;
+    public int SpawnConditionCampaignStageId;
+    public int EnterConditionEventQuestId;
+    public int EnterConditionArchiveEventQuestId;
+    public int EnterConditionEventQuestStageId;
+    public int EnterConditionCampaignStageId;
+    public string? NameLocalkey;
     public StageCategory StageCategory;
-    public Boolean SpotAutocontrol;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Int32 FieldMonsterId;
-    public Int32 SpotId;
-    public Int32 RewardId;
+    public bool SpotAutocontrol;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public int FieldMonsterId;
+    public int SpotId;
+    public int RewardId;
     public ScenarioType EnterScenarioType;
-    public String? EnterScenario;
+    public string? EnterScenario;
     public ScenarioType ExitScenarioType;
-    public String? ExitScenario;
-    public Int32 FixedPlayCharacterId;
-    public Int32 CharacterLv;
+    public string? ExitScenario;
+    public int FixedPlayCharacterId;
+    public int CharacterLv;
 }
 
 [MemoryPackable]
 public partial class EventQuestRecord
 {
-    public Int32 Id;
-    public Int32 EventQuestManagerId;
+    public int Id;
+    public int EventQuestManagerId;
     public Category ConditionType;
-    public Int32 ConditionValue;
-    public String? ConditionUiLocalkey;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 NextQuestId;
-    public String? EndScenarioId;
-    public Int32 RewardId;
+    public int ConditionValue;
+    public string? ConditionUiLocalkey;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int NextQuestId;
+    public string? EndScenarioId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningCutSceneRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? CutsceneResource;
-    public String? CutsceneName;
-    public String? CutsceneDescription;
-    public Int32 SpecialAppearCount;
-    public String? UnlockConditionDesc;
+    public int Id;
+    public int GroupId;
+    public string? CutsceneResource;
+    public string? CutsceneName;
+    public string? CutsceneDescription;
+    public int SpecialAppearCount;
+    public string? UnlockConditionDesc;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningDifficultyRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Difficulty;
-    public Int32 ScrollSpeed;
-    public Int32 HpDecreasePerSec;
-    public Int32 NextDifficulty;
-    public Int32 NeedMeterToNextDifficulty;
-    public List<Int32>? PresetGroupId;
-    public Boolean IsRushMode;
+    public int Id;
+    public int GroupId;
+    public int Difficulty;
+    public int ScrollSpeed;
+    public int HpDecreasePerSec;
+    public int NextDifficulty;
+    public int NeedMeterToNextDifficulty;
+    public List<int>? PresetGroupId;
+    public bool IsRushMode;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EnterScenario;
-    public Int32 OpenCondition;
-    public Int32 DailyRewardDistance;
-    public Int32 DailyRewardId;
-    public Int32 MissionGroupId;
-    public Int32 StatusPointGroupId;
-    public Int32 StatusGroupId;
-    public Int32 SpyItemGroupId;
-    public Int32 TutorialId;
-    public Int32 AlbumCategoryId;
-    public Int32 CutSceneGroupId;
-    public Int32 ScenarioGroupId;
-    public Int32 DifficultyGroupId;
-    public Int32 FallDeathDistance;
-    public Int32 JumpYSpeed;
-    public Int32 GravityValue;
-    public Int32 RopeActionFallSpeed;
-    public Int32 RopeActionGravityValue;
-    public Int32 RopeActionPullForce;
-    public Int32 MaxRopeAttachDistance;
-    public Int32 MaxRopeAttachHeight;
-    public Int32 SpinJumpYSpeed;
-    public Int32 SpinJumpGravityValue;
-    public Int32 InitialFallDeathSpeed;
-    public Int32 FallDeathGravityValue;
-    public Int32 RopeAngle;
-    public Int32 RopeCooltime;
-    public Int32 RopeSpeed;
-    public Int32 RopeMaintainTime;
-    public Int32 SpeedRatioAfterHit;
-    public Int32 SpeedRatioAfterHitTime;
-    public Int32 GetSpGoldCoinValue;
-    public Int32 GetSpSilverCoinValue;
-    public Int32 GetScoreGoldCoinValue;
-    public Int32 GetScoreSilverCoinValue;
-    public Int32 ShieldTime;
-    public Int32 ItemMoveSpeedByMagnet;
-    public Int32 DistanceScoreRatio;
-    public Int32 RushTime;
-    public Int32 RushCountValue;
-    public Int32 InvincibleTime;
-    public Int32 StartDifficulty;
-    public Int32 DRankTargetScore;
-    public Int32 CRankTargetScore;
-    public Int32 BRankTargetScore;
-    public Int32 ARankTargetScore;
-    public Int32 SRankTargetScore;
+    public int Id;
+    public int EventId;
+    public string? EnterScenario;
+    public int OpenCondition;
+    public int DailyRewardDistance;
+    public int DailyRewardId;
+    public int MissionGroupId;
+    public int StatusPointGroupId;
+    public int StatusGroupId;
+    public int SpyItemGroupId;
+    public int TutorialId;
+    public int AlbumCategoryId;
+    public int CutSceneGroupId;
+    public int ScenarioGroupId;
+    public int DifficultyGroupId;
+    public int FallDeathDistance;
+    public int JumpYSpeed;
+    public int GravityValue;
+    public int RopeActionFallSpeed;
+    public int RopeActionGravityValue;
+    public int RopeActionPullForce;
+    public int MaxRopeAttachDistance;
+    public int MaxRopeAttachHeight;
+    public int SpinJumpYSpeed;
+    public int SpinJumpGravityValue;
+    public int InitialFallDeathSpeed;
+    public int FallDeathGravityValue;
+    public int RopeAngle;
+    public int RopeCooltime;
+    public int RopeSpeed;
+    public int RopeMaintainTime;
+    public int SpeedRatioAfterHit;
+    public int SpeedRatioAfterHitTime;
+    public int GetSpGoldCoinValue;
+    public int GetSpSilverCoinValue;
+    public int GetScoreGoldCoinValue;
+    public int GetScoreSilverCoinValue;
+    public int ShieldTime;
+    public int ItemMoveSpeedByMagnet;
+    public int DistanceScoreRatio;
+    public int RushTime;
+    public int RushCountValue;
+    public int InvincibleTime;
+    public int StartDifficulty;
+    public int DRankTargetScore;
+    public int CRankTargetScore;
+    public int BRankTargetScore;
+    public int ARankTargetScore;
+    public int SRankTargetScore;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? MissionLocaleKey;
+    public int Id;
+    public int GroupId;
+    public string? MissionLocaleKey;
     public EventRopeRunningMissionType MissionType;
-    public Int32 MissionValue;
-    public Int32 RewardId;
+    public int MissionValue;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningObjectGroupRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public List<EventRopeRunningObjectGroupRatio_Raw>? GroupRatio;
-    public Boolean IsVisible;
+    public bool IsVisible;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningObjectRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public EventRopeRunningObjectType ObjectType;
-    public Int32 ObjectColliderX;
-    public Int32 ObjectColliderY;
+    public int ObjectColliderX;
+    public int ObjectColliderY;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningPresetRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PresetGroupId;
-    public Int32 Order;
-    public Int32 Ceiling;
-    public Int32 Object1;
-    public Int32 Object2;
-    public Int32 Object3;
-    public Int32 Object4;
-    public Int32 Object5;
-    public Int32 Object6;
-    public Int32 Object7;
-    public Int32 Object8;
-    public Int32 Object9;
-    public Int32 Object10;
-    public Int32 Obstacle;
-    public Int32 Land;
+    public int Id;
+    public int PresetGroupId;
+    public int Order;
+    public int Ceiling;
+    public int Object1;
+    public int Object2;
+    public int Object3;
+    public int Object4;
+    public int Object5;
+    public int Object6;
+    public int Object7;
+    public int Object8;
+    public int Object9;
+    public int Object10;
+    public int Obstacle;
+    public int Land;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningScenarioRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ScenarioDialogGroupId;
-    public Int32 ScenarioUnlockDay;
+    public int Id;
+    public int GroupId;
+    public string? ScenarioDialogGroupId;
+    public int ScenarioUnlockDay;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningSpyItemRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? ResourceId;
-    public String? NameLocaleKey;
-    public String? DescLocaleKey;
+    public int Id;
+    public int GroupId;
+    public string? ResourceId;
+    public string? NameLocaleKey;
+    public string? DescLocaleKey;
     public EventRopeRunningSpyItemFunctionType FunctionType;
-    public Int32 FunctionValue;
+    public int FunctionValue;
     public EventRopeRunningSpyItemUnlockConditionType UnlockConditionType;
-    public Int32 UnlockConditionValue;
-    public String? UnlockConditionLocaleKey;
-    public Int32 UnlockTime;
+    public int UnlockConditionValue;
+    public string? UnlockConditionLocaleKey;
+    public int UnlockTime;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningStatusPointRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SpCount;
-    public Int32 GetCoinPoint;
+    public int Id;
+    public int GroupId;
+    public int SpCount;
+    public int GetCoinPoint;
 }
 
 [MemoryPackable]
 public partial class EventRopeRunningStatusRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Level;
-    public Int32 Hp;
-    public Int32 Defence;
-    public Int32 Recovery;
+    public int Id;
+    public int GroupId;
+    public int Level;
+    public int Hp;
+    public int Defence;
+    public int Recovery;
 }
 
 [MemoryPackable]
 public partial class EventRunningChallengeStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Single JumpYPower;
-    public Single GravityValue;
-    public Single DefaultObjectSpeed;
-    public Int32 DefaultObtainPoint;
-    public Int32 Life;
-    public Int32 HitImmuneTimeMs;
-    public Int32 AutoIncreaseDifficultySecond;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public float JumpYPower;
+    public float GravityValue;
+    public float DefaultObjectSpeed;
+    public int DefaultObtainPoint;
+    public int Life;
+    public int HitImmuneTimeMs;
+    public int AutoIncreaseDifficultySecond;
 }
 
 [MemoryPackable]
 public partial class EventRunningObjectRecord
 {
-    public Int32 Id;
-    public String? ObjectResourceId;
+    public int Id;
+    public string? ObjectResourceId;
 }
 
 [MemoryPackable]
 public partial class EventRunningSpawnGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SpawnObjectId;
-    public Int32 SpawnRatio;
+    public int Id;
+    public int GroupId;
+    public int SpawnObjectId;
+    public int SpawnRatio;
 }
 
 [MemoryPackable]
 public partial class EventRunningStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Int32 ClearTimeSecond;
-    public Single JumpYPower;
-    public Single GravityValue;
-    public Single DefaultObjectSpeed;
-    public Int32 DefaultObtainPoint;
-    public Int32 Life;
-    public Int32 HitImmuneTimeMs;
-    public Int32 AutoIncreaseDifficultySecond;
-    public String? ClearConditionDesc;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public int ClearTimeSecond;
+    public float JumpYPower;
+    public float GravityValue;
+    public float DefaultObjectSpeed;
+    public int DefaultObtainPoint;
+    public int Life;
+    public int HitImmuneTimeMs;
+    public int AutoIncreaseDifficultySecond;
+    public string? ClearConditionDesc;
 }
 
 [MemoryPackable]
 public partial class EventRunningTimeDifficultRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 DifficultyStep;
-    public Int32 PlayTimeMin;
-    public Int32 PlayTimeMax;
-    public Int32 SpawnDistanceMin;
-    public Int32 SpawnDistanceMax;
-    public Int32 SpawnGroupId;
-    public Single DifficultyPlaySpeed;
-    public Single AutoIncreasePlaySpeed;
+    public int Id;
+    public int GroupId;
+    public int DifficultyStep;
+    public int PlayTimeMin;
+    public int PlayTimeMax;
+    public int SpawnDistanceMin;
+    public int SpawnDistanceMax;
+    public int SpawnGroupId;
+    public float DifficultyPlaySpeed;
+    public float AutoIncreasePlaySpeed;
 }
 
 [MemoryPackable]
 public partial class EventSBCharacterAttackStateRecord_Raw
 {
-    public Int32 Id;
-    public Int32 AnimatorId;
+    public int Id;
+    public int AnimatorId;
     public SBCharacterAttackType AttackType;
-    public String? SkillIcon;
+    public string? SkillIcon;
     public SBCharacterSkillUseEnergyType UseEnergyType;
-    public Int32 UseEnergyValue;
-    public Int32 AnimationSpeedRatio;
-    public String? UseEffectResource;
-    public Int32 AttackGroupId;
-    public Boolean IsInvincible;
-    public Int32 NextAttack;
-    public Int32 NextAttackInputStartTime;
-    public Int32 NextDefenseMotionMinimumTransitionTime;
-    public Int32 NextAttackMinimumTransitionTime;
-    public Int32 TimeToIdle;
+    public int UseEnergyValue;
+    public int AnimationSpeedRatio;
+    public string? UseEffectResource;
+    public int AttackGroupId;
+    public bool IsInvincible;
+    public int NextAttack;
+    public int NextAttackInputStartTime;
+    public int NextDefenseMotionMinimumTransitionTime;
+    public int NextAttackMinimumTransitionTime;
+    public int TimeToIdle;
 }
 
 [MemoryPackable]
 public partial class EventSBCharacterAttackRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBCharacterSkillType SkillType;
     public List<SBCharacterSkillUseColliderType>? UseColliderType;
-    public Int32 ColliderStartTime;
-    public Int32 ColliderEndTime;
-    public String? ProjectileResource;
-    public String? ProjectileHitResource;
-    public Int32 ProjectileStartTime;
-    public Int32 ProjectileSize;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileLifeTime;
-    public Int32 ProjectileRollAxis;
-    public Int32 Damage;
-    public Int32 DecreaseShieldGauge;
-    public Int32 DecreaseBalanceGauge;
-    public Int32 GainBetaGauge;
-    public Int32 GainBurstGauge;
-    public Int32 RecoveryHp;
-    public Boolean IsDown;
+    public int ColliderStartTime;
+    public int ColliderEndTime;
+    public string? ProjectileResource;
+    public string? ProjectileHitResource;
+    public int ProjectileStartTime;
+    public int ProjectileSize;
+    public int ProjectileSpeed;
+    public int ProjectileLifeTime;
+    public int ProjectileRollAxis;
+    public int Damage;
+    public int DecreaseShieldGauge;
+    public int DecreaseBalanceGauge;
+    public int GainBetaGauge;
+    public int GainBurstGauge;
+    public int RecoveryHp;
+    public bool IsDown;
 }
 
 [MemoryPackable]
 public partial class EventSBCharacterEnhanceRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBCharacterEnhanceType EnhanceType;
-    public Int32 EnhanceLevel;
-    public Boolean IsMaximum;
-    public Int32 EnhanceValue01;
-    public Int32 EnhanceValue02;
-    public String? EnhanceLevelLocale;
+    public int EnhanceLevel;
+    public bool IsMaximum;
+    public int EnhanceValue01;
+    public int EnhanceValue02;
+    public string? EnhanceLevelLocale;
     public SBCurrencyType EnhanceMaterialItemType;
-    public Int32 EnhanceMaterialItemValue;
-    public String? EnhanceMaterialLocale;
+    public int EnhanceMaterialItemValue;
+    public string? EnhanceMaterialLocale;
 }
 
 [MemoryPackable]
 public partial class EventSBCharacterSkillRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBCharacterSkillGroupType SkillGroup;
-    public String? SkillIcon;
-    public String? SkillNameLocale;
-    public String? SkillDescriptionLocale;
-    public Int32 SkillToActivation;
-    public Boolean IsDefaultLearn;
-    public Int32 PriorSkill;
-    public Int32 NeedLearnSkillpoint;
+    public string? SkillIcon;
+    public string? SkillNameLocale;
+    public string? SkillDescriptionLocale;
+    public int SkillToActivation;
+    public bool IsDefaultLearn;
+    public int PriorSkill;
+    public int NeedLearnSkillpoint;
     public List<AffectSkillData_Raw>? AffectSkillData;
 }
 
 [MemoryPackable]
 public partial class EventSBCharacterRecord_Raw
 {
-    public Int32 Id;
-    public String? CharacterResource;
-    public Int32 EnhanceGroupId;
-    public Int32 SkillGroupId;
-    public Int32 DefaultShieldGauge;
-    public Int32 DefaultBurstGauge;
-    public Int32 DefaultAttackSkillId;
-    public Int32 BetaSkill01StateId;
-    public Int32 BetaSkill02StateId;
-    public Int32 BetaSkill03StateId;
-    public Int32 BetaSkill04StateId;
-    public Int32 BurstSkill01StateId;
-    public Int32 BurstSkill02StateId;
-    public Int32 BurstSkill03StateId;
-    public Int32 BurstSkill04StateId;
-    public Int32 HaveShieldGaugeGuardDamageRatio;
-    public Int32 NoneShieldGaugeGuardDamageRatio;
-    public Int32 RecoveryShieldGaugeTime;
-    public Int32 RecoveryShieldGaugeAmount;
-    public Int32 GuardInputPreventionTime;
-    public Int32 GuardMinimumTime;
-    public Int32 PerfectGuardDecreaseBalanceGauge;
-    public Int32 PerfectGuardGainBetaGauge;
-    public Int32 DefaultPerfectGuardTime;
-    public Int32 PerfectGuardBulletTime;
-    public Int32 NormalParryMaintainTime;
-    public Int32 PerfectParryMaintainTime;
-    public Int32 DashToNextDefenseMotionMinimumTransitionTime;
-    public Int32 DashToNextMotionMinimumTransitionTime;
-    public Int32 DashTimeToIdle;
-    public Int32 DefaultPerfectDodgeTime;
-    public Int32 PerfectDodgeBulletTime;
-    public Int32 PerfectDodgeFrontAndBackBulletTime;
-    public Int32 PerfectDodgeGainBurstGauge;
-    public Int32 PerfectDodgeInvincibleTime;
-    public Int32 DodgeToNextDefenseMotionMinimumTransitionTime;
-    public Int32 DodgeToNextMotionMinimumTransitionTime;
-    public Int32 DodgeTimeToIdle;
-    public Int32 DefaultCriticalProbability;
-    public Int32 DefaultDamageRatio;
-    public Int32 DefaultReviveCount;
-    public Int32 CharacterDownHoldTime;
-    public Int32 CharacterHitHoldingTime;
-    public Int32 CharacterStandUpTime;
-    public Int32 BlinkTeleportationTime;
+    public int Id;
+    public string? CharacterResource;
+    public int EnhanceGroupId;
+    public int SkillGroupId;
+    public int DefaultShieldGauge;
+    public int DefaultBurstGauge;
+    public int DefaultAttackSkillId;
+    public int BetaSkill01StateId;
+    public int BetaSkill02StateId;
+    public int BetaSkill03StateId;
+    public int BetaSkill04StateId;
+    public int BurstSkill01StateId;
+    public int BurstSkill02StateId;
+    public int BurstSkill03StateId;
+    public int BurstSkill04StateId;
+    public int HaveShieldGaugeGuardDamageRatio;
+    public int NoneShieldGaugeGuardDamageRatio;
+    public int RecoveryShieldGaugeTime;
+    public int RecoveryShieldGaugeAmount;
+    public int GuardInputPreventionTime;
+    public int GuardMinimumTime;
+    public int PerfectGuardDecreaseBalanceGauge;
+    public int PerfectGuardGainBetaGauge;
+    public int DefaultPerfectGuardTime;
+    public int PerfectGuardBulletTime;
+    public int NormalParryMaintainTime;
+    public int PerfectParryMaintainTime;
+    public int DashToNextDefenseMotionMinimumTransitionTime;
+    public int DashToNextMotionMinimumTransitionTime;
+    public int DashTimeToIdle;
+    public int DefaultPerfectDodgeTime;
+    public int PerfectDodgeBulletTime;
+    public int PerfectDodgeFrontAndBackBulletTime;
+    public int PerfectDodgeGainBurstGauge;
+    public int PerfectDodgeInvincibleTime;
+    public int DodgeToNextDefenseMotionMinimumTransitionTime;
+    public int DodgeToNextMotionMinimumTransitionTime;
+    public int DodgeTimeToIdle;
+    public int DefaultCriticalProbability;
+    public int DefaultDamageRatio;
+    public int DefaultReviveCount;
+    public int CharacterDownHoldTime;
+    public int CharacterHitHoldingTime;
+    public int CharacterStandUpTime;
+    public int BlinkTeleportationTime;
 }
 
 [MemoryPackable]
 public partial class EventSBCurrencyRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public SBCurrencyType CurrencyType;
-    public String? ItemResource;
-    public String? ItemNameLocale;
-    public String? ItemDescriptionLocale;
+    public string? ItemResource;
+    public string? ItemNameLocale;
+    public string? ItemDescriptionLocale;
 }
 
 [MemoryPackable]
 public partial class EventSBInGameGuideRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBInGameGuideOutputType IngameGuideOutputType;
-    public Int32 IngameGuideOutputTime;
-    public String? IngameGuideLocaleMobile;
-    public String? IngameGuideLocalePc;
+    public int IngameGuideOutputTime;
+    public string? IngameGuideLocaleMobile;
+    public string? IngameGuideLocalePc;
 }
 
 [MemoryPackable]
 public partial class EventSBItemRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public SBItemType ItemType;
-    public String? ItemResource;
-    public String? ItemNameLocale;
-    public String? ItemDescriptionLocale;
-    public Int32 ItemLevel;
+    public string? ItemResource;
+    public string? ItemNameLocale;
+    public string? ItemDescriptionLocale;
+    public int ItemLevel;
     public List<SBItemOptionLocale_Raw>? SbItemOptionLocale;
     public List<SBItemOptionData_Raw>? SbItemOption;
 }
@@ -6823,1031 +6823,1031 @@ public partial class EventSBItemRecord_Raw
 [MemoryPackable]
 public partial class EventSBManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? EnterScenario;
-    public Int32 StageGroupId;
-    public Int32 CharacterId;
-    public Int32 CharacterSkillGroupId;
-    public Int32 EnhanceGroupId;
-    public Int32 ShopGroupId;
-    public Int32 MissionGroupId;
-    public Int32 TutorialListGroupId;
-    public String? BattleFieldResource;
-    public Int32 BattleFieldRadius;
-    public Int32 HaveShieldGaugeHitDamageRatio;
-    public String? RetributionIcon;
-    public Int32 RepulseDecreaseShieldGaugeRatio;
-    public Int32 SkillBulletTime;
-    public Int32 GigasCameraChangeDistance;
-    public Int32 AbaddonCameraChangeDistance;
-    public Int32 StalkerCameraChangeDistance;
-    public Int32 BehemothCameraChangeDistance;
-    public Int32 BruteCameraChangeDistance;
-    public Int32 DamageChangeScoreRatio;
-    public Int32 ChangeLeftTimeToPoint;
-    public Int32 BuffSkillAttackStateId;
-    public Int32 BuffDuration;
-    public Int32 BuffAtkUpValue;
-    public Int32 BuffSpeedUpValue;
+    public int Id;
+    public int EventId;
+    public string? EnterScenario;
+    public int StageGroupId;
+    public int CharacterId;
+    public int CharacterSkillGroupId;
+    public int EnhanceGroupId;
+    public int ShopGroupId;
+    public int MissionGroupId;
+    public int TutorialListGroupId;
+    public string? BattleFieldResource;
+    public int BattleFieldRadius;
+    public int HaveShieldGaugeHitDamageRatio;
+    public string? RetributionIcon;
+    public int RepulseDecreaseShieldGaugeRatio;
+    public int SkillBulletTime;
+    public int GigasCameraChangeDistance;
+    public int AbaddonCameraChangeDistance;
+    public int StalkerCameraChangeDistance;
+    public int BehemothCameraChangeDistance;
+    public int BruteCameraChangeDistance;
+    public int DamageChangeScoreRatio;
+    public int ChangeLeftTimeToPoint;
+    public int BuffSkillAttackStateId;
+    public int BuffDuration;
+    public int BuffAtkUpValue;
+    public int BuffSpeedUpValue;
 }
 
 [MemoryPackable]
 public partial class EventSBMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? MissionLocalkey;
     public SBMissionCategory MissionCategory;
     public SBMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
+    public int MissionTargetId;
+    public int MissionCount;
     public SBMissionRewardType RewardType;
-    public Int32 RewardValue;
-    public Int32 RewardAmount;
+    public int RewardValue;
+    public int RewardAmount;
 }
 
 [MemoryPackable]
 public partial class EventSBMonsterAttackStateRecord_Raw
 {
-    public Int32 Id;
-    public Int32 AnimatorId;
-    public Int32 AnimationSpeedRatio;
-    public String? UseEffectResource;
-    public Int32 UseAttackGroupId;
-    public Boolean IsInvincible;
-    public Int32 TimeToIdle;
-    public Boolean SkillTutorialUse;
-    public Int32 SkillTutorialUseId;
-    public Int32 SkillTutorialOutputTime;
+    public int Id;
+    public int AnimatorId;
+    public int AnimationSpeedRatio;
+    public string? UseEffectResource;
+    public int UseAttackGroupId;
+    public bool IsInvincible;
+    public int TimeToIdle;
+    public bool SkillTutorialUse;
+    public int SkillTutorialUseId;
+    public int SkillTutorialOutputTime;
 }
 
 [MemoryPackable]
 public partial class EventSBMonsterAttackRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBMonsterSkillType SkillType;
     public List<SBMonsterSkillUseColliderType>? UseColliderType;
-    public Int32 ColliderStartTime;
-    public Int32 ColliderEndTime;
-    public String? ProjectileResource;
-    public String? ProjectileHitResource;
-    public Int32 ProjectileStartTime;
-    public Int32 ProjectileFireTime;
-    public Int32 ProjectileMaximumHeight;
-    public Int32 ProjectileSize;
-    public Int32 ProjectileSpeed;
-    public Int32 ProjectileDirection;
-    public Int32 ProjectileLifeTime;
-    public Int32 MoveStartTime;
-    public Int32 MoveEndTime;
-    public Int32 MaximumJumpHeight;
-    public Int32 Damage;
-    public Int32 DecreaseShieldGauge;
-    public Boolean IsDown;
-    public Boolean EveGuardAble;
+    public int ColliderStartTime;
+    public int ColliderEndTime;
+    public string? ProjectileResource;
+    public string? ProjectileHitResource;
+    public int ProjectileStartTime;
+    public int ProjectileFireTime;
+    public int ProjectileMaximumHeight;
+    public int ProjectileSize;
+    public int ProjectileSpeed;
+    public int ProjectileDirection;
+    public int ProjectileLifeTime;
+    public int MoveStartTime;
+    public int MoveEndTime;
+    public int MaximumJumpHeight;
+    public int Damage;
+    public int DecreaseShieldGauge;
+    public bool IsDown;
+    public bool EveGuardAble;
     public SBMonsterSpecialSkillType SpecialSkillType;
-    public Int32 SpecialSkillWarningTime;
-    public Int32 SpecialSkillEveWarningTime;
-    public Int32 DodgeSkillDelayTime;
-    public Boolean CanBeCanceledByPerfectParry;
+    public int SpecialSkillWarningTime;
+    public int SpecialSkillEveWarningTime;
+    public int DodgeSkillDelayTime;
+    public bool CanBeCanceledByPerfectParry;
     public SBMonsterParryAniDirectionType ByPerfectParryAniDirection;
     public SBMonsterParryAniDirectionType AttackDirection;
-    public Boolean StrongHit;
-    public Boolean FocusEve;
-    public Int32 FocusEveStartTime;
-    public Int32 FocusEveEndTime;
+    public bool StrongHit;
+    public bool FocusEve;
+    public int FocusEveStartTime;
+    public int FocusEveEndTime;
 }
 
 [MemoryPackable]
 public partial class EventSBMonsterRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public SBMonsterType MonsterType;
-    public String? MonsterResource;
-    public String? MonsterNameLocale;
-    public Int32 MonsterAtk;
-    public Int32 MonsterHp;
-    public Int32 MonsterShieldGauge;
-    public Int32 BalanceGauge;
-    public Int32 MonsterRecoveryShieldGaugeTime;
-    public String? MonsterBt;
-    public String? Phase01Bgm;
-    public String? Phase02Bgm;
-    public Int32 StartDistanceWithCharacter;
-    public Int32 GroggyTime;
-    public Int32 DownTime;
-    public Int32 RetributionStartDistance;
-    public Int32 RetributionResource;
-    public Int32 RetributionResourceWithSkill;
-    public Int32 RetributionDamage;
-    public Int32 RetributionDecreaseShieldGauge;
-    public Int32 RetributionDownTime;
-    public Int32 FinishResource;
-    public List<Double>? BlinkCharacterLocation;
+    public string? MonsterResource;
+    public string? MonsterNameLocale;
+    public int MonsterAtk;
+    public int MonsterHp;
+    public int MonsterShieldGauge;
+    public int BalanceGauge;
+    public int MonsterRecoveryShieldGaugeTime;
+    public string? MonsterBt;
+    public string? Phase01Bgm;
+    public string? Phase02Bgm;
+    public int StartDistanceWithCharacter;
+    public int GroggyTime;
+    public int DownTime;
+    public int RetributionStartDistance;
+    public int RetributionResource;
+    public int RetributionResourceWithSkill;
+    public int RetributionDamage;
+    public int RetributionDecreaseShieldGauge;
+    public int RetributionDownTime;
+    public int FinishResource;
+    public List<double>? BlinkCharacterLocation;
     public List<UseSkillData_Raw>? UseSkillData;
 }
 
 [MemoryPackable]
 public partial class EventSBShopRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBShopItemType ItemGroup;
-    public Boolean IsOpened;
+    public bool IsOpened;
     public List<SBOpenConditionData_Raw>? SbOpenConditionData;
-    public Int32 ItemOrder;
-    public Int32 ItemPrice;
-    public Int32 ItemId;
+    public int ItemOrder;
+    public int ItemPrice;
+    public int ItemId;
 }
 
 [MemoryPackable]
 public partial class EventSBStageRewardRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBRewardType RewardType;
-    public Int32 RewardId;
-    public Int32 RewardAmount;
-    public Int32 ScoreMin;
-    public Int32 ScoreMax;
+    public int RewardId;
+    public int RewardAmount;
+    public int ScoreMin;
+    public int ScoreMax;
 }
 
 [MemoryPackable]
 public partial class EventSBStageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public SBBossType BossType;
     public SBStageType StageType;
-    public String? StageNameLocale;
-    public String? StageNameLocaleWithoutLevel;
-    public Int32 MonsterId;
-    public String? MonsterImage;
-    public String? MonsterIcon;
-    public Int32 LimitTime;
-    public Int32 UnlockDate;
-    public Int32 UnlockConditionStage;
+    public string? StageNameLocale;
+    public string? StageNameLocaleWithoutLevel;
+    public int MonsterId;
+    public string? MonsterImage;
+    public string? MonsterIcon;
+    public int LimitTime;
+    public int UnlockDate;
+    public int UnlockConditionStage;
     public List<UnlockConditionLocaleData_Raw>? UnlockConditionLocale;
-    public Int32 StageFirstClearReward;
-    public Int32 StageClearReward;
-    public Int32 StageFailureReward;
-    public Boolean IngameGuideUse;
-    public Int32 IngameGuideGroupId;
+    public int StageFirstClearReward;
+    public int StageClearReward;
+    public int StageFailureReward;
+    public bool IngameGuideUse;
+    public int IngameGuideGroupId;
 }
 
 [MemoryPackable]
 public partial class EventSBTimeLineRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public SBTimeLineType TimelineType;
-    public String? UseEveTimeline;
-    public Int32 UseEveAnimatorId;
-    public String? UseMonsterTimeline;
-    public Int32 UseMonsterAnimatorId;
-    public List<Double>? TimelineStartCharacterLocation;
-    public Int32 TimelinePlayTime;
-    public Int32 EveMoveAbleTime;
+    public string? UseEveTimeline;
+    public int UseEveAnimatorId;
+    public string? UseMonsterTimeline;
+    public int UseMonsterAnimatorId;
+    public List<double>? TimelineStartCharacterLocation;
+    public int TimelinePlayTime;
+    public int EveMoveAbleTime;
 }
 
 [MemoryPackable]
 public partial class EventSBTutorialListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TutorialPageId;
+    public int Id;
+    public int GroupId;
+    public int TutorialPageId;
     public SBTutorialOutputType TutorialOutputType;
-    public Int32 TutorialOutputValue;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public int TutorialOutputValue;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class EventScenarioControlRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public String? ScenarioGroupId;
-    public String? ScenarioPlayType;
+    public int Id;
+    public int EventId;
+    public string? ScenarioGroupId;
+    public string? ScenarioPlayType;
 }
 
 [MemoryPackable]
 public partial class EventSmashChallengeStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public Int32 Life;
-    public String? Resource;
-    public Int32 SpawnSlotCount;
-    public Int32 PointLimit;
-    public Int32 AppearHitPoint;
-    public Int32 IdleHitPoint;
-    public Int32 ExitHitPoint;
-    public Int32 NoneTargetPassPoint;
+    public int Id;
+    public int TimeDifficultGroup;
+    public int Life;
+    public string? Resource;
+    public int SpawnSlotCount;
+    public int PointLimit;
+    public int AppearHitPoint;
+    public int IdleHitPoint;
+    public int ExitHitPoint;
+    public int NoneTargetPassPoint;
 }
 
 [MemoryPackable]
 public partial class EventSmashCharacterGroupRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 CharacterId;
-    public Int32 SpawnRate;
+    public int Id;
+    public int Group;
+    public int CharacterId;
+    public int SpawnRate;
 }
 
 [MemoryPackable]
 public partial class EventSmashCharacterRecord
 {
-    public Int32 Id;
-    public String? Resource;
+    public int Id;
+    public string? Resource;
     public EventSmashCharacterType Type;
-    public Int32 TypeValue;
+    public int TypeValue;
 }
 
 [MemoryPackable]
 public partial class EventSmashStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 ClearPoint;
-    public String? ClearConditionDesc;
-    public Int32 TimeDifficultGroup;
-    public Int32 Life;
-    public String? Resource;
-    public Int32 SpawnSlotCount;
-    public Int32 AppearHitPoint;
-    public Int32 IdleHitPoint;
-    public Int32 ExitHitPoint;
-    public Int32 NoneTargetPassPoint;
+    public int Id;
+    public int ClearPoint;
+    public string? ClearConditionDesc;
+    public int TimeDifficultGroup;
+    public int Life;
+    public string? Resource;
+    public int SpawnSlotCount;
+    public int AppearHitPoint;
+    public int IdleHitPoint;
+    public int ExitHitPoint;
+    public int NoneTargetPassPoint;
 }
 
 [MemoryPackable]
 public partial class EventSmashTimeDifficultRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Lv;
-    public Int32 PlayTimeMin;
-    public Int32 PlayTimeMax;
-    public Int32 SpawnGroup;
-    public Int32 SpawnCountMax;
-    public Int32 SpawnDelayTime;
-    public Int32 CharacterWaitTime;
+    public int Id;
+    public int Group;
+    public int Lv;
+    public int PlayTimeMin;
+    public int PlayTimeMax;
+    public int SpawnGroup;
+    public int SpawnCountMax;
+    public int SpawnDelayTime;
+    public int CharacterWaitTime;
 }
 
 [MemoryPackable]
 public partial class EventSortOutBoxRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? BoxResource;
+    public int Id;
+    public int GroupId;
+    public string? BoxResource;
 }
 
 [MemoryPackable]
 public partial class EventSortOutMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int ManagerId;
+    public string? MissionLocalkey;
     public EventSortOutMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
-    public Int32 RewardId;
+    public int MissionTargetId;
+    public int MissionCount;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class EventSortOutRecord
 {
-    public Int32 Id;
-    public Int32 EventManagerId;
-    public Boolean IsArchiveEvent;
-    public String? EnterScenario;
-    public String? NameLocalkey;
-    public Int32 AutoChargeId;
-    public Int32 CurrencyTicket;
-    public Int32 Time;
-    public Int32 Level1Wave;
-    public Int32 Level2Wave;
-    public Int32 Level3Wave;
-    public Int32 Level2StartPoint;
-    public Int32 Level3StartPoint;
-    public Int32 GainFeverGauge;
-    public Int32 MaxFeverGauge;
-    public Int32 DecreaseFeverGauge;
-    public Int32 CorrectCount;
-    public Int32 PenaltyTime;
-    public Int32 RankDMinPoint;
-    public Int32 RankDMaxPoint;
-    public Int32 RankDReward;
-    public Int32 RankCMinPoint;
-    public Int32 RankCMaxPoint;
-    public Int32 RankCReward;
-    public Int32 RankBMinPoint;
-    public Int32 RankBMaxPoint;
-    public Int32 RankBReward;
-    public Int32 RankAMinPoint;
-    public Int32 RankAMaxPoint;
-    public Int32 RankAReward;
-    public Int32 RankSMinPoint;
-    public Int32 RankSMaxPoint;
-    public Int32 RankSReward;
+    public int Id;
+    public int EventManagerId;
+    public bool IsArchiveEvent;
+    public string? EnterScenario;
+    public string? NameLocalkey;
+    public int AutoChargeId;
+    public int CurrencyTicket;
+    public int Time;
+    public int Level1Wave;
+    public int Level2Wave;
+    public int Level3Wave;
+    public int Level2StartPoint;
+    public int Level3StartPoint;
+    public int GainFeverGauge;
+    public int MaxFeverGauge;
+    public int DecreaseFeverGauge;
+    public int CorrectCount;
+    public int PenaltyTime;
+    public int RankDMinPoint;
+    public int RankDMaxPoint;
+    public int RankDReward;
+    public int RankCMinPoint;
+    public int RankCMaxPoint;
+    public int RankCReward;
+    public int RankBMinPoint;
+    public int RankBMaxPoint;
+    public int RankBReward;
+    public int RankAMinPoint;
+    public int RankAMaxPoint;
+    public int RankAReward;
+    public int RankSMinPoint;
+    public int RankSMaxPoint;
+    public int RankSReward;
 }
 
 [MemoryPackable]
 public partial class EventSortOutWaveRecord
 {
-    public Int32 Id;
-    public Int32 Level;
-    public Int32 GainPoint;
-    public Int32 Box1Id;
-    public Int32 Box2Id;
-    public Int32 Box3Id;
-    public Int32 Box4Id;
-    public Int32 Box5Id;
-    public Int32 Box6Id;
-    public Int32 BoxSpecialId;
-    public Int32 BoxFeverId;
+    public int Id;
+    public int Level;
+    public int GainPoint;
+    public int Box1Id;
+    public int Box2Id;
+    public int Box3Id;
+    public int Box4Id;
+    public int Box5Id;
+    public int Box6Id;
+    public int BoxSpecialId;
+    public int BoxFeverId;
 }
 
 [MemoryPackable]
 public partial class EventStackUpChallengeStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Single CharacterDefaultSpeed;
-    public Int32 DefaultObtainPoint;
-    public Single PerfectActionPointRate;
-    public Single PerfectActionLength;
-    public Single ObjectSpawnDistance;
-    public Int32 AutoIncreaseDifficultyFloor;
-    public Single CameraDefaultSpeed;
-    public Single ObjectDefaultLength;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public float CharacterDefaultSpeed;
+    public int DefaultObtainPoint;
+    public float PerfectActionPointRate;
+    public float PerfectActionLength;
+    public float ObjectSpawnDistance;
+    public int AutoIncreaseDifficultyFloor;
+    public float CameraDefaultSpeed;
+    public float ObjectDefaultLength;
 }
 
 [MemoryPackable]
 public partial class EventStackUpStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 TimeDifficultGroup;
-    public String? StageResourceId;
-    public Int32 ClearNumberFloors;
-    public Single CharacterDefaultSpeed;
-    public Int32 DefaultObtainPoint;
-    public Single PerfectActionPointRate;
-    public Single PerfectActionLength;
-    public Single ObjectSpawnDistance;
-    public Int32 AutoIncreaseDifficultyFloor;
-    public Single CameraDefaultSpeed;
-    public Single ObjectDefaultLength;
+    public int Id;
+    public int TimeDifficultGroup;
+    public string? StageResourceId;
+    public int ClearNumberFloors;
+    public float CharacterDefaultSpeed;
+    public int DefaultObtainPoint;
+    public float PerfectActionPointRate;
+    public float PerfectActionLength;
+    public float ObjectSpawnDistance;
+    public int AutoIncreaseDifficultyFloor;
+    public float CameraDefaultSpeed;
+    public float ObjectDefaultLength;
 }
 
 [MemoryPackable]
 public partial class EventStackUpTimeDifficultRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 DifficultyStep;
-    public Int32 StackFloorMin;
-    public Int32 StackFloorMax;
-    public Single DifficultyPlaySpeed;
-    public Single AutoIncreasePlaySpeed;
+    public int Id;
+    public int GroupId;
+    public int DifficultyStep;
+    public int StackFloorMin;
+    public int StackFloorMax;
+    public float DifficultyPlaySpeed;
+    public float AutoIncreasePlaySpeed;
 }
 
 [MemoryPackable]
 public partial class EventStoryRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public StoryEventPartType PartType;
-    public String? PrologueScenario;
-    public Int32 AutoChargeId;
+    public string? PrologueScenario;
+    public int AutoChargeId;
     public RewardType EventItemType;
-    public Int32 EventItemId;
-    public Int32 DungeonId1;
-    public Int32 DungeonId2;
-    public Int32 AlbumCategoryGroup;
-    public Int32 MissionGroup;
-    public Int32 ContentsShopId;
-    public Int32 DiceId;
-    public String? UiPrefab1;
-    public String? UiPrefab2;
-    public String? ChallengeMonsterResource;
+    public int EventItemId;
+    public int DungeonId1;
+    public int DungeonId2;
+    public int AlbumCategoryGroup;
+    public int MissionGroup;
+    public int ContentsShopId;
+    public int DiceId;
+    public string? UiPrefab1;
+    public string? UiPrefab2;
+    public string? ChallengeMonsterResource;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureEventPageRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 FirstSelectId;
-    public String? ResourceName;
-    public String? ScenarioLocalkey;
-    public String? Effect;
-    public Boolean IsBgmTenssionUp;
+    public int Id;
+    public int ManagerId;
+    public int FirstSelectId;
+    public string? ResourceName;
+    public string? ScenarioLocalkey;
+    public string? Effect;
+    public bool IsBgmTenssionUp;
     public EventTextAdventurePageType PageType;
-    public Int32 SelectOptionGroupId;
-    public Int32 GetLootItemId;
-    public Boolean IsGoToFirstSelectPage;
-    public Int32 NextPageId;
-    public String? ScenarioGroupId;
+    public int SelectOptionGroupId;
+    public int GetLootItemId;
+    public bool IsGoToFirstSelectPage;
+    public int NextPageId;
+    public string? ScenarioGroupId;
     public EventTextAdventureEndingType EndingType;
-    public Int32 EndingNum;
-    public String? EndingSubTitleLocalkey;
-    public String? EndingHintLocalkey;
+    public int EndingNum;
+    public string? EndingSubTitleLocalkey;
+    public string? EndingHintLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureFirstSelectRecord
 {
-    public Int32 Id;
-    public Int32 FirstSelectGroupId;
-    public String? FirstSelectResource;
-    public String? FirstSelectLocalkey;
-    public String? FirstSelectDescriptionLocalkey;
-    public Int32 NextPageId;
-    public Boolean IsUseTimeCondition;
+    public int Id;
+    public int FirstSelectGroupId;
+    public string? FirstSelectResource;
+    public string? FirstSelectLocalkey;
+    public string? FirstSelectDescriptionLocalkey;
+    public int NextPageId;
+    public bool IsUseTimeCondition;
     public DateTime TimeCondition;
-    public Boolean IsUseEndingCondition;
-    public Int32 EndingCondition;
-    public Boolean ShowEndingCondition;
-    public String? Effect;
-    public String? SoundEffect;
-    public String? NavigationIcon;
+    public bool IsUseEndingCondition;
+    public int EndingCondition;
+    public bool ShowEndingCondition;
+    public string? Effect;
+    public string? SoundEffect;
+    public string? NavigationIcon;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureLocaleRecord
 {
-    public Int32 Id;
-    public String? FirstSelectDescriptionLocalkey;
-    public String? LootitemNameLocalkey;
-    public String? LootitemDescriptionLocalkey;
-    public String? LootitemGainMessageLocalkey;
-    public String? LootitemAlreadyGainLocalkey;
-    public String? OpenConditionTimeLocalkey;
-    public String? OpenConditionEndingLocalkey;
-    public String? OpenConditionHiddenLocalkey;
-    public String? AlbumLocalkey;
-    public String? AlbumDescriptionLocalkey;
-    public String? RewardDescriptionLocalkey;
-    public String? RewardAlreadyReceivedLocalkey;
-    public String? QuickEndLocalkey;
-    public String? QuickEndStartButtonLocalkey;
-    public String? QuickEndDescriptionLocalkey;
-    public String? QuickEndAlertLocalkey;
-    public String? LootitemButtonLocalkey;
-    public String? AlbumButtonLocalkey;
-    public String? GameStartButtonLocalkey;
-    public String? RevertPageLocalkey;
-    public String? DataSavingLocalkey;
-    public String? PauseButtonLocalkey;
-    public String? PauseLocalkey;
-    public String? PauseDescriptionLocalkey;
-    public String? EndingCollectAbleLocalkey;
-    public String? EndingCollectDisableLocalkey;
-    public String? EndingCollectInfinityModLocalkey;
-    public String? TouchToGoRewardPageLocalkey;
-    public String? TouchToEndLocalkey;
-    public String? AdventureLocationLocalkey;
-    public String? GameLoadLocalkey;
-    public String? ToastCanNotSelectLocalkey;
-    public String? ToastCurrencyTicketLackLocalkey;
-    public String? ToastQuickEndOpenConditionLocalkey;
-    public String? ToastRequireFirstSelectLocalkey;
-    public String? ToastRequireEndingLocalkey;
-    public String? ToastRequireLootItemLocalkey;
-    public String? ToastEndingNotCollectedLocalkey;
-    public String? EndingRecordSuccessLocalkey;
-    public String? EndingRecordDeniedLocalkey;
-    public String? RewardCountLeftLocalkey;
-    public String? NoRewardInArchiveLocalkey;
+    public int Id;
+    public string? FirstSelectDescriptionLocalkey;
+    public string? LootitemNameLocalkey;
+    public string? LootitemDescriptionLocalkey;
+    public string? LootitemGainMessageLocalkey;
+    public string? LootitemAlreadyGainLocalkey;
+    public string? OpenConditionTimeLocalkey;
+    public string? OpenConditionEndingLocalkey;
+    public string? OpenConditionHiddenLocalkey;
+    public string? AlbumLocalkey;
+    public string? AlbumDescriptionLocalkey;
+    public string? RewardDescriptionLocalkey;
+    public string? RewardAlreadyReceivedLocalkey;
+    public string? QuickEndLocalkey;
+    public string? QuickEndStartButtonLocalkey;
+    public string? QuickEndDescriptionLocalkey;
+    public string? QuickEndAlertLocalkey;
+    public string? LootitemButtonLocalkey;
+    public string? AlbumButtonLocalkey;
+    public string? GameStartButtonLocalkey;
+    public string? RevertPageLocalkey;
+    public string? DataSavingLocalkey;
+    public string? PauseButtonLocalkey;
+    public string? PauseLocalkey;
+    public string? PauseDescriptionLocalkey;
+    public string? EndingCollectAbleLocalkey;
+    public string? EndingCollectDisableLocalkey;
+    public string? EndingCollectInfinityModLocalkey;
+    public string? TouchToGoRewardPageLocalkey;
+    public string? TouchToEndLocalkey;
+    public string? AdventureLocationLocalkey;
+    public string? GameLoadLocalkey;
+    public string? ToastCanNotSelectLocalkey;
+    public string? ToastCurrencyTicketLackLocalkey;
+    public string? ToastQuickEndOpenConditionLocalkey;
+    public string? ToastRequireFirstSelectLocalkey;
+    public string? ToastRequireEndingLocalkey;
+    public string? ToastRequireLootItemLocalkey;
+    public string? ToastEndingNotCollectedLocalkey;
+    public string? EndingRecordSuccessLocalkey;
+    public string? EndingRecordDeniedLocalkey;
+    public string? RewardCountLeftLocalkey;
+    public string? NoRewardInArchiveLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureLootItemRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? IconResource;
-    public String? ItemNameLocalkey;
-    public String? ItemDescriptionLocalkey;
+    public int Id;
+    public int ManagerId;
+    public string? IconResource;
+    public string? ItemNameLocalkey;
+    public string? ItemDescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchiveEvent;
-    public String? UiPrefab;
-    public Int32 FirstSelectGroupId;
-    public Int32 TicketAutoChargeId;
-    public Int32 RewardTicketAutoChargeId;
+    public int Id;
+    public int EventId;
+    public bool IsArchiveEvent;
+    public string? UiPrefab;
+    public int FirstSelectGroupId;
+    public int TicketAutoChargeId;
+    public int RewardTicketAutoChargeId;
     public DateTime InfinityModActiveDate;
-    public Int32 RewardId;
-    public String? FirstEnterScenarioGroupId;
-    public Int32 QuickEndEventPageId;
-    public Int32 QuickEndOpenConditionValue;
-    public Int32 HelpTipId;
-    public Int32 LocaleId;
+    public int RewardId;
+    public string? FirstEnterScenarioGroupId;
+    public int QuickEndEventPageId;
+    public int QuickEndOpenConditionValue;
+    public int HelpTipId;
+    public int LocaleId;
 }
 
 [MemoryPackable]
 public partial class EventTextAdventureSelectOptionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ManagerId;
-    public String? SelectionLocalkey;
+    public int Id;
+    public int GroupId;
+    public int ManagerId;
+    public string? SelectionLocalkey;
     public EventTextAdventureSelectionOpenType OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Boolean IsHidden;
-    public Int32 PageId;
-    public String? Voice;
-    public String? SoundEffect;
+    public int OpenConditionValue;
+    public bool IsHidden;
+    public int PageId;
+    public string? Voice;
+    public string? SoundEffect;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseArcadeManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 ArcadeEventId;
-    public Int32 ExistManagerId;
-    public Int32 ArcadeMissionGroupId;
+    public int Id;
+    public int ArcadeEventId;
+    public int ExistManagerId;
+    public int ArcadeMissionGroupId;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseArchiveManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 ExistManagerId;
+    public int Id;
+    public int EventId;
+    public int ExistManagerId;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseBuffRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 BuffPriority;
-    public Boolean IsCanStack;
-    public String? BuffName;
-    public String? BuffDescription;
+    public int Id;
+    public int ManagerId;
+    public int BuffPriority;
+    public bool IsCanStack;
+    public string? BuffName;
+    public string? BuffDescription;
     public TowerDefenseBuffTargetType BuffTarget;
     public TowerDefenseBuffEffectType BuffEffectType;
-    public Int32 BuffEffectValue;
-    public String? BuffEffectResource;
-    public String? BuffIconResource;
-    public Boolean IsUseSpriteTint;
-    public String? SetSpriteTint;
-    public Int32 SetSpriteTintAlphaValue;
-    public Int32 SetTransparent;
-    public Boolean IsDefaultBuff;
+    public int BuffEffectValue;
+    public string? BuffEffectResource;
+    public string? BuffIconResource;
+    public bool IsUseSpriteTint;
+    public string? SetSpriteTint;
+    public int SetSpriteTintAlphaValue;
+    public int SetTransparent;
+    public bool IsDefaultBuff;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseBurstDialogRecord
 {
-    public Int32 Id;
-    public Int32 HeroGroupId;
-    public String? Speaker;
-    public String? ScenarioLocalkey;
-    public Int32 NikkeResourceId;
-    public Int32 NikkeCostumeIndex;
+    public int Id;
+    public int HeroGroupId;
+    public string? Speaker;
+    public string? ScenarioLocalkey;
+    public int NikkeResourceId;
+    public int NikkeCostumeIndex;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseCinematicRecord
 {
-    public Int32 Id;
-    public Int32 StageId;
+    public int Id;
+    public int StageId;
     public TowerDefenseCinematicStartConditionType StartConditionType;
-    public Int32 StartConditionValue;
-    public Int32 StartDelay;
+    public int StartConditionValue;
+    public int StartDelay;
     public TowerDefenseCinematicType CinematicType;
-    public String? CinematicTypeValue;
-    public Int32 TowerSpawnDelay;
-    public Int32 TimelineActionStartFrame;
-    public Int32 TimelineActionEndFrame;
-    public Boolean IsLoopAction;
+    public string? CinematicTypeValue;
+    public int TowerSpawnDelay;
+    public int TimelineActionStartFrame;
+    public int TimelineActionEndFrame;
+    public bool IsLoopAction;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseDebuffRecord
 {
-    public Int32 Id;
-    public Int32 DebuffPriority;
-    public String? DebuffName;
-    public String? DebuffDescription;
+    public int Id;
+    public int DebuffPriority;
+    public string? DebuffName;
+    public string? DebuffDescription;
     public TowerDefenseDebuffEffectType DebuffEffectType;
-    public Int32 DebuffEffectValue;
-    public String? DebuffEffectResource;
-    public Boolean IsUseSpriteTint;
-    public String? SetSpriteTint;
-    public Int32 SetSpriteTintAlphaValue;
+    public int DebuffEffectValue;
+    public string? DebuffEffectResource;
+    public bool IsUseSpriteTint;
+    public string? SetSpriteTint;
+    public int SetSpriteTintAlphaValue;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public EventTowerDefenseEventType EventType;
-    public String? UiPrefabKeyword;
-    public Int32 HeroSlotOpenCost;
-    public Int32 HeroSlotOpenCostIncrease;
-    public Int32 TowerRefundPercentage;
-    public Int32 WaveQuickStartBurstSkillAcceleration;
-    public Int32 MonsterLimit;
-    public Int32 TowerBuildTime;
-    public Int32 TowerDemolishTime;
-    public Int32 AreaVerticalDiameter;
-    public Int32 UiControlGameSpeedDeceleration;
-    public Int32 ZoomMaxValue;
-    public Int32 ZoomSpeed;
-    public Int32 ResourceDefaultScale;
-    public Int32 MonsterDefaultScale;
-    public String? UpgradeCurrencyResource;
-    public String? UpgradeCurrencyName;
-    public String? UpgradeCurrencyDescription;
-    public Int32 ToastMessagePrintTime;
-    public String? DailyMissionToastMessageTitleLocale;
-    public String? DailyMissionToastMessageLocale;
-    public String? DailyMissionToastMessageIcon;
-    public Int32 DailyMissionToastMessagePrintValue;
-    public String? AchievementMissionToastMessageTitleLocale;
-    public String? AchievementMissionToastMessageIcon;
-    public Int32 IngameDialogPrintSpeed;
-    public Int32 BurstDialogPrintTime;
-    public Int32 BuffTerminationNoticeTime;
-    public Int32 BuffTerminationNoticeBlinkRate;
-    public Int32 StageClearDelay;
-    public Int32 BurstGuideToastHoldTime;
-    public Boolean IsUse3XSpeed;
-    public Boolean IsUseWaveInfo;
-    public String? FirstEntryMessageLocalkey;
+    public string? UiPrefabKeyword;
+    public int HeroSlotOpenCost;
+    public int HeroSlotOpenCostIncrease;
+    public int TowerRefundPercentage;
+    public int WaveQuickStartBurstSkillAcceleration;
+    public int MonsterLimit;
+    public int TowerBuildTime;
+    public int TowerDemolishTime;
+    public int AreaVerticalDiameter;
+    public int UiControlGameSpeedDeceleration;
+    public int ZoomMaxValue;
+    public int ZoomSpeed;
+    public int ResourceDefaultScale;
+    public int MonsterDefaultScale;
+    public string? UpgradeCurrencyResource;
+    public string? UpgradeCurrencyName;
+    public string? UpgradeCurrencyDescription;
+    public int ToastMessagePrintTime;
+    public string? DailyMissionToastMessageTitleLocale;
+    public string? DailyMissionToastMessageLocale;
+    public string? DailyMissionToastMessageIcon;
+    public int DailyMissionToastMessagePrintValue;
+    public string? AchievementMissionToastMessageTitleLocale;
+    public string? AchievementMissionToastMessageIcon;
+    public int IngameDialogPrintSpeed;
+    public int BurstDialogPrintTime;
+    public int BuffTerminationNoticeTime;
+    public int BuffTerminationNoticeBlinkRate;
+    public int StageClearDelay;
+    public int BurstGuideToastHoldTime;
+    public bool IsUse3XSpeed;
+    public bool IsUseWaveInfo;
+    public string? FirstEntryMessageLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseMissionRecord
 {
-    public Int32 Id;
-    public Int32 MinigameManagerId;
-    public Int32 ArcadeMissionGroupId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int MinigameManagerId;
+    public int ArcadeMissionGroupId;
+    public string? MissionLocalkey;
     public EventTowerDefenseMissionCategory MissionCategory;
     public EventTowerDefenseMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
+    public int MissionTargetId;
+    public int MissionCount;
     public List<missionvaluedata>? MissionValue;
     public EventTowerDefenseMissionRewardType RewardType;
-    public Int32 RewardValue;
+    public int RewardValue;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseMonsterSkillRecord
 {
-    public Int32 Id;
-    public Int32 MonsterSkillOrder;
-    public String? MonsterSkillName;
-    public String? MonsterSkillDescription;
+    public int Id;
+    public int MonsterSkillOrder;
+    public string? MonsterSkillName;
+    public string? MonsterSkillDescription;
     public TowerDefenseMonsterSkillActiveType MonsterSkillActiveType;
-    public Int32 MonsterSkillActiveValue;
-    public Int32 SkillCastTime;
+    public int MonsterSkillActiveValue;
+    public int SkillCastTime;
     public TowerDefenseMonsterSkillType MonsterSkillType;
     public List<MonsterSkillTypeValueListData>? MonsterSkillTypeValueList;
-    public String? MonsterSkillResourceEffect;
-    public Int32 SkillEffectDelay;
-    public String? MonsterSkillResourceEffect2;
-    public Int32 SkillEffectDelay2;
-    public String? MonsterSkillResourceAreaEffect;
+    public string? MonsterSkillResourceEffect;
+    public int SkillEffectDelay;
+    public string? MonsterSkillResourceEffect2;
+    public int SkillEffectDelay2;
+    public string? MonsterSkillResourceAreaEffect;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseMonsterRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
+    public int Id;
+    public int ManagerId;
     public TowerDefenseMonsterGradeType MonsterGrade;
-    public String? MonsterName;
-    public String? MonsterDescription;
-    public String? MonsterIcon;
-    public String? MonsterResource;
-    public Int32 MonsterAnimSpeed;
-    public Int32 MonsterScale;
-    public Int32 MonsterHitDetectionRadius;
-    public Int32 MonsterHp;
-    public Int32 MonsterDef;
-    public Int32 MonsterSpeed;
+    public string? MonsterName;
+    public string? MonsterDescription;
+    public string? MonsterIcon;
+    public string? MonsterResource;
+    public int MonsterAnimSpeed;
+    public int MonsterScale;
+    public int MonsterHitDetectionRadius;
+    public int MonsterHp;
+    public int MonsterDef;
+    public int MonsterSpeed;
     public TowerDefenseMonsterMoveType MoveType;
     public List<MonsterSkillListData>? MonsterSkillList;
-    public Boolean IsUseNextPhase;
-    public Int32 NextPhaseMonsterId;
-    public Int32 NextPhaseMonsterSpawnCount;
-    public Int32 NextPhaseMonsterSpawnRadius;
-    public Int32 DefensePointDecrease;
-    public Int32 GoldReward;
-    public Int32 SkillUnusableTime;
-    public Int32 ChallengeScore;
+    public bool IsUseNextPhase;
+    public int NextPhaseMonsterId;
+    public int NextPhaseMonsterSpawnCount;
+    public int NextPhaseMonsterSpawnRadius;
+    public int DefensePointDecrease;
+    public int GoldReward;
+    public int SkillUnusableTime;
+    public int ChallengeScore;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseScenarioGroupRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 StageId;
+    public int Id;
+    public int ManagerId;
+    public int StageId;
     public TowerDefenseDialogOutputConditionType OutputConditionType;
-    public Int32 OutputConditionValue;
-    public Int32 DelayTime;
-    public Int32 DialogListGroupId;
+    public int OutputConditionValue;
+    public int DelayTime;
+    public int DialogListGroupId;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseScenarioListRecord
 {
-    public Int32 Id;
-    public Int32 DialogListGroupId;
-    public String? Speaker;
+    public int Id;
+    public int DialogListGroupId;
+    public string? Speaker;
     public TowerDefenseDialogSpeakerPositionType SpeakerPosition;
     public TowerDefenseDialogSpeakerTeamType SpeakerTeam;
-    public String? ScenarioLocalkey;
-    public String? PrintCutscene;
-    public Boolean IsEndCutscene;
+    public string? ScenarioLocalkey;
+    public string? PrintCutscene;
+    public bool IsEndCutscene;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseSpeakerRecord
 {
-    public String? Id;
-    public String? SpeakerName;
-    public String? SpeakerPortrait;
+    public string? Id;
+    public string? SpeakerName;
+    public string? SpeakerPortrait;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseStageRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 EventStoryId;
+    public int Id;
+    public int ManagerId;
+    public int EventStoryId;
     public TowerDefenseStageType StageType;
-    public Int32 StageOrder;
-    public String? StageNameLocalkey;
-    public String? StageShortNameLocalkey;
-    public String? StageDescriptionLocalkey;
-    public String? StageInfoImage;
-    public Boolean IsEventStoryStage;
-    public String? EventStoryStageLockedAlertMessage;
-    public Int32 OpenConditionEventStoryStage;
-    public Int32 OpenConditionArchiveEventStoryStage;
-    public String? OpenConditionEventStoryStageLocale;
-    public Int32 OpenConditionTdStage;
+    public int StageOrder;
+    public string? StageNameLocalkey;
+    public string? StageShortNameLocalkey;
+    public string? StageDescriptionLocalkey;
+    public string? StageInfoImage;
+    public bool IsEventStoryStage;
+    public string? EventStoryStageLockedAlertMessage;
+    public int OpenConditionEventStoryStage;
+    public int OpenConditionArchiveEventStoryStage;
+    public string? OpenConditionEventStoryStageLocale;
+    public int OpenConditionTdStage;
     public DateTime OpenConditionTime;
-    public String? TowerDefenseStageMapPrefab;
-    public Int32 WaveDataGroupId;
-    public Int32 DefensePoint;
-    public Int32 StartGold;
-    public Int32 MaxHeroSlot;
-    public Int32 HeroSlotOpenCount;
+    public string? TowerDefenseStageMapPrefab;
+    public int WaveDataGroupId;
+    public int DefensePoint;
+    public int StartGold;
+    public int MaxHeroSlot;
+    public int HeroSlotOpenCount;
     public TowerDefenseClearConditionType StageClearConditionType;
-    public Int32 StageClearConditionValue;
-    public Int32 StageFirstClearReward;
-    public Int32 StageFirstClearUpgradeCurrencyReward;
-    public String? EnterScenario;
-    public String? ExitScenario;
-    public Int32 StageSelectTutorialId;
+    public int StageClearConditionValue;
+    public int StageFirstClearReward;
+    public int StageFirstClearUpgradeCurrencyReward;
+    public string? EnterScenario;
+    public string? ExitScenario;
+    public int StageSelectTutorialId;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseTowerSkillRecord
 {
-    public Int32 Id;
-    public Int32 SkillGroupId;
+    public int Id;
+    public int SkillGroupId;
     public TowerDefenseSkillSystemType SkillSystemType;
-    public String? SkillName;
-    public String? SkillDescription;
-    public String? SkillDescriptionShort;
-    public String? SkillIcon;
-    public String? SkillIconBackground;
-    public String? SkillProjectile;
+    public string? SkillName;
+    public string? SkillDescription;
+    public string? SkillDescriptionShort;
+    public string? SkillIcon;
+    public string? SkillIconBackground;
+    public string? SkillProjectile;
     public TowerDefenseTowerSkillProjectileMuzzleType SkillProjectileMuzzleType;
-    public String? SkillFireEffect;
-    public String? SkillHitEffect;
+    public string? SkillFireEffect;
+    public string? SkillHitEffect;
     public TowerDefenseSkillHitEffectType SkillHitEffectType;
-    public String? SkillAuraEffect;
+    public string? SkillAuraEffect;
     public TowerDefenseSkillAuraEffectType SkillAuraEffectType;
     public TowerDefenseTowerSkillAuraEffectTargetType SkillAuraEffectTargetType;
-    public Int32 SkillAuraEffectHoldTime;
-    public String? SkillAreaEffect;
+    public int SkillAuraEffectHoldTime;
+    public string? SkillAreaEffect;
     public TowerDefenseSkillAreaEffectType SkillAreaEffectType;
-    public Boolean SkillSpineResourceParameterOn;
-    public Int32 SkillSpineResourceParameterHoldTime;
-    public Boolean UseSkillSpineAnimation;
-    public Int32 SkillLevel;
-    public Int32 SkillCost;
+    public bool SkillSpineResourceParameterOn;
+    public int SkillSpineResourceParameterHoldTime;
+    public bool UseSkillSpineAnimation;
+    public int SkillLevel;
+    public int SkillCost;
     public TowerDefenseSkillUseType SkillUseType;
-    public Int32 SkillCoolTime;
-    public Int32 SkillUseAttackCount;
+    public int SkillCoolTime;
+    public int SkillUseAttackCount;
     public TowerDefenseSkillType SkillType;
     public TowerDefenseTowerAttackPriorityType SkillTargetSelectPriority;
-    public Int32 SkillEffectRange;
-    public Int32 SkillInstantEffectApplyDelay;
-    public Int32 SkillMissileProjectileCount;
-    public Int32 SkillMissileProjectileFireDelay;
-    public Int32 SkillProjectileApproachTime;
-    public Int32 SkillProjectileMaxHeight;
-    public Int32 SkillProjectileMissilePropulsionStartTiming;
-    public Int32 SkillAreaHoldTime;
-    public Int32 SkillAreaEffectDuration;
-    public Int32 SkillNormalAttackEnhanceTime;
+    public int SkillEffectRange;
+    public int SkillInstantEffectApplyDelay;
+    public int SkillMissileProjectileCount;
+    public int SkillMissileProjectileFireDelay;
+    public int SkillProjectileApproachTime;
+    public int SkillProjectileMaxHeight;
+    public int SkillProjectileMissilePropulsionStartTiming;
+    public int SkillAreaHoldTime;
+    public int SkillAreaEffectDuration;
+    public int SkillNormalAttackEnhanceTime;
     public List<SkillEffectListData>? SkillEffectList;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseTowerRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 TowerGroupId;
-    public Int32 LinkedGroupId;
-    public Boolean IsForCinematic;
+    public int Id;
+    public int ManagerId;
+    public int TowerGroupId;
+    public int LinkedGroupId;
+    public bool IsForCinematic;
     public TowerDefenseTowerType TowerType;
-    public String? TowerName;
-    public String? TowerDescription;
-    public String? TowerResource;
-    public String? TowerProjectile;
-    public String? TowerHitEffect;
-    public String? TowerIcon;
-    public Int32 TowerLevel;
-    public Int32 TowerCost;
-    public Int32 TowerOpenConditionStageOrder;
-    public Int32 TowerOpenConditionStageClear;
+    public string? TowerName;
+    public string? TowerDescription;
+    public string? TowerResource;
+    public string? TowerProjectile;
+    public string? TowerHitEffect;
+    public string? TowerIcon;
+    public int TowerLevel;
+    public int TowerCost;
+    public int TowerOpenConditionStageOrder;
+    public int TowerOpenConditionStageClear;
     public TowerDefenseTowerReinforceType TowerReinforceType;
-    public Int32 TowerReinforceValue01;
-    public Int32 TowerReinforceValue02;
-    public Int32 AttackRange;
+    public int TowerReinforceValue01;
+    public int TowerReinforceValue02;
+    public int AttackRange;
     public TowerDefenseTowerAttackPriorityType AttackPriority01;
     public TowerDefenseTowerAttackPriorityType AttackPriority02;
     public TowerDefenseTowerAttackType AttackType;
-    public Int32 AttackEffectRange;
-    public Int32 AttackTargetCount;
-    public Int32 AttackProjectileApproachTime;
-    public Int32 AttackProjectileMaxHeight;
-    public Int32 AttackProjectileMissilePropulsionStartTiming;
+    public int AttackEffectRange;
+    public int AttackTargetCount;
+    public int AttackProjectileApproachTime;
+    public int AttackProjectileMaxHeight;
+    public int AttackProjectileMissilePropulsionStartTiming;
     public TowerDefenseTowerAttackMovementType AttackMovementType;
-    public Int32 TowerStatAtk;
-    public Int32 TowerStatDefPenetration;
-    public Int32 TowerStatRpm;
-    public String? TowerRpmText;
-    public Int32 TowerStatCastDelay;
-    public Int32 ApplyDebuff;
-    public Int32 ApplyChance;
-    public Int32 ApplyDebuffHoldTime;
+    public int TowerStatAtk;
+    public int TowerStatDefPenetration;
+    public int TowerStatRpm;
+    public string? TowerRpmText;
+    public int TowerStatCastDelay;
+    public int ApplyDebuff;
+    public int ApplyChance;
+    public int ApplyDebuffHoldTime;
     public TowerDefenseHitEffectPrintType HitEffectPrintType;
     public List<TowerSkillListData>? TowerSkillList;
-    public Int32 TowerBurstSkill;
-    public Int32 TowerDefaultBuff;
+    public int TowerBurstSkill;
+    public int TowerDefaultBuff;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseTutorialListRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 TutorialPageGroupId;
+    public int Id;
+    public int GroupId;
+    public int TutorialPageGroupId;
     public EventTowerDefenseTutorialType TutorialType;
     public EventTowerDefenseTutorialButtonType ButtonType;
-    public String? ButtonValue;
+    public string? ButtonValue;
     public EventTowerDefenseTutorialOutputType TutorialOutputType;
-    public Int32 TutorialOutputValue;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public int TutorialOutputValue;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseTutorialPageRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public EventTowerDefenseTutorialPageType PageType;
-    public Int32 PageOrder;
-    public Boolean IsAvailableInArcade;
-    public String? ImageResource;
-    public String? PageTitleLocalkey;
-    public String? TutorialLocalkey;
+    public int PageOrder;
+    public bool IsAvailableInArcade;
+    public string? ImageResource;
+    public string? PageTitleLocalkey;
+    public string? TutorialLocalkey;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseTutorialRecord
 {
-    public Int32 Id;
-    public Int32 MinigameManagerId;
-    public Int32 TutorialListGroupId;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public int Id;
+    public int MinigameManagerId;
+    public int TutorialListGroupId;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseUpgradeGroupRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 UpgradeGroupOrder;
-    public String? UpgradeGroupIcon;
+    public int Id;
+    public int ManagerId;
+    public int UpgradeGroupOrder;
+    public string? UpgradeGroupIcon;
     public TowerDefenseUpgradeTargetType UpgradeTargetType;
-    public Int32 UpgradeTargetTowerGroupId;
-    public Int32 UpgradeListGroupId;
+    public int UpgradeTargetTowerGroupId;
+    public int UpgradeListGroupId;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseUpgradeListRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 UpgradeListOrder;
-    public String? UpgradeName;
-    public String? UpgradeDescription;
-    public String? UpgradeIcon;
-    public Int32 UpgradeCost;
+    public int Id;
+    public int GroupId;
+    public int UpgradeListOrder;
+    public string? UpgradeName;
+    public string? UpgradeDescription;
+    public string? UpgradeIcon;
+    public int UpgradeCost;
     public TowerDefenseUpgradeType UpgradeEffectType;
-    public Int32 UpgradeEffectValue;
+    public int UpgradeEffectValue;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseWaveDataRecord
 {
-    public Int32 Id;
-    public Int32 WaveDataGroupId;
-    public Int32 WaveOrder;
-    public Int32 WaveStartWaitingTime;
-    public Int32 WaveFastStartRewardGold;
-    public Int32 NextWaveCallTime;
-    public Int32 NextWaveCallMonsterKillId;
+    public int Id;
+    public int WaveDataGroupId;
+    public int WaveOrder;
+    public int WaveStartWaitingTime;
+    public int WaveFastStartRewardGold;
+    public int NextWaveCallTime;
+    public int NextWaveCallMonsterKillId;
     public TowerDefenseWaveType WaveType;
-    public Int32 WavePathGroupId;
-    public Int32 WaveRepresentMonster;
-    public Int32 ChallengeScore;
+    public int WavePathGroupId;
+    public int WaveRepresentMonster;
+    public int ChallengeScore;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseWavePathRandomRecord
 {
-    public Int32 Id;
-    public Int32 RandomGroupId;
-    public Int32 WavePathGroupId;
-    public Int32 RandomChance;
-    public Int32 WaveRepresentMonster;
+    public int Id;
+    public int RandomGroupId;
+    public int WavePathGroupId;
+    public int RandomChance;
+    public int WaveRepresentMonster;
 }
 
 [MemoryPackable]
 public partial class EventTowerDefenseWavePathRecord
 {
-    public Int32 Id;
-    public Int32 WavePathGroupId;
-    public Int32 SpawnStartTime;
-    public Int32 SpawnMonsterId;
-    public Int32 SpawnCount;
-    public Int32 SpawnDelay;
-    public String? StartingPointGroup;
+    public int Id;
+    public int WavePathGroupId;
+    public int SpawnStartTime;
+    public int SpawnMonsterId;
+    public int SpawnCount;
+    public int SpawnDelay;
+    public string? StartingPointGroup;
     public TowerDefenseStartingPointType StartingPointType;
-    public Int32 StartingPointMinOrder;
-    public Int32 StartingPointMaxOrder;
-    public Int32 ForcedStartingPointIndex;
+    public int StartingPointMinOrder;
+    public int StartingPointMaxOrder;
+    public int ForcedStartingPointIndex;
 }
 
 [MemoryPackable]
 public partial class EventYXMiniGameProfileRecord_Raw
 {
     public EventSystemType EventSystemType;
-    public String? ProfleAddressable;
+    public string? ProfleAddressable;
 }
 
 [MemoryPackable]
 public partial class ExtraStageListRecord
 {
-    public Int32 Id;
-    public Int32 CampaignStageId;
-    public Int32 Chapter;
-    public Int32 ExtraOpenCondition;
+    public int Id;
+    public int CampaignStageId;
+    public int Chapter;
+    public int ExtraOpenCondition;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemExpRecord
 {
-    public Int32 Id;
+    public int Id;
     public FavoriteItemRare FavoriteRare;
-    public Int32 Level;
-    public Int32 NeedExp;
+    public int Level;
+    public int NeedExp;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemLevelRecord
 {
-    public Int32 Id;
-    public Int32 LevelEnhanceId;
-    public Int32 Grade;
-    public Int32 Level;
+    public int Id;
+    public int LevelEnhanceId;
+    public int Grade;
+    public int Level;
     public List<FavoriteItemStatData>? FavoriteitemStatData;
     public List<CollectionItemSkillLevelData>? CollectionSkillLevelData;
 }
@@ -7855,156 +7855,156 @@ public partial class FavoriteItemLevelRecord
 [MemoryPackable]
 public partial class FavoriteItemProbabilityRecord
 {
-    public Int32 Id;
-    public Int32 ProbabilityGroup;
-    public Int32 LevelMin;
-    public Int32 LevelMax;
-    public Int32 NeedItemId;
-    public Int32 NeedItemCount;
-    public Int32 Exp;
-    public Int32 GreatSuccessRate;
-    public Int32 GreatSuccessLevel;
+    public int Id;
+    public int ProbabilityGroup;
+    public int LevelMin;
+    public int LevelMax;
+    public int NeedItemId;
+    public int NeedItemCount;
+    public int Exp;
+    public int GreatSuccessRate;
+    public int GreatSuccessLevel;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemQuestStageRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ChapterId;
+    public int Id;
+    public int GroupId;
+    public int ChapterId;
     public ChapterMod ChapterMod;
-    public Int32 NameCode;
-    public Int32 SpawnConditionFavoriteitemQuestId;
-    public Int32 SpawnConditionFavoriteitemQuestStageId;
-    public Int32 SpawnConditionCampaignStageId;
-    public Int32 EnterConditionFavoriteitemQuestId;
-    public Int32 EnterConditionFavoriteitemQuestStageId;
-    public Int32 EnterConditionCampaignStageId;
-    public String? NameLocalkey;
+    public int NameCode;
+    public int SpawnConditionFavoriteitemQuestId;
+    public int SpawnConditionFavoriteitemQuestStageId;
+    public int SpawnConditionCampaignStageId;
+    public int EnterConditionFavoriteitemQuestId;
+    public int EnterConditionFavoriteitemQuestStageId;
+    public int EnterConditionCampaignStageId;
+    public string? NameLocalkey;
     public StageCategory StageCategory;
-    public Boolean SpotAutocontrol;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Int32 FieldMonsterId;
-    public Int32 SpotId;
-    public Int32 StateEffectFunctionId;
-    public Int32 RewardId;
+    public bool SpotAutocontrol;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public int FieldMonsterId;
+    public int SpotId;
+    public int StateEffectFunctionId;
+    public int RewardId;
     public ScenarioType EnterScenarioType;
-    public String? EnterScenario;
+    public string? EnterScenario;
     public ScenarioType ExitScenarioType;
-    public String? ExitScenario;
-    public Int32 FixedPlayCharacterId;
-    public Int32 CharacterLv;
+    public string? ExitScenario;
+    public int FixedPlayCharacterId;
+    public int CharacterLv;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemQuestRecord
 {
-    public Int32 Id;
-    public Int32 NameCode;
+    public int Id;
+    public int NameCode;
     public Category ConditionType;
-    public Int32 ConditionValue;
-    public String? ConditionUiLocalkey;
-    public String? QuestThumbnailResourceId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 NextQuestId;
-    public String? EndScenarioId;
-    public Int32 RewardId;
+    public int ConditionValue;
+    public string? ConditionUiLocalkey;
+    public string? QuestThumbnailResourceId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int NextQuestId;
+    public string? EndScenarioId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? IconResourceId;
-    public String? ImgResourceId;
-    public String? PropResourceId;
-    public Int32 Order;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? IconResourceId;
+    public string? ImgResourceId;
+    public string? PropResourceId;
+    public int Order;
     public FavoriteItemRare FavoriteRare;
     public FavoriteItemType FavoriteType;
     public WeaponType WeaponType;
-    public Int32 NameCode;
-    public Int32 MaxLevel;
-    public Int32 LevelEnhanceId;
-    public Int32 ProbabilityGroup;
+    public int NameCode;
+    public int MaxLevel;
+    public int LevelEnhanceId;
+    public int ProbabilityGroup;
     public List<CollectionSkillGroupData>? CollectionSkillGroupData;
     public List<FavoriteItemSkillGroupData>? FavoriteitemSkillGroupData;
-    public Int32 AlbumcategoryId;
+    public int AlbumcategoryId;
 }
 
 [MemoryPackable]
 public partial class FieldInteractionActionTriggerRecord
 {
-    public Int32 Id;
-    public Boolean IsArchiveData;
+    public int Id;
+    public bool IsArchiveData;
     public FieldInteractionActionTriggerFieldType FieldType;
-    public Int32 FieldId;
+    public int FieldId;
     public FieldInteractionActionTriggerFieldDifficultyType FieldDifficulty;
     public List<StoryEventIdListData_Raw>? StoryEventIdList;
     public FieldInteractionActionTriggerType TriggerType;
-    public String? TriggerTypeValue;
+    public string? TriggerTypeValue;
     public FieldInteractionActionQuestType QuestType;
-    public Boolean IsAwakeLoad;
-    public Boolean IsUseSpawnCondition;
+    public bool IsAwakeLoad;
+    public bool IsUseSpawnCondition;
     public DateTime SpawnConditionTime;
-    public Int32 SpawnConditionStage;
-    public Int32 SpawnConditionMission;
-    public Int32 SpawnConditionInteractionActionTrigger;
-    public Int32 SpawnConditionFieldItem;
-    public Boolean IsUseDespawnCondition;
+    public int SpawnConditionStage;
+    public int SpawnConditionMission;
+    public int SpawnConditionInteractionActionTrigger;
+    public int SpawnConditionFieldItem;
+    public bool IsUseDespawnCondition;
     public DateTime DespawnConditionTime;
-    public Int32 DespawnConditionStage;
-    public Int32 DespawnConditionMission;
-    public Int32 DespawnConditionInteractionActionTrigger;
-    public Int32 DespawnConditionFieldItem;
+    public int DespawnConditionStage;
+    public int DespawnConditionMission;
+    public int DespawnConditionInteractionActionTrigger;
+    public int DespawnConditionFieldItem;
     public FieldInteractionActionActiveType TriggerActiveType;
     public FieldInteractionActionActionType TriggerActionType;
-    public Int32 TriggerActionValue;
-    public String? InteractionMarkerResource;
-    public Boolean IsRepeatStopOnOverlap;
-    public Boolean IsUseCameraAction;
-    public Boolean IsUseHudHide;
-    public Boolean IsUseFadeInOut;
-    public Int32 FadeInOutDelay;
-    public Int32 OutroFadeInOutStartTime;
+    public int TriggerActionValue;
+    public string? InteractionMarkerResource;
+    public bool IsRepeatStopOnOverlap;
+    public bool IsUseCameraAction;
+    public bool IsUseHudHide;
+    public bool IsUseFadeInOut;
+    public int FadeInOutDelay;
+    public int OutroFadeInOutStartTime;
 }
 
 [MemoryPackable]
 public partial class FieldItemRecord
 {
-    public Int32 Id;
+    public int Id;
     public FieldItemType ItemType;
-    public Int32 TypeValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? FielditemPrefab;
+    public int TypeValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? FielditemPrefab;
     public ObtainContentsType ObtainContents;
-    public Int32 ObtainLocation;
+    public int ObtainLocation;
     public FieldItemObtainDifficulty Difficulty;
-    public String? ObtainScenario;
-    public Boolean IsFinalReward;
-    public Int32 BlueprintId;
+    public string? ObtainScenario;
+    public bool IsFinalReward;
+    public int BlueprintId;
     public DateTime SpawnTime;
     public DateTime DespawnTime;
-    public Boolean IsArchiveFieldItem;
-    public Int32 SpawnConditionStage;
-    public Int32 StoryEventId;
-    public Int32 SpawnConditionItem;
-    public Int32 SpawnConditionInteractionActionTrigger;
-    public Int32 SpawnDelayInteractionActionTrigger;
-    public Boolean IsUseHint;
+    public bool IsArchiveFieldItem;
+    public int SpawnConditionStage;
+    public int StoryEventId;
+    public int SpawnConditionItem;
+    public int SpawnConditionInteractionActionTrigger;
+    public int SpawnDelayInteractionActionTrigger;
+    public bool IsUseHint;
 }
 
 [MemoryPackable]
 public partial class FieldMapRecord
 {
-    public String? Id;
+    public string? Id;
     public List<DefaultSpawnerData>? CameraPoint;
     public List<DefaultSpawnerData>? StartingPoint;
     public List<SupplyPointData>? SupplyPoint;
@@ -8039,791 +8039,791 @@ public partial class FieldMapRecord
 [MemoryPackable]
 public partial class FieldPasswordCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public String? PasswordCharacterResource;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public string? PasswordCharacterResource;
 }
 
 [MemoryPackable]
 public partial class FieldPasswordCodeRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public Int32 Input;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public int Input;
 }
 
 [MemoryPackable]
 public partial class FieldPasswordDoorRecord_Raw
 {
-    public Int32 Id;
-    public String? UiPrefabResource;
-    public Int32 PasswordId;
-    public Int32 InteractionDistance;
-    public String? InteractionMarker;
-    public Int32 HintPrintTime;
-    public Boolean IsUseMinimapHint;
-    public String? MinimapHintIcon;
+    public int Id;
+    public string? UiPrefabResource;
+    public int PasswordId;
+    public int InteractionDistance;
+    public string? InteractionMarker;
+    public int HintPrintTime;
+    public bool IsUseMinimapHint;
+    public string? MinimapHintIcon;
 }
 
 [MemoryPackable]
 public partial class FieldPasswordRecord_Raw
 {
-    public Int32 Id;
-    public String? UiPrefabResource;
-    public Int32 PasswordCharacterGroupId;
-    public Int32 PasswordCodeGroupId;
-    public String? PasswordDescription;
-    public String? FielditemPrefab;
+    public int Id;
+    public string? UiPrefabResource;
+    public int PasswordCharacterGroupId;
+    public int PasswordCodeGroupId;
+    public string? PasswordDescription;
+    public string? FielditemPrefab;
     public ObtainContentsType ObtainContents;
-    public Int32 ObtainLocation;
+    public int ObtainLocation;
     public FieldItemObtainDifficulty Difficulty;
-    public String? ObtainScenario;
-    public Boolean IsFinalReward;
+    public string? ObtainScenario;
+    public bool IsFinalReward;
     public DateTime SpawnTime;
-    public Boolean IsArchivePassword;
-    public Int32 SpawnConditionStage;
-    public Int32 StoryEventId;
-    public Int32 SpawnConditionItem;
-    public Int32 SpawnConditionInteractionActionTrigger;
-    public Int32 SpawnDelayInteractionActionTrigger;
-    public Int32 SpawnConditionPasswordDoorOpen;
-    public Boolean IsUseMinimapHint;
-    public String? MinimapHintIcon;
+    public bool IsArchivePassword;
+    public int SpawnConditionStage;
+    public int StoryEventId;
+    public int SpawnConditionItem;
+    public int SpawnConditionInteractionActionTrigger;
+    public int SpawnDelayInteractionActionTrigger;
+    public int SpawnConditionPasswordDoorOpen;
+    public bool IsUseMinimapHint;
+    public string? MinimapHintIcon;
 }
 
 [MemoryPackable]
 public partial class FieldTalkDialogRecord
 {
-    public String? Id;
-    public String? GroupId;
+    public string? Id;
+    public string? GroupId;
     public SpeechWindowType SpeechWindow;
-    public String? SpeakName;
-    public String? PlayAnimation;
-    public String? ScenarioLocalekey;
-    public String? PlaySound;
-    public String? PlayBgm;
+    public string? SpeakName;
+    public string? PlayAnimation;
+    public string? ScenarioLocalekey;
+    public string? PlaySound;
+    public string? PlayBgm;
 }
 
 [MemoryPackable]
 public partial class FieldTriggerControlRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public FieldTriggerFieldType FieldType;
-    public Boolean IsUseSpawnCondition;
-    public Int32 SpawnConditionStage;
+    public bool IsUseSpawnCondition;
+    public int SpawnConditionStage;
     public DateTime SpawnConditionTime;
-    public Boolean IsUseDespawnCondition;
-    public Int32 DespawnConditionStage;
+    public bool IsUseDespawnCondition;
+    public int DespawnConditionStage;
     public DateTime DespawnConditionTime;
-    public Boolean IsUseStateChangeCondition;
-    public Int32 StateChangeConditionStage;
+    public bool IsUseStateChangeCondition;
+    public int StateChangeConditionStage;
     public DateTime StateChangeConditionTime;
 }
 
 [MemoryPackable]
 public partial class FishingCastingRecord
 {
-    public Int32 Id;
-    public Int32 CastingSpeed;
-    public Int32 CastingGroupStart01;
-    public Int32 CastingGroupEnd01;
+    public int Id;
+    public int CastingSpeed;
+    public int CastingGroupStart01;
+    public int CastingGroupEnd01;
     public FishGroupType Casting01BonusGroup;
-    public Int32 CastingGroupStart02;
-    public Int32 CastingGroupEnd02;
+    public int CastingGroupStart02;
+    public int CastingGroupEnd02;
     public FishGroupType Casting02BonusGroup;
-    public Int32 CastingGroupStart03;
-    public Int32 CastingGroupEnd03;
+    public int CastingGroupStart03;
+    public int CastingGroupEnd03;
     public FishGroupType Casting03BonusGroup;
 }
 
 [MemoryPackable]
 public partial class FishingManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchiveEvent;
-    public String? EnterScenario;
-    public String? UseFishCollectionData;
-    public Int32 UseSpotGroupId;
-    public Int32 CastingBonusRatio;
-    public Int32 CastingLimitTime;
-    public Int32 SpecialPatternDecreaseHpRatio;
-    public Int32 JudgmentStartDistance;
-    public Int32 PerfectZoneDistance;
-    public Int32 GreatZoneDistance;
-    public Int32 GoodZoneDistance;
-    public Int32 PerfectDecreaseHp;
-    public Int32 GreatDecreaseHp;
-    public Int32 GoodDecreaseHp;
-    public Int32 SmallHpDecreaseRatio;
-    public Int32 MidHpDecreaseRatio;
-    public Int32 LargeHpDecreaseRatio;
-    public Int32 PenaltyHp;
-    public Int32 TimeAlert;
-    public Int32 GainGoldRatio;
-    public Int32 CatchDoubleRatio;
-    public Int32 FishingMaximumSizeRatio;
-    public Int32 PatternStartDelayTime;
-    public Int32 ResultWindowDelayTime;
+    public int Id;
+    public int EventId;
+    public bool IsArchiveEvent;
+    public string? EnterScenario;
+    public string? UseFishCollectionData;
+    public int UseSpotGroupId;
+    public int CastingBonusRatio;
+    public int CastingLimitTime;
+    public int SpecialPatternDecreaseHpRatio;
+    public int JudgmentStartDistance;
+    public int PerfectZoneDistance;
+    public int GreatZoneDistance;
+    public int GoodZoneDistance;
+    public int PerfectDecreaseHp;
+    public int GreatDecreaseHp;
+    public int GoodDecreaseHp;
+    public int SmallHpDecreaseRatio;
+    public int MidHpDecreaseRatio;
+    public int LargeHpDecreaseRatio;
+    public int PenaltyHp;
+    public int TimeAlert;
+    public int GainGoldRatio;
+    public int CatchDoubleRatio;
+    public int FishingMaximumSizeRatio;
+    public int PatternStartDelayTime;
+    public int ResultWindowDelayTime;
 }
 
 [MemoryPackable]
 public partial class FishingSpotRecord
 {
-    public Int32 Id;
-    public Int32 FishingManagerId;
-    public Int32 GroupId;
-    public Boolean IsRareSpot;
+    public int Id;
+    public int FishingManagerId;
+    public int GroupId;
+    public bool IsRareSpot;
     public AdventureSpotOpenCondition OpenCondition;
-    public Int32 OpenConditionValue;
-    public Int32 SpawnDayStart;
-    public Int32 SpawnDayEnd;
+    public int OpenConditionValue;
+    public int SpawnDayStart;
+    public int SpawnDayEnd;
     public List<catchable_group_list>? CatchableGroupList;
-    public Int32 CastingId;
-    public Boolean IsInfinity;
-    public Int32 CatchableCount;
-    public String? SpotFishEffectResource;
-    public String? SpotOutlineEffectResource;
-    public Int32 SmallFishingRatio;
-    public Int32 MidFishingRatio;
-    public Int32 LargeFishingRatio;
-    public Int32 CameraZoomIn;
+    public int CastingId;
+    public bool IsInfinity;
+    public int CatchableCount;
+    public string? SpotFishEffectResource;
+    public string? SpotOutlineEffectResource;
+    public int SmallFishingRatio;
+    public int MidFishingRatio;
+    public int LargeFishingRatio;
+    public int CameraZoomIn;
 }
 
 [MemoryPackable]
 public partial class FishPatternDirectionRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
+    public int Id;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class FishPatternRecord
 {
-    public Int32 Id;
-    public Int32 TimeLimit;
-    public Int32 PatternSpeed;
-    public Int32 PatternTerm;
-    public Int32 PatternNormalId;
-    public Int32 PatternLeftAppearanceProbability;
-    public Int32 PatternRightAppearanceProbability;
-    public Int32 PatternUpAppearanceProbability;
-    public Int32 PatternDownAppearanceProbability;
-    public Int32 PatternSpecialId;
-    public Int32 SpecialPatternAppearanceRatio;
-    public Boolean SpecialPatternLeftUse;
-    public Boolean SpecialPatternRightUse;
-    public Boolean SpecialPatternUpUse;
-    public Boolean SpecialPatternDownUse;
+    public int Id;
+    public int TimeLimit;
+    public int PatternSpeed;
+    public int PatternTerm;
+    public int PatternNormalId;
+    public int PatternLeftAppearanceProbability;
+    public int PatternRightAppearanceProbability;
+    public int PatternUpAppearanceProbability;
+    public int PatternDownAppearanceProbability;
+    public int PatternSpecialId;
+    public int SpecialPatternAppearanceRatio;
+    public bool SpecialPatternLeftUse;
+    public bool SpecialPatternRightUse;
+    public bool SpecialPatternUpUse;
+    public bool SpecialPatternDownUse;
 }
 
 [MemoryPackable]
 public partial class FishRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public FishGroupType FishGroup;
-    public String? NameLocale;
-    public String? DescriptionLocale;
-    public String? CatchResource;
-    public Int32 FishPattern;
-    public Int32 FishHp;
-    public Int32 CatchPoint;
-    public Int32 MinSize;
-    public Int32 MaxSize;
-    public Int32 AppearanceRatio;
-    public Int32 CatchableTime;
+    public string? NameLocale;
+    public string? DescriptionLocale;
+    public string? CatchResource;
+    public int FishPattern;
+    public int FishHp;
+    public int CatchPoint;
+    public int MinSize;
+    public int MaxSize;
+    public int AppearanceRatio;
+    public int CatchableTime;
 }
 
 [MemoryPackable]
 public partial class FixedPlayCharacterRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public FixedPlayCharacterContentsType FixContentsType;
-    public Int32 Slot;
-    public Boolean IsUseSd;
-    public Boolean IsSlotOpen;
-    public Int32 CharacterId;
-    public Int32 CostumeIndex;
-    public Int32 CharacterLevel;
-    public Int32 AttractiveLevel;
+    public int Slot;
+    public bool IsUseSd;
+    public bool IsSlotOpen;
+    public int CharacterId;
+    public int CostumeIndex;
+    public int CharacterLevel;
+    public int AttractiveLevel;
     public List<FixedEquipmentData>? EquipmentArray;
 }
 
 [MemoryPackable]
 public partial class FreeRewardPassManagerRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 MissionGroupId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 RankSkipCurrencyId;
-    public Int32 RankSkipCurrencyValue;
-    public String? PassLobbyButtonResourceId;
-    public String? PrefabId;
+    public int Id;
+    public int EventId;
+    public int MissionGroupId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int RankSkipCurrencyId;
+    public int RankSkipCurrencyValue;
+    public string? PassLobbyButtonResourceId;
+    public string? PrefabId;
 }
 
 [MemoryPackable]
 public partial class FreeRewardPassMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 MissionGroupId;
+    public int Id;
+    public int MissionGroupId;
     public RenewType RenewType;
-    public Int32 Order;
+    public int Order;
     public MissionTriggerType MissionTriggerType;
     public Trigger TriggerConditionType;
-    public Int32 TriggerConditionId;
-    public Int32 TriggerConditionValue;
+    public int TriggerConditionId;
+    public int TriggerConditionValue;
     public DataCheckForPass DatacheckConditionType;
-    public Int32 DatacheckConditionId;
-    public Int32 DatacheckConditionValue;
-    public String? NameLocalkey;
-    public Int32 PointValue;
+    public int DatacheckConditionId;
+    public int DatacheckConditionValue;
+    public string? NameLocalkey;
+    public int PointValue;
 }
 
 [MemoryPackable]
 public partial class FreeRewardPassRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PassId;
-    public Int32 PassRank;
-    public Int32 TotalRequiredPoint;
-    public Int32 RewardId;
-    public Boolean IsHighlight;
+    public int Id;
+    public int PassId;
+    public int PassRank;
+    public int TotalRequiredPoint;
+    public int RewardId;
+    public bool IsHighlight;
 }
 
 [MemoryPackable]
 public partial class GachaCustomizeRecord
 {
-    public Int32 Id;
+    public int Id;
     public GachaCategory GachaType;
-    public Int32 GachaId;
-    public Boolean IsCharPremium;
-    public Boolean IsWishListDefault;
+    public int GachaId;
+    public bool IsCharPremium;
+    public bool IsWishListDefault;
 }
 
 [MemoryPackable]
 public partial class GachaListProbRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public GachaCategory GachaType;
     public GachaSubType GachaSubType;
-    public Int32 GachaId;
-    public Int32 Prob;
+    public int GachaId;
+    public int Prob;
 }
 
 [MemoryPackable]
 public partial class GachaPaybackStepRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PaybackId;
-    public Int32 Step;
-    public Int32 GachaCount;
-    public Int32 RewardId;
+    public int Id;
+    public int PaybackId;
+    public int Step;
+    public int GachaCount;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class GachaPaybackRecord_Raw
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 GachaId;
-    public Int32 CharacterId;
-    public String? UiPrefabMain;
-    public String? UiPrefabSub;
+    public int Id;
+    public int EventId;
+    public int GachaId;
+    public int CharacterId;
+    public string? UiPrefabMain;
+    public string? UiPrefabSub;
 }
 
 [MemoryPackable]
 public partial class GachaPityCharacterRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 CharacterId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int CharacterId;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class GachaPityRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GachaTypeId;
-    public Int32 PityAmount;
-    public Int32 NeedGachaCount;
-    public Int32 PityCharacterGroup;
-    public Int32 RewardAmount;
+    public int Id;
+    public int GachaTypeId;
+    public int PityAmount;
+    public int NeedGachaCount;
+    public int PityCharacterGroup;
+    public int RewardAmount;
     public DateTime StartDate;
     public DateTime EndDate;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 HelptipGroupId;
-    public String? UiBannerPrefab;
-    public String? UiPopupPrefab;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int HelptipGroupId;
+    public string? UiBannerPrefab;
+    public string? UiPopupPrefab;
 }
 
 [MemoryPackable]
 public partial class GachaPriceObjectRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Object0;
-    public Int32 Object1;
-    public Int32 Object2;
-    public Int32 Object3;
-    public Int32 Object4;
+    public int Id;
+    public int Object0;
+    public int Object1;
+    public int Object2;
+    public int Object3;
+    public int Object4;
 }
 
 [MemoryPackable]
 public partial class GachaSelectupListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GachaTypeId;
-    public Int32 Order;
-    public Int32 CharacterId;
-    public Boolean IsDefault;
+    public int Id;
+    public int GachaTypeId;
+    public int Order;
+    public int CharacterId;
+    public bool IsDefault;
 }
 
 [MemoryPackable]
 public partial class GachaTypeRecord
 {
-    public Int32 Id;
+    public int Id;
     public GachaPremiumType Type;
-    public Int32 OrderId;
-    public Int32 EventId;
+    public int OrderId;
+    public int EventId;
     public GachaProvideCountType GachaProvideCountType;
-    public Boolean UseDailyDiscountOne;
-    public Int32 DailyFreeGachaEventId;
-    public Int32 GachaPriceObjectId;
+    public bool UseDailyDiscountOne;
+    public int DailyFreeGachaEventId;
+    public int GachaPriceObjectId;
     public List<GachaPrice_Data>? GachaPriceGroup;
-    public Int32 GradeProbId;
-    public Boolean IsMaxCount;
-    public Int32 MaxCeilingCount;
-    public Int32 FixedCharAmount;
-    public String? GachaPagePrefab;
+    public int GradeProbId;
+    public bool IsMaxCount;
+    public int MaxCeilingCount;
+    public int FixedCharAmount;
+    public string? GachaPagePrefab;
     public GachaPrefabType GachaPrefabType;
-    public Int32 PickupCharGroupId;
-    public Int32 GachaPlayMaxCount;
-    public Int32 GachaRewardId;
-    public Int32 GachaPlayMaxCountRewardId;
-    public Int32 PreviousGachaId;
-    public String? GachaQuickBannerResourceId;
+    public int PickupCharGroupId;
+    public int GachaPlayMaxCount;
+    public int GachaRewardId;
+    public int GachaPlayMaxCountRewardId;
+    public int PreviousGachaId;
+    public string? GachaQuickBannerResourceId;
 }
 
 [MemoryPackable]
 public partial class GradeCoreEquipmentRecord
 {
-    public Int32 Id;
-    public Int32 Grade;
-    public Int32 MaxLevel;
-    public Int32 MaxGrade;
-    public Int32 MaterialValue;
-    public String? Rarity;
+    public int Id;
+    public int Grade;
+    public int MaxLevel;
+    public int MaxGrade;
+    public int MaterialValue;
+    public string? Rarity;
 }
 
 [MemoryPackable]
 public partial class GradeCoreRecord
 {
-    public Int32 Id;
+    public int Id;
     public OriginalRareType Rare;
-    public Int32 Grade;
-    public Int32 Core;
-    public Int32 MaxLevel;
-    public Int32 PieceValue;
-    public Int32 MaxAttractiveLevel;
+    public int Grade;
+    public int Core;
+    public int MaxLevel;
+    public int PieceValue;
+    public int MaxAttractiveLevel;
 }
 
 [MemoryPackable]
 public partial class GrindingCharacterRecord
 {
-    public Int32 Id;
+    public int Id;
     public OriginalRareType Rarity;
-    public RewardEntry? Reward;
+    public Reward_Data? Reward;
 }
 
 [MemoryPackable]
 public partial class GuildRecord
 {
-    public Int32 Grade;
-    public Int32 Exp;
-    public Int32 MaxMemberCount;
-    public Int32 MaxActivityPoint;
+    public int Grade;
+    public int Exp;
+    public int MaxMemberCount;
+    public int MaxActivityPoint;
 }
 
 [MemoryPackable]
 public partial class HelpTipDescriptionRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Order;
+    public int Id;
+    public int Group;
+    public int Order;
     public HelpTipDescriptionType Type;
-    public String? Value;
+    public string? Value;
 }
 
 [MemoryPackable]
 public partial class HelpTipRecord
 {
-    public Int32 Id;
-    public Int32 ViewId;
-    public Int32 ViewSubId;
-    public String? Title;
-    public Int32 DescriptionGroup;
+    public int Id;
+    public int ViewId;
+    public int ViewSubId;
+    public string? Title;
+    public int DescriptionGroup;
     public ContentsTutorialSubGroup HudTutorialReplay;
 }
 
 [MemoryPackable]
 public partial class InAppShopManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public CashshopMainCategoryType MainCategoryType;
-    public Int32 OrderGroupId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? MainCategoryIconName;
-    public Int32 SubCategoryId;
-    public String? SubCategoryNameLocalkey;
-    public Int32 PackageShopId;
-    public Boolean IsHideIfNotValid;
+    public int OrderGroupId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? MainCategoryIconName;
+    public int SubCategoryId;
+    public string? SubCategoryNameLocalkey;
+    public int PackageShopId;
+    public bool IsHideIfNotValid;
     public RenewType RenewType;
     public DateTime StartDate;
     public DateTime EndDate;
-    public Boolean DateUiControl;
+    public bool DateUiControl;
     public InAppShopType ShopType;
     public InAppShopCategory ShopCategory;
-    public String? ShopPrefabName;
+    public string? ShopPrefabName;
 }
 
 [MemoryPackable]
 public partial class InfraCoreFunctionRecord
 {
-    public Int32 Id;
+    public int Id;
     public InfraCoreFunctionType FunctionType;
-    public String? FunctionLocalkey;
-    public Int32 Order;
-    public Boolean IsHidden;
+    public string? FunctionLocalkey;
+    public int Order;
+    public bool IsHidden;
 }
 
 [MemoryPackable]
 public partial class InfraCoreGradeRecord
 {
-    public Int32 Id;
-    public Int32 Grade;
-    public Int32 InfraCoreExp;
-    public Int32 RewardId;
+    public int Id;
+    public int Grade;
+    public int InfraCoreExp;
+    public int RewardId;
     public List<InfraCoreGradeData>? FunctionList;
 }
 
 [MemoryPackable]
 public partial class InterceptAnomalousManagerRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public DateTime StartDate;
     public DateTime EndDate;
-    public Int32 Group;
+    public int Group;
 }
 
 [MemoryPackable]
 public partial class InterceptAnomalousRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public String? Name;
-    public String? Description;
-    public String? Thumbnail;
-    public String? MonsterSpine;
-    public Int32 MonsterSpineScale;
-    public Int32 Order;
-    public Int32 LimitCharacterLv;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Int32 MonsterStageLvChangeGroup;
+    public int Id;
+    public int Group;
+    public string? Name;
+    public string? Description;
+    public string? Thumbnail;
+    public string? MonsterSpine;
+    public int MonsterSpineScale;
+    public int Order;
+    public int LimitCharacterLv;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public int MonsterStageLvChangeGroup;
     public InterceptSpotType SpotType;
-    public Int32 SpotId;
-    public Int32 DummySpotId;
-    public Int32 AutoChargeId;
-    public Int32 TicketCount;
-    public String? RewardInfoIcon;
-    public String? RewardInfoLocale;
-    public Boolean UseRewardPriority;
-    public Int32 PriorityGrade;
-    public Int32 ConditionRewardGroup;
+    public int SpotId;
+    public int DummySpotId;
+    public int AutoChargeId;
+    public int TicketCount;
+    public string? RewardInfoIcon;
+    public string? RewardInfoLocale;
+    public bool UseRewardPriority;
+    public int PriorityGrade;
+    public int ConditionRewardGroup;
     public List<percent_condition_reward_group_data_Raw>? PercentConditionRewardGroups;
-    public Boolean UseFixedResult;
-    public Int32 FixedDamage;
-    public String? BgColor;
-    public Int32 ResultCharacterResourceId;
+    public bool UseFixedResult;
+    public int FixedDamage;
+    public string? BgColor;
+    public int ResultCharacterResourceId;
     public InterceptAnomalousRecommendConditionType RecommendConditionType;
-    public String? RecommendConditionValue;
-    public Int32 RecommendConditionCount;
+    public string? RecommendConditionValue;
+    public int RecommendConditionCount;
 }
 
 [MemoryPackable]
 public partial class InterceptNormalManagerRecord
 {
-    public Int32 Id;
-    public Int32 Group;
+    public int Id;
+    public int Group;
 }
 
 [MemoryPackable]
 public partial class InterceptNormalRecord
 {
-    public Int32 Id;
-    public Int32 Group;
+    public int Id;
+    public int Group;
     public InterceptType Type;
-    public String? Name;
-    public String? ShortName;
-    public String? Description;
-    public String? Thumbnail;
-    public String? MonsterSpine;
-    public Int32 MonsterSpineScale;
-    public Int32 Order;
-    public Int32 CharacterLv;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Int32 MonsterStageLvChangeGroup;
+    public string? Name;
+    public string? ShortName;
+    public string? Description;
+    public string? Thumbnail;
+    public string? MonsterSpine;
+    public int MonsterSpineScale;
+    public int Order;
+    public int CharacterLv;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public int MonsterStageLvChangeGroup;
     public InterceptSpotType SpotType;
-    public Int32 SpotId;
-    public Int32 DummySpotId;
-    public Int32 AutoChargeId;
-    public Int32 TicketCount;
-    public Int32 ConditionRewardGroup;
-    public Int32 PercentConditionRewardGroup;
-    public Boolean UseRewardPriority;
-    public Int32 PriorityGrade;
-    public Boolean UseFixedResult;
-    public Int32 FixedDamage;
-    public Int32 ResultCharacterResourceId;
+    public int SpotId;
+    public int DummySpotId;
+    public int AutoChargeId;
+    public int TicketCount;
+    public int ConditionRewardGroup;
+    public int PercentConditionRewardGroup;
+    public bool UseRewardPriority;
+    public int PriorityGrade;
+    public bool UseFixedResult;
+    public int FixedDamage;
+    public int ResultCharacterResourceId;
 }
 
 [MemoryPackable]
 public partial class InterceptSpecialManagerRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 StartId;
+    public int Id;
+    public int Group;
+    public int StartId;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureAlbumRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public PhotoSpotType PhotoGroup;
-    public Int32 Order;
-    public Int32 PhotoPoint;
-    public Int32 PhotoSpotId;
+    public int Order;
+    public int PhotoPoint;
+    public int PhotoSpotId;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureFishCollectionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public FishGroupType FishGroup;
-    public Int32 Order;
-    public Int32 FishPoint;
-    public Int32 FishId;
+    public int Order;
+    public int FishPoint;
+    public int FishId;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureItemRecord
 {
-    public Int32 Id;
+    public int Id;
     public IslandAdventureItemGroupType ItemGroup;
-    public Int32 ItemOrder;
-    public Boolean FirstItem;
-    public String? ItemResource;
-    public String? ItemNameLocale;
-    public String? ItemDescriptionLocale;
+    public int ItemOrder;
+    public bool FirstItem;
+    public string? ItemResource;
+    public string? ItemNameLocale;
+    public string? ItemDescriptionLocale;
     public List<ItemOptionLocaleData>? ItemOptionLocale;
-    public Int32 MaximumAmount;
+    public int MaximumAmount;
     public List<ItemOptionData>? ItemOption;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchiveEvent;
-    public String? EnterScenario;
-    public Int32 FishCollectionGroup;
-    public Int32 FishStepUpRewardGroupId;
-    public Int32 AlbumDataGroup;
-    public Int32 PhotoStepUpRewardGroupId;
-    public Int32 ShopDataGroup;
-    public Int32 UnionRankDataGroup;
+    public int Id;
+    public int EventId;
+    public bool IsArchiveEvent;
+    public string? EnterScenario;
+    public int FishCollectionGroup;
+    public int FishStepUpRewardGroupId;
+    public int AlbumDataGroup;
+    public int PhotoStepUpRewardGroupId;
+    public int ShopDataGroup;
+    public int UnionRankDataGroup;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureMissionRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public String? MissionLocalkey;
+    public int Id;
+    public int ManagerId;
+    public string? MissionLocalkey;
     public EventIslandAdventureMissionCategory MissionCategory;
     public EventIslandAdventureMissionType MissionType;
-    public Int32 MissionTargetId;
-    public Int32 MissionCount;
+    public int MissionTargetId;
+    public int MissionCount;
     public EventIslandAdventureMissionRewardType RewardType;
-    public Int32 RewardValue;
+    public int RewardValue;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureShopRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public IslandAdventureItemGroupType ItemGroup;
-    public Boolean RepeatPurchase;
-    public Boolean IsOpened;
+    public bool RepeatPurchase;
+    public bool IsOpened;
     public IslandAdventureItemOpenType OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Int32 ShopItemOrder;
-    public Int32 ItemPrice;
-    public Int32 ItemId;
+    public int OpenConditionValue;
+    public int ShopItemOrder;
+    public int ItemPrice;
+    public int ItemId;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureStepUpRewardRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Step;
-    public Int32 TargetPoint;
-    public Int32 RewardId;
+    public int Id;
+    public int GroupId;
+    public int Step;
+    public int TargetPoint;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureTutorialListRecord
 {
-    public Int32 Id;
-    public Int32 ManagerId;
-    public Int32 TutorialPageId;
+    public int Id;
+    public int ManagerId;
+    public int TutorialPageId;
     public IslandAdventureTutorialOutputType TutorialOutputType;
-    public Int32 TutorialOutputValue;
-    public String? TutorialTitleLocalkey;
-    public Boolean IsOpened;
+    public int TutorialOutputValue;
+    public string? TutorialTitleLocalkey;
+    public bool IsOpened;
 }
 
 [MemoryPackable]
 public partial class IslandAdventureUnionRankingRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
+    public int Id;
+    public int GroupId;
     public IslandAdventureUnionRankingGroup RankType;
 }
 
 [MemoryPackable]
 public partial class ItemEquipCombinationGroupRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public ItemEquipCombinationGroupType OptionGroup;
-    public Int32 Order;
+    public int Order;
     public ItemEquipCombinationOptionType OptionType;
-    public String? NameLocalekey;
-    public String? IconId;
+    public string? NameLocalekey;
+    public string? IconId;
 }
 
 [MemoryPackable]
 public partial class ItemEquipCombinationListRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public List<OptionType_Raw>? OptionType;
-    public Int32 RandomGroupId;
+    public int RandomGroupId;
 }
 
 [MemoryPackable]
 public partial class ItemEquipCombinationRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public CorporationType MaterialType;
     public EquipmentRarityType MaterialGrade;
-    public Int32 MaterialCount;
+    public int MaterialCount;
     public List<OptionGroup_Raw>? OptionGroup;
 }
 
 [MemoryPackable]
 public partial class ItemEquipCorpSettingRecord
 {
-    public Int32 Id;
+    public int Id;
     public RewardType Key;
     public CorporationType CorpType;
-    public String? CorpDescriptionLocalkey;
-    public Int32 RatioNone;
-    public Int32 RatioMissilis;
-    public Int32 RatioElysion;
-    public Int32 RatioTetra;
-    public Int32 RatioPilgrim;
-    public Int32 RatioAbnormal;
+    public string? CorpDescriptionLocalkey;
+    public int RatioNone;
+    public int RatioMissilis;
+    public int RatioElysion;
+    public int RatioTetra;
+    public int RatioPilgrim;
+    public int RatioAbnormal;
 }
 
 [MemoryPackable]
 public partial class ItemEquipExpRecord
 {
-    public Int32 Id;
+    public int Id;
     public EquipmentRarityType ItemRare;
-    public Int32 GradeCoreId;
-    public Int32 Level;
-    public Int32 Exp;
+    public int GradeCoreId;
+    public int Level;
+    public int Exp;
 }
 
 [MemoryPackable]
 public partial class ItemEquipGradeExpRecord
 {
-    public Int32 Id;
+    public int Id;
     public EquipmentRarityType ItemRare;
-    public Int32 GradeCoreId;
-    public Int32 Exp;
+    public int GradeCoreId;
+    public int Exp;
 }
 
 [MemoryPackable]
 public partial class ItemEquipRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
     public ItemType ItemType;
     public ItemSubType ItemSubType;
     public CharacterClassType Class;
     public EquipmentRarityType ItemRare;
-    public Int32 GradeCoreId;
-    public Int32 GrowGrade;
+    public int GradeCoreId;
+    public int GrowGrade;
     public List<StatData>? Stat;
     public List<OptionSlot>? OptionSlot;
-    public Int32 OptionCost;
-    public Int32 OptionChangeCost;
-    public Int32 OptionLockCost;
+    public int OptionCost;
+    public int OptionChangeCost;
+    public int OptionLockCost;
 }
 
 [MemoryPackable]
 public partial class ItemMaterialRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
     public ItemType ItemType;
     public ItemSubType ItemSubType;
     public OriginalRareType ItemRare;
-    public Int32 ItemValue;
+    public int ItemValue;
     public MaterialType MaterialType;
-    public Int32 MaterialValue;
-    public Int32 StackMax;
+    public int MaterialValue;
+    public int StackMax;
 }
 
 [MemoryPackable]
 public partial class ItemPieceRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ResourceId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ResourceId;
     public ItemType ItemType;
     public ItemSubType ItemSubType;
     public OriginalRareType ItemRare;
@@ -8831,383 +8831,383 @@ public partial class ItemPieceRecord
     public CorporationSubType CorporationSubType;
     public CharacterClassType Class;
     public ItemUseType UseType;
-    public Int32 UseId;
-    public Int32 UseValue;
-    public Boolean UseLimitCount;
-    public Int32 UseLimitCountValue;
-    public Int32 StackMax;
+    public int UseId;
+    public int UseValue;
+    public bool UseLimitCount;
+    public int UseLimitCountValue;
+    public int StackMax;
 }
 
 [MemoryPackable]
 public partial class ItemRandomRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public RewardType RewardType;
-    public Int32 RewardId;
-    public Int32 RewardValueMin;
-    public Int32 RewardValueMax;
-    public Int32 Ratio;
+    public int RewardId;
+    public int RewardValueMin;
+    public int RewardValueMax;
+    public int Ratio;
 }
 
 [MemoryPackable]
 public partial class ItemSelectOptionRowRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
+    public int Id;
+    public int GroupId;
+    public int Order;
     public RewardType SelectType;
-    public Int32 SelectId;
-    public Int32 SelectValue;
+    public int SelectId;
+    public int SelectValue;
 }
 
 [MemoryPackable]
 public partial class JukeboxListRecord
 {
-    public Int32 Id;
-    public Int32 Theme;
-    public String? Bgm;
-    public Boolean IsLoop;
-    public Int32 PlayTime;
-    public String? Name;
-    public Int32 Order;
-    public String? Artist;
-    public Boolean IsDefaultBgm;
+    public int Id;
+    public int Theme;
+    public string? Bgm;
+    public bool IsLoop;
+    public int PlayTime;
+    public string? Name;
+    public int Order;
+    public string? Artist;
+    public bool IsDefaultBgm;
     public GetInfoType GetInfoType;
-    public String? GetInfoValue;
+    public string? GetInfoValue;
 }
 
 [MemoryPackable]
 public partial class LiberateAttractiveEpisode
 {
-    public Int32 Id;
-    public Int32 NameCode;
-    public String? ConditionScenarioGroupId;
-    public String? ScenarioTitleLoacle;
-    public String? AttractiveScenarioGroupId;
+    public int Id;
+    public int NameCode;
+    public string? ConditionScenarioGroupId;
+    public string? ScenarioTitleLoacle;
+    public string? AttractiveScenarioGroupId;
 }
 
 [MemoryPackable]
 public partial class LiberateCharacterRecord
 {
-    public Int32 Id;
-    public Int32 TypeGroupId;
-    public Int32 CharacterNameCode;
+    public int Id;
+    public int TypeGroupId;
+    public int CharacterNameCode;
     public ResetType MissionRenewType;
-    public Int32 MissionStepGroup;
-    public Int32 MissionMaxClearAmount;
-    public String? ScenarioId;
+    public int MissionStepGroup;
+    public int MissionMaxClearAmount;
+    public string? ScenarioId;
 }
 
 [MemoryPackable]
 public partial class LiberateMissionGroupRecord
 {
-    public Int32 Id;
-    public Int32 MissionStepGroup;
-    public Int32 MissionStep;
-    public Int32 DefaultMissionGroupId;
-    public Int32 ResetMissionGroupId;
-    public Int32 StepUpExp;
-    public Int32 RewardId;
-    public String? ScenarioId;
+    public int Id;
+    public int MissionStepGroup;
+    public int MissionStep;
+    public int DefaultMissionGroupId;
+    public int ResetMissionGroupId;
+    public int StepUpExp;
+    public int RewardId;
+    public string? ScenarioId;
 }
 
 [MemoryPackable]
 public partial class LiberateMissionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SubGroupId;
+    public int Id;
+    public int GroupId;
+    public int SubGroupId;
     public Trigger Trigger;
-    public String? Description;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
+    public string? Description;
+    public int ConditionId;
+    public int ConditionValue;
     public OriginalRareType MissionGrade;
-    public Int32 MissionPointValue;
+    public int MissionPointValue;
 }
 
 [MemoryPackable]
 public partial class LiveWallpaperReaction
 {
-    public Int32 Id;
-    public Int32 ReactionTargetId;
+    public int Id;
+    public int ReactionTargetId;
     public LiveWallpaperReactionType ReactionType;
     public SpeecherType SpeecherType;
-    public Int32 SpeecherResourceId;
-    public String? LocaleFile;
-    public Int32 TargetChapter;
-    public String? SpeechLocalkey;
-    public String? ReactionVoice;
-    public Int32 Order;
+    public int SpeecherResourceId;
+    public string? LocaleFile;
+    public int TargetChapter;
+    public string? SpeechLocalkey;
+    public string? ReactionVoice;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class LobbyDecoBackgroundRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 Order;
-    public String? ResourceId;
-    public String? MiResourceId;
-    public String? SiResourceId;
-    public Int32 ConditionCampaignStageClear;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int Order;
+    public string? ResourceId;
+    public string? MiResourceId;
+    public string? SiResourceId;
+    public int ConditionCampaignStageClear;
     public PriceType PriceType;
-    public Int32 PriceId;
-    public Int32 PriceCount;
+    public int PriceId;
+    public int PriceCount;
     public RewardType ExchangeItemType;
-    public Int32 ExchangeItemId;
-    public Int32 ExchangeItemCount;
-    public Boolean IsSecret;
+    public int ExchangeItemId;
+    public int ExchangeItemCount;
+    public bool IsSecret;
 }
 
 [MemoryPackable]
 public partial class LobbySettingManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public DateTime StartDate;
     public DateTime EndDate;
-    public String? UserLobbyBackground;
-    public String? UserLobbyBgm;
+    public string? UserLobbyBackground;
+    public string? UserLobbyBgm;
 }
 
 [MemoryPackable]
 public partial class LocaleNickNameListRecord_Raw
 {
-    public Int32 Id;
-    public String? Ko;
-    public String? En;
-    public String? Ja;
-    public String? ZhTw;
-    public String? ZhCn;
-    public String? De;
-    public String? Th;
-    public String? Fr;
+    public int Id;
+    public string? Ko;
+    public string? En;
+    public string? Ja;
+    public string? ZhTw;
+    public string? ZhCn;
+    public string? De;
+    public string? Th;
+    public string? Fr;
 }
 
 [MemoryPackable]
 public partial class LoginEventResourceRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 CharacterId;
-    public Int32 CostumeId;
-    public String? SetCharacterAnim;
-    public String? LogoResourceTable;
-    public String? LogoResourceId;
-    public String? UiPrefab;
-    public Boolean IsReplenishActive;
-    public Int32 ReplenishCurrency;
-    public Int32 CurrencyValue;
+    public int Id;
+    public int EventId;
+    public int CharacterId;
+    public int CostumeId;
+    public string? SetCharacterAnim;
+    public string? LogoResourceTable;
+    public string? LogoResourceId;
+    public string? UiPrefab;
+    public bool IsReplenishActive;
+    public int ReplenishCurrency;
+    public int CurrencyValue;
 }
 
 [MemoryPackable]
 public partial class LoginEventRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 Day;
+    public int Id;
+    public int EventId;
+    public int Day;
     public login_event_reward_type LoginEventRewardType;
-    public Int32 RewardId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class LostSectorStageRecord
 {
-    public Int32 Id;
-    public Int32 Sector;
-    public Int32 ParentsId;
-    public String? NameLocalkey;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Boolean SpotAutocontrol;
-    public Int32 FieldMonsterId;
-    public Int32 SpotId;
-    public String? EnterScenario;
-    public String? ExitScenario;
+    public int Id;
+    public int Sector;
+    public int ParentsId;
+    public string? NameLocalkey;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public bool SpotAutocontrol;
+    public int FieldMonsterId;
+    public int SpotId;
+    public string? EnterScenario;
+    public string? ExitScenario;
 }
 
 [MemoryPackable]
 public partial class LostSectorRecord
 {
-    public Int32 Id;
-    public String? SectorLocalkey;
-    public String? SectorSubLocalkey;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 Type;
-    public Int32 Sector;
+    public int Id;
+    public string? SectorLocalkey;
+    public string? SectorSubLocalkey;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int Type;
+    public int Sector;
     public ContentOpenType OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Int32 SectorClearCondition;
-    public Int32 RequiredSquadCount;
-    public Int32 MaxNkCount;
-    public String? FieldId;
-    public Boolean EnableSmog;
-    public Int32 ExplorationReward;
-    public String? EnterScenario;
-    public String? ExitScenario;
-    public String? Bg;
-    public String? BgInfo;
+    public int OpenConditionValue;
+    public int SectorClearCondition;
+    public int RequiredSquadCount;
+    public int MaxNkCount;
+    public string? FieldId;
+    public bool EnableSmog;
+    public int ExplorationReward;
+    public string? EnterScenario;
+    public string? ExitScenario;
+    public string? Bg;
+    public string? BgInfo;
 }
 
 [MemoryPackable]
 public partial class MemorialMemoryRecord
 {
-    public Int32 MemorialMemoryId;
-    public String? MemorialMemoryName;
-    public String? MemorialMemoryDescription;
-    public Int32 FielditemId;
-    public Int32 MemorialMemorySeriesId;
-    public String? MemorialMemoryResource;
-    public Boolean IsUseObtainScenario;
+    public int MemorialMemoryId;
+    public string? MemorialMemoryName;
+    public string? MemorialMemoryDescription;
+    public int FielditemId;
+    public int MemorialMemorySeriesId;
+    public string? MemorialMemoryResource;
+    public bool IsUseObtainScenario;
 }
 
 [MemoryPackable]
 public partial class MemorialSeriesCategoryRecord
 {
-    public String? Id;
-    public Int32 Order;
+    public string? Id;
+    public int Order;
     public MemorialSeriesCategoryType CategoryType;
-    public String? CategoryName;
-    public String? CategoryIcon;
+    public string? CategoryName;
+    public string? CategoryIcon;
     public MemorialCategoryFormType MemorialFormType;
 }
 
 [MemoryPackable]
 public partial class MemorialSeriesRecord
 {
-    public Int32 MemorialSeriesId;
-    public Int32 Order;
-    public String? MemorialSeriesName;
-    public String? MemorialSeriesDescription;
-    public String? MemorialSeriesCategory;
-    public String? MemorialSeriesResource;
-    public Boolean IsEventMemorial;
+    public int MemorialSeriesId;
+    public int Order;
+    public string? MemorialSeriesName;
+    public string? MemorialSeriesDescription;
+    public string? MemorialSeriesCategory;
+    public string? MemorialSeriesResource;
+    public bool IsEventMemorial;
     public List<MemorialMemoryID>? MemorialMemoryId;
-    public Int32 CollectRewardId;
+    public int CollectRewardId;
 }
 
 [MemoryPackable]
 public partial class MessengerConditionTriggerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
+    public int Id;
+    public int EventId;
     public List<TriggerData>? TriggerList;
     public MessageType MessageType;
-    public String? Tid;
-    public Int32 ResourceId;
-    public String? NameLocalkey;
-    public String? EnterScenarioId;
-    public String? ExitScenarioId;
-    public Int32 StaminaValue;
-    public Int32 RewardId;
+    public string? Tid;
+    public int ResourceId;
+    public string? NameLocalkey;
+    public string? EnterScenarioId;
+    public string? ExitScenarioId;
+    public int StaminaValue;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class MessengerDialogRecord
 {
-    public String? Id;
-    public String? ConversationId;
-    public String? RoomId;
+    public string? Id;
+    public string? ConversationId;
+    public string? RoomId;
     public MessengerSpeakerType SpeakerType;
-    public String? MemberId;
+    public string? MemberId;
     public MessengerMessageType MessageType;
-    public String? JumpTarget;
-    public String? DialogLocalkey;
-    public String? ResourceId;
-    public Int32 RewardId;
+    public string? JumpTarget;
+    public string? DialogLocalkey;
+    public string? ResourceId;
+    public int RewardId;
     public DateTime RewardExpireDate;
-    public Boolean IsOpener;
+    public bool IsOpener;
 }
 
 [MemoryPackable]
 public partial class MidasProductRecord
 {
-    public Int32 Id;
+    public int Id;
     public ProductType ProductType;
-    public Int32 ProductId;
+    public int ProductId;
     public MidasItemType ItemType;
-    public String? MidasProductIdProximabeta;
-    public String? MidasProductIdGamamobi;
-    public Boolean IsFree;
-    public String? Cost;
+    public string? MidasProductIdProximabeta;
+    public string? MidasProductIdGamamobi;
+    public bool IsFree;
+    public string? Cost;
 }
 
 [MemoryPackable]
 public partial class MinigameHelpTipDescRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public String? HelptipTitle;
-    public String? HelptipImage;
-    public String? HelptipDescription;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public string? HelptipTitle;
+    public string? HelptipImage;
+    public string? HelptipDescription;
 }
 
 [MemoryPackable]
 public partial class MinigameHelpTipRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? PrefabId;
+    public int Id;
+    public int GroupId;
+    public string? PrefabId;
 }
 
 [MemoryPackable]
 public partial class MiniGameHubRecord_Raw
 {
-    public Int32 Id;
-    public Int32 HubGroup;
-    public Int32 HelptipGroup;
-    public Int32 HelptipGroupOrder;
-    public String? HelptipTitleLocalkey;
-    public Boolean IsHidden;
-    public String? PrefabId;
+    public int Id;
+    public int HubGroup;
+    public int HelptipGroup;
+    public int HelptipGroupOrder;
+    public string? HelptipTitleLocalkey;
+    public bool IsHidden;
+    public string? PrefabId;
 }
 
 [MemoryPackable]
 public partial class MonsterCallingListRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int64 MonsterId;
+    public int Id;
+    public int GroupId;
+    public long MonsterId;
     public MonsterSpawnType SpawnType;
-    public Int32 StartPoint;
-    public Int32 ActionPoint;
-    public Int32 DirPoint;
-    public Single SpawnTime;
-    public Int32 AttackTime;
+    public int StartPoint;
+    public int ActionPoint;
+    public int DirPoint;
+    public float SpawnTime;
+    public int AttackTime;
 }
 
 [MemoryPackable]
 public partial class MonsterFieldRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ResourceId;
-    public String? MonPrefab;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ResourceId;
+    public string? MonPrefab;
     public AttributeType Attribute;
-    public Single FieldMonsterScale;
-    public Boolean IsBoss;
-    public Int32 FieldSightRange;
-    public Int32 FieldMoveVelocity;
-    public List<Int32>? FieldSkillId;
-    public String? FieldAi;
-    public String? SpotJsonPath;
-    public Int32 FightingPower;
+    public float FieldMonsterScale;
+    public bool IsBoss;
+    public int FieldSightRange;
+    public int FieldMoveVelocity;
+    public List<int>? FieldSkillId;
+    public string? FieldAi;
+    public string? SpotJsonPath;
+    public int FightingPower;
 }
 
 [MemoryPackable]
 public partial class MonsterModelRecord
 {
-    public Int32 Id;
-    public Int32 ResourceId;
-    public String? MonPrefab;
+    public int Id;
+    public int ResourceId;
+    public string? MonPrefab;
     public MonsterGradeType Grade;
     public MonsterSizeType Size;
     public MonsterSizeType DissolveType;
@@ -9222,257 +9222,257 @@ public partial class MonsterModelRecord
 [MemoryPackable]
 public partial class MonsterPartsRecord
 {
-    public Int32 Id;
-    public Int32 MonsterModelId;
-    public String? PartsNameLocalkey;
-    public Int32 DamageHpRatio;
-    public Int32 HpRatio;
-    public Int32 DefenceRatio;
-    public Boolean DestroyAfterAnim;
-    public Boolean DestroyAfterMovable;
-    public Int32 PassiveSkillId;
-    public Boolean VisibleHp;
-    public Int32 LinkedPartsId;
-    public List<String>? WeaponObject;
+    public int Id;
+    public int MonsterModelId;
+    public string? PartsNameLocalkey;
+    public int DamageHpRatio;
+    public int HpRatio;
+    public int DefenceRatio;
+    public bool DestroyAfterAnim;
+    public bool DestroyAfterMovable;
+    public int PassiveSkillId;
+    public bool VisibleHp;
+    public int LinkedPartsId;
+    public List<string>? WeaponObject;
     public List<WeaponObjectEnum>? WeaponObjectEnum;
     public PartsType PartsType;
-    public List<String>? PartsObject;
-    public Int32 EnergyResistRatio;
-    public Int32 MetalResistRatio;
-    public Int32 BioResistRatio;
-    public Int32 AttackRatio;
-    public String? PartsSkin;
+    public List<string>? PartsObject;
+    public int EnergyResistRatio;
+    public int MetalResistRatio;
+    public int BioResistRatio;
+    public int AttackRatio;
+    public string? PartsSkin;
     public MonsterDestroyAnimTrigger MonsterDestroyAnimTrigger;
-    public Boolean IsMainPart;
-    public Boolean IsPartsDamageAble;
+    public bool IsMainPart;
+    public bool IsPartsDamageAble;
 }
 
 [MemoryPackable]
 public partial class MonsterStageLvChangeRecord
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 Step;
+    public int Id;
+    public int Group;
+    public int Step;
     public MonsterStageLvChangeConditionType ConditionType;
-    public Int64 ConditionValueMin;
-    public Int64 ConditionValueMax;
-    public Int32 MonsterStageLv;
-    public Int32 PassiveSkillId;
-    public Int32 TargetPassiveSkillId;
-    public Int32 GimmickobjectLvControl;
+    public long ConditionValueMin;
+    public long ConditionValueMax;
+    public int MonsterStageLv;
+    public int PassiveSkillId;
+    public int TargetPassiveSkillId;
+    public int GimmickobjectLvControl;
 }
 
 [MemoryPackable]
 public partial class MonsterRecord
 {
-    public Int64 Id;
-    public List<Int32>? ElementId;
-    public Int32 MonsterModelId;
+    public long Id;
+    public List<int>? ElementId;
+    public int MonsterModelId;
     public MonsterUIGradeType UiGrade;
-    public String? NameLocalkey;
-    public String? AppearanceLocalkey;
-    public String? DescriptionLocalkey;
-    public Boolean IsIrregular;
-    public Int32 HpRatio;
-    public Int32 DefenceRatio;
-    public Int32 AttackRatio;
-    public Int32 EnergyResistRatio;
-    public Int32 MetalResistRatio;
-    public Int32 BioResistRatio;
-    public Int32 DetectorCenter;
-    public Int32 DetectorRadius;
+    public string? NameLocalkey;
+    public string? AppearanceLocalkey;
+    public string? DescriptionLocalkey;
+    public bool IsIrregular;
+    public int HpRatio;
+    public int DefenceRatio;
+    public int AttackRatio;
+    public int EnergyResistRatio;
+    public int MetalResistRatio;
+    public int BioResistRatio;
+    public int DetectorCenter;
+    public int DetectorRadius;
     public NoneTargetType Nonetarget;
     public FunctionNoneTargetType Functionnonetarget;
-    public String? SpotAi;
-    public String? SpotAiDefense;
-    public String? SpotAiBasedefense;
-    public Int32 SpotMoveSpeed;
-    public Int32 SpotAccelerationTime;
+    public string? SpotAi;
+    public string? SpotAiDefense;
+    public string? SpotAiBasedefense;
+    public int SpotMoveSpeed;
+    public int SpotAccelerationTime;
     public MonsterSpawnType FixedSpawnType;
-    public Int32 SpotRandRatioNormal;
-    public Int32 SpotRandRatioJump;
-    public Int32 SpotRandRatioDrop;
-    public Int32 SpotRandRatioDash;
-    public Int32 SpotRandRatioTeleport;
-    public Int32 PassiveSkillId;
+    public int SpotRandRatioNormal;
+    public int SpotRandRatioJump;
+    public int SpotRandRatioDrop;
+    public int SpotRandRatioDash;
+    public int SpotRandRatioTeleport;
+    public int PassiveSkillId;
     public List<SkillData>? SkillData;
-    public Int32 StatenhanceId;
+    public int StatenhanceId;
 }
 
 [MemoryPackable]
 public partial class MuseumBuffRecord_Raw
 {
-    public Int32 Id;
-    public String? BuffIcon;
-    public Int32 SkillId;
+    public int Id;
+    public string? BuffIcon;
+    public int SkillId;
 }
 
 [MemoryPackable]
 public partial class MuseumCommonStageHpGroupRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Group;
-    public Int32 WaveOrder;
-    public Int64 HpValue;
+    public int Id;
+    public int Group;
+    public int WaveOrder;
+    public long HpValue;
 }
 
 [MemoryPackable]
 public partial class MuseumGroupRecord_Raw
 {
-    public Int32 Id;
-    public Int32 Order;
-    public String? GroupName;
-    public Int32 RankingPointId;
+    public int Id;
+    public int Order;
+    public string? GroupName;
+    public int RankingPointId;
 }
 
 [MemoryPackable]
 public partial class MuseumMissionRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StageId;
-    public Int32 Order;
+    public int Id;
+    public int StageId;
+    public int Order;
     public MuseumStageModeType ModeType;
     public MuseumMissionConditionType ConditionType;
-    public Int64 ConditionValue;
-    public String? MissionDesc;
-    public Int32 RewardId;
-    public Int32 RankingPointAmount;
+    public long ConditionValue;
+    public string? MissionDesc;
+    public int RewardId;
+    public int RankingPointAmount;
 }
 
 [MemoryPackable]
 public partial class MuseumRankingPointRecord_Raw
 {
-    public Int32 Id;
-    public String? PointIcon;
-    public String? PointName;
-    public String? PointDesc;
+    public int Id;
+    public string? PointIcon;
+    public string? PointName;
+    public string? PointDesc;
 }
 
 [MemoryPackable]
 public partial class MuseumStageModeRecord_Raw
 {
-    public Int32 Id;
-    public Int32 StageId;
+    public int Id;
+    public int StageId;
     public MuseumStageModeType ModeType;
-    public Int32 ModeOpenCondition;
-    public Int32 CharacterLv;
-    public Int32 Wave;
-    public Int32 MonsterStageLv;
-    public Int32 MonsterStageLvChangeGroup;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Boolean SpotAutocontrol;
+    public int ModeOpenCondition;
+    public int CharacterLv;
+    public int Wave;
+    public int MonsterStageLv;
+    public int MonsterStageLvChangeGroup;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public bool SpotAutocontrol;
 }
 
 [MemoryPackable]
 public partial class MuseumStageRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public String? StageName;
-    public Int32 BuffId;
-    public Int64 MonsterId;
-    public String? MonsterImageSi;
-    public String? MonsterImage;
-    public Int32 SoloRaidManagerId;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public string? StageName;
+    public int BuffId;
+    public long MonsterId;
+    public string? MonsterImageSi;
+    public string? MonsterImage;
+    public int SoloRaidManagerId;
     public DateTime SeasonStartDate;
     public DateTime SeasonEndDate;
-    public Int32 SoloRaidStageHpGroup;
+    public int SoloRaidStageHpGroup;
 }
 
 [MemoryPackable]
 public partial class MuseumWeeklyBuffGroupRecord_Raw
 {
-    public Int32 Id;
-    public Int32 SeasonId;
-    public Int32 WeekCount;
+    public int Id;
+    public int SeasonId;
+    public int WeekCount;
 }
 
 [MemoryPackable]
 public partial class MuseumWeeklyBuffRecord_Raw
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public Int32 StageId;
-    public Int32 BuffId;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public int StageId;
+    public int BuffId;
 }
 
 [MemoryPackable]
 public partial class NarrativeSignRecord
 {
-    public Int32 Id;
+    public int Id;
     public FieldNarrativeSignType NarrativeSignType;
-    public String? NameLocale;
-    public String? DescriptionLocale;
-    public String? SignIcon;
+    public string? NameLocale;
+    public string? DescriptionLocale;
+    public string? SignIcon;
     public BalloonType BalloonType;
-    public Int32 BalloonPrintTime;
+    public int BalloonPrintTime;
 }
 
 [MemoryPackable]
 public partial class NikkeEpMissionScenarioGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Order;
-    public String? ScenarioTitleLoacle;
-    public String? ScenarioGroupId;
-    public String? ScenarioOpenConditionGroupId;
+    public int Id;
+    public int GroupId;
+    public int Order;
+    public string? ScenarioTitleLoacle;
+    public string? ScenarioGroupId;
+    public string? ScenarioOpenConditionGroupId;
 }
 
 [MemoryPackable]
 public partial class NikkeEpMissionRecord
 {
-    public Int32 Id;
-    public Int32 NameCode;
-    public Int32 ScenarioGroup;
+    public int Id;
+    public int NameCode;
+    public int ScenarioGroup;
     public DateTime StartDate;
     public DateTime EndDate;
-    public Int32 RewardId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class OutpostBuildingRecord
 {
-    public Int32 Id;
-    public Int32 ResourceGroupId;
-    public Int32 BuildingLv;
-    public Int32 InitBuildingSlot;
+    public int Id;
+    public int ResourceGroupId;
+    public int BuildingLv;
+    public int InitBuildingSlot;
     public BuildingCategory Category;
     public BuildingDisplayCategory DisplayCategory;
-    public String? CategoryLocalkey;
-    public Int32 TypeId;
-    public Int32 Time;
+    public string? CategoryLocalkey;
+    public int TypeId;
+    public int Time;
     public List<BuildConditionData>? BuildCondition;
     public List<OutpostCostData>? Cost;
     public CurrencyType FastCompCurrencyType;
-    public Int32 FastCompCurrencyValue;
+    public int FastCompCurrencyValue;
     public List<OutpostFunctionData>? Function;
-    public String? OpenEpisode;
-    public Int32 RewardId;
+    public string? OpenEpisode;
+    public int RewardId;
     public ContentsOpen ContentsOpen;
 }
 
 [MemoryPackable]
 public partial class OutpostFastBattleRecord
 {
-    public Int32 Id;
-    public Int32 FastbattleCondition;
+    public int Id;
+    public int FastbattleCondition;
     public CurrencyType PriceType;
-    public Int32 PriceValue;
-    public Int32 TimeMin;
+    public int PriceValue;
+    public int TimeMin;
 }
 
 [MemoryPackable]
 public partial class OutpostMapChangeSchedulerRecord_Raw
 {
-    public Int32 Id;
-    public String? Desc;
-    public String? ResourceId;
-    public Int32 SkinGroupId;
-    public Boolean IsDefault;
+    public int Id;
+    public string? Desc;
+    public string? ResourceId;
+    public int SkinGroupId;
+    public bool IsDefault;
     public DateTime StartDate;
     public DateTime EndDate;
 }
@@ -9480,111 +9480,111 @@ public partial class OutpostMapChangeSchedulerRecord_Raw
 [MemoryPackable]
 public partial class OutpostResourceRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SkinGroupId;
-    public String? SkinGroupLocalkey;
-    public Int32 EventId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? BuildingSpriteResourceId;
-    public String? BuildingSymbolResourceId;
-    public String? BuildingResourceId;
+    public int Id;
+    public int GroupId;
+    public int SkinGroupId;
+    public string? SkinGroupLocalkey;
+    public int EventId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? BuildingSpriteResourceId;
+    public string? BuildingSymbolResourceId;
+    public string? BuildingResourceId;
 }
 
 [MemoryPackable]
 public partial class PackageGroupRecord
 {
-    public Int32 Id;
-    public Int32 PackageGroupId;
+    public int Id;
+    public int PackageGroupId;
     public RewardType ProductType;
-    public Int32 ProductId;
-    public Int32 ProductValue;
+    public int ProductId;
+    public int ProductValue;
 }
 
 [MemoryPackable]
 public partial class PackageListRecord
 {
-    public Int32 Id;
-    public Int32 PackageShopId;
-    public Int32 PackageOrder;
-    public Int32 ProductId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
+    public int Id;
+    public int PackageShopId;
+    public int PackageOrder;
+    public int ProductId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
-    public Boolean IsActive;
+    public bool IsLimit;
+    public int BuyLimitCount;
+    public bool IsActive;
 }
 
 [MemoryPackable]
 public partial class PackageShopRecord
 {
-    public Int32 Id;
-    public Int32 PackageGroupId;
-    public Int32 ProductGrade;
-    public Int32 ProductEfficiency;
-    public Boolean IsFree;
-    public Int32 MidasProductId;
+    public int Id;
+    public int PackageGroupId;
+    public int ProductGrade;
+    public int ProductEfficiency;
+    public bool IsFree;
+    public int MidasProductId;
 }
 
 [MemoryPackable]
 public partial class PassCostumeListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PackageShopId;
-    public Int32 PackageOrder;
-    public Int32 PassCostumeShopId;
-    public Boolean IsActive;
+    public int Id;
+    public int PackageShopId;
+    public int PackageOrder;
+    public int PassCostumeShopId;
+    public bool IsActive;
 }
 
 [MemoryPackable]
 public partial class PassCostumeShopRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PackageGroupId;
-    public Int32 CostumeId;
+    public int Id;
+    public int PackageGroupId;
+    public int CostumeId;
     public DateTime StartDate;
     public DateTime EndDate;
-    public Int32 MidasProductId;
+    public int MidasProductId;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
+    public bool IsLimit;
+    public int BuyLimitCount;
 }
 
 [MemoryPackable]
 public partial class PassMissionRecord
 {
-    public Int32 Id;
-    public Int32 PassPointId;
+    public int Id;
+    public int PassPointId;
     public Trigger ConditionType;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 RewardId;
+    public int ConditionId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class PhotoManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Boolean IsArchiveEvent;
-    public Int32 UseSpotGroupId;
+    public int Id;
+    public int EventId;
+    public bool IsArchiveEvent;
+    public int UseSpotGroupId;
     public PhotoZoomType DefaultZoomValue;
     public PhotoObjectType DefaultObjectGroupValue;
     public PhotoFlashType DefaultFlashValue;
-    public String? MistakePhotoLocale;
-    public String? ChangeCharacterModel;
-    public String? ChangeCharacterEffect;
-    public Int32 ResultWindowDelayTime;
+    public string? MistakePhotoLocale;
+    public string? ChangeCharacterModel;
+    public string? ChangeCharacterEffect;
+    public int ResultWindowDelayTime;
 }
 
 [MemoryPackable]
 public partial class PhotoQuizRecord
 {
-    public Int32 Id;
+    public int Id;
     public PhotoZoomType ZoomValue;
     public PhotoObjectType ObjectGroupValue;
     public PhotoFlashType FlashValue;
@@ -9593,298 +9593,298 @@ public partial class PhotoQuizRecord
 [MemoryPackable]
 public partial class PhotoSpotRecord
 {
-    public Int32 Id;
-    public Int32 PhotoManagerId;
-    public Int32 GroupId;
-    public Int32 SpotGroup;
+    public int Id;
+    public int PhotoManagerId;
+    public int GroupId;
+    public int SpotGroup;
     public PhotoSpotType SpotType;
-    public Int32 SpotOrder;
+    public int SpotOrder;
     public AdventureSpotOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
-    public Int32 SpotSpawnDay;
-    public List<String>? AbleTakePhotoArtMap;
-    public String? NoticeAbleTakePhoto;
-    public Int32 AbleTakePhotoAnytime;
-    public Boolean UseFlash;
-    public Int32 PhotoQuizId;
-    public Int32 PhotoId;
-    public String? LockIcon;
-    public String? OpenIcon;
-    public String? NameLocale;
-    public String? NpcLocationLocale;
-    public String? PhotoHintLocale;
-    public String? HintResource;
-    public String? SpecialSpotSubHintLocale;
+    public int OpenConditionValue;
+    public int SpotSpawnDay;
+    public List<string>? AbleTakePhotoArtMap;
+    public string? NoticeAbleTakePhoto;
+    public int AbleTakePhotoAnytime;
+    public bool UseFlash;
+    public int PhotoQuizId;
+    public int PhotoId;
+    public string? LockIcon;
+    public string? OpenIcon;
+    public string? NameLocale;
+    public string? NpcLocationLocale;
+    public string? PhotoHintLocale;
+    public string? HintResource;
+    public string? SpecialSpotSubHintLocale;
 }
 
 [MemoryPackable]
 public partial class PhotoRecord
 {
-    public Int32 Id;
-    public String? NameLocale;
-    public String? TakePhotoResource;
-    public String? MistakePhotoResource;
-    public String? MemoLocale;
+    public int Id;
+    public string? NameLocale;
+    public string? TakePhotoResource;
+    public string? MistakePhotoResource;
+    public string? MemoLocale;
 }
 
 [MemoryPackable]
 public partial class PointRecord
 {
-    public Int32 Id;
+    public int Id;
     public PointType PointType;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ResourceId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ResourceId;
 }
 
 [MemoryPackable]
 public partial class PollListRecord_Raw
 {
-    public Int32 Id;
-    public Int32 PollReward;
-    public String? PollLinkGlobal;
-    public String? PollLinkHmt;
-    public Boolean IsRepeat;
+    public int Id;
+    public int PollReward;
+    public string? PollLinkGlobal;
+    public string? PollLinkHmt;
+    public bool IsRepeat;
 }
 
 [MemoryPackable]
 public partial class PopupPackageListRecord
 {
-    public Int32 Id;
-    public Int32 PopupPackageGroupId;
+    public int Id;
+    public int PopupPackageGroupId;
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public Int32 ConditionGroupId;
-    public Int32 ProductGrade;
-    public Int32 TimeLimit;
-    public Int32 ProductEfficiency;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
-    public Int32 CharacterResourceId;
-    public Int32 CostumeId;
-    public Boolean IsActive;
+    public int ConditionId;
+    public int ConditionValue;
+    public int ConditionGroupId;
+    public int ProductGrade;
+    public int TimeLimit;
+    public int ProductEfficiency;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
+    public int CharacterResourceId;
+    public int CostumeId;
+    public bool IsActive;
 }
 
 [MemoryPackable]
 public partial class PopupPackageShopRecord
 {
-    public Int32 Id;
-    public Int32 OrderGroupId;
-    public Int32 PopupPackageGroupId;
-    public Int32 PackageGroupId;
-    public Int32 ProductGrade;
-    public Int32 InfracorePoint;
-    public Int32 MidasProductId;
+    public int Id;
+    public int OrderGroupId;
+    public int PopupPackageGroupId;
+    public int PackageGroupId;
+    public int ProductGrade;
+    public int InfracorePoint;
+    public int MidasProductId;
 }
 
 [MemoryPackable]
 public partial class PresetRecord
 {
-    public Int32 Id;
+    public int Id;
     public List<PresetTeamData>? Team;
-    public Int32 BaseLobbyBackground;
-    public Int32 SettingTitle;
+    public int BaseLobbyBackground;
+    public int SettingTitle;
 }
 
 [MemoryPackable]
 public partial class ProductOfferRecord
 {
-    public Int32 Id;
-    public Boolean IsActive;
+    public int Id;
+    public bool IsActive;
     public ProductOfferPopupType ProductOfferPopupType;
-    public Int32 ProductId;
-    public Int32 InappshopTabId;
-    public Int32 GachaCurrencyType;
-    public Int32 GachaCurrencyValue;
+    public int ProductId;
+    public int InappshopTabId;
+    public int GachaCurrencyType;
+    public int GachaCurrencyValue;
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
-    public String? PopupDescLocalkey;
-    public String? PopupPathLocalkey;
-    public String? UiPrefabAddressable;
-    public String? CharacterResourceAddressable;
+    public int ConditionId;
+    public int ConditionValue;
+    public string? PopupDescLocalkey;
+    public string? PopupPathLocalkey;
+    public string? UiPrefabAddressable;
+    public string? CharacterResourceAddressable;
 }
 
 [MemoryPackable]
 public partial class ProfileCardObjectRecord
 {
-    public Int32 Id;
+    public int Id;
     public ObjectType ObjectType;
     public ObjectSubType ObjectSubType;
     public ProfileCardObjectGradeType GradeType;
-    public Int32 Order;
-    public String? ResourceId;
-    public String? BadgeResourceId;
-    public String? SiResourceId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public Int32 ExchangeItemId;
-    public Int32 ExchangeItemValue;
-    public Int32 RequireItemId;
-    public Int32 RequireItemValue;
-    public Boolean IsHidden;
+    public int Order;
+    public string? ResourceId;
+    public string? BadgeResourceId;
+    public string? SiResourceId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public int ExchangeItemId;
+    public int ExchangeItemValue;
+    public int RequireItemId;
+    public int RequireItemValue;
+    public bool IsHidden;
 }
 
 [MemoryPackable]
 public partial class RankSkipCostRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SkipStep;
-    public Int32 PriceId;
-    public Int32 PriceValue;
+    public int Id;
+    public int GroupId;
+    public int SkipStep;
+    public int PriceId;
+    public int PriceValue;
 }
 
 [MemoryPackable]
 public partial class RecycleResearchLevelRecord
 {
-    public Int32 Id;
+    public int Id;
     public RecycleType RecycleType;
     public RecycleSubType RecycleSubType;
-    public Int32 RecycleLevel;
-    public Int32 LimitSynchroLevel;
-    public Int32 ItemId;
-    public Int32 ItemValue;
+    public int RecycleLevel;
+    public int LimitSynchroLevel;
+    public int ItemId;
+    public int ItemValue;
 }
 
 [MemoryPackable]
 public partial class RecycleResearchStatRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? FunctionLocalkey;
-    public Int32 ResourceId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? FunctionLocalkey;
+    public int ResourceId;
     public RecycleType RecycleType;
     public RecycleSubType RecycleSubType;
-    public Int32 UnlockConditionId;
-    public Int32 UnlockLevel;
+    public int UnlockConditionId;
+    public int UnlockLevel;
     public CurrencyType UnlockCurrencyId;
-    public Int32 UnlockCurrencyValue;
-    public Int32 Attack;
-    public Int32 Defence;
-    public Int32 Hp;
+    public int UnlockCurrencyValue;
+    public int Attack;
+    public int Defence;
+    public int Hp;
 }
 
 [MemoryPackable]
 public partial class RewardUpManagerRecord
 {
-    public Int32 Id;
-    public Int32 EventGroupId;
+    public int Id;
+    public int EventGroupId;
     public RewardUpEventType EventType;
-    public Int32 BonusValue;
-    public String? Icon;
-    public String? TitleLocalkey;
-    public String? DescriptionLocalkey;
+    public int BonusValue;
+    public string? Icon;
+    public string? TitleLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class ScenarioCameraSettingRecord
 {
-    public String? Id;
-    public Double PositionX;
-    public Double PositionY;
-    public Double PositionZ;
+    public string? Id;
+    public double PositionX;
+    public double PositionY;
+    public double PositionZ;
 }
 
 [MemoryPackable]
 public partial class ScenarioCameraShakeSettingRecord
 {
-    public String? Id;
-    public Double AmplitudeX;
-    public Double AmplitudeY;
-    public Double AmplitudeZ;
-    public Double AmplitudeFov;
-    public Double FrequencyX;
-    public Double FrequencyY;
-    public Double FrequencyZ;
-    public Double FrequencyFov;
-    public Double Loop;
+    public string? Id;
+    public double AmplitudeX;
+    public double AmplitudeY;
+    public double AmplitudeZ;
+    public double AmplitudeFov;
+    public double FrequencyX;
+    public double FrequencyY;
+    public double FrequencyZ;
+    public double FrequencyFov;
+    public double Loop;
 }
 
 [MemoryPackable]
 public partial class ScenarioCharacterSettingRecord
 {
-    public String? Id;
-    public String? NameLocalkey;
-    public Int32 ResourceId;
-    public String? SkinId;
+    public string? Id;
+    public string? NameLocalkey;
+    public int ResourceId;
+    public string? SkinId;
     public FrameType FrameType;
-    public String? Address;
-    public String? SdResourceAddress;
+    public string? Address;
+    public string? SdResourceAddress;
 }
 
 [MemoryPackable]
 public partial class ScenarioMovieRecord
 {
-    public String? Id;
-    public String? GroupId;
-    public String? Language;
-    public String? MovieLink;
-    public String? Subtitles;
+    public string? Id;
+    public string? GroupId;
+    public string? Language;
+    public string? MovieLink;
+    public string? Subtitles;
 }
 
 [MemoryPackable]
 public partial class ScenarioPositionSettingRecord
 {
-    public String? Id;
-    public Double PositionX;
-    public Double PositionY;
-    public Double PositionZ;
-    public Double RotationX;
-    public Double RotationY;
-    public Double RotationZ;
+    public string? Id;
+    public double PositionX;
+    public double PositionY;
+    public double PositionZ;
+    public double RotationX;
+    public double RotationY;
+    public double RotationZ;
 }
 
 [MemoryPackable]
 public partial class SDBattleEventRecord
 {
-    public Int32 Id;
-    public String? NumberOfTimes;
+    public int Id;
+    public string? NumberOfTimes;
 }
 
 [MemoryPackable]
 public partial class SDCharacterAnimationRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
+    public int Id;
+    public string? NameLocalkey;
     public SDCharacterAnimationShortName AnimationName;
-    public Int32 VoiceCategory;
+    public int VoiceCategory;
 }
 
 [MemoryPackable]
 public partial class SeasonPassRecord
 {
-    public Int32 Id;
-    public Int32 PassId;
+    public int Id;
+    public int PassId;
     public RewardType ConditionType;
-    public Int32 ConditionValue;
-    public Int32 PassRank;
-    public Int32 FreeReward;
-    public Int32 PremiumReward1;
-    public Int32 PremiumReward2;
-    public Boolean IsHighlight;
+    public int ConditionValue;
+    public int PassRank;
+    public int FreeReward;
+    public int PremiumReward1;
+    public int PremiumReward2;
+    public bool IsHighlight;
 }
 
 [MemoryPackable]
 public partial class ShootingRangeContentsRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 GroupId;
+    public int Id;
+    public int EventId;
+    public int GroupId;
 }
 
 [MemoryPackable]
 public partial class ShootingRangeSpecRecord
 {
-    public Int32 Id;
+    public int Id;
     public CharacterClassType Class;
     public OriginalRareType Rare;
-    public Int32 Grade;
-    public Int32 CharacterLevel;
-    public Int32 AttractiveLevel;
+    public int Grade;
+    public int CharacterLevel;
+    public int AttractiveLevel;
     public List<EquipmentList>? EquipmentList;
     public List<SkillLevelList>? SkillLevelList;
 }
@@ -9892,661 +9892,660 @@ public partial class ShootingRangeSpecRecord
 [MemoryPackable]
 public partial class ShootingRangeRecord
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public ShootingRangeType ShootingRangeType;
     public ShootingRangeBattleLength ShootingRangeBattleLengthType;
-    public Boolean SpecActiveSpot;
-    public Int32 StageLv;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Int32 SpotId;
+    public bool SpecActiveSpot;
+    public int StageLv;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public int SpotId;
 }
 
 [MemoryPackable]
 public partial class ShopDiscountProbRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 ApplicationProb;
-    public Int32 DiscountRate;
+    public int Id;
+    public int GroupId;
+    public int ApplicationProb;
+    public int DiscountRate;
 }
 
 [MemoryPackable]
 public partial class SideStoryCutRecord
 {
-    public Int32 Id;
-    public Int32 StageId;
-    public Int32 Step;
-    public Int32 WaveId;
-    public String? ScenarioGroupId;
+    public int Id;
+    public int StageId;
+    public int Step;
+    public int WaveId;
+    public string? ScenarioGroupId;
     public SideStoryEventCondition ConditionType;
-    public String? ConditionId;
-    public String? ConditionValue;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 SidestoryCharacterGroup;
-    public Boolean IsIncludeWaveInfo;
+    public string? ConditionId;
+    public string? ConditionValue;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int SidestoryCharacterGroup;
+    public bool IsIncludeWaveInfo;
 }
 
 [MemoryPackable]
 public partial class SideStoryPartRecord
 {
-    public Int32 Id;
-    public Int32 SidestoryId;
-    public Int32 Step;
-    public Int32 OpenConditionStage;
-    public Int32 OpenConditionHour;
+    public int Id;
+    public int SidestoryId;
+    public int Step;
+    public int OpenConditionStage;
+    public int OpenConditionHour;
 }
 
 [MemoryPackable]
 public partial class SideStoryPlayCharacterRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 Slot;
-    public Int32 CharacterId;
-    public Int32 CostumeIndex;
-    public Int32 CharacterLevel;
+    public int Id;
+    public int GroupId;
+    public int Slot;
+    public int CharacterId;
+    public int CostumeIndex;
+    public int CharacterLevel;
 }
 
 [MemoryPackable]
 public partial class SideStorySpotEventRecord
 {
-    public Int32 Id;
-    public Int32 SpotCutId;
-    public Int32 Step;
-    public String? SpotDialogGroupId;
-    public Int32 StateEffectFunctionId;
+    public int Id;
+    public int SpotCutId;
+    public int Step;
+    public string? SpotDialogGroupId;
+    public int StateEffectFunctionId;
     public SideStoryEventCondition ConditionType;
-    public String? ConditionId;
-    public String? ConditionValue;
-    public Boolean DialogSpotPause;
+    public string? ConditionId;
+    public string? ConditionValue;
+    public bool DialogSpotPause;
 }
 
 [MemoryPackable]
 public partial class SideStoryStageRecord
 {
-    public Int32 Id;
-    public Int32 SidestoryId;
-    public Int32 PartId;
-    public Int32 Step;
-    public String? StageName;
-    public Int32 OpenConditionStage;
-    public Int32 FirstClearReward;
-    public Int32 VictoryCharacterResource;
+    public int Id;
+    public int SidestoryId;
+    public int PartId;
+    public int Step;
+    public string? StageName;
+    public int OpenConditionStage;
+    public int FirstClearReward;
+    public int VictoryCharacterResource;
 }
 
 [MemoryPackable]
 public partial class SideStoryRecord
 {
-    public Int32 Id;
-    public String? SidestoryName;
+    public int Id;
+    public string? SidestoryName;
     public List<OpenConditionStageData>? OpenConditionStageList;
-    public Int32 OpenConditionHour;
-    public String? PreviousStoryDesc;
+    public int OpenConditionHour;
+    public string? PreviousStoryDesc;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomOverclockLevelRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 OverclockLevel;
-    public Int32 MonsterLevelUp;
-    public Int32 BattlePower;
-    public String? Color;
-    public Int32 RewardId;
+    public int Id;
+    public int GroupId;
+    public int OverclockLevel;
+    public int MonsterLevelUp;
+    public int BattlePower;
+    public string? Color;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomOverclockOptionGroupRecord
 {
-    public Int32 Id;
-    public Int32 SeasonGroup;
-    public Boolean OptionChange;
-    public Boolean InfiniteOption;
-    public Int32 GroupOrder;
+    public int Id;
+    public int SeasonGroup;
+    public bool OptionChange;
+    public bool InfiniteOption;
+    public int GroupOrder;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomOverclockOptionRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 OptionChangeOrder;
+    public int Id;
+    public int GroupId;
+    public int OptionChangeOrder;
     public InfiniteOptionCode InfiniteOptionCode;
-    public String? OptionNameLocalkey;
-    public String? OptionDescLocalkey;
-    public String? OptionIcon;
-    public Int32 OptionOverclockLevel;
+    public string? OptionNameLocalkey;
+    public string? OptionDescLocalkey;
+    public string? OptionIcon;
+    public int OptionOverclockLevel;
     public List<SimulationRoomOcOptions>? OptionData;
-    public Boolean FixOption;
+    public bool FixOption;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomOverclockSeasonRecord
 {
-    public Int32 Id;
-    public String? SeasonNameLocalkey;
-    public Int32 OptionGroupId;
-    public Int32 OverclockLevelGroup;
-    public Boolean MainSeason;
+    public int Id;
+    public string? SeasonNameLocalkey;
+    public int OptionGroupId;
+    public int OverclockLevelGroup;
+    public bool MainSeason;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomSelectionGroupRecord
 {
-    public Int32 Id;
-    public Int32 SelectionGroupId;
-    public Int32 SelectionNumber;
+    public int Id;
+    public int SelectionGroupId;
+    public int SelectionNumber;
     public SimulationRoomEventFunctionType EventFunctionType;
     public SimulationRoomEventfunctionTargetType EventFunctionTargetType;
-    public Int32 EventFunctionTargetValue;
+    public int EventFunctionTargetValue;
     public SimulationRoomEventfunctionValueType EventFunctionValueType;
-    public Int32 EventFunctionValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public int EventFunctionValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomEventRecord
 {
-    public Int32 Id;
+    public int Id;
     public SimulationRoomEvent EventType;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ResourceId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomChapterRecord
 {
-    public Int32 Id;
-    public Int32 Chapter;
-    public Int32 DifficultyId;
-    public Int32 RecommendedBattlePower;
-    public Int32 StageValue;
-    public Int32 RewardId;
-    public Boolean OverclockActive;
-    public Boolean SimpleSimulationActive;
+    public int Id;
+    public int Chapter;
+    public int DifficultyId;
+    public int RecommendedBattlePower;
+    public int StageValue;
+    public int RewardId;
+    public bool OverclockActive;
+    public bool SimpleSimulationActive;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomLevelScalingRecord
 {
-    public Int32 Id;
+    public int Id;
     public SimulationRoomEvent EventType;
-    public Int32 DifficultyId;
-    public Int32 Chapter;
-    public Int32 BaseMonsterLevel;
-    public Int32 BaseMonsterBattlePower;
-    public Int32 ImprovementMonsterLevel;
-    public Int32 ImprovementMonsterBattlePower;
+    public int DifficultyId;
+    public int Chapter;
+    public int BaseMonsterLevel;
+    public int BaseMonsterBattlePower;
+    public int ImprovementMonsterLevel;
+    public int ImprovementMonsterBattlePower;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomDialogueLocationRecord
 {
-    public Int32 Id;
+    public int Id;
     public SimulationRoomLocation Location;
-    public Int32 Chapter;
-    public String? DialogueLocalkey;
-    public String? DialogueVoice;
-    public String? SetCharAnim;
-    public Int32 Weight;
-    public Boolean OcModeUse;
-    public Int32 OcLevelMin;
-    public Int32 OcLevelMax;
+    public int Chapter;
+    public string? DialogueLocalkey;
+    public string? DialogueVoice;
+    public string? SetCharAnim;
+    public int Weight;
+    public bool OcModeUse;
+    public int OcLevelMin;
+    public int OcLevelMax;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomDialogueBattleRecord
 {
-    public Int32 Id;
+    public int Id;
     public SimulationRoomBattleDialogueType DialogueType;
-    public String? DialogueLocalkey;
-    public String? DialogueVoice;
-    public String? SetCharAnim;
-    public Int32 Weight;
-    public Boolean OcModeUse;
-    public Int32 OcLevelMin;
-    public Int32 OcLevelMax;
+    public string? DialogueLocalkey;
+    public string? DialogueVoice;
+    public string? SetCharAnim;
+    public int Weight;
+    public bool OcModeUse;
+    public int OcLevelMin;
+    public int OcLevelMax;
 }
 
 [MemoryPackable]
 public partial class SimulationRoomDifficultyRecord
 {
-    public Int32 Id;
+    public int Id;
     public ContentsOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int OpenConditionValue;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
 }
 
 [MemoryPackable]
 public partial class SkillInfoRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SkillLevel;
-    public Int32 NextLevelId;
-    public Int32 LevelUpCostId;
-    public String? Icon;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? InfoDescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public int SkillLevel;
+    public int NextLevelId;
+    public int LevelUpCostId;
+    public string? Icon;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? InfoDescriptionLocalkey;
     public List<ValueData>? DescriptionValueList;
 }
 
 [MemoryPackable]
 public partial class SoloRaidManagerRecord
 {
-    public Int32 Id;
-    public Int32 MonsterPreset;
-    public Int32 RankingGroupId;
+    public int Id;
+    public int MonsterPreset;
+    public int RankingGroupId;
 }
 
 [MemoryPackable]
 public partial class SoloRaidPresetRecord
 {
-    public Int32 Id;
-    public Int32 PresetGroupId;
+    public int Id;
+    public int PresetGroupId;
     public DifficultyType DifficultyType;
     public QuickBattleType QuickBattleType;
-    public Int32 CharacterLv;
-    public Int32 WaveOpenCondition;
-    public Int32 WaveOrder;
-    public Int32 Wave;
-    public Int32 MonsterStageLv;
-    public Int32 MonsterStageLvChangeGroup;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Boolean SpotAutocontrol;
-    public String? WaveName;
-    public String? WaveDescription;
-    public String? MonsterImageSi;
-    public String? MonsterImage;
-    public Int32 FirstClearRewardId;
-    public Int32 RewardId;
+    public int CharacterLv;
+    public int WaveOpenCondition;
+    public int WaveOrder;
+    public int Wave;
+    public int MonsterStageLv;
+    public int MonsterStageLvChangeGroup;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public bool SpotAutocontrol;
+    public string? WaveName;
+    public string? WaveDescription;
+    public string? MonsterImageSi;
+    public string? MonsterImage;
+    public int FirstClearRewardId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class SoloRaidRankingRecord
 {
-    public Int32 Id;
-    public Int32 RankingGroupId;
-    public Int32 Priority;
-    public Int32 ResourceId;
+    public int Id;
+    public int RankingGroupId;
+    public int Priority;
+    public int ResourceId;
     public GrantType GrantType;
-    public Int32 GrantValueMin;
-    public Int32 GrantValueMax;
-    public Int32 RewardId;
-    public Boolean IsRecording;
+    public int GrantValueMin;
+    public int GrantValueMax;
+    public int RewardId;
+    public bool IsRecording;
 }
 
 [MemoryPackable]
 public partial class SpecialLobbySettingManagerRecord
 {
-    public Int32 Id;
+    public int Id;
     public DateTime StartDate;
     public DateTime EndDate;
-    public Int32 SpecialLobbyChangeCount;
-    public String? SpecialLobbyBackground;
-    public Int32 CharacterResourceId;
-    public Int32 CostumeIndex;
-    public String? SpecialLobbyBgm;
-    public Boolean LobbyDisableByChange;
+    public int SpecialLobbyChangeCount;
+    public string? SpecialLobbyBackground;
+    public int CharacterResourceId;
+    public int CostumeIndex;
+    public string? SpecialLobbyBgm;
+    public bool LobbyDisableByChange;
 }
 
 [MemoryPackable]
 public partial class SquadInfoRecord
 {
-    public Int32 Id;
+    public int Id;
     public Squad Squad;
-    public String? SquadName;
-    public String? SquadDescription;
-    public String? ResourceId;
+    public string? SquadName;
+    public string? SquadDescription;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class StateEffectRecord
 {
-    public Int32 Id;
-    public List<Int32>? UseFunctionIdList;
-    public List<Int32>? HurtFunctionIdList;
+    public int Id;
+    public List<int>? UseFunctionIdList;
+    public List<int>? HurtFunctionIdList;
     public List<FunctionData>? Functions;
-    public String? Icon;
+    public string? Icon;
 }
 
 [MemoryPackable]
 public partial class StepUpPackageListRecord
 {
-    public Int32 Id;
-    public Int32 StepupGroupId;
-    public Int32 PackageGroupId;
-    public Int32 Step;
-    public Int32 PreviousPackageId;
-    public Boolean IsLastStep;
-    public Int32 ProductEffieciency;
+    public int Id;
+    public int StepupGroupId;
+    public int PackageGroupId;
+    public int Step;
+    public int PreviousPackageId;
+    public bool IsLastStep;
+    public int ProductEffieciency;
     public ShopBuyLimitType BuyLimitType;
-    public Boolean IsLimit;
-    public Int32 BuyLimitCount;
-    public Boolean IsFree;
-    public Int32 MidasProductId;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
-    public String? ProductResourceId;
+    public bool IsLimit;
+    public int BuyLimitCount;
+    public bool IsFree;
+    public int MidasProductId;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
+    public string? ProductResourceId;
 }
 
 [MemoryPackable]
 public partial class StepUpPackageShopRecord
 {
-    public Int32 Id;
-    public Int32 PackageShopId;
-    public Int32 StepupGroupId;
-    public String? BannerResourceId;
-    public String? BannerLocalkey;
-    public String? PopupNameLocalkey;
-    public String? PopupDescLocalkey;
+    public int Id;
+    public int PackageShopId;
+    public int StepupGroupId;
+    public string? BannerResourceId;
+    public string? BannerLocalkey;
+    public string? PopupNameLocalkey;
+    public string? PopupDescLocalkey;
 }
 
 [MemoryPackable]
 public partial class SubQuestRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public int GroupId;
+    public string? DescriptionLocalkey;
     public List<TriggerData>? TriggerList;
-    public String? ConversationId;
+    public string? ConversationId;
     public Trigger ClearTrigger;
-    public Int32 ClearConditionId;
-    public Int32 ClearConditionValue;
+    public int ClearConditionId;
+    public int ClearConditionValue;
     public ScenarioType ScenarioType;
-    public String? EpisodeId;
-    public String? EndMessengerConversationId;
-    public Int32 BeforeSubQuestId;
+    public string? EpisodeId;
+    public string? EndMessengerConversationId;
+    public int BeforeSubQuestId;
 }
 
 [MemoryPackable]
 public partial class SupportCharacterGroupRecord
 {
-    public Int32 Id;
-    public Int32 GroupId;
-    public Int32 SupportCharacterId;
+    public int Id;
+    public int GroupId;
+    public int SupportCharacterId;
 }
 
 [MemoryPackable]
 public partial class SupportCharacterRecord
 {
-    public Int32 Id;
-    public Int32 CharacterId;
-    public Int32 CharacterLevel;
-    public Int32 AttractiveLevel;
+    public int Id;
+    public int CharacterId;
+    public int CharacterLevel;
+    public int AttractiveLevel;
     public List<support_equipment_data>? EquipmentArray;
-    public Int32 HarmonycubeId;
-    public Int32 HarmonycubeLevel;
-    public Int32 SkillLevel1;
-    public Int32 SkillLevel2;
-    public Int32 UltiSkillLevel3;
+    public int HarmonycubeId;
+    public int HarmonycubeLevel;
+    public int SkillLevel1;
+    public int SkillLevel2;
+    public int UltiSkillLevel3;
 }
 
 [MemoryPackable]
 public partial class SupportContentsRecord
 {
-    public Int32 Id;
+    public int Id;
     public TeamType ContentsType;
-    public Int32 UseValue;
-    public Int32 GroupId;
+    public int UseValue;
+    public int GroupId;
 }
 
 [MemoryPackable]
 public partial class TierRecord
 {
-    public Int32 Id;
+    public int Id;
     public ArenaType ArenaType;
-    public Int32 Priority;
-    public String? Name;
-    public String? Description;
-    public Int32 TierNumber;
-    public Int32 ResourceId;
+    public int Priority;
+    public string? Name;
+    public string? Description;
+    public int TierNumber;
+    public int ResourceId;
     public GrantType GrantType;
-    public Int32 GrantValueMin;
-    public Int32 GrantValueMax;
+    public int GrantValueMin;
+    public int GrantValueMax;
 }
 
 [MemoryPackable]
 public partial class TimeReferenceRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public DateTime DateValue;
 }
 
 [MemoryPackable]
 public partial class TimeStackRewardRecord
 {
-    public Int32 Id;
+    public int Id;
     public ArenaType ArenaType;
     public TimeRewardConditionType ConditionType;
-    public Int32 ConditionValue;
+    public int ConditionValue;
     public List<TimeStackRewardData>? TimeStackReward;
 }
 
 [MemoryPackable]
 public partial class TowerRecord
 {
-    public Int32 Id;
+    public int Id;
     public CorporationTowerType Type;
-    public Int32 Floor;
-    public Int32 MonsterStageLv;
-    public Int32 DynamicObjectStageLv;
-    public Int32 StandardBattlePower;
-    public Int32 StageStatIncreaseGroupId;
-    public Boolean IsUseQuickBattle;
-    public Boolean SpotAutocontrol;
-    public String? FieldMonsterId;
-    public String? Bg;
-    public Int32 SpotId;
-    public Int32 RewardId;
+    public int Floor;
+    public int MonsterStageLv;
+    public int DynamicObjectStageLv;
+    public int StandardBattlePower;
+    public int StageStatIncreaseGroupId;
+    public bool IsUseQuickBattle;
+    public bool SpotAutocontrol;
+    public string? FieldMonsterId;
+    public string? Bg;
+    public int SpotId;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class TransitionRecord
 {
-    public Int32 Id;
-    public String? DepartSceneCode;
-    public String? ArriveSceneCode;
-    public Int32 DepartViewType;
-    public Int32 ArriveViewType;
-    public Int32 EventId;
-    public Int32 TransitionType;
-    public Boolean IsGauge;
-    public Int32 LoadingTipGroup;
+    public int Id;
+    public string? DepartSceneCode;
+    public string? ArriveSceneCode;
+    public int DepartViewType;
+    public int ArriveViewType;
+    public int EventId;
+    public int TransitionType;
+    public bool IsGauge;
+    public int LoadingTipGroup;
     public RotationType RotationType;
 }
 
 [MemoryPackable]
 public partial class TriggerMissionEventRewardRecord
 {
-    public Int32 Id;
-    public Int32 EventId;
-    public Int32 TriggerId;
-    public Int32 EventRewardId;
+    public int Id;
+    public int EventId;
+    public int TriggerId;
+    public int EventRewardId;
 }
 
 [MemoryPackable]
 public partial class UnionRaidAllClearRewardRecord_Raw
 {
-    public Int32 Id;
+    public int Id;
     public UnionRaidNormalConditionType ConditionType;
-    public Int32 ConditionValue;
-    public String? NameLocalkey;
-    public Int32 RewardId;
+    public int ConditionValue;
+    public string? NameLocalkey;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class UnionRaidManagerRecord
 {
-    public Int32 Id;
-    public Int32 MonsterPreset;
+    public int Id;
+    public int MonsterPreset;
 }
 
 [MemoryPackable]
 public partial class UnionRaidPresetRecord
 {
-    public Int32 Id;
-    public Int32 PresetGroupId;
+    public int Id;
+    public int PresetGroupId;
     public UnionRaidDifficultyType DifficultyType;
-    public Int32 WaveOrder;
-    public Int32 Wave;
-    public Int32 WaveChangeStep;
-    public Int32 MonsterStageLv;
-    public Int32 MonsterStageLvChangeGroup;
-    public Int32 DynamicObjectStageLv;
-    public Int32 CoverStageLv;
-    public Boolean SpotAutocontrol;
-    public String? WaveName;
-    public String? WaveDescription;
-    public String? MonsterImageSi;
-    public String? MonsterImage;
-    public String? MonsterSpine;
-    public Int32 MonsterSpineScale;
-    public Int32 RewardId;
+    public int WaveOrder;
+    public int Wave;
+    public int WaveChangeStep;
+    public int MonsterStageLv;
+    public int MonsterStageLvChangeGroup;
+    public int DynamicObjectStageLv;
+    public int CoverStageLv;
+    public bool SpotAutocontrol;
+    public string? WaveName;
+    public string? WaveDescription;
+    public string? MonsterImageSi;
+    public string? MonsterImage;
+    public string? MonsterSpine;
+    public int MonsterSpineScale;
+    public int RewardId;
 }
 
 [MemoryPackable]
 public partial class UnionRaidRankingTierRecord
 {
-    public Int32 Id;
-    public Int32 Priority;
-    public String? NameLocalkey;
-    public String? DescriptionLocalkey;
+    public int Id;
+    public int Priority;
+    public string? NameLocalkey;
+    public string? DescriptionLocalkey;
     public UnionRaidRankingTier RankType;
-    public Int32 TierNumber;
-    public Int32 ResourceId;
+    public int TierNumber;
+    public int ResourceId;
     public GrantType GrantType;
-    public Int32 GrantValueMin;
-    public Int32 GrantValueMax;
-    public Int32 RewardId;
-    public Boolean IsRecording;
+    public int GrantValueMin;
+    public int GrantValueMax;
+    public int RewardId;
+    public bool IsRecording;
 }
 
 [MemoryPackable]
 public partial class UserIconRecord
 {
-    public Int32 Id;
-    public Int32 ResourceId;
-    public Int32 CostumeIndex;
-    public Int32 NameCode;
-    public String? NameLocalkey;
-    public Int32 Order;
+    public int Id;
+    public int ResourceId;
+    public int CostumeIndex;
+    public int NameCode;
+    public string? NameLocalkey;
+    public int Order;
 }
 
 [MemoryPackable]
 public partial class UserTitleAcquireConditionRecord
 {
-    public Int32 Id;
-    public Int32 UserTitleId;
-    public Int32 Order;
+    public int Id;
+    public int UserTitleId;
+    public int Order;
     public UserTitleAcquireInformationType InfoType;
-    public String? ContentsDescLocaleKey;
+    public string? ContentsDescLocaleKey;
     public List<UserTitleConditionObject>? AcquireConditionList;
 }
 
 [MemoryPackable]
 public partial class UserTitleAssemblyRecord
 {
-    public Int32 Id;
+    public int Id;
     public UserTitleAssemblyType AssemblyType;
-    public String? IconId;
-    public String? BgDecoId;
-    public String? TitleLocaleKey;
-    public String? BgColorRgb;
-    public String? TitleStrokeColorRgb;
-    public Int32 CharacterNameCode;
+    public string? IconId;
+    public string? BgDecoId;
+    public string? TitleLocaleKey;
+    public string? BgColorRgb;
+    public string? TitleStrokeColorRgb;
+    public int CharacterNameCode;
 }
 
 [MemoryPackable]
 public partial class UserTitleSingleRecord
 {
-    public Int32 Id;
-    public String? ResourceId;
+    public int Id;
+    public string? ResourceId;
 }
 
 [MemoryPackable]
 public partial class UserTitleRecord
 {
-    public Int32 Id;
-    public Int32 Order;
+    public int Id;
+    public int Order;
     public UserTitleProductionType UserTitleProductionType;
-    public Int32 UserTitleProductionId;
-    public String? IconResourceId;
-    public String? NameLocaleKey;
-    public String? DescLocaleKey;
-    public Int32 RewardId;
-    public Boolean NotAcquiredIsVisible;
+    public int UserTitleProductionId;
+    public string? IconResourceId;
+    public string? NameLocaleKey;
+    public string? DescLocaleKey;
+    public int RewardId;
+    public bool NotAcquiredIsVisible;
 }
 
 [MemoryPackable]
 public partial class ViewModeCharacterFaceListRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? AnimationName;
-    public List<Int32>? HideCharacterNameCode;
-    public List<Int32>? HideCostumeId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? AnimationName;
+    public List<int>? HideCharacterNameCode;
+    public List<int>? HideCostumeId;
 }
 
 [MemoryPackable]
 public partial class ViewModeCharacterFaceSwitchingRecord_Raw
 {
-    public Int32 Id;
-    public String? NameLocalkey;
-    public String? AnimationName;
-    public List<Int32>? SwitchingCharacterNameCode;
-    public List<Int32>? SwitchingCostumeId;
+    public int Id;
+    public string? NameLocalkey;
+    public string? AnimationName;
+    public List<int>? SwitchingCharacterNameCode;
+    public List<int>? SwitchingCostumeId;
 }
 
 [MemoryPackable]
 public partial class WaveDataRecord
 {
-    public Int32 StageId;
-    public String? GroupId;
+    public int StageId;
+    public string? GroupId;
     public SpotModType SpotMod;
     public WaveDataUIThemeType UiTheme;
-    public Int32 BattleTime;
-    public String? ModValue;
-    public Int32 MonsterCount;
-    public Boolean UseIntroScene;
-    public Boolean WaveRepeat;
-    public String? PointData;
-    public String? PointDataFly;
-    public String? BackgroundName;
+    public int BattleTime;
+    public string? ModValue;
+    public int MonsterCount;
+    public bool UseIntroScene;
+    public bool WaveRepeat;
+    public string? PointData;
+    public string? PointDataFly;
+    public string? BackgroundName;
     public ThemeType Theme;
     public ThemeTimeType ThemeTime;
-    public String? StageInfoBg;
-    public List<Int64>? TargetList;
+    public string? StageInfoBg;
+    public List<long>? TargetList;
     public List<WaveData>? WaveData;
-    public Int32 CloseMonsterCount;
-    public Int32 MidMonsterCount;
-    public Int32 FarMonsterCount;
+    public int CloseMonsterCount;
+    public int MidMonsterCount;
+    public int FarMonsterCount;
 }
 
 [MemoryPackable]
 public partial class WordRecord
 {
-    public Int32 Id;
-    public String? Group;
-    public Int32 PageNumber;
-    public Int32 Order;
+    public int Id;
+    public string? Group;
+    public int PageNumber;
+    public int Order;
     public ResourceType ResourceType;
-    public String? ResourceValue;
+    public string? ResourceValue;
 }
 
-// Enums: 
 // Additional referenced types: 
 public enum ResourceType
 {
@@ -10557,15 +10556,15 @@ public enum ResourceType
 [MemoryPackable]
 public partial class WaveData
 {
-    public String? WavePath;
-    public Int32 PrivateMonsterCount;
+    public string? WavePath;
+    public int PrivateMonsterCount;
     public List<WaveMonsterData>? WaveMonsterList;
 }
 
 [MemoryPackable]
 public partial class WaveMonsterData
 {
-    public Int64 WaveMonsterId;
+    public long WaveMonsterId;
     public MonsterSpawnType SpawnType;
 }
 
@@ -10623,8 +10622,8 @@ public enum UserTitleAssemblyType
 public partial class UserTitleConditionObject
 {
     public UserTitleAcquireConditionType ConditionType;
-    public Int32 ConditionPointValue;
-    public String? ConditionDescLocaleKey;
+    public int ConditionPointValue;
+    public string? ConditionDescLocaleKey;
 }
 
 public enum UserTitleAcquireConditionType
@@ -10698,9 +10697,9 @@ public enum RotationType
 public partial class TimeStackRewardData
 {
     public RewardType ItemType;
-    public Int32 ItemId;
-    public Int32 ItemValue;
-    public Int32 TimeSec;
+    public int ItemId;
+    public int ItemValue;
+    public int TimeSec;
 }
 
 public enum TimeRewardConditionType
@@ -10711,15 +10710,15 @@ public enum TimeRewardConditionType
 [MemoryPackable]
 public partial class support_equipment_data
 {
-    public Int32 EquipmentId;
+    public int EquipmentId;
     public CorporationType EquipmentCorp;
-    public Int32 EquipmentLevel;
+    public int EquipmentLevel;
 }
 
 [MemoryPackable]
 public partial class FunctionData
 {
-    public Int32 Function;
+    public int Function;
 }
 
 public enum GrantType
@@ -10738,7 +10737,7 @@ public enum DifficultyType
 [MemoryPackable]
 public partial class ValueData
 {
-    public String? DescriptionValue;
+    public string? DescriptionValue;
 }
 
 public enum SimulationRoomBattleDialogueType
@@ -10800,7 +10799,7 @@ public partial class SimulationRoomOcOptions
 {
     public SimulationRoomOcOptionFunction OptionFunction;
     public List<SimulationRoomOcOptionTarget>? OptionTarget;
-    public Int32 OptionValue;
+    public int OptionValue;
 }
 
 public enum SimulationRoomOcOptionTarget
@@ -10864,7 +10863,7 @@ public enum InfiniteOptionCode
 [MemoryPackable]
 public partial class OpenConditionStageData
 {
-    public Int32 OpenConditionStage;
+    public int OpenConditionStage;
 }
 
 public enum SideStoryEventCondition
@@ -10895,14 +10894,14 @@ public enum ShootingRangeType
 [MemoryPackable]
 public partial class SkillLevelList
 {
-    public Int32 SkillLevel;
+    public int SkillLevel;
 }
 
 [MemoryPackable]
 public partial class EquipmentList
 {
-    public Int32 EquipmentId;
-    public Int32 EquipmentLevel;
+    public int EquipmentId;
+    public int EquipmentLevel;
 }
 
 public enum SDCharacterAnimationShortName
@@ -10981,7 +10980,7 @@ public enum ProductOfferPopupType
 public partial class PresetTeamData
 {
     public PresetTeamType PresetTeamType;
-    public List<Int32>? PresetShooters;
+    public List<int>? PresetShooters;
 }
 
 public enum PresetTeamType
@@ -11020,9 +11019,9 @@ public partial class OutpostFunctionData
 {
     public OutpostFunctionType FunctionType;
     public FunctionValueType FunctionValueType;
-    public Int32 FunctionValue;
-    public String? FunctionTitleLocalkey;
-    public String? FunctionDescriptionLocalkey;
+    public int FunctionValue;
+    public string? FunctionTitleLocalkey;
+    public string? FunctionDescriptionLocalkey;
 }
 
 public enum OutpostFunctionType
@@ -11045,8 +11044,8 @@ public enum OutpostFunctionType
 public partial class OutpostCostData
 {
     public CostType CostType;
-    public Int32 CostId;
-    public Int32 CostValue;
+    public int CostId;
+    public int CostValue;
 }
 
 public enum CostType
@@ -11059,7 +11058,7 @@ public enum CostType
 public partial class BuildConditionData
 {
     public BuildCondition BuildConditionType;
-    public Int32 BuildConditionValue;
+    public int BuildConditionValue;
 }
 
 public enum BuildCondition
@@ -11112,9 +11111,9 @@ public enum MuseumStageModeType
 [MemoryPackable]
 public partial class SkillData
 {
-    public Int32 SkillId;
-    public List<Int32>? UseFunctionIdSkill;
-    public List<Int32>? HurtFunctionIdSkill;
+    public int SkillId;
+    public List<int>? UseFunctionIdSkill;
+    public List<int>? HurtFunctionIdSkill;
 }
 
 public enum FunctionNoneTargetType
@@ -11242,7 +11241,7 @@ public enum MessageType
 [MemoryPackable]
 public partial class MemorialMemoryID
 {
-    public Int32 MemorialMemoryId;
+    public int MemorialMemoryId;
 }
 
 public enum MemorialCategoryFormType
@@ -11306,15 +11305,15 @@ public enum MaterialType
 [MemoryPackable]
 public partial class OptionSlot
 {
-    public Int32 OptionSlots;
-    public Int32 OptionSlotSuccessRatio;
+    public int @option_slot;
+    public int OptionSlotSuccessRatio;
 }
 
 [MemoryPackable]
 public partial class StatData
 {
     public StatType StatType;
-    public Int32 StatValue;
+    public int StatValue;
 }
 
 [MemoryPackable]
@@ -11423,7 +11422,7 @@ public enum EventIslandAdventureMissionCategory
 public partial class ItemOptionData
 {
     public IslandAdventureItemOption ItemOptionGroup;
-    public Int32 ItemOptionValue;
+    public int ItemOptionValue;
 }
 
 public enum IslandAdventureItemOption
@@ -11442,7 +11441,7 @@ public enum IslandAdventureItemOption
 [MemoryPackable]
 public partial class ItemOptionLocaleData
 {
-    public String? ItemOptionLocale;
+    public string? ItemOptionLocale;
 }
 
 public enum IslandAdventureItemGroupType
@@ -11474,13 +11473,13 @@ public enum InterceptAnomalousRecommendConditionType
 [MemoryPackable]
 public partial class percent_condition_reward_group_data_Raw
 {
-    public Int32 PercentConditionRewardGroup;
+    public int PercentConditionRewardGroup;
 }
 
 [MemoryPackable]
 public partial class InfraCoreGradeData
 {
-    public Int32 Function;
+    public int Function;
 }
 
 public enum InfraCoreFunctionType
@@ -11545,10 +11544,10 @@ public enum GachaPrefabType
 [MemoryPackable]
 public partial class GachaPrice_Data
 {
-    public Int32 GachaPriceType;
-    public Int32 GachaPriceValueCount1;
-    public Int32 DailyGachaDiscountPriceValue1;
-    public Int32 GachaPriceValueCount10;
+    public int GachaPriceType;
+    public int GachaPriceValueCount1;
+    public int DailyGachaDiscountPriceValue1;
+    public int GachaPriceValueCount10;
 }
 
 public enum GachaProvideCountType
@@ -11615,8 +11614,8 @@ public enum MissionTriggerType
 [MemoryPackable]
 public partial class FixedEquipmentData
 {
-    public Int32 EquipmentId;
-    public Int32 EquipmentLevel;
+    public int EquipmentId;
+    public int EquipmentLevel;
 }
 
 public enum FixedPlayCharacterContentsType
@@ -11627,7 +11626,7 @@ public enum FixedPlayCharacterContentsType
 [MemoryPackable]
 public partial class catchable_group_list
 {
-    public Int32 CatchableGroupId;
+    public int CatchableGroupId;
 }
 
 public enum AdventureSpotOpenCondition
@@ -11663,22 +11662,22 @@ public enum SpeechWindowType
 [MemoryPackable]
 public partial class PasswordSpawnerData_Raw
 {
-    public String? PositionId;
-    public Int32 PasswordTableId;
+    public string? PositionId;
+    public int PasswordTableId;
 }
 
 [MemoryPackable]
 public partial class EventTargetSpawnerData
 {
-    public String? PositionId;
+    public string? PositionId;
 }
 
 [MemoryPackable]
 public partial class LevelTriggerData
 {
-    public String? PositionId;
+    public string? PositionId;
     public FieldSwitchType SwitchType;
-    public Boolean OnTrigger;
+    public bool OnTrigger;
 }
 
 public enum FieldSwitchType
@@ -11692,22 +11691,22 @@ public enum FieldSwitchType
 [MemoryPackable]
 public partial class PasswordDoorSpawnerData_Raw
 {
-    public String? PositionId;
-    public Int32 PasswordDoorTableId;
+    public string? PositionId;
+    public int PasswordDoorTableId;
 }
 
 [MemoryPackable]
 public partial class DoorSpawnerData
 {
-    public String? PositionId;
-    public Boolean OnTrigger;
+    public string? PositionId;
+    public bool OnTrigger;
 }
 
 [MemoryPackable]
 public partial class StageSpawnerData
 {
-    public String? PositionId;
-    public Int32 StageId;
+    public string? PositionId;
+    public int StageId;
     public QuestType EventState;
 }
 
@@ -11723,43 +11722,43 @@ public enum QuestType
 [MemoryPackable]
 public partial class QuestObjectData
 {
-    public String? PositionId;
-    public Int32 QuestObjectId;
+    public string? PositionId;
+    public int QuestObjectId;
 }
 
 [MemoryPackable]
 public partial class NPCSpawnerData
 {
-    public String? PositionId;
-    public Int32 NpcId;
+    public string? PositionId;
+    public int NpcId;
 }
 
 [MemoryPackable]
 public partial class ItemSpawnerData
 {
-    public String? PositionId;
-    public Int32 ItemId;
-    public Boolean IsCompleteReward;
+    public string? PositionId;
+    public int ItemId;
+    public bool IsCompleteReward;
 }
 
 [MemoryPackable]
 public partial class InteractionObjectData
 {
-    public String? PositionId;
-    public Int32 InteractionId;
+    public string? PositionId;
+    public int InteractionId;
 }
 
 [MemoryPackable]
 public partial class SupplyPointData
 {
-    public String? PositionId;
-    public Int32 Reinforcement;
+    public string? PositionId;
+    public int Reinforcement;
 }
 
 [MemoryPackable]
 public partial class DefaultSpawnerData
 {
-    public String? PositionId;
+    public string? PositionId;
 }
 
 public enum FieldItemObtainDifficulty
@@ -11819,7 +11818,7 @@ public enum FieldInteractionActionTriggerType
 [MemoryPackable]
 public partial class StoryEventIdListData_Raw
 {
-    public Int32 StoryEventId;
+    public int StoryEventId;
 }
 
 public enum FieldInteractionActionTriggerFieldDifficultyType
@@ -11838,15 +11837,15 @@ public enum FieldInteractionActionTriggerFieldType
 [MemoryPackable]
 public partial class FavoriteItemSkillGroupData
 {
-    public Int32 FavoriteSkillId;
+    public int FavoriteSkillId;
     public TableType SkillTable;
-    public Int32 SkillChangeSlot;
+    public int SkillChangeSlot;
 }
 
 [MemoryPackable]
 public partial class CollectionSkillGroupData
 {
-    public Int32 CollectionSkillId;
+    public int CollectionSkillId;
 }
 
 public enum FavoriteItemType
@@ -11858,14 +11857,14 @@ public enum FavoriteItemType
 [MemoryPackable]
 public partial class CollectionItemSkillLevelData
 {
-    public Int32 CollectionSkillLevel;
+    public int CollectionSkillLevel;
 }
 
 [MemoryPackable]
 public partial class FavoriteItemStatData
 {
     public StatType StatType;
-    public Int32 StatValue;
+    public int StatValue;
 }
 
 public enum FavoriteItemRare
@@ -11941,8 +11940,8 @@ public enum EventTowerDefenseTutorialType
 [MemoryPackable]
 public partial class TowerSkillListData
 {
-    public Int32 TowerSkillGroup;
-    public Int32 TowerSkillSetFirstLv;
+    public int TowerSkillGroup;
+    public int TowerSkillSetFirstLv;
 }
 
 public enum TowerDefenseHitEffectPrintType
@@ -11985,11 +11984,11 @@ public partial class SkillEffectListData
 {
     public TowerDefenseSkillEffectType SkillEffectType;
     public TowerDefenseSkillEffectTargetType SkillEffectTarget;
-    public Int32 SkillEffectTargetCount;
+    public int SkillEffectTargetCount;
     public TowerDefenseSkillEffectApplyPriorityType SkillEffectTargetPriority;
-    public Int32 SkillEffectValue;
-    public Int32 SkillEffectHoldTime;
-    public Int32 SkillEffectApplyChance;
+    public int SkillEffectValue;
+    public int SkillEffectHoldTime;
+    public int SkillEffectApplyChance;
 }
 
 public enum TowerDefenseSkillEffectApplyPriorityType
@@ -12143,7 +12142,7 @@ public enum TowerDefenseDialogOutputConditionType
 [MemoryPackable]
 public partial class MonsterSkillListData
 {
-    public Int32 MonsterSkill;
+    public int MonsterSkill;
 }
 
 public enum TowerDefenseMonsterMoveType
@@ -12161,7 +12160,7 @@ public enum TowerDefenseMonsterGradeType
 [MemoryPackable]
 public partial class MonsterSkillTypeValueListData
 {
-    public Int32 MonsterSkillTypeValue;
+    public int MonsterSkillTypeValue;
 }
 
 public enum TowerDefenseMonsterSkillType
@@ -12190,7 +12189,7 @@ public enum EventTowerDefenseMissionRewardType
 public partial class missionvaluedata
 {
     public EventTowerDefenseMissionConditionType ConditionType;
-    public Int32 ConditionValue;
+    public int ConditionValue;
 }
 
 public enum EventTowerDefenseMissionConditionType
@@ -12335,7 +12334,7 @@ public enum SBTimeLineType
 [MemoryPackable]
 public partial class UnlockConditionLocaleData_Raw
 {
-    public String? UnlockConditionLocale;
+    public string? UnlockConditionLocale;
 }
 
 public enum SBStageType
@@ -12362,7 +12361,7 @@ public enum SBRewardType
 public partial class SBOpenConditionData_Raw
 {
     public SBShopItemOpenType OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
 }
 
 public enum SBShopItemOpenType
@@ -12381,7 +12380,7 @@ public enum SBShopItemType
 [MemoryPackable]
 public partial class UseSkillData_Raw
 {
-    public Int32 SkillId;
+    public int SkillId;
 }
 
 public enum SBMonsterType
@@ -12516,8 +12515,8 @@ public enum SBMissionCategory
 public partial class SBItemOptionData_Raw
 {
     public SBItemOptionType ItemOptionGroup;
-    public Int32 ItemOptionValue;
-    public Int32 ItemOptionMaintenanceTime;
+    public int ItemOptionValue;
+    public int ItemOptionMaintenanceTime;
 }
 
 public enum SBItemOptionType
@@ -12552,7 +12551,7 @@ public enum SBItemOptionType
 [MemoryPackable]
 public partial class SBItemOptionLocale_Raw
 {
-    public String? ItemOptionLocale;
+    public string? ItemOptionLocale;
 }
 
 public enum SBItemType
@@ -12571,8 +12570,8 @@ public enum SBInGameGuideOutputType
 public partial class AffectSkillData_Raw
 {
     public SBCharacterSkillAffectSkillFactorType AffectSkillFactor;
-    public Int32 AffectFactorValue;
-    public Int32 AffectSkill;
+    public int AffectFactorValue;
+    public int AffectSkill;
 }
 
 public enum SBCharacterSkillAffectSkillFactorType
@@ -12709,8 +12708,8 @@ public enum EventRopeRunningObjectType
 [MemoryPackable]
 public partial class EventRopeRunningObjectGroupRatio_Raw
 {
-    public Int32 ObjectId;
-    public Int32 Ratio;
+    public int ObjectId;
+    public int Ratio;
 }
 
 public enum EventRopeRunningMissionType
@@ -12792,7 +12791,7 @@ public enum EventNKSTileTypeData
 [MemoryPackable]
 public partial class EventNKSTimeLineActionTypeValue
 {
-    public String? TimelineActionTypeValue;
+    public string? TimelineActionTypeValue;
 }
 
 public enum EventNKSStageTimelineActionType
@@ -12825,8 +12824,8 @@ public enum EventNKSStageTimelineActionType
 [MemoryPackable]
 public partial class DropItemData
 {
-    public Int32 DropItemId;
-    public Int32 DropItemAmount;
+    public int DropItemId;
+    public int DropItemAmount;
 }
 
 public enum EventNKSMonsterGradeType
@@ -12846,7 +12845,7 @@ public enum EventNKSMonsterColType
 [MemoryPackable]
 public partial class ActionValueData
 {
-    public Int32 ActionValue;
+    public int ActionValue;
 }
 
 public enum EventNKSMonsterActionType
@@ -12872,7 +12871,7 @@ public enum EventNKSMissionRewardTypeData
 public partial class NKSMissionValueData
 {
     public EventNKSMissionConditionTypeData ConditionType;
-    public Int32 ConditionId;
+    public int ConditionId;
 }
 
 public enum EventNKSMissionConditionTypeData
@@ -12903,7 +12902,7 @@ public enum EventNKSMissionCategoryData
 [MemoryPackable]
 public partial class DescriptionValueData
 {
-    public String? DescriptionValue;
+    public string? DescriptionValue;
 }
 
 public enum EventNKSFieldItemType
@@ -12938,7 +12937,7 @@ public enum EventNKSItemCategoryType
 [MemoryPackable]
 public partial class ItemConditionIdData
 {
-    public Int32 ItemConditionId;
+    public int ItemConditionId;
 }
 
 [MemoryPackable]
@@ -12946,7 +12945,7 @@ public partial class NKSStatData
 {
     public EventNKSItemsStatType StatType;
     public EventNKSItemsStatCalcType StatCalcType;
-    public Double StatValue;
+    public double StatValue;
 }
 
 public enum EventNKSBuffTypeData
@@ -12957,26 +12956,26 @@ public enum EventNKSBuffTypeData
 [MemoryPackable]
 public partial class EventNKSProjectileAtkRangeData
 {
-    public Int32 ProjAtkRange;
+    public int ProjAtkRange;
 }
 
 [MemoryPackable]
 public partial class EventNKSProjectileTypeValueData
 {
-    public Int32 ProjTypeValue;
+    public int ProjTypeValue;
 }
 
 [MemoryPackable]
 public partial class EventNKSGachaBonusData
 {
-    public Int32 BonusSlot;
+    public int BonusSlot;
 }
 
 [MemoryPackable]
 public partial class DialogConditionData
 {
     public EventNKSDialogConditionTypeData UseConditionType;
-    public List<Int32>? UseConditionValue;
+    public List<int>? UseConditionValue;
 }
 
 public enum EventNKSDialogConditionTypeData
@@ -12997,12 +12996,12 @@ public enum EventNKSDialogEffectTypeData
 [MemoryPackable]
 public partial class SpineResourceData
 {
-    public String? ShowSpineResourceId;
-    public String? SpineAnimResourceId;
-    public String? HideSpineResourceId;
-    public Int32 SpineResourceCordX;
-    public Int32 SpineResourceCordY;
-    public Double SpineResourceScale;
+    public string? ShowSpineResourceId;
+    public string? SpineAnimResourceId;
+    public string? HideSpineResourceId;
+    public int SpineResourceCordX;
+    public int SpineResourceCordY;
+    public double SpineResourceScale;
 }
 
 public enum EventNKSVersionType
@@ -13046,28 +13045,28 @@ public enum EventNKSItemsStatType
 [MemoryPackable]
 public partial class ModuleDefaultData
 {
-    public Int32 ModuleDefault;
+    public int ModuleDefault;
 }
 
 [MemoryPackable]
 public partial class WeaponDefaultData
 {
-    public Int32 WeaponDefault;
+    public int WeaponDefault;
 }
 
 [MemoryPackable]
 public partial class SlotItemData
 {
-    public Int32 SlotGetItem;
-    public Int32 SlotReqItem;
-    public Int32 SlotReqItemValue;
+    public int SlotGetItem;
+    public int SlotReqItem;
+    public int SlotReqItemValue;
 }
 
 [MemoryPackable]
 public partial class BallonConditionData
 {
     public EventNKSDialogConditionTypeData UseConditionType;
-    public List<Int32>? UseConditionValue;
+    public List<int>? UseConditionValue;
 }
 
 public enum EventNKSDialogPrintTypeData
@@ -13121,7 +13120,7 @@ public enum MVGTutorialConditionType
 public partial class EventMVGShopRequireCurrencyTypeData_Raw
 {
     public EventMVGCurrencyTypeData RequireCurrencyType;
-    public Int32 RequireCurrencyAmount;
+    public int RequireCurrencyAmount;
 }
 
 public enum EventMVGShopItemTypeData
@@ -13194,9 +13193,9 @@ public enum EventMVGMonsterSettinggradeTypeData
 [MemoryPackable]
 public partial class EventMVGMonsterDropListSettingData_Raw
 {
-    public Int32 DropListId;
-    public Int32 DropListRate;
-    public Int32 DropCount;
+    public int DropListId;
+    public int DropListRate;
+    public int DropCount;
 }
 
 public enum EventMVGCurrencyType
@@ -13272,7 +13271,7 @@ public enum EventMVGMissionType
 [MemoryPackable]
 public partial class EventMVGDirectorTimelineValueData_Raw
 {
-    public String? TimelineValue;
+    public string? TimelineValue;
 }
 
 public enum EventMVGDirectorTimeLineActionTypeData
@@ -13314,7 +13313,7 @@ public partial class EventMVGCharacterCustomCustomVariablesData_Raw
     public EventMVGCharacterCustomVariablesTypeData CustomVariablesType;
     public EventMVGCharactercustomVariablesSettingData CustomVariables;
     public EventMVGCharacterCustomCalcTypeData CustomCalcType;
-    public Int32 CustomValue;
+    public int CustomValue;
 }
 
 public enum EventMVGCharacterCustomCalcTypeData
@@ -13423,7 +13422,7 @@ public enum EventMVGCustomTypeMainData
 [MemoryPackable]
 public partial class EventMVGCharacterCustomActionProjTypeValueData_Raw
 {
-    public String? ProjTypeValue;
+    public string? ProjTypeValue;
 }
 
 public enum EventMVGCharacterCustomActionProjectileTypeData
@@ -13451,7 +13450,7 @@ public enum EventMVGCharacterCustomActionMuzzleTypeData
 [MemoryPackable]
 public partial class EventMVGCharacterCustomActionValueData_Raw
 {
-    public String? ActionValue;
+    public string? ActionValue;
 }
 
 public enum EventMVGCharacterCustomActionTypeData
@@ -13504,8 +13503,8 @@ public enum EventGachaBoardMissionMissionCondition
 public partial class riding_contents_value
 {
     public EventFieldRidingContentsType EventFieldRidingContentsType;
-    public String? ContentsSdModel;
-    public String? ContentsModelChangeEffect;
+    public string? ContentsSdModel;
+    public string? ContentsModelChangeEffect;
 }
 
 public enum EventFieldRidingContentsType
@@ -13562,15 +13561,15 @@ public enum EventTargetEventType
 [MemoryPackable]
 public partial class first_reward_Raw
 {
-    public Int32 FirstRewardId;
-    public Int32 FirstRewardNum;
+    public int FirstRewardId;
+    public int FirstRewardNum;
 }
 
 [MemoryPackable]
 public partial class fix_reward_Raw
 {
-    public Int32 FixRewardId;
-    public Int32 FixRewardNum;
+    public int FixRewardId;
+    public int FixRewardNum;
 }
 
 public enum EvaStageType
@@ -13583,7 +13582,7 @@ public enum EvaStageType
 [MemoryPackable]
 public partial class need_skill_Raw
 {
-    public Int32 NeedSkillId;
+    public int NeedSkillId;
 }
 
 public enum EvaSkillEffectType
@@ -13650,8 +13649,8 @@ public enum EvaBookType
 [MemoryPackable]
 public partial class PresetGroupData_Raw
 {
-    public Int32 PresetGroupId;
-    public Int32 PresetGroupRatio;
+    public int PresetGroupId;
+    public int PresetGroupRatio;
 }
 
 public enum EventDragonDungeonRunKnockBackDirection
@@ -13719,13 +13718,13 @@ public enum EventDragonDungeonRunCharacterUnlockType
 [MemoryPackable]
 public partial class DiceClearScenarioGroupData
 {
-    public String? ClearScenarioGroupId;
+    public string? ClearScenarioGroupId;
 }
 
 [MemoryPackable]
 public partial class DiceClearRewardData
 {
-    public Int32 ClearRewardId;
+    public int ClearRewardId;
 }
 
 public enum DiceEventEventType
@@ -13770,39 +13769,39 @@ public enum EventDatingSimRelationResultEventType
 [MemoryPackable]
 public partial class RelationAppearSelectionConditionListData
 {
-    public String? EventConditionSelectionEvent;
+    public string? EventConditionSelectionEvent;
 }
 
 [MemoryPackable]
 public partial class RelationAppearDialogConditionListData
 {
-    public String? EventConditionDialogEvent;
+    public string? EventConditionDialogEvent;
 }
 
 [MemoryPackable]
 public partial class RelationAppearHeroineConditionListData
 {
-    public String? ConditionTargetHeroine;
-    public Int32 EventConditionRelationLv;
-    public Int32 EventConditionRelationPoint;
+    public string? ConditionTargetHeroine;
+    public int EventConditionRelationLv;
+    public int EventConditionRelationPoint;
 }
 
 [MemoryPackable]
 public partial class RelationSubtitleLVListData
 {
-    public String? RelationSubtitleLv;
+    public string? RelationSubtitleLv;
 }
 
 [MemoryPackable]
 public partial class IsGroupEventRelationLVListData
 {
-    public Boolean IsGroupEventRelationLv;
+    public bool IsGroupEventRelationLv;
 }
 
 [MemoryPackable]
 public partial class HeroineIdListData
 {
-    public String? HeroineId;
+    public string? HeroineId;
 }
 
 public enum EventDatingSimTime
@@ -13870,7 +13869,7 @@ public enum CE004StageSeedType
 public partial class CE004OpenConditionTypeGroupData_Raw
 {
     public CE004StageOpenConditionType OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
 }
 
 public enum CE004StageOpenConditionType
@@ -14026,7 +14025,7 @@ public enum CE002MiniGameMonsterType
 public partial class EventCE002MiniGameDataOpenConditionObject
 {
     public EventCE002MiniGameDataOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
 }
 
 public enum EventCE002MiniGameDataOpenCondition
@@ -14069,9 +14068,9 @@ public enum EBMSummonTimeRepeatType
 [MemoryPackable]
 public partial class EBMSummonGroupData_Raw
 {
-    public Int32 SummonPosition;
-    public Int32 SummonMonster;
-    public Int32 MonsterLevelAdd;
+    public int SummonPosition;
+    public int SummonMonster;
+    public int MonsterLevelAdd;
 }
 
 public enum EBMDifficultyType
@@ -14216,7 +14215,7 @@ public enum BTGSkillType
 [MemoryPackable]
 public partial class ObjectId_Raw
 {
-    public Int32 ObjectId;
+    public int ObjectId;
 }
 
 public enum EventBTGMissionConditionType
@@ -14237,19 +14236,19 @@ public partial class SkillData02_Raw
     public EventBHWeaponSkillType SkillType02;
     public List<SkillValueData02_Raw>? SkillValue02;
     public List<SkillResourceData02_Raw>? SkillResource02;
-    public String? SkillDescriptionLocale02;
+    public string? SkillDescriptionLocale02;
 }
 
 [MemoryPackable]
 public partial class SkillResourceData02_Raw
 {
-    public String? SkillResource02;
+    public string? SkillResource02;
 }
 
 [MemoryPackable]
 public partial class SkillValueData02_Raw
 {
-    public Int32 SkillValue02;
+    public int SkillValue02;
 }
 
 public enum EventBHWeaponSkillType
@@ -14285,19 +14284,19 @@ public partial class SkillData01_Raw
     public EventBHWeaponSkillType SkillType01;
     public List<SkillValueData01_Raw>? SkillValue01;
     public List<SkillResourceData01_Raw>? SkillResource01;
-    public String? SkillDescriptionLocale01;
+    public string? SkillDescriptionLocale01;
 }
 
 [MemoryPackable]
 public partial class SkillResourceData01_Raw
 {
-    public String? SkillResource01;
+    public string? SkillResource01;
 }
 
 [MemoryPackable]
 public partial class SkillValueData01_Raw
 {
-    public Int32 SkillValue01;
+    public int SkillValue01;
 }
 
 public enum EventBHWeaponTagType
@@ -14329,7 +14328,7 @@ public enum EventBHWeaponType
 [MemoryPackable]
 public partial class SlotData_Raw
 {
-    public Int32 Slot;
+    public int Slot;
 }
 
 public enum BHTutorialOutputType
@@ -14342,7 +14341,7 @@ public enum BHTutorialOutputType
 [MemoryPackable]
 public partial class PassiveSkillValueData_Raw
 {
-    public Int32 SkillValue;
+    public int SkillValue;
 }
 
 public enum BHPassiveSkillType
@@ -14381,7 +14380,7 @@ public enum BHPassiveType
 [MemoryPackable]
 public partial class MonsterSkillValueData_Raw
 {
-    public Int32 MonsterSkillValue;
+    public int MonsterSkillValue;
 }
 
 public enum BHMonsterSkillType
@@ -14412,19 +14411,19 @@ public enum EventBHConditionType
 [MemoryPackable]
 public partial class InventorySlotData_Raw
 {
-    public Int32 Slot;
+    public int Slot;
 }
 
 [MemoryPackable]
 public partial class SkillResourceData_Raw
 {
-    public String? SkillResource;
+    public string? SkillResource;
 }
 
 [MemoryPackable]
 public partial class BHSkillValueData_Raw
 {
-    public Int32 SkillValue;
+    public int SkillValue;
 }
 
 public enum BHCharacterSkillType
@@ -14436,8 +14435,8 @@ public enum BHCharacterSkillType
 [MemoryPackable]
 public partial class StateEffectList
 {
-    public Int32 StateEffectId;
-    public Int32 StateEffectLevel;
+    public int StateEffectId;
+    public int StateEffectLevel;
 }
 
 public enum EchoDialogTriggerType
@@ -14464,7 +14463,7 @@ public partial class DispatchGrade_Data
 {
     public DispatchSlotType DispatchSlotType;
     public OriginalRareType Rare;
-    public Int32 SlotValue;
+    public int SlotValue;
 }
 
 public enum DispatchSlotType
@@ -14486,8 +14485,8 @@ public enum SelectType
 [MemoryPackable]
 public partial class DispatchBoardData
 {
-    public Int32 DispatchGroup;
-    public Int32 DispatchProb;
+    public int DispatchGroup;
+    public int DispatchProb;
 }
 
 public enum DispatchType
@@ -14527,8 +14526,8 @@ public enum EventPhaseType
 public partial class CostData
 {
     public RewardType ItemType;
-    public Int32 ItemId;
-    public Int32 ItemValue;
+    public int ItemId;
+    public int ItemValue;
 }
 
 public enum CooperationEventContentsType
@@ -14695,7 +14694,7 @@ public enum DurationType
 public partial class SkillValueData
 {
     public SkillValueType SkillValueType;
-    public Int64 SkillValue;
+    public long SkillValue;
 }
 
 public enum SkillValueType
@@ -14798,8 +14797,8 @@ public enum OpenType
 [MemoryPackable]
 public partial class bot_equipment_data
 {
-    public Int32 EquipmentId;
-    public Int32 EquipmentLevel;
+    public int EquipmentId;
+    public int EquipmentLevel;
 }
 
 public enum BotCategory
@@ -14930,7 +14929,7 @@ public enum ShortCutsInteractionType
 public partial class ArchiveMessengerConditionObject
 {
     public ArchiveMessengerConditionType ConditionType;
-    public Int32 ConditionId;
+    public int ConditionId;
 }
 
 public enum ArchiveMessengerConditionType
@@ -15000,7 +14999,7 @@ public enum EventSystemType
 public partial class EventFieldCurrencyData
 {
     public EventFieldCurrencyType EventFieldCurrencyType;
-    public Int32 EventFieldCurrencyId;
+    public int EventFieldCurrencyId;
 }
 
 public enum EventFieldCurrencyType
@@ -15024,9 +15023,9 @@ public enum EventFieldRoamingNPCType
 [MemoryPackable]
 public partial class ArchiveEventFieldNPCEventData
 {
-    public Int32 EventId;
+    public int EventId;
     public EventFieldChildEventType EventType;
-    public String? EventResourceValue;
+    public string? EventResourceValue;
 }
 
 public enum EventFieldChildEventType
@@ -15065,7 +15064,7 @@ public enum QuickBattleType
 public partial class EventDungeonOpenConditionObject
 {
     public EventDungeonOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
 }
 
 public enum EventDungeonOpenCondition
@@ -15104,9 +15103,9 @@ public enum EventFieldNPCInteractionType
 [MemoryPackable]
 public partial class EventFieldNPCEventData
 {
-    public Int32 EventId;
+    public int EventId;
     public EventFieldChildEventType EventType;
-    public String? EventResourceValue;
+    public string? EventResourceValue;
 }
 
 public enum EventFieldNPCType
@@ -15143,8 +15142,8 @@ public enum FieldProgressEventTarget
 [MemoryPackable]
 public partial class SelectionEventValueListData
 {
-    public String? EventTargetHeroine;
-    public Int32 EventValue;
+    public string? EventTargetHeroine;
+    public int EventValue;
     public EventDatingSimSelectionResultGradeType EventResultGrade;
 }
 
@@ -15163,27 +15162,27 @@ public enum EventDatingSimSelectionEventType
 [MemoryPackable]
 public partial class SelectDialogConditionListData
 {
-    public String? SelectConditionDialogEvent;
+    public string? SelectConditionDialogEvent;
 }
 
 [MemoryPackable]
 public partial class SelectConditionListData
 {
-    public String? ConditionTargetHeroine;
-    public Int32 SelectConditionRelationLv;
-    public Int32 SelectConditionRelationPoint;
+    public string? ConditionTargetHeroine;
+    public int SelectConditionRelationLv;
+    public int SelectConditionRelationPoint;
 }
 
 [MemoryPackable]
 public partial class DialogAppearSelectionConditionListData
 {
-    public String? EventConditionSelectionEvent;
+    public string? EventConditionSelectionEvent;
 }
 
 [MemoryPackable]
 public partial class DialogAppearDialogConditionListData
 {
-    public String? EventConditionDialogEvent;
+    public string? EventConditionDialogEvent;
 }
 
 public enum CooperationEventReportType
@@ -15197,8 +15196,8 @@ public partial class buff_data
 {
     public CooperationBuffTargetCategoryType BuffTargetType;
     public CooperationBuffTargetType BuffTarget;
-    public Int32 BuffId;
-    public String? BuffThumbnail;
+    public int BuffId;
+    public string? BuffThumbnail;
 }
 
 public enum CooperationBuffTargetType
@@ -15228,8 +15227,8 @@ public enum EventType
 public partial class TriggerData
 {
     public Trigger Trigger;
-    public Int32 ConditionId;
-    public Int32 ConditionValue;
+    public int ConditionId;
+    public int ConditionValue;
 }
 
 public enum TypeOpenCondition
@@ -15241,7 +15240,7 @@ public enum TypeOpenCondition
 public partial class LessonConditionData
 {
     public LessonConditionType ConditionType;
-    public Int32 ConditionValue;
+    public int ConditionValue;
 }
 
 public enum LessonConditionType
@@ -15260,8 +15259,8 @@ public enum LessonConditionType
 [MemoryPackable]
 public partial class LessonRewardData
 {
-    public Int32 LessonRewardId;
-    public Int32 LessonRewardValue;
+    public int LessonRewardId;
+    public int LessonRewardValue;
 }
 
 public enum LessonType
@@ -15280,11 +15279,11 @@ public enum LessonType
 [MemoryPackable]
 public partial class OutpostBattle_Data
 {
-    public Int32 ViewItemId;
+    public int ViewItemId;
     public PrepareRewardType ItemType;
-    public Int32 ItemId;
-    public Int32 ItemValue;
-    public Int32 TimeSec;
+    public int ItemId;
+    public int ItemValue;
+    public int TimeSec;
 }
 
 public enum PrepareRewardType
@@ -15469,19 +15468,19 @@ public enum ShopBuyLimitType
 public partial class HarmonyCubeStatData
 {
     public StatType StatType;
-    public Int32 StatRate;
+    public int StatRate;
 }
 
 [MemoryPackable]
 public partial class SkillLevelData
 {
-    public Int32 SkillLevel;
+    public int SkillLevel;
 }
 
 [MemoryPackable]
 public partial class HarmonyCubeSkillGroupData
 {
-    public Int32 SkillGroupId;
+    public int SkillGroupId;
 }
 
 public enum CharacterClassType
@@ -16416,7 +16415,7 @@ public enum ChapterMod
 public partial class OpenConditionData
 {
     public ContentsOpenCondition OpenConditionType;
-    public Int32 OpenConditionValue;
+    public int OpenConditionValue;
 }
 
 public enum ContentsOpenCondition
@@ -16711,13 +16710,13 @@ public enum ContentsTutorialSubGroup
     SoloRaid = 15
 }
 [MemoryPackable]
-public partial class RewardEntry
+public partial class Reward_Data
 {
-    public Int32 RewardPercent;
+    public int RewardPercent;
     public PercentDisplayType PercentDisplayType;
     public RewardType RewardType;
-    public Int32 RewardId;
-    public Int32 RewardValue;
+    public int RewardId;
+    public int RewardValue;
 }
 
 public enum ScenarioType
@@ -16802,18 +16801,17 @@ public enum FilterType
 [MemoryPackable]
 public partial class ScenarioEffectData
 {
-    public String? PlayEffectId;
-    public String? StopEffectId;
-    public String? SetEffectPosition;
-    public Boolean IsEffectMovable;
+    public string? PlayEffectId;
+    public string? StopEffectId;
+    public string? SetEffectPosition;
+    public bool IsEffectMovable;
 }
 
 [MemoryPackable]
 public partial class ScenarioCharacterData
 {
-    public String? ShowCharId;
-    public String? HideCharId;
-    public String? SetCharPosition;
-    public String? SetCharAnim;
+    public string? ShowCharId;
+    public string? HideCharId;
+    public string? SetCharPosition;
+    public string? SetCharAnim;
 }
-

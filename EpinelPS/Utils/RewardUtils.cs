@@ -68,7 +68,7 @@ namespace EpinelPS.Utils
                 user.userPointData.UserLevel = newLevel;
             }
 
-            foreach (RewardEntry item in rewardData.Rewards)
+            foreach (var item in rewardData.Rewards)
             {
                 if (item.RewardType != RewardType.None)
                 {
