@@ -414,7 +414,7 @@ namespace EpinelPS.Utils
                     Logging.WriteLine("TODO: reward_value_max", LogType.Warning);
                 }
 
-                if (winningRecord.reward_type == "Currency")
+                if (winningRecord.reward_type == RewardType.Currency)
                     RewardUtils.AddSingleCurrencyObject(user, ref ret, (CurrencyType)winningRecord.reward_id, winningRecord.reward_value_min);
                 else
                     RewardUtils.AddSingleObject(user, ref ret, winningRecord.reward_id, winningRecord.reward_type, winningRecord.reward_value_min);

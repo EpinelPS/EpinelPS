@@ -29,7 +29,7 @@ namespace EpinelPS.LobbyServer.Trigger
                     user.MainQuestData[item.Key] = true;
 
                     MainQuestCompletionRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest id " + item.Key);
-                    RewardTableRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id) ?? throw new Exception("failed to lookup reward id " + questInfo.reward_id);
+                    RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id) ?? throw new Exception("failed to lookup reward id " + questInfo.reward_id);
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
                 }
             }

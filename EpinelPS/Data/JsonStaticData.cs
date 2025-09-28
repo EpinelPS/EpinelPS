@@ -134,13 +134,55 @@ namespace EpinelPS.Data
         public int characterLevel;
     }
     [MemoryPackable]
-    public partial class RewardTableRecord
+    public partial class RewardRecord
     {
         public int id;
         public int user_exp;
         public int character_exp;
-        public RewardEntry[]? rewards;
+        public List<RewardEntry> rewards = [];
     }
+
+    public enum PercentDisplayType
+    {
+        None,
+        Percent,
+        Random
+    }
+    public enum RewardType
+    {
+        None = 0,
+        User_exp = 1,
+        Char_exp = 2,
+        Currency = 3,
+        Character = 4,
+        Item = 5,
+        Frame = 6,
+        AttractivePoint = 7,
+        Bgm = 8,
+        Point = 9,
+        LiveWallpaper = 10,
+        Memorial = 11,
+        CharacterCostume = 12,
+        ItemRandom = 13,
+        InfraCoreExp = 14,
+        ItemRandomBox = 15,
+        Equipment_None = 16,
+        Equipment_MISSILIS = 17,
+        Equipment_ELYSION = 18,
+        Equipment_TETRA = 19,
+        Equipment_PILGRIM = 20,
+        Equipment_Random_01 = 21,
+        Equipment_Random_02 = 22,
+        Equipment_Random_03 = 23,
+        PassPoint = 41,
+        Equipment_ABNORMAL = 42,
+        FavoriteItem = 43,
+        ProfileCardObject = 44,
+        ProfileRandomBox = 45,
+        UserTitle = 46,
+        LobbyDecoBackground = 47
+    }
+
 
     [MemoryPackable]
     public partial class RewardEntry
@@ -149,8 +191,8 @@ namespace EpinelPS.Data
         /// example: 1000000
         /// </summary>
         public int reward_percent;
-        public string percent_display_type = "";
-        public string reward_type = "";
+        public PercentDisplayType percent_display_type;
+        public RewardType reward_type;
         public int reward_id;
         public int reward_value;
     }
@@ -202,12 +244,33 @@ namespace EpinelPS.Data
         public string lesson_type = "";
         public TacticAcademyLessonReward[]? lesson_reward;
     }
+    public enum OpenType
+    {
+        Open,
+        NonUpdate
+    }
+
+    public enum ChapterGuideType
+    {
+        None,
+        Tutorial,
+        Common
+    }
+
 
     [MemoryPackable]
     public partial class CampaignChapterRecord
     {
         public int id;
+        public string name_localized = "";
+        public string description_localized = "";
+        public int world;
         public int chapter;
+        public OpenType openType;
+        public DateTime openTime;
+        public ChapterGuideType chapter_guide;
+        public string chapter_image = "";
+        public string hard_chapter_image = "";
         public string field_id = "";
         public string hard_field_id = "";
     }
@@ -878,7 +941,7 @@ namespace EpinelPS.Data
     {
         public int id;
         public int group_id;
-        public string reward_type = "";
+        public RewardType reward_type;
         public int reward_id;
         public int reward_value_min;
         public int reward_value_max;

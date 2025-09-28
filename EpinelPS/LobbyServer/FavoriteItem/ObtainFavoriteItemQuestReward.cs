@@ -39,8 +39,8 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 characterCsn = character.Csn;
             }
 
-            RewardTableRecord ? reward = GameData.Instance.GetRewardTableEntry(questData.reward_id);
-            if (reward?.rewards == null || reward.rewards.Length == 0 || reward.rewards[0].reward_type != "FavoriteItem")
+            RewardRecord ? reward = GameData.Instance.GetRewardTableEntry(questData.reward_id);
+            if (reward?.rewards == null || reward.rewards.Count == 0 || reward.rewards[0].reward_type != RewardType.FavoriteItem)
             {
                 if (questData.reward_id > 0 && reward != null)
                 {

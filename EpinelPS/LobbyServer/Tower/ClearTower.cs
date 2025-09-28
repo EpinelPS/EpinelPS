@@ -63,7 +63,7 @@ namespace EpinelPS.LobbyServer.Tower
                 user.AddTrigger(TriggerType.TowerBasicClear, TowerId);
             }
 
-            RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
+            RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
 

@@ -38,7 +38,7 @@ namespace EpinelPS.LobbyServer.Campaign
             ItemSpawner position = map.ItemSpawner.Where(x => x.positionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position id");
 
             FieldItemRecord positionReward = GameData.Instance.FieldItems[position.itemId];
-            RewardTableRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
+            RewardRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
             // Hide it from the field

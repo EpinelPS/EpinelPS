@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
                 {
                     foreach (var rewardEntry in GameData.Instance.RewardDataRecords[quest.reward_id].rewards ??= [])
                     {
-                        if (!string.IsNullOrEmpty(rewardEntry.reward_type))
+                        if (rewardEntry.reward_type != RewardType.None)
                         {
                             switch (rewardEntry.reward_id)
                             {

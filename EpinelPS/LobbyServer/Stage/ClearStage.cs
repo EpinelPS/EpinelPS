@@ -42,7 +42,7 @@ namespace EpinelPS.LobbyServer.Stage
             }
 
             DoQuestSpecificUserOperations(user, StageId);
-            RewardTableRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
+            RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
 
             if (forceCompleteScenarios)
             {

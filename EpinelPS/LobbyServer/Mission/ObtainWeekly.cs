@@ -29,7 +29,7 @@ namespace EpinelPS.LobbyServer.Mission
                 if (key.reward_id != 0)
                 {
                     // Actual reward
-                    RewardTableRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                    RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
                 }
                 else

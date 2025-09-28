@@ -44,7 +44,7 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, CampaignStageRecord> StageDataRecords = [];
 
         [LoadRecord("RewardTable.json", "id")]
-        public readonly Dictionary<int, RewardTableRecord> RewardDataRecords = [];
+        public readonly Dictionary<int, RewardRecord> RewardDataRecords = [];
 
         [LoadRecord("UserExpTable.json", "level")]
         public readonly Dictionary<int, UserExpRecord> UserExpDataRecords = [];
@@ -518,7 +518,7 @@ namespace EpinelPS.Data
         {
             return StageDataRecords[stage];
         }
-        public RewardTableRecord? GetRewardTableEntry(int rewardId)
+        public RewardRecord? GetRewardTableEntry(int rewardId)
         {
             return RewardDataRecords[rewardId];
         }

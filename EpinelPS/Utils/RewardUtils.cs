@@ -9,10 +9,10 @@ namespace EpinelPS.Utils
     {
         public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
         {
-            RewardTableRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
+            RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
             return RegisterRewardsForUser(user, rewardData);
         }
-        public static NetRewardData RegisterRewardsForUser(User user, RewardTableRecord rewardData)
+        public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData)
         {
             NetRewardData ret = new()
             {
@@ -70,7 +70,7 @@ namespace EpinelPS.Utils
 
             foreach (RewardEntry item in rewardData.rewards)
             {
-                if (!string.IsNullOrEmpty(item.reward_type))
+                if (item.reward_type != RewardType.None)
                 {
                     if (item.reward_percent != 1000000)
                     {
@@ -111,174 +111,173 @@ namespace EpinelPS.Utils
         /// <param name="rewardType"></param>
         /// <param name="rewardCount"></param>
         /// <exception cref="Exception"></exception>
-        public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, string rewardType, int rewardCount)
+        public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
         {
-            if (rewardId != 0 || !string.IsNullOrEmpty(rewardType))
+            if (rewardId == 0 || rewardType == RewardType.None) return;
+
+            if (rewardType == RewardType.Currency)
             {
-                if (string.IsNullOrEmpty(rewardType) || string.IsNullOrWhiteSpace(rewardType)) { }
-                else if (rewardType == "Currency")
+                AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
+            }
+            else if (rewardType == RewardType.Item || 
+                rewardType.ToString().StartsWith("Equipment_"))
+            {
+                // Check if user already has said item. If it is level 1, increase item count.
+                // If user does not have item, generate a new item ID
+                if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
                 {
-                    AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
-                }
-                else if (rewardType == "Item" || rewardType.StartsWith("Equipment_"))
-                {
-                    // Check if user already has said item. If it is level 1, increase item count.
-                    // If user does not have item, generate a new item ID
-                    if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
+                    ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).FirstOrDefault();
+                    if (newItem != null)
                     {
-                        ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).FirstOrDefault();
-                        if (newItem != null)
-                        {
-                            newItem.Count += rewardCount;
+                        newItem.Count += rewardCount;
 
-                            // Tell the client the reward and its amount
-                            ret.Item.Add(new NetItemData()
-                            {
-                                Count = rewardCount,
-                                Tid = rewardId,
-                                //Isn = newItem.Isn
-                            });
-
-                            // Tell the client the new amount of this item
-                            ret.UserItems.Add(new NetUserItemData()
-                            {
-                                Isn = newItem.Isn,
-                                Tid = newItem.ItemType,
-                                Count = newItem.Count
-                            });
-                        }
-                        else
-                        {
-                            throw new Exception("should not occur");
-                        }
-                    }
-                    else
-                    {
-
-                        int id = user.GenerateUniqueItemId();
-                        user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
+                        // Tell the client the reward and its amount
                         ret.Item.Add(new NetItemData()
                         {
                             Count = rewardCount,
                             Tid = rewardId,
-                            //Isn = id
+                            //Isn = newItem.Isn
                         });
 
-                        // Tell the client the new amount of this item (which is the same as user did not have item previously)
+                        // Tell the client the new amount of this item
                         ret.UserItems.Add(new NetUserItemData()
                         {
-                            Isn = id,
-                            Tid = rewardId,
-                            Count = rewardCount
+                            Isn = newItem.Isn,
+                            Tid = newItem.ItemType,
+                            Count = newItem.Count
                         });
-                    }
-                }
-                else if (rewardType == "Memorial")
-                {
-                    if (!user.Memorial.Contains(rewardId))
-                    {
-                        ret.Memorial.Add(rewardId);
-                        user.Memorial.Add(rewardId);
-                    }
-                }
-                else if (rewardType == "Bgm")
-                {
-                    if (!user.JukeboxBgm.Contains(rewardId))
-                    {
-                        ret.JukeboxBgm.Add(rewardId);
-                        user.JukeboxBgm.Add(rewardId);
-                    }
-                }
-                else if (rewardType == "InfraCoreExp")
-                {
-                    int beforeLv = user.InfraCoreLvl;
-                    int beforeExp = user.InfraCoreExp;
-
-                    user.InfraCoreExp += rewardCount;
-                    
-                    // Check for level ups
-                    Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
-                    int newLevel = user.InfraCoreLvl;
-                    
-                    foreach (InfracoreRecord grade in gradeTable.Values.OrderBy(g => g.grade))
-                    {
-                        if (user.InfraCoreExp >= grade.infra_core_exp)
-                        {
-                            newLevel = grade.grade + 1;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    
-                    if (newLevel > user.InfraCoreLvl)
-                    {
-                        user.InfraCoreLvl = newLevel;
-                    }
-                    
-                    ret.InfraCoreExp = new NetIncreaseExpData()
-                    {
-                        BeforeLv = beforeLv,
-                        BeforeExp = beforeExp,
-                        CurrentLv = user.InfraCoreLvl,
-                        CurrentExp = user.InfraCoreExp,
-                        GainExp = rewardCount
-                    };
-                }
-                else if (rewardType == "ItemRandomBox")
-                {
-                    ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == rewardId).FirstOrDefault().Value;
-
-                    if (cItem.item_sub_type == ItemSubType.ItemRandomBoxList)
-                    {
-                        NetRewardData reward = NetUtils.UseLootBox(user, rewardId, rewardCount);
-
-                        ret = NetUtils.MergeRewards([ret, reward], user);
                     }
                     else
                     {
-                        NetItemData itm = new()
-                        {
-                            Count = rewardCount,
-                            Tid = cItem.id,
-                            Isn = user.GenerateUniqueItemId()
-                        };
-                        ret.Item.Add(itm);
-
-                        user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
+                        throw new Exception("should not occur");
                     }
-                }
-                else if (rewardType == "FavoriteItem")
-                {
-
-                    NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
-                    {
-                        FavoriteItemId = user.GenerateUniqueItemId(),
-                        Tid = rewardId,
-                        Csn = 0, 
-                        Lv = 0,  
-                        Exp = 0  
-                    };
-                    user.FavoriteItems.Add(newFavoriteItem);
-
-                    ret.UserFavoriteItems.Add(newFavoriteItem);
-
-                    NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
-                    {
-                        FavoriteItemId = newFavoriteItem.FavoriteItemId,
-                        Tid = newFavoriteItem.Tid,
-                        Csn = newFavoriteItem.Csn,
-                        Lv = newFavoriteItem.Lv,
-                        Exp = newFavoriteItem.Exp
-                    };
-                    ret.FavoriteItems.Add(favoriteItemData);
-
                 }
                 else
                 {
-                    Logging.WriteLine("TODO: Reward type " + rewardType, LogType.Warning);
+
+                    int id = user.GenerateUniqueItemId();
+                    user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
+                    ret.Item.Add(new NetItemData()
+                    {
+                        Count = rewardCount,
+                        Tid = rewardId,
+                        //Isn = id
+                    });
+
+                    // Tell the client the new amount of this item (which is the same as user did not have item previously)
+                    ret.UserItems.Add(new NetUserItemData()
+                    {
+                        Isn = id,
+                        Tid = rewardId,
+                        Count = rewardCount
+                    });
                 }
+            }
+            else if (rewardType == RewardType.Memorial)
+            {
+                if (!user.Memorial.Contains(rewardId))
+                {
+                    ret.Memorial.Add(rewardId);
+                    user.Memorial.Add(rewardId);
+                }
+            }
+            else if (rewardType == RewardType.Bgm)
+            {
+                if (!user.JukeboxBgm.Contains(rewardId))
+                {
+                    ret.JukeboxBgm.Add(rewardId);
+                    user.JukeboxBgm.Add(rewardId);
+                }
+            }
+            else if (rewardType == RewardType.InfraCoreExp)
+            {
+                int beforeLv = user.InfraCoreLvl;
+                int beforeExp = user.InfraCoreExp;
+
+                user.InfraCoreExp += rewardCount;
+
+                // Check for level ups
+                Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
+                int newLevel = user.InfraCoreLvl;
+
+                foreach (InfracoreRecord grade in gradeTable.Values.OrderBy(g => g.grade))
+                {
+                    if (user.InfraCoreExp >= grade.infra_core_exp)
+                    {
+                        newLevel = grade.grade + 1;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (newLevel > user.InfraCoreLvl)
+                {
+                    user.InfraCoreLvl = newLevel;
+                }
+
+                ret.InfraCoreExp = new NetIncreaseExpData()
+                {
+                    BeforeLv = beforeLv,
+                    BeforeExp = beforeExp,
+                    CurrentLv = user.InfraCoreLvl,
+                    CurrentExp = user.InfraCoreExp,
+                    GainExp = rewardCount
+                };
+            }
+            else if (rewardType == RewardType.ItemRandomBox)
+            {
+                ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == rewardId).FirstOrDefault().Value;
+
+                if (cItem.item_sub_type == ItemSubType.ItemRandomBoxList)
+                {
+                    NetRewardData reward = NetUtils.UseLootBox(user, rewardId, rewardCount);
+
+                    ret = NetUtils.MergeRewards([ret, reward], user);
+                }
+                else
+                {
+                    NetItemData itm = new()
+                    {
+                        Count = rewardCount,
+                        Tid = cItem.id,
+                        Isn = user.GenerateUniqueItemId()
+                    };
+                    ret.Item.Add(itm);
+
+                    user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
+                }
+            }
+            else if (rewardType == RewardType.FavoriteItem)
+            {
+
+                NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+                {
+                    FavoriteItemId = user.GenerateUniqueItemId(),
+                    Tid = rewardId,
+                    Csn = 0,
+                    Lv = 0,
+                    Exp = 0
+                };
+                user.FavoriteItems.Add(newFavoriteItem);
+
+                ret.UserFavoriteItems.Add(newFavoriteItem);
+
+                NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
+                {
+                    FavoriteItemId = newFavoriteItem.FavoriteItemId,
+                    Tid = newFavoriteItem.Tid,
+                    Csn = newFavoriteItem.Csn,
+                    Lv = newFavoriteItem.Lv,
+                    Exp = newFavoriteItem.Exp
+                };
+                ret.FavoriteItems.Add(favoriteItemData);
+
+            }
+            else
+            {
+                Logging.WriteLine("TODO: Reward type " + rewardType, LogType.Warning);
             }
         }
     }

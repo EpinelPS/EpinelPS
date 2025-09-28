@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.Messenger
             KeyValuePair<int, SubquestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
             KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.id == req.MessageId).First();
 
-            RewardTableRecord rewardRecord = GameData.Instance.GetRewardTableEntry(conversation.Value.reward_id) ?? throw new Exception("unable to lookup reward");
+            RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(conversation.Value.reward_id) ?? throw new Exception("unable to lookup reward");
 
             user.SetSubQuest(req.SubQuestId, true);
 

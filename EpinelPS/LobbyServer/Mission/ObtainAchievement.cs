@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Mission
 
                 if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-                RewardTableRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
 
                 NetRewardData reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
                 rewards.Add(reward);
