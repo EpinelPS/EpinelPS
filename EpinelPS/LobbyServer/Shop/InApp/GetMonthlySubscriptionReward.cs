@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Shop.InApp
 
             ResGetMonthlySubscriptionReward response = new();
 
-            // TODO: Validate response from real server
+            // TODO: ValIdate response from real server
             await WriteDataAsync(response);
         }
     }

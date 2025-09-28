@@ -24,16 +24,16 @@ namespace EpinelPS.LobbyServer.Lostsector
 
 
             // Get map info
-            MapInfo map = GameData.Instance.MapData[GameData.Instance.LostSector[req.SectorId].field_id];
+            var map = GameData.Instance.MapData[GameData.Instance.LostSector[req.SectorId].FieldId];
 
             // find reward
-            ItemSpawner rewardEntry = map.ItemSpawner.Where(x => x.positionId == req.Object.PositionId).FirstOrDefault() ?? throw new Exception("cannot find reward");
+            var rewardEntry = map.ItemSpawner.Where(x => x.PositionId == req.Object.PositionId).FirstOrDefault() ?? throw new Exception("cannot find reward");
 
-            FieldItemRecord positionReward = GameData.Instance.FieldItems[rewardEntry.itemId];
-            response.Reward = RewardUtils.RegisterRewardsForUser(user, positionReward.type_value);
+            FieldItemRecord positionReward = GameData.Instance.FieldItems[rewardEntry.ItemId];
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, positionReward.TypeValue);
             response.BoxCount = lostSectorUser.ObtainedRewards;
 
-            if (positionReward.is_final_reward)
+            if (positionReward.IsFinalReward)
             {
                 lostSectorUser.RecievedFinalReward = true;
             }

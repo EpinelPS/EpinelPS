@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
 
             var user = GetUser();
 
-            var challengeStageId = GameData.Instance.EventPlaySodaChallengeModeTable.First(i => i.Value.game_type == EventPlaySodaGameType.Smash).Key;
+            var challengeStageId = GameData.Instance.EventPlaySodaChallengeModeTable.First(i => i.Value.GameType == EventPlaySodaGameType.Smash).Key;
 
             var arcadePlaySodaInfo = user.ArcadePlaySodaInfoList.First(i => i.ChallengeStageId == challengeStageId);
 

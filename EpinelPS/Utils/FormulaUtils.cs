@@ -9,18 +9,18 @@ namespace EpinelPS.Utils
             CharacterModel? character = user.Characters.FirstOrDefault(c => c.Csn == csn);
             if (character == null) return 0;
 
-            CharacterRecord? charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid);
+            CharacterRecord? charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.Id == character.Tid);
             if (charRecord == null) return 0;
 
-            CharacterStatRecord? statRecord = GameData.Instance.characterStatTable.Values.FirstOrDefault(s => charRecord.stat_enhance_id == s.group + (character.Level - 1));
+            CharacterStatRecord? statRecord = GameData.Instance.characterStatTable.Values.FirstOrDefault(s => charRecord.StatEnhanceId == s.Group + (character.Level - 1));
             if (statRecord == null) return 0;
 
             float coreMult = 1f + character.Grade * 0.02f;
-            float hp = statRecord.level_hp * coreMult;
-            float atk = statRecord.level_attack * coreMult;
-            float def = statRecord.level_defence * coreMult;
-            float critRate = charRecord.critical_ratio;
-            float critDamage = charRecord.critical_damage;
+            float hp = statRecord.LevelHp * coreMult;
+            float atk = statRecord.LevelAttack * coreMult;
+            float def = statRecord.LevelDefence * coreMult;
+            float critRate = charRecord.CriticalRatio;
+            float critDamage = charRecord.CriticalDamage;
             float skill1Level = character.Skill1Lvl;
             float skill2Level = character.Skill2Lvl;
             float ultSkillLevel = character.UltimateLevel;

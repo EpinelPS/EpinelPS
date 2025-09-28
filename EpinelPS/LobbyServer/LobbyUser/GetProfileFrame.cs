@@ -11,9 +11,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
             ReqGetProfileFrame req = await ReadData<ReqGetProfileFrame>();
             ResGetProfileFrame response = new();
 
-            foreach (UserFrameTableRecord frameRecord in GameData.Instance.userFrameTable.Values)
+            foreach (var frameRecord in GameData.Instance.userFrameTable.Values)
             {
-                response.Frames.Add(frameRecord.id);
+                response.Frames.Add(frameRecord.Id);
             }
 
             await WriteDataAsync(response);

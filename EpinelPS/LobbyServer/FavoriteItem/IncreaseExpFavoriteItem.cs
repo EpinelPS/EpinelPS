@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
 
             if (req.ItemData == null)
             {
-                throw new BadHttpRequestException($"No material item provided", 400);
+                throw new BadHttpRequestException($"No material item provIded", 400);
             }
 
             ItemData? userItem = user.Items.FirstOrDefault(x => x.Isn == req.ItemData.Isn);
@@ -51,15 +51,15 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 throw new BadHttpRequestException($"Cannot upgrade at current level with this material", 400);
             }
 
-            int baseExp = probabilityData.exp * req.LoopCount;
-            bool isGreatSuccess = CheckGreatSuccess(probabilityData.great_success_rate);
+            int baseExp = probabilityData.Exp * req.LoopCount;
+            bool isGreatSuccess = CheckGreatSuccess(probabilityData.GreatSuccessRate);
 
             int totalExpGained = baseExp;
             int targetLevel = favoriteItem.Lv;
 
             if (isGreatSuccess)
             {
-                targetLevel = probabilityData.great_success_level;
+                targetLevel = probabilityData.GreatSuccessRate;
             }
 
             int goldCost = baseExp * 10;
@@ -103,9 +103,9 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         {
             foreach (var record in GameData.Instance.FavoriteItemProbabilityTable.Values)
             {
-                if (record.need_item_id == materialId &&
-                    currentLevel >= record.level_min &&
-                    currentLevel <= record.level_max)
+                if (record.NeedItemId == materialId &&
+                    currentLevel >= record.LevelMin &&
+                    currentLevel <= record.LevelMax)
                 {
                     return record;
                 }
@@ -125,31 +125,32 @@ namespace EpinelPS.LobbyServer.FavoriteItem
               
             if (!GameData.Instance.FavoriteItemTable.TryGetValue(favoriteItem.Tid, out FavoriteItemRecord? favoriteRecord))
             {
-                var sampleTids = GameData.Instance.FavoriteItemTable.Keys.Take(5).ToList();
+                var sampleTIds = GameData.Instance.FavoriteItemTable.Keys.Take(5).ToList();
                 return;
             }
 
             
-            string itemRarity = favoriteRecord.favorite_rare;
-            if (string.IsNullOrEmpty(itemRarity))
+            var itemRarity = favoriteRecord.FavoriteRare;
+            if (favoriteRecord.FavoriteRare == FavoriteItemRare.None)
             {
+                // TODO: dont hardcode table ids
                 if (favoriteItem.Tid >= 100102 && favoriteItem.Tid <= 100602 && favoriteItem.Tid % 100 == 2)
                 {
-                    itemRarity = "SR";
+                    itemRarity = FavoriteItemRare.SR;
                 }
                 else if (favoriteItem.Tid >= 100101 && favoriteItem.Tid <= 100601 && favoriteItem.Tid % 100 == 1)
                 {
-                    itemRarity = "R";
+                    itemRarity = FavoriteItemRare.R;
                 }
                 else if (favoriteItem.Tid >= 200101 && favoriteItem.Tid <= 201301 && favoriteItem.Tid % 100 == 1)
                 {
-                    itemRarity = "SSR";
+                    itemRarity = FavoriteItemRare.SSR;
                 }
                 
             }
            
 
-            if (itemRarity == "SSR")
+            if (itemRarity == FavoriteItemRare.SSR)
             {
                 int ssrMaxLevel = 2; // SSR has levels 0, 1, 2
                 
@@ -168,14 +169,14 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             }
 
             var expRecords = GameData.Instance.FavoriteItemExpTable.Values
-                .Where(x => x.favorite_rare == itemRarity)
-                .OrderBy(x => x.level)
+                .Where(x => x.FavoriteRare == itemRarity)
+                .OrderBy(x => x.Level)
                 .ToList();
 
 
             if (!expRecords.Any())
             {
-                var allRarities = GameData.Instance.FavoriteItemExpTable.Values.Select(x => x.favorite_rare).Distinct();
+                var allRarities = GameData.Instance.FavoriteItemExpTable.Values.Select(x => x.FavoriteRare).Distinct();
                 return;
             }
 
@@ -206,8 +207,8 @@ namespace EpinelPS.LobbyServer.FavoriteItem
 
         private int GetExpRequiredForLevel(int level, List<FavoriteItemExpRecord> expRecords)
         {
-            var record = expRecords.FirstOrDefault(x => x.level == level);
-            return record?.need_exp ?? 0;
+            var record = expRecords.FirstOrDefault(x => x.Level == level);
+            return record?.NeedExp ?? 0;
         }
         
     }

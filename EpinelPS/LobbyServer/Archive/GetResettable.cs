@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Archive
             ResGetResettableArchiveScenario response = new(); // has ScenarioIdList field that takes in strings
 
             // Retrieve stage IDs from GameData
-            List<string> stageIds = [.. GameData.Instance.archiveEventDungeonStageRecords.Values.Select(record => record.stage_id.ToString())];
+            List<string> stageIds = [.. GameData.Instance.archiveEventDungeonStageRecords.Values.Select(record => record.StageId.ToString())];
 
             // Add them to the response
             response.ScenarioIdList.Add(stageIds);

@@ -15,10 +15,10 @@ namespace EpinelPS.LobbyServer.Outpost
 
             int currentLevel = user.InfraCoreLvl;
 
-             Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
+             Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
             if (gradeTable.TryGetValue(currentLevel, out var gradeData))
             {
-                if (gradeData.reward_id > 0)
+                if (gradeData.RewardId > 0)
                 {
                     bool isReceived = user.InfraCoreRewardReceived.ContainsKey(currentLevel) && user.InfraCoreRewardReceived[currentLevel];
                     
@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Outpost
                     {
                         user.InfraCoreRewardReceived[currentLevel] = true;
                         
-                        var reward = RewardUtils.RegisterRewardsForUser(user, gradeData.reward_id);
+                        var reward = RewardUtils.RegisterRewardsForUser(user, gradeData.RewardId);
                         response.Reward = reward;
                     }
                 }

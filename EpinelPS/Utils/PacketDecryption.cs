@@ -42,7 +42,7 @@ namespace EpinelPS.Utils
 
                     byte[] bytes = encryptedBytes.ToArray();
 
-                    GameClientInfo key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("Invalid decryption token");
+                    GameClientInfo key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("InvalId decryption token");
                     byte[] additionalData = GenerateAdditionalData(decryptionToken, false);
 
                     byte[] x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
@@ -94,7 +94,7 @@ namespace EpinelPS.Utils
 
             if (majorType != 0)
             {
-                //throw new InvalidDataException("Not a valid CBOR unsigned integer");
+                //throw new InvalidDataException("Not a valId CBOR unsigned integer");
             }
 
             ulong value;
@@ -135,7 +135,7 @@ namespace EpinelPS.Utils
             }
             else
             {
-                throw new InvalidDataException("Invalid additional info for CBOR unsigned integer");
+                throw new InvalidDataException("InvalId additional info for CBOR unsigned integer");
             }
 
             return value;
@@ -143,7 +143,7 @@ namespace EpinelPS.Utils
 
         public static byte[] EncryptData(byte[] message, string authToken)
         {
-            GameClientInfo key = LobbyHandler.GetInfo(authToken) ?? throw new BadHttpRequestException("Invalid decryption token");
+            GameClientInfo key = LobbyHandler.GetInfo(authToken) ?? throw new BadHttpRequestException("InvalId decryption token");
             MemoryStream m = new();
 
             m.WriteByte(89); // cbor ushort
@@ -234,7 +234,7 @@ namespace EpinelPS.Utils
             CBorItem item = CBorReadItem(s);
             if (item.MajorType != 2)
             {
-                throw new Exception("invalid string");
+                throw new Exception("invalId string");
             }
             string resp = "";
 
@@ -254,7 +254,7 @@ namespace EpinelPS.Utils
             CBorItem item = CBorReadItem(s);
             if (item.MajorType != 2)
             {
-                throw new Exception("invalid string");
+                throw new Exception("invalId string");
             }
 
             int len = item.FullValue;

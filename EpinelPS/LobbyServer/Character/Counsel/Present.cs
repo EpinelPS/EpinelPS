@@ -21,29 +21,29 @@ namespace EpinelPS.LobbyServer.Character.Counsel
             }
 
             int totalExpGained = 0;
-            CharacterRecord? characterRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(x => x.name_code == req.NameCode);
+            CharacterRecord? characterRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(x => x.NameCode == req.NameCode);
 
             foreach (NetItemData item in req.Items)
             {
                 ItemMaterialRecord? materialInfo = GameData.Instance.itemMaterialTable.GetValueOrDefault(item.Tid);
-                if (materialInfo != null && materialInfo.item_sub_type == "AttractiveMaterial")
+                if (materialInfo != null && materialInfo.ItemSubType == ItemSubType.AttractiveMaterial)
                 {
-                    int expGained = materialInfo.item_value * (int)item.Count;
+                    int expGained = materialInfo.ItemValue * (int)item.Count;
 
                     if (characterRecord != null)
                     {
-                        if (materialInfo.material_type == "Corporation")
+                        if (materialInfo.MaterialType == MaterialType.Corporation)
                         {
-                            string corporation = materialInfo.name_localkey.Split('_')[2];
-                            if (corporation.Equals(characterRecord.corporation, StringComparison.OrdinalIgnoreCase))
+                            string corporation = materialInfo.NameLocalkey.Split('_')[2];
+                            if (corporation.Equals(characterRecord.Corporation.ToString(), StringComparison.OrdinalIgnoreCase))
                             {
                                 expGained *= 5;
                             }
                         }
-                        else if (materialInfo.material_type == "Squad")
+                        else if (materialInfo.MaterialType == MaterialType.Squad)
                         {
-                            string squad = materialInfo.name_localkey.Split('_')[2];
-                            if (squad.Equals(characterRecord.squad, StringComparison.OrdinalIgnoreCase))
+                            string squad = materialInfo.NameLocalkey.Split('_')[2];
+                            if (squad.Equals(characterRecord.Squad.ToString(), StringComparison.OrdinalIgnoreCase))
                             {
                                 expGained *= 3;
                             }
@@ -92,16 +92,16 @@ namespace EpinelPS.LobbyServer.Character.Counsel
         {
             while (attractiveData.Lv < 40)
             {
-                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.Values.FirstOrDefault(x => x.attractive_level == attractiveData.Lv);
+                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.Values.FirstOrDefault(x => x.AttractiveLevel == attractiveData.Lv);
 
                 if (levelInfo == null)
                 {
                     break;
                 }
 
-                if (attractiveData.Exp >= levelInfo.attractive_point)
+                if (attractiveData.Exp >= levelInfo.AttractivePoint)
                 {
-                    attractiveData.Exp -= levelInfo.attractive_point;
+                    attractiveData.Exp -= levelInfo.AttractivePoint;
                     attractiveData.Lv++;
                 }
                 else

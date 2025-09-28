@@ -9,7 +9,7 @@ namespace EpinelPS.Utils
     {
         public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
         {
-            RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward id {rewardId}");
+            RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward Id {rewardId}");
             return RegisterRewardsForUser(user, rewardData);
         }
         public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData)
@@ -18,11 +18,11 @@ namespace EpinelPS.Utils
             {
                 PassPoint = new()
             };
-            if (rewardData.rewards == null) return ret;
+            if (rewardData.Rewards == null) return ret;
 
-            if (rewardData.user_exp != 0)
+            if (rewardData.UserExp != 0)
             {
-                int newXp = rewardData.user_exp + user.userPointData.ExperiencePoint;
+                int newXp = rewardData.UserExp + user.userPointData.ExperiencePoint;
 
                 int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
                 int newLevel = user.userPointData.UserLevel;
@@ -56,11 +56,11 @@ namespace EpinelPS.Utils
                     BeforeExp = user.userPointData.ExperiencePoint,
                     BeforeLv = user.userPointData.UserLevel,
 
-                    // IncreaseExp = rewardData.user_exp,
+                    // IncreaseExp = rewardData.UserExp,
                     CurrentExp = newXp,
                     CurrentLv = newLevel,
 
-                    GainExp = rewardData.user_exp,
+                    GainExp = rewardData.UserExp,
 
                 };
                 user.userPointData.ExperiencePoint = newXp;
@@ -68,16 +68,16 @@ namespace EpinelPS.Utils
                 user.userPointData.UserLevel = newLevel;
             }
 
-            foreach (RewardEntry item in rewardData.rewards)
+            foreach (RewardEntry item in rewardData.Rewards)
             {
-                if (item.reward_type != RewardType.None)
+                if (item.RewardType != RewardType.None)
                 {
-                    if (item.reward_percent != 1000000)
+                    if (item.RewardPercent != 1000000)
                     {
-                        Logging.WriteLine("WARNING: ignoring percent: " + item.reward_percent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                        Logging.WriteLine("WARNING: ignoring percent: " + item.RewardPercent / 10000.0 + ", item will be added anyways", LogType.Warning);
                     }
 
-                    AddSingleObject(user, ref ret, item.reward_id, item.reward_type, item.reward_value);
+                    AddSingleObject(user, ref ret, item.RewardId, item.RewardType, item.RewardValue);
                 }
             }
 
@@ -122,7 +122,7 @@ namespace EpinelPS.Utils
             else if (rewardType == RewardType.Item || 
                 rewardType.ToString().StartsWith("Equipment_"))
             {
-                // Check if user already has said item. If it is level 1, increase item count.
+                // Check if user already has saId item. If it is level 1, increase item count.
                 // If user does not have item, generate a new item ID
                 if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
                 {
@@ -155,19 +155,19 @@ namespace EpinelPS.Utils
                 else
                 {
 
-                    int id = user.GenerateUniqueItemId();
-                    user.Items.Add(new ItemData() { ItemType = rewardId, Isn = id, Level = 1, Exp = 0, Count = rewardCount });
+                    int Id = user.GenerateUniqueItemId();
+                    user.Items.Add(new ItemData() { ItemType = rewardId, Isn = Id, Level = 1, Exp = 0, Count = rewardCount });
                     ret.Item.Add(new NetItemData()
                     {
                         Count = rewardCount,
                         Tid = rewardId,
-                        //Isn = id
+                        //Isn = Id
                     });
 
-                    // Tell the client the new amount of this item (which is the same as user did not have item previously)
+                    // Tell the client the new amount of this item (which is the same as user dId not have item previously)
                     ret.UserItems.Add(new NetUserItemData()
                     {
-                        Isn = id,
+                        Isn = Id,
                         Tid = rewardId,
                         Count = rewardCount
                     });
@@ -197,14 +197,14 @@ namespace EpinelPS.Utils
                 user.InfraCoreExp += rewardCount;
 
                 // Check for level ups
-                Dictionary<int, InfracoreRecord> gradeTable = GameData.Instance.InfracoreTable;
+                Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
                 int newLevel = user.InfraCoreLvl;
 
-                foreach (InfracoreRecord grade in gradeTable.Values.OrderBy(g => g.grade))
+                foreach (var grade in gradeTable.Values.OrderBy(g => g.Grade))
                 {
-                    if (user.InfraCoreExp >= grade.infra_core_exp)
+                    if (user.InfraCoreExp >= grade.InfraCoreExp)
                     {
-                        newLevel = grade.grade + 1;
+                        newLevel = grade.Grade + 1;
                     }
                     else
                     {
@@ -228,9 +228,9 @@ namespace EpinelPS.Utils
             }
             else if (rewardType == RewardType.ItemRandomBox)
             {
-                ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == rewardId).FirstOrDefault().Value;
+                ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.Id == rewardId).FirstOrDefault().Value;
 
-                if (cItem.item_sub_type == ItemSubType.ItemRandomBoxList)
+                if (cItem.ItemSubType == ItemSubType.ItemRandomBoxList)
                 {
                     NetRewardData reward = NetUtils.UseLootBox(user, rewardId, rewardCount);
 
@@ -241,7 +241,7 @@ namespace EpinelPS.Utils
                     NetItemData itm = new()
                     {
                         Count = rewardCount,
-                        Tid = cItem.id,
+                        Tid = cItem.Id,
                         Isn = user.GenerateUniqueItemId()
                     };
                     ret.Item.Add(itm);

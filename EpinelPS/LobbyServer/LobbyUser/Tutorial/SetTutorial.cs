@@ -14,9 +14,17 @@ namespace EpinelPS.LobbyServer.LobbyUser.Tutorial
 
             if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
             {
-                ClearedTutorialData cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
-                cleared.id = req.LastClearedTid;
-                user.ClearedTutorialData.Add(req.LastClearedTid, cleared);
+                var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
+                cleared.Id = req.LastClearedTid;
+                user.ClearedTutorialData.Add(req.LastClearedTid, new ClearedTutorialData()
+                {
+                    ClearedStageId = cleared.ClearedStageId,
+                    GroupId = cleared.GroupId,
+                    Id = cleared.GroupId,
+                    NextId = cleared.NextId,
+                    SaveTutorial = cleared.SaveTutorial,
+                    VersionGroup = cleared.VersionGroup
+                });
             }
             JsonDb.Save();
 

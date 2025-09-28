@@ -32,7 +32,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
 
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-            foreach (KeyValuePair<int, Data.ClearedTutorialData> item in user.ClearedTutorialData)
+            foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
             {
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;

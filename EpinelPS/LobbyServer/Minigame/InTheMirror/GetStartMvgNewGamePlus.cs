@@ -16,19 +16,19 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
             foreach (var questData in user.ArcadeInTheMirrorData.Quests.Where(q => q.IsReceived == false))
             {
                 var quest = GameData.Instance.EventMvgQuestTable[questData.QuestId];
-                if (quest.reward_id != 0)
+                if (quest.RewardId != 0)
                 {
-                    foreach (var rewardEntry in GameData.Instance.RewardDataRecords[quest.reward_id].rewards ??= [])
+                    foreach (var rewardEntry in GameData.Instance.RewardDataRecords[quest.RewardId].Rewards ??= [])
                     {
-                        if (rewardEntry.reward_type != RewardType.None)
+                        if (rewardEntry.RewardType != RewardType.None)
                         {
-                            switch (rewardEntry.reward_id)
+                            switch (rewardEntry.RewardId)
                             {
                                 case 9810003:
-                                    user.ArcadeInTheMirrorData.Gold += rewardEntry.reward_value;
+                                    user.ArcadeInTheMirrorData.Gold += rewardEntry.RewardValue;
                                     break;
                                 case 9811001:
-                                    user.ArcadeInTheMirrorData.Core += rewardEntry.reward_value;
+                                    user.ArcadeInTheMirrorData.Core += rewardEntry.RewardValue;
                                     break;
                                 default:
                                     break;

@@ -33,15 +33,15 @@ namespace EpinelPS.LobbyServer.Campaign
 
             // Register and return reward
 
-            MapInfo map = GameData.Instance.MapData[req.MapId];
+            var map = GameData.Instance.MapData[req.MapId];
 
-            ItemSpawner position = map.ItemSpawner.Where(x => x.positionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position id");
+            var position = map.ItemSpawner.Where(x => x.PositionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position Id");
 
-            FieldItemRecord positionReward = GameData.Instance.FieldItems[position.itemId];
-            RewardRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.type_value) ?? throw new Exception("failed to get reward");
+            FieldItemRecord positionReward = GameData.Instance.FieldItems[position.ItemId];
+            RewardRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.TypeValue) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
-            // Hide it from the field
+            // HIde it from the field
             field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type});
 
             JsonDb.Save();

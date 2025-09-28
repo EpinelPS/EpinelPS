@@ -13,16 +13,16 @@ namespace EpinelPS.LobbyServer.Character
             User user = GetUser();
 
             ResSynchroLevelUp response = new();
-            Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
+            Dictionary<int, CharacterLevelRecord> data = GameData.Instance.GetCharacterLevelUpData();
 
 
             int requiredCredit = 0;
             int requiredBattleData = 0;
             int requiredCoreDust = 0;
-            CharacterLevelData levelUpData = data[user.SynchroDeviceLevel + 1];
-            requiredCredit += levelUpData.gold;
-            requiredBattleData += levelUpData.character_exp;
-            requiredCoreDust += levelUpData.character_exp2;
+            CharacterLevelRecord levelUpData = data[user.SynchroDeviceLevel + 1];
+            requiredCredit += levelUpData.Gold;
+            requiredBattleData += levelUpData.CharacterExp;
+            requiredCoreDust += levelUpData.CharacterExp2;
 
             if (user.CanSubtractCurrency(CurrencyType.Gold, requiredCredit) &&
                 user.CanSubtractCurrency(CurrencyType.CharacterExp, requiredBattleData) &&
@@ -47,7 +47,7 @@ namespace EpinelPS.LobbyServer.Character
             }
             response.SynchroLv = user.SynchroDeviceLevel;
 
-            user.AddTrigger(TriggerType.CharacterLevelUpCount, 1);
+            user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
 
             JsonDb.Save();
             await WriteDataAsync(response);

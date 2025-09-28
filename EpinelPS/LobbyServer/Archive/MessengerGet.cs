@@ -20,13 +20,13 @@ namespace EpinelPS.LobbyServer.Archive
 
             if (gameData.archiveMessengerConditionRecords.TryGetValue(groupId, out ArchiveMessengerConditionRecord? conditionRecord))
             {
-                foreach (ArchiveMessengerConditionList condition in conditionRecord.archive_messenger_condition_list)
+                foreach (var condition in conditionRecord.ArchiveMessengerConditionList)
                 {
                     // Add each condition as a NetArchiveMessage in the response
                     response.ArchiveMessageList.Add(new NetArchiveMessage
                     {
-                        ConditionId = condition.condition_id,
-                        MessageId = conditionRecord.tid // Correctly using tid as MessageId
+                        ConditionId = condition.ConditionId,
+                        MessageId = conditionRecord.Tid // Correctly using tId as MessageId
                     });
                 }
             }

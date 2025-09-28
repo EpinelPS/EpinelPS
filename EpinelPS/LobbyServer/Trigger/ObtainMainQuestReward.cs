@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EpinelPS.LobbyServer.Trigger
+namespace EpinelPS.LobbyServer.TriggerController
 {
     [PacketPath("/trigger/obtainmainquestreward")]
     public class ObtainMainQuestReward : LobbyMsgHandler
@@ -28,8 +28,8 @@ namespace EpinelPS.LobbyServer.Trigger
                 {
                     user.MainQuestData[item.Key] = true;
 
-                    MainQuestCompletionRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest id " + item.Key);
-                    RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.reward_id) ?? throw new Exception("failed to lookup reward id " + questInfo.reward_id);
+                    MainQuestRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest Id " + item.Key);
+                    RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.RewardId) ?? throw new Exception("failed to lookup reward Id " + questInfo.RewardId);
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
                 }
             }

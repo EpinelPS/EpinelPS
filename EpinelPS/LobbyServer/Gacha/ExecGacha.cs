@@ -32,18 +32,18 @@ namespace EpinelPS.LobbyServer.Gacha
 
             List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
             // Remove the .Values part since it's already a list.
-            // Group by name_code to treat same name_code as one character 
-            // Always add characters with grade_core_id == 1 and 101
-            List<CharacterRecord> allCharacterData = [.. entireallCharacterData.GroupBy(c => c.name_code).SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))];
+            // Group by NameCode to treat same NameCode as one character 
+            // Always add characters with GradeCoreId == 1 and 101
+            List<CharacterRecord> allCharacterData = [.. entireallCharacterData.GroupBy(c => c.NameCode).SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
 
             // Separate characters by rarity categories
-            List<CharacterRecord> rCharacters = [.. allCharacterData.Where(c => c.original_rare == "R")];
-            List<CharacterRecord> srCharacters = [.. allCharacterData.Where(c => c.original_rare == "SR")];
+            List<CharacterRecord> rCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.R)];
+            List<CharacterRecord> srCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SR)];
 
             // Separate Pilgrim SSRs and non-Pilgrim SSRs
             // treat overspec as pilgrim 
-            List<CharacterRecord> pilgrimCharacters = [.. allCharacterData.Where(c => (c.original_rare == "SSR" && c.corporation == "PILGRIM") || (c.original_rare == "SSR" && c.corporation_sub_type == "OVERSPEC"))];
-            List<CharacterRecord> ssrCharacters = [.. allCharacterData.Where(c => c.original_rare == "SSR" && c.corporation != "PILGRIM")];
+            List<CharacterRecord> pilgrimCharacters = [.. allCharacterData.Where(c => (c.OriginalRare == OriginalRareType.SSR && c.Corporation == CorporationType.PILGRIM) || (c.OriginalRare == OriginalRareType.SSR && c.CorporationSubType == CorporationSubType.OVERSPEC))];
+            List<CharacterRecord> ssrCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SSR && c.Corporation != CorporationType.PILGRIM)];
 
             List<CharacterRecord> selectedCharacters = [];
 
@@ -51,7 +51,7 @@ namespace EpinelPS.LobbyServer.Gacha
             if (user.sickpulls)
             {
                 // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
-                selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
+                selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.Id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
             }
             else
             {
@@ -71,7 +71,7 @@ namespace EpinelPS.LobbyServer.Gacha
                 {
                     // PieceCount = 1, // Spare Body
                     CurrencyValue = 0, // Body Label
-                    Tid = characterData.id,
+                    Tid = characterData.Id,
                     Type = 1
                 };
 
@@ -81,11 +81,11 @@ namespace EpinelPS.LobbyServer.Gacha
                 // If not fully limit broken, add spare body item
                 // If user does not have character, generate CSN and add character
 
-                if (user.HasCharacter(characterData.id))
+                if (user.HasCharacter(characterData.Id))
                 {
-                    CharacterModel character = user.GetCharacter(characterData.id) ?? throw new Exception("HasCharacter() returned true, however character was null");
+                    CharacterModel character = user.GetCharacter(characterData.Id) ?? throw new Exception("HasCharacter() returned true, however character was null");
 
-                    ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.piece_id);
+                    ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.PieceId);
 
                     response.Characters.Add(new NetUserCharacterDefaultData()
                     {
@@ -96,16 +96,16 @@ namespace EpinelPS.LobbyServer.Gacha
                         UltiSkillLv = character.UltimateLevel,
                         Skill1Lv = character.Skill1Lvl,
                         Skill2Lv = character.Skill2Lvl,
-                        Tid = characterData.id,
+                        Tid = characterData.Id,
                     });
 
                     bool increase_item = false;
 
                     gacha.Sn = character.Csn;
-                    gacha.Tid = characterData.id;
+                    gacha.Tid = characterData.Id;
 
                     // Check if we can add upgrade item
-                    if (characterData.original_rare == "SR")
+                    if (characterData.OriginalRare == OriginalRareType.SR)
                     {
                         if (existingItem != null && character.Grade + existingItem.Count <= 1)
                         {
@@ -116,7 +116,7 @@ namespace EpinelPS.LobbyServer.Gacha
                             increase_item = true;
                         }
                     }
-                    else if (characterData.original_rare == "SSR")
+                    else if (characterData.OriginalRare == OriginalRareType.SSR)
                     {
                         if (existingItem != null && character.Grade + existingItem.Count <= 10)
                         {
@@ -152,7 +152,7 @@ namespace EpinelPS.LobbyServer.Gacha
                             // If the item does not exist, create a new item entry
                             ItemData newItem = new()
                             {
-                                ItemType = characterData.piece_id,
+                                ItemType = characterData.PieceId,
                                 Csn = 0,
                                 Count = 1, // or any relevant count
                                 Level = 0,
@@ -178,7 +178,7 @@ namespace EpinelPS.LobbyServer.Gacha
                     }
                     else
                     {
-                        gacha.CurrencyValue = characterData.original_rare == "SSR" ? 6000 : (characterData.original_rare == "SR" ? 200 : 150);
+                        gacha.CurrencyValue = characterData.OriginalRare == OriginalRareType.SSR ? 6000 : (characterData.OriginalRare == OriginalRareType.SR ? 200 : 150);
                         user.AddCurrency(CurrencyType.DissolutionPoint, gacha.CurrencyValue);
 
                         totalBodyLabels += (int)gacha.CurrencyValue;
@@ -196,7 +196,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         Lv = 1,
                         Skill1Lv = 1,
                         Skill2Lv = 1,
-                        Tid = characterData.id,
+                        Tid = characterData.Id,
                         UltiSkillLv = 1
                     });
 
@@ -208,25 +208,25 @@ namespace EpinelPS.LobbyServer.Gacha
                         Level = 1,
                         Skill1Lvl = 1,
                         Skill2Lvl = 1,
-                        Tid = characterData.id,
+                        Tid = characterData.Id,
                         UltimateLevel = 1
                     });
 
                     // Add "New Character" Badge
-                    user.AddBadge(BadgeContents.NikkeNew, characterData.name_code.ToString());
-                    user.AddTrigger(TriggerType.ObtainCharacter, 1, characterData.name_code);
-                    user.AddTrigger(TriggerType.ObtainCharacterNew, 1);
+                    user.AddBadge(BadgeContents.NikkeNew, characterData.NameCode.ToString());
+                    user.AddTrigger(Trigger.ObtainCharacter, 1, characterData.NameCode);
+                    user.AddTrigger(Trigger.ObtainCharacterNew, 1);
 
-                    if (characterData.original_rare == "SSR" || characterData.original_rare == "SR")
+                    if (characterData.OriginalRare == OriginalRareType.SSR || characterData.OriginalRare == OriginalRareType.SR)
                     {
-                        user.BondInfo.Add(new() { NameCode = characterData.name_code, Lv = 1 });
+                        user.BondInfo.Add(new() { NameCode = characterData.NameCode, Lv = 1 });
 
                     }
                 }
 
                 response.Gacha.Add(gacha);
 
-                user.AddTrigger(TriggerType.GachaCharacter, 0, 0);
+                user.AddTrigger(Trigger.GachaCharacter, 0, 0);
             }
             int TicketType = req.CurrencyType;
             int currencyType = TicketType == 5100 ? (int)CurrencyType.SilverMileageTicket : (int)CurrencyType.GoldMileageTicket;
@@ -245,14 +245,14 @@ namespace EpinelPS.LobbyServer.Gacha
 		private static CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters,List<CharacterRecord> srCharacters,List<CharacterRecord> ssrCharacters,List<CharacterRecord> pilgrimCharacters,List<int> exclusionList,int increasedChanceCharacterID,List<CharacterRecord> allCharacterData)
 		{
             // Remove excluded characters from each category
-            List<CharacterRecord> availableRCharacters = [.. rCharacters.Where(c => !exclusionList.Contains(c.id))];
-            List<CharacterRecord> availableSRCharacters = [.. srCharacters.Where(c => !exclusionList.Contains(c.id))];
-            List<CharacterRecord> availableSSRCharacters = [.. ssrCharacters.Where(c => !exclusionList.Contains(c.id))];
-            List<CharacterRecord> availablePilgrimCharacters = [.. pilgrimCharacters.Where(c => !exclusionList.Contains(c.id))];
+            List<CharacterRecord> availableRCharacters = [.. rCharacters.Where(c => !exclusionList.Contains(c.Id))];
+            List<CharacterRecord> availableSRCharacters = [.. srCharacters.Where(c => !exclusionList.Contains(c.Id))];
+            List<CharacterRecord> availableSSRCharacters = [.. ssrCharacters.Where(c => !exclusionList.Contains(c.Id))];
+            List<CharacterRecord> availablePilgrimCharacters = [.. pilgrimCharacters.Where(c => !exclusionList.Contains(c.Id))];
 
             // Find the IncreasedChanceCharacterID in the SSR list
-            CharacterRecord? increasedChanceCharacter = availableSSRCharacters.FirstOrDefault(c => c.id == increasedChanceCharacterID);
-			bool isPilgrimOrOverspec = increasedChanceCharacter != null && (increasedChanceCharacter.corporation == "PILGRIM" || increasedChanceCharacter.corporation_sub_type == "OVERSPEC");
+            CharacterRecord? increasedChanceCharacter = availableSSRCharacters.FirstOrDefault(c => c.Id == increasedChanceCharacterID);
+			bool isPilgrimOrOverspec = increasedChanceCharacter != null && (increasedChanceCharacter.Corporation == CorporationType.PILGRIM || increasedChanceCharacter.CorporationSubType == CorporationSubType.OVERSPEC);
 
 			double increasedChance = increasedChanceCharacterID != 1 ? (isPilgrimOrOverspec ? 1.0 : 2.0): 0.0;
 

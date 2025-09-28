@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.Intercept
                 BonusReward = sRes.BonusReward
             };
 
-            user.AddTrigger(Data.TriggerType.InterceptClear, 1);
+            user.AddTrigger(Data.Trigger.InterceptClear, 1);
 
             JsonDb.Save();
 

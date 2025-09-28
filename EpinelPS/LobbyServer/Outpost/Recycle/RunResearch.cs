@@ -18,13 +18,13 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
             // Check progress is null, non-null means research is already unlocked.
             if (progress is null)
             {
-                RecycleResearchStatRecord researchRecord = GameData.Instance.RecycleResearchStats.Values.FirstOrDefault(e => e.id == req.Tid)
-                    ?? throw new Exception("not found research record with tid " + req.Tid);
+                RecycleResearchStatRecord researchRecord = GameData.Instance.RecycleResearchStats.Values.FirstOrDefault(e => e.Id == req.Tid)
+                    ?? throw new Exception("not found research record with tId " + req.Tid);
                 progress = new()
                 {
-                    Attack = researchRecord.attack,
-                    Defense = researchRecord.defense,
-                    Hp = researchRecord.hp,
+                    Attack = researchRecord.Attack,
+                    Defense = researchRecord.Defence,
+                    Hp = researchRecord.Hp,
                 };
                 user.ResearchProgress.Add(req.Tid, progress);
             }

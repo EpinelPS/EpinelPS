@@ -19,9 +19,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             user.CompletedScenarios.Add(req.ScenarioId);
 
-            if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardRecord? record))
+            if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardsRecord? record))
             {
-                response.Reward = RewardUtils.RegisterRewardsForUser(user, record.reward_id);
+                response.Reward = RewardUtils.RegisterRewardsForUser(user, record.RewardId);
             }
 
             JsonDb.Save();

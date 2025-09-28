@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Mission
 
                 if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
 
                 NetRewardData reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
                 rewards.Add(reward);
@@ -34,7 +34,7 @@ namespace EpinelPS.LobbyServer.Mission
                 total_points++;
             }
 
-            user.AddTrigger(TriggerType.PointRewardAchievement, total_points);
+            user.AddTrigger(Trigger.PointRewardAchievement, total_points);
 
             response.Reward = NetUtils.MergeRewards(rewards, user);
 

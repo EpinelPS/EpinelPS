@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Inventory
                             item.Csn = item.CsnList[0];
                             if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(item.ItemType, out var harmonyCubeData))
                             {
-                                item.Position = harmonyCubeData.location_id;
+                                item.Position = harmonyCubeData.LocationId;
                             }
                         }
                         else

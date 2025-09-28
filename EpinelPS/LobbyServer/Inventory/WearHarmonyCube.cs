@@ -33,7 +33,7 @@ namespace EpinelPS.LobbyServer.Inventory
             long swapCsn = req.Wear.SwapCsn;
 
             ItemHarmonyCubeLevelRecord? currentLevelData = GetCurrentLevelData(harmonyCubeItem, harmonyCubeData);
-            int maxSlots = currentLevelData?.slot ?? 1;
+            int maxSlots = currentLevelData?.Slot ?? 1;
 
             if (swapCsn > 0)
             {
@@ -63,7 +63,7 @@ namespace EpinelPS.LobbyServer.Inventory
             }
             else
             {
-                throw new BadHttpRequestException("Invalid character CSN", 400);
+                throw new BadHttpRequestException("InvalId character CSN", 400);
             }
 
             foreach (ItemData modifiedItem in modifiedItems)
@@ -142,7 +142,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             // CRITICAL: Remove this character from ALL harmony cubes at the same position
             // This fixes any existing data inconsistency where a character might be in multiple CsnLists
-            List<ItemData> modifiedItems = CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.location_id, harmonyCubeItem.Isn);
+            List<ItemData> modifiedItems = CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
 
             // Add to CsnList
             harmonyCubeItem.CsnList.Add(targetCsn);
@@ -151,7 +151,7 @@ namespace EpinelPS.LobbyServer.Inventory
             if (harmonyCubeItem.CsnList.Count == 1)
             {
                 harmonyCubeItem.Csn = targetCsn;
-                harmonyCubeItem.Position = harmonyCubeData.location_id;
+                harmonyCubeItem.Position = harmonyCubeData.LocationId;
             }
 
             Console.WriteLine($"Equipped harmony cube {harmonyCubeItem.ItemType} to character {targetCsn} for user {user.Username} (slot {harmonyCubeItem.CsnList.Count}/{maxSlots})");
@@ -195,7 +195,7 @@ namespace EpinelPS.LobbyServer.Inventory
                     {
                         // Set legacy fields to the first remaining character
                         item.Csn = item.CsnList[0];
-                        item.Position = existingHarmonyCubeData.location_id;
+                        item.Position = existingHarmonyCubeData.LocationId;
                     }
                     else
                     {
@@ -207,7 +207,7 @@ namespace EpinelPS.LobbyServer.Inventory
                     // Add to modified items list for response
                     modifiedItems.Add(item);
 
-                    Console.WriteLine($"[ONE HARMONY CUBE RULE] Removed character {targetCsn} from harmony cube {item.ItemType} (position {existingHarmonyCubeData.location_id}) - one character can only have one harmony cube");
+                    Console.WriteLine($"[ONE HARMONY CUBE RULE] Removed character {targetCsn} from harmony cube {item.ItemType} (position {existingHarmonyCubeData.LocationId}) - one character can only have one harmony cube");
                 }
             }
 
@@ -218,12 +218,12 @@ namespace EpinelPS.LobbyServer.Inventory
         {
             // Get level data for this harmony cube
             List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
-                .Where(x => x.level_enhance_id == harmonyCubeData.level_enhance_id)
-                .OrderBy(x => x.level)
+                .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)
+                .OrderBy(x => x.Level)
                 .ToList();
 
             // Find current level data
-            return levelData.FirstOrDefault(x => x.level == harmonyCubeItem.Level);
+            return levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level);
         }
 
         private bool IsClassCompatible(CharacterModel character, ItemHarmonyCubeRecord harmonyCubeData)
@@ -232,7 +232,7 @@ namespace EpinelPS.LobbyServer.Inventory
             if (GameData.Instance.CharacterTable.TryGetValue(character.Tid, out CharacterRecord? characterData))
             {
                 // Check if harmony cube class restriction matches character class
-                return harmonyCubeData.@class == "All" || harmonyCubeData.@class == characterData.character_class;
+                return harmonyCubeData.Class == CharacterClassType.All || harmonyCubeData.Class == characterData.Class;
             }
             return false;
         }

@@ -64,7 +64,7 @@ namespace EpinelPS.Utils
         public static RunCmdResponse CompleteStage(ulong userId, string input2)
         {
             User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-            if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+            if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
 
             try
             {
@@ -83,7 +83,7 @@ namespace EpinelPS.Utils
                         foreach (int item in stages)
                         {
                             CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
-                            if (!user.IsStageCompleted(item) && stageData.chapter_mod == ChapterMod.Normal)
+                            if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
                             {
                                 Console.WriteLine("Completing stage " + item);
                                 ClearStage.CompleteStage(user, item, true);
@@ -105,7 +105,7 @@ namespace EpinelPS.Utils
                     {
                         Console.WriteLine($"Processing chapter: {chapter}");
 
-                        List<string> stages = [.. GameData.Instance.GetScenarioStageIdsForChapter(chapter).Where(stageId => GameData.Instance.IsValidScenarioStage(stageId, chapterNumber, stageNumber))];
+                        List<string> stages = [.. GameData.Instance.GetScenarioStageIdsForChapter(chapter).Where(stageId => GameData.Instance.IsValIdScenarioStage(stageId, chapterNumber, stageNumber))];
 
                         Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
 
@@ -127,7 +127,7 @@ namespace EpinelPS.Utils
                     if (user.MainQuestData.Count >= 2)
                     {
                         KeyValuePair<int, bool> last = user.MainQuestData.Last();
-                        Logging.WriteLine("last quest id: " + last.Key, LogType.Debug);
+                        Logging.WriteLine("last quest Id: " + last.Key, LogType.Debug);
                         for (int i = 0; i < last.Key; i++)
                         {
                             if (GameData.Instance.QuestDataRecords.ContainsKey(i))
@@ -140,7 +140,7 @@ namespace EpinelPS.Utils
                 }
                 else
                 {
-                    return new RunCmdResponse() { error = "Chapter and stage number must be valid integers" };
+                    return new RunCmdResponse() { error = "Chapter and stage number must be valId integers" };
                 }
             }
             catch (Exception ex)
@@ -153,14 +153,14 @@ namespace EpinelPS.Utils
 
         public static RunCmdResponse AddAllCharacters(User user)
         {
-            // Group characters by name_code and always add those with grade_core_id == 11, 103, and include grade_core_id == 201
+            // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201
             List<CharacterRecord> allCharacters = [.. GameData.Instance.CharacterTable.Values
-                .GroupBy(c => c.name_code)  // Group by name_code to treat same name_code as one character                     3999 = marian
-                .SelectMany(g => g.Where(c => c.grade_core_id == 1 || c.grade_core_id == 101 || c.grade_core_id == 201 || c.name_code == 3999))];
+                .GroupBy(c => c.NameCode)  // Group by NameCode to treat same NameCode as one character                     3999 = marian
+                .SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
 
             foreach (CharacterRecord? character in allCharacters)
             {
-                if (!user.HasCharacter(character.id))
+                if (!user.HasCharacter(character.Id))
                 {
                     user.Characters.Add(new CharacterModel()
                     {
@@ -170,13 +170,13 @@ namespace EpinelPS.Utils
                         Level = 1,
                         Skill1Lvl = 1,
                         Skill2Lvl = 1,
-                        Tid = character.id,  // Tid is the character ID
+                        Tid = character.Id,  // Tid is the character ID
                         UltimateLevel = 1
                     });
 
-                    user.BondInfo.Add(new() { NameCode = character.name_code, Lv = 1 });
-                    user.AddTrigger(TriggerType.ObtainCharacter, 1, character.name_code);
-                    user.AddTrigger(TriggerType.ObtainCharacterNew, 1);
+                    user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
+                    user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
+                    user.AddTrigger(Trigger.ObtainCharacterNew, 1);
                 }
             }
 
@@ -189,14 +189,14 @@ namespace EpinelPS.Utils
         {
             foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
             {
-                ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.id);
+                ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
 
                 if (item == null)
                 {
                     user.Items.Add(new ItemData
                     {
                         Isn = user.GenerateUniqueItemId(),
-                        ItemType = tableItem.id,
+                        ItemType = tableItem.Id,
                         Level = 1,
                         Exp = 1,
                         Count = amount
@@ -215,11 +215,16 @@ namespace EpinelPS.Utils
 
         public static RunCmdResponse FinishAllTutorials(User user)
         {
-            foreach (ClearedTutorialData tutorial in GameData.Instance.TutorialTable.Values)
+            foreach (var tutorial in GameData.Instance.TutorialTable.Values)
             {
-                if (!user.ClearedTutorialData.ContainsKey(tutorial.id))
+                if (!user.ClearedTutorialData.ContainsKey(tutorial.Id))
                 {
-                    user.ClearedTutorialData.Add(tutorial.id, tutorial);
+                    user.ClearedTutorialData.Add(tutorial.Id, new ClearedTutorialData()
+                    {
+                        Id = tutorial.Id,
+                        GroupId = tutorial.GroupId,
+                        VersionGroup = tutorial.VersionGroup
+                    });
                 }
             }
 
@@ -235,21 +240,21 @@ namespace EpinelPS.Utils
             foreach (CharacterModel character in user.Characters)
             {
                 // Get current character's Tid
-                int tid = character.Tid;
+                int tId = character.Tid;
 
                 // Get the character data from the character table
-                if (!GameData.Instance.CharacterTable.TryGetValue(tid, out CharacterRecord? charData))
+                if (!GameData.Instance.CharacterTable.TryGetValue(tId, out CharacterRecord? charData))
                 {
-                    Console.WriteLine($"Character data not found for Tid {tid}");
+                    Console.WriteLine($"Character data not found for Tid {tId}");
                     continue;
                 }
 
-                int currentGradeCoreId = charData.grade_core_id;
-                int nameCode = charData.name_code;
-                string originalRare = charData.original_rare;
+                int currentGradeCoreId = charData.GradeCoreId;
+                int nameCode = charData.NameCode;
+                var originalRare = charData.OriginalRare;
 
-                // Skip characters with original_rare == "R"
-                if (originalRare == "R" || nameCode == 3999)
+                // Skip characters with OriginalRare == "R"
+                if (originalRare == OriginalRareType.R || nameCode == 3999)
                 {
                     continue;
                 }
@@ -257,43 +262,43 @@ namespace EpinelPS.Utils
                 // Now handle normal SR and SSR characters
                 int maxGradeCoreId = 0;
 
-                // If the character is "SSR", it can have a grade_core_id from 1 to 11
-                if (originalRare == "SSR")
+                // If the character is "SSR", it can have a GradeCoreId from 1 to 11
+                if (originalRare == OriginalRareType.SSR)
                 {
                     maxGradeCoreId = 11;  // SSR characters can go from 1 to 11
 
-                    // Calculate the new grade_core_id within the bounds
+                    // Calculate the new GradeCoreId within the bounds
                     int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
 
-                    // Find the character with the same name_code and new grade_core_id
+                    // Find the character with the same NameCode and new GradeCoreId
                     CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
-                        c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
+                        c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
 
                     if (newCharData != null)
                     {
                         // Update the character's Tid and Grade
-                        character.Tid = newCharData.id;
+                        character.Tid = newCharData.Id;
                         character.Grade = inputGrade;
                     }
 
                 }
 
-                // If the character is "SR", it can have a grade_core_id from 101 to 103
-                else if (originalRare == "SR")
+                // If the character is "SR", it can have a GradeCoreId from 101 to 103
+                else if (originalRare == OriginalRareType.SR)
                 {
                     maxGradeCoreId = 103;  // SR characters can go from 101 to 103
 
-                    // Start from 101 and increment based on inputGrade (inputGrade 0 -> grade_core_id 101)
+                    // Start from 101 and increment based on inputGrade (inputGrade 0 -> GradeCoreId 101)
                     int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
 
-                    // Find the character with the same name_code and new grade_core_id
+                    // Find the character with the same NameCode and new GradeCoreId
                     CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
-                        c.name_code == nameCode && c.grade_core_id == newGradeCoreId);
+                        c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
 
                     if (newCharData != null)
                     {
                         // Update the character's Tid and Grade
-                        character.Tid = newCharData.id;
+                        character.Tid = newCharData.Id;
                         character.Grade = inputGrade;
                     }
 

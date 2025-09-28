@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Tower
         {
             ResClearTower response = new();
 
-            if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with id " + TowerId);
+            if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with Id " + TowerId);
 
             // Parse TowerId to get TowerType and FloorNumber
             int TowerType = (TowerId / 10000) - 1; // For some weird reason the Type here doesn't match up with NetTowerData, thus the -1
@@ -35,35 +35,35 @@ namespace EpinelPS.LobbyServer.Tower
             // Update user's TowerProgress
             if (!user.TowerProgress.TryGetValue(TowerType, out int value))
             {
-                user.TowerProgress[TowerType] = record.floor;
+                user.TowerProgress[TowerType] = record.Floor;
             }
             else if (value < FloorNumber)
             {
-                user.TowerProgress[TowerType] = record.floor;
+                user.TowerProgress[TowerType] = record.Floor;
             }
 
-            if (record.type == "TETRA")
+            if (record.Type == CorporationTowerType.TETRA)
             {
-                user.AddTrigger(TriggerType.TowerTetraClear, TowerId);
+                user.AddTrigger(Trigger.TowerTetraClear, TowerId);
             }
-            else if (record.type == "ELYSION")
+            else if (record.Type == CorporationTowerType.ELYSION)
             {
-                user.AddTrigger(TriggerType.TowerElysionClear, TowerId);
+                user.AddTrigger(Trigger.TowerElysionClear, TowerId);
             }
-            else if (record.type == "MISSILIS")
+            else if (record.Type== CorporationTowerType.MISSILIS)
             {
-                user.AddTrigger(TriggerType.TowerMissilisClear, TowerId);
+                user.AddTrigger(Trigger.TowerMissilisClear, TowerId);
             }
-            else if (record.type == "PILGRIM")
+            else if (record.Type == CorporationTowerType.OVERSPEC)
             {
-                user.AddTrigger(TriggerType.TowerOverspecClear, TowerId);
+                user.AddTrigger(Trigger.TowerOverspecClear, TowerId);
             }
-            else if (record.type == "ALL")
+            else if (record.Type == CorporationTowerType.ALL)
             {
-                user.AddTrigger(TriggerType.TowerBasicClear, TowerId);
+                user.AddTrigger(Trigger.TowerBasicClear, TowerId);
             }
 
-            RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.reward_id) ?? throw new Exception("failed to get reward");
+            RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.RewardId) ?? throw new Exception("failed to get reward");
             response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
 

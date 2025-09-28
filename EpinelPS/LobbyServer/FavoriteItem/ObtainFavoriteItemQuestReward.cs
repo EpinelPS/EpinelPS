@@ -24,14 +24,14 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 throw new BadHttpRequestException("Quest not cleared or reward already received");
             }
 
-            List<CharacterRecord> characterRecords = GameData.Instance.CharacterTable.Values.Where(c => c.name_code == questData.name_code).ToList();
+            List<CharacterRecord> characterRecords = GameData.Instance.CharacterTable.Values.Where(c => c.NameCode == questData.NameCode).ToList();
             if (!characterRecords.Any())
             {
-                throw new Exception($"Failed to find character record with name_code: {questData.name_code}");
+                throw new Exception($"Failed to find character record with NameCode: {questData.NameCode}");
             }
 
-            HashSet<int> characterTids = characterRecords.Select(c => c.id).ToHashSet();
-            CharacterModel? character = user.Characters.FirstOrDefault(c => characterTids.Contains(c.Tid));
+            HashSet<int> characterTIds = characterRecords.Select(c => c.Id).ToHashSet();
+            CharacterModel? character = user.Characters.FirstOrDefault(c => characterTIds.Contains(c.Tid));
             
             int characterCsn = 0;
             if (character != null)
@@ -39,10 +39,10 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 characterCsn = character.Csn;
             }
 
-            RewardRecord ? reward = GameData.Instance.GetRewardTableEntry(questData.reward_id);
-            if (reward?.rewards == null || reward.rewards.Count == 0 || reward.rewards[0].reward_type != RewardType.FavoriteItem)
+            RewardRecord ? reward = GameData.Instance.GetRewardTableEntry(questData.RewardId);
+            if (reward?.Rewards == null || reward.Rewards.Count == 0 || reward.Rewards[0].RewardType != RewardType.FavoriteItem)
             {
-                if (questData.reward_id > 0 && reward != null)
+                if (questData.RewardId > 0 && reward != null)
                 {
                     NetRewardData rewardData = RewardUtils.RegisterRewardsForUser(user, reward);
                     ResObtainFavoriteItemQuestReward genericResponse = new ResObtainFavoriteItemQuestReward { UserReward = rewardData };
@@ -53,7 +53,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 }
                 throw new Exception("FavoriteItem reward data not found for quest");
             }
-            int newItemTid = reward.rewards[0].reward_id;
+            int newItemTId = reward.Rewards[0].RewardId;
 
             if (character != null)
             {
@@ -68,7 +68,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             
             if (character != null && finalRewardData.UserFavoriteItems.Count > 0)
             {
-                var newFavoriteItem = user.FavoriteItems.LastOrDefault(f => f.Tid == newItemTid);
+                var newFavoriteItem = user.FavoriteItems.LastOrDefault(f => f.Tid == newItemTId);
                 if (newFavoriteItem != null)
                 {
                     newFavoriteItem.Csn = characterCsn; // Equip item by setting Csn

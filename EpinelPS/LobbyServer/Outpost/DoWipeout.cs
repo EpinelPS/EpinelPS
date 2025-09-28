@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.Outpost
                 response.Currencies.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value});
             }
 
-            user.AddTrigger(TriggerType.OutpostFastBattleReward, 1);
+            user.AddTrigger(Trigger.OutpostFastBattleReward, 1);
 
             JsonDb.Save();
 

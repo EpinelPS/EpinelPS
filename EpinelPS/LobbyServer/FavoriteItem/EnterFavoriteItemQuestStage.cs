@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             ReqEnterFavoriteItemQuestStage req = await ReadData<ReqEnterFavoriteItemQuestStage>();
             User user = GetUser();
 
-            user.AddTrigger(TriggerType.CampaignStart, 1, req.StageId);
+            user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
 
             JsonDb.Save();
 

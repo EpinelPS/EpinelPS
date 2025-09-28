@@ -46,14 +46,14 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             }
             
                         
-            if (questData.next_quest_id > 0)
+            if (questData.NextQuestId > 0)
             {
-                NetUserFavoriteItemQuestData? nextQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == questData.next_quest_id);
+                NetUserFavoriteItemQuestData? nextQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == questData.NextQuestId);
                 if (nextQuest == null)
                 {
                     NetUserFavoriteItemQuestData newQuest = new NetUserFavoriteItemQuestData
                     {
-                        QuestId = questData.next_quest_id,
+                        QuestId = questData.NextQuestId,
                         Clear = false,
                         Received = false
                     };

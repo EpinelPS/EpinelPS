@@ -16,11 +16,11 @@ namespace EpinelPS.LobbyServer.Messenger
 
             KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
 
-            response.Message = user.CreateMessage(msgToSave.Value.conversation_id, req.MessageId);
+            response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId);
 
-            if (msgToSave.Value.reward_id != 0)
+            if (msgToSave.Value.RewardId != 0)
             {
-                Logging.WriteLine("TODO reward for messenger. Reward ID: " + msgToSave.Value.reward_id + " Message ID: " + req.MessageId, LogType.Warning);
+                Logging.WriteLine("TODO reward for messenger. Reward ID: " + msgToSave.Value.RewardId + " Message ID: " + req.MessageId, LogType.Warning);
             }
 
             JsonDb.Save();

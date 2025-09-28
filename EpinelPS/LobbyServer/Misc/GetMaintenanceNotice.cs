@@ -1,5 +1,5 @@
 ﻿using EpinelPS.Utils;
-//idk why i did this but it still works as long as IsWhitelisted is set to true
+//Idk why i dId this but it still works as long as IsWhitelisted is set to true
 namespace EpinelPS.LobbyServer.Misc
 {
     [PacketPath("/maintenancenotice")]
@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Misc
         protected override async Task HandleAsync()
         {
             ReqMaintenanceNotice req = await ReadData<ReqMaintenanceNotice>(); // field string OpenId
-            string oid = req.OpenId;
+            string oId = req.OpenId;
 
             // Create a new instance of ResMaintenanceNotice
             ResMaintenanceNotice r = new()

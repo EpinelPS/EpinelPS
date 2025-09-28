@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Outpost
             // test data
             return buildingId switch
             {
-                // bulidding (22xxx)
+                // bulIdding (22xxx)
                 22401 => new BuildingCost { Gold = 1000, BuildTimeMinutes = 5 },
                 22701 => new BuildingCost { Gold = 2000, BuildTimeMinutes = 10 },
                 22801 => new BuildingCost { Gold = 1500, BuildTimeMinutes = 8 },
@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.Outpost
                 23400 => new BuildingCost { Gold = 2000, BuildTimeMinutes = 10 },
                 23500 => new BuildingCost { Gold = 1800, BuildTimeMinutes = 9 },
 
-                // bulidding (10xxx-12xxx)
+                // bulIdding (10xxx-12xxx)
                 10100 => new BuildingCost { Gold = 500, BuildTimeMinutes = 3 },
                 10200 => new BuildingCost { Gold = 800, BuildTimeMinutes = 5 },
                 10300 => new BuildingCost { Gold = 1200, BuildTimeMinutes = 7 },

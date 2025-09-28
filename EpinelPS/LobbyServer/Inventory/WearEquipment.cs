@@ -29,7 +29,7 @@ namespace EpinelPS.LobbyServer.Inventory
             {
                 if (item.Isn == req.Isn)
                 {
-                    // update character id
+                    // update character Id
                     item.Csn = req.Csn;
                     item.Position = pos;
                     response.Items.Add(NetUtils.ToNet(item));

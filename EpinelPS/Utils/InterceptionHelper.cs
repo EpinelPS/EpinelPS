@@ -11,21 +11,31 @@ namespace EpinelPS.Utils
 
             if (type != 1 && type != 2) throw new Exception("unknown interception type");
 
-            Dictionary<int, InterceptionRecord> records = type == 0 ? GameData.Instance.InterceptNormal : GameData.Instance.InterceptSpecial;
+            int conditionReward;
+            int percentRewardGroup;
+            if (type == 0)
+            {
+                conditionReward = GameData.Instance.InterceptNormal[id].ConditionRewardGroup;
+                percentRewardGroup = GameData.Instance.InterceptNormal[id].PercentConditionRewardGroup;
+            }
+            else
+            {
+                conditionReward = GameData.Instance.InterceptSpecial[id].ConditionRewardGroup;
+                percentRewardGroup = GameData.Instance.InterceptSpecial[id].PercentConditionRewardGroup;
+            }
 
-            InterceptionRecord record = records[id];
 
-            int normReward = GameData.Instance.GetConditionReward(record.condition_reward_group, damage);
+            int normReward = GameData.Instance.GetConditionReward(conditionReward, damage);
             if (normReward != 0)
             {
                 response.NormalReward = RewardUtils.RegisterRewardsForUser(user, normReward);
             }
             else
             {
-                Logging.WriteLine($"unable to find reward which meets condition of damage {damage} and group {record.condition_reward_group}");
+                Logging.WriteLine($"unable to find reward which meets condition of damage {damage} and group {conditionReward}");
             }
 
-            int percentReward = GameData.Instance.GetConditionReward(record.percent_condition_reward_group, damage);
+            int percentReward = GameData.Instance.GetConditionReward(percentRewardGroup, damage);
             if (percentReward != 0)
             {
                 response.BonusReward = RewardUtils.RegisterRewardsForUser(user, percentReward);

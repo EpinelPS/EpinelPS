@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Trigger
+namespace EpinelPS.LobbyServer.TriggerController
 {
     [PacketPath("/Trigger/GetMainQuestData")]
     public class GetMainQuestData : LobbyMsgHandler

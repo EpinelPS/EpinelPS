@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Character
             ReqCharacterLevelUp req = await ReadData<ReqCharacterLevelUp>();
             User user = GetUser();
             ResCharacterLevelUp response = new();
-            Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
+            Dictionary<int, CharacterLevelRecord> data = GameData.Instance.GetCharacterLevelUpData();
 
             foreach (CharacterModel item in user.Characters.ToArray())
             {
@@ -23,10 +23,10 @@ namespace EpinelPS.LobbyServer.Character
                     int requiredCoreDust = 0;
                     for (int i = item.Level; i < req.Lv; i++)
                     {
-                        CharacterLevelData levelUpData = data[i];
-                        requiredCredit += levelUpData.gold;
-                        requiredBattleData += levelUpData.character_exp;
-                        requiredCoreDust += levelUpData.character_exp2;
+                        CharacterLevelRecord levelUpData = data[i];
+                        requiredCredit += levelUpData.Gold;
+                        requiredBattleData += levelUpData.CharacterExp;
+                        requiredCoreDust += levelUpData.CharacterExp2;
                     }
 
                     if (user.CanSubtractCurrency(CurrencyType.Gold, requiredCredit) &&
@@ -73,7 +73,7 @@ namespace EpinelPS.LobbyServer.Character
                 }
             }
 
-            user.AddTrigger(TriggerType.CharacterLevelUpCount, 1);
+            user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
             JsonDb.Save();
 
             await WriteDataAsync(response);

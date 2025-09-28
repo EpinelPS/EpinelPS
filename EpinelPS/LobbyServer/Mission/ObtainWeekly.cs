@@ -26,20 +26,20 @@ namespace EpinelPS.LobbyServer.Mission
 
                 user.WeeklyResetableData.CompletedWeeklyMissions.Add(item);
 
-                if (key.reward_id != 0)
+                if (key.RewardId != 0)
                 {
                     // Actual reward
-                    RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.reward_id) ?? throw new Exception("unable to lookup reward");
+                    RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
                     rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
                 }
                 else
                 {
                     // Point reward
-                    total_points += key.point_value;
+                    total_points += key.PointValue;
                 }
             }
 
-            user.AddTrigger(TriggerType.PointRewardWeekly, total_points);
+            user.AddTrigger(Trigger.PointRewardWeekly, total_points);
             user.WeeklyResetableData.WeeklyMissionPoints += total_points;
 
             response.Reward = NetUtils.MergeRewards(rewards, user);

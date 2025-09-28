@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer
                 ResetHour = JsonDb.Instance.ResetHourUtcTime,
                 CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
             };
-            // todo: validate response with actual server
+            // todo: valIdate response with actual server
 
             await WriteDataAsync(response);
         }

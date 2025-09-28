@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             response.Reward = NetUtils.UseLootBox(user, box.ItemType, req.Count);
 
-            // update client side box count
+            // update client sIde box count
             response.Reward.UserItems.Add(NetUtils.UserItemDataToNet(box));
 
             JsonDb.Save();

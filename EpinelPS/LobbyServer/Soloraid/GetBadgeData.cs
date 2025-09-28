@@ -1,8 +1,8 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Soloraid;
+namespace EpinelPS.LobbyServer.SoloraId;
 
-[PacketPath("/soloraidmuseum/get/reddotdata")]
+[PacketPath("/soloraIdmuseum/get/reddotdata")]
 public class GetBadgeData : LobbyMsgHandler
 {
     protected override async Task HandleAsync()

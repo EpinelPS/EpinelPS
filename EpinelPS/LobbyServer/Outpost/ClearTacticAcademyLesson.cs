@@ -17,11 +17,11 @@ namespace EpinelPS.LobbyServer.Outpost
                 ClearLessonTid = req.LessonTid
             };
 
-            TacticAcademyLessonRecord x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
+            TacticAcademyFunctionRecord x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
 
-            if (user.CanSubtractCurrency((CurrencyType)x.currency_id, x.currency_value))
+            if (user.CanSubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue))
             {
-                user.SubtractCurrency((CurrencyType)x.currency_id, x.currency_value);
+                user.SubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue);
 
                 user.CompletedTacticAcademyLessons.Add(req.LessonTid);
 
@@ -40,27 +40,27 @@ namespace EpinelPS.LobbyServer.Outpost
             await WriteDataAsync(response);
         }
 
-        private static void ProcessLessonReward(User user, TacticAcademyLessonRecord r)
+        private static void ProcessLessonReward(User user, TacticAcademyFunctionRecord r)
         {
-            if (r.lesson_reward == null)
+            if (r.LessonReward == null)
             {
                 Console.WriteLine("Warning: lesson_reward shouldnt be null");
                 return;
             }
 
-            if (r.lesson_type == "OutpostBattle")
+            if (r.LessonType == LessonType.OutpostBattle)
             {
-                foreach (TacticAcademyLessonReward item in r.lesson_reward)
+                foreach (var item in r.LessonReward)
                 {
-                    if (item.lesson_reward_id != 0 && item.lesson_reward_value != 0)
+                    if (item.LessonRewardId != 0 && item.LessonRewardValue != 0)
                     {
-                        user.OutpostBuffs.GetPercentages((CurrencyType)item.lesson_reward_id).Add(item.lesson_reward_value);
+                        user.OutpostBuffs.GetPercentages((CurrencyType)item.LessonRewardId).Add(item.LessonRewardValue);
                     }
                 }
             }
             else
             {
-                Console.WriteLine("Warning: unknown lesson type: " + r.lesson_type);
+                Console.WriteLine("Warning: unknown lesson type: " + r.LessonType);
             }
         }
     }

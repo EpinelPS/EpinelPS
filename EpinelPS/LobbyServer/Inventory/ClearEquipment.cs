@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.Inventory
             {
                 if (item.Isn == req.Isn)
                 {
-                    // update character id
+                    // update character Id
                     item.Csn = 0;
 
                     response.Item = NetUtils.ToNet(item);

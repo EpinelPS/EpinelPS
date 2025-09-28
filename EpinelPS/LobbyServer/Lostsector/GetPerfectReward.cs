@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Lostsector
 
                 LostSectorRecord sectorInfo = GameData.Instance.LostSector[req.SectorId];
 
-                response.Reward = RewardUtils.RegisterRewardsForUser(user, sectorInfo.exploration_reward);
+                response.Reward = RewardUtils.RegisterRewardsForUser(user, sectorInfo.ExplorationReward);
             }
 
             JsonDb.Save();

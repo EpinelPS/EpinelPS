@@ -1,7 +1,7 @@
 using EpinelPS.Database;
 using EpinelPS.Data;
 using EpinelPS.Utils;
-using static EpinelPS.Data.TriggerType;
+using static EpinelPS.Data.Trigger;
 
 namespace EpinelPS.LobbyServer.Inventory
 {
@@ -27,8 +27,8 @@ namespace EpinelPS.LobbyServer.Inventory
             }
 
             List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
-                .Where(x => x.level_enhance_id == harmonyCubeData.level_enhance_id)
-                .OrderBy(x => x.level)
+                .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)
+                .OrderBy(x => x.Level)
                 .ToList();
 
             if (levelData.Count == 0)
@@ -36,21 +36,21 @@ namespace EpinelPS.LobbyServer.Inventory
                 throw new BadHttpRequestException("No level data found for this harmony cube", 400);
             }
 
-            ItemHarmonyCubeLevelRecord? currentLevelData = levelData.FirstOrDefault(x => x.level == harmonyCubeItem.Level);
+            ItemHarmonyCubeLevelRecord? currentLevelData = levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level);
             if (currentLevelData == null)
             {
                 throw new BadHttpRequestException("Current level data not found", 400);
             }
 
-            ItemHarmonyCubeLevelRecord? nextLevelData = levelData.FirstOrDefault(x => x.level == harmonyCubeItem.Level + 1);
+            ItemHarmonyCubeLevelRecord? nextLevelData = levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level + 1);
             if (nextLevelData == null)
             {
                 throw new BadHttpRequestException("Harmony cube is already at max level", 400);
             }
 
-            int requiredMaterialCount = nextLevelData.material_value;
-            int requiredMaterialId = nextLevelData.material_id;
-            int requiredGold = nextLevelData.gold_value;
+            int requiredMaterialCount = nextLevelData.MaterialValue;
+            int requiredMaterialId = nextLevelData.MaterialId;
+            int requiredGold = nextLevelData.GoldValue;
 
             ItemData? materialItem = user.Items.FirstOrDefault(x => x.ItemType == requiredMaterialId && x.Count >= requiredMaterialCount);
             if (materialItem == null)
@@ -79,11 +79,11 @@ namespace EpinelPS.LobbyServer.Inventory
             harmonyCubeItem.Level++;
             harmonyCubeItem.Exp = 0; // Reset exp for the new level
 
-            user.AddTrigger(TriggerType.HarmonyCubeLevel, harmonyCubeItem.Level, harmonyCubeItem.ItemType);
+            user.AddTrigger(Trigger.HarmonyCubeLevel, harmonyCubeItem.Level, harmonyCubeItem.ItemType);
 
             if (harmonyCubeItem.Level >= levelData.Count)
             {
-                user.AddTrigger(TriggerType.HarmonyCubeLevelMax, 1, harmonyCubeItem.ItemType);
+                user.AddTrigger(Trigger.HarmonyCubeLevelMax, 1, harmonyCubeItem.ItemType);
             }
 
             response.Items.Add(NetUtils.ToNet(harmonyCubeItem));

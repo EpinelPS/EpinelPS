@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Outpost
                         new NetJukeboxPlaylistSong { JukeboxTableId = 9020001, Order = 902 }  
                     }
                 },
-                // JukeboxPlaylistUid = 123456789 // Assign a static UID, if required
+                // JukeboxPlaylistUId = 123456789 // Assign a static UID, if required
             };
 
             // Send the response

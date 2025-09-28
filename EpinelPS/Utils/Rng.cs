@@ -16,24 +16,24 @@ namespace EpinelPS.Utils
         {
             return random.Next();
         } /// <summary>
-          /// Picks a random item. weights is a list of numbers which represents probability, table ids represent ID for weight
+          /// Picks a random item. weights is a list of numbers which represents probability, table Ids represent ID for weight
           /// </summary>
           /// <param name="weights"></param>
           /// <param name="tableIds"></param>
           /// <returns></returns>
           /// <exception cref="Exception"></exception>
-        public static RandomItemRecord PickWeightedItem(RandomItemRecord[] records)
+        public static ItemRandomRecord PickWeightedItem(ItemRandomRecord[] records)
         {
             int totalWeight = 0;
-            foreach (RandomItemRecord item in records)
-                totalWeight += item.ratio;
+            foreach (ItemRandomRecord item in records)
+                totalWeight += item.Ratio;
 
             int randomNumber = random.Next(0, totalWeight);
 
             int runningSum = 0;
             for (int i = 0; i < records.Length; i++)
             {
-                runningSum += records[i].ratio;
+                runningSum += records[i].Ratio;
                 if (randomNumber < runningSum)
                     return records[i];
             }

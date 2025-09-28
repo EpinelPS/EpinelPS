@@ -3,7 +3,15 @@ using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.Models;
-
+public class ClearedTutorialData
+{
+    public int Id;
+    public int VersionGroup;
+    public int GroupId;
+    public int ClearedStageId;
+    public int NextId;
+    public bool SaveTutorial;
+}
 public class User
 {
     // User info
@@ -105,7 +113,7 @@ public class User
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
     public NetArcadeMvgData ArcadeInTheMirrorData = new();
 
-    public TriggerModel AddTrigger(TriggerType type, int value, int conditionId = 0)
+    public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
     {
         TriggerModel t = new()
         {
@@ -129,7 +137,7 @@ public class User
         {
             BadgeContent = type,
             Location = location,
-            BadgeGuid = Guid.NewGuid().ToString(),
+            BadgeGuId = Guid.NewGuid().ToString(),
             Seq = LastBadgeSeq++
         };
 
@@ -139,20 +147,20 @@ public class User
     }
 
 
-    public void SetQuest(int tid, bool recievedReward)
+    public void SetQuest(int tId, bool recievedReward)
     {
-        if (!MainQuestData.TryAdd(tid, recievedReward))
+        if (!MainQuestData.TryAdd(tId, recievedReward))
         {
-            MainQuestData[tid] = recievedReward;
+            MainQuestData[tId] = recievedReward;
             return;
         }
     }
 
-    public void SetSubQuest(int tid, bool recievedReward)
+    public void SetSubQuest(int tId, bool recievedReward)
     {
-        if (!SubQuestData.TryAdd(tid, recievedReward))
+        if (!SubQuestData.TryAdd(tId, recievedReward))
         {
-            SubQuestData[tid] = recievedReward;
+            SubQuestData[tId] = recievedReward;
             return;
         }
     }
@@ -179,11 +187,11 @@ public class User
 
         return num;
     }
-    public bool IsStageCompleted(int id)
+    public bool IsStageCompleted(int Id)
     {
         foreach (var item in FieldInfoNew)
         {
-            if (item.Value.CompletedStages.Contains(id))
+            if (item.Value.CompletedStages.Contains(Id))
             {
                 return true;
             }
@@ -234,12 +242,12 @@ public class User
 
     public bool HasCharacter(int c)
     {
-        // Step 1: Get the 'name_code' of the input character with Tid 'c'
+        // Step 1: Get the 'NameCode' of the input character with Tid 'c'
         if (GameData.Instance.CharacterTable.TryGetValue(c, out var inputCharacterRecord))
         {
-            int targetNameCode = inputCharacterRecord.name_code;
-            // Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
-            var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
+            int targetNameCode = inputCharacterRecord.NameCode;
+            // Step 2: Find all character IDs in 'characterTable' that have the same 'NameCode'
+            var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.NameCode == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
             // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
             return Characters.Any(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid));
@@ -253,12 +261,12 @@ public class User
 
     public CharacterModel? GetCharacter(int c)
     {
-        // Step 1: Get the 'name_code' of the input character with Tid 'c'
+        // Step 1: Get the 'NameCode' of the input character with Tid 'c'
         if (GameData.Instance.CharacterTable.TryGetValue(c, out var inputCharacterRecord))
         {
-            int targetNameCode = inputCharacterRecord.name_code;
-            // Step 2: Find all character IDs in 'characterTable' that have the same 'name_code'
-            var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.name_code == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
+            int targetNameCode = inputCharacterRecord.NameCode;
+            // Step 2: Find all character IDs in 'characterTable' that have the same 'NameCode'
+            var matchingCharacterIds = GameData.Instance.CharacterTable.Where(kvp => kvp.Value.NameCode == targetNameCode).Select(kvp => kvp.Key).ToHashSet();
 
             // Step 3: Check if any of your owned characters have a 'Tid' in the set of matching IDs
             return Characters.Where(ownedCharacter => matchingCharacterIds.Contains(ownedCharacter.Tid)).FirstOrDefault();
@@ -346,9 +354,9 @@ public class User
     {
         var msg = new NetMessage()
         {
-            ConversationId = r.conversation_id,
+            ConversationId = r.ConversationId,
             CreatedAt = DateTime.UtcNow.Ticks,
-            MessageId = r.id,
+            MessageId = r.Id,
             Seq = (long)LastMessageId++,
             State = state
         };

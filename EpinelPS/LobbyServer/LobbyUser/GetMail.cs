@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
                 Msn = 3,
                 Nickname = "nick",
                 Title = new() { IsPlain = true, Str = "Our Server Fell" },
-                Text = new() { IsPlain = true, Str = "Our Game Was Down For 1 Second because the HP Laptop Which Hosted the Server Got Shut Down by the Lid Closing. As for the Reward for the Inconvience, free paid gems" },
+                Text = new() { IsPlain = true, Str = "Our Game Was Down For 1 Second because the HP Laptop Which Hosted the Server Got Shut Down by the LId Closing. As for the Reward for the Inconvience, free paId gems" },
                 HasReward = true,
                 Sender = 102
 

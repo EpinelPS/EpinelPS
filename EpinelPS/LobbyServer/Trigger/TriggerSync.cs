@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Trigger
+namespace EpinelPS.LobbyServer.TriggerController
 {
     [PacketPath("/trigger/sync")]
     public class TriggerSync : LobbyMsgHandler

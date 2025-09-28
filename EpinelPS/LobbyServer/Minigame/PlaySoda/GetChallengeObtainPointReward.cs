@@ -24,7 +24,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
             while (pointValues.Length > arcadePlaySodaInfo.LastRewardStep && arcadePlaySodaInfo.AccumulatedScore >= pointValues[arcadePlaySodaInfo.LastRewardStep])
             {
                 arcadePlaySodaInfo.LastRewardStep++;
-                rewards.Add(RewardUtils.RegisterRewardsForUser(user, GameData.Instance.EventPlaySodaPointRewardTable.First(r => (int)r.Value.game_type == arcadePlaySodaInfo.ChallengeStageId && r.Value.step == arcadePlaySodaInfo.LastRewardStep && r.Value.point_value == pointValues[arcadePlaySodaInfo.LastRewardStep - 1]).Value.reward_id));
+                rewards.Add(RewardUtils.RegisterRewardsForUser(user, GameData.Instance.EventPlaySodaPointRewardTable.First(r => (int)r.Value.GameType == arcadePlaySodaInfo.ChallengeStageId && r.Value.Step == arcadePlaySodaInfo.LastRewardStep && r.Value.PointValue == pointValues[arcadePlaySodaInfo.LastRewardStep - 1]).Value.RewardId));
             }
 
             await WriteDataAsync(new ResObtainArcadePlaySodaPointReward() { LastRewardStep = arcadePlaySodaInfo.LastRewardStep, Reward = NetUtils.MergeRewards(rewards, user) });

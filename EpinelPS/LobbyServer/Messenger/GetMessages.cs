@@ -27,18 +27,18 @@ namespace EpinelPS.LobbyServer.Messenger
 
         private static void CheckAndCreateAvailableMessages(User user)
         {
-            foreach (KeyValuePair<int, MessengerMsgConditionRecord> messageCondition in GameData.Instance.MessageConditions)
+            foreach (KeyValuePair<int, MessengerConditionTriggerRecord> messageCondition in GameData.Instance.MessageConditions)
             {
                 int conditionId = messageCondition.Key;
-                MessengerMsgConditionRecord msgCondition = messageCondition.Value;
+                MessengerConditionTriggerRecord msgCondition = messageCondition.Value;
 
                 if (IsMessageConditionSatisfied(user, conditionId))
                 {
-                    bool messageExists = user.MessengerData.Any(m => m.ConversationId == msgCondition.tid);
+                    bool messageExists = user.MessengerData.Any(m => m.ConversationId == msgCondition.Tid);
                     if (!messageExists)
                     {
                         KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.FirstOrDefault(x =>
-                            x.Value.conversation_id == msgCondition.tid && x.Value.is_opener);
+                            x.Value.ConversationId == msgCondition.Tid && x.Value.IsOpener);
 
                         if (conversation.Value != null)
                         {
@@ -51,14 +51,14 @@ namespace EpinelPS.LobbyServer.Messenger
 
         private static bool IsMessageConditionSatisfied(User user, int conditionId)
         {
-            if (!GameData.Instance.MessageConditions.TryGetValue(conditionId, out MessengerMsgConditionRecord? msgCondition))
+            if (!GameData.Instance.MessageConditions.TryGetValue(conditionId, out MessengerConditionTriggerRecord? msgCondition))
             {
                 return false;
             }
 
-            foreach (MessengerConditionTriggerList trigger in msgCondition.trigger_list)
+            foreach (TriggerData trigger in msgCondition.TriggerList)
             {
-                if (trigger.trigger == "None" || trigger.condition_id == 0)
+                if (trigger.Trigger == Data.Trigger.None || trigger.ConditionId == 0)
                     continue;
 
                 if (!CheckTriggerCondition(user, trigger))
@@ -70,25 +70,12 @@ namespace EpinelPS.LobbyServer.Messenger
             return true;
         }
 
-        private static bool CheckTriggerCondition(User user, MessengerConditionTriggerList trigger)
+        private static bool CheckTriggerCondition(User user, TriggerData trigger)
         {
-            TriggerType triggerType = ParseTriggerType(trigger.trigger);
-
             return user.Triggers.Any(t =>
-                t.Type == triggerType &&
-                t.ConditionId == trigger.condition_id &&
-                t.Value >= trigger.condition_value);
-        }
-
-        private static TriggerType ParseTriggerType(string triggerString)
-        {
-            return triggerString switch
-            {
-                "ObtainCharacter" => TriggerType.ObtainCharacter,
-                "MainQuestClear" => TriggerType.MainQuestClear,
-                "MessageClear" => TriggerType.MessageClear,
-                _ => TriggerType.None
-            };
+                t.Type == trigger.Trigger &&
+                t.ConditionId == trigger.ConditionId &&
+                t.Value >= trigger.ConditionValue);
         }
     }
 }

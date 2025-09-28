@@ -34,7 +34,7 @@ namespace EpinelPS.LobbyServer.Stage
             };
             CampaignStageRecord clearedStage = GameData.Instance.GetStageData(StageId) ?? throw new Exception("cleared stage cannot be null");
 
-            string stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            string stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.ChapterId, clearedStage.ChapterMod);
             
             if (user.FieldInfoNew.Count == 0)
             {
@@ -42,17 +42,17 @@ namespace EpinelPS.LobbyServer.Stage
             }
 
             DoQuestSpecificUserOperations(user, StageId);
-            RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.reward_id);
+            RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.RewardId);
 
             if (forceCompleteScenarios)
             {
-                if (!user.CompletedScenarios.Contains(clearedStage.enter_scenario) && !string.IsNullOrEmpty(clearedStage.enter_scenario) && !string.IsNullOrWhiteSpace(clearedStage.enter_scenario))
+                if (!user.CompletedScenarios.Contains(clearedStage.EnterScenario) && !string.IsNullOrEmpty(clearedStage.EnterScenario) && !string.IsNullOrWhiteSpace(clearedStage.EnterScenario))
                 {
-                    user.CompletedScenarios.Add(clearedStage.enter_scenario);
+                    user.CompletedScenarios.Add(clearedStage.EnterScenario);
                 }
-                if (!user.CompletedScenarios.Contains(clearedStage.exit_scenario) && !string.IsNullOrEmpty(clearedStage.exit_scenario) && !string.IsNullOrWhiteSpace(clearedStage.exit_scenario))
+                if (!user.CompletedScenarios.Contains(clearedStage.ExitScenario) && !string.IsNullOrEmpty(clearedStage.ExitScenario) && !string.IsNullOrWhiteSpace(clearedStage.ExitScenario))
                 {
-                    user.CompletedScenarios.Add(clearedStage.exit_scenario);
+                    user.CompletedScenarios.Add(clearedStage.ExitScenario);
                 }
             }
 
@@ -92,9 +92,9 @@ namespace EpinelPS.LobbyServer.Stage
                 });
             }
 
-            if (clearedStage.stage_category == StageCategory.Normal || clearedStage.stage_category == StageCategory.Boss || clearedStage.stage_category == StageCategory.Hard)
+            if (clearedStage.StageCategory == StageCategory.Normal || clearedStage.StageCategory == StageCategory.Boss || clearedStage.StageCategory == StageCategory.Hard)
             {
-                if (clearedStage.chapter_mod == ChapterMod.Hard)
+                if (clearedStage.ChapterMod == ChapterMod.Hard)
                 {
                     if (StageId > user.LastHardStageCleared)
                         user.LastHardStageCleared = StageId;
@@ -107,10 +107,10 @@ namespace EpinelPS.LobbyServer.Stage
             }
             else
             {
-                Logging.Warn("Unknown stage category " + clearedStage.stage_category);
+                Logging.Warn("Unknown stage category " + clearedStage.StageCategory);
             }
 
-            if (clearedStage.stage_type != StageType.Sub)
+            if (clearedStage.StageType != StageType.Sub)
             {
                 // add outpost reward level if unlocked
                 if (user.MainQuestData.TryGetValue(21, out bool _))
@@ -132,12 +132,12 @@ namespace EpinelPS.LobbyServer.Stage
 
 
             // Mark chapter as completed if boss stage was completed
-            if (clearedStage.stage_category == StageCategory.Boss && clearedStage.stage_type == StageType.Main)
+            if (clearedStage.StageCategory == StageCategory.Boss && clearedStage.StageType == StageType.Main)
             {
-                if (clearedStage.chapter_mod == ChapterMod.Hard)
-                    user.AddTrigger(TriggerType.HardChapterClear, 1, clearedStage.chapter_id);
+                if (clearedStage.ChapterMod == ChapterMod.Hard)
+                    user.AddTrigger(Trigger.HardChapterClear, 1, clearedStage.ChapterId);
                 else
-                    user.AddTrigger(TriggerType.ChapterClear, 1, clearedStage.chapter_id);
+                    user.AddTrigger(Trigger.ChapterClear, 1, clearedStage.ChapterId);
             }
 
             if (!user.FieldInfoNew.ContainsKey(stageMapId))
@@ -150,13 +150,13 @@ namespace EpinelPS.LobbyServer.Stage
 
         private static void DoQuestSpecificUserOperations(User user, int clearedStageId)
         {
-            MainQuestCompletionRecord? quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
+            MainQuestRecord? quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
 
-            user.AddTrigger(TriggerType.CampaignClear, 1, clearedStageId);
+            user.AddTrigger(Trigger.CampaignClear, 1, clearedStageId);
             if (quest != null)
             {
-                user.SetQuest(quest.id, false);
-                user.AddTrigger(TriggerType.MainQuestClear, 1, quest.id);
+                user.SetQuest(quest.Id, false);
+                user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
             }
 
             // TODO: Is this the right place to add default characters?
@@ -182,12 +182,12 @@ namespace EpinelPS.LobbyServer.Stage
                 user.BondInfo.Add(new() { NameCode = 3001, Lv = 1 });
                 user.BondInfo.Add(new() { NameCode = 3005, Lv = 1 });
 
-                user.AddTrigger(TriggerType.ObtainCharacter, 1, 3001);
-                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1018);
-                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1015);
-                user.AddTrigger(TriggerType.ObtainCharacter, 1, 1014);
-                user.AddTrigger(TriggerType.ObtainCharacter, 1, 3005);
-                user.AddTrigger(TriggerType.ObtainCharacterNew, 1);
+                user.AddTrigger(Trigger.ObtainCharacter, 1, 3001);
+                user.AddTrigger(Trigger.ObtainCharacter, 1, 1018);
+                user.AddTrigger(Trigger.ObtainCharacter, 1, 1015);
+                user.AddTrigger(Trigger.ObtainCharacter, 1, 1014);
+                user.AddTrigger(Trigger.ObtainCharacter, 1, 3005);
+                user.AddTrigger(Trigger.ObtainCharacterNew, 1);
 
                 NetTeamData team1Sub = new()
                 {

@@ -14,13 +14,13 @@ namespace EpinelPS.LobbyServer.Subquest
 
             ResSetTriggerFromSubQuest response = new();
 
-            if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubquestRecord? record))
+            if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubQuestRecord? record))
                 throw new Exception("no such subquest: " + req.SubquestId);
 
 
-            user.AddTrigger(TriggerType.CampaignGroupClear, record.clear_condition_value, record.clear_condition_id); // TODO this may need to go elsewhere
-user.AddTrigger(TriggerType.FieldObjectCollection, record.clear_condition_value, record.clear_condition_id); // TODO this may need to go elsewhere
-            user.AddTrigger(TriggerType.SubQuestClear, 1, req.SubquestId);
+            user.AddTrigger(Trigger.CampaignGroupClear, record.ClearConditionValue, record.ClearConditionId); // TODO this may need to go elsewhere
+user.AddTrigger(Trigger.FieldObjectCollection, record.ClearConditionValue, record.ClearConditionId); // TODO this may need to go elsewhere
+            user.AddTrigger(Trigger.SubQuestClear, 1, req.SubquestId);
 
             JsonDb.Save();
 

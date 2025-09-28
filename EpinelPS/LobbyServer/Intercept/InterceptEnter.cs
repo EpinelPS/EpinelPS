@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Intercept
 
             ResEnterIntercept response = new();
 
-            user.AddTrigger(Data.TriggerType.InterceptStart, 1);
+            user.AddTrigger(Data.Trigger.InterceptStart, 1);
 
             await WriteDataAsync(response);
         }

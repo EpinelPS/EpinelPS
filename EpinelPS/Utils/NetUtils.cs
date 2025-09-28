@@ -93,18 +93,18 @@ namespace EpinelPS.Utils
             {
                 if (item.Isn == isn)
                 {
-                    string? subType = GameData.Instance.GetItemSubType(item.ItemType);
+                    var subType = GameData.Instance.GetItemSubType(item.ItemType);
                     switch (subType)
                     {
-                        case "Module_A":
+                        case ItemSubType.Module_A:
                             return 0;
-                        case "Module_B":
+                        case ItemSubType.Module_B:
                             return 1;
-                        case "Module_C":
+                        case ItemSubType.Module_C:
                             return 2;
-                        case "Module_D":
+                        case ItemSubType.Module_D:
                             return 3;
-                        case "HarmonyCube":
+                        case ItemSubType.HarmonyCube:
                             return GetHarmonyCubePosition(item.ItemType);
                         default:
                             Console.WriteLine("Unknown item subtype: " + subType);
@@ -121,7 +121,7 @@ namespace EpinelPS.Utils
         {
             if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(itemType, out ItemHarmonyCubeRecord? harmonyCube))
             {
-                return harmonyCube.location_id;
+                return harmonyCube.LocationId;
             }
             return 1; 
         }
@@ -207,7 +207,7 @@ namespace EpinelPS.Utils
 
         public static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost)
         {
-            OutpostBattleTableRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+            OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
 
             int value = 0;
             double ratio = 0;
@@ -218,19 +218,19 @@ namespace EpinelPS.Utils
             switch (type)
             {
                 case CurrencyType.CharacterExp2:
-                    value = battleData.character_exp2;
+                    value = battleData.CharacterExp2;
                     ratio = 1;
                     break;
                 case CurrencyType.CharacterExp:
-                    value = battleData.character_exp1;
+                    value = battleData.CharacterExp1;
                     ratio = 3;
                     break;
                 case CurrencyType.Gold:
-                    value = battleData.credit;
+                    value = battleData.Credit;
                     ratio = 3;
                     break;
                 case CurrencyType.UserExp:
-                    value = battleData.user_exp;
+                    value = battleData.UserExp;
                     ratio = 1;
                     break;
             }
@@ -242,34 +242,34 @@ namespace EpinelPS.Utils
             //duration = TimeSpan.FromHours(1);
             NetRewardData result = new();
 
-            OutpostBattleTableRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+            OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
 
             result.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.CharacterExp2,
                 FinalValue = 0,
-                Value = CalcOutpostRewardAmount(battleData.character_exp2, 1, 1, duration.TotalMinutes)
+                Value = CalcOutpostRewardAmount(battleData.CharacterExp2, 1, 1, duration.TotalMinutes)
             });
 
             result.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.CharacterExp,
                 FinalValue = 0,
-                Value = CalcOutpostRewardAmount(battleData.character_exp1, 3, 1, duration.TotalMinutes)
+                Value = CalcOutpostRewardAmount(battleData.CharacterExp1, 3, 1, duration.TotalMinutes)
             });
 
             result.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.Gold,
                 FinalValue = 0,
-                Value = CalcOutpostRewardAmount(battleData.credit, 3, 1, duration.TotalMinutes)
+                Value = CalcOutpostRewardAmount(battleData.Credit, 3, 1, duration.TotalMinutes)
             });
 
             result.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.UserExp,
                 FinalValue = 0,
-                Value = CalcOutpostRewardAmount(battleData.user_exp, 3, 1, duration.TotalMinutes)
+                Value = CalcOutpostRewardAmount(battleData.UserExp, 3, 1, duration.TotalMinutes)
             });
 
             return result;
@@ -393,31 +393,31 @@ namespace EpinelPS.Utils
 
         public static NetRewardData UseLootBox(User user, int boxId, int count)
         {
-            ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.id == boxId).FirstOrDefault().Value ?? throw new Exception("cannot find box id " + boxId);
+            ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems.Where(x => x.Value.Id == boxId).FirstOrDefault().Value ?? throw new Exception("cannot find box Id " + boxId);
 
-            if (cItem.use_type != "ItemRandomBox") throw new Exception("expected random box");
+            if (cItem.UseType != ItemUseType.ItemRandomBox) throw new Exception("expected random box");
 
             // find matching probability entries
-            RandomItemRecord[] probabilityEntries = [.. GameData.Instance.RandomItem.Values.Where(x => x.group_id == cItem.use_id)];
-            if (probabilityEntries.Length == 0) throw new Exception($"cannot find any probability entries with ID {cItem.use_id}, box ID: {cItem.id}");
+            ItemRandomRecord[] probabilityEntries = [.. GameData.Instance.RandomItem.Values.Where(x => x.GroupId == cItem.UseId)];
+            if (probabilityEntries.Length == 0) throw new Exception($"cannot find any probability entries with ID {cItem.UseId}, box ID: {cItem.Id}");
 
             // run probability as many times as needed
             NetRewardData ret = new() { PassPoint = new() };
             for (int i = 0; i < count; i++)
             {
-                RandomItemRecord winningRecord = Rng.PickWeightedItem(probabilityEntries);
+                ItemRandomRecord winningRecord = Rng.PickWeightedItem(probabilityEntries);
 
-                Logging.WriteLine($"LootBox {boxId}: Won item - Type: {winningRecord.reward_type}, ID: {winningRecord.reward_id}, Value: {winningRecord.reward_value_min}", LogType.Info);
+                Logging.WriteLine($"LootBox {boxId}: Won item - Type: {winningRecord.RewardType}, ID: {winningRecord.RewardId}, Value: {winningRecord.RewardValueMin}", LogType.Info);
 
-                if (winningRecord.reward_value_min != winningRecord.reward_value_max)
+                if (winningRecord.RewardValueMin != winningRecord.RewardValueMax)
                 {
-                    Logging.WriteLine("TODO: reward_value_max", LogType.Warning);
+                    Logging.WriteLine("TODO: RewardValueMax", LogType.Warning);
                 }
 
-                if (winningRecord.reward_type == RewardType.Currency)
-                    RewardUtils.AddSingleCurrencyObject(user, ref ret, (CurrencyType)winningRecord.reward_id, winningRecord.reward_value_min);
+                if (winningRecord.RewardType == RewardType.Currency)
+                    RewardUtils.AddSingleCurrencyObject(user, ref ret, (CurrencyType)winningRecord.RewardId, winningRecord.RewardValueMin);
                 else
-                    RewardUtils.AddSingleObject(user, ref ret, winningRecord.reward_id, winningRecord.reward_type, winningRecord.reward_value_min);
+                    RewardUtils.AddSingleObject(user, ref ret, winningRecord.RewardId, winningRecord.RewardType, winningRecord.RewardValueMin);
             }
             JsonDb.Save();
 

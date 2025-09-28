@@ -68,20 +68,20 @@ namespace EpinelPS.LobbyServer.Inventory
         (int exp, int modules) AddExp(NetItemData srcItem, ItemData destItem)
         {
             int[] maxLevel = [0, 0, 3, 3, 4, 4, 5, 5, 5, 5];
-            ItemEquipRecord? srcEquipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.id == srcItem.Tid);
-            ItemEquipRecord destEquipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType) ?? throw new NullReferenceException();;
+            ItemEquipRecord? srcEquipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.Id == srcItem.Tid);
+            ItemEquipRecord destEquipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.Id == destItem.ItemType) ?? throw new NullReferenceException();;
             int[] expNextTable = [.. GameData.Instance.itemEquipExpTable.Values
-                    .Where(x => x.item_rare == destEquipRecord.item_rare)
-                    .Select(x => x.exp)
+                    .Where(x => x.ItemRare == destEquipRecord.ItemRare)
+                    .Select(x => x.Exp)
                     .OrderBy(x => x)];
             int exp = 0;
             int modules = 0;
 
             if (srcEquipRecord != null)
             {
-                ItemEquipGradeExpRecord levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == srcEquipRecord.grade_core_id) ?? throw new NullReferenceException();;
+                ItemEquipGradeExpRecord levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.GradeCoreId == srcEquipRecord.GradeCoreId) ?? throw new NullReferenceException();;
 
-                exp = srcItem.Count * levelRecord.exp;
+                exp = srcItem.Count * levelRecord.Exp;
 
                 destItem.Exp += exp;
             }
@@ -102,13 +102,13 @@ namespace EpinelPS.LobbyServer.Inventory
             // TODO: double-check this. is this a thing?
             // destItem.Exp += GetSourceExp(srcItem);
 
-            while (destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1] && destItem.Exp >= expNextTable[destItem.Level + 1] && destItem.Level < maxLevel[destEquipRecord.grade_core_id - 1])
+            while (destItem.Level < maxLevel[destEquipRecord.GradeCoreId - 1] && destItem.Exp >= expNextTable[destItem.Level + 1] && destItem.Level < maxLevel[destEquipRecord.GradeCoreId - 1])
             {
                 destItem.Exp -= expNextTable[destItem.Level + 1];
                 destItem.Level++;
             }
 
-            if (destItem.Level >= maxLevel[destEquipRecord.grade_core_id - 1])
+            if (destItem.Level >= maxLevel[destEquipRecord.GradeCoreId - 1])
             {
                 modules = destItem.Exp; // TODO: check this. is the ratio actually 1:1?
                 destItem.Exp = 0;
@@ -120,11 +120,11 @@ namespace EpinelPS.LobbyServer.Inventory
         private int GetSourceExp(NetItemData srcItem)
         {
             ItemData item = GetUser().Items.FirstOrDefault(x => x.Isn == srcItem.Isn) ?? throw new NullReferenceException();
-            ItemEquipRecord equipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.id == item.ItemType) ?? throw new NullReferenceException();
-            ItemEquipGradeExpRecord? levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == equipRecord.grade_core_id);
+            ItemEquipRecord equipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.Id == item.ItemType) ?? throw new NullReferenceException();
+            ItemEquipGradeExpRecord? levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.GradeCoreId == equipRecord.GradeCoreId);
             int[] expNextTable = [.. GameData.Instance.itemEquipExpTable.Values
-                .Where(x => x.item_rare == equipRecord.item_rare)
-                .Select(x => x.exp)];
+                .Where(x => x.ItemRare == equipRecord.ItemRare)
+                .Select(x => x.Exp)];
             int level = item.Level;
             int exp = item.Exp;
 
@@ -139,11 +139,11 @@ namespace EpinelPS.LobbyServer.Inventory
         private static int CalcTotalExp(ItemData destItem)
         {
             int exp = 0;
-            ItemEquipRecord equipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.id == destItem.ItemType) ?? throw new NullReferenceException();
-            ItemEquipGradeExpRecord? levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.grade_core_id == equipRecord.grade_core_id);
+            ItemEquipRecord equipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.Id == destItem.ItemType) ?? throw new NullReferenceException();
+            ItemEquipGradeExpRecord? levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.GradeCoreId == equipRecord.GradeCoreId);
             int[] expNextTable = [.. GameData.Instance.itemEquipExpTable.Values
-                .Where(x => x.item_rare == equipRecord.item_rare)
-                .Select(x => x.exp)];
+                .Where(x => x.ItemRare == equipRecord.ItemRare)
+                .Select(x => x.Exp)];
 
             // skip the first level, it's unused
             for (int i = 1; i < expNextTable.Length; i++)

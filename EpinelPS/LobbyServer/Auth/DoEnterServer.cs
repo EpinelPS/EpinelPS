@@ -32,7 +32,7 @@ namespace EpinelPS.LobbyServer.Auth
 
             string token = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                                .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                               .AddClaim("userid", UserId)
+                               .AddClaim("userId", UserId)
                                .IssuedAt(DateTime.UtcNow)
                                .Expiration(DateTime.UtcNow.AddDays(2))
                                .Encode();

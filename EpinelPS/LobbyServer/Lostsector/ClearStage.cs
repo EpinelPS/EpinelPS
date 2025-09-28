@@ -26,17 +26,17 @@ namespace EpinelPS.LobbyServer.Lostsector
 
         public static void ClearLostSectorStage(User user, int stageId)
         {
-            // get lost sector id from stage id
-            int sector = GameData.Instance.LostSectorStages[stageId].sector;
+            // get lost sector Id from stage Id
+            int sector = GameData.Instance.LostSectorStages[stageId].Sector;
 
-            // get position ID from stage id in map data
+            // get position ID from stage Id in map data
 
             LostSectorRecord sectorData = GameData.Instance.LostSector[sector];
-            MapInfo mapInfo = GameData.Instance.MapData[sectorData.field_id];
+            var mapInfo = GameData.Instance.MapData[sectorData.FieldId];
 
-            StageSpawner stage = mapInfo.StageSpawner.Where(x => x.stageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
+            var stage = mapInfo.StageSpawner.Where(x => x.StageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
 
-            user.LostSectorData[sector].ClearedStages.Add(stage.positionId, stageId);
+            user.LostSectorData[sector].ClearedStages.Add(stage.PositionId, stageId);
         }
     }
 }

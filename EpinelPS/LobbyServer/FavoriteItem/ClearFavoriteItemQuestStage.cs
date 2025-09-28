@@ -28,13 +28,13 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 if (existingQuest != null) existingQuest.Clear = true;
                 else user.FavoriteItemQuests.Add(new NetUserFavoriteItemQuestData { QuestId = req.FavoriteItemQuestId, Clear = true });
 
-                if (questData.next_quest_id > 0 && user.FavoriteItemQuests.All(q => q.QuestId != questData.next_quest_id))
+                if (questData.NextQuestId > 0 && user.FavoriteItemQuests.All(q => q.QuestId != questData.NextQuestId))
                 {
-                    user.FavoriteItemQuests.Add(new NetUserFavoriteItemQuestData { QuestId = questData.next_quest_id, Clear = false, Received = false });
+                    user.FavoriteItemQuests.Add(new NetUserFavoriteItemQuestData { QuestId = questData.NextQuestId, Clear = false, Received = false });
                 }
             }
 
-            string stageMapId = GameData.Instance.GetMapIdFromChapter(stageData.chapter_id, stageData.chapter_mod);
+            string stageMapId = GameData.Instance.GetMapIdFromChapter(stageData.ChapterId, stageData.ChapterMod);
             if (!user.FieldInfoNew.ContainsKey(stageMapId))
             {
                 user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());

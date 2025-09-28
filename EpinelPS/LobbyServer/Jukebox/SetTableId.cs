@@ -3,7 +3,7 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Jukebox
 {
-    [PacketPath("/jukebox/set/tableid")]
+    [PacketPath("/jukebox/set/tableId")]
     public class SetTableId : LobbyMsgHandler
     {
         protected override async Task HandleAsync()

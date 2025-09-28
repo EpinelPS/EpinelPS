@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Inventory
             }
 
             ItemHarmonyCubeLevelRecord? currentLevelData = GetCurrentLevelData(harmonyCubeItem, harmonyCubeData);
-            int maxSlots = currentLevelData?.slot ?? 1;
+            int maxSlots = currentLevelData?.Slot ?? 1;
 
             foreach (long clearCsn in req.Clears)
             {
@@ -119,14 +119,14 @@ namespace EpinelPS.LobbyServer.Inventory
                 throw new BadHttpRequestException($"Character class incompatible with harmony cube", 400);
             }
 
-            CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.location_id, harmonyCubeItem.Isn);
+            CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
 
             harmonyCubeItem.CsnList.Add(targetCsn);
 
             if (harmonyCubeItem.CsnList.Count == 1)
             {
                 harmonyCubeItem.Csn = targetCsn;
-                harmonyCubeItem.Position = harmonyCubeData.location_id;
+                harmonyCubeItem.Position = harmonyCubeData.LocationId;
             }
 
         }
@@ -156,7 +156,7 @@ namespace EpinelPS.LobbyServer.Inventory
                     if (item.CsnList.Count > 0)
                     {
                         item.Csn = item.CsnList[0];
-                        item.Position = existingHarmonyCubeData.location_id;
+                        item.Position = existingHarmonyCubeData.LocationId;
                     }
                     else
                     {
@@ -171,18 +171,18 @@ namespace EpinelPS.LobbyServer.Inventory
         private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(ItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
         {
             List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
-                .Where(x => x.level_enhance_id == harmonyCubeData.level_enhance_id)
-                .OrderBy(x => x.level)
+                .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)
+                .OrderBy(x => x.Level)
                 .ToList();
 
-            return levelData.FirstOrDefault(x => x.level == harmonyCubeItem.Level);
+            return levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level);
         }
 
         private bool IsClassCompatible(CharacterModel character, ItemHarmonyCubeRecord harmonyCubeData)
         {
             if (GameData.Instance.CharacterTable.TryGetValue(character.Tid, out CharacterRecord? characterData))
             {
-                return harmonyCubeData.@class == "All" || harmonyCubeData.@class == characterData.character_class;
+                return harmonyCubeData.Class == CharacterClassType.All || harmonyCubeData.Class == characterData.Class;
             }
             return false;
         }

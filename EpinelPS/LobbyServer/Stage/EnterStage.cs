@@ -15,9 +15,9 @@ namespace EpinelPS.LobbyServer.Stage
             ResEnterStage response = new();
 
             CampaignStageRecord clearedStage = GameData.Instance.GetStageData(req.StageId) ?? throw new Exception("cleared stage cannot be null");
-            string map = GameData.Instance.GetMapIdFromChapter(clearedStage.chapter_id, clearedStage.chapter_mod);
+            string map = GameData.Instance.GetMapIdFromChapter(clearedStage.ChapterId, clearedStage.ChapterMod);
 
-            if (clearedStage.stage_category ==  StageCategory.Boss)
+            if (clearedStage.StageCategory == StageCategory.Boss)
             {
                 // When entering a boss stage, unlock boss information in campaign
                 if (!user.FieldInfoNew.ContainsKey(map))
@@ -27,7 +27,7 @@ namespace EpinelPS.LobbyServer.Stage
                     info.BossEntered = true;
             }
 
-            user.AddTrigger(TriggerType.CampaignStart, 1, req.StageId);
+            user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
 
             JsonDb.Save();
 

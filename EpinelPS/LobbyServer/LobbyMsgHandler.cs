@@ -58,7 +58,7 @@ namespace EpinelPS.LobbyServer
                              .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                              .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
-            UserId = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userid"]).GetUInt64();
+            UserId = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
 
             if (UserId == 0) throw new Exception("403");
             await HandleAsync();
@@ -144,9 +144,9 @@ namespace EpinelPS.LobbyServer
         {
             return JsonDb.GetUser(UserId) ?? throw new Exception("null user");
         }
-        public User? GetUser(ulong id)
+        public User? GetUser(ulong Id)
         {
-            return JsonDb.GetUser(id);
+            return JsonDb.GetUser(Id);
         }
     }
 }

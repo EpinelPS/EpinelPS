@@ -18,11 +18,11 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
             foreach (var questId in request.QuestIds)
             {
                 var quest = GameData.Instance.EventMvgQuestTable[questId];
-                if (quest.id != 0)
+                if (quest.Id != 0)
                 {
-                    user.ArcadeInTheMirrorData.Quests.First(q => q.QuestId == quest.id).IsReceived = true;
+                    user.ArcadeInTheMirrorData.Quests.First(q => q.QuestId == quest.Id).IsReceived = true;
 
-                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, quest.reward_id));
+                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, quest.RewardId));
                 }
             }
 

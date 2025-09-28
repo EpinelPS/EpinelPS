@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             ReqLoginEventData req = await ReadData<ReqLoginEventData>();
-            int evid = req.EventId;
+            int evId = req.EventId;
             ResLoginEventData response = new()
             {
                 EndDate = DateTime.Now.AddDays(13).Ticks,

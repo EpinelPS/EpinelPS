@@ -15,12 +15,12 @@ namespace EpinelPS.LobbyServer.Character
 
             CharacterModel character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");
 
-            CharacterRecord charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.id == character.Tid) ?? throw new Exception("cannot find character record");
+            CharacterRecord charRecord = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.Id == character.Tid) ?? throw new Exception("cannot find character record");
             Dictionary<int, int> skillIdMap = new()
             {
-                { 1, charRecord.ulti_skill_id },
-                { 2, charRecord.skill1_id },
-                { 3, charRecord.skill2_id }
+                { 1, charRecord.UltiSkillId },
+                { 2, charRecord.Skill1Id },
+                { 3, charRecord.Skill2Id }
             };
             Dictionary<int, int> skillLevelMap = new()
             {
@@ -28,19 +28,19 @@ namespace EpinelPS.LobbyServer.Character
                 { 2, character.Skill1Lvl },
                 { 3, character.Skill2Lvl }
             };
-            SkillInfoRecord skillRecord = GameData.Instance.skillInfoTable.Values.FirstOrDefault(s => s.id == skillIdMap[req.Category] + (skillLevelMap[req.Category] - 1)) ?? throw new Exception("cannot find character skill record");
-            CostRecord costRecord = GameData.Instance.costTable.Values.FirstOrDefault(c => c.id == skillRecord.level_up_cost_id) ?? throw new Exception("cannot find character cost record");
+            SkillInfoRecord skillRecord = GameData.Instance.skillInfoTable.Values.FirstOrDefault(s => s.Id == skillIdMap[req.Category] + (skillLevelMap[req.Category] - 1)) ?? throw new Exception("cannot find character skill record");
+            CostRecord costRecord = GameData.Instance.costTable.Values.FirstOrDefault(c => c.Id == skillRecord.LevelUpCostId) ?? throw new Exception("cannot find character cost record");
 
-            foreach (CostData? cost in costRecord.costs.Where(i => i.item_type != "None"))
+            foreach (CostData? cost in costRecord.Costs.Where(i => i.ItemType != RewardType.None))
             {
-                ItemData item = user.Items.FirstOrDefault(i => i.ItemType == cost.item_id) ?? throw new NullReferenceException();
+                ItemData item = user.Items.FirstOrDefault(i => i.ItemType == cost.ItemId) ?? throw new NullReferenceException();
 
-                item.Count -= cost.item_value;
+                item.Count -= cost.ItemValue;
 
                 response.Items.Add(new NetUserItemData
                 {
                     Isn = item.Isn,
-                    Tid = cost.item_id,
+                    Tid = cost.ItemId,
                     Count = item.Count,
                     Csn = item.Csn,
                     Corporation = item.Corp,
@@ -81,7 +81,7 @@ namespace EpinelPS.LobbyServer.Character
 
             if (character.UltimateLevel == 10 && character.Skill1Lvl == 10 && character.Skill2Lvl == 10)
             {
-                user.AddTrigger(TriggerType.CharacterSkillLevelMax, 1);
+                user.AddTrigger(Trigger.CharacterSkillLevelMax, 1);
             }
 
             response.Character = newChar;

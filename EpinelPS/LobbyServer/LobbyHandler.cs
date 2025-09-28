@@ -75,7 +75,7 @@ namespace EpinelPS.LobbyServer
         /// </summary>
         /// <param name="publicKey"></param>
         /// <returns></returns>
-        public static GameClientInfo GenGameClientTok(ByteString publicKey, ulong userid)
+        public static GameClientInfo GenGameClientTok(ByteString publicKey, ulong userId)
         {
             string token = Rng.RandomString(381);
 
@@ -86,10 +86,10 @@ namespace EpinelPS.LobbyServer
             info.Keys = box;
             info.ClientAuthToken = token;
 
-            if (userid == 0)
+            if (userId == 0)
                 throw new Exception("expected user account");
 
-            info.UserId = userid;
+            info.UserId = userId;
 
             return info;
         }
@@ -127,7 +127,7 @@ namespace EpinelPS.LobbyServer
 
 
             // Restore completed tutorials.
-            foreach (KeyValuePair<int, Data.ClearedTutorialData> item in user.ClearedTutorialData)
+            foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
             {
                 int groupId = item.Value.GroupId;
                 int version = item.Value.VersionGroup;

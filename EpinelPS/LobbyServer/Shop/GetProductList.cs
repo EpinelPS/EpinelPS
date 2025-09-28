@@ -24,11 +24,11 @@ namespace EpinelPS.LobbyServer.Shop
                     MidasProductRecord? record = product.FirstOrDefault().Value;
                     if (record != null)
                     {
-                        string normalizedCost = record.cost.Replace(',', '.');
+                        string normalizedCost = record.Cost.Replace(',', '.');
 
                         if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
                         {
-                            Logging.WriteLine($"Failed to parse '{record.cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
+                            Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
                             continue;
                         }
 
@@ -38,7 +38,7 @@ namespace EpinelPS.LobbyServer.Shop
                             CurrencyCode = "USD",
                             CurrencySymbol = "$",
                             MicroPrice = microPrice,
-                            Price = record.cost,
+                            Price = record.Cost,
                             ProductId = item
                         });
                     }

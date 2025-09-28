@@ -14,8 +14,8 @@ namespace EpinelPS.LobbyServer.Messenger
 
             ResEnterSubQuestMessengerDialog response = new();
 
-            KeyValuePair<int, SubquestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-            KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.conversation_id == opener.Value.conversation_id && x.Value.is_opener).First();
+            KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
+            KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.ConversationId && x.Value.IsOpener).First();
             
             response.Message = user.CreateMessage(conversation.Value);
             JsonDb.Save();

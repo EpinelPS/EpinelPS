@@ -76,7 +76,7 @@ namespace EpinelPS.LobbyServer.Character.Counsel
         {
             while (attractiveData.Lv < 40)
             {
-                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.FirstOrDefault(x => x.Value.attractive_level == attractiveData.Lv).Value;
+                AttractiveLevelRecord? levelInfo = GameData.Instance.AttractiveLevelTable.FirstOrDefault(x => x.Value.AttractiveLevel == attractiveData.Lv).Value;
 
                 if (levelInfo == null)
                 {
@@ -84,9 +84,9 @@ namespace EpinelPS.LobbyServer.Character.Counsel
                     break;
                 }
 
-                if (attractiveData.Exp >= levelInfo.attractive_point)
+                if (attractiveData.Exp >= levelInfo.AttractivePoint)
                 {
-                    attractiveData.Exp -= levelInfo.attractive_point;
+                    attractiveData.Exp -= levelInfo.AttractivePoint;
                     attractiveData.Lv++;
                 }
                 else

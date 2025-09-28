@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Tower
             ResEnterTower response = new();
 
 
-            user.AddTrigger(TriggerType.TowerAllStart, 1);
+            user.AddTrigger(Trigger.TowerAllStart, 1);
             JsonDb.Save();
 
             await WriteDataAsync(response);

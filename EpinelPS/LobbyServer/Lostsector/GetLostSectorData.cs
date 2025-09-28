@@ -15,14 +15,14 @@ namespace EpinelPS.LobbyServer.Lostsector
 
             foreach (KeyValuePair<int, LostSectorRecord> item in GameData.Instance.LostSector)
             {
-                if (item.Value.open_condition_type == ContentOpenType.Stage && user.IsStageCompleted(item.Value.open_condition_value))
+                if (item.Value.OpenConditionType == ContentOpenType.Stage && user.IsStageCompleted(item.Value.OpenConditionValue))
                 {
-                    response.ClearStages.Add(new NetFieldStageData() { StageId = item.Value.open_condition_value });
+                    response.ClearStages.Add(new NetFieldStageData() { StageId = item.Value.OpenConditionValue });
                 }
 
                 if (user.LostSectorData.TryGetValue(item.Key, out LostSectorData? val))
                 {
-                    MapInfo map = GameData.Instance.MapData[item.Value.field_id];
+                    var map = GameData.Instance.MapData[item.Value.FieldId];
                     response.LostSector.Add(new NetUserLostSectorData()
                     {
                         IsOpen = val.IsOpen,

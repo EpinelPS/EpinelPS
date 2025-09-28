@@ -21,27 +21,27 @@ namespace EpinelPS.LobbyServer.Character
             CharacterModel targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new NullReferenceException();
 
             // Find the element with the current csn from the request
-            CharacterRecord? currentCharacter = fullchardata.FirstOrDefault(c => c.id == targetCharacter.Tid);
+            CharacterRecord? currentCharacter = fullchardata.FirstOrDefault(c => c.Id == targetCharacter.Tid);
 
             if (currentCharacter != null && targetCharacter != null)
             {
-                if (currentCharacter.grade_core_id == 103 || currentCharacter.grade_core_id == 11 || currentCharacter.grade_core_id == 201)
+                if (currentCharacter.GradeCoreId == 103 || currentCharacter.GradeCoreId == 11 || currentCharacter.GradeCoreId == 201)
                 {
                     Console.WriteLine("warning: cannot upgrade code any further!");
                     await WriteDataAsync(response);
                     return;
                 }
 
-                // Find a new CSN based on the `name_code` of the current character and `grade_core_id + 1`
+                // Find a new CSN based on the `NameCode` of the current character and `GradeCoreId + 1`
                 // For some reason, there is a seperate character for each limit/core break value.
-                CharacterRecord? newCharacter = fullchardata.FirstOrDefault(c => c.name_code == currentCharacter.name_code && c.grade_core_id == currentCharacter.grade_core_id + 1);
+                CharacterRecord? newCharacter = fullchardata.FirstOrDefault(c => c.NameCode == currentCharacter.NameCode && c.GradeCoreId == currentCharacter.GradeCoreId + 1);
 
 
                 if (newCharacter != null)
                 {
                     // replace character in DB with new character
                     targetCharacter.Grade++;
-                    targetCharacter.Tid = newCharacter.id;
+                    targetCharacter.Tid = newCharacter.Id;
 
                     response.Character = new NetUserCharacterDefaultData()
                     {
@@ -60,9 +60,9 @@ namespace EpinelPS.LobbyServer.Character
                     user.RemoveItemBySerialNumber(req.Isn, 1);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
 
-                    if (newCharacter.grade_core_id == 103 || newCharacter.grade_core_id == 11 || newCharacter.grade_core_id == 201)
+                    if (newCharacter.GradeCoreId == 103 || newCharacter.GradeCoreId == 11 || newCharacter.GradeCoreId == 201)
                     {
-                        user.AddTrigger(TriggerType.CharacterGradeMax, 1);
+                        user.AddTrigger(Trigger.CharacterGradeMax, 1);
                     }
 
                     JsonDb.Save();

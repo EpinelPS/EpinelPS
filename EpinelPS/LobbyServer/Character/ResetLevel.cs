@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Character
             ReqCharacterGrowReset req = await ReadData<ReqCharacterGrowReset>();
             User user = GetUser();
             ResCharacterGrowReset response = new();
-            Dictionary<int, CharacterLevelData> data = GameData.Instance.GetCharacterLevelUpData();
+            Dictionary<int, CharacterLevelRecord> data = GameData.Instance.GetCharacterLevelUpData();
 
             foreach (CharacterModel item in user.Characters.ToArray())
             {
@@ -34,10 +34,10 @@ namespace EpinelPS.LobbyServer.Character
                     int requiredCoreDust = 0;
                     for (int i = 1; i < item.Level; i++)
                     {
-                        CharacterLevelData levelUpData = data[i];
-                        requiredCredit += levelUpData.gold;
-                        requiredBattleData += levelUpData.character_exp;
-                        requiredCoreDust += levelUpData.character_exp2;
+                        CharacterLevelRecord levelUpData = data[i];
+                        requiredCredit += levelUpData.Gold;
+                        requiredBattleData += levelUpData.CharacterExp;
+                        requiredCoreDust += levelUpData.CharacterExp2;
                     }
 
                     user.AddCurrency(CurrencyType.Gold, requiredCredit);
