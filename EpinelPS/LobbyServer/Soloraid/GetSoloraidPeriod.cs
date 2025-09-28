@@ -2,8 +2,8 @@
 
 namespace EpinelPS.LobbyServer.SoloraId
 {
-    [PacketPath("/soloraId/getperiod")]
-    public class GetSoloraIdPeriod : LobbyMsgHandler
+    [PacketPath("/soloraid/getperiod")]
+    public class GetSoloraidPeriod : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {

@@ -476,10 +476,7 @@ namespace EpinelPS.Data
 
             foreach (ZipEntry item in MainZip)
             {
-                if (item.Name.StartsWith("CampaignMap/") ||
-                    item.Name.StartsWith("EventMap/") ||
-                    item.Name.StartsWith("LostSectorMap/")
-                   )
+                if (item.Name.StartsWith("FieldMapData_") && item.Name != "FieldMapData_EventMap.mpk")
                 {
                     FieldMapRecord[] x = await LoadZip<FieldMapRecord>(item.Name, progress);
 
