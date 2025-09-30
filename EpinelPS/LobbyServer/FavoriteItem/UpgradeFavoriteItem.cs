@@ -20,13 +20,13 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 throw new BadHttpRequestException("Favorite item not found", 400);
             }    
 
-            int srItemTId = rFavoriteItem.Tid + 1;
+            int srItemTid = rFavoriteItem.Tid + 1;
 
 
-            NetUserFavoriteItemData? srInventoryItem = user.FavoriteItems.FirstOrDefault(f => f.Tid == srItemTId && f.Csn == 0);
+            NetUserFavoriteItemData? srInventoryItem = user.FavoriteItems.FirstOrDefault(f => f.Tid == srItemTid && f.Csn == 0);
             if (srInventoryItem == null)
             {
-                throw new BadHttpRequestException($"No SR-grade favorite item (TID: {srItemTId}) available in inventory for exchange", 400);
+                throw new BadHttpRequestException($"No SR-grade favorite item (TID: {srItemTid}) available in inventory for exchange", 400);
             }
 
             (int NewLevel, int RemainingExp, double ConversionRate) expConversion = CalculateExpConversion(rFavoriteItem.Lv, rFavoriteItem.Exp);
@@ -43,7 +43,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
             NetUserFavoriteItemData newSrFavoriteItem = new NetUserFavoriteItemData
             {
                 FavoriteItemId = user.GenerateUniqueItemId(),
-                Tid = srItemTId,
+                Tid = srItemTid,
                 Csn = equippedCharacterCsn, // Maintain equipment status
                 Lv = expConversion.NewLevel,
                 Exp = expConversion.RemainingExp

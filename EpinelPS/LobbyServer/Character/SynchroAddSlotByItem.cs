@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Character
     {
         protected override async Task HandleAsync()
         {
-            // Broken protocol so we dIdn't valIdate request data.
+            // Broken protocol so we dIdn't validate request data.
             // May fix later.
             ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
             

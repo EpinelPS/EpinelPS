@@ -137,7 +137,7 @@ public class User
         {
             BadgeContent = type,
             Location = location,
-            BadgeGuId = Guid.NewGuid().ToString(),
+            BadgeGuid = Guid.NewGuid().ToString(),
             Seq = LastBadgeSeq++
         };
 

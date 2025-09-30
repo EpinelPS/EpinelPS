@@ -22,7 +22,7 @@ namespace EpinelPS.LobbyServer.Character
                 
             }
 
-            // TODO: ValIdate response from real server and pull info from user info
+            // TODO: Validate response from real server and pull info from user info
             await WriteDataAsync(response);
         }
     }

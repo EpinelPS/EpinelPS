@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 namespace EpinelPS.LobbyServer.Event
 {
     [PacketPath("/event/getjoinedevent")]

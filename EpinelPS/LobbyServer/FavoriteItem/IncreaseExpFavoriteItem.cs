@@ -30,7 +30,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
 
             if (req.ItemData == null)
             {
-                throw new BadHttpRequestException($"No material item provIded", 400);
+                throw new BadHttpRequestException($"No material item provided", 400);
             }
 
             ItemData? userItem = user.Items.FirstOrDefault(x => x.Isn == req.ItemData.Isn);

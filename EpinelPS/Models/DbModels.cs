@@ -180,7 +180,7 @@ namespace EpinelPS.Models
         public string Location = "";
         public long Seq;
         public BadgeContents BadgeContent;
-        public string BadgeGuId = "";
+        public string BadgeGuid = "";
 
         public BadgeModel() { }
         public BadgeModel(NetBadge badge)
@@ -188,7 +188,7 @@ namespace EpinelPS.Models
             Location = badge.Location;
             Seq = badge.Seq;
             BadgeContent = badge.BadgeContent;
-            BadgeGuId = new Guid([.. badge.BadgeGuid]).ToString();
+            BadgeGuid = new Guid([.. badge.BadgeGuid]).ToString();
         }
 
         public NetBadge ToNet()
@@ -196,7 +196,7 @@ namespace EpinelPS.Models
             return new NetBadge()
             {
                 BadgeContent = BadgeContent,
-                BadgeGuid = ByteString.CopyFrom(new Guid(BadgeGuId).ToByteArray()),
+                BadgeGuid = ByteString.CopyFrom(new Guid(BadgeGuid).ToByteArray()),
                 Location = Location,
                 Seq = Seq
             };
