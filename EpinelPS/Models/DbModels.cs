@@ -65,6 +65,19 @@ namespace EpinelPS.Models
         // For harmony cubes that can be equipped to multiple characters
         public List<long> CsnList = [];
     }
+    
+    public class EquipmentAwakeningData
+    {
+        public long Isn;
+        public NetEquipmentAwakeningOption Option;
+        public bool IsNewData; 
+        
+        public EquipmentAwakeningData()
+        {
+            Option = new NetEquipmentAwakeningOption();
+            IsNewData = false; 
+        }
+    }
     public class EventData
     {
         public List<string> CompletedScenarios = [];
@@ -109,9 +122,9 @@ namespace EpinelPS.Models
         public List<int> CompletedDailyMissions = [];
         public int DailyMissionPoints;
         public SimroomData SimRoomData = new();
-        
-        public bool UnlimitedCounseling = false;
+
         public Dictionary<int, int> DailyCounselCount = [];
+    
     }
     public class WeeklyResetableData
     {

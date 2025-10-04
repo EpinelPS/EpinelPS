@@ -9,11 +9,11 @@ namespace EpinelPS.Utils
         {
              InterceptionClearResult response = new();
 
-            if (type != 1 && type != 2) throw new Exception("unknown interception type");
+            //if (type != 1 && type != 2) throw new Exception("unknown interception type");
 
             int conditionReward;
             int percentRewardGroup;
-            if (type == 0)
+            if (type == 0 || type == 1)
             {
                 conditionReward = GameData.Instance.InterceptNormal[id].ConditionRewardGroup;
                 percentRewardGroup = GameData.Instance.InterceptNormal[id].PercentConditionRewardGroup;
