@@ -119,57 +119,77 @@ namespace EpinelPS.Utils
             {
                 AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
             }
-            else if (rewardType == RewardType.Item || 
-                rewardType.ToString().StartsWith("Equipment_"))
+            else if (rewardType == RewardType.Item ||rewardType.ToString().StartsWith("Equipment_"))
             {
-                // Check if user already has saId item. If it is level 1, increase item count.
-                // If user does not have item, generate a new item ID
-                if (user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).Any())
+
+                int corpId = 0; // Default to 0 (None)
+
+                if (rewardType.ToString().StartsWith("Equipment_"))
                 {
-                    ItemData? newItem = user.Items.Where(x => x.ItemType == rewardId && x.Level == 1).FirstOrDefault();
-                    if (newItem != null)
-                    {
-                        newItem.Count += rewardCount;
+                    var corpSetting = GameData.Instance.ItemEquipCorpSettingTable.Values.FirstOrDefault(x => x.Key == rewardType);
 
-                        // Tell the client the reward and its amount
-                        ret.Item.Add(new NetItemData()
-                        {
-                            Count = rewardCount,
-                            Tid = rewardId,
-                            //Isn = newItem.Isn
-                        });
-
-                        // Tell the client the new amount of this item
-                        ret.UserItems.Add(new NetUserItemData()
-                        {
-                            Isn = newItem.Isn,
-                            Tid = newItem.ItemType,
-                            Count = newItem.Count
-                        });
-                    }
-                    else
+                    if (corpSetting != null)
                     {
-                        throw new Exception("should not occur");
+                        if (corpSetting.CorpType == CorporationType.RANDOM)
+                        {
+                            // Use weighted random selection - all corporations have equal chance
+                            // Weights: MISSILIS(1)=20%, ELYSION(2)=20%, TETRA(3)=20%, PILGRIM(4)=20%, ABNORMAL(7)=20%
+                            int[] corpIds = { 1, 2, 3, 4, 7 }; // All corporations have equal chance
+                            corpId = corpIds[Rng.Next(0, corpIds.Length)];
+                        }
+                        else
+                        {
+                            // Directly use the CorpType enum value as integer
+                            corpId = (int)corpSetting.CorpType;
+                        }
                     }
+
                 }
-                else
-                {
 
-                    int Id = user.GenerateUniqueItemId();
-                    user.Items.Add(new ItemData() { ItemType = rewardId, Isn = Id, Level = 1, Exp = 0, Count = rewardCount });
+                // Check if user already has said item. If it is level 1, increase item count.
+                ItemData? existingItem = user.Items.FirstOrDefault(x => x.ItemType == rewardId && x.Level == 1 && x.Corp == corpId);
+
+                if (existingItem != null)
+                {
+                    existingItem.Count += rewardCount;
+
+                    // Tell the client the reward and its amount
                     ret.Item.Add(new NetItemData()
                     {
                         Count = rewardCount,
                         Tid = rewardId,
-                        //Isn = Id
+                        Corporation = corpId
                     });
 
-                    // Tell the client the new amount of this item (which is the same as user dId not have item previously)
+                    // Tell the client the new amount of this item
                     ret.UserItems.Add(new NetUserItemData()
                     {
-                        Isn = Id,
+                        Isn = existingItem.Isn,
+                        Tid = existingItem.ItemType,
+                        Count = existingItem.Count,
+                        Corporation = existingItem.Corp
+                    });
+                }
+                else
+                {
+                    int id = user.GenerateUniqueItemId();
+                    var newItem = new ItemData() { ItemType = rewardId, Isn = id, Level = 0, Exp = 0, Count = rewardCount, Corp = corpId };
+                    user.Items.Add(newItem);
+
+                    ret.Item.Add(new NetItemData()
+                    {
+                        Count = rewardCount,
                         Tid = rewardId,
-                        Count = rewardCount
+                        Corporation = corpId
+                    });
+
+                    // Tell the client the new amount of this item
+                    ret.UserItems.Add(new NetUserItemData()
+                    {
+                        Isn = newItem.Isn,
+                        Tid = newItem.ItemType,
+                        Count = newItem.Count,
+                        Corporation = newItem.Corp
                     });
                 }
             }
