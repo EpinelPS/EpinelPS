@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.Event
                 EventData = new NetEventData()
                 {
                 Id = 20001,
-                EventSystemType = (int)EventType.PickupGachaEvent,
+                EventSystemType = (int)EventSystemType.PickupGachaEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.Event
                 EventData = new NetEventData()
                 {
                 Id = 70077,
-                EventSystemType = (int)EventType.PickupGachaEvent,
+                EventSystemType = (int)EventSystemType.PickupGachaEvent,
                 EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventEndDate = DateTime.Now.AddDays(20).Ticks,
@@ -44,7 +44,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 10046,
-					EventSystemType = (int)EventType.LoginEvent,
+					EventSystemType = (int)EventSystemType.LoginEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -57,7 +57,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 40066,
-					EventSystemType = (int)EventType.StoryEvent,
+					EventSystemType = (int)EventSystemType.StoryEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -70,7 +70,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 60066,
-					EventSystemType = (int)EventType.ChallengeModeEvent,
+					EventSystemType = (int)EventSystemType.ChallengeModeEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -83,7 +83,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 70078,
-					EventSystemType = (int)EventType.PickupGachaEvent,
+					EventSystemType = (int)EventSystemType.PickupGachaEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -96,7 +96,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 70079,
-					EventSystemType = (int)EventType.PickupGachaEvent,
+					EventSystemType = (int)EventSystemType.PickupGachaEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -112,7 +112,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 140052,
-					EventSystemType = RewardUpEvent,
+					EventSystemType = (int)EventSystemType.RewardUpEvent,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,
@@ -130,7 +130,7 @@ namespace EpinelPS.LobbyServer.Event
 				EventData = new NetEventData()
 				{
 					Id = 170017,
-					EventSystemType = TriggerMissionEventReward,
+					EventSystemType = (int)EventSystemType.TriggerMissionEventReward,
 					EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
 					EventDisableDate = DateTime.Now.AddDays(20).Ticks,

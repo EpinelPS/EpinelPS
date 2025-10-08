@@ -6,6 +6,11 @@ namespace EpinelPS.Utils
     {
         private static readonly Random random = new();
 
+        public static int Next(int minValue, int maxValue)
+        {
+            return random.Next(minValue, maxValue);
+        }
+
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
