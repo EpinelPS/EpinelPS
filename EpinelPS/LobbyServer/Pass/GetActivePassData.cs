@@ -1,30 +1,42 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
+using log4net;
+using Newtonsoft.Json;
 
 namespace EpinelPS.LobbyServer.Pass
 {
     [PacketPath("/pass/getactive")]
     public class GetActivePassData : LobbyMsgHandler
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(GetActivePassData));
         protected override async Task HandleAsync()
         {
             ReqGetActivePassData req = await ReadData<ReqGetActivePassData>();
+            User user = GetUser();
 
             ResGetActivePassData response = new()
             {
-                PassExist = true,
-                Pass = new NetPassInfo { PassId = 1028, PassPoint = 490, PassSkipCount = 15, PremiumActive = true }
+                PassExist = false,
             };
 
-            // Adding PassRankList using a loop
-            for (int rank = 1; rank <= 15; rank++)
+            var passManager = GameData.Instance.PassManagerTable.Values.FirstOrDefault(p => p.SeasonStartDate <= DateTime.UtcNow && p.SeasonEndDate >= DateTime.UtcNow);
+            if (passManager != null)
             {
-                response.Pass.PassRankList.Add(new NetPassRankData { PassRank = rank, IsNormalRewarded = true, IsPremiumRewarded = true });
+                log.Debug($"Found active pass: {JsonConvert.SerializeObject(passManager)}");
+                NetPassInfo passInfo = PassHelper.GetPassInfo(user, passManager.Id, passManager.PassPointId);
+                // Simple validation to ensure we have a valid pass
+                if (passInfo.PassId != 0 && passInfo.PassRankList.Count > 0)
+                {
+                    response.PassExist = true;
+                    response.Pass = passInfo;
+                }
+            }
+            else
+            {
+                Logging.WriteLine("No active pass found.");
             }
 
-            int[] missionIds = new[] { 4001, 4002, 4003, 4004, 4005, 4006, 4007 };
-            foreach (int missionId in missionIds) response.Pass.PassMissionList.Add(new NetPassMissionData { PassMissionId = missionId, IsComplete = true });
-           
-		   await WriteDataAsync(response);
+            await WriteDataAsync(response);
         }
     }
 }

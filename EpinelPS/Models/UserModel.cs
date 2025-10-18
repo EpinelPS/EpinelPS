@@ -110,9 +110,12 @@ public class User
 
     // Event data
     public Dictionary<int, EventData> EventInfo = [];
+    public Dictionary<int, LoginEventData> LoginEventInfo = [];
     public MogMinigameInfo MogInfo = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
     public NetArcadeMvgData ArcadeInTheMirrorData = new();
+
+    public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
     public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
     {

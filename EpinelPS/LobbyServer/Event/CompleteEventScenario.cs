@@ -13,7 +13,10 @@ namespace EpinelPS.LobbyServer.Event
 
             if (user.EventInfo.TryGetValue(req.EventId, out EventData? evt))
             {
-                evt.CompletedScenarios.Add(req.ScenarioId);
+                if (!evt.CompletedScenarios.Contains(req.ScenarioId))
+                {
+                    evt.CompletedScenarios.Add(req.ScenarioId);
+                }
             }
             else
             {
@@ -21,7 +24,8 @@ namespace EpinelPS.LobbyServer.Event
                 evt.CompletedScenarios.Add(req.ScenarioId);
                 user.EventInfo.Add(req.EventId, evt);
             }
-
+            
+            JsonDb.Save();
             ResSetEventScenarioComplete response = new();
 
             // TODO reward

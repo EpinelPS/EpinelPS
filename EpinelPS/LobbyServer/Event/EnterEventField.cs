@@ -1,5 +1,4 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Utils;
+﻿using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Event
 {
@@ -13,14 +12,12 @@ namespace EpinelPS.LobbyServer.Event
 
             ResEnterEventField response = new()
             {
-                Field = new(),
-                Json = "{}"
+                Field = new()
             };
 
             
 
-            // Retrieve collected objects
-
+            // Retrieve collected objects and completed stages
             if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
             {
                 field = new FieldInfoNew();
@@ -33,7 +30,9 @@ namespace EpinelPS.LobbyServer.Event
             }
             foreach (NetFieldObject obj in field.CompletedObjects)
             {
-                response.Field.Objects.Add(obj);
+                if (obj == null) continue;
+                if (obj.Type == 1)
+                    response.Field.Objects.Add(obj);
             }
 
 

@@ -262,6 +262,33 @@ namespace EpinelPS.Data
 
         [LoadRecord("ItemEquipCorpSettingTable.json", "Id")]
         public readonly Dictionary<int, ItemEquipCorpSettingRecord> ItemEquipCorpSettingTable = [];
+
+        [LoadRecord("LobbyPrivateBannerTable.json", "Id")]
+        public readonly Dictionary<int, LobbyPrivateBannerRecord> LobbyPrivateBannerTable = [];
+
+        [LoadRecord("LoginEventTable.json", "Id")]
+        public readonly Dictionary<int, LoginEventRecord> LoginEventTable = [];
+        
+        // Event Dungeon data Table
+        [LoadRecord("EventDungeonTable.json", "Id")]
+        public readonly Dictionary<int, EventDungeonRecord> EventDungeonTable = [];
+        [LoadRecord("EventDungeonStageTable.json", "Id")]
+        public readonly Dictionary<int, EventDungeonStageRecord> EventDungeonStageTable = [];
+        [LoadRecord("EventDungeonSpotBattleTable.json", "Id")]
+        public readonly Dictionary<int, EventDungeonSpotBattleRecord> EventDungeonSpotBattleTable = [];
+        [LoadRecord("EventDungeonDifficultTable.json", "Id")]
+        public readonly Dictionary<int, EventDungeonDifficultRecord> EventDungeonDifficultTable = [];
+        
+        // Pass Data Tables
+        [LoadRecord("PassManagerTable.json", "Id")]
+        public readonly Dictionary<int, PassManagerRecord> PassManagerTable = [];
+        [LoadRecord("EventPassManagerTable.json", "Id")]
+        public readonly Dictionary<int, EventPassManagerRecord> EventPassManagerTable = [];
+        [LoadRecord("SeasonPassTable.json", "Id")]
+        public readonly Dictionary<int, SeasonPassRecord> SeasonPassTable = [];
+        [LoadRecord("PassMissionTable.json", "Id")]
+        public readonly Dictionary<int, PassMissionRecord> PassMissionTable = [];
+
         static async Task<GameData> BuildAsync()
         {
             await Load();

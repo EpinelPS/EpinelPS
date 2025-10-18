@@ -2,3 +2,27 @@
 
 # CA5397: Do not use deprecated SslProtocols values
 dotnet_diagnostic.CA5397.severity = none
+
+# CS8602: 解引用可能出现空引用。
+dotnet_diagnostic.CS8602.severity = none
+
+# CS8619: 值中的引用类型的为 Null 性与目标类型不匹配。
+dotnet_diagnostic.CS8619.severity = none
+
+# CS8604: 引用类型参数可能为 null。
+dotnet_diagnostic.CS8604.severity = none
+
+# CS8981: 该类型名称仅包含小写 ascii 字符。此类名称可能会成为该语言的保留值。
+dotnet_diagnostic.CS8981.severity = none
+
+# IDE0120: 简化 LINQ 表达式
+dotnet_diagnostic.IDE0120.severity = none
+
+# CS8603: 可能返回 null 引用。
+dotnet_diagnostic.CS8603.severity = none
+
+# SYSLIB0039: 类型或成员已过时
+dotnet_diagnostic.SYSLIB0039.severity = none
+
+# CS0219: 变量已被赋值，但从未使用过它的值
+dotnet_diagnostic.CS0219.severity = none

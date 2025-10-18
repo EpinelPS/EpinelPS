@@ -1,6 +1,5 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.LobbyServer;
-using EpinelPS.LobbyServer.Stage;
 using EpinelPS.Data;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -10,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using log4net.Config;
 
 namespace EpinelPS
 {
@@ -19,6 +19,7 @@ namespace EpinelPS
         {
             try
             {
+                XmlConfigurator.Configure(new FileInfo("log4net.config"));
                 Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
                 Console.WriteLine("This software is licensed under the AGPL-3.0 License");
                 Console.WriteLine("Targeting game version " + GameConfig.Root.TargetVersion);
