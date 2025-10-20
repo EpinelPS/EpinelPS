@@ -25,7 +25,6 @@ namespace EpinelPS.LobbyServer.Inventory
                     };
                     harmonyCubeData.CsnList.AddRange(item.CsnList);
                     response.HarmonyCubes.Add(harmonyCubeData);
-                    continue;
                 }
                 response.Items.Add(new NetUserItemData() { Count = item.Count, Tid = item.ItemType, Csn = item.Csn, Lv = item.Level, Exp = item.Exp, Corporation = item.Corp, Isn = item.Isn, Position = item.Position });
                   

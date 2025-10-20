@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Utils;
 using EpinelPS.Database;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Event.StoryEvent
 {
@@ -9,32 +10,42 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
         protected override async Task HandleAsync()
         {
             ReqStoryDungeonEventData req = await ReadData<ReqStoryDungeonEventData>();
-            int evId = req.EventId;
             User user = GetUser();
 
 
-            if (!user.EventInfo.TryGetValue(evId, out EventData? eventData))
+            if (!user.EventInfo.TryGetValue(req.EventId, out EventData? eventData))
             {
                 eventData = new();
             }
+            
 
             ResStoryDungeonEventData response = new()
             {
                 RemainTicket = 5,
-
-                TeamData = new NetUserTeamData()
-                {
-                    LastContentsTeamNumber = 1,
-                    Type = 20
-                }
+                TeamData = new NetUserTeamData
+                { 
+                    Type = (int)TeamType.StoryEvent
+                },
             };
+
+            if (user.UserTeams.TryGetValue((int)TeamType.StoryEvent, out NetUserTeamData? teamData))
+            {
+                response.TeamData = teamData;
+            }
+            foreach (var stageId in eventData.ClearedStages)
+            {
+                response.LastClearedEventStageList.Add(new NetLastClearedEventStageData()
+                {
+                    StageId = stageId
+                });
+            }
             response.LastClearedEventStageList.Add(new NetLastClearedEventStageData()
             {
-                DifficultyId = eventData.Diff,
                 StageId = eventData.LastStage
             });
-            // TOOD
+            // TODO
 
+            JsonDb.Save();
             await WriteDataAsync(response);
         }
     }

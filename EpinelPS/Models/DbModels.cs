@@ -81,8 +81,15 @@ namespace EpinelPS.Models
     public class EventData
     {
         public List<string> CompletedScenarios = [];
+        public List<int> ClearedStages = []; // List of cleared stage IDs
         public int Diff = 0; // Default value for Diff
         public int LastStage = 0; // Default value for LastStage
+    }
+    public class LoginEventData
+    {
+        public List<int> Days = [];
+        public int LastDay = 0; // Default value for LastDay
+        public long LastDate = 0; // Default value for LastDate
     }
 
     public class SynchroSlot
@@ -259,5 +266,27 @@ namespace EpinelPS.Models
         public int ObtainedRewards { get; set; } = 0;
         public bool RecievedFinalReward { get; set; }
         public bool CompletedPerfectly { get; set; }
+    }
+    
+    public class PassRankData
+    {
+        public int PassRank { get; set; } = 0;
+        public bool IsNormalRewarded { get; set; } = false;
+        public bool IsPremiumRewarded { get; set; } = false;
+    }
+    public class PassMissionData
+    {
+        public int PassMissionId { get; set; } = 0;
+        public bool IsComplete { get; set; } = false;
+    }
+    public class PassData
+    {
+        public int PassId { get; set; } = 0;
+        public int PassPoint { get; set; } = 0;
+        public int PassSkipCount { get; set; } = 0;
+        public bool PremiumActive { get; set; } = false;
+        public string LastCompleteAt { get; set; } = "";
+        public List<PassRankData> PassRankList { get; set; } = [];
+        public List<PassMissionData> PassMissionList { get; set; } = [];
     }
 }

@@ -1,3 +1,5 @@
+using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Event
@@ -13,11 +15,30 @@ namespace EpinelPS.LobbyServer.Event
             ResChallengeEventStageData response = new()
             {
                 RemainTicket = 3,
-                TeamData = user.UserTeams[1]
+                TeamData = new NetUserTeamData
+                {
+                    Type = (int)TeamType.StoryEvent
+                },
             };
+            // check if user has a team for this type
+            if (user.UserTeams.TryGetValue((int)TeamType.StoryEvent, out NetUserTeamData? teamData))
+            {
+                response.TeamData = teamData;
+            }
+            if (!user.EventInfo.TryGetValue(req.EventId, out EventData? eventData))
+            {
+                eventData = new() { LastStage = 0 };
+                user.EventInfo.Add(req.EventId, eventData);
+            }
+            
+            // placeholder response data for last cleared stage
+            response.LastClearedEventStageList.Add(new NetLastClearedEventStageData()
+            {
+                DifficultyId = eventData.Diff,
+                StageId = eventData.LastStage
+            });
 
-            // TODO implement properly
-
+            JsonDb.Save();
             await WriteDataAsync(response);
         }
     }
