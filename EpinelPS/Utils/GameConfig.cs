@@ -1,11 +1,10 @@
-using EpinelPS.Database;
+﻿using EpinelPS.Database;
 using Newtonsoft.Json;
 
 namespace EpinelPS.Utils
 {
     public class GameConfigRoot
     {
-        public StaticData StaticData { get; set; } = new();
         public StaticData StaticDataMpk { get; set; } = new();
         public string ResourceBaseURL { get; set; } = "";
         public string GameMinVer { get; set; } = "";

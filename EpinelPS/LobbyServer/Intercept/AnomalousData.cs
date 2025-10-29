@@ -14,9 +14,8 @@ namespace EpinelPS.LobbyServer.Intercept
             ResInterceptAnomalousData response = new()
             {
                 InterceptAnomalousManagerId = 101,
-                RemainingTickets = 5
+                TodayRemainingTickets = 5
             };
-			response.ClearedInterceptAnomalousIds.Add([1, 2, 3, 4, 5]);
             await WriteDataAsync(response);
         }
     }

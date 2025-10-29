@@ -22,18 +22,13 @@ namespace EpinelPS.Data
             }
         }
 
-        public byte[] Sha256Hash;
         public byte[] MpkHash = [];
-        public int Size;
         public int MpkSize;
 
         private ZipFile MainZip;
         private MemoryStream ZipStream;
         private int totalFiles = 1;
         private int currentFile;
-
-        // TODO: all of the data types need to be changed to match the game
-        private bool UseMemoryPack = true;
 
         public readonly Dictionary<string, FieldMapRecord> MapData = [];
 
@@ -303,30 +298,18 @@ namespace EpinelPS.Data
             return Instance;
         }
 
-        public GameData(string filePath, string mpkFilePath)
+        public GameData(string mpkFilePath)
         {
-            if (!File.Exists(filePath)) throw new ArgumentException("Static data file must exist", nameof(filePath));
+            if (!File.Exists(mpkFilePath)) throw new ArgumentException("Static data file must exist", nameof(mpkFilePath));
 
             // disable warnings
             ZipStream = new();
 
-            // process json data
-            byte[] rawBytes = File.ReadAllBytes(filePath);
-            Sha256Hash = SHA256.HashData(rawBytes);
-            Size = rawBytes.Length;
+            byte[] rawBytes2 = File.ReadAllBytes(mpkFilePath);
+            MpkHash = SHA256.HashData(rawBytes2);
+            MpkSize = rawBytes2.Length;
 
-            // process mpk data
-            if (!string.IsNullOrEmpty(mpkFilePath))
-            {
-                byte[] rawBytes2 = File.ReadAllBytes(mpkFilePath);
-                MpkHash = SHA256.HashData(rawBytes2);
-                MpkSize = rawBytes2.Length;
-            }
-
-            if (UseMemoryPack)
-                LoadGameData(mpkFilePath, GameConfig.Root.StaticDataMpk);
-            else
-                LoadGameData(filePath, GameConfig.Root.StaticData);
+            LoadGameData(mpkFilePath, GameConfig.Root.StaticDataMpk);
             if (MainZip == null) throw new Exception("failed to read zip file");
         }
 
@@ -446,15 +429,8 @@ namespace EpinelPS.Data
 
         public static async Task Load()
         {
-            string? targetFile = await AssetDownloadUtil.DownloadOrGetFileAsync(GameConfig.Root.StaticData.Url, CancellationToken.None) ?? throw new Exception("static data download fail");
-            if (string.IsNullOrEmpty(GameConfig.Root.StaticDataMpk.Url))
-            {
-                _instance = new(targetFile, "");
-                return;
-            }
-
             string? targetFile2 = await AssetDownloadUtil.DownloadOrGetFileAsync(GameConfig.Root.StaticDataMpk.Url, CancellationToken.None) ?? throw new Exception("static data download fail");
-            _instance = new(targetFile, targetFile2);
+            _instance = new(targetFile2);
         }
         #endregion
 
@@ -462,7 +438,7 @@ namespace EpinelPS.Data
         {
             try
             {
-                if (UseMemoryPack) entry = entry.Replace(".json", ".mpk");
+                entry = entry.Replace(".json", ".mpk");
 
                 ZipEntry fileEntry = MainZip.GetEntry(entry);
                 if (fileEntry == null)
@@ -471,22 +447,8 @@ namespace EpinelPS.Data
                     return [];
                 }
 
-                X[]? deserializedObject;
-
-                if (UseMemoryPack)
-                {
-                    Stream stream = MainZip.GetInputStream(fileEntry);
-                    deserializedObject = await MemoryPackSerializer.DeserializeAsync<X[]>(stream);
-                }
-                else
-                {
-                    using var streamReader = new System.IO.StreamReader(MainZip.GetInputStream(fileEntry));
-                    var json = await streamReader.ReadToEndAsync();
-                    DataTable<X> obj = JsonConvert.DeserializeObject<DataTable<X>>(json) ?? throw new Exception("deserializeobject failed");
-                    deserializedObject = [.. obj.records];
-                }
-
-                if (deserializedObject == null) throw new Exception("failed to parse " + entry);
+                Stream stream = MainZip.GetInputStream(fileEntry);
+                X[] deserializedObject = await MemoryPackSerializer.DeserializeAsync<X[]>(stream) ?? throw new Exception("failed to parse " + entry);
 
                 currentFile++;
                 bar.Report((double)currentFile / totalFiles);

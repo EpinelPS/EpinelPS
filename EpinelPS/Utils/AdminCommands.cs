@@ -400,7 +400,7 @@ namespace EpinelPS.Utils
             if (serverIp == null || staticDataUrl == null || resourcesUrl == null)
             {
                 serverIp = await AssetDownloadUtil.GetIpAsync(serverUrl);
-                staticDataUrl = $"https://{serverIp}/v1/get-static-data-pack-info";
+                staticDataUrl = $"https://{serverIp}/v1/get-static-data-pack-info-mpk";
                 resourcesUrl = $"https://{serverIp}/v1/resourcehosts2";
             }
 
