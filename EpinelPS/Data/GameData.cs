@@ -496,7 +496,7 @@ namespace EpinelPS.Data
             if (QuestDataRecords.Count == 0) throw new Exception("QuestDataRecords should not be empty");
             foreach (KeyValuePair<int, MainQuestRecord> item in QuestDataRecords)
             {
-                if (item.Value.ConditionId == stage)
+                if (item.Value.ConditionId[0].ConditionId == stage)
                 {
                     return item.Value;
                 }

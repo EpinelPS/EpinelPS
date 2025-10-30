@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.TriggerController
 
             var completedQuest = GameData.Instance.GetMainQuestByTableId(req.Tid) ?? throw new Exception("Quest not found");
 
-            user.AddTrigger(Trigger.CampaignClear, 1, completedQuest.ConditionId);
+            user.AddTrigger(Trigger.CampaignClear, 1, completedQuest.ConditionId[0].ConditionId);
             user.AddTrigger(Trigger.MainQuestClear, 1, completedQuest.Id);
 
             JsonDb.Save();

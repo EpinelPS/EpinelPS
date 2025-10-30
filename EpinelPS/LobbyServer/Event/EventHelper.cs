@@ -11,7 +11,8 @@ namespace EpinelPS.LobbyServer.Event
 
         public static void AddEvents(ref ResGetEventList response)
         {
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
+            // TODO
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = []; //[.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
             Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
             log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
 
@@ -73,7 +74,7 @@ namespace EpinelPS.LobbyServer.Event
 
         public static void AddJoinedGachaEvents(ref ResGetJoinedEvent response)
         {
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];//[.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
             Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
             log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
 
@@ -124,7 +125,7 @@ namespace EpinelPS.LobbyServer.Event
             }
             // Add the main event associated with the banner
             var mainEvent = eventManagers.First(em => em.Id == banner.EventId);
-            events.Add(new NetEventData()
+          /*  events.Add(new NetEventData()
             {
                 Id = mainEvent.Id,
                 EventSystemType = (int)mainEvent.EventSystemType,
@@ -132,12 +133,12 @@ namespace EpinelPS.LobbyServer.Event
                 EventVisibleDate = banner.StartDate.Ticks,
                 EventDisableDate = banner.EndDate.Ticks,
                 EventEndDate = banner.EndDate.Ticks
-            });
+            });*/
             // Add child events associated with the main event
             var childEvents = eventManagers.Where(em => em.ParentsEventId == banner.EventId || em.SetField == banner.EventId).ToList();
             foreach (var childEvent in childEvents)
             {
-                events.Add(new NetEventData()
+               /* events.Add(new NetEventData()
                 {
                     Id = childEvent.Id,
                     EventSystemType = (int)childEvent.EventSystemType,
@@ -145,7 +146,7 @@ namespace EpinelPS.LobbyServer.Event
                     EventVisibleDate = banner.StartDate.Ticks,
                     EventDisableDate = banner.EndDate.Ticks,
                     EventEndDate = banner.EndDate.Ticks
-                });
+                });*/
             }
             return events;
         }
@@ -183,10 +184,10 @@ namespace EpinelPS.LobbyServer.Event
                 {
                     Id = gachaEvent.Id,
                     EventSystemType = (int)gachaEvent.EventSystemType,
-                    EventStartDate = banner.StartDate.Ticks,
-                    EventVisibleDate = banner.StartDate.Ticks,
-                    EventDisableDate = banner.EndDate.Ticks,
-                    EventEndDate = banner.EndDate.Ticks
+                    //EventStartDate = banner.StartDate.Ticks,
+                    //EventVisibleDate = banner.StartDate.Ticks,
+                    ////EventDisableDate = banner.EndDate.Ticks,
+                    //EventEndDate = banner.EndDate.Ticks
                 });
             }
             return events;
