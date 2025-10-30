@@ -59,7 +59,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
 
             if (isGreatSuccess)
             {
-                targetLevel = probabilityData.GreatSuccessRate;
+                targetLevel = probabilityData.GreatSuccessLevel;
             }
 
             int goldCost = baseExp * 10;

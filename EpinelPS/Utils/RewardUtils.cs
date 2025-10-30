@@ -173,7 +173,15 @@ namespace EpinelPS.Utils
                 else
                 {
                     int id = user.GenerateUniqueItemId();
-                    var newItem = new ItemData() { ItemType = rewardId, Isn = id, Level = 0, Exp = 0, Count = rewardCount, Corp = corpId };
+                    int level = 0; // Default to 0
+                    ItemSubType itemSubType = GameData.Instance.GetItemSubType(rewardId);
+
+                    // Check if Harmony Cube set level to 1
+                    if (itemSubType == ItemSubType.HarmonyCube)
+                    {
+                        level = 1;
+                    }
+                    var newItem = new ItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = rewardCount, Corp = corpId };
                     user.Items.Add(newItem);
 
                     ret.Item.Add(new NetItemData()
