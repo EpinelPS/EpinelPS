@@ -285,6 +285,12 @@ namespace EpinelPS.Data
         [LoadRecord("PassMissionTable.json", "Id")]
         public readonly Dictionary<int, PassMissionRecord> PassMissionTable = [];
 
+        // Daily Mission Event Data Tables
+        [LoadRecord("DailyMissionEventSettingTable.json", "Id")]
+        public readonly Dictionary<int, DailyMissionEventSettingRecord_Raw> DailyMissionEventSettingTable = [];
+        [LoadRecord("DailyEventTable.json", "Id")]
+        public readonly Dictionary<int, DailyEventRecord> DailyEventTable = [];
+
         static async Task<GameData> BuildAsync()
         {
             await Load();
