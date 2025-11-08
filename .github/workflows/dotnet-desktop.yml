@@ -1,9 +1,9 @@
 name: Build and publish server
 
 on:
-  workflow_dispatch: # 仅在手动触发时运行
-  # push:
-  # pull_request:
+  workflow_dispatch:
+  push:
+  pull_request:
 
 jobs:
 
