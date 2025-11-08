@@ -5,17 +5,13 @@ using Newtonsoft.Json;
 
 namespace EpinelPS.LobbyServer.Event
 {
-    public static class EventHelper
+    public class EventHelper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EventHelper));
 
         public static void AddEvents(ref ResGetEventList response)
         {
-            // TODO
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = []; //[.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
-            Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
-            log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
-
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData();
             if (lobbyPrivateBanners.Count == 0)
             {
                 // No active lobby private banners
@@ -24,60 +20,28 @@ namespace EpinelPS.LobbyServer.Event
             }
 
             var eventManagers = GameData.Instance.eventManagers.Values.ToList();
-
             foreach (var banner in lobbyPrivateBanners)
             {
                 // Get all events (including child events) associated with this banner
                 List<NetEventData> events = GetEventData(banner, eventManagers);
                 log.Debug($"Banner EventId: {banner.EventId} has {events.Count} associated events: {JsonConvert.SerializeObject(events)}");
-                if (events.Count == 0)
-                {
-                    Logging.WriteLine($"No events found for Banner EventId: {banner.EventId}", LogType.Warning);
-                    continue;
-                }
-                foreach (var ev in events)
-                {
-                    // Avoid adding duplicate events
-                    if (!response.EventList.Any(e => e.Id == ev.Id))
-                    {
-                        response.EventList.Add(ev);
-                    }
-                    else
-                    {
-                        log.Debug($"Skipping duplicate event Id: {ev.Id}");
-                    }
-                }
+                AddEvents(ref response, events);
 
                 // Additionally, get any gacha events associated with this banner
-                List<NetEventData> gachaEvents = GetGachaEventData(banner, eventManagers);
+                List<EventSystemType> systemTypes = [EventSystemType.PickupGachaEvent, EventSystemType.BoxGachaEvent, EventSystemType.LoginEvent];
+                List<NetEventData> gachaEvents = GetEventDataBySystemTypes(banner, eventManagers, systemTypes);
                 log.Debug($"Banner EventId: {banner.EventId} has {gachaEvents.Count} associated gacha events: {JsonConvert.SerializeObject(gachaEvents)}");
-                if (gachaEvents.Count == 0)
-                {
-                    Logging.WriteLine($"No gacha events found for Banner EventId: {banner.EventId}", LogType.Warning);
-                    continue;
-                }
-                foreach (var gachaEvent in gachaEvents)
-                {
-                    // Avoid adding duplicate events
-                    if (!response.EventList.Any(e => e.Id == gachaEvent.Id))
-                    {
-                        response.EventList.Add(gachaEvent);
-                    }
-                    else
-                    {
-                        log.Debug($"Skipping duplicate gacha event Id: {gachaEvent.Id}");
-                    }
-                }
+                AddEvents(ref response, gachaEvents);
             }
-
+            // add daily mission events
+            List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
+            log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
+            AddEvents(ref response, dailyMissionEvents);
         }
 
-        public static void AddJoinedGachaEvents(ref ResGetJoinedEvent response)
+        public static void AddJoinedEvents(ref ResGetJoinedEvent response)
         {
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];//[.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
-            Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
-            log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
-
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData();
             if (lobbyPrivateBanners.Count == 0)
             {
                 // No active lobby private banners
@@ -88,30 +52,21 @@ namespace EpinelPS.LobbyServer.Event
             var eventManagers = GameData.Instance.eventManagers.Values.ToList();
             foreach (var banner in lobbyPrivateBanners)
             {
-                List<NetEventData> gachaEvents = GetGachaEventData(banner, eventManagers);
+                // add gacha events
+                List<EventSystemType> systemTypes = [EventSystemType.PickupGachaEvent, EventSystemType.BoxGachaEvent, EventSystemType.LoginEvent];
+                List<NetEventData> gachaEvents = GetEventDataBySystemTypes(banner, eventManagers, systemTypes);
                 log.Debug($"Banner EventId: {banner.EventId} has {gachaEvents.Count} associated gacha events: {JsonConvert.SerializeObject(gachaEvents)}");
-                if (gachaEvents.Count == 0)
-                {
-                    Logging.WriteLine($"No gacha events found for Banner EventId: {banner.EventId}", LogType.Warning);
-                    continue;
-                }
-                foreach (var gachaEvent in gachaEvents)
-                {
-                    // Avoid adding duplicate events
-                    if (!response.EventWithJoinData.Any(e => e.EventData.Id == gachaEvent.Id))
-                    {
-                        response.EventWithJoinData.Add(new NetEventWithJoinData()
-                        {
-                            EventData = gachaEvent,
-                            JoinAt = 0
-                        });
-                    }
-                    else
-                    {
-                        log.Debug($"Skipping duplicate gacha event Id: {gachaEvent.Id}");
-                    }
-                }
+                AddJoinedEvents(ref response, gachaEvents);
+
+                // add challenge events
+                List<NetEventData> challengeEvents = GetChallengeEventData(banner, eventManagers);
+                log.Debug($"Banner EventId: {banner.EventId} has {challengeEvents.Count} associated challenge events: {JsonConvert.SerializeObject(challengeEvents)}");
+                AddJoinedEvents(ref response, challengeEvents);
             }
+            // add daily mission events
+            List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
+            log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
+            AddJoinedEvents(ref response, dailyMissionEvents);
         }
 
         private static List<NetEventData> GetEventData(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers)
@@ -125,33 +80,33 @@ namespace EpinelPS.LobbyServer.Event
             }
             // Add the main event associated with the banner
             var mainEvent = eventManagers.First(em => em.Id == banner.EventId);
-          /*  events.Add(new NetEventData()
+            events.Add(new NetEventData()
             {
                 Id = mainEvent.Id,
                 EventSystemType = (int)mainEvent.EventSystemType,
-                EventStartDate = banner.StartDate.Ticks,
-                EventVisibleDate = banner.StartDate.Ticks,
-                EventDisableDate = banner.EndDate.Ticks,
-                EventEndDate = banner.EndDate.Ticks
-            });*/
+                // EventStartDate = banner.StartDate.Ticks,
+                // EventVisibleDate = banner.StartDate.Ticks,
+                // EventDisableDate = banner.EndDate.Ticks,
+                // EventEndDate = banner.EndDate.Ticks
+            });
             // Add child events associated with the main event
             var childEvents = eventManagers.Where(em => em.ParentsEventId == banner.EventId || em.SetField == banner.EventId).ToList();
             foreach (var childEvent in childEvents)
             {
-               /* events.Add(new NetEventData()
+                events.Add(new NetEventData()
                 {
                     Id = childEvent.Id,
                     EventSystemType = (int)childEvent.EventSystemType,
-                    EventStartDate = banner.StartDate.Ticks,
-                    EventVisibleDate = banner.StartDate.Ticks,
-                    EventDisableDate = banner.EndDate.Ticks,
-                    EventEndDate = banner.EndDate.Ticks
-                });*/
+                    // EventStartDate = banner.StartDate.Ticks,
+                    // EventVisibleDate = banner.StartDate.Ticks,
+                    // EventDisableDate = banner.EndDate.Ticks,
+                    // EventEndDate = banner.EndDate.Ticks
+                });
             }
             return events;
         }
 
-        private static List<NetEventData> GetGachaEventData(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers)
+        private static List<NetEventData> GetEventDataBySystemTypes(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers, List<EventSystemType> systemTypes)
         {
             List<NetEventData> events = [];
             // Find all event banner resource tables associated with this banner's EventId
@@ -166,10 +121,10 @@ namespace EpinelPS.LobbyServer.Event
                 return events;
             }
 
-            // Find all gacha events (PickupGachaEvent or BoxGachaEvent) that use these banner resource tables
+            // Find all events matching the banner resource tables and specified system types
             var gachaEvents = eventManagers.Where(em =>
             eventBannerResourceTables.Contains(em.EventBannerResourceTable)
-            && (em.EventSystemType == EventSystemType.PickupGachaEvent || em.EventSystemType == EventSystemType.BoxGachaEvent)).ToList();
+            && systemTypes.Contains(em.EventSystemType)).ToList();
             log.Debug($"Found {gachaEvents.Count} gacha events from banner resource tables: {JsonConvert.SerializeObject(gachaEvents)}");
             if (gachaEvents.Count == 0)
             {
@@ -184,10 +139,131 @@ namespace EpinelPS.LobbyServer.Event
                 {
                     Id = gachaEvent.Id,
                     EventSystemType = (int)gachaEvent.EventSystemType,
-                    //EventStartDate = banner.StartDate.Ticks,
-                    //EventVisibleDate = banner.StartDate.Ticks,
-                    ////EventDisableDate = banner.EndDate.Ticks,
-                    //EventEndDate = banner.EndDate.Ticks
+                    // EventStartDate = banner.StartDate.Ticks,
+                    // EventVisibleDate = banner.StartDate.Ticks,
+                    // EventDisableDate = banner.EndDate.Ticks,
+                    // EventEndDate = banner.EndDate.Ticks
+                });
+            }
+            return events;
+        }
+
+        private static List<NetEventData> GetChallengeEventData(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers)
+        {
+            List<NetEventData> events = [];
+
+            // Find all challenge events (ChallengeModeEvent) associated with this banner's EventId
+            var challengeEvents = eventManagers.Where(em =>
+            em.ParentsEventId == banner.EventId && em.EventSystemType == EventSystemType.ChallengeModeEvent).ToList();
+            log.Debug($"Found {challengeEvents.Count} challenge events from banner resource tables: {JsonConvert.SerializeObject(challengeEvents)}");
+            if (challengeEvents.Count == 0)
+            {
+                Logging.WriteLine($"No challenge events found for Banner EventId: {banner.EventId}", LogType.Warning);
+                return events;
+            }
+
+            // Add each challenge event to the list
+            foreach (var challengeEvent in challengeEvents)
+            {
+                events.Add(new NetEventData()
+                {
+                    Id = challengeEvent.Id,
+                    EventSystemType = (int)challengeEvent.EventSystemType,
+                    // EventStartDate = banner.StartDate.Ticks,
+                    // EventVisibleDate = banner.StartDate.Ticks,
+                    // EventDisableDate = banner.EndDate.Ticks,
+                    // EventEndDate = banner.EndDate.Ticks
+                });
+            }
+            return events;
+        }
+
+        /// <summary>
+        /// Get active lobby private banner data
+        /// </summary>
+        /// <returns>List of active lobby private banners</returns>
+        public static List<LobbyPrivateBannerRecord> GetLobbyPrivateBannerData()
+        {
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];
+            // lobbyPrivateBanners = [.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
+            lobbyPrivateBanners.Add(new LobbyPrivateBannerRecord() { Id = 10093, PrivateBannerShowDuration = 8, EventId = 82700 });
+            Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
+            log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
+            return lobbyPrivateBanners;
+        }
+
+        private static void AddEvents(ref ResGetEventList response, List<NetEventData> eventDatas)
+        {
+            foreach (var eventData in eventDatas)
+            {
+                // if (eventData.Id == 70115) continue;
+                // Avoid adding duplicate events
+                if (!response.EventList.Any(e => e.Id == eventData.Id))
+                {
+                    if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                    if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                    if (eventData.EventDisableDate == 0) eventData.EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks;
+                    if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
+                    response.EventList.Add(eventData);
+                }
+                else
+                {
+                    log.Debug($"Skipping duplicate event Id: {eventData.Id}");
+                }
+            }
+        }
+
+        private static void AddJoinedEvents(ref ResGetJoinedEvent response, List<NetEventData> eventDatas)
+        {
+            foreach (var eventData in eventDatas)
+            {
+                if (eventData.Id == 70115) continue;
+                // Avoid adding duplicate events
+                if (!response.EventWithJoinData.Any(e => e.EventData.Id == eventData.Id))
+                {
+                    if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                    if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                    if (eventData.EventDisableDate == 0) eventData.EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks;
+                    if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
+                    response.EventWithJoinData.Add(new NetEventWithJoinData()
+                    {
+                        
+                        EventData = eventData,
+                        JoinAt = 0
+                    });
+                }
+                else
+                {
+                    log.Debug($"Skipping duplicate event Id: {eventData.Id}");
+                }
+            }
+        }
+
+        private static List<NetEventData> GetDailyMissionEventData(List<EventManagerRecord> eventManagers)
+        {
+            List<NetEventData> events = [];
+
+            var dailyEventIds = GameData.Instance.DailyMissionEventSettingTable.Values.Select(de => de.EventId).ToList();
+            log.Debug($"Daily Mission Event IDs: {JsonConvert.SerializeObject(dailyEventIds)}");
+            var dailyEvents = eventManagers.Where(em => dailyEventIds.Contains(em.Id)).ToList();
+            log.Debug($"Found {dailyEvents.Count} daily events: {JsonConvert.SerializeObject(dailyEvents)}");
+            if (dailyEvents.Count == 0)
+            {
+                Logging.WriteLine("No daily events found.", LogType.Warning);
+                return events;
+            }
+
+            // Add each daily event to the list
+            foreach (var dailyEvent in dailyEvents)
+            {
+                events.Add(new NetEventData()
+                {
+                    Id = dailyEvent.Id,
+                    EventSystemType = (int)dailyEvent.EventSystemType,
+                    EventStartDate = DateTime.UtcNow.Ticks,
+                    EventVisibleDate = DateTime.UtcNow.Ticks,
+                    EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks,
+                    EventEndDate = DateTime.UtcNow.AddDays(30).Ticks
                 });
             }
             return events;

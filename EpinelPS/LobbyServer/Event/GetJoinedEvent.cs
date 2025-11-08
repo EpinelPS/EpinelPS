@@ -7,26 +7,12 @@ namespace EpinelPS.LobbyServer.Event
     {
         protected override async Task HandleAsync()
         {
-            ReqGetJoinedEvent req = await ReadData<ReqGetJoinedEvent>();
+            await ReadData<ReqGetJoinedEvent>();
             //types are defined in EventTypes.cs
             ResGetJoinedEvent response = new();
 
-            response.EventWithJoinData.Add(new NetEventWithJoinData()
-            {
-                EventData = new NetEventData()
-                {
-                Id = 20001,
-                EventSystemType = (int)EventSystemType.PickupGachaEvent,
-                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
-                EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-                EventEndDate = DateTime.Now.AddDays(20).Ticks,
-                EventDisableDate = DateTime.Now.AddDays(20).Ticks
-                },
-                JoinAt = 0
-            });
-
 			// add gacha events from active lobby banners
-			EventHelper.AddJoinedGachaEvents(ref response);
+			EventHelper.AddJoinedEvents(ref response);
 			
             await WriteDataAsync(response);
         }
