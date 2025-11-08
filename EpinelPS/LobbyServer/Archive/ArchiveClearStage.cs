@@ -10,8 +10,8 @@ namespace EpinelPS.LobbyServer.Archive
             ReqClearArchiveStage req = await ReadData<ReqClearArchiveStage>(); // has fields EventId, StageId, BattleResult
             int evid = req.EventId;
             int stgid = req.StageId;
-            int result = req.BattleResult; // if 2 add to event info as last stage
-            User user = GetUser() ?? throw new Exception("User not found.");
+            int result = req.BattleResult;
+            User user = GetUser();
 
             // Check if the EventInfo exists for the given EventId
             if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
@@ -19,13 +19,12 @@ namespace EpinelPS.LobbyServer.Archive
                 throw new Exception($"Event with ID {evid} not found.");
             }
 
-            // Update the EventData if BattleResult is 2
-            if (result == 1)
+            // Update the EventData if BattleResult is 1
+            if (result == 1 && !eventData.ClearedStages.Contains(stgid))
             {
-
+                eventData.ClearedStages.Add(stgid);
                 // Update the LastStage in EventData
                 eventData.LastStage = stgid;
-
             }
 			JsonDb.Save();
             ResClearArchiveStage response = new();

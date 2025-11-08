@@ -1,5 +1,4 @@
 ﻿using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.LobbyUser
 {
     [PacketPath("/user/scenario/exist")]
@@ -13,21 +12,34 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             ResExistScenario response = new();
 
-            User user = GetUser();
-
             foreach (string? item in req.ScenarioGroupIds)
             {
-                foreach (string completed in user.CompletedScenarios)
+                if (FindScenarioInMainStages(item) || FindScenarioInArchiveStages(item))
                 {
-                    // story thingy was completed
-                    if (completed == item)
-                    {
-                        response.ExistGroupIds.Add(item);
-                    }
+                    response.ExistGroupIds.Add(item);
                 }
             }
 
             await WriteDataAsync(response);
+        }
+
+        private bool FindScenarioInMainStages(string scenarioGroupId)
+        {
+            User user = GetUser();
+            return user.CompletedScenarios.Contains(scenarioGroupId);
+        }
+
+        private bool FindScenarioInArchiveStages(string scenarioGroupId)
+        {
+            User user = GetUser();
+            foreach (EventData evtData in user.EventInfo.Values)
+            {
+                if (evtData.CompletedScenarios.Contains(scenarioGroupId))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
