@@ -10,11 +10,21 @@ namespace EpinelPS.LobbyServer.Archive
             ReqGetResettableArchiveScenario req = await ReadData<ReqGetResettableArchiveScenario>();
             ResGetResettableArchiveScenario response = new(); // has ScenarioIdList field that takes in strings
 
-            // Retrieve stage IDs from GameData
-            List<string> stageIds = [.. GameData.Instance.archiveEventDungeonStageRecords.Values.Select(record => record.StageId.ToString())];
-
-            // Add them to the response
-            response.ScenarioIdList.Add(stageIds);
+            GameData gameData = GameData.Instance;
+            User user = GetUser();
+            foreach (ArchiveEventStoryRecord record in gameData.archiveEventStoryRecords.Values)
+            {
+                // Add the PrologueScenario to the ScenarioIdList
+                if (record.EventId == req.EventId && !string.IsNullOrEmpty(record.PrologueScenario))
+                {
+                    if (user.EventInfo.TryGetValue(req.EventId, out EventData? evtData) &&
+                        evtData.CompletedScenarios.Contains(record.PrologueScenario))
+                    {
+                        response.ScenarioIdList.Add(record.PrologueScenario);
+                    }
+                    break;
+                }
+            }
 
             await WriteDataAsync(response);
         }

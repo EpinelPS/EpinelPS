@@ -11,16 +11,19 @@ namespace EpinelPS.LobbyServer.Archive
             int evid = req.EventId;
             int stgid = req.StageId;
 
-            User user = GetUser() ?? throw new Exception("User not found.");
+            User user = GetUser();
 
             // Check if the EventInfo exists for the given EventId
             if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))
             {
                 throw new Exception($"Event with ID {evid} not found.");
             }
-            // Update the LastStage in EventData
-            eventData.LastStage = stgid;
-
+            if (!eventData.ClearedStages.Contains(stgid))
+            {
+                eventData.ClearedStages.Add(stgid);
+                // Update the LastStage in EventData
+                eventData.LastStage = stgid;
+            }
 			JsonDb.Save();
             ResFastClearArchiveStage response = new();
 
