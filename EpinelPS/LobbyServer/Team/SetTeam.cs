@@ -1,4 +1,5 @@
-﻿using EpinelPS.Database;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Team
@@ -16,10 +17,16 @@ namespace EpinelPS.LobbyServer.Team
             {
                 Type = req.Type
             };
-            response.Teams.AddRange(req.Teams.ToArray());
+            response.Teams.AddRange([.. req.Teams]);
 
             // Add team data to user data
-            NetUserTeamData teamData = new() { LastContentsTeamNumber = req.ContentsId + 1, Type = req.Type };
+            int contentsId = req.ContentsId + 1; // Default to 1 if not provided
+            if (req.Type == (int)TeamType.StoryEvent)
+            {
+                contentsId = 1; // Default to 1 for story event teams
+            }
+
+            NetUserTeamData teamData = new() { LastContentsTeamNumber = contentsId, Type = req.Type };
 
             // Check for existing teams with same TeamNumber and replace or add accordingly
             foreach (var newTeam in req.Teams)
@@ -47,7 +54,7 @@ namespace EpinelPS.LobbyServer.Team
             {
                 // If key already exists, we need to merge teams properly
                 var existingTeamData = user.UserTeams[req.Type];
-                existingTeamData.LastContentsTeamNumber = req.ContentsId + 1;
+                existingTeamData.LastContentsTeamNumber = contentsId;
                 existingTeamData.Type = req.Type;
 
                 // Apply same logic to existing team data
