@@ -65,17 +65,17 @@ namespace EpinelPS.Models
         // For harmony cubes that can be equipped to multiple characters
         public List<long> CsnList = [];
     }
-    
+
     public class EquipmentAwakeningData
     {
         public long Isn;
         public NetEquipmentAwakeningOption Option;
-        public bool IsNewData; 
-        
+        public bool IsNewData;
+
         public EquipmentAwakeningData()
         {
             Option = new NetEquipmentAwakeningOption();
-            IsNewData = false; 
+            IsNewData = false;
         }
     }
     public class EventData
@@ -115,12 +115,66 @@ namespace EpinelPS.Models
         public int Defense;
         public int Hp;
     }
-    public class SimroomData
+
+    // Simroom Data
+    public class SimRoomData
     {
         public int CurrentDifficulty;
         public int CurrentChapter;
+        public List<int> Buffs = [];
+        public List<int> LegacyBuffs = [];
+        public List<SimRoomEvent> Events = [];
+        public List<SimRoomCharacterHp> RemainingHps = [];
+        public List<SimRoomChapterInfo> ReceivedRewardChapters = [];
+        public bool IsSimpleModeSkipEnabled = false;
         public bool Entered = false;
     }
+    public class SimRoomEvent
+    {
+        public SimRoomEventLocationInfo Location = new();
+        public bool Selected;
+        public SimRoomBattleEvent Battle = new();
+        public SimRoomSelectionEvent Selection = new();
+        public int EventCase;
+    }
+    public class SimRoomEventLocationInfo
+    {
+        public int Chapter;
+        public int Stage;
+        public int Order;
+    }
+    public class SimRoomChapterInfo
+    {
+        public int Difficulty;
+        public int Chapter;
+    }
+    public class SimRoomBattleEvent
+    {
+        public int Id;
+        public List<int> BuffOptions = [];
+        public int Progress;
+        public int RemainingTargetHealth;
+        public int BuffPreviewId;
+    }
+    public class SimRoomSelectionEvent
+    {
+        public int Id;
+        public int SelectedNumber;
+        public List<SimRoomSelectionGroupElement> Group = [];
+    }
+    public class SimRoomSelectionGroupElement
+    {
+        public int SelectionNumber;
+        public int Id;
+        public bool IsDone;
+        public int RandomBuff;
+    }
+    public class SimRoomCharacterHp
+    {
+        public long Csn;
+        public int Hp;
+    }
+
     public class ResetableData
     {
         public int WipeoutCount = 0;
@@ -128,10 +182,10 @@ namespace EpinelPS.Models
         public int InterceptionTickets = 3;
         public List<int> CompletedDailyMissions = [];
         public int DailyMissionPoints;
-        public SimroomData SimRoomData = new();
+        public SimRoomData SimRoomData = new();
 
         public Dictionary<int, int> DailyCounselCount = [];
-    
+
     }
     public class WeeklyResetableData
     {
@@ -267,7 +321,7 @@ namespace EpinelPS.Models
         public bool RecievedFinalReward { get; set; }
         public bool CompletedPerfectly { get; set; }
     }
-    
+
     public class PassRankData
     {
         public int PassRank { get; set; } = 0;

@@ -16,13 +16,17 @@ namespace EpinelPS.LobbyServer.Simroom
                 Result = SimRoomResult.Success,
             };
 
+            
             user.ResetableData.SimRoomData.Entered = true;
             user.ResetableData.SimRoomData.CurrentDifficulty = req.Difficulty;
             user.ResetableData.SimRoomData.CurrentChapter = req.StartingChapter;
-
-            // TODO: generate buffs
-
             JsonDb.Save();
+
+            List<NetSimRoomEvent> events = SimRoomHelper.GetSimRoomEvents(user);
+            user.ResetableData.SimRoomData.Events = [.. events.Select(SimRoomHelper.NetToM)];
+            JsonDb.Save();
+            
+            response.Events.AddRange(events);
 
             await WriteDataAsync(response);
         }
