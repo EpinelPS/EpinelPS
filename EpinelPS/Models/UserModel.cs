@@ -3,6 +3,7 @@ using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.Models;
+
 public class ClearedTutorialData
 {
     public int Id;
@@ -34,6 +35,7 @@ public class User
     public DateTime BanEnd;
     public int BanId = 0;
     public DateTime LastReset = DateTime.MinValue;
+    public DateTime LastWeeklyReset = DateTime.MinValue;
 
     // Game data
     public List<string> CompletedScenarios = [];
@@ -86,7 +88,7 @@ public class User
     public List<int> Memorial = [];
     public List<int> JukeboxBgm = [];
     public List<NetUserFavoriteItemData> FavoriteItems = [];
-    
+
     public List<NetUserFavoriteItemQuestData> FavoriteItemQuests = [];
     public Dictionary<int, int> TowerProgress = [];
 
@@ -403,7 +405,36 @@ public class User
         return LastReset < todayResetTime;
     }
 
-    public void ResetDataIfNeeded()
+    private bool ShouldResetWeekly()
+    {
+        var nowLocal = DateTime.UtcNow;
+
+        // Calculate the most recent Tuesday reset time
+        DayOfWeek currentDay = nowLocal.DayOfWeek;
+        int daysSinceTuesday = ((int)currentDay - (int)DayOfWeek.Tuesday + 7) % 7;
+
+        // Get the date of the most recent Tuesday
+        DateTime thisTuesday = nowLocal.Date.AddDays(-daysSinceTuesday);
+
+        // Compute the weekly reset time
+        DateTime weeklyResetTime = new(
+            thisTuesday.Year,
+            thisTuesday.Month,
+            thisTuesday.Day,
+            JsonDb.Instance.ResetHourUtcTime, 0, 0
+        );
+
+        // If nowLocal is before the weekly reset time, subtract a week
+        if (nowLocal < weeklyResetTime)
+        {
+            weeklyResetTime = weeklyResetTime.AddDays(-7);
+        }
+
+        // If user's last reset was before the last scheduled 2 PM, they need reset
+        return LastWeeklyReset < weeklyResetTime;
+    }
+
+    /*public void ResetDataIfNeeded()
     {
         if (!ShouldResetUser()) return;
 
@@ -412,5 +443,41 @@ public class User
         LastReset = DateTime.UtcNow;
         ResetableData = new();
         JsonDb.Save();
+    }*/
+
+    public void ResetDataIfNeeded()
+    {
+        bool needsSave = false;
+
+        // Check daily reset
+        if (ShouldResetUser())
+        {
+            Logging.WriteLine("Resetting daily user data...", LogType.Warning);
+
+            LastReset = DateTime.UtcNow;
+            ResetableData = new()
+            {
+                SimRoomData = new()
+                {
+                    LegacyBuffs = ResetableData.SimRoomData.LegacyBuffs // Retain old LegacyBuffs data
+                }
+            };
+            needsSave = true;
+        }
+
+        // Check weekly reset
+        if (ShouldResetWeekly())
+        {
+            Logging.WriteLine("Resetting weekly user data...", LogType.Warning);
+
+            LastWeeklyReset = DateTime.UtcNow;
+            ResetableData = new();
+            needsSave = true;
+        }
+
+        if (needsSave)
+        {
+            JsonDb.Save();
+        }
     }
 }

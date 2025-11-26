@@ -291,6 +291,24 @@ namespace EpinelPS.Data
         [LoadRecord("DailyEventTable.json", "Id")]
         public readonly Dictionary<int, DailyEventRecord> DailyEventTable = [];
 
+        // SimulationRoom Data Tables
+        [LoadRecord("SimulationRoomChapterTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomChapterRecord> SimulationRoomChapterTable = [];
+        [LoadRecord("SimulationRoomStageLocationTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomStageLocationRecord> SimulationRoomStageLocationTable = [];
+        [LoadRecord("SimulationRoomSelectionEventTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomSelectionEventRecord> SimulationRoomSelectionEventTable = [];
+        [LoadRecord("SimulationRoomSelectionGroupTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomSelectionGroupRecord> SimulationRoomSelectionGroupTable = [];
+        [LoadRecord("SimulationRoomBattleEventTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomBattleEventRecord> SimulationRoomBattleEventTable = [];
+        [LoadRecord("SimulationRoomLevelScalingTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomLevelScalingRecord> SimulationRoomLevelScalingTable = [];
+        [LoadRecord("SimulationRoomBuffPreviewTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomBuffPreviewRecord> SimulationRoomBuffPreviewTable = [];
+        [LoadRecord("SimulationRoomBuffTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomBuffRecord> SimulationRoomBuffTable = [];
+
         static async Task<GameData> BuildAsync()
         {
             await Load();
