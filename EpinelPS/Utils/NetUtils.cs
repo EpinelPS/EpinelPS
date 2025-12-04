@@ -96,13 +96,13 @@ namespace EpinelPS.Utils
                     var subType = GameData.Instance.GetItemSubType(item.ItemType);
                     switch (subType)
                     {
-                        case ItemSubType.Module_A:
+                        case ItemSubType.ModuleA:
                             return 0;
-                        case ItemSubType.Module_B:
+                        case ItemSubType.ModuleB:
                             return 1;
-                        case ItemSubType.Module_C:
+                        case ItemSubType.ModuleC:
                             return 2;
-                        case ItemSubType.Module_D:
+                        case ItemSubType.ModuleD:
                             return 3;
                         case ItemSubType.HarmonyCube:
                             return GetHarmonyCubePosition(item.ItemType);
