@@ -18,15 +18,15 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
     # Install the .NET Core workload
     - name: Install .NET 9
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild
@@ -42,7 +42,7 @@ jobs:
       run: dotnet publish EpinelPS
 
     - name: Copy to output
-      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy /s /e "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net9.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy /s /e "${{ github.workspace }}\EpinelPS\bin\Release\net9.0\win-x64\publish\" "${{ github.workspace }}\out\"  && copy "${{ github.workspace }}\ServerSelector.Desktop\sodium.dll" "${{ github.workspace }}\out\sodium.dll"
+      run: echo ${{ github.workspace }} && md ${{ github.workspace }}/out/ && xcopy /s /e "${{ github.workspace }}\ServerSelector.Desktop\bin\Release\net10.0\win-x64\publish\" "${{ github.workspace }}\out\" && xcopy /s /e "${{ github.workspace }}\EpinelPS\bin\Release\net10.0\win-x64\publish\" "${{ github.workspace }}\out\"  && copy "${{ github.workspace }}\ServerSelector.Desktop\sodium.dll" "${{ github.workspace }}\out\sodium.dll"
   
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

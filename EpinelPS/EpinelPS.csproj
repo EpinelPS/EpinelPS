@@ -10,7 +10,7 @@
 		<SelfContained>true</SelfContained>
 		<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
 		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
-		<Version>0.135.4.3</Version>
+		<Version>0.140.8.0</Version>
 		<CETCompat>false</CETCompat>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<ImplicitUsings>enable</ImplicitUsings>

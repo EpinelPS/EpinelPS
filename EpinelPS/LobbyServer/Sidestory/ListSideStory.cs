@@ -19,6 +19,8 @@ namespace EpinelPS.LobbyServer.Sidestory
                 response.SideStoryStageDataList.Add(new NetSideStoryStageData() { SideStoryStageId = item, ClearedAt = Timestamp.FromDateTime(DateTime.UtcNow) });
             }
 
+            response.ViewedSideStoryIds.AddRange(user.ViewedSideStoryStages);
+
             await WriteDataAsync(response);
         }
     }

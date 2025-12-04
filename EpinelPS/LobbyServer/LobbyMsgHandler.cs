@@ -116,8 +116,11 @@ namespace EpinelPS.LobbyServer
                 msg2.MergeFrom(Contents);
 
                 Logging.WriteLine("Reading " + msg2.GetType().Name, LogType.Debug);
-                PrintMessage(msg2);
-                Logging.WriteLine("", LogType.Debug);
+                if (msg2.GetType().Name != "ReqSyncBadge")
+                {
+                    PrintMessage(msg2);
+                    Logging.WriteLine("", LogType.Debug);
+                }
                 
                 return msg2;
             }
@@ -130,8 +133,11 @@ namespace EpinelPS.LobbyServer
                 PacketDecryptResponse bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
                 msg.MergeFrom(bin.Contents);
 
-                PrintMessage(msg);
-                Logging.WriteLine("", LogType.Debug);
+                if (msg.GetType().Name != "ReqSyncBadge")
+                {
+                    PrintMessage(msg);
+                    Logging.WriteLine("", LogType.Debug);
+                }
 
                 UserId = bin.UserId;
                 UsedAuthToken = bin.UsedAuthToken;

@@ -84,6 +84,7 @@ public class User
     public int GachaTutorialPlayCount = 0;
     public List<int> CompletedTacticAcademyLessons = [];
     public List<int> CompletedSideStoryStages = [];
+    public List<int> ViewedSideStoryStages = [];
 
     public List<int> Memorial = [];
     public List<int> JukeboxBgm = [];

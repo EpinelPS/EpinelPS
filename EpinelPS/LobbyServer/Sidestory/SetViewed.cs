@@ -1,3 +1,4 @@
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Sidestory
@@ -12,8 +13,15 @@ namespace EpinelPS.LobbyServer.Sidestory
 
             ResSetViewSideStory response = new();
 
-            // TODO
+            foreach (var id in req.ViewedSideStoryIds)
+            {
+                if (!user.ViewedSideStoryStages.Contains(id))
+                {
+                    user.ViewedSideStoryStages.Add(id);
+                }
+            }
 
+            JsonDb.Save();
             await WriteDataAsync(response);
         }
     }
