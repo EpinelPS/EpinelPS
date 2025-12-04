@@ -119,12 +119,12 @@ namespace EpinelPS.Utils
             {
                 AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
             }
-            else if (rewardType == RewardType.Item ||rewardType.ToString().StartsWith("Equipment_"))
+            else if (rewardType == RewardType.Item ||rewardType.ToString().StartsWith("Equipment"))
             {
 
                 int corpId = 0; // Default to 0 (None)
 
-                if (rewardType.ToString().StartsWith("Equipment_"))
+                if (rewardType.ToString().StartsWith("Equipment"))
                 {
                     var corpSetting = GameData.Instance.ItemEquipCorpSettingTable.Values.FirstOrDefault(x => x.Key == rewardType);
 
