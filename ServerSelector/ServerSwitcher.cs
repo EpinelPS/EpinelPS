@@ -130,7 +130,9 @@ namespace ServerSelector
             string hostsFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "drivers/etc/hosts");
             string CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
 
-            string launcherCertList = launcherPath + "/intl_service/cacert.pem";
+            string launcherCertList = launcherPath + "/intl_service/intl_cacert.pem";
+             if (!File.Exists(launcherCertList))
+                launcherCertList = launcherPath + "/intl_service/cacert.pem"; // older INTL sdk versions
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
             if (!File.Exists(gameCertList))
                 gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem"; // older INTL sdk versions
