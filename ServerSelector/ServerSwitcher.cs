@@ -43,7 +43,11 @@ namespace ServerSelector
                 return "Launcher path is invalid. Make sure that the game executable exists in the launcher folder";
             }
 
-            string launcherCertList = launcherPath + "/intl_service/cacert.pem";
+
+            // TODO fix this mess
+            string launcherCertList = launcherPath + "/intl_service/intl_cacert.pem";
+            if (!File.Exists(launcherCertList))
+                launcherCertList = launcherPath + "/intl_service/cacert.pem"; // older INTL sdk versions
             string gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/intl_cacert.pem";
             if (!File.Exists(gameCertList))
                 gameCertList = gamePath + "/nikke_Data/Plugins/x86_64/cacert.pem"; // older INTL sdk versions
