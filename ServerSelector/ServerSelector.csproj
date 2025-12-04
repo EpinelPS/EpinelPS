@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
 		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
     <LangVersion>latest</LangVersion>
@@ -16,7 +16,7 @@
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.6" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.6" />
-    <PackageReference Include="FluentAvaloniaUI" Version="2.3.0" />
+    <PackageReference Include="FluentAvaloniaUI" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
