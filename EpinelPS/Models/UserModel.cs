@@ -460,7 +460,10 @@ public class User
             {
                 SimRoomData = new()
                 {
-                    LegacyBuffs = ResetableData.SimRoomData.LegacyBuffs // Retain old LegacyBuffs data
+                    LegacyBuffs = ResetableData.SimRoomData.LegacyBuffs, // Retain old LegacyBuffs data
+                    CurrentDifficulty = ResetableData.SimRoomData.CurrentDifficulty,
+                    CurrentChapter = ResetableData.SimRoomData.CurrentChapter,
+                    CurrentSeasonData = ResetableData.SimRoomData.CurrentSeasonData,
                 }
             };
             needsSave = true;
@@ -472,7 +475,18 @@ public class User
             Logging.WriteLine("Resetting weekly user data...", LogType.Warning);
 
             LastWeeklyReset = DateTime.UtcNow;
-            ResetableData = new();
+            var currentSeasonData = ResetableData.SimRoomData.CurrentSeasonData;
+            currentSeasonData.LatestOption = new();
+            ResetableData = new()
+            {
+                SimRoomData = new()
+                {
+                    // Retain old LegacyBuffs data and currentSeason data
+                    CurrentDifficulty = ResetableData.SimRoomData.CurrentDifficulty,
+                    CurrentChapter = ResetableData.SimRoomData.CurrentChapter,
+                    CurrentSeasonData = currentSeasonData,
+                }
+            };
             needsSave = true;
         }
 

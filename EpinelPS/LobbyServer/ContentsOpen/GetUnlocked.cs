@@ -31,7 +31,7 @@ namespace EpinelPS.LobbyServer.ContentsOpen
                 JsonDb.Save();
             }
 
-            foreach (KeyValuePair<int, UnlockData> item in user.ContentsOpenUnlocked)
+            foreach (KeyValuePair<int, UnlockData> item in user.ContentsOpenUnlocked.OrderBy(x => x.Key))
             {
                 response.ContentsOpenUnlockInfoList.Add(new NetContentsOpenUnlockInfo()
                 {

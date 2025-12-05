@@ -45,6 +45,7 @@ namespace EpinelPS.LobbyServer.Simroom
             user.ResetableData.SimRoomData.Events = [];
             user.ResetableData.SimRoomData.RemainingHps = [];
             user.ResetableData.SimRoomData.Buffs = [];
+            user.ResetableData.SimRoomData.CurrentSeasonData.IsOverclock = false;
 
             JsonDb.Save();
 

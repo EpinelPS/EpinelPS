@@ -26,3 +26,6 @@ dotnet_diagnostic.SYSLIB0039.severity = none
 
 # CS0219: 变量已被赋值，但从未使用过它的值
 dotnet_diagnostic.CS0219.severity = none
+
+# CS8618: 类型不包含 null 值的属性
+dotnet_diagnostic.CS8618.severity = none

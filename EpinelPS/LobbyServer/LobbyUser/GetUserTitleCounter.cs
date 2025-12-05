@@ -7,11 +7,16 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            ReqGetUserTitleCounterList req = await ReadData<ReqGetUserTitleCounterList>();
+            await ReadData<ReqGetUserTitleCounterList>();
 
-            ResGetUserTitleCounterList r = new();
+            ResGetUserTitleCounterList response = new();
+            response.UserTitleCounterList.Add(new ResGetUserTitleCounterList.Types.NetUserTitleCounter { Condition = 23, SubCondition = 1, Count = 10});
+            response.UserTitleCounterList.Add(new ResGetUserTitleCounterList.Types.NetUserTitleCounter { Condition = 23, SubCondition = 2, Count = 10});
+            response.UserTitleCounterList.Add(new ResGetUserTitleCounterList.Types.NetUserTitleCounter { Condition = 23, SubCondition = 3, Count = 10});
+            response.UserTitleCounterList.Add(new ResGetUserTitleCounterList.Types.NetUserTitleCounter { Condition = 23, SubCondition = 4, Count = 10});
+            response.UserTitleCounterList.Add(new ResGetUserTitleCounterList.Types.NetUserTitleCounter { Condition = 23, SubCondition = 5, Count = 10});
 
-            await WriteDataAsync(r);
+            await WriteDataAsync(response);
         }
     }
 }
