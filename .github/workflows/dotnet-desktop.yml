@@ -23,7 +23,7 @@ jobs:
         fetch-depth: 0
 
     # Install the .NET Core workload
-    - name: Install .NET 9
+    - name: Install .NET 10
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 10.0.x
@@ -48,4 +48,38 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Server and Server selector
+        path: ${{ github.workspace }}/out/
+  serverOnly:
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    runs-on: linux-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET 10
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore packages
+      run: dotnet restore
+
+    - name: Publish Server
+      run: dotnet publish EpinelPS
+
+    - name: Copy to output
+      run: echo ${{ github.workspace }} && xcopy /s /e "${{ github.workspace }}\EpinelPS\bin\Release\net10.0\linux-x64\publish\" "${{ github.workspace }}\out\"
+  
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: EpinelPS_linux_x64
         path: ${{ github.workspace }}/out/
