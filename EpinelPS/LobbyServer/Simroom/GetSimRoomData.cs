@@ -31,6 +31,8 @@ namespace EpinelPS.LobbyServer.Simroom
 
             var CurrentDifficulty = user.ResetableData.SimRoomData.CurrentDifficulty;
             var currentChapter = user.ResetableData.SimRoomData.CurrentChapter;
+            var buffs = user.ResetableData.SimRoomData.Buffs;
+            var legacyBuffs = user.ResetableData.SimRoomData.LegacyBuffs;
 
             ResGetSimRoom response = new()
             {
@@ -41,20 +43,34 @@ namespace EpinelPS.LobbyServer.Simroom
                 // NextLegacyBuffResetDate: Resets at 2 AM every Tuesday
                 NextLegacyBuffResetDate = DateTimeHelper.GetNextWeekdayAtTime("China Standard Time", DayOfWeek.Tuesday, 2).ToTimestamp(),
                 IsSimpleModeSkipEnabled = user.ResetableData.SimRoomData.IsSimpleModeSkipEnabled,
-
+                LastPlayedChapter = new NetSimRoomChapterInfo()
+                {
+                    Chapter = currentChapter,
+                    Difficulty = CurrentDifficulty,
+                }
             };
 
             // LegacyBuffs
-            response.LegacyBuffs.AddRange(user.ResetableData.SimRoomData.LegacyBuffs);
+            response.LegacyBuffs.AddRange(legacyBuffs);
 
             // OverclockData
-            response.OverclockData = GetOverclockData(user: user);
+            try
+            {
+                response.OverclockData = GetOverclockData(user: user);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteLine($"Get OverclockData Exception: {ex.Message}", LogType.Error);
+            }
 
             // ClearInfos
             response.ClearInfos.AddRange(GetClearInfos(user));
 
             // OverclockOptionList
-            // response.OverclockOptionList.Add([]);
+            if (user.ResetableData.SimRoomData.CurrentSeasonData.IsOverclock)
+            {
+                response.OverclockOptionList.AddRange(user.ResetableData.SimRoomData.CurrentSeasonData.CurrentOptionList);
+            }
 
             // check if user is in sim room
             if (user.ResetableData.SimRoomData.Entered)
@@ -65,15 +81,9 @@ namespace EpinelPS.LobbyServer.Simroom
                 // TODO: Get RemainingHps
                 response.RemainingHps.AddRange(GetCharacterHp(user));
 
-                response.LastPlayedChapter = new NetSimRoomChapterInfo()
-                {
-                    Chapter = currentChapter,
-                    Difficulty = CurrentDifficulty,
-                };
-
                 // Buffs = Buffs + LegacyBuffs
-                response.Buffs.AddRange(user.ResetableData.SimRoomData.Buffs);
-                response.Buffs.AddRange(user.ResetableData.SimRoomData.LegacyBuffs);
+                response.Buffs.AddRange(buffs);
+                response.Buffs.AddRange(legacyBuffs);
 
                 // response.NextSimpleModeBuffSelectionInfo = new()
                 // {
@@ -144,57 +154,66 @@ namespace EpinelPS.LobbyServer.Simroom
         public static List<NetSimRoomCharacterHp> GetCharacterHp(User user)
         {
             List<NetSimRoomCharacterHp> hps = [];
-            if (user.UserTeams.TryGetValue((int)TeamType.SimulationRoom, out var userTeamData))
+            var userRemainingHps = user.ResetableData.SimRoomData.RemainingHps;
+            foreach (var userRemainingHp in userRemainingHps)
             {
-                if (userTeamData.Teams.Count > 0 && userTeamData.Teams[0].Slots.Count > 0)
-                {
-                    foreach (var slot in userTeamData.Teams[0].Slots)
-                    {
-                        hps.Add(new() { Csn = slot.Value, Hp = 100000 });
-                    }
-                }
+                hps.Add(new() { Csn = userRemainingHp.Csn, Hp = userRemainingHp.Hp });
             }
             return hps;
         }
 
         private static NetSimRoomOverclockData GetOverclockData(User user)
         {
-            return new NetSimRoomOverclockData
+            var currentSeasonData = user.ResetableData.SimRoomData.CurrentSeasonData;
+
+            var netOverclockData = new NetSimRoomOverclockData
             {
+                HasClearedLevel50 = currentSeasonData.HasClearedLevel50,
+                WasInfinitePopupChecked = currentSeasonData.WasInfinitePopupChecked,
+                WasMainSeasonResetPopupChecked = currentSeasonData.WasMainSeasonResetPopupChecked,
+                WasSubSeasonResetPopupChecked = currentSeasonData.WasSubSeasonResetPopupChecked,
+
+                // CurrentSeasonData
                 CurrentSeasonData = new NetSimRoomOverclockSeasonData
                 {
-                    SeasonStartDate = Timestamp.FromDateTimeOffset(DateTime.UtcNow.Date.AddDays(-1)),
-                    SeasonEndDate = Timestamp.FromDateTimeOffset(DateTime.UtcNow.Date.AddDays(7)),
+                    SeasonStartDate = DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
+                    SeasonEndDate = DateTime.UtcNow.Date.AddDays(12).ToTimestamp(),
                     IsSeasonOpen = true,
-                    Season = 1,
-                    SubSeason = 1,
-                    SeasonWeekCount = 1
+                    Season = currentSeasonData.CurrentSeason,
+                    SubSeason = currentSeasonData.CurrentSubSeason,
+                    SeasonWeekCount = 2,
                 },
 
+                // CurrentSeasonHighScore
                 CurrentSeasonHighScore = new NetSimRoomOverclockHighScoreData
                 {
-                    CreatedAt = Timestamp.FromDateTimeOffset(DateTime.UtcNow.Date.AddDays(-1)),
-                    OptionLevel = 1,
-                    Season = 1,
-                    SubSeason = 1,
-                    OptionList = { 1 }
+                    CreatedAt = currentSeasonData.CurrentSeasonHighScore.CreatedAt ?? DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
+                    Season = currentSeasonData.CurrentSeasonHighScore.Season,
+                    SubSeason = currentSeasonData.CurrentSeasonHighScore.SubSeason,
+                    OptionList = { currentSeasonData.CurrentSeasonHighScore.OptionList },
+                    OptionLevel = currentSeasonData.CurrentSeasonHighScore.OptionLevel,
                 },
-
+                // CurrentSubSeasonHighScore
                 CurrentSubSeasonHighScore = new NetSimRoomOverclockHighScoreData
                 {
-                    CreatedAt = Timestamp.FromDateTimeOffset(DateTime.UtcNow.Date.AddDays(-1)),
-                    OptionLevel = 1,
-                    Season = 1,
-                    SubSeason = 1,
-                    OptionList = { 1 }
+                    CreatedAt = currentSeasonData.CurrentSubSeasonHighScore.CreatedAt ?? DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
+                    Season = currentSeasonData.CurrentSubSeasonHighScore.Season,
+                    SubSeason = currentSeasonData.CurrentSubSeasonHighScore.SubSeason,
+                    OptionList = { currentSeasonData.CurrentSubSeasonHighScore.OptionList },
+                    OptionLevel = currentSeasonData.CurrentSubSeasonHighScore.OptionLevel,
                 },
 
+                // LatestOption
                 LatestOption = new NetSimRoomOverclockOptionSettingData
                 {
-                    Season = 1,
-                    OptionList = { 1 }
+                    Season = currentSeasonData.LatestOption.Season,
+                    OptionList = { currentSeasonData.LatestOption.OptionList },
                 }
             };
+            netOverclockData.CurrentSeasonData.Season = GameData.Instance.SimulationRoomOcSeasonTable.Keys.Max();
+            netOverclockData.CurrentSeasonData.SubSeason = 3;
+
+            return netOverclockData;
         }
     }
 }

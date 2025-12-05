@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser
 {
@@ -7,12 +8,12 @@ namespace EpinelPS.LobbyServer.LobbyUser
     {
         protected override async Task HandleAsync()
         {
-            ReqGetContentsOpenData req = await ReadData<ReqGetContentsOpenData>();
+            await ReadData<ReqGetContentsOpenData>();
             User user = GetUser();
 
             // this request returns a list of "special" stages that mark when something is unlocked, ex: the shop or interception
 
-            List<int> specialStages = [6003003, 6002008, 6002016, 6005003, 6003021, 6011018, 6007021, 6004018, 6005013, 6003009, 6003012, 6009017, 6016039, 6001004, 6000003, 6000001, 6002001, 6004023, 6005026, 6020050, 6006004, 6006023,6022049];
+            List<int> specialStages = [6003003, 6002008, 6002016, 6005003, 6003021, 6011018, 6007021, 6004018, 6005013, 6003009, 6003012, 6009017, 6016039, 6001004, 6000003, 6000001, 6002001, 6004023, 6005026, 6020050, 6006004, 6006023, 6022049];
 
             ResGetContentsOpenData response = new();
             foreach (FieldInfoNew field in user.FieldInfoNew.Values)
@@ -23,12 +24,40 @@ namespace EpinelPS.LobbyServer.LobbyUser
                         response.ClearStageList.Add(stage);
                 }
             }
-            response.MaxGachaCount = 10;
-			response.MaxGachaPremiumCount = 10;
+            response.MaxGachaCount = user.GachaTutorialPlayCount;
+            response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;
             // todo tutorial playcount of gacha
             response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
 
+            // ClearSimRoomChapterList: 已通关的章节列表，用于显示超频选项 SimRoomOC
+            response.ClearSimRoomChapterList.AddRange(GetClearSimRoomChapterList(user));
+
             await WriteDataAsync(response);
+        }
+
+        private static List<int> GetClearSimRoomChapterList(User user)
+        {
+            var clearSimRoomChapterList = new List<int>();
+            try
+            {
+                var currentDifficulty = user.ResetableData.SimRoomData?.CurrentDifficulty ?? 0;
+                var currentChapter = user.ResetableData.SimRoomData?.CurrentChapter ?? 0;
+                if (currentDifficulty > 0 && currentChapter > 0)
+                {
+                    var chapters = GameData.Instance.SimulationRoomChapterTable.Values.Where(c => c.DifficultyId <= currentDifficulty).ToList();
+                    foreach (var chapter in chapters)
+                    {
+                        bool isAdd = chapter.DifficultyId < currentDifficulty ||
+                            (chapter.DifficultyId == currentDifficulty && chapter.Chapter <= currentChapter);
+                        if (isAdd) clearSimRoomChapterList.Add(chapter.Id);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logging.Warn($"GetClearSimRoomChapterList error: {e.Message}");
+            }
+            return clearSimRoomChapterList;
         }
     }
 }

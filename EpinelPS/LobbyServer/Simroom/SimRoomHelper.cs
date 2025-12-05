@@ -1,6 +1,7 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using Google.Protobuf.WellKnownTypes;
 using log4net;
 using Newtonsoft.Json;
 
@@ -17,15 +18,32 @@ namespace EpinelPS.LobbyServer.Simroom
         /// <param name="user"> User </param>
         /// <param name="difficultyId"> DifficultyId </param>
         /// <param name="chapterId"> ChapterId </param>
+        /// <param name="overclockOptionList"> OverclockOptionList </param>
+        /// <param name="overclockSeason"> OverclockSeason </param>
+        /// <param name="overclockSubSeason"> OverclockSubSeason </param>
         /// <returns>The list of NetSimRoomEvent</returns>
-        public static List<NetSimRoomEvent> GetSimRoomEvents(User user, int difficultyId = 0, int chapterId = 0)
+        public static List<NetSimRoomEvent> GetSimRoomEvents(User user, int difficultyId = 0, int chapterId = 0,
+        List<int>? overclockOptionList = null, int overclockSeason = 0, int overclockSubSeason = 0)
         {
+
+            bool isOverclock = overclockOptionList is not null && overclockOptionList.Count > 0 && overclockSeason > 0 && overclockSubSeason > 0;
+
             List<NetSimRoomEvent> netSimRooms = [];
+            var currentOCData = user.ResetableData.SimRoomData.CurrentSeasonData;
             int currentDifficulty = user.ResetableData.SimRoomData.CurrentDifficulty;
             int currentChapter = user.ResetableData.SimRoomData.CurrentChapter;
+            int currentOCSeason = currentOCData.CurrentSeason;
+            int currentOCSubSeason = currentOCData.CurrentSubSeason;
+            List<int> currentOCList = currentOCData.CurrentOptionList;
 
             if (difficultyId > 0) currentDifficulty = difficultyId;
             if (chapterId > 0) currentChapter = chapterId;
+            if (isOverclock)
+            {
+                currentOCSeason = overclockSeason;
+                currentOCSubSeason = overclockSubSeason;
+                currentOCList = overclockOptionList ?? [];
+            }
 
             var events = user.ResetableData.SimRoomData.Events;
             if (events.Count > 1)
@@ -33,7 +51,8 @@ namespace EpinelPS.LobbyServer.Simroom
                 return [.. events.Select(MToNet)];
             }
 
-            var simRoomChapter = GameData.Instance.SimulationRoomChapterTable.Values.FirstOrDefault(x => x.Chapter == currentChapter && x.DifficultyId == currentDifficulty);
+            var simRoomChapter = GameData.Instance.SimulationRoomChapterTable.Values
+                .FirstOrDefault(x => x.Chapter == currentChapter && x.DifficultyId == currentDifficulty);
             log.Debug($"Fond SimulationRoomChapter Chapter: {currentChapter}, DifficultyId: {currentDifficulty} Data: {JsonConvert.SerializeObject(simRoomChapter)}");
 
             var buffPreviewRecords = GameData.Instance.SimulationRoomBuffPreviewTable.Values.ToList();
@@ -43,13 +62,18 @@ namespace EpinelPS.LobbyServer.Simroom
 
             if (simRoomChapter is null) return netSimRooms;
 
+            int battleEventGroup = GetBattleEventGroup(overclockOptionList, isOverclock);
+            bool isHardBattle = GetIsHardBattle(overclockOptionList, isOverclock);
+
             for (int i = 1; i <= simRoomChapter.StageValue; i++)
             {
                 if (i == simRoomChapter.StageValue) // BossBattle
                 {
-                    var battleBuffPreviews = GameData.Instance.SimulationRoomBuffPreviewTable.Values.Where(x => x.EventType is SimulationRoomEvent.BossBattle).ToList();
+                    var battleBuffPreviews = GameData.Instance.SimulationRoomBuffPreviewTable.Values.Where(x =>
+                        x.EventType is SimulationRoomEvent.BossBattle).ToList();
                     var randomBuffPreview = GetRandomItems(battleBuffPreviews, 1);
-                    var simRoomBattleEvent = CreateSimRoomBattleEvent(chapter: simRoomChapter, stage: i, order: 1, simRoomBattleEventRecords, randomBuffPreview[0]);
+                    var simRoomBattleEvent = CreateSimRoomBattleEvent(simRoomChapter, i, 1, simRoomBattleEventRecords, randomBuffPreview[0],
+                        overclockSeason: currentOCSeason, battleEventGroup: battleEventGroup, isOverclock);
                     events.Add(NetToM(simRoomBattleEvent));
                     netSimRooms.Add(simRoomBattleEvent);
                 }
@@ -117,18 +141,26 @@ namespace EpinelPS.LobbyServer.Simroom
                 {
                     var battleBuffPreviews = buffPreviewRecords.FindAll(x
                         => x.EventType is SimulationRoomEvent.NormalBattle or SimulationRoomEvent.EliteBattle);
+                    if (isOverclock && isHardBattle)
+                    {
+                        battleBuffPreviews = buffPreviewRecords.FindAll(x
+                            => x.EventType is SimulationRoomEvent.EliteBattle);
+                    }
                     var randomBuffPreview = GetRandomItems(battleBuffPreviews, 3);
                     int order = 0;
                     foreach (var simRoomBuffPreview in randomBuffPreview)
                     {
                         order += 1;
-                        var simRoomBattleEvent = CreateSimRoomBattleEvent(chapter: simRoomChapter, stage: i, order: order, simRoomBattleEventRecords, simRoomBuffPreview);
+                        var simRoomBattleEvent = CreateSimRoomBattleEvent(chapter: simRoomChapter, stage: i, order: order,
+                         simRoomBattleEventRecords, simRoomBuffPreview, overclockSeason: currentOCSeason, battleEventGroup: battleEventGroup, isOverclock);
                         events.Add(NetToM(simRoomBattleEvent));
                         netSimRooms.Add(simRoomBattleEvent);
                     }
                 }
             }
-            // user.AddTrigger()
+            user.AddTrigger(Trigger.SimulationRoomStart, value: 1);
+            user.AddTrigger(Trigger.SimulationRoomClearCount1Only, value: 1);
+            user.AddTrigger(Trigger.SimulationRoomClearWithoutCondition, value: 1);
             user.ResetableData.SimRoomData.Events = events;
             JsonDb.Save();
             return netSimRooms;
@@ -264,7 +296,8 @@ namespace EpinelPS.LobbyServer.Simroom
         /// <param name="randomBuffPreview"></param>
         /// <returns>NetSimRoomEvent</returns>
         private static NetSimRoomEvent CreateSimRoomBattleEvent(SimulationRoomChapterRecord chapter, int stage, int order,
-            List<SimulationRoomBattleEventRecord> simRoomBattleEventRecords, SimulationRoomBuffPreviewRecord randomBuffPreview)
+            List<SimulationRoomBattleEventRecord> simRoomBattleEventRecords, SimulationRoomBuffPreviewRecord randomBuffPreview,
+            int overclockSeason = 0, int battleEventGroup = 0, bool isOverclock = false)
         {
             var simRoomEvent = new NetSimRoomEvent();
             var location = new NetSimRoomEventLocationInfo();
@@ -273,8 +306,17 @@ namespace EpinelPS.LobbyServer.Simroom
             location.Chapter = chapter.Chapter;
             location.Stage = stage;
             location.Order = order;
-            var simRoomBuffPreviewBattleEvents = simRoomBattleEventRecords.FindAll(x
-                => x.EventType == randomBuffPreview.EventType && x.DifficultyConditionValue <= chapter.DifficultyId);
+            var simRoomBuffPreviewBattleEvents = simRoomBattleEventRecords.FindAll(x =>
+                x.EventType == randomBuffPreview.EventType
+                && x.DifficultyConditionValue <= chapter.DifficultyId
+                && x.UseOcMode == false);
+            if (isOverclock)
+            {
+                simRoomBuffPreviewBattleEvents = simRoomBattleEventRecords.FindAll(x =>
+                    x.EventType == randomBuffPreview.EventType
+                    && x.UseOcMode == true && x.UseSeasonId == overclockSeason
+                    && x.BattleEventGroup == battleEventGroup);
+            }
             log.Debug($"EventType: {randomBuffPreview.EventType}, SimRoomBattleEventRecord Count: {simRoomBuffPreviewBattleEvents.Count}");
             var randomBattleEvents = GetRandomItems(simRoomBuffPreviewBattleEvents, 1);
             foreach (var battleEvent in randomBattleEvents)
@@ -428,10 +470,42 @@ namespace EpinelPS.LobbyServer.Simroom
             }
         }
 
+        public static int GetBattleEventGroup(List<int>? overclockOptionList = null, bool isOverclock = false)
+        {
+            // TODO: Implement battle event group logic
+            if (!isOverclock) return 0;
+            if (overclockOptionList is null || overclockOptionList.Count == 0) return 0;
+            var simRoomOcOptionRecords = GameData.Instance.SimulationRoomOcOptionTable.Values.Where(x =>
+            overclockOptionList.Contains(x.Id)).ToList();
+            if (simRoomOcOptionRecords is null || simRoomOcOptionRecords.Count == 0) return 0;
+            foreach (var item in simRoomOcOptionRecords.FindAll(x => x.OptionData.Count > 0))
+            {
+                var optionData = item.OptionData.Find(x => x.OptionFunction == SimulationRoomOcOptionFunction.BattleEventGroupChange);
+                if (optionData is not null) return optionData.OptionValue;
+            }
+            return 0;
+        }
+
+        public static bool GetIsHardBattle(List<int>? overclockOptionList = null, bool isOverclock = false)
+        {
+            // TODO: Implement hard battle check logic
+            if (!isOverclock) return false;
+            if (overclockOptionList is null || overclockOptionList.Count == 0) return false;
+            var simRoomOcOptionRecords = GameData.Instance.SimulationRoomOcOptionTable.Values.Where(x =>
+            overclockOptionList.Contains(x.Id)).ToList();
+            if (simRoomOcOptionRecords is null || simRoomOcOptionRecords.Count == 0) return false;
+            foreach (var item in simRoomOcOptionRecords)
+            {
+                if (item.OptionNameLocalkey.EndsWith("_HARD_BATTLE_ONLY")) return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Update User SimRoomEvent Events
         /// </summary>
-        public static void UpdateUserSimRoomEvent(User user, int index, List<SimRoomEvent> events, int selectionNumber = 0,
+        public static void UpdateUserSimRoomEvent(User user, int index, List<SimRoomEvent> events,
+            int selectionNumber = 0, int selectionGroupElementId = 0,
             bool isDone = false, int battleProgress = 0, List<int>? BuffOptions = null)
         {
             try
@@ -441,7 +515,7 @@ namespace EpinelPS.LobbyServer.Simroom
                 simRoomEvent.Selected = true;
 
                 // Update Selection Group
-                var groupIndex = simRoomEvent.Selection.Group.FindIndex(x => x.SelectionNumber == selectionNumber);
+                var groupIndex = simRoomEvent.Selection.Group.FindIndex(x => x.Id == selectionGroupElementId || x.SelectionNumber == selectionNumber);
                 if (groupIndex > -1 && isDone)
                 {
                     var group = simRoomEvent.Selection.Group[groupIndex];
@@ -472,100 +546,192 @@ namespace EpinelPS.LobbyServer.Simroom
             }
         }
 
-        public static List<SimRoomCharacterHp> UpdateUserRemainingHps(User user, List<NetSimRoomCharacterHp>? remainingHps = null, int teamNumber = 1, int HpValue = 10000)
+        public static List<SimRoomCharacterHp> UpdateUserRemainingHps(User user, List<NetSimRoomCharacterHp>? remainingHps = null, int teamNumber = 1, int hpValue = 10000)
         {
-            var userRemainingHps = user.ResetableData.SimRoomData.RemainingHps;
             try
             {
-                // req remainingHps
-                if (remainingHps is not null && remainingHps.Count > 0)
+                var userRemainingHps = user.ResetableData.SimRoomData.RemainingHps ?? [];
+
+                // Update from input parameters
+                if (remainingHps?.Count > 0)
                 {
-                    foreach (var characterHp in remainingHps)
-                    {
-                        var userCharacterHpIndex = userRemainingHps.FindIndex(x => x.Csn == characterHp.Csn);
-                        if (userCharacterHpIndex > -1)
-                        {
-                            userRemainingHps[userCharacterHpIndex] = new SimRoomCharacterHp { Csn = characterHp.Csn, Hp = characterHp.Hp };
-                        }
-                        else
-                        {
-                            userRemainingHps.Add(new SimRoomCharacterHp { Csn = characterHp.Csn, Hp = characterHp.Hp });
-                        }
-                    }
+                    userRemainingHps = UpdateFromRemainingHps(userRemainingHps, remainingHps);
                 }
 
-                // get user team 
-                if (user.UserTeams.TryGetValue((int)TeamType.SimulationRoom, out var userTeam))
-                {
-                    var team = userTeam.Teams.FirstOrDefault(x => x.TeamNumber == teamNumber);
-                    if (team is not null)
-                    {
-                        foreach (var slot in team.Slots)
-                        {
-                            if (userRemainingHps.FindIndex(x => x.Csn == slot.Value) < 0) userRemainingHps.Add(new SimRoomCharacterHp { Csn = slot.Value, Hp = HpValue });
-                        }
-                    }
-                }
-                // update user
+                // Initialize team HPs
+                userRemainingHps = InitializeTeamHps(user, userRemainingHps, teamNumber, hpValue);
+
+                // Save and return
                 user.ResetableData.SimRoomData.RemainingHps = userRemainingHps;
                 return userRemainingHps;
             }
             catch (Exception e)
             {
                 log.Error($"Update UserRemainingHps Exception: {e.Message}");
+                log.Error($"Stack Trace: {e.StackTrace}");
+                return user.ResetableData.SimRoomData.RemainingHps ?? [];
             }
-            return userRemainingHps;
         }
 
+        private static List<SimRoomCharacterHp> UpdateFromRemainingHps(List<SimRoomCharacterHp> userRemainingHps, List<NetSimRoomCharacterHp> remainingHps)
+        {
+            var existingHpsDict = userRemainingHps.ToDictionary(x => x.Csn, x => x);
 
+            foreach (var characterHp in remainingHps)
+            {
+                existingHpsDict[characterHp.Csn] = new SimRoomCharacterHp { Csn = characterHp.Csn, Hp = characterHp.Hp };
+            }
+
+            return [.. existingHpsDict.Values];
+        }
+
+        private static List<SimRoomCharacterHp> InitializeTeamHps(User user, List<SimRoomCharacterHp> userRemainingHps, int teamNumber, int hpValue)
+        {
+            if (!user.UserTeams.TryGetValue((int)TeamType.SimulationRoom, out var userTeam))
+                return userRemainingHps;
+
+            var team = userTeam.Teams.FirstOrDefault(x => x.TeamNumber == teamNumber);
+            if (team == null)
+                return userRemainingHps;
+
+            var existingHpsDict = userRemainingHps.ToDictionary(x => x.Csn, x => x);
+
+            foreach (var slot in team.Slots)
+            {
+                if (!existingHpsDict.ContainsKey(slot.Value))
+                {
+                    existingHpsDict[slot.Value] = new SimRoomCharacterHp { Csn = slot.Value, Hp = hpValue };
+                }
+            }
+
+            return [.. existingHpsDict.Values];
+        }
+
+        /// <summary>
+        /// Received Reward
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <param name="difficultyId">int difficultyId</param>
+        /// <param name="chapterId">int chapterId</param>
+        /// <returns>NetRewardData</returns>
         public static NetRewardData? SimRoomReceivedReward(User user, int difficultyId, int chapterId)
         {
             // check if reward is received
             NetRewardData? reward = null;
             if (!IsRewardReceived(user, difficultyId, chapterId))
             {
+                // get all chapter records for the current difficulty
+                var chapterRecords = GameData.Instance.SimulationRoomChapterTable.Values
+                    .Where(x => x.DifficultyId <= difficultyId);
 
-                var allChapterRecords = GameData.Instance.SimulationRoomChapterTable.Values;
-                var chapter = allChapterRecords
-                    .FirstOrDefault(x => x.DifficultyId == difficultyId && x.Chapter == chapterId);
-
-                if (chapter is not null && chapter.RewardId > 0)
+                if (chapterRecords.Any())
                 {
-                    var receivedRewardChapters = user.ResetableData.SimRoomData.ReceivedRewardChapters;
+                    // get last received reward chapter
+                    var receivedRewardChapters = user.ResetableData.SimRoomData.ReceivedRewardChapters ?? [];
                     var receivedRewardChapter = receivedRewardChapters
-                        .OrderBy(x => x.Difficulty)
-                        .ThenBy(x => x.Chapter)
-                        .LastOrDefault();
-                    SimulationRoomChapterRecord? receivedRewardChapterRecord = null;
-                    if (receivedRewardChapter is not null)
-                    {
-                        receivedRewardChapterRecord = allChapterRecords
-                            .FirstOrDefault(x => x.DifficultyId == receivedRewardChapter.Difficulty
-                                              && x.Chapter == receivedRewardChapter.Chapter);
-                    }
+                        .OrderBy(x => x.Difficulty).ThenBy(x => x.Chapter).LastOrDefault();
+
+                    var receivedRewardChapterId = receivedRewardChapter?.Chapter ?? 0;
+                    var receivedRewardDifficultyId = receivedRewardChapter?.Difficulty ?? 0;
 
                     reward = new NetRewardData();
-                    if (receivedRewardChapterRecord is null)
+
+                    // 
+                    bool shouldAddRewardChapter = false;
+                    List<Reward_Data> IncrementalRewards = [];
+                    foreach (var chapter in chapterRecords)
                     {
-                        // Claiming the reward for the first time
-                        reward = RewardUtils.RegisterRewardsForUser(user, rewardId: chapter.RewardId);
+                        bool shouldCalculateReward = chapter.DifficultyId > receivedRewardDifficultyId ||
+                            (chapter.DifficultyId == receivedRewardDifficultyId && chapter.Chapter > receivedRewardChapterId);
+
+                        if (shouldCalculateReward)
+                        {
+                            CalculateIncrementalReward(ref IncrementalRewards, chapter.RewardId);
+                        }
+
+                        if (chapter.Chapter == chapterId && chapter.DifficultyId == difficultyId)
+                        {
+                            shouldAddRewardChapter = true;
+                        }
+                    }
+
+                    if (shouldAddRewardChapter)
+                    {
                         AddRewardChapter(user, difficultyId, chapterId);
                     }
-                    // Check if the received reward chapter is lower than the current chapter
-                    else if (receivedRewardChapterRecord.DifficultyId == difficultyId && receivedRewardChapterRecord.Chapter < chapter.Chapter)
+                    foreach (var item in IncrementalRewards)
                     {
-                        // Claiming the reward for a higher chapter
-                        reward = CalculateIncrementalReward(user, chapter, receivedRewardChapterRecord);
-                        AddRewardChapter(user, difficultyId, chapterId);
-                    }
-                    // Check if the received reward chapter is lower than the current difficulty
-                    else if (receivedRewardChapterRecord.DifficultyId < difficultyId)
-                    {
-                        // Claiming the reward for a higher difficulty
-                        reward = RewardUtils.RegisterRewardsForUser(user, rewardId: chapter.RewardId);
-                        AddRewardChapter(user, difficultyId, chapterId);
+                        RewardUtils.AddSingleObject(user, ref reward, item.RewardId, item.RewardType, item.RewardValue);
                     }
                 }
+            }
+            return reward;
+        }
+
+        /// <summary>
+        /// Overclock Received Reward
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <returns>NetRewardData</returns>
+        public static NetRewardData? SimRoomOverclockReceivedReward(User user)
+        {
+            // check if reward is received
+            NetRewardData? reward = null;
+            var currentSeasonData = user.ResetableData.SimRoomData.CurrentSeasonData;
+            if (currentSeasonData is null) return null;
+            if (!currentSeasonData.IsOverclock) return null;
+
+            var currentOptionList = currentSeasonData.CurrentOptionList;
+            if (currentOptionList is null || currentOptionList.Count == 0) return null;
+
+            var lastHighOption = currentSeasonData.CurrentSeasonHighScore;
+            var lastOptionLevel = lastHighOption?.OptionLevel ?? 0;
+
+            var currentSeasonRecord = GameData.Instance.SimulationRoomOcSeasonTable.Values
+                .FirstOrDefault(x => x.Id == currentSeasonData.CurrentSeason);
+            if (currentSeasonRecord is null) return null;
+
+            var currentOptionRecords = GameData.Instance.SimulationRoomOcOptionTable.Values
+                .Where(x => currentOptionList.Contains(x.Id)).ToList();
+
+            if (currentOptionRecords.Count == 0) return null;
+            var currentOptionLevel = currentOptionRecords.Max(x => x.OptionOverclockLevel);
+
+            // Update User Latest Option
+            if (currentOptionLevel > 0)
+            {
+                user.ResetableData.SimRoomData.CurrentSeasonData.LatestOption = new OverclockHighScoreData()
+                {
+                    Season = currentSeasonData.CurrentSeason,
+                    OptionLevel = currentOptionLevel,
+                    OptionList = currentOptionList
+                };
+            }
+
+            if (currentOptionLevel <= lastOptionLevel) return null;
+            if (currentSeasonRecord.OverclockLevelGroup <= 0) return null;
+
+            // get all oc level records for the current season and option level
+            var ocLevelRecords = GameData.Instance.SimulationRoomOcLevelTable.Values
+                .Where(x => x.GroupId == currentSeasonRecord.OverclockLevelGroup
+                    && x.OverclockLevel <= currentOptionLevel
+                    && x.OverclockLevel > lastOptionLevel
+                    && x.RewardId > 0).ToList();
+
+            if (ocLevelRecords == null || ocLevelRecords.Count == 0) return null;
+
+            reward = new NetRewardData();
+
+            List<Reward_Data> IncrementalRewards = [];
+
+            foreach (var ocLevel in ocLevelRecords)
+            {
+                CalculateIncrementalReward(ref IncrementalRewards, ocLevel.RewardId);
+            }
+
+            foreach (var item in IncrementalRewards)
+            {
+                RewardUtils.AddSingleObject(user, ref reward, item.RewardId, item.RewardType, item.RewardValue);
             }
             return reward;
         }
@@ -580,6 +746,7 @@ namespace EpinelPS.LobbyServer.Simroom
             log.Debug($"IsRewardReceived (diff: {difficultyId}, chapter: {chapterId}): {isReceived}");
             return isReceived;
         }
+
         /// <summary>
         /// Add reward chapter
         /// </summary>
@@ -595,39 +762,119 @@ namespace EpinelPS.LobbyServer.Simroom
         /// <summary>
         /// Calculate incremental reward
         /// </summary>
-        /// <returns>Incremental reward data</returns>
-        private static NetRewardData CalculateIncrementalReward(User user,
-            SimulationRoomChapterRecord chapter, SimulationRoomChapterRecord receivedChapterRecord)
+        private static void CalculateIncrementalReward(ref List<Reward_Data> IncrementalRewards, int rewardId)
         {
-            var reward = new NetRewardData();
-            var rewardRecord = GameData.Instance.GetRewardTableEntry(chapter.RewardId);
-            var receivedRewardRecord = GameData.Instance.GetRewardTableEntry(receivedChapterRecord.RewardId);
-
-            if (rewardRecord?.Rewards == null || receivedRewardRecord?.Rewards == null)
+            var rewardRecord = GameData.Instance.GetRewardTableEntry(rewardId);
+            if (rewardRecord is not null && rewardRecord.Rewards.Count > 0)
             {
-                // If rewardRecord or receivedRewardRecord is empty, return the complete reward record
-                reward = RewardUtils.RegisterRewardsForUser(user, rewardId: chapter.RewardId);
-            }
-            else
-            {
-                var receivedRewardIds = receivedRewardRecord.Rewards
-                    .Where(x => x != null)
-                    .ToDictionary(x => x.RewardId, x => x.RewardValue);
-
-                foreach (var rewardItem in rewardRecord.Rewards.Where(x => x != null))
+                foreach (var rewardItem in rewardRecord.Rewards.Where(x => x is not null && x.RewardValue > 0))
                 {
-                    int receivedAmount = receivedRewardIds.GetValueOrDefault(rewardItem.RewardId, 0);
-                    int remainingAmount = Math.Max(0, rewardItem.RewardValue - receivedAmount);
-
-                    if (remainingAmount > 0)
+                    // If reward already exists, increment its value, otherwise add it to the list
+                    var rewardIndex = IncrementalRewards.FindIndex(x => x.RewardId == rewardItem.RewardId);
+                    if (rewardIndex > -1)
                     {
-                        RewardUtils.AddSingleObject(user, ref reward, rewardItem.RewardId,
-                            rewardType: rewardItem.RewardType, remainingAmount);
+                        IncrementalRewards[rewardIndex].RewardValue = IncrementalRewards[rewardIndex].RewardValue + rewardItem.RewardValue;
+                    }
+                    else
+                    {
+                        IncrementalRewards.Add(rewardItem);
                     }
                 }
             }
-
-            return reward;
         }
+
+        public static void UpdateOverclockHighScoreData(User user, NetSimRoomEventLocationInfo location)
+        {
+            var currentSeasonData = user.ResetableData.SimRoomData.CurrentSeasonData;
+
+            // Check if current season is overclock, if not, quit
+            if (currentSeasonData is null || !currentSeasonData.IsOverclock)
+            {
+                return;
+            }
+
+            var events = user.ResetableData.SimRoomData.Events;
+            var simRoomEventIndex = events.FindIndex(x =>
+                x.Location.Chapter == location.Chapter && x.Location.Stage == location.Stage && x.Location.Order == location.Order);
+            if (simRoomEventIndex > -1)
+            {
+                var simRoomEvent = events[simRoomEventIndex];
+                // TODO: This is a temporary solution, need to find a better way to determine if the challenge is completed
+                var maxStage = events.Max(e => e.Location.Stage);
+                if (simRoomEvent.Location.Stage == maxStage)
+                {
+                    var currentOptionList = currentSeasonData.CurrentOptionList;
+                    if (currentOptionList.Count <= 0)
+                    {
+                        // If currentOptionList is empty, quit
+                        return;
+                    }
+                    var ocOptionTable = GameData.Instance.SimulationRoomOcOptionTable.Values.ToList();
+                    var currentOptions = ocOptionTable.Where(x => currentOptionList.Contains(x.Id)).ToList();
+                    int currentOptionLevel = currentOptions.Sum(x => x.OptionOverclockLevel);
+
+
+
+                    var highScoreData = CreateOrUpdateHighScoreData(currentSeasonData, currentOptionList, currentOptionLevel, ocOptionTable);
+                    if (highScoreData is null) return; // If highScoreData is null, quit
+
+                    if (currentOptionLevel >= 50)
+                    {
+                        currentSeasonData.HasClearedLevel50 = true;
+                    }
+
+                    // Update User CurrentSeasonData
+                    highScoreData.CreatedAt = DateTime.UtcNow.Date.ToTimestamp();
+                    currentSeasonData.CurrentSeasonHighScore = highScoreData;
+                    currentSeasonData.CurrentSubSeasonHighScore = highScoreData;
+                    user.ResetableData.SimRoomData.CurrentSeasonData = currentSeasonData;
+                }
+            }
+            else
+            {
+                log.Warn($"Not Found User.ResetableData.SimRoomData.Events");
+            }
+
+        }
+
+        private static OverclockHighScoreData? CreateOrUpdateHighScoreData(
+            OverclockData currentSeasonData, List<int> currentOptionList,
+            int currentOptionLevel, List<SimulationRoomOverclockOptionRecord> ocOptionTable)
+        {
+
+            var currentHighOptionList = currentSeasonData.CurrentSeasonHighScore.OptionList;
+
+            // If currentHighOptionList is empty, return new HighScoreData
+            if (currentHighOptionList.Count <= 0)
+            {
+                return new OverclockHighScoreData
+                {
+                    Season = currentSeasonData.CurrentSeason,
+                    SubSeason = currentSeasonData.CurrentSubSeason,
+                    OptionList = currentOptionList,
+                    OptionLevel = currentOptionLevel
+                };
+            }
+
+            // Get current high options, current high option level
+            var currentHighOptions = ocOptionTable.Where(x => currentHighOptionList.Contains(x.Id));
+            int currentHighOptionLevel = currentHighOptions.Sum(x => x.OptionOverclockLevel);
+
+            // If current option level is greater than current high option level, return new HighScoreData
+            if (currentOptionLevel >= currentHighOptionLevel)
+            {
+                return new OverclockHighScoreData
+                {
+                    Season = currentSeasonData.CurrentSeason,
+                    SubSeason = currentSeasonData.CurrentSubSeason,
+                    OptionList = currentOptionList,
+                    OptionLevel = currentOptionLevel
+                };
+            }
+
+            return null; 
+        }
+
+
     }
 }

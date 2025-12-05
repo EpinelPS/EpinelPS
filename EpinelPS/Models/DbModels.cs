@@ -38,6 +38,7 @@ namespace EpinelPS.Models
         public int Skill1Lvl = 1;
         public int Skill2Lvl = 1;
         public int Grade = 0;
+        public bool IsMainForce = false;
     }
     public class MainQuestData
     {
@@ -128,6 +129,29 @@ namespace EpinelPS.Models
         public List<SimRoomChapterInfo> ReceivedRewardChapters = [];
         public bool IsSimpleModeSkipEnabled = false;
         public bool Entered = false;
+        public OverclockData CurrentSeasonData = new();
+    }
+    public class OverclockData
+    {
+        public int CurrentSeason;
+        public int CurrentSubSeason;
+        public List<int> CurrentOptionList = [];
+        public bool IsOverclock = false;
+        public bool HasClearedLevel50 = false;
+        public bool WasInfinitePopupChecked = false;
+        public bool WasMainSeasonResetPopupChecked = true;
+        public bool WasSubSeasonResetPopupChecked = true;
+        public OverclockHighScoreData CurrentSeasonHighScore = new();
+        public OverclockHighScoreData CurrentSubSeasonHighScore = new();
+        public OverclockHighScoreData LatestOption = new();
+    }
+    public class OverclockHighScoreData
+    {
+        public int Season;
+        public int SubSeason;
+        public List<int> OptionList = [];
+        public int OptionLevel;
+        public Google.Protobuf.WellKnownTypes.Timestamp? CreatedAt;
     }
     public class SimRoomEvent
     {

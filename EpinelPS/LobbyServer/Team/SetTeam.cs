@@ -1,5 +1,4 @@
-﻿using EpinelPS.Data;
-using EpinelPS.Database;
+﻿using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Team
@@ -21,9 +20,10 @@ namespace EpinelPS.LobbyServer.Team
 
             // Add team data to user data
             int contentsId = req.ContentsId + 1; // Default to 1 if not provided
-            if (req.Type == (int)TeamType.StoryEvent)
+            
+            if (req.Teams.Count != 0)
             {
-                contentsId = 1; // Default to 1 for story event teams
+                contentsId = req.Teams.Select(x => x.TeamNumber).Max(x => x);
             }
 
             NetUserTeamData teamData = new() { LastContentsTeamNumber = contentsId, Type = req.Type };

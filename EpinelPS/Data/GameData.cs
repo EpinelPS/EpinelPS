@@ -308,6 +308,16 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, SimulationRoomBuffPreviewRecord> SimulationRoomBuffPreviewTable = [];
         [LoadRecord("SimulationRoomBuffTable.json", "Id")]
         public readonly Dictionary<int, SimulationRoomBuffRecord> SimulationRoomBuffTable = [];
+        
+        // SimulationRoom Overclock Data Tables
+        [LoadRecord("SimulationRoomOcLevelTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomOverclockLevelRecord> SimulationRoomOcLevelTable = [];
+        [LoadRecord("SimulationRoomOcOptionGroupTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomOverclockOptionGroupRecord> SimulationRoomOcOptionGroupTable = [];
+        [LoadRecord("SimulationRoomOcOptionTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomOverclockOptionRecord> SimulationRoomOcOptionTable = [];
+        [LoadRecord("SimulationRoomOcSeasonTable.json", "Id")]
+        public readonly Dictionary<int, SimulationRoomOverclockSeasonRecord> SimulationRoomOcSeasonTable = [];
 
         static async Task<GameData> BuildAsync()
         {
@@ -350,8 +360,9 @@ namespace EpinelPS.Data
         {
             using FileStream fileStream = File.Open(file, FileMode.Open, FileAccess.Read);
 
-            Rfc2898DeriveBytes a = new(PresharedValue, data.GetSalt2Bytes(), 10000, HashAlgorithmName.SHA256);
-            byte[] key2 = a.GetBytes(32);
+            // Rfc2898DeriveBytes a = new(PresharedValue, data.GetSalt2Bytes(), 10000, HashAlgorithmName.SHA256);
+            // byte[] key2 = a.GetBytes(32);
+            byte[] key2 = Rfc2898DeriveBytes.Pbkdf2(PresharedValue, data.GetSalt2Bytes(), 10000, HashAlgorithmName.SHA256, 32);
 
             byte[] decryptionKey = key2[0..16];
             byte[] iv = key2[16..32];
@@ -387,8 +398,9 @@ namespace EpinelPS.Data
                 throw new Exception("error 3");
 
             dataMs.Position = 0;
-            Rfc2898DeriveBytes keyDec2 = new(PresharedValue, data.GetSalt1Bytes(), 10000, HashAlgorithmName.SHA256);
-            byte[] key3 = keyDec2.GetBytes(32);
+            // Rfc2898DeriveBytes keyDec2 = new(PresharedValue, data.GetSalt1Bytes(), 10000, HashAlgorithmName.SHA256);
+            // byte[] key3 = keyDec2.GetBytes(32);
+            byte[] key3 = Rfc2898DeriveBytes.Pbkdf2(PresharedValue, data.GetSalt1Bytes(), 10000, HashAlgorithmName.SHA256, 32);
 
             byte[] val2 = key3[0..16];
             byte[] iv2 = key3[16..32];

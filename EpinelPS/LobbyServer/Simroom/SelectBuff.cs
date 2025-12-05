@@ -60,6 +60,12 @@ namespace EpinelPS.LobbyServer.Simroom
                         var difficulty = user.ResetableData.SimRoomData.CurrentDifficulty;
                         var reward = SimRoomHelper.SimRoomReceivedReward(user, difficulty, location.Chapter);
                         if (reward is not null) response.Reward = reward;
+
+                        var overclockReward = SimRoomHelper.SimRoomOverclockReceivedReward(user);
+                        if (overclockReward is not null) response.RewardByOverclock = overclockReward;
+
+                        // Update User OverclockHighScoreData
+                        SimRoomHelper.UpdateOverclockHighScoreData(user, req.Location);
                     }
                 }
 
