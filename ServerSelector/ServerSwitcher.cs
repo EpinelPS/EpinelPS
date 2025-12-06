@@ -57,7 +57,7 @@ namespace ServerSelector
                 string certList1 = await File.ReadAllTextAsync(launcherCertList);
 
                 if (!certList1.Contains("Good SSL Ca"))
-                    return "Patch missing";
+                    return "SSL Cert Patch missing";
             }
 
             if (File.Exists(gameCertList))
@@ -65,11 +65,10 @@ namespace ServerSelector
                 string certList2 = await File.ReadAllTextAsync(gameCertList);
 
                 if (!certList2.Contains("Good SSL Ca"))
-                    return "Patch missing";
+                    return "SSL Cert Patch missing";
             }
 
             // TODO: Check sodium lib
-            // TODO: Check if gameassembly was patched
             // TODO: check hosts file
 
             return "OK";

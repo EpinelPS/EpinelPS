@@ -48,6 +48,9 @@ namespace EpinelPS.Data
         [LoadRecord("CampaignChapterTable.json", "Chapter")]
         public readonly Dictionary<int, CampaignChapterRecord> ChapterCampaignData = [];
 
+        [LoadRecord("ContentsOpenTable.json", "Id")]
+        public readonly Dictionary<ContentsOpen, ContentsOpenRecord> ContentsOpenTable = [];
+
         [LoadRecord("CharacterCostumeTable.json", "Id")]
         public readonly Dictionary<int, CharacterCostumeRecord> CharacterCostumeTable = [];
 

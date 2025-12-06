@@ -13,16 +13,21 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             // this request returns a list of "special" stages that mark when something is unlocked, ex: the shop or interception
 
-            List<int> specialStages = [6003003, 6002008, 6002016, 6005003, 6003021, 6011018, 6007021, 6004018, 6005013, 6003009, 6003012, 6009017, 6016039, 6001004, 6000003, 6000001, 6002001, 6004023, 6005026, 6020050, 6006004, 6006023, 6022049];
-
             ResGetContentsOpenData response = new();
-            foreach (FieldInfoNew field in user.FieldInfoNew.Values)
+
+            foreach (var item in GameData.Instance.ContentsOpenTable)
             {
-                foreach (int stage in field.CompletedStages)
+                foreach (var condition in item.Value.OpenCondition)
                 {
-                    if (specialStages.Contains(stage))
-                        response.ClearStageList.Add(stage);
+                    if (condition.OpenConditionType == ContentsOpenCondition.StageClear)
+                    {
+                        if (user.IsStageCompleted(condition.OpenConditionValue))
+                        {
+                            response.ClearStageList.Add(condition.OpenConditionValue);
+                        }
+                    }
                 }
+
             }
             response.MaxGachaCount = user.GachaTutorialPlayCount;
             response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;
