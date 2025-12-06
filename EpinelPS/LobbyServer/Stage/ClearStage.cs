@@ -92,25 +92,33 @@ namespace EpinelPS.LobbyServer.Stage
                 });
             }
 
-            if (clearedStage.StageCategory == StageCategory.Normal || clearedStage.StageCategory == StageCategory.Boss || clearedStage.StageCategory == StageCategory.Hard)
+            if (clearedStage.StageCategory == StageCategory.Normal || clearedStage.StageCategory == StageCategory.Boss || clearedStage.StageCategory == StageCategory.Hard || clearedStage.StageCategory == StageCategory.Story)
             {
                 if (clearedStage.ChapterMod == ChapterMod.Hard)
                 {
                     if (StageId > user.LastHardStageCleared)
                         user.LastHardStageCleared = StageId;
                 }
-                else
+                else if (clearedStage.ChapterMod == ChapterMod.Story)
+                {
+                    if (StageId > user.LastStoryStageCleared)
+                        user.LastStoryStageCleared = StageId;
+                }
+                else if (clearedStage.ChapterMod == ChapterMod.Normal)
                 {
                     if (StageId > user.LastNormalStageCleared)
                         user.LastNormalStageCleared = StageId;
                 }
+                else throw new NotImplementedException();
             }
             else
             {
                 Logging.Warn("Unknown stage category " + clearedStage.StageCategory);
             }
 
-            if (clearedStage.StageType != StageType.Sub)
+            user.LastClearedDifficulty = (int)clearedStage.ChapterMod;
+
+            if (clearedStage.StageType != StageType.Sub && clearedStage.ChapterMod != ChapterMod.Story)
             {
                 // add outpost reward level if unlocked
                 if (user.MainQuestData.TryGetValue(21, out bool _))

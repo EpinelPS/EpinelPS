@@ -595,45 +595,6 @@ namespace EpinelPS.Data
             }
             return -1;
         }
-        public string? GetMapIdFromDBFieldName(string field)
-        {
-            // Get game map ID from DB Field Name (ex: 1_Normal for chapter 1 normal)
-            string[] keys = field.Split("_");
-            if (int.TryParse(keys[0], out int chapterNum))
-            {
-                string difficulty = keys[1];
-
-                foreach (KeyValuePair<int, CampaignChapterRecord> item in ChapterCampaignData)
-                {
-                    if (difficulty == "Normal" && item.Value.Chapter == chapterNum)
-                    {
-                        return item.Value.FieldId;
-                    }
-                    else if (difficulty == "Hard" && item.Value.Chapter == chapterNum)
-                    {
-                        return item.Value.HardFieldId;
-                    }
-                }
-
-                return null;
-            }
-            else
-            {
-                return keys[0]; // Already a Map ID
-            }
-        }
-        public int GetNormalChapterNumberFromFieldName(string field)
-        {
-            foreach (KeyValuePair<int, CampaignChapterRecord> item in ChapterCampaignData)
-            {
-                if (item.Value.FieldId == field)
-                {
-                    return item.Value.Chapter;
-                }
-            }
-
-            return -1;
-        }
         public IEnumerable<int> GetAllCostumes()
         {
             foreach (KeyValuePair<int, CharacterCostumeRecord> item in CharacterCostumeTable)
@@ -740,7 +701,12 @@ namespace EpinelPS.Data
             CampaignChapterRecord data = ChapterCampaignData[chapter - 1];
             if (mod == ChapterMod.Hard)
                 return data.HardFieldId;
-            else return data.FieldId;
+            else if (mod == ChapterMod.Normal)
+                return data.FieldId;
+            else if (mod == ChapterMod.Story)
+                return data.StoryFieldId;
+            
+            throw new NotImplementedException($"difficulty {mod} not implemented");
         }
 
         internal int GetConditionReward(int groupId, long damage)

@@ -30,6 +30,9 @@ namespace EpinelPS.LobbyServer.LobbyUser
             response.RepresentationTeam = NetUtils.GetDisplayedTeam(user);
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
+            response.LastClearedStoryStageId = user.LastStoryStageCleared;
+            response.LastClearedHardMainStageId = user.LastHardStageCleared;
+            response.LastClearedMod = user.LastClearedDifficulty;
 
             // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
             foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)

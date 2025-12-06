@@ -110,6 +110,10 @@ namespace EpinelPS.LobbyServer.LobbyUser
             }
 
             response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
+            response.LastClearedStoryStageId = user.LastStoryStageCleared;
+            response.LastClearedHardMainStageId = user.LastHardStageCleared;
+            response.LastClearedMod = user.LastClearedDifficulty;
+
             response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
 
             response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);

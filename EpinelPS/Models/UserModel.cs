@@ -22,7 +22,9 @@ public class User
     public ulong ID;
     public long RegisterTime;
     public int LastNormalStageCleared;
+    public int LastStoryStageCleared;
     public int LastHardStageCleared;
+    public int LastClearedDifficulty;
     public string? Nickname;
     public int ProfileIconId = 39900;
     public bool ProfileIconIsPrism = false;

@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.Misc
             };
 
             // Define maintenance window timestamps
-            Google.Protobuf.WellKnownTypes.Timestamp maintenanceFrom = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-2)); // Example: 2 hour ago
+            /*Google.Protobuf.WellKnownTypes.Timestamp maintenanceFrom = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-2)); // Example: 2 hour ago
             Google.Protobuf.WellKnownTypes.Timestamp maintenanceTo = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1));   // Example: 1 hour ago
 
             // Add a new maintenance window
@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Misc
             {
                 From = maintenanceFrom,
                 To = maintenanceTo
-            };
+            };*/
 
             await WriteDataAsync(r);
         }
