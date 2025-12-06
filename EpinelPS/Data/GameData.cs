@@ -322,6 +322,18 @@ namespace EpinelPS.Data
         [LoadRecord("SimulationRoomOcSeasonTable.json", "Id")]
         public readonly Dictionary<int, SimulationRoomOverclockSeasonRecord> SimulationRoomOcSeasonTable = [];
 
+        // MiniGame AZX Tables
+        [LoadRecord("EventAZXAppleGameMissionTable.json", "Id")]
+        public readonly Dictionary<int, EventAZXAppleGameMissionRecord_Raw> EventAZXAppleGameMissionTable = [];
+        [LoadRecord("EventAZXAppleGameBoardTable.json", "Id")]
+        public readonly Dictionary<int, EventAZXAppleGameBoardRecord_Raw> EventAZXAppleGameBoardTable = [];
+        [LoadRecord("EventAZXAppleGameCharacterTable.json", "Id")]
+        public readonly Dictionary<int, EventAZXAppleGameCharacterRecord_Raw> EventAZXAppleGameCharacterTable = [];
+        [LoadRecord("EventAZXAppleGameSkillTable.json", "Id")]
+        public readonly Dictionary<int, EventAZXAppleGameSkillRecord_Raw> EventAZXAppleGameSkillTable = [];
+        [LoadRecord("EventAZXAppleGameCutSceneTable.json", "Id")]
+        public readonly Dictionary<int, EventAZXAppleGameCutSceneRecord_Raw> EventAZXAppleGameCutSceneTable = [];
+
         static async Task<GameData> BuildAsync()
         {
             await Load();

@@ -367,4 +367,55 @@ namespace EpinelPS.Models
         public List<PassRankData> PassRankList { get; set; } = [];
         public List<PassMissionData> PassMissionList { get; set; } = [];
     }
+
+    // MiniGameAzxData
+    public class MiniGameAzxData
+    {
+        public List<MiniGameAzxScoreData> ScoreDatas { get; set; } = [];
+        public List<AchievementMissionData> AchievementMissionDataList { get; set; } = [];
+        public List<ConditionalBoardData> ConditionalBoardDataList { get; set; } = [];
+        public List<ConditionalCharacterData> ConditionalCharacterDataList { get; set; } = [];
+        public List<ConditionalSkillData> ConditionalSkillDataList { get; set; } = [];
+        public List<CutSceneData> CutSceneDataList { get; set; } = [];
+        public bool IsTutorialConfirmed { get; set; } = false;
+        public int SelectedBoardId { get; set; }
+        public int SelectedCharacterId { get; set; }
+        public Dictionary<int, int> SkillCount { get; set; } = [];
+        public Dictionary<int, int> CharacterCount { get; set; } = [];
+    }
+    public class MiniGameAzxScoreData
+    {
+        public int AzxId { get; set; }
+        public int DateDay { get; set; }
+        public int AccumulatedScore { get; set; }
+        public int HighScore { get; set; }
+        public bool IsDailyRewarded { get; set; } = false;
+        public Google.Protobuf.WellKnownTypes.Duration? HighScoreTime { get; set; }
+    }
+    public class AchievementMissionData
+    {
+        public int MissionId { get; set; }
+        public bool IsReceived { get; set; }
+
+    }
+    public class ConditionalBoardData
+    {
+        public int BoardId { get; set; }
+        public bool IsUnlocked { get; set; }
+    }
+    public class ConditionalCharacterData
+    {
+        public int CharacterId { get; set; }
+        public bool IsUnlocked { get; set; }
+    }
+    public class ConditionalSkillData
+    {
+        public int SkillId { get; set; }
+        public bool IsUnlocked { get; set; }
+    }
+    public class CutSceneData
+    {
+        public int CutSceneId { get; set; }
+        public bool IsNew { get; set; }
+    }
 }

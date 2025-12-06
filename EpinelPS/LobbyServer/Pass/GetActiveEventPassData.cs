@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Pass
             ResGetActiveEventPassData response = new(); // fields PassList = NetPassInfo
 
             List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];//[.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.PrivateBannerShowDuration <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
-            lobbyPrivateBanners = EventHelper.GetLobbyPrivateBannerData();
+            lobbyPrivateBanners = EventHelper.GetLobbyPrivateBannerData(user);
             // TODO: PrivateBannerShowDuration
             log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
             if (lobbyPrivateBanners.Count <= 0)

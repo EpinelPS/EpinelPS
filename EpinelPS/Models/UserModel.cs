@@ -122,6 +122,9 @@ public class User
 
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
+    public List<int> LobbyPrivateBannerIds = [];
+    public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo = [];
+
     public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
     {
         TriggerModel t = new()

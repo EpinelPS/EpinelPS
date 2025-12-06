@@ -9,9 +9,9 @@ namespace EpinelPS.LobbyServer.Event
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EventHelper));
 
-        public static void AddEvents(ref ResGetEventList response)
+        public static void AddEvents(User user, ref ResGetEventList response)
         {
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData();
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData(user);
             if (lobbyPrivateBanners.Count == 0)
             {
                 // No active lobby private banners
@@ -32,6 +32,11 @@ namespace EpinelPS.LobbyServer.Event
                 List<NetEventData> gachaEvents = GetEventDataBySystemTypes(banner, eventManagers, systemTypes);
                 log.Debug($"Banner EventId: {banner.EventId} has {gachaEvents.Count} associated gacha events: {JsonConvert.SerializeObject(gachaEvents)}");
                 AddEvents(ref response, gachaEvents);
+
+                // add challenge events
+                var challengeEvents = GetChallengeEventData(banner, eventManagers);
+                log.Debug($"Banner EventId: {banner.EventId} has {challengeEvents.Count} associated challenge events: {JsonConvert.SerializeObject(challengeEvents)}");
+                AddEvents(ref response, challengeEvents);
             }
             // add daily mission events
             List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
@@ -39,9 +44,9 @@ namespace EpinelPS.LobbyServer.Event
             AddEvents(ref response, dailyMissionEvents);
         }
 
-        public static void AddJoinedEvents(ref ResGetJoinedEvent response)
+        public static void AddJoinedEvents(User user, ref ResGetJoinedEvent response)
         {
-            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData();
+            List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData(user);
             if (lobbyPrivateBanners.Count == 0)
             {
                 // No active lobby private banners
@@ -182,11 +187,19 @@ namespace EpinelPS.LobbyServer.Event
         /// Get active lobby private banner data
         /// </summary>
         /// <returns>List of active lobby private banners</returns>
-        public static List<LobbyPrivateBannerRecord> GetLobbyPrivateBannerData()
+        public static List<LobbyPrivateBannerRecord> GetLobbyPrivateBannerData(User user)
         {
+            var lobbyPrivateBannerIds = user.LobbyPrivateBannerIds;
+            var lobbyPrivateBannerRecords = GameData.Instance.LobbyPrivateBannerTable.Values;
             List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];
-            // lobbyPrivateBanners = [.. GameData.Instance.LobbyPrivateBannerTable.Values.Where(b => b.StartDate <= DateTime.UtcNow && b.EndDate >= DateTime.UtcNow)];
-            lobbyPrivateBanners.Add(new LobbyPrivateBannerRecord() { Id = 10093, PrivateBannerShowDuration = 8, EventId = 82700 });
+            if (lobbyPrivateBannerIds is not null && lobbyPrivateBannerIds.Count > 0)
+            {
+                lobbyPrivateBanners = [.. lobbyPrivateBannerRecords.Where(b => lobbyPrivateBannerIds.Contains(b.Id))];
+            }
+            else
+            {
+                lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.OrderBy(b => b.Id).Last());
+            }
             Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
             log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
             return lobbyPrivateBanners;
