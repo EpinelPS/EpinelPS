@@ -15,20 +15,28 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
             ResGetContentsOpenData response = new();
 
+            List<int> stages = [];
+
             foreach (var item in GameData.Instance.ContentsOpenTable)
             {
                 foreach (var condition in item.Value.OpenCondition)
                 {
-                    if (condition.OpenConditionType == ContentsOpenCondition.StageClear)
+                    if (condition.OpenConditionType == ContentsOpenCondition.StageClear && !stages.Contains(condition.OpenConditionValue) && user.IsStageCompleted(condition.OpenConditionValue))
                     {
-                        if (user.IsStageCompleted(condition.OpenConditionValue))
-                        {
-                            response.ClearStageList.Add(condition.OpenConditionValue);
-                        }
+                        stages.Add(condition.OpenConditionValue);
                     }
                 }
-
             }
+
+            // these stages are not present in contentsopentable but are required to show mission UI and burst sidebar UI in battle view
+            List<int> specialStages = [6000001, 6000003];
+
+            foreach (var item in specialStages)
+            {
+                if (!stages.Contains(item) && user.IsStageCompleted(item)) stages.Add(item);
+            }
+
+            response.ClearStageList.AddRange(stages);
             response.MaxGachaCount = user.GachaTutorialPlayCount;
             response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;
             // todo tutorial playcount of gacha
