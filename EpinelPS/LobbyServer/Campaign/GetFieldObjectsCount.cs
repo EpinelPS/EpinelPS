@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Campaign
                 response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
                 {
                     MapId = map.Key,
-                    Count = map.Value.CompletedObjects.Count
+                    Count = map.Value.CompletedObjects.Where(x => x.Type == 1).Count()
                 });
             }
 
