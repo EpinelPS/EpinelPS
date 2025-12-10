@@ -59,6 +59,17 @@ namespace EpinelPS.Utils
             };
         }
 
+        internal static NetItemData ItemDataToNet(ItemData item)
+        {
+            return new NetItemData()
+            {
+                Count = item.Count,
+                Tid = item.ItemType,
+                Corporation = item.Corp,
+                Isn = item.Isn,
+            };
+        }
+
 
         public static List<NetUserItemData> GetUserItems(User user)
         {

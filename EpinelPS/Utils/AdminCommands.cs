@@ -278,7 +278,7 @@ namespace EpinelPS.Utils
                     {
                         // Update the character's Tid and Grade
                         character.Tid = newCharData.Id;
-                        character.Grade = inputGrade;
+                        character.Grade = newGradeCoreId;
                     }
 
                 }
@@ -299,7 +299,7 @@ namespace EpinelPS.Utils
                     {
                         // Update the character's Tid and Grade
                         character.Tid = newCharData.Id;
-                        character.Grade = inputGrade;
+                        character.Grade = newGradeCoreId;
                     }
 
                 }

@@ -57,6 +57,12 @@ namespace EpinelPS.LobbyServer.Event
             var eventManagers = GameData.Instance.eventManagers.Values.ToList();
             foreach (var banner in lobbyPrivateBanners)
             {
+
+                // Get all events (including child events) associated with this banner
+                var events = GetEventData(banner, eventManagers);
+                log.Debug($"Banner EventId: {banner.EventId} has {events.Count} associated events: {JsonConvert.SerializeObject(events)}");
+                AddJoinedEvents(ref response, events);
+                
                 // add gacha events
                 List<EventSystemType> systemTypes = [EventSystemType.PickupGachaEvent, EventSystemType.BoxGachaEvent, EventSystemType.LoginEvent];
                 List<NetEventData> gachaEvents = GetEventDataBySystemTypes(banner, eventManagers, systemTypes);

@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
                 {
                     eventData.ClearedStages.Add(req.StageId);
                 }
-                eventData.LastStage = req.StageId;
+                if (eventData.LastStage < req.StageId) eventData.LastStage = req.StageId;
                 eventData.Diff = difficultId;
             }
             else
@@ -34,8 +34,15 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
             }
             user.AddTrigger(Trigger.EventStageClear, 1, req.StageId);
             user.AddTrigger(Trigger.EventDungeonStageClear, 1, req.EventId);
+            if (bonusReward.Item.Count > 0)
+            {
+                bonusReward.Item.ToList().ForEach(item =>
+                {
+                    user.AddTrigger(Trigger.ObtainEventCurrencyMaterial, item.Count, item.Tid);
+                });
+            }
 
-            response.RemainTicket = 4;
+            response.RemainTicket = EventStoryHelper.SubtractTicket(user, req.EventId, 1);
 
             response.Reward = reward;
             response.BonusReward = bonusReward;

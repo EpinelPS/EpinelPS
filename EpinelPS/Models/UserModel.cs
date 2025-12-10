@@ -116,6 +116,8 @@ public class User
     // Event data
     public Dictionary<int, EventData> EventInfo = [];
     public Dictionary<int, LoginEventData> LoginEventInfo = [];
+    public Dictionary<int, EventMissionData> EventMissionInfo = []; // key: eventId
+    public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo = []; // key: eventId
     public MogMinigameInfo MogInfo = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
     public NetArcadeMvgData ArcadeInTheMirrorData = new();
@@ -499,5 +501,11 @@ public class User
         {
             JsonDb.Save();
         }
+    }
+    public int GetDateDay()
+    {
+        // +4 每天4点重新计算 yyyyMMdd
+        DateTime dateTime = DateTime.UtcNow.AddHours(4);
+        return dateTime.Year * 10000 + dateTime.Month * 100 + dateTime.Day;
     }
 }

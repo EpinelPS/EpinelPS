@@ -267,6 +267,14 @@ namespace EpinelPS.Data
 
         [LoadRecord("LoginEventTable.json", "Id")]
         public readonly Dictionary<int, LoginEventRecord> LoginEventTable = [];
+
+        // Contents Shop Data Tables
+        [LoadRecord("ContentsShopTable.json", "Id")]
+        public readonly Dictionary<int, ContentsShopRecord> ContentsShopTable = [];
+        [LoadRecord("ContentsShopProductTable.json", "Id")]
+        public readonly Dictionary<int, ContentsShopProductRecord> ContentsShopProductTable = [];
+        [LoadRecord("ShopDiscountProbTable.json", "Id")]
+        public readonly Dictionary<int, ShopDiscountProbRecord> ShopDiscountProbTable = [];
         
         // Event Dungeon data Table
         [LoadRecord("EventDungeonTable.json", "Id")]
@@ -277,6 +285,10 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, EventDungeonSpotBattleRecord> EventDungeonSpotBattleTable = [];
         [LoadRecord("EventDungeonDifficultTable.json", "Id")]
         public readonly Dictionary<int, EventDungeonDifficultRecord> EventDungeonDifficultTable = [];
+        [LoadRecord("EventStoryTable.json", "Id")]
+        public readonly Dictionary<int, EventStoryRecord> EventStoryTable = [];
+        [LoadRecord("AutoChargeTable.json", "Id")]
+        public readonly Dictionary<int, AutoChargeRecord> AutoChargeTable = [];
         
         // Pass Data Tables
         [LoadRecord("PassManagerTable.json", "Id")]
@@ -287,6 +299,12 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, SeasonPassRecord> SeasonPassTable = [];
         [LoadRecord("PassMissionTable.json", "Id")]
         public readonly Dictionary<int, PassMissionRecord> PassMissionTable = [];
+
+        // Event Mission Data Tables
+        [LoadRecord("EventMissionListTable.json", "Id")]
+        public readonly Dictionary<int, EventMissionListRecord> EventMissionListTable = [];
+        [LoadRecord("EventMissionCategoryTable.json", "Id")]
+        public readonly Dictionary<int, EventMissionCategoryRecord> EventMissionCategoryTable = [];
 
         // Daily Mission Event Data Tables
         [LoadRecord("DailyMissionEventSettingTable.json", "Id")]

@@ -12,16 +12,17 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
             ReqStoryDungeonEventData req = await ReadData<ReqStoryDungeonEventData>();
             User user = GetUser();
 
-
+            // Get user event data, if not exist, create new one
             if (!user.EventInfo.TryGetValue(req.EventId, out EventData? eventData))
             {
-                eventData = new();
+                eventData = new() { LastDay = user.GetDateDay(), FreeTicket = 5};
+                user.EventInfo.TryAdd(req.EventId, eventData);
             }
             
 
             ResStoryDungeonEventData response = new()
             {
-                RemainTicket = 5,
+                RemainTicket = EventStoryHelper.GetTicket(user, req.EventId),
                 TeamData = new NetUserTeamData
                 { 
                     Type = (int)TeamType.StoryEvent

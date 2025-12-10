@@ -60,6 +60,9 @@ namespace EpinelPS.LobbyServer.Inventory
             // we NEED to make sure the target item itself is in the delta list, or the UI won't update!
             response.Items.Add(NetUtils.ToNet(destItem));
 
+            // Add trigger for equipment level count - 升级装备次数
+            user.AddTrigger(Trigger.EquipItemLevelCount, 1);
+
             JsonDb.Save();
 
             await WriteDataAsync(response);
