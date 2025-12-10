@@ -116,7 +116,7 @@
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0" Grid.Column="0" ToolTip.Tip="The folder with the game and launcher folders.">Game root path: </TextBlock>
 					<TextBox x:Name="txtGamePath" Grid.Row="0" Grid.Column="1" TextChanged="GamePath_TextChanged" ToolTip.Tip="The folder with the game and launcher folders.">C:\NIKKE\</TextBox>
-					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Classes="utility" Click="BtnSelectGamePath_Click">...</Button>
+					<Button x:Name="btnSelectGamePath" Grid.Row="0" Grid.Column="2" Classes="utility" Click="BtnSelectGamePath_Click" Margin="5,0,0,0">...</Button>
 
 					<TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4" Grid.Column="0">Server: </TextBlock>
 
@@ -144,7 +144,7 @@
                     </Button>
 				</Grid>
 			</TabItem>
-			<TabItem Header="Android">
+			<TabItem Header="Android" IsVisible="False">
 				<Grid Margin="5">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto"></ColumnDefinition>

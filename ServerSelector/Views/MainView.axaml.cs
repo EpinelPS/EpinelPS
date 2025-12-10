@@ -14,9 +14,9 @@ public partial class MainView : UserControl
     public MainView()
     {
         InitializeComponent();
-        CmbServerSelection.SelectedIndex = ServerSwitcher.IsUsingOfficalServer() ? 0 : 1;
+        CmbServerSelection.SelectedIndex = ServerSwitcher.IsUsingLocalServer() ? 1 : 0;
 
-        TxtIpAddress.IsEnabled = !ServerSwitcher.IsUsingOfficalServer();
+        TxtIpAddress.IsEnabled = !ServerSwitcher.IsUsingLocalServer();
         ChkOffline.IsChecked = ServerSwitcher.IsOffline();
 
         if (OperatingSystem.IsWindows() && !new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
@@ -57,25 +57,17 @@ public partial class MainView : UserControl
         }
     }
 
-    private string? GamePath
+    private string? BasePath
     {
         get
         {
             if (txtGamePath.Text == null) return null;
-            return Path.Combine(txtGamePath.Text, "NIKKE", "game");
-        }
-    }
-    private string? LauncherPath
-    {
-        get
-        {
-            if (txtGamePath.Text == null) return null;
-            return Path.Combine(txtGamePath.Text, "Launcher");
+            return txtGamePath.Text;
         }
     }
     private bool ValidatePaths(bool showMessage)
     {
-        if (string.IsNullOrEmpty(txtGamePath.Text) || LauncherPath == null)
+        if (string.IsNullOrEmpty(BasePath))
         {
             SetGamePathValid(false);
             if (showMessage)
@@ -83,20 +75,21 @@ public partial class MainView : UserControl
             return false;
         }
 
-        if (!Directory.Exists(GamePath))
+        if (!Directory.Exists(BasePath))
         {
             SetGamePathValid(false);
             if (showMessage)
-                ShowWarningMsg("game folder does not exist in the game root folder", "Error");
+                ShowWarningMsg("Game path does not exist", "Error");
             return false;
         }
 
-        if (!File.Exists(Path.Combine(LauncherPath, "nikke_launcher.exe")))
+        var result = ServerSwitcher.SetBasePath(BasePath);
+
+        if (!result.Item1)
         {
             SetGamePathValid(false);
             if (showMessage)
-                ShowWarningMsg("Game path is invalid. Make sure that nikke_launcher.exe exists in the <Game Path>/launcher folder", "Error");
-
+                ShowWarningMsg(result.Item2, "Error");
             return false;
         }
 
@@ -107,11 +100,11 @@ public partial class MainView : UserControl
 
     private async void UpdateIntegrityLabel()
     {
-        if (!ValidatePaths(false) || txtGamePath.Text == null || GamePath == null || LauncherPath == null)
+        if (!ValidatePaths(false) || txtGamePath.Text == null || BasePath == null)
             return;
 
         SetLoadingScreenVisible(true);
-        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity(GamePath, LauncherPath);
+        LblStatus.Text = "Status: " + await ServerSwitcher.CheckIntegrity();
         SetLoadingScreenVisible(false);
     }
 
@@ -131,7 +124,7 @@ public partial class MainView : UserControl
 
     private async void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        if (!ValidatePaths(true) || txtGamePath.Text == null || GamePath == null || LauncherPath == null)
+        if (!ValidatePaths(true) || txtGamePath.Text == null || BasePath == null)
             return;
 
         if (CmbServerSelection.SelectedIndex == 1 && !IPAddress.TryParse(TxtIpAddress.Text, out _))
@@ -150,7 +143,7 @@ public partial class MainView : UserControl
         SetLoadingScreenVisible(true);
         try
         {
-            ServerSwitchResult res = await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, GamePath, LauncherPath, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
+            ServerSwitchResult res = await ServerSwitcher.SaveCfg(CmbServerSelection.SelectedIndex == 0, TxtIpAddress.Text, ChkOffline.IsChecked ?? false);
 
             if (!res.IsSupported)
             {
