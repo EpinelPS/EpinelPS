@@ -19,7 +19,15 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
             ClearEventStageHelper.ClearStage(user, req.StageId, ref reward, ref bonusReward, 1, req.ClearCount); // always battleResult = 1 for fast clear
 
             user.AddTrigger(Trigger.EventDungeonStageClear, req.ClearCount, req.EventId);
-            response.RemainTicket = 4;
+            response.RemainTicket = EventStoryHelper.SubtractTicket(user, req.EventId, req.ClearCount);
+
+            if (bonusReward.Item.Count > 0)
+            {
+                bonusReward.Item.ToList().ForEach(item =>
+                {
+                    user.AddTrigger(Trigger.ObtainEventCurrencyMaterial, item.Count, item.Tid);
+                });
+            }
 
             response.Reward = reward;
             response.BonusReward = bonusReward;

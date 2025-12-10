@@ -85,12 +85,34 @@ namespace EpinelPS.Models
         public List<int> ClearedStages = []; // List of cleared stage IDs
         public int Diff = 0; // Default value for Diff
         public int LastStage = 0; // Default value for LastStage
+        public int LastDay = 0;
+        public int FreeTicket = 0;
     }
     public class LoginEventData
     {
         public List<int> Days = [];
         public int LastDay = 0; // Default value for LastDay
         public long LastDate = 0; // Default value for LastDate
+    }
+    // EventMissionData
+    public class EventMissionData
+    {
+        public List<int> MissionIdList = [];
+        public List<int> DailyMissionIdList = [];
+        public int LastDay = 0; // yyyyMMdd
+        public long LastDate = 0; // Default value for LastDate
+    }
+    // EventShopBuyCountData
+    public class EventShopProductData
+    {
+        public int ProductTid = 0; 
+        public int BuyCount = 0; 
+    }
+
+    public class EventShopBuyCountData
+    {
+        public int EventId = 0; 
+        public List<EventShopProductData> datas = [];
     }
 
     public class SynchroSlot

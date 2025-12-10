@@ -119,7 +119,7 @@ namespace EpinelPS.Utils
             {
                 AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
             }
-            else if (rewardType == RewardType.Item ||rewardType.ToString().StartsWith("Equipment"))
+            else if (rewardType == RewardType.Item || rewardType.ToString().StartsWith("Equipment"))
             {
 
                 int corpId = 0; // Default to 0 (None)
@@ -211,11 +211,8 @@ namespace EpinelPS.Utils
             }
             else if (rewardType == RewardType.Bgm)
             {
-                if (!user.JukeboxBgm.Contains(rewardId))
-                {
-                    ret.JukeboxBgm.Add(rewardId);
-                    user.JukeboxBgm.Add(rewardId);
-                }
+                if (!user.JukeboxBgm.Contains(rewardId)) user.JukeboxBgm.Add(rewardId);
+                ret.JukeboxBgm.Add(rewardId);
             }
             else if (rewardType == RewardType.InfraCoreExp)
             {
