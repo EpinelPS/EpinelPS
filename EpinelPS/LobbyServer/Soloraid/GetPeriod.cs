@@ -1,20 +1,17 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.SoloraId
+namespace EpinelPS.LobbyServer.Soloraid
 {
     [PacketPath("/soloraid/getperiod")]
-    public class GetSoloraidPeriod : LobbyMsgHandler
+    public class GetPeriod : LobbyMsgHandler
     {
         protected override async Task HandleAsync()
         {
-            ReqGetSoloRaidPeriod req = await ReadData<ReqGetSoloRaidPeriod>();
+            await ReadData<ReqGetSoloRaidPeriod>();
 
             ResGetSoloRaidPeriod response = new()
             {
-                Period = new NetSoloRaidPeriodData
-                {
-
-                }
+                Period = SoloRaidHelper.GetSoloRaidPeriod()
             };
             // TODO
             await WriteDataAsync(response);
