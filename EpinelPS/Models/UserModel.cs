@@ -126,6 +126,8 @@ public class User
 
     public List<int> LobbyPrivateBannerIds = [];
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo = [];
+    // solo raid data
+    public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
     public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
     {

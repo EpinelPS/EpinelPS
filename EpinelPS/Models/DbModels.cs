@@ -440,4 +440,63 @@ namespace EpinelPS.Models
         public int CutSceneId { get; set; }
         public bool IsNew { get; set; }
     }
+
+    // Solo Raid Data
+    public class SoloRaidInfo
+    {
+        public int RaidId { get; set; }
+        public int RaidOpenCount { get; set; }
+        public int TrialCount { get; set; }
+        public int LastDateDay { get; set; }
+        public List<SoloRaidLevelData> SoloRaidLevels { get; set; } = []; // key: raidLevel
+    }
+    public class SoloRaidLevelData
+    {
+        public int RaidLevel { get; set; }
+        public int RaidJoinCount { get; set; }
+        public long Hp { get; set; }
+        public long TotalDamage { get; set; }
+        public bool IsClear { get; set; }
+        public SoloRaidStatus Status { get; set; }
+        public SoloRaidType Type { get; set; }
+        public bool IsOpen { get; set; }
+        public List<SoloRaidLogData> Logs { get; set; } = [];
+    }
+    public class SoloRaidLogData
+    {
+        public long Damage { get; set; }
+        public bool Kill { get; set; }
+        public List<TeamCharacterData> Team { get; set; } = [];
+
+        public NetSoloRaidLog ToNet()
+        {
+            return new NetSoloRaidLog()
+            {
+                Damage = Damage,
+                Kill = Kill,
+                Team = { Team.Select(x => x.ToNet()).ToList() },
+            };
+        }
+    }
+    public class TeamCharacterData
+    {
+        public int Slot { get; set; }
+        public long Csn { get; set; }
+        public int Tid { get; set; }
+        public int Lv { get; set; }
+        public int Combat { get; set; }
+        public int CostumeId { get; set; }
+
+        public NetSoloRaidTeamCharacter ToNet()
+        {
+            return new NetSoloRaidTeamCharacter()
+            {
+                Slot = Slot,
+                Tid = Tid,
+                Lv = Lv,
+                Combat = Combat,
+                CostumeId = CostumeId,
+            };
+        }
+    }
 }

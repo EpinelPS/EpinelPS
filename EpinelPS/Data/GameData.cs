@@ -351,6 +351,23 @@ namespace EpinelPS.Data
         public readonly Dictionary<int, EventAZXAppleGameSkillRecord_Raw> EventAZXAppleGameSkillTable = [];
         [LoadRecord("EventAZXAppleGameCutSceneTable.json", "Id")]
         public readonly Dictionary<int, EventAZXAppleGameCutSceneRecord_Raw> EventAZXAppleGameCutSceneTable = [];
+        
+        // solo raid data Table
+        [LoadRecord("SoloRaidManagerTable.json", "Id")]
+        public readonly Dictionary<int, SoloRaidManagerRecord> SoloRaidManagerTable = [];
+        [LoadRecord("SoloRaidPresetTable.json", "Id")]
+        public readonly Dictionary<int, SoloRaidPresetRecord> SoloRaidPresetTable = [];
+        
+        // Monster data Table
+        [LoadRecord("MonsterTable.json", "Id")]
+        public readonly Dictionary<long, MonsterRecord> MonsterTable = [];
+        [LoadRecord("MonsterModelTable.json", "Id")]
+        public readonly Dictionary<int, MonsterModelRecord> MonsterModelTable = [];
+        [LoadRecord("MonsterStatEnhanceTable.json", "Id")]
+        public readonly Dictionary<int, MonsterStatEnhanceRecord> MonsterStatEnhanceTable = [];
+        [LoadRecord("WaveDataTable.wave_Intercept_001.json", "StageId")]
+        public readonly Dictionary<int, WaveDataRecord> WaveIntercept001Table = [];
+
 
         static async Task<GameData> BuildAsync()
         {

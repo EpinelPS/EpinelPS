@@ -1,6 +1,6 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.SoloraId;
+namespace EpinelPS.LobbyServer.Soloraid;
 
 [PacketPath("/soloraidmuseum/get/reddotdata")]
 public class GetBadgeData : LobbyMsgHandler
