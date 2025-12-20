@@ -31,15 +31,15 @@ namespace EpinelPS.LobbyServer.Character
                     return;
                 }
 
-                // Find a new CSN based on the `NameCode` of the current character and `GradeCoreId + 1`
+                // Find a new CSN based on the `NameCode` of the current character and `GradeCoreId + req.Count`
                 // For some reason, there is a seperate character for each limit/core break value.
-                CharacterRecord? newCharacter = fullchardata.FirstOrDefault(c => c.NameCode == currentCharacter.NameCode && c.GradeCoreId == currentCharacter.GradeCoreId + 1);
+                CharacterRecord? newCharacter = fullchardata.FirstOrDefault(c => c.NameCode == currentCharacter.NameCode && c.GradeCoreId == currentCharacter.GradeCoreId + req.Count);
 
 
                 if (newCharacter != null)
                 {
                     // replace character in DB with new character
-                    targetCharacter.Grade++;
+                    targetCharacter.Grade += req.Count;
                     targetCharacter.Tid = newCharacter.Id;
 
                     response.Character = new NetUserCharacterDefaultData()
@@ -47,7 +47,7 @@ namespace EpinelPS.LobbyServer.Character
                         Csn = req.Csn,
                         CostumeId = targetCharacter.CostumeId,
                         Grade = targetCharacter.Grade,
-                        Lv = user.GetSynchroLevel(),
+                        Lv = targetCharacter.Level,
                         Skill1Lv = targetCharacter.Skill1Lvl,
                         Skill2Lv = targetCharacter.Skill2Lvl,
                         Tid = targetCharacter.Tid,
@@ -56,7 +56,7 @@ namespace EpinelPS.LobbyServer.Character
 
                     // remove spare body item
                     ItemData bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
-                    user.RemoveItemBySerialNumber(req.Isn, 1);
+                    user.RemoveItemBySerialNumber(req.Isn, req.Count);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
 
                     JsonDb.Save();
