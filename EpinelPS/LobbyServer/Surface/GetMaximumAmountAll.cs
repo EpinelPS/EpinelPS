@@ -1,6 +1,6 @@
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Hexacode;
+namespace EpinelPS.LobbyServer.Surface;
 
 [PacketPath("/Surface/Export/MaxAmount/All")]
 public class GetMaximumAmountAll : LobbyMsgHandler
