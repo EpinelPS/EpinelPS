@@ -6,7 +6,7 @@ using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using log4net;
 using Newtonsoft.Json;
-using static ResGetEventMissionClearList.Types;
+using static EpinelPS.ResGetEventMissionClearList.Types;
 
 namespace EpinelPS.LobbyServer.Event.Mission
 {

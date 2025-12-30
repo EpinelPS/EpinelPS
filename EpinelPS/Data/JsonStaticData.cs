@@ -244,7 +244,8 @@ public partial class ArchiveEventManagerRecord
 	public string? EventShortcutId;
 	public int ArchiveMatchEventId;
 	public int ArchiveStoryProgressGroupOrder;
-	public string? ArchiveStoryProgressLocale;
+	public string? ArchiveStoryProgressLocale1;
+	public string? ArchiveStoryProgressLocale2;
 	public DateTime EventStartDate;
 	public DateTime EventEndDate;
 	public int ParentsEventId;
@@ -290,10 +291,13 @@ public partial class ArchiveEventStoryRecord
 {
 	public int Id;
 	public int EventId;
+	public StoryEventPartType PartType;
 	public string? PrologueScenario;
-	public int DungeonId;
+	public int DungeonId1;
+	public int DungeonId2;
 	public int AlbumCategoryGroup;
-	public string? UiPrefab;
+	public string? UiPrefab1;
+	public string? UiPrefab2;
 	public int ArchiveTicketItemId;
 	public int ArchiveCurrencyItemId;
 }
@@ -508,7 +512,7 @@ public partial class AttractiveCounselDialogRecord
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
-	public bool PlayLipsync;
+	public bool PlayLipSync;
 	public List<ScenarioCharacterData> Characters;
 	public string? SetBackground;
 	public string? SetLight;
@@ -588,7 +592,7 @@ public partial class AttractiveScenarioDialogRecord
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
-	public bool PlayLipsync;
+	public bool PlayLipSync;
 	public List<ScenarioCharacterData> Characters;
 	public string? SetBackground;
 	public string? SetLight;
@@ -660,8 +664,8 @@ public partial class BHSkillValueData_Raw
 [MemoryPackable]
 public partial class BallonConditionData
 {
-	public EventNKSDialogConditionTypeData UseconditionType;
-	public List<int> UseconditionValue;
+	public EventNKSDialogConditionTypeData UseConditionType;
+	public List<int> UseConditionValue;
 }
 
 [MemoryPackable]
@@ -1325,7 +1329,7 @@ public partial class ContentsTutorialRecord
 	public ContentsTutorialTriggerValue CloseValue;
 	public string? CloseValueExtraKey;
 	public string? CharResourceId;
-	public string? TitleTextlocale;
+	public string? TitleTextLocale;
 	public string? TextLocale;
 	public ContentsTutorialTextLocation TextLocation;
 	public int Background;
@@ -1543,8 +1547,8 @@ public partial class DialogAppearSelectionConditionListData
 [MemoryPackable]
 public partial class DialogConditionData
 {
-	public EventNKSDialogConditionTypeData UseconditionType;
-	public List<int> UseconditionValue;
+	public EventNKSDialogConditionTypeData UseConditionType;
+	public List<int> UseConditionValue;
 }
 
 [MemoryPackable]
@@ -4803,7 +4807,7 @@ public partial class EventMVGChapterInfoRecord_Raw
 [MemoryPackable]
 public partial class EventMVGCharacterCustomActionProjTypeValueData_Raw
 {
-	public string? ProjTypevalue;
+	public string? ProjTypeValue;
 }
 
 [MemoryPackable]
@@ -4819,13 +4823,13 @@ public partial class EventMVGCharacterCustomActionRecord_Raw
 	public string? ProjResourceId;
 	public string? ProjResourceHitId;
 	public EventMVGCharacterCustomActionProjectileTypeData ProjType;
-	public List<EventMVGCharacterCustomActionProjTypeValueData_Raw> ProjTypevalue;
+	public List<EventMVGCharacterCustomActionProjTypeValueData_Raw> ProjTypeValue;
 	public int ProjAmount;
 	public int ProjDuration;
 	public string? AfterDurationFx;
-	public int ProjAftercollide;
-	public int ProjDmgcount;
-	public int ProjDmgdelay;
+	public int ProjAfterCollide;
+	public int ProjDmgCount;
+	public int ProjDmgDelay;
 	public int ProjPierce;
 	public double ProjSize;
 	public double ProjSpd;
@@ -4852,8 +4856,8 @@ public partial class EventMVGCharacterCustomRecord_Raw
 {
 	public int Id;
 	public int GroupId;
-	public EventMVGCustomTypeMainData CustomtypeMain;
-	public EventMVGCharacterCustomSubTypeData CustomtypeSub;
+	public EventMVGCustomTypeMainData CustomTypeMain;
+	public EventMVGCharacterCustomSubTypeData CustomTypeSub;
 	public EventMVGCharacterCustomLockTypeData SkillLockType;
 	public bool AttackKeep;
 	public int Lv;
@@ -4872,16 +4876,16 @@ public partial class EventMVGCharacterSettingRecord_Raw
 	public int StatAtk;
 	public int MaxAbsorbGauge;
 	public int MaxModuleSlot;
-	public int SkillCSetsearchpointlength;
-	public int DefaultskillALv;
-	public int SkillAIdset;
-	public int SkillBIdset;
-	public int SkillCIdset;
-	public int SkillDIdset;
-	public int SkillBurstAIdset;
-	public int SkillBurstBIdset;
-	public int SkillBurstCIdset;
-	public int SkillBurstDIdset;
+	public int SkillCSetSearchPointLength;
+	public int DefaultSkillALv;
+	public int SkillAIdSet;
+	public int SkillBIdSet;
+	public int SkillCIdSet;
+	public int SkillDIdSet;
+	public int SkillBurstAIdSet;
+	public int SkillBurstBIdSet;
+	public int SkillBurstCIdSet;
+	public int SkillBurstDIdSet;
 	public string? BurstAnim;
 	public string? BurstCharacterFx;
 }
@@ -5145,10 +5149,10 @@ public partial class EventMVGResourceSettingRecord_Raw
 	public EventMVGResourceTypeData ResourceType;
 	public string? ResourceValue;
 	public string? ActiveFxResource;
-	public string? AnimGoOn;
-	public string? AnimOn;
-	public string? AnimGoOff;
-	public string? AnimOff;
+	public string? AnimGOON;
+	public string? AnimON;
+	public string? AnimGOOFF;
+	public string? AnimOFF;
 }
 
 [MemoryPackable]
@@ -5316,7 +5320,7 @@ public partial class EventNKSBalloonRecord
 	public string? ScenarioLocalkey;
 	public string? PlaySound;
 	public int Duration;
-	public int ExecuteDelaytime;
+	public int ExecuteDelayTime;
 	public int ExecuteRate;
 	public bool FirstShowCheck;
 	public List<BallonConditionData> ConditionData;
@@ -5327,10 +5331,10 @@ public partial class EventNKSCharacterBurstRecord
 {
 	public int Id;
 	public int CharacterId;
-	public int ItemsactionGroupId;
-	public int BurstActivetime;
+	public int ItemsActionGroupId;
+	public int BurstActiveTime;
 	public int CooldownTime;
-	public int KillCooldownSubtime;
+	public int KillCooldownSubTime;
 }
 
 [MemoryPackable]
@@ -5349,24 +5353,24 @@ public partial class EventNKSCharacterRecord
 	public int CommonSettingsID;
 	public string? NameLocalkey;
 	public string? ResourceId;
-	public string? UiResourceId;
-	public string? UiLobbycharacter;
-	public int CharacterskilltreeGroupId;
+	public string? UIResourceId;
+	public string? UILobbyCharacter;
+	public int CharacterSkillTreeGroupId;
 	public int ReqStgClear;
-	public int ReqitemCurrency;
-	public int ReqitemId;
-	public int StatMvspd;
-	public int MinMvspd;
+	public int ReqItemCurrency;
+	public int ReqItemId;
+	public int StatMvSpd;
+	public int MinMvSpd;
 	public int StatHp;
 	public int MinHp;
 	public int StatAtk;
 	public int MinAtk;
 	public int StatAtkspd;
 	public int MinAtkspd;
-	public int StatProjsize;
-	public int MinProjsize;
-	public int StatProjspd;
-	public int MinProjspd;
+	public int StatProjSize;
+	public int MinProjSize;
+	public int StatProjSpd;
+	public int MinProjSpd;
 	public int StatDef;
 	public int MinDef;
 	public int StatMagnet;
@@ -5404,7 +5408,7 @@ public partial class EventNKSCoinSkillStoreRecord
 	public int Grade;
 	public int GroupRate;
 	public EventNKSItemsStatType StatType1;
-	public EventNKSItemsStatCalcType StatCalctype1;
+	public EventNKSItemsStatCalcType StatCalcType1;
 	public double StatValue1;
 	public string? LocaleName;
 	public string? IconResource;
@@ -5427,7 +5431,7 @@ public partial class EventNKSCollectionRecord
 	public EventNKSVersionType VersionType;
 	public int ItemID;
 	public string? Particle;
-	public string? CollectionHintlocale;
+	public string? CollectionHintLocale;
 }
 
 [MemoryPackable]
@@ -5441,24 +5445,24 @@ public partial class EventNKSCommonSettingsRecord
 	public bool IsArchiveEvent;
 	public int CheckBoss;
 	public string? EnterScenario;
-	public int FielditemAutodisappeartime;
+	public int FieldItemAutoDisappearTime;
 	public int AutoSaveTimer;
 	public double ItemCalcWeight;
 	public int PcInvincibleTime;
-	public int MagnetMovetoPlayercharacterSpd;
-	public string? MonsterCommonAppeareffect;
-	public string? MonsterCommonDeatheffectId;
-	public int SetBossdeatheffecttime;
-	public int MonsterCommonKnockbackdelay;
-	public int MonsterCommonWhiteblinkdelay;
-	public int BounceDefaultwidth;
-	public int BounceDefaultheight;
-	public int PlayablecharacterBurstFadetime;
-	public double PlayablecharacterBurstInterval;
-	public int CoinskillstoreRerollamount;
-	public int CoinskillstoreLockaddamount;
-	public int CoinreviveMaxcount;
-	public int LevelupslotMaxrerollcount;
+	public int MagnetMoveToPlayerCharacterSpd;
+	public string? MonsterCommonAppearEffect;
+	public string? MonsterCommonDeathEffectId;
+	public int SetBossDeathEffectTime;
+	public int MonsterCommonKnockbackDelay;
+	public int MonsterCommonWhiteBlinkDelay;
+	public int BounceDefaultWidth;
+	public int BounceDefaultHeight;
+	public int PlayableCharacterBurstFadeTime;
+	public double PlayableCharacterBurstInterval;
+	public int CoinSkillStoreReRollAmount;
+	public int CoinSkillStoreLockAddAmount;
+	public int CoinReviveMaxCount;
+	public int LevelupSlotMaxRerollCount;
 	public int MaxCombineWeapon;
 	public int MaxCombineModule;
 }
@@ -5467,7 +5471,7 @@ public partial class EventNKSCommonSettingsRecord
 public partial class EventNKSDialogRecord
 {
 	public int Id;
-	public bool IsDialogfirstpoint;
+	public bool IsDialogFirstPoint;
 	public string? GroupId;
 	public int Priority;
 	public EventNKSDialogPrintTypeData PrintType;
@@ -5485,7 +5489,7 @@ public partial class EventNKSDialogRecord
 	public List<SpineResourceData> SpineData;
 	public EventNKSDialogEffectTypeData ScenarioEffectType;
 	public string? ScenarioEffectValue;
-	public int ExecuteDelaytime;
+	public int ExecuteDelayTime;
 	public int ExecuteRate;
 	public bool FirstShowCheck;
 	public List<DialogConditionData> ConditionData;
@@ -5511,7 +5515,7 @@ public partial class EventNKSGachaBoxRecord
 	public int Id;
 	public string? ResourceId;
 	public int Grade;
-	public int GachalistGroupId;
+	public int GachaListGroupId;
 	public int Rate;
 	public int MaxSlot;
 	public List<EventNKSGachaBonusData> BonusSlotData;
@@ -5534,7 +5538,7 @@ public partial class EventNKSGuideRecord
 	public int GroupId;
 	public string? GuideResourceId;
 	public string? GuideTitleLocalkey;
-	public string? GuideSubtitleLocalkey;
+	public string? GuideSubTitleLocalkey;
 	public string? GuideDescriptionLocalkey;
 }
 
@@ -5549,20 +5553,20 @@ public partial class EventNKSItemsActionRecord
 	public string? ProjResourceId;
 	public string? ProjResourceHitId;
 	public string? ProjType;
-	public List<EventNKSProjectileTypeValueData> ProjTypevalue;
-	public string? ProjValuestack;
+	public List<EventNKSProjectileTypeValueData> ProjTypeValue;
+	public string? ProjValueStack;
 	public int ProjAmount;
 	public int ProjDuration;
-	public int ProjAfterduration;
-	public int ProjAftercollide;
-	public int ProjAftercollideStat;
-	public int ProjDmgcount;
-	public int ProjDmgdelay;
+	public int ProjAfterDuration;
+	public int ProjAfterCollide;
+	public int ProjAfterCollideStat;
+	public int ProjDmgCount;
+	public int ProjDmgDelay;
 	public int ProjPierce;
 	public double ProjSize;
 	public double ProjSpd;
 	public List<EventNKSProjectileAtkRangeData> ProjAtkRange;
-	public int ProjKnockbackvalue;
+	public int ProjKnockbackValue;
 }
 
 [MemoryPackable]
@@ -5571,28 +5575,28 @@ public partial class EventNKSItemsRecord
 	public int Id;
 	public int GroupId;
 	public bool IsCombine;
-	public List<ItemConditionIdData> ItemconditionId;
+	public List<ItemConditionIdData> ItemConditionId;
 	public int Lv;
 	public List<int> LockCharacterId;
 	public List<int> DisableCharacterId;
 	public int LvMax;
-	public string? IconresourceId;
+	public string? IconResourceId;
 	public EventNKSItemCategoryType ItemCategory;
-	public double FielditemScale;
+	public double FieldItemScale;
 	public EventNKSItemPassiveSpecialTypeData PassiveSpecial;
-	public EventNKSFieldItemType FielditemType;
+	public EventNKSFieldItemType FieldItemType;
 	public string? ItemNameLocale;
 	public string? ItemDescLocale;
 	public int ItemRating;
 	public int ItemRatio;
-	public int ItemstatId;
-	public int ItemactionId;
+	public int ItemStatId;
+	public int ItemActionId;
 	public int ItemValue;
 	public bool LevelUpOnly;
 	public bool CanMagnet;
-	public int ItemconditionTime;
+	public int ItemConditionTime;
 	public bool IsBonus;
-	public int ItemunlockconditionMissionid;
+	public int ItemUnlockConditionMissionID;
 	public List<DescriptionValueData> DescriptionValue;
 }
 
@@ -5600,9 +5604,9 @@ public partial class EventNKSItemsRecord
 public partial class EventNKSItemsStatRecord
 {
 	public int Id;
-	public int StatTimeduration;
-	public string? StatMarkerresourceId;
-	public int ProjStattimeDeath;
+	public int StatTimeDuration;
+	public string? StatMarkerResourceId;
+	public int ProjStatTimeDeath;
 	public EventNKSBuffTypeData BuffType;
 	public List<NKSStatData> Stat;
 }
@@ -5635,14 +5639,14 @@ public partial class EventNKSMonsterActionRecord
 	public List<ActionValueData> ActionValue;
 	public string? ProjResourceId;
 	public string? ProjType;
-	public List<EventNKSProjectileTypeValueData> ProjTypevalue;
+	public List<EventNKSProjectileTypeValueData> ProjTypeValue;
 	public int ProjAmount;
 	public int ProjDuration;
-	public int ProjAfterduration;
-	public int ProjAftercollide;
-	public int ProjAftercollideStat;
-	public int ProjDmgcount;
-	public int ProjDmgdelay;
+	public int ProjAfterDuration;
+	public int ProjAfterCollide;
+	public int ProjAfterCollideStat;
+	public int ProjDmgCount;
+	public int ProjDmgDelay;
 	public double ProjSize;
 	public double ProjSpd;
 	public List<EventNKSProjectileAtkRangeData> ProjAtkRange;
@@ -5658,24 +5662,24 @@ public partial class EventNKSMonsterRecord
 	public EventNKSMonsterColType ColType;
 	public EventNKSMonsterGradeType Grade;
 	public string? BehaviorTree;
-	public int MonsteractionGroupId;
-	public double StatMvspd;
+	public int MonsterActionGroupId;
+	public double StatMvSpd;
 	public int StatHp;
 	public int StatAtk;
 	public int StatDef;
-	public int StatProjspd;
-	public int StatProjsize;
-	public int StatColdmg;
+	public int StatProjSpd;
+	public int StatProjSize;
+	public int StatColDmg;
 	public List<DropItemData> DropItem;
-	public int RandomdropGroupId;
-	public int RandomdropAmount;
+	public int RandomDropGroupId;
+	public int RandomDropAmount;
 	public int DropRadius;
-	public int DeathactionGroupId;
-	public string? SpawneffectResourceId;
-	public string? HiteffectResourceId;
-	public string? DeatheffectResourceId;
+	public int DeathActionGroupId;
+	public string? SpawnEffectResourceId;
+	public string? HitEffectResourceId;
+	public string? DeathEffectResourceId;
 	public bool ResistanceAttract;
-	public bool ResistanceKnockback;
+	public bool ResistanceKnockBack;
 	public bool ResistanceParalysis;
 }
 
@@ -5688,7 +5692,7 @@ public partial class EventNKSProjectileAtkRangeData
 [MemoryPackable]
 public partial class EventNKSProjectileTypeValueData
 {
-	public int ProjTypevalue;
+	public int ProjTypeValue;
 }
 
 [MemoryPackable]
@@ -5697,8 +5701,8 @@ public partial class EventNKSSpawnGroupRecord
 	public int Id;
 	public int GroupId;
 	public int TimelineValue;
-	public EventNKSStageTimelineActionType TimelineActiontype;
-	public List<EventNKSTimeLineActionTypeValue> TimelineActiontypeValue;
+	public EventNKSStageTimelineActionType TimelineActionType;
+	public List<EventNKSTimeLineActionTypeValue> TimelineActionTypeValue;
 }
 
 [MemoryPackable]
@@ -5707,12 +5711,12 @@ public partial class EventNKSSpawnTimelineRecord
 	public int Id;
 	public int GroupId;
 	public int TimelineValue;
-	public bool TimelineIsloop;
+	public bool TimelineIsLoop;
 	public int TimelineSpawnGroup;
 	public int TimelineLoopCount;
 	public int TimelineLoopInterval;
-	public EventNKSStageTimelineActionType TimelineActiontype;
-	public List<EventNKSTimeLineActionTypeValue> TimelineActiontypeValue;
+	public EventNKSStageTimelineActionType TimelineActionType;
+	public List<EventNKSTimeLineActionTypeValue> TimelineActionTypeValue;
 }
 
 [MemoryPackable]
@@ -5726,21 +5730,21 @@ public partial class EventNKSStageRecord
 	public bool IsChallenge;
 	public int MapWidth;
 	public int MapHeight;
-	public int TilesetId;
-	public int StagetimelineGroupId;
+	public int TileSetId;
+	public int StageTimelineGroupId;
 	public int ClearReward;
 	public string? EnterScenario;
 	public string? LoseScenario;
 	public string? WinScenario;
-	public string? StagenameLocale;
-	public string? StagedescLocale;
+	public string? StageNameLocale;
+	public string? StageDescLocale;
 	public List<string?> BGMset;
-	public int UiDifficult;
-	public string? UiTheme;
-	public string? UiThemeLocalkey;
+	public int UIDifficult;
+	public string? UITheme;
+	public string? UIThemeLocalKey;
 	public int DecoTileAmount;
-	public int DecotileXoffset;
-	public int DecotileYoffset;
+	public int DecoTileXoffset;
+	public int DecoTileYoffset;
 }
 
 [MemoryPackable]
@@ -5756,7 +5760,7 @@ public partial class EventNKSStageTileSetRecord
 [MemoryPackable]
 public partial class EventNKSTimeLineActionTypeValue
 {
-	public string? TimelineActiontypeValue;
+	public string? TimelineActionTypeValue;
 }
 
 [MemoryPackable]
@@ -6137,7 +6141,7 @@ public partial class EventRebuildEdenDialogRecord_Raw
 	public int GroupId;
 	public int Order;
 	public EventRebuildEdenDialogNamePlatePositionType NameplatePosition;
-	public string? ScenariodialogGroupid;
+	public string? ScenarioDialogGroupid;
 	public string? ResourceId;
 	public string? NameLocale;
 	public string? TextLocale;
@@ -6158,12 +6162,12 @@ public partial class EventRebuildEdenDispatchRecord_Raw
 	public EventRebuildEdenDispatchCategory Category;
 	public bool IsOnce;
 	public bool IsRare;
-	public int AfterWaittime;
+	public int AfterWaitTime;
 	public EventRebuildEdenListConditionType ListCondition;
 	public int ConditionValue;
-	public int ListRatioweight;
-	public int RatioNormalsuccess;
-	public int RatioSpecialsuccess;
+	public int ListRatioWeight;
+	public int RatioNormalSuccess;
+	public int RatioSpecialSuccess;
 	public int RewardSpecialWeight;
 	public int RewardFailWeight;
 	public List<int> RewardId;
@@ -6191,7 +6195,7 @@ public partial class EventRebuildEdenEnvEventRecord_Raw
 	public int ConditionValue;
 	public string? IconResource;
 	public List<EventRebuildEnvEffectTypeSetting_Raw> EffectSettings;
-	public EventRebuildEdenEnvEventFxType ScreenfxResourceId;
+	public EventRebuildEdenEnvEventFxType ScreenFxResourceId;
 	public string? BgmResource;
 }
 
@@ -6244,7 +6248,7 @@ public partial class EventRebuildEdenManagerRecord_Raw
 	public int DemolitionRefundValue;
 	public int ProductionCreatetimePenalty;
 	public int ForceUnitSpd;
-	public int ElevatorExcludedFromfloor;
+	public int ElevatorExcludedFromFloor;
 	public int DispatchCounts;
 	public int DispatchBonusCount;
 	public int DispatchDailybonusCorrection;
@@ -6994,7 +6998,7 @@ public partial class EventScenarioDialogRecord
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
-	public bool PlayLipsync;
+	public bool PlayLipSync;
 	public List<ScenarioCharacterData> Characters;
 	public string? SetBackground;
 	public string? SetLight;
@@ -7483,7 +7487,7 @@ public partial class EventTowerDefenseManagerRecord
 	public int BuffTerminationNoticeBlinkRate;
 	public int StageClearDelay;
 	public int BurstGuideToastHoldTime;
-	public bool IsUse3XSpeed;
+	public bool IsUse3xSpeed;
 	public bool IsUseWaveInfo;
 	public string? FirstEntryMessageLocalkey;
 }
@@ -8163,7 +8167,7 @@ public partial class FieldTutorialRecord
 	public int ClearedStageId;
 	public int CloseStageId;
 	public string? CharResourceId;
-	public string? TitleTextlocale;
+	public string? TitleTextLocale;
 	public string? TextLocale;
 	public int Background;
 	public List<string?> AddonResource;
@@ -9163,7 +9167,7 @@ public partial class IslandAdventureUnionRankingRecord
 [MemoryPackable]
 public partial class ItemConditionIdData
 {
-	public int ItemconditionId;
+	public int ItemConditionId;
 }
 
 [MemoryPackable]
@@ -10274,7 +10278,7 @@ public partial class NKSMissionValueData
 public partial class NKSStatData
 {
 	public EventNKSItemsStatType StatType;
-	public EventNKSItemsStatCalcType StatCalctype;
+	public EventNKSItemsStatCalcType StatCalcType;
 	public double StatValue;
 }
 
@@ -11170,7 +11174,7 @@ public partial class ScenarioDialogRecord
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
-	public bool PlayLipsync;
+	public bool PlayLipSync;
 	public List<ScenarioCharacterData> Characters;
 	public string? SetBackground;
 	public string? SetLight;
@@ -11485,7 +11489,7 @@ public partial class SideStoryScenarioDialogRecord
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
-	public bool PlayLipsync;
+	public bool PlayLipSync;
 	public List<ScenarioCharacterData> Characters;
 	public string? SetBackground;
 	public string? SetLight;
@@ -11842,8 +11846,8 @@ public partial class SkillData
 public partial class SkillData01_Raw
 {
 	public EventBHWeaponSkillType SkillType01;
-	public List<SkillValueData01_Raw> Skillvalue01;
-	public List<SkillResourceData01_Raw> Skillresource01;
+	public List<SkillValueData01_Raw> SkillValue01;
+	public List<SkillResourceData01_Raw> SkillResource01;
 	public string? SkillDescriptionLocale01;
 }
 
@@ -11851,8 +11855,8 @@ public partial class SkillData01_Raw
 public partial class SkillData02_Raw
 {
 	public EventBHWeaponSkillType SkillType02;
-	public List<SkillValueData02_Raw> Skillvalue02;
-	public List<SkillResourceData02_Raw> Skillresource02;
+	public List<SkillValueData02_Raw> SkillValue02;
+	public List<SkillResourceData02_Raw> SkillResource02;
 	public string? SkillDescriptionLocale02;
 }
 
@@ -11949,9 +11953,9 @@ public partial class SlotData_Raw
 [MemoryPackable]
 public partial class SlotItemData
 {
-	public int SlotGetitem;
-	public int SlotReqitem;
-	public int SlotReqitemValue;
+	public int SlotGetItem;
+	public int SlotReqItem;
+	public int SlotReqItemValue;
 }
 
 [MemoryPackable]
@@ -12041,13 +12045,13 @@ public partial class SpotTutorialRecord
 	public SpotTutorialCloseValue CloseValue;
 	public TutorialFunctionType TutorialFunctionType;
 	public string? CharResourceId;
-	public string? TitleTextlocale;
+	public string? TitleTextLocale;
 	public string? TextLocale;
 	public SpootTutorialTextLocation TextLocation;
 	public int Background;
 	public string? AddonResource;
 	public List<string?> UnmaskKeyList;
-	public List<string?> UnmaskkeylistNoinput;
+	public List<string?> UnmaskKeyListNoinput;
 	public long MarkMonsterId;
 	public string? MonsterMarkResource;
 	public string? EffectList;
@@ -13945,8 +13949,8 @@ public enum EventDungeonOpenCondition : int
 public enum RewardType : int
 {
 	None = 0,
-	Userexp = 1,
-	Charexp = 2,
+	UserExp = 1,
+	CharExp = 2,
 	Currency = 3,
 	Character = 4,
 	Item = 5,
@@ -14107,7 +14111,8 @@ public enum EventSystemType : int
 	RopeRunningMiniGame = 51,
 	RebuildEdenMiniGame = 52,
 	CE007MiniGame = 53,
-	AZXAppleMiniGame = 54
+	AZXAppleMiniGame = 54,
+	TicketGachaEvent = 55
 }
 
 public enum Category : int
@@ -14141,6 +14146,12 @@ public enum Category : int
 	FavoriteItemQuestStageClear = 26,
 	FavoriteItemQuestStageGroupClear = 27,
 	SimulationRoomSelect = 28
+}
+
+public enum StoryEventPartType : int
+{
+	OnePart = 0,
+	TwoPart = 1
 }
 
 public enum ArchiveMessengerConditionType : int
@@ -14341,8 +14352,8 @@ public enum ScenarioFadeType : int
 	None = 0,
 	Black = 1,
 	White = 2,
-	Blackwithoutdialogue = 3,
-	Whitewithoutdialogue = 4
+	BlackWithoutDialogue = 3,
+	WhiteWithoutDialogue = 4
 }
 
 public enum BGMShopType : int
@@ -14355,22 +14366,22 @@ public enum BGMShopType : int
 public enum BGMType : int
 {
 	None = 0,
-	Chapterbgm = 1,
-	Arenabgm = 2,
-	Spotbgm = 3,
-	Outgamebgm = 4,
+	ChapterBgm = 1,
+	ArenaBgm = 2,
+	SpotBgm = 3,
+	OutgameBgm = 4,
 	Ambient = 5,
-	Storyeventbgm = 6,
-	Eventfieldbgm = 7,
-	Storyeventbgmset = 8
+	StoryEventBgm = 6,
+	EventFieldBgm = 7,
+	StoryEventBgmSet = 8
 }
 
 public enum BGMSubType : int
 {
 	None = 0,
-	Campaignstage = 1,
-	Suddenbattle = 2,
-	Lostsector = 3,
+	CampaignStage = 1,
+	SuddenBattle = 2,
+	LostSector = 3,
 	ArenaSpecial = 4,
 	ArenaNormal = 5,
 	ALL = 6,
@@ -14379,29 +14390,29 @@ public enum BGMSubType : int
 	TETRA = 9,
 	PILGRIM = 10,
 	Outpost = 11,
-	Multiraid = 12,
-	Simulationroom = 13,
+	MultiRaid = 12,
+	SimulationRoom = 13,
 	Raid = 14,
-	Shootingrange = 15,
-	Eventstage = 16,
-	Eventfield = 17,
+	ShootingRange = 15,
+	EventStage = 16,
+	EventField = 17,
 	Gacha = 18,
-	Jukeboxlobby = 19,
-	Jukeboxcommandcenter = 20,
-	Sidestory = 21,
+	JukeboxLobby = 19,
+	JukeboxCommandcenter = 20,
+	SideStory = 21,
 	Arcade = 22,
-	Archivefield = 23
+	ArchiveField = 23
 }
 
 public enum BGMTriggerEventType : int
 {
 	None = 0,
-	Stageenter = 1,
-	Stageclear = 2,
-	Targetappear = 3,
+	StageEnter = 1,
+	StageClear = 2,
+	TargetAppear = 3,
 	ChangePhase2 = 4,
 	ChangePhase3 = 5,
-	Stagestart = 6
+	StageStart = 6
 }
 
 public enum EventNKSDialogConditionTypeData : int
@@ -14771,7 +14782,7 @@ public enum CharacterReactionType : int
 	Enter = 0,
 	Touch = 1,
 	Stay = 2,
-	Speciallobbychange = 3
+	SpecialLobbyChange = 3
 }
 
 public enum OriginalRareType : int
@@ -15127,7 +15138,9 @@ public enum CharacterSkillType : int
 	ReFullChargeHitDamage = 25,
 	InstantAllParts = 26,
 	TargetHitCountGetBuff = 27,
-	HealCharge = 28
+	HealCharge = 28,
+	TargetingSequentialAttack = 29,
+	InstantAllProjectile = 30
 }
 
 public enum DurationType : int
@@ -15317,40 +15330,42 @@ public enum RenewType : int
 	ManualRenew = 5,
 	NoRenew = 6
 }
-public enum CurrencyType
+
+public enum CurrencyType : int
 {
-    None = 0,
-    UserExp = 1,
-    ChargeCash = 98,
-    FreeCash = 99,
-    CharacterExp = 1000,
-    Gold = 2000,
-    CharacterExp2 = 3000,
-    Friendship_Point = 4000,
-    ArenaChip = 5000,
-    Char_Premium_Ticket = 5100,
-    Char_Customize_Ticket = 5200,
-    Char_Corporation_Ticket = 5300,
-    Char_CE002_RE_Ticket = 5401,
-    Char_CE007_Ticket = 5402,
-    Char_Select_01_Ticket = 5501,
-    Char_Select_02_Ticket = 5502,
-    Arena_Ticket = 6001,
-    _2nd_Arena_Ticket = 6002,
-    InterceptTicket = 6003,
-    ContentStamina = 6100,
-    RecycleRoomPoint = 6200,
-    InfraCoreEnergy = 7000,
-    RaptureParts = 8000,
-    RapturePartsRanking = 8100,
-    DissolutionPoint = 9000,
-    InApp = 9999,
-    GuildCoin = 10000,
-    SilverMileageTicket = 11000,
-    GoldMileageTicket = 12000,
-    SimulationRoomPoint = 13000,
-    CharacterSkillReset_Ticket = 14000,
-    HexaCodeCurrency = 15000
+	None = 0,
+	UserExp = 1,
+	ChargeCash = 98,
+	FreeCash = 99,
+	CharacterExp = 1000,
+	Gold = 2000,
+	CharacterExp2 = 3000,
+	FriendshipPoint = 4000,
+	ArenaChip = 5000,
+	CharPremiumTicket = 5100,
+	CharCustomizeTicket = 5200,
+	CharCorporationTicket = 5300,
+	CharCE002RETicket = 5401,
+	CharCE007Ticket = 5402,
+	CharSelect01Ticket = 5501,
+	CharSelect02Ticket = 5502,
+	CharGuaranteed01Ticket = 5601,
+	ArenaTicket = 6001,
+	_2nd_Arena_Ticket = 6002,
+	InterceptTicket = 6003,
+	ContentStamina = 6100,
+	RecycleRoomPoint = 6200,
+	InfraCoreEnergy = 7000,
+	RaptureParts = 8000,
+	RapturePartsRanking = 8100,
+	DissolutionPoint = 9000,
+	InApp = 9999,
+	GuildCoin = 10000,
+	SilverMileageTicket = 11000,
+	GoldMileageTicket = 12000,
+	SimulationRoomPoint = 13000,
+	CharacterSkillResetTicket = 14000,
+	HexaCodeCurrency = 15000
 }
 
 public enum ContentsTutorialSubGroup : int
@@ -15562,8 +15577,8 @@ public enum CooperationEventContentsType : int
 public enum CooperationEventReportType : int
 {
 	None = 0,
-	Noattackinputtimetotal = 1,
-	Noallinputtimetotal = 2
+	NoAttackInputTimeTotal = 1,
+	NoAllInputTimeTotal = 2
 }
 
 public enum CostumePriceType : int
@@ -16383,11 +16398,11 @@ public enum EvaMissionRewardType : int
 
 public enum EvaSkillEffectType : int
 {
-	Mechaattack = 0,
-	Wingmanattack = 1,
+	MechaAttack = 0,
+	WingmanAttack = 1,
 	Hp = 2,
-	Pickrange = 3,
-	Ultimateskill = 4,
+	PickRange = 3,
+	UltimateSkill = 4,
 	Display = 5,
 	Danmaku = 6
 }
@@ -16497,8 +16512,8 @@ public enum EventMVGCharacterCustomActionMuzzleTypeData : int
 	CMuzzle = 5,
 	DCenter = 6,
 	DMuzzle = 7,
-	Charactercenter = 8,
-	Characterbottom = 9,
+	CharacterCenter = 8,
+	CharacterBottom = 9,
 	None = 10
 }
 
@@ -16539,41 +16554,41 @@ public enum EventMVGCharactercustomVariablesSettingData : int
 	AbsorbRecoveryAmount = 16,
 	HealthRecoveryTime = 17,
 	HealthRecoveryAmount = 18,
-	AbsorbperfectTime = 19,
-	AbsorbactLockTime = 20,
-	AbsorbactLockrecoveryTime = 21,
-	AbsorbactLockrecoveryValue = 22,
-	BurstgaugeConsumeTime = 23,
-	Attackkeep = 24,
+	AbsorbPerfectTime = 19,
+	AbsorbActLockTime = 20,
+	AbsorbActLockRecoveryTime = 21,
+	AbsorbActLockRecoveryValue = 22,
+	BurstGaugeConsumeTime = 23,
+	AttackKeep = 24,
 	ActionGroupID = 25,
 	CoolDownTime = 26,
 	GlobalCoolDownTime = 27,
-	ProjtypeValue1 = 28,
-	ProjtypeValue2 = 29,
-	ProjtypeValue3 = 30,
-	ProjtypeValue4 = 31,
-	ProjtypeValue5 = 32,
-	ProjtypeValue6 = 33,
-	ProjtypeValue7 = 34,
-	ProjtypeValue8 = 35,
-	ProjtypeValue9 = 36,
-	ProjtypeValue10 = 37,
-	Projduration = 38,
-	ProjafterCollide = 39,
-	Projpierce = 40,
-	Projspd = 41,
-	Projatk = 42,
-	Projsize = 43,
-	Projdmgdelay = 44,
-	Projamount = 45,
-	ProjdmgCount = 46,
-	Stathp = 47,
-	Statatk = 48,
+	ProjTypeValue1 = 28,
+	ProjTypeValue2 = 29,
+	ProjTypeValue3 = 30,
+	ProjTypeValue4 = 31,
+	ProjTypeValue5 = 32,
+	ProjTypeValue6 = 33,
+	ProjTypeValue7 = 34,
+	ProjTypeValue8 = 35,
+	ProjTypeValue9 = 36,
+	ProjTypeValue10 = 37,
+	ProjDuration = 38,
+	ProjAfterCollide = 39,
+	ProjPierce = 40,
+	ProjSpd = 41,
+	ProjAtk = 42,
+	ProjSize = 43,
+	ProjDmgdelay = 44,
+	ProjAmount = 45,
+	ProjDmgCount = 46,
+	StatHp = 47,
+	StatAtk = 48,
 	MaxAbsorbGauge = 49,
 	MaxModuleSlot = 50,
 	Currency = 51,
-	Holdmove = 52,
-	GlassCtoggle = 53,
+	HoldMove = 52,
+	GlassCToggle = 53,
 	None = 54
 }
 
@@ -16588,15 +16603,15 @@ public enum EventMVGCharacterCustomCalcTypeData : int
 
 public enum EventMVGCustomTypeMainData : int
 {
-	Skilla = 0,
-	Skillb = 1,
-	Skillc = 2,
-	Skilld = 3,
+	SkillA = 0,
+	SkillB = 1,
+	SkillC = 2,
+	SkillD = 3,
 	SkillBurstA = 4,
 	SkillBurstB = 5,
 	SkillBurstC = 6,
 	SkillBurstD = 7,
-	Charamv = 8,
+	CharaMv = 8,
 	CharaDash = 9,
 	CharaJump = 10,
 	CharaLock = 11,
@@ -16896,17 +16911,17 @@ public enum EventNKSDialogPrintTypeData : int
 public enum EventNKSItemsStatType : int
 {
 	None = 0,
-	StatmvSpd = 1,
-	Stathp = 2,
-	Statatk = 3,
-	Statatkspd = 4,
-	StatprojSize = 5,
-	StatprojSpd = 6,
-	Statdef = 7,
-	Statmagnet = 8,
-	StatcolDmg = 9,
-	Statrevivecount = 10,
-	Statrerollcount = 11
+	StatMvSpd = 1,
+	StatHp = 2,
+	StatAtk = 3,
+	StatAtkspd = 4,
+	StatProjSize = 5,
+	StatProjSpd = 6,
+	StatDef = 7,
+	StatMagnet = 8,
+	StatColDmg = 9,
+	StatRevivecount = 10,
+	StatRerollcount = 11
 }
 
 public enum EventNKSItemsStatCalcType : int
@@ -16939,7 +16954,7 @@ public enum EventNKSVersionType : int
 public enum EventNKSDialogEffectTypeData : int
 {
 	None = 0,
-	Setcamerashake = 1,
+	SetCameraShake = 1,
 	White = 2,
 	Black = 3
 }
@@ -16972,7 +16987,7 @@ public enum EventNKSFieldItemType : int
 	MinionKill = 4,
 	Heal = 5,
 	Invincible = 6,
-	BursttimeSub = 7,
+	BurstTimeSub = 7,
 	GachaBox = 8
 }
 
@@ -17695,12 +17710,6 @@ public enum EventSortOutMissionType : int
 	SortOutCount = 3
 }
 
-public enum StoryEventPartType : int
-{
-	OnePart = 0,
-	TwoPart = 1
-}
-
 public enum EventTextAdventurePageType : int
 {
 	None = 0,
@@ -18162,7 +18171,7 @@ public enum ObtainContentsType : int
 {
 	None = 0,
 	Campaign = 1,
-	Lostsector = 2,
+	LostSector = 2,
 	Eventfield = 3
 }
 
@@ -18373,7 +18382,7 @@ public enum FunctionType : int
 	ChangeMaxSkillCoolTimeUlti = 122,
 	HealDecoy = 123,
 	Transformation = 124,
-	Immortalvalue = 125,
+	ImmortalValue = 125,
 	StatMaintainFireStance = 126,
 	AtkChangeMaxHpRate = 127,
 	OverHealSave = 128,
@@ -18458,7 +18467,10 @@ public enum FunctionType : int
 	StatDefNoneBreakCol = 207,
 	ChangeHealChargeValue = 208,
 	FixStatChargeTime = 209,
-	GrayScale = 210
+	GrayScale = 210,
+	ChangeMaxTargetingCount = 211,
+	InstantSequentialAttackDamageRatio = 212,
+	BarrierImmuneDamage = 213
 }
 
 public enum FunctionStandardType : int
@@ -18573,7 +18585,8 @@ public enum TimingTriggerType : int
 	OnFullChargeBonusRangeHitNum = 87,
 	OnKeepFullChargeShot = 88,
 	OnDeadComplete = 89,
-	OnFullChargeCoreHitNum = 90
+	OnFullChargeCoreHitNum = 90,
+	OnBrokenBarrier = 91
 }
 
 public enum StatusTriggerType : int
@@ -18643,7 +18656,8 @@ public enum StatusTriggerType : int
 	IsCheckNotTarget = 62,
 	IsCheckFunctionOverlap = 63,
 	IsFirstBurstMember = 64,
-	IsNotFirstBurstMember = 65
+	IsNotFirstBurstMember = 65,
+	IsCharging = 66
 }
 
 public enum FunctionKeepingType : int
@@ -18696,7 +18710,8 @@ public enum GachaSubType : int
 {
 	None = 0,
 	PickupCharacter = 1,
-	LimitedCharacter = 2
+	LimitedCharacter = 2,
+	GuaranteedCharacter = 3
 }
 
 public enum GachaPremiumType : int
@@ -18712,7 +18727,8 @@ public enum GachaPremiumType : int
 	GachaCharge = 8,
 	GachaPickup = 9,
 	GachaStepup = 10,
-	GachaSelectup = 11
+	GachaSelectup = 11,
+	GachaGuaranteed = 12
 }
 
 public enum GachaProvideCountType : int
@@ -19328,26 +19344,26 @@ public enum MoveType : int
 public enum WeaponObjectEnum : int
 {
 	None = 0,
-	Weaponobject01 = 1,
-	Weaponobject02 = 2,
-	Weaponobject03 = 3,
-	Weaponobject04 = 4,
-	Weaponobject05 = 5,
-	Weaponobject06 = 6,
-	Weaponobject07 = 7,
-	Weaponobject08 = 8,
-	Weaponobject09 = 9,
-	Weaponobject10 = 10,
-	Weaponobject11 = 11,
-	Weaponobject12 = 12,
-	Weaponobject13 = 13,
-	Weaponobject14 = 14,
-	Weaponobject15 = 15,
-	Weaponobject16 = 16,
-	Weaponobject17 = 17,
-	Weaponobject18 = 18,
-	Weaponobject19 = 19,
-	Weaponobject20 = 20
+	WeaponObject01 = 1,
+	WeaponObject02 = 2,
+	WeaponObject03 = 3,
+	WeaponObject04 = 4,
+	WeaponObject05 = 5,
+	WeaponObject06 = 6,
+	WeaponObject07 = 7,
+	WeaponObject08 = 8,
+	WeaponObject09 = 9,
+	WeaponObject10 = 10,
+	WeaponObject11 = 11,
+	WeaponObject12 = 12,
+	WeaponObject13 = 13,
+	WeaponObject14 = 14,
+	WeaponObject15 = 15,
+	WeaponObject16 = 16,
+	WeaponObject17 = 17,
+	WeaponObject18 = 18,
+	WeaponObject19 = 19,
+	WeaponObject20 = 20
 }
 
 public enum PartsType : int
@@ -21003,27 +21019,27 @@ public enum SurfaceSkillRangeTypeCondition : int
 	None = 0,
 	All = 1,
 	User = 2,
-	Userplatoon = 3,
-	Currentattacktarget = 4,
+	UserPlatoon = 3,
+	CurrentAttackTarget = 4,
 	Around = 5,
-	Occupiedarea = 6,
-	Usemonsterusearea = 7,
-	Aroundcallingsignal = 8,
-	Aroundnotself = 9,
-	Battlezone = 10
+	OccupiedArea = 6,
+	UseMonsterUseArea = 7,
+	AroundCallingSignal = 8,
+	AroundNotSelf = 9,
+	BattleZone = 10
 }
 
 public enum SurfaceTargetCategoryCondition : int
 {
 	None = 0,
 	Character = 1,
-	Nikkecharacter = 2,
-	Monstercharacter = 3,
+	NikkeCharacter = 2,
+	MonsterCharacter = 3,
 	Platoon = 4,
-	Nikkeplatoon = 5,
-	Monsterplatoon = 6,
+	NikkePlatoon = 5,
+	MonsterPlatoon = 6,
 	Obstruction = 7,
-	Opticalcamouflage = 8
+	OpticalCamouflage = 8
 }
 
 public enum SurfaceFunctionPreferTarget : int
@@ -21064,9 +21080,9 @@ public enum SurfaceTimingTriggerStandardCondition : int
 {
 	None = 0,
 	User = 1,
-	Userplatoon = 2,
+	UserPlatoon = 2,
 	Target = 3,
-	Triggertarget = 4
+	TriggerTarget = 4
 }
 
 public enum SurfaceStatusTriggerTypeCondition : int
@@ -21106,9 +21122,9 @@ public enum SurfaceStatusTriggerStandardCondition : int
 {
 	None = 0,
 	User = 1,
-	Userplatoon = 2,
+	UserPlatoon = 2,
 	Target = 3,
-	Triggertarget = 4
+	TriggerTarget = 4
 }
 
 public enum SurfaceKeepingTypeCondition : int

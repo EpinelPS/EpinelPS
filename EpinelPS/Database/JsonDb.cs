@@ -25,7 +25,16 @@ namespace EpinelPS.Database
                 Save();
             }
 
-            var j = JsonConvert.DeserializeObject<CoreInfo>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json"));
+            var text = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json");
+            if (text.Contains("Char_Premium_Ticket"))
+            {
+                text = text.Replace("Char_Premium_Ticket", "CharPremiumTicket");
+                text = text.Replace("Char_Customize_Ticket", "CharCustomizeTicket");
+                text = text.Replace("Char_Select_01_Ticket", "CharSelect01Ticket");
+                text = text.Replace("Char_Select_02_Ticket", "CharSelect02Ticket"); 
+            }
+
+            var j = JsonConvert.DeserializeObject<CoreInfo>(text);
             if (j != null)
             {
                 Instance = j;
