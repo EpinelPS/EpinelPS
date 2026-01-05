@@ -62,6 +62,42 @@ namespace EpinelPS.Controllers
             }
         }
 
+        [HttpPost("RegisterAccount")]
+        public RunCmdResponse RegisterAccount([FromBody] RegisterAccountReg req)
+        {
+            if (!AdminController.CheckAuth(HttpContext) && JsonDb.Instance.Users.Count != 0) return new RunCmdResponse() { error = "bad token" };
+
+            if (JsonDb.Instance.Users.Where(x => x.Username == req.Email).Count() != 0)
+            {
+                return new RunCmdResponse() { error = $"Email {req.Email} already exists" };
+            }
+
+            ulong uid = (ulong)new Random().Next(1, int.MaxValue);
+
+            // Check if we havent generated a UID that exists
+            foreach (User item in JsonDb.Instance.Users)
+            {
+                if (item.ID == uid)
+                {
+                    uid -= (ulong)new Random().Next(1, 1221);
+                }
+            }
+
+            JsonDb.Instance.Users.Add(new User()
+            {
+                Username = req.Email,
+                Password = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(req.Password))).ToLower(),
+                RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                ID = uid,
+                PlayerName = "Player_" + Rng.RandomString(8),
+                IsAdmin = JsonDb.Instance.Users.Count == 0
+            });
+
+            JsonDb.Save();
+
+            return new RunCmdResponse() { ok = true };
+        }
+
         [HttpPost("RunCmd")]
         public async Task<RunCmdResponse> RunCmd([FromBody] RunCmdRequest req)
         {

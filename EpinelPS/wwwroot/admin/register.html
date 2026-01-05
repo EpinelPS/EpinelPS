@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title data-i18n="app.name">EpinelPS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="/admin/assets/css/nikke-theme.css">
+    <link rel="stylesheet" href="/admin/assets/css/nikke-login.css">
+    <link rel="stylesheet" href="/admin/assets/css/nikke-i18n.css">
+
+    <link rel="icon" href="/admin/assets/img/favicon.ico" type="image/x-icon">
+</head>
+<body class="login-page">
+    <div class="login-overlay"></div>
+    <div class="nikke-glow"></div>
+    
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1 data-i18n="app.name">EpinelPS Admin Console</h1>
+                <p data-i18n="users.modal.add">Add new user</p>
+            </div>
+            <div class="login-body">
+            <form id="addUserForm">
+                <div class="mb-3">
+                    <label for="newUsername" class="form-label" data-i18n="users.modal.username">Email</label>
+                    <input type="text" class="form-control" id="newUsername" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label" data-i18n="users.modal.password">Password</label>
+                    <input type="password" class="form-control" id="newPassword" required>
+                </div>
+
+            <button type="button" class="btn btn-primary" id="saveUserBtn" data-i18n="users.modal.add">Register</button>
+            </form>
+            </div>
+            <div class="login-footer" data-i18n="app.name">
+                EpinelPS Admin Console
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <script src="/admin/assets/js/nikke-i18n.js"></script>
+    <script src="/admin/assets/js/nikke-login.js"></script>
+    
+    <script>
+    document.addEventListener('mousemove', function(e) {
+        const glow = document.querySelector('.nikke-glow');
+        glow.style.left = (e.clientX - 100) + 'px';
+        glow.style.top = (e.clientY - 100) + 'px';
+    });
+
+     document.getElementById('saveUserBtn').addEventListener('click', async function() {
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+
+            if (!username || !password) {
+                showNotification(i18n.t('users.notifications.requiredFields'), 'error');
+                return;
+            }
+
+            this.innerHTML = `<i class="fas fa-circle-notch fa-spin me-2"></i> <span>${i18n.t('users.modal.saving')}</span>`;
+            this.disabled = true;
+
+
+            const response = await fetch("/adminapi/RegisterAccount", {
+                method: "POST",
+                body: JSON.stringify({
+                Email: username,
+                Password: password,
+                IsAdmin: true
+                }),
+                headers: {
+                "Content-type": "application/json; charset=UTF-8"
+                }
+            });
+
+            this.disabled = false;
+            this.innerHTML = i18n.t('users.modal.save');
+
+            if (!response.ok)
+            {
+                alert("Server error: " + response.status);
+                return;
+            }
+
+            const result = await response.json();
+            if (!result.ok)
+            {
+                alert("Error: " + result.error);
+                return;
+            }
+
+            document.getElementById('addUserForm').reset();
+            alert(i18n.t('users.notifications.userAdded'));
+        });
+
+    window.addEventListener('nikke:languageChanged', function() {
+        document.title = i18n.t('app.name');
+
+        const errorMsg = document.getElementById('errormsg');
+        if (errorMsg.textContent) {
+            errorMsg.textContent = i18n.t('auth.error.invalid');
+        }
+
+        const loginBtn = document.querySelector('.login-button');
+        if (!loginBtn.disabled) {
+            loginBtn.innerHTML = `<i class="fas fa-sign-in-alt me-2"></i><span>${i18n.t('auth.enter')}</span>`;
+        }
+    });
+    </script>
+</body>
+</html>

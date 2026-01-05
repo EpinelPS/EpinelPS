@@ -13,6 +13,16 @@ public class RunCmdRequest
     public string p2 { get; set; } = "";
 }
 
+public class RegisterAccountReg
+{
+    [Required]
+    public string Email { get; set; } = "";
+    [Required]
+    public string Password { get; set; } = "";
+    [Required]
+    public bool IsAdmin { get;set;}
+}
+
 public class RunCmdResponse
 {
     public bool ok { get; set; }

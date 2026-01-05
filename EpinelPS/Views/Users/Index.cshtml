@@ -122,7 +122,7 @@
 </div>
 
 <!-- 添加用户模态框 - 修改为NIKKE风格 -->
-<div class="nikke-modal" id="addUserModal">
+<div class="nikke-modal" id="addUserModal" style="display: none;">
     <div class="nikke-modal-backdrop"></div>
     <div class="nikke-modal-container">
         <div class="nikke-modal-header">
@@ -134,15 +134,11 @@
         <div class="nikke-modal-body">
             <form id="addUserForm">
                 <div class="mb-3">
-                    <label for="newUsername" class="form-label" data-i18n="users.modal.username">用户名</label>
+                    <label for="newUsername" class="form-label" data-i18n="users.modal.username">Email</label>
                     <input type="text" class="form-control" id="newUsername" required>
                 </div>
                 <div class="mb-3">
-                    <label for="newNickname" class="form-label" data-i18n="users.modal.nickname">昵称</label>
-                    <input type="text" class="form-control" id="newNickname">
-                </div>
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label" data-i18n="users.modal.password">密码</label>
+                    <label for="newPassword" class="form-label" data-i18n="users.modal.password">Password</label>
                     <input type="password" class="form-control" id="newPassword" required>
                 </div>
                 <div class="mb-3 form-check nikke-checkbox">
@@ -232,7 +228,6 @@
         left: 0;
         right: 0;
         bottom: 0;
-        display: none;
         z-index: 1050;
     }
 
@@ -261,7 +256,9 @@
     }
 
     .nikke-modal.show .nikke-modal-container {
-        transform: translateY(0);
+        left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
         opacity: 1;
     }
 
@@ -424,6 +421,7 @@
         function openAddUserModal() {
             const modal = document.getElementById('addUserModal');
             modal.classList.add('show');
+            modal.style.display = "block";
             setTimeout(() => {
                 document.getElementById('newUsername').focus();
             }, 300);
@@ -433,6 +431,7 @@
         function closeAddUserModal() {
             const modal = document.getElementById('addUserModal');
             modal.classList.remove('show');
+            modal.style.display = "none";
             document.getElementById('addUserForm').reset();
         }
 
@@ -442,10 +441,10 @@
         });
 
         // 保存用户按钮
-        document.getElementById('saveUserBtn').addEventListener('click', function() {
+        document.getElementById('saveUserBtn').addEventListener('click', async function() {
             const username = document.getElementById('newUsername').value;
-            const nickname = document.getElementById('newNickname').value;
             const password = document.getElementById('newPassword').value;
+            const isAdmin = document.getElementById('isAdmin').value === "on" ? true : false;
 
             if (!username || !password) {
                 showNotification(i18n.t('users.notifications.requiredFields'), 'error');
@@ -456,21 +455,38 @@
             this.innerHTML = `<i class="fas fa-circle-notch fa-spin me-2"></i> <span>${i18n.t('users.modal.saving')}</span>`;
             this.disabled = true;
 
-            // 模拟添加延迟
-            setTimeout(() => {
-                // 关闭模态框
-                closeAddUserModal();
 
-                // 恢复按钮状态
-                this.innerHTML = i18n.t('users.modal.save');
-                this.disabled = false;
+            const response = await fetch("/adminapi/RegisterAccount", {
+                method: "POST",
+                body: JSON.stringify({
+                Email: username,
+                Password: password,
+                IsAdmin: isAdmin
+                }),
+                headers: {
+                "Content-type": "application/json; charset=UTF-8"
+                }
+            });
 
-                // 清空表单
-                document.getElementById('addUserForm').reset();
+            this.disabled = false;
+            this.innerHTML = i18n.t('users.modal.save');
 
-                // 显示成功通知
-                showNotification(i18n.t('users.notifications.userAdded'), 'success');
-            }, 1000);
+            if (!response.ok)
+            {
+                alert("Server error: " + response.status);
+                return;
+            }
+
+            const result = await response.json();
+            if (!result.ok)
+            {
+                alert("Error: " + result.error);
+                return;
+            }
+
+            closeAddUserModal();
+            document.getElementById('addUserForm').reset();
+            showNotification(i18n.t('users.notifications.userAdded'), 'success');
         });
 
         // 分页按钮事件

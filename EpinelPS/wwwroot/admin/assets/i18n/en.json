@@ -142,8 +142,7 @@
     "modal": {
       "add": "Add New User",
       "close": "Close",
-      "username": "Username",
-      "nickname": "Nickname",
+      "username": "Email",
       "password": "Password",
       "isAdmin": "Admin Privileges",
       "cancel": "Cancel",
@@ -153,10 +152,10 @@
     "modify": {
       "title": "Modify User Info",
       "subtitle": "User Information",
-      "isAdmin": "Admin Privileges: ",
-      "disableGacha": "Disable Gacha System: ",
+      "isAdmin": "Admin Privileges",
+      "disableGacha": "Disable Gacha System",
       "disableGachaHint": "Allows all characters to have equal chances of getting pulled",
-      "isBanned": "Banned:",
+      "isBanned": "Banned",
       "cheats": "Cheat Functions",
       "campaign": "Campaign:",
       "skipStages": "Skip Stages",
