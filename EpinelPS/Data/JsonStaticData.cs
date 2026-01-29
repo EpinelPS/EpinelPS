@@ -5829,6 +5829,7 @@ public partial class EventPirateCafeManagerRecord_Raw
 {
 	public int Id;
 	public int EventId;
+	public MiniGameSystemType MinigameType;
 	public int OpenCondition;
 	public int DailyRewardConditionValue;
 	public int DailyRewardId;
@@ -13936,7 +13937,8 @@ public enum ArcadeGameType : int
 	Mvg = 5,
 	PlaySoda = 6,
 	BubbleMarch = 7,
-	DragonDungeonRun = 8
+	DragonDungeonRun = 8,
+	PirateCafe = 9
 }
 
 public enum EventDungeonOpenCondition : int
@@ -18470,7 +18472,8 @@ public enum FunctionType : int
 	GrayScale = 210,
 	ChangeMaxTargetingCount = 211,
 	InstantSequentialAttackDamageRatio = 212,
-	BarrierImmuneDamage = 213
+	BarrierImmuneDamage = 213,
+	AddTeamAmmo = 214
 }
 
 public enum FunctionStandardType : int

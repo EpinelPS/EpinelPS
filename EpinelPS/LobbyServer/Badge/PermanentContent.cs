@@ -12,7 +12,12 @@ namespace EpinelPS.LobbyServer.Badge
             User user = GetUser();
 
             ResPermanentContentBadgeData response = new();
-
+            response.ChampionArenaBadgeData = new();
+            response.SoloRaidMuseumBadgeData = new();
+            response.ChampionArenaBadgeData.Schedule = new();
+            response.ChampionArenaBadgeData.NextSchedule = new();
+            response.ChampionArenaBadgeData.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
+            response.ChampionArenaBadgeData.CurrentOrLastSeasonStartAt = new();
             // TODO
 
             await WriteDataAsync(response);
