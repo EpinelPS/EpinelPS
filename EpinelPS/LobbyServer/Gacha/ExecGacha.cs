@@ -228,12 +228,122 @@ namespace EpinelPS.LobbyServer.Gacha
 
                 user.AddTrigger(Trigger.GachaCharacter, 0, 0);
             }
-            int TicketType = req.CurrencyType;
-            int currencyType = TicketType == 5100 ? (int)CurrencyType.SilverMileageTicket : (int)CurrencyType.GoldMileageTicket;
-            CurrencyType currencyTypeToAdd = TicketType == 5100 ? CurrencyType.SilverMileageTicket : CurrencyType.GoldMileageTicket;
-			response.Reward.Currency.Add(new NetCurrencyData() { Type = currencyType, Value = numberOfPulls });
-            response.Reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.DissolutionPoint, Value = totalBodyLabels });
-            user.AddCurrency(currencyTypeToAdd, numberOfPulls);
+
+            CurrencyType ticketType = (CurrencyType)req.CurrencyType;
+
+            // ==========================
+            // CAPABILITIES (single source of truth)
+            // ==========================
+            bool canUsePremiumTicket   = ticketType == CurrencyType.CharPremiumTicket;
+            bool canUseCustomizeTicket = ticketType == CurrencyType.CharCustomizeTicket;
+            bool canUseFreeCash        =
+                ticketType == CurrencyType.CharPremiumTicket ||
+                ticketType == CurrencyType.CharCustomizeTicket ||
+                ticketType == CurrencyType.FreeCash;
+
+            // ==========================
+            // STATE
+            // ==========================
+            long pullsLeft = numberOfPulls;
+
+            long usePremiumTickets = 0;
+            long useCharCustomizeTickets = 0;
+            long useFreeCash = 0;
+            long useChargeCash = 0;
+            long useFriendshipPoint = 0;
+
+            long userPremiumTickets = user.GetCurrencyVal(CurrencyType.CharPremiumTicket);
+            long userCharCustomizeTickets = user.GetCurrencyVal(CurrencyType.CharCustomizeTicket);
+            long userFreeCash = user.GetCurrencyVal(CurrencyType.FreeCash);
+
+            // ==========================
+            // EXCLUSIVE CURRENCIES
+            // ==========================
+            switch (ticketType)
+            {
+                case CurrencyType.ChargeCash:
+                    useChargeCash = pullsLeft * 200; // Note: ChargeCash discount pricing not implemented yet (UI currently shows 200).
+                    pullsLeft = 0;
+                    break;
+
+                case CurrencyType.FriendshipPoint:
+                    useFriendshipPoint = pullsLeft * 10;
+                    pullsLeft = 0;
+                    break;
+            }
+
+            // ==========================
+            // MIXED PAYMENT PIPELINE
+            // ==========================
+            if (canUsePremiumTicket)
+            {
+                usePremiumTickets = Math.Min(userPremiumTickets, pullsLeft);
+                pullsLeft -= usePremiumTickets;
+            }
+
+            if (canUseCustomizeTicket)
+            {
+                useCharCustomizeTickets = Math.Min(userCharCustomizeTickets, pullsLeft);
+                pullsLeft -= useCharCustomizeTickets;
+            }
+
+            if (canUseFreeCash)
+            {
+                long maxFreePulls = userFreeCash / 300;
+                long freePullsUsed = Math.Min(maxFreePulls, pullsLeft);
+
+                long costPerPull = 300; // Note: Free Cash / Charge Cash gacha cost discount not yet implemented
+
+                if (numberOfPulls == 1)
+                    costPerPull = 150; // Note: discount for single pull not yet implemented (UI currently shows 150).
+
+                useFreeCash = freePullsUsed * costPerPull;
+                pullsLeft -= freePullsUsed;
+
+                if (pullsLeft > 0)
+                {
+                    useChargeCash = pullsLeft * costPerPull;
+                    pullsLeft = 0;
+                }
+            }
+
+            // ==========================
+            // APPLY CURRENCY CHANGES
+            // ==========================
+            void ApplyCurrency(CurrencyType type, long delta)
+            {
+                if (delta == 0) return;
+
+                if (delta < 0)
+                    user.SubtractCurrency(type, -delta);
+                else
+                    user.AddCurrency(type, delta);
+
+                response.Currencies.Add(new NetUserCurrencyData
+                {
+                    Type = (int)type,
+                    Value = user.GetCurrencyVal(type)
+                });
+            }
+
+            ApplyCurrency(CurrencyType.CharPremiumTicket, -usePremiumTickets);
+            ApplyCurrency(CurrencyType.CharCustomizeTicket, -useCharCustomizeTickets);
+            ApplyCurrency(CurrencyType.FreeCash, -useFreeCash);
+            ApplyCurrency(CurrencyType.ChargeCash, -useChargeCash);
+            ApplyCurrency(CurrencyType.FriendshipPoint, -useFriendshipPoint);
+            ApplyCurrency(CurrencyType.DissolutionPoint, totalBodyLabels);
+
+            // ==========================
+            // MILEAGE REWARDS
+            // ==========================
+            if (ticketType == CurrencyType.CharPremiumTicket ||
+                ticketType == CurrencyType.CharCustomizeTicket ||
+                ticketType == CurrencyType.FreeCash ||
+                ticketType == CurrencyType.FriendshipPoint)
+                ApplyCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
+
+            if (ticketType == CurrencyType.ChargeCash)
+                ApplyCurrency(CurrencyType.GoldMileageTicket, numberOfPulls);
 
             user.GachaTutorialPlayCount++;
 
