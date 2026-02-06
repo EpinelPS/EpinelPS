@@ -245,6 +245,7 @@ namespace EpinelPS.LobbyServer.Gacha
             // STATE
             // ==========================
             long pullsLeft = numberOfPulls;
+            bool discount = req.IsDiscount;
 
             long usePremiumTickets = 0;
             long useCharCustomizeTickets = 0;
@@ -262,7 +263,8 @@ namespace EpinelPS.LobbyServer.Gacha
             switch (ticketType)
             {
                 case CurrencyType.ChargeCash:
-                    useChargeCash = pullsLeft * 200; // Note: ChargeCash discount pricing not implemented yet (UI currently shows 200).
+
+                    useChargeCash = pullsLeft * (discount ? 200:300);
                     pullsLeft = 0;
                     break;
 
@@ -292,10 +294,7 @@ namespace EpinelPS.LobbyServer.Gacha
                 long maxFreePulls = userFreeCash / 300;
                 long freePullsUsed = Math.Min(maxFreePulls, pullsLeft);
 
-                long costPerPull = 300; // Note: Free Cash / Charge Cash gacha cost discount not yet implemented
-
-                if (numberOfPulls == 1)
-                    costPerPull = 150; // Note: discount for single pull not yet implemented (UI currently shows 150).
+                long costPerPull = discount ? 150:300;
 
                 useFreeCash = freePullsUsed * costPerPull;
                 pullsLeft -= freePullsUsed;
