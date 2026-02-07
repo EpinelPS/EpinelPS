@@ -291,19 +291,13 @@ namespace EpinelPS.LobbyServer.Gacha
 
             if (canUseFreeCash)
             {
-                long maxFreePulls = userFreeCash / 300;
-                long freePullsUsed = Math.Min(maxFreePulls, pullsLeft);
+                long costPerPull = discount ? 150 : 300;
+                long totalCostNeeded = pullsLeft * costPerPull;
+                
+                useFreeCash = Math.Min(userFreeCash, totalCostNeeded);
+                useChargeCash = totalCostNeeded - useFreeCash;
 
-                long costPerPull = discount ? 150:300;
-
-                useFreeCash = freePullsUsed * costPerPull;
-                pullsLeft -= freePullsUsed;
-
-                if (pullsLeft > 0)
-                {
-                    useChargeCash = pullsLeft * costPerPull;
-                    pullsLeft = 0;
-                }
+                pullsLeft = 0;
             }
 
             // ==========================
