@@ -625,8 +625,8 @@ namespace EpinelPS
 
             HttpClient cl = new();
 
-            // TODO: the server returns different boundary each time, looks like a GUID
-            List<byte> response = [.. Encoding.UTF8.GetBytes("--f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\r\n")];
+            var id = Guid.NewGuid();
+            List<byte> response = [.. Encoding.UTF8.GetBytes($"--{id}\r\n")];
 
             int i = 0;
             foreach (HttpContent? item in multipart.Contents)
@@ -656,7 +656,8 @@ namespace EpinelPS
                     else
                     {
                         List<byte> ResponseWithBytes =
-    [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
+                        [
+                            .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
                             //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
                             .. Encoding.UTF8.GetBytes($"\r\n"),
@@ -667,7 +668,8 @@ namespace EpinelPS
                 catch (Exception ex)
                 {
                     List<byte> ResponseWithBytes =
-   [                   .. Encoding.UTF8.GetBytes("HTTP/1.1 500 Internal Server Error\r\n"),
+                        [
+                            .. Encoding.UTF8.GetBytes("HTTP/1.1 500 Internal Server Error\r\n"),
                             //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
                             .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
                             .. Encoding.UTF8.GetBytes($"\r\n"),
@@ -680,14 +682,14 @@ namespace EpinelPS
                 // add boundary, also include http newline if there is binary content
 
                 if (i == multipart.Contents.Count)
-                    response.AddRange(Encoding.UTF8.GetBytes("\r\n--f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a--\r\n"));
+                    response.AddRange(Encoding.UTF8.GetBytes($"\r\n--{id}--\r\n"));
                 else
-                    response.AddRange(Encoding.UTF8.GetBytes("\r\n--f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\r\n"));
+                    response.AddRange(Encoding.UTF8.GetBytes($"\r\n--{id}\r\n"));
 
             }
 
             byte[] responseBytes = [.. response];
-            ctx.Response.ContentType = "multipart/mixed; boundary=\"f5d5cf4d-5627-422f-b3c6-532f1a0cbc0a\"";
+            ctx.Response.ContentType = $"multipart/mixed; boundary=\"{id}\"";
             ctx.Response.Body.Write(responseBytes);
         }
         public static string GetCachePathForPath(string path)

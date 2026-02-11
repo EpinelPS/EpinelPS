@@ -4774,6 +4774,116 @@ public partial class EventInAppShopRecord
 }
 
 [MemoryPackable]
+public partial class EventLycorisMiniGame3StarRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public Lycoris3StarConditionType ConditionType;
+	public int ConditionValue;
+	public string? ConditionDesc;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameDevelopRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int DevelopLevel;
+	public LycorisSkillGroupType Group;
+	public int UseCore;
+	public int UseMoney;
+	public string? Res;
+	public string? Name;
+	public string? Desc;
+	public LycorisEnhancementType Enhancementtype;
+	public int Enhancementvalue;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameDifficultyRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int Difficulty;
+	public int PerfectPeriod;
+	public int GreatPeriod;
+	public int GoodPeriod;
+	public int BadPeriod;
+	public int ComboCoefficient;
+	public float ScoreCoefficient;
+	public int PerfectScore;
+	public int GreatScore;
+	public int GoodScore;
+	public int MissScore;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameEntryRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? Res;
+	public string? Name;
+	public string? Desc;
+	public LycorisEntryType EntryType;
+	public int EntryValue;
+	public int Addition;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameHPConstRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int Inithp;
+	public int Misshp;
+	public int Combocount;
+	public int Recoveryrate;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int DailyRewardId;
+	public string? GameGuideKey;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameMissionRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public LycorisMissionType MissionType;
+	public int Difficulty;
+	public List<int> Entry;
+	public string? Name;
+	public string? Res;
+	public int FirstClearReward;
+	public int SecondClearReward;
+	public List<int> _3star;
+	public DateTime StageOpenDate;
+	public int StageOpenClearedMission;
+	public bool EmptyMiss;
+	public string? GuideKey;
+}
+
+[MemoryPackable]
+public partial class EventLycorisMiniGameTaskRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? Name;
+	public string? Desc;
+	public string? Res;
+	public LycorisTriggerType TriggerType;
+	public int TriggerParamOne;
+	public int TriggerParamTwo;
+	public int RewardId;
+}
+
+[MemoryPackable]
 public partial class EventMVGBalloonRecord_Raw
 {
 	public int Id;
@@ -5795,6 +5905,8 @@ public partial class EventPassManagerRecord
 	public bool UsePlaceholder;
 	public string? PrefabId;
 	public bool IsDisplayLobby;
+	public bool OnInfo;
+	public string? HelpDescription;
 }
 
 [MemoryPackable]
@@ -7821,13 +7933,6 @@ public partial class EventTowerDefenseWavePathRecord
 }
 
 [MemoryPackable]
-public partial class EventYXMiniGameProfileRecord_Raw
-{
-	public EventSystemType EventSystemType;
-	public string? ProfleAddressable;
-}
-
-[MemoryPackable]
 public partial class ExternalType
 {
 	public List<string?> Src;
@@ -9660,6 +9765,18 @@ public partial class LoginEventResourceRecord
 }
 
 [MemoryPackable]
+public partial class LostSectorNPCRecord_Raw
+{
+	public int Id;
+	public string? NpcName;
+	public int ResourceId;
+	public bool IsUseBalloonTalk;
+	public string? BalloonAlwaysId;
+	public BalloonPlayType BalloonAlwaysPlayType;
+	public int BalloonAlwaysCycle;
+}
+
+[MemoryPackable]
 public partial class LostSectorRecord
 {
 	public int Id;
@@ -9954,6 +10071,7 @@ public partial class MonsterModelRecord
 	public int ResourceId;
 	public string? MonPrefab;
 	public MonsterGradeType Grade;
+	public MonsterGenerationType MonsterGeneration;
 	public MonsterSizeType Size;
 	public MonsterSizeType DissolveType;
 	public AttributeType Attribute;
@@ -10300,6 +10418,7 @@ public partial class NarrativeSignRecord
 	public string? SignIcon;
 	public BalloonType BalloonType;
 	public int BalloonPrintTime;
+	public List<QuizOption_Raw> QuizOption;
 }
 
 [MemoryPackable]
@@ -10940,6 +11059,12 @@ public partial class QuickTimeEventRecord
 	public int TimeLimit;
 	public int FirstColAnimTime;
 	public int ElementId;
+}
+
+[MemoryPackable]
+public partial class QuizOption_Raw
+{
+	public string? QuizOption;
 }
 
 [MemoryPackable]
@@ -13803,6 +13928,13 @@ public partial class WordRecord
 }
 
 [MemoryPackable]
+public partial class YXMiniGameRecord_Raw
+{
+	public string? ProfileKey;
+	public EventSystemType EventSystemType;
+}
+
+[MemoryPackable]
 public partial class attractive_counsel_dialog_record_group
 {
 	public string? GroupId;
@@ -14114,7 +14246,8 @@ public enum EventSystemType : int
 	RebuildEdenMiniGame = 52,
 	CE007MiniGame = 53,
 	AZXAppleMiniGame = 54,
-	TicketGachaEvent = 55
+	TicketGachaEvent = 55,
+	CE008LycorisMiniGame = 57
 }
 
 public enum Category : int
@@ -14699,7 +14832,8 @@ public enum Trigger : int
 	EventRopeRunningRewardCheck = 158,
 	EventMiniGameCE007RewardCheck = 159,
 	EventREBUILDEDENPlayCheck = 160,
-	EventAZXServiceTimeRewardCheck = 161
+	EventAZXServiceTimeRewardCheck = 161,
+	EventMiniGameCE008RewardCheck = 162
 }
 
 public enum ChapterMod : int
@@ -14923,7 +15057,8 @@ public enum Squad : int
 	CE00602 = 64,
 	CE00603 = 65,
 	OverTheHorizon = 66,
-	CE007 = 67
+	CE007 = 67,
+	CE008 = 68
 }
 
 public enum WeaponType : int
@@ -16486,6 +16621,54 @@ public enum EventGachaBoardMissionMissionCondition : int
 	CharacterCollectionItemLevel = 5,
 	CharacterEquipCollection = 6,
 	CharacterEquipItemOverload = 7
+}
+
+public enum Lycoris3StarConditionType : int
+{
+	Complete = 0,
+	Accuracy = 1,
+	ComboCount = 2,
+	Score = 3
+}
+
+public enum LycorisSkillGroupType : int
+{
+	SkillOne = 0,
+	SkillTwo = 1,
+	SkillThree = 2
+}
+
+public enum LycorisEnhancementType : int
+{
+	HP = 0,
+	Score = 1,
+	Easy = 2
+}
+
+public enum LycorisEntryType : int
+{
+	None = 0,
+	HardRock = 1,
+	DoubleTime = 2,
+	Hidden = 3,
+	Flashlight = 4,
+	SuddenDeath = 5,
+	Perfect = 6
+}
+
+public enum LycorisMissionType : int
+{
+	Normal = 0,
+	Difficult = 1
+}
+
+public enum LycorisTriggerType : int
+{
+	None = 0,
+	StarType = 1,
+	MaxSumSkillLevelType = 2,
+	PlayStageType = 3,
+	CountClearTask = 4
 }
 
 public enum EventMVGBalloonTypeData : int
@@ -18151,7 +18334,9 @@ public enum FieldInteractionActionActionType : int
 	None = 0,
 	Auto = 1,
 	Manual = 2,
-	Stage = 3
+	Stage = 3,
+	FirstAutoAfterManual = 4,
+	AutoAfterManual = 5
 }
 
 public enum FieldItemType : int
@@ -18589,7 +18774,8 @@ public enum TimingTriggerType : int
 	OnKeepFullChargeShot = 88,
 	OnDeadComplete = 89,
 	OnFullChargeCoreHitNum = 90,
-	OnBrokenBarrier = 91
+	OnBrokenBarrier = 91,
+	OnProjectileBrokenNum = 92
 }
 
 public enum StatusTriggerType : int
@@ -19328,6 +19514,13 @@ public enum MonsterGradeType : int
 	Boss = 5
 }
 
+public enum MonsterGenerationType : int
+{
+	None = 0,
+	Normal = 1,
+	DarkMatter = 2
+}
+
 public enum MonsterSizeType : int
 {
 	None = 0,
@@ -19592,7 +19785,8 @@ public enum FieldNarrativeSignType : int
 {
 	None = 0,
 	Popup = 1,
-	Balloon = 2
+	Balloon = 2,
+	Quiz = 3
 }
 
 public enum ScenarioPlayType : int

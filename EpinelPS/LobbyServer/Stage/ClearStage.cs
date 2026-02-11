@@ -63,7 +63,6 @@ namespace EpinelPS.LobbyServer.Stage
                 response.StageClearReward = RewardUtils.RegisterRewardsForUser(user, rewardData);
             else
                 Console.WriteLine("rewardId is null for stage " + StageId);
-            response.Reward = response.StageClearReward;
 
             response.ScenarioReward = new NetRewardData() { PassPoint = new() };
 
