@@ -15,7 +15,7 @@ namespace EpinelPS
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace EpinelPS
                 Console.WriteLine("This software is licensed under the AGPL-3.0 License");
                 Console.WriteLine("Targeting game version " + GameConfig.Root.TargetVersion);
 
-                GameData.Instance.GetAllCostumes(); // force static data to be loaded
+                await GameData.CreateAsync();
 
                 Console.WriteLine("Initializing database");
                 JsonDb.Save();
