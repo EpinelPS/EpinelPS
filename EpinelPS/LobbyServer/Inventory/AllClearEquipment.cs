@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 Csn = req.Csn
             };
 
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 if (item.Csn == req.Csn)
                 {

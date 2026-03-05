@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Inventory
             User user = GetUser();
 
             ResGetInventoryData response = new();
-            foreach (ItemData item in user.Items)
+            foreach (DbItemData item in user.Items)
             {
                  
                 ItemSubType itemSubType = GameData.Instance.GetItemSubType(item.ItemType);

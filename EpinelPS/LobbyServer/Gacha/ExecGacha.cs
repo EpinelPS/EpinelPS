@@ -85,7 +85,7 @@ namespace EpinelPS.LobbyServer.Gacha
                 {
                     CharacterModel character = user.GetCharacter(characterData.Id) ?? throw new Exception("HasCharacter() returned true, however character was null");
 
-                    ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.PieceId);
+                    DbItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.PieceId);
 
                     response.Characters.Add(new NetUserCharacterDefaultData()
                     {
@@ -150,7 +150,7 @@ namespace EpinelPS.LobbyServer.Gacha
                         else
                         {
                             // If the item does not exist, create a new item entry
-                            ItemData newItem = new()
+                            DbItemData newItem = new()
                             {
                                 ItemType = characterData.PieceId,
                                 Csn = 0,

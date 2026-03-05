@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResEquipmentAwakening response = new();
 
-            ItemData? equipmentToAwaken = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+            DbItemData? equipmentToAwaken = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
             if (equipmentToAwaken == null)
             {
                 await WriteDataAsync(response);
@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Inventory
             int materialCost = 1;
             int materialId = 7080001; // Equipment option material
 
-            ItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
+            DbItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
             if (material == null || material.Count < materialCost)
             {
                 await WriteDataAsync(response);

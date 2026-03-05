@@ -33,7 +33,7 @@ namespace EpinelPS.LobbyServer.Character
 
             foreach (CostData? cost in costRecord.Costs.Where(i => i.ItemType != RewardType.None))
             {
-                ItemData item = user.Items.FirstOrDefault(i => i.ItemType == cost.ItemId) ?? throw new NullReferenceException();
+                DbItemData item = user.Items.FirstOrDefault(i => i.ItemType == cost.ItemId) ?? throw new NullReferenceException();
 
                 item.Count -= cost.ItemValue;
 

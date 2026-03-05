@@ -13,7 +13,7 @@ namespace EpinelPS.Utils
         /// <param name="user">The user whose inventory to update</param>
         /// <param name="responseItems">The response items list to update</param>
         /// <returns>True if deduction was successful, false otherwise</returns>
-        public static bool DeductMaterials(ItemData material, int materialCost, User user, IList<NetUserItemData> responseItems)
+        public static bool DeductMaterials(DbItemData material, int materialCost, User user, IList<NetUserItemData> responseItems)
         {
             if (material.Count < materialCost)
                 return false;

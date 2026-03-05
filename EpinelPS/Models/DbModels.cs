@@ -52,7 +52,7 @@ namespace EpinelPS.Models
         public int ExperiencePoint = 0;
     }
 
-    public class ItemData
+    public class DbItemData
     {
         public int ItemType;
         public long Csn;

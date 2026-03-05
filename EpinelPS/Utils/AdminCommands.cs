@@ -189,11 +189,11 @@ namespace EpinelPS.Utils
         {
             foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
             {
-                ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
+                DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
 
                 if (item == null)
                 {
-                    user.Items.Add(new ItemData
+                    user.Items.Add(new DbItemData
                     {
                         Isn = user.GenerateUniqueItemId(),
                         ItemType = tableItem.Id,
@@ -366,11 +366,11 @@ namespace EpinelPS.Utils
 
         public static RunCmdResponse AddItem(User user, int itemId, int amount)
         {
-            ItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
+            DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
 
             if (item == null)
             {
-                user.Items.Add(new ItemData
+                user.Items.Add(new DbItemData
                 {
                     Isn = user.GenerateUniqueItemId(),
                     ItemType = itemId,

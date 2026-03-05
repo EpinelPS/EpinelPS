@@ -387,8 +387,8 @@ namespace EpinelPS.LobbyServer.Event.Shop
                     user.AddCurrency(CurrencyType.DissolutionPoint, addCurrencyNum);
                     currency.Add(CurrencyType.DissolutionPoint, addCurrencyNum);
                 }
-                List<ItemData> items = [];
-                List<ItemData> userItems = [];
+                List<DbItemData> items = [];
+                List<DbItemData> userItems = [];
                 if (addMaterialNum > 0)
                 {
                     netCharacter.PieceCount = addMaterialNum;
@@ -412,7 +412,7 @@ namespace EpinelPS.LobbyServer.Event.Shop
                     for (int i = 0; i < goodsValue * quantity; i++)
                     {
                         var (tid, pos, isn) = (itemId, GetItemPos(equip.ItemSubType), user.GenerateUniqueItemId());
-                        ItemData newItem = new() { ItemType = tid, Count = 1, Position = pos, Isn = isn, Corp = GetEquipCorp(itemType) };
+                        DbItemData newItem = new() { ItemType = tid, Count = 1, Position = pos, Isn = isn, Corp = GetEquipCorp(itemType) };
                         user.Items.Add(newItem);
                         response.Product.Item.Add(NetUtils.ItemDataToNet(newItem));
                         response.Product.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
@@ -433,7 +433,7 @@ namespace EpinelPS.LobbyServer.Event.Shop
             else
             {
                 var (tid, count, isn) = (itemId, goodsValue * quantity, user.GenerateUniqueItemId());
-                ItemData itemData = new() { ItemType = tid, Count = count, Isn = isn };
+                DbItemData itemData = new() { ItemType = tid, Count = count, Isn = isn };
                 user.Items.Add(itemData);
                 response.Product.UserItems.Add(NetUtils.UserItemDataToNet(itemData));
                 bool isAddAutoCharge = AddAutoChargeByTid(ref response, itemId: itemId, value: count, finalValue: count);

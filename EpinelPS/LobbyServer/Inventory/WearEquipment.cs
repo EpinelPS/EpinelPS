@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             // unequip old item
 
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 if (item.Csn == req.Csn && item.Position == pos)
                 {
@@ -25,7 +25,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
             }
 
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 if (item.Isn == req.Isn)
                 {

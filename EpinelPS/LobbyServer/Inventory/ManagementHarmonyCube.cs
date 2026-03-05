@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResManagementHarmonyCube response = new();
 
-            ItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+            DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
             if (harmonyCubeItem == null)
             {
                 throw new BadHttpRequestException("Harmony cube not found", 404);
@@ -67,10 +67,10 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
             }
 
-            List<ItemData> allHarmonyCubes = user.Items.Where(item =>
+            List<DbItemData> allHarmonyCubes = user.Items.Where(item =>
                 GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
 
-            foreach (ItemData harmonyCube in allHarmonyCubes)
+            foreach (DbItemData harmonyCube in allHarmonyCubes)
             {
                 NetUserHarmonyCubeData netHarmonyCube = new()
                 {
@@ -96,7 +96,7 @@ namespace EpinelPS.LobbyServer.Inventory
             await WriteDataAsync(response);
         }
 
-        private void EquipHarmonyCubeToCharacter(User user, ItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
+        private void EquipHarmonyCubeToCharacter(User user, DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
         {
             if (harmonyCubeItem.CsnList.Contains(targetCsn))
             {
@@ -133,7 +133,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
         private void CleanupCharacterFromAllHarmonyCubes(User user, long targetCsn, int position, long excludeIsn)
         {
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 if (!GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType) ||
                     item.Isn == excludeIsn)
@@ -168,7 +168,7 @@ namespace EpinelPS.LobbyServer.Inventory
             }
         }
 
-        private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(ItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
+        private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
         {
             List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
                 .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)

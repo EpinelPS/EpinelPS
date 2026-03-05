@@ -33,7 +33,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
                 throw new BadHttpRequestException($"No material item provided", 400);
             }
 
-            ItemData? userItem = user.Items.FirstOrDefault(x => x.Isn == req.ItemData.Isn);
+            DbItemData? userItem = user.Items.FirstOrDefault(x => x.Isn == req.ItemData.Isn);
             if (userItem == null)
             {
                 throw new BadHttpRequestException($"Material item with ISN {req.ItemData.Isn} not found", 404);

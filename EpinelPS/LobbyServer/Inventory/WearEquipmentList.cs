@@ -20,7 +20,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 int pos = NetUtils.GetItemPos(user, item2);
 
                 // Check if the item being equipped is T10
-                ItemData? itemToCheck = user.Items.FirstOrDefault(x => x.Isn == item2);
+                DbItemData? itemToCheck = user.Items.FirstOrDefault(x => x.Isn == item2);
                 if (itemToCheck != null && IsT10Equipment(itemToCheck.ItemType))
                 {
                     // If trying to equip a T10 item, check if there's already a T10 item in that position
@@ -41,7 +41,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
 
                 // unequip previous items
-                foreach (ItemData item in user.Items.ToArray())
+                foreach (DbItemData item in user.Items.ToArray())
                 {
                     if (item.Position == pos && item.Csn == req.Csn)
                     {
@@ -58,11 +58,11 @@ namespace EpinelPS.LobbyServer.Inventory
                 }
 
                 // Find the item to equip
-                ItemData? targetItem = user.Items.FirstOrDefault(x => x.Isn == item2);
+                DbItemData? targetItem = user.Items.FirstOrDefault(x => x.Isn == item2);
                 if (targetItem != null)
                 {
                     // Handle case where we have multiple copies of the same item
-                    ItemData? equippedItem = null;
+                    DbItemData? equippedItem = null;
                     if (targetItem.Count > 1)
                     {
                         // Reduce count of original item
@@ -70,7 +70,7 @@ namespace EpinelPS.LobbyServer.Inventory
                         response.Items.Add(NetUtils.ToNet(targetItem));
 
                         // Create a new item instance to equip
-                        equippedItem = new ItemData
+                        equippedItem = new DbItemData
                         {
                             ItemType = targetItem.ItemType,
                             Isn = user.GenerateUniqueItemId(),
@@ -102,7 +102,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 bool requestedItemAdded = response.Items.Any(x => x.Isn == requestedIsn);
                 if (!requestedItemAdded)
                 {
-                    ItemData? requestedItem = user.Items.FirstOrDefault(x => x.Isn == requestedIsn);
+                    DbItemData? requestedItem = user.Items.FirstOrDefault(x => x.Isn == requestedIsn);
                     if (requestedItem != null)
                     {
                         response.Items.Add(NetUtils.ToNet(requestedItem));
@@ -121,7 +121,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             // Add all other equipped items for this character to the response
             // This helps the client synchronize the full equipment state
-            foreach (ItemData item in user.Items)
+            foreach (DbItemData item in user.Items)
             {
                 if (item.Csn == req.Csn && item.Csn != 0)
                 {

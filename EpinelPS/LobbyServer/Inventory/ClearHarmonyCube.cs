@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResClearHarmonyCube response = new();
 
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 if (item.Isn == req.Isn)
                 {

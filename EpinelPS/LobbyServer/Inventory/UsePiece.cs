@@ -21,7 +21,7 @@ namespace EpinelPS.LobbyServer.Inventory
             User user = GetUser();
             ResUsePiece response = new();
 
-            ItemData piece = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new InvalidDataException("cannot find piece with isn " + req.Isn);
+            DbItemData piece = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new InvalidDataException("cannot find piece with isn " + req.Isn);
             if (req.Count * 50 > piece.Count) throw new Exception("count mismatch");
 
             piece.Count -= req.Count * 50;
@@ -44,7 +44,7 @@ namespace EpinelPS.LobbyServer.Inventory
             int totalBodyLabels = 0;
             foreach (CharacterRecord? character in selectedCharacters)
             {
-                ItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.PieceId);
+                DbItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.PieceId);
 
                 if (user.GetCharacter(character.Id) is CharacterModel ownedCharacter)
                 {

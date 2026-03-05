@@ -55,7 +55,7 @@ public class User
 
     public ResetableData ResetableData = new();
     public WeeklyResetableData WeeklyResetableData = new();
-    public List<ItemData> Items = [];
+    public List<DbItemData> Items = [];
     public List<CharacterModel> Characters = [];
     public List<EquipmentAwakeningData> EquipmentAwakenings = [];
     public long[] RepresentationTeamDataNew = [];

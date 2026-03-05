@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResLevelUpHarmonyCube response = new();
 
-            ItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+            DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
             if (harmonyCubeItem == null)
             {
                 throw new BadHttpRequestException("Harmony cube not found", 404);
@@ -52,7 +52,7 @@ namespace EpinelPS.LobbyServer.Inventory
             int requiredMaterialId = nextLevelData.MaterialId;
             int requiredGold = nextLevelData.GoldValue;
 
-            ItemData? materialItem = user.Items.FirstOrDefault(x => x.ItemType == requiredMaterialId && x.Count >= requiredMaterialCount);
+            DbItemData? materialItem = user.Items.FirstOrDefault(x => x.ItemType == requiredMaterialId && x.Count >= requiredMaterialCount);
             if (materialItem == null)
             {
                 throw new BadHttpRequestException($"Not enough materials. Required: {requiredMaterialCount} of item {requiredMaterialId}", 400);

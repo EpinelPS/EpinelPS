@@ -53,7 +53,7 @@ namespace EpinelPS.LobbyServer.Inventory
             // Query actual material ID and cost from CostTable.json
             (int materialId, int materialCost)  = GetMaterialInfo(costId);
 
-            ItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
+            DbItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
             if (material == null || material.Count < materialCost)
             {
                 await WriteDataAsync(response);

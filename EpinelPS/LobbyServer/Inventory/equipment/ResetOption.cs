@@ -53,7 +53,7 @@ namespace EpinelPS.LobbyServer.Inventory
             (int materialId, int materialCost) = GetMaterialInfo(costId);
 
             // Check if user has enough materials
-            ItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
+            DbItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
             if (material == null || material.Count < materialCost)
             {
                 Logging.WriteLine($"Insufficient materials for reset operation. Need {materialCost} of item {materialId}, but have {material?.Count ?? 0}", LogType.Warning);

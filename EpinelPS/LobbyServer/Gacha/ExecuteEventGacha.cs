@@ -63,7 +63,7 @@ namespace EpinelPS.LobbyServer.Gacha
 			foreach (CharacterRecord characterData in selectedCharacters)
 			{
                 // Check if the item for this character already exists in user.Items based on ItemType
-                ItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.PieceId);
+                DbItemData? existingItem = user.Items.FirstOrDefault(item => item.ItemType == characterData.PieceId);
 
 				if (existingItem != null)
 				{
@@ -85,7 +85,7 @@ namespace EpinelPS.LobbyServer.Gacha
 				else
 				{
                     // If the item does not exist, create a new item entry
-                    ItemData newItem = new()
+                    DbItemData newItem = new()
 					{
 						ItemType = characterData.PieceId,
 						Csn = 0,

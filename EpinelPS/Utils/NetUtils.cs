@@ -29,7 +29,7 @@ namespace EpinelPS.Utils
 
             return (null, null);
         }
-        public static NetUserItemData ToNet(ItemData item)
+        public static NetUserItemData ToNet(DbItemData item)
         {
             return new()
             {
@@ -44,7 +44,7 @@ namespace EpinelPS.Utils
             };
         }
 
-        internal static NetUserItemData UserItemDataToNet(ItemData item)
+        internal static NetUserItemData UserItemDataToNet(DbItemData item)
         {
             return new NetUserItemData()
             {
@@ -59,7 +59,7 @@ namespace EpinelPS.Utils
             };
         }
 
-        internal static NetItemData ItemDataToNet(ItemData item)
+        internal static NetItemData ItemDataToNet(DbItemData item)
         {
             return new NetItemData()
             {
@@ -76,7 +76,7 @@ namespace EpinelPS.Utils
             List<NetUserItemData> ret = [];
             Dictionary<int, NetUserItemData> itemDictionary = [];
 
-            foreach (ItemData? item in user.Items.ToList())
+            foreach (DbItemData? item in user.Items.ToList())
             {
                 if (item.Csn == 0)
                 {
@@ -100,7 +100,7 @@ namespace EpinelPS.Utils
 
         public static int GetItemPos(User user, long isn)
         {
-            foreach (ItemData item in user.Items)
+            foreach (DbItemData item in user.Items)
             {
                 if (item.Isn == isn)
                 {

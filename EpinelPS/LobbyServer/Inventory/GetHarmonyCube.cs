@@ -14,10 +14,10 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResGetHarmonyCube response = new();
 
-            List<ItemData> harmonyCubes = user.Items.Where(item => 
+            List<DbItemData> harmonyCubes = user.Items.Where(item => 
                 GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
 
-            foreach (ItemData harmonyCube in harmonyCubes)
+            foreach (DbItemData harmonyCube in harmonyCubes)
             {
                 if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(harmonyCube.ItemType, out ItemHarmonyCubeRecord? harmonyCubeData))
                 {

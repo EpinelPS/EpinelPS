@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Inventory
             User user = GetUser();
             ResWearHarmonyCube response = new();
 
-            ItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+            DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
             if (harmonyCubeItem == null)
             {
                 throw new BadHttpRequestException("Harmony cube not found", 404);
@@ -50,7 +50,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             }
 
-            List<ItemData> modifiedItems = new();
+            List<DbItemData> modifiedItems = new();
             if (targetCsn > 0)
             {
                 modifiedItems = EquipHarmonyCubeToCharacter(user, harmonyCubeItem, harmonyCubeData, targetCsn, maxSlots);
@@ -66,7 +66,7 @@ namespace EpinelPS.LobbyServer.Inventory
                 throw new BadHttpRequestException("InvalId character CSN", 400);
             }
 
-            foreach (ItemData modifiedItem in modifiedItems)
+            foreach (DbItemData modifiedItem in modifiedItems)
             {
                 NetUserHarmonyCubeData netModifiedHarmonyCube = new()
                 {
@@ -111,14 +111,14 @@ namespace EpinelPS.LobbyServer.Inventory
             await WriteDataAsync(response);
         }
 
-        private List<ItemData> EquipHarmonyCubeToCharacter(User user, ItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
+        private List<DbItemData> EquipHarmonyCubeToCharacter(User user, DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
         {
 
             // Check if already equipped to this character
             if (harmonyCubeItem.CsnList.Contains(targetCsn))
             {
                 Console.WriteLine($"Harmony cube {harmonyCubeItem.ItemType} already equipped to character {targetCsn}");
-                return new List<ItemData>(); // Already equipped, no need to do anything
+                return new List<DbItemData>(); // Already equipped, no need to do anything
             }
 
             // Check slot limit
@@ -142,7 +142,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             // CRITICAL: Remove this character from ALL harmony cubes at the same position
             // This fixes any existing data inconsistency where a character might be in multiple CsnLists
-            List<ItemData> modifiedItems = CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
+            List<DbItemData> modifiedItems = CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
 
             // Add to CsnList
             harmonyCubeItem.CsnList.Add(targetCsn);
@@ -159,13 +159,13 @@ namespace EpinelPS.LobbyServer.Inventory
             return modifiedItems;
         }
 
-        private List<ItemData> CleanupCharacterFromAllHarmonyCubes(User user, long targetCsn, int position, long excludeIsn)
+        private List<DbItemData> CleanupCharacterFromAllHarmonyCubes(User user, long targetCsn, int position, long excludeIsn)
         {
             // Remove this character from ALL harmony cubes (all positions)
             // This ensures one character can only have one harmony cube equipped at any time
-            List<ItemData> modifiedItems = new();
+            List<DbItemData> modifiedItems = new();
 
-            foreach (ItemData item in user.Items.ToArray())
+            foreach (DbItemData item in user.Items.ToArray())
             {
                 // Skip if it's not a harmony cube or it's the item we're about to equip
                 if (!GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType) ||
@@ -214,7 +214,7 @@ namespace EpinelPS.LobbyServer.Inventory
             return modifiedItems;
         }
 
-        private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(ItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
+        private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
         {
             // Get level data for this harmony cube
             List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values

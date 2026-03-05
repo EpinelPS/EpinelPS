@@ -43,7 +43,7 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
 
             if (statRecord.RecycleType == RecycleType.Personal) // main research
             {
-                ItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.ItemId); // item_Id equals level-up item's tId.
+                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.ItemId); // item_Id equals level-up item's tId.
                 if (usedItem is null || usedItem.Count < levelRecord.ItemValue)
                     return;
 
@@ -61,7 +61,7 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
             else if (statRecord.RecycleType == RecycleType.Class || statRecord.RecycleType == RecycleType.Corporation) // class research or corporation research
             {
                 NetItemData netItem = req.Items.Single();
-                ItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == netItem.Tid);
+                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == netItem.Tid);
                 if (usedItem is null)
                     return;
 

@@ -55,7 +55,7 @@ namespace EpinelPS.LobbyServer.Character
                     };
 
                     // remove spare body item
-                    ItemData bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
+                    DbItemData bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
                     user.RemoveItemBySerialNumber(req.Isn, req.Count);
                     response.Items.Add(NetUtils.ToNet(bodyItem));
 

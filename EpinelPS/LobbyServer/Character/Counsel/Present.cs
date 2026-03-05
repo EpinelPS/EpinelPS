@@ -52,7 +52,7 @@ namespace EpinelPS.LobbyServer.Character.Counsel
 
                     totalExpGained += expGained;
 
-                    ItemData? userItem = user.Items.FirstOrDefault(x => x.ItemType == item.Tid);
+                    DbItemData? userItem = user.Items.FirstOrDefault(x => x.ItemType == item.Tid);
                     if (userItem != null)
                     {
                         userItem.Count -= (int)item.Count;

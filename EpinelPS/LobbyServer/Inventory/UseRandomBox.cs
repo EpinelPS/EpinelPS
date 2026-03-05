@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             ResUseRandomBox response = new();
 
-            ItemData box = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find box with isn " + req.Isn);
+            DbItemData box = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find box with isn " + req.Isn);
             if (req.Count > box.Count) throw new Exception("count mismatch");
 
             box.Count -= req.Count;

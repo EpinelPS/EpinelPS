@@ -147,7 +147,7 @@ namespace EpinelPS.Utils
                 }
 
                 // Check if user already has said item. If it is level 1, increase item count.
-                ItemData? existingItem = user.Items.FirstOrDefault(x => x.ItemType == rewardId && x.Level == 1 && x.Corp == corpId);
+                DbItemData? existingItem = user.Items.FirstOrDefault(x => x.ItemType == rewardId && x.Level == 1 && x.Corp == corpId);
 
                 if (existingItem != null)
                 {
@@ -181,7 +181,7 @@ namespace EpinelPS.Utils
                     {
                         level = 1;
                     }
-                    var newItem = new ItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = rewardCount, Corp = corpId };
+                    var newItem = new DbItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = rewardCount, Corp = corpId };
                     user.Items.Add(newItem);
 
                     ret.Item.Add(new NetItemData()
@@ -271,7 +271,7 @@ namespace EpinelPS.Utils
                     };
                     ret.Item.Add(itm);
 
-                    user.Items.Add(new ItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
+                    user.Items.Add(new DbItemData() { Count = rewardCount, Isn = itm.Isn, ItemType = itm.Tid });
                 }
             }
             else if (rewardType == RewardType.FavoriteItem)

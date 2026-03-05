@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Inventory
             User user = GetUser();
             ResUseTimeReward response = new();
 
-            ItemData timeReward = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find time reward with isn " + req.Isn);
+            DbItemData timeReward = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find time reward with isn " + req.Isn);
             if (req.Count > timeReward.Count) throw new Exception("count mismatch");
 
             timeReward.Count -= req.Count;

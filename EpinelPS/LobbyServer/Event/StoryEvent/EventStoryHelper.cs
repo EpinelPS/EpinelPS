@@ -27,7 +27,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
             }
 
             // Get item ticket information and free ticket max
-            (ItemData itemTicket, int freeTicketMax) = GetItemTicket(user, eventId);
+            (DbItemData itemTicket, int freeTicketMax) = GetItemTicket(user, eventId);
 
             // Get remain item ticket
             int remainItemTicket = itemTicket?.Count ?? 0;
@@ -70,7 +70,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
             }
 
             // Get item ticket information
-            (ItemData itemTicket, _) = GetItemTicket(user, eventId);
+            (DbItemData itemTicket, _) = GetItemTicket(user, eventId);
             // Get remain item ticket 
             int remainItemTicket = itemTicket?.Count ?? 0;
 
@@ -109,7 +109,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
         /// <param name="user"></param>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        private static (ItemData itemTicket, int freeTicketMax) GetItemTicket(User user, int eventId)
+        private static (DbItemData itemTicket, int freeTicketMax) GetItemTicket(User user, int eventId)
         {
             int freeTicketMax = 5; // Default free ticket max is 5
             // Get event story data

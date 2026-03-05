@@ -32,7 +32,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
             (int materialId, int materialCost) = GetMaterialInfoForAwakening(awakening.Option);
 
-            ItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
+            DbItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
             if (material == null || material.Count < materialCost)
             {
                 await WriteDataAsync(response);
