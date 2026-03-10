@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.PartyMatch
         protected override async Task HandleAsync()
         {
             ReqListInvitation req = await ReadData<ReqListInvitation>();
-            User user = GetUser();
+            User user = User;
 
             ResListInvitation response = new();
             // TODO

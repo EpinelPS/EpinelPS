@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Mission
         protected override async Task HandleAsync()
         {
             ReqObtainAchievementReward req = await ReadData<ReqObtainAchievementReward>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainAchievementReward response = new();
 

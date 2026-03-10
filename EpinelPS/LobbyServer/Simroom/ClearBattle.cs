@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             // {"location":{"chapter":3,"stage":3,"order":2},"event":111011143,"teamNumber":1,"antiCheatAdditionalInfo":{"clientLocalTime":"638993283799771900"}}
             ReqClearSimRoomBattle req = await ReadData<ReqClearSimRoomBattle>();
-            User user = GetUser();
+            User user = User;
 
             ResClearSimRoomBattle response = new()
             {

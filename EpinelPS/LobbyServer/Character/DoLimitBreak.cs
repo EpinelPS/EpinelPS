@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Character
             // Read the incoming request that contains the current CSN and ISN
             ReqCharacterUpgrade req = await ReadData<ReqCharacterUpgrade>(); // Contains csn and isn (read-only)
             ResCharacterUpgrade response = new();
-            User user = GetUser();
+            User user = User;
 
             // Get all character data from the game's character table
             List<CharacterRecord> fullchardata = [.. GameData.Instance.CharacterTable.Values];

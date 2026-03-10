@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             //  int AzxId
             //  RepeatedField<int> AchievementMissionIdList
             ReqAcquireMiniGameAzxAchievementMissionReward req = await ReadData<ReqAcquireMiniGameAzxAchievementMissionReward>();
-            User user = GetUser();
+            User user = User;
 
             // ResAcquireMiniGameAzxAchievementMissionReward Fields
             //  NetRewardData Reward

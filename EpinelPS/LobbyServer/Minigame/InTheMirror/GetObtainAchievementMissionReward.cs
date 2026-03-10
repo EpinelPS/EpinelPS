@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
         {
             var request = await ReadData<ReqObtainArcadeMvgAchievementMissionReward>();
 
-            var user = GetUser();
+            var user = User;
 
             List<NetRewardData> rewards = [];
 

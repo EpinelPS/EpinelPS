@@ -9,7 +9,7 @@ public class ClosePractice : LobbyMsgHandler
     {
         // int RaidId, int RaidLevel
         var req = await ReadData<ReqCloseSoloRaidPractice>();
-        var user = GetUser();
+        var user = User;
         ResCloseSoloRaidPractice response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success

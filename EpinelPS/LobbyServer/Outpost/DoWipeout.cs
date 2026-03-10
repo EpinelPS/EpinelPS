@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Outpost
         {
             ReqObtainFastBattleReward req = await ReadData<ReqObtainFastBattleReward>();
             ResObtainFastBattleReward response = new();
-            User user = GetUser();
+            User user = User;
 
             if (user.ResetableData.WipeoutCount >= 12)
             {

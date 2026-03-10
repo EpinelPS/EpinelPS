@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Stage
             ReqCheckStageClear req = await ReadData<ReqCheckStageClear>();
 
             ResCheckStageClear response = new();
-            User user = GetUser();
+            User user = User;
 
             foreach (KeyValuePair<string, FieldInfoNew> fields in user.FieldInfoNew)
             {

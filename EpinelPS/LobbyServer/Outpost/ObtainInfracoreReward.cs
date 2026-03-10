@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Outpost
             ReqObtainInfraCoreReward req = await ReadData<ReqObtainInfraCoreReward>();
             ResObtainInfraCoreReward response = new();
 
-            User user = GetUser();
+            User user = User;
 
             int currentLevel = user.InfraCoreLvl;
 

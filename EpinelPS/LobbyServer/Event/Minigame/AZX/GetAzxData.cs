@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
         {
             // int AzxId
             ReqGetMiniGameAzxData req = await ReadData<ReqGetMiniGameAzxData>();
-            User user = GetUser();
+            User user = User;
 
             // ResGetMiniGameAzxData Fields
             //  NetMiniGameAzxDailyMissionData DailyMissionData

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Sidestory
         protected override async Task HandleAsync()
         {
             ReqClearSideStoryStage req = await ReadData<ReqClearSideStoryStage>();
-            User user = GetUser();
+            User user = User;
 
             ResClearSideStoryStage response = new();
 

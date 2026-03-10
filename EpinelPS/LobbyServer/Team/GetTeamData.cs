@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Team
         protected override async Task HandleAsync()
         {
             ReqGetTeamData req = await ReadData<ReqGetTeamData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetTeamData response = new();
 

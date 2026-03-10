@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             ReqQuitSimRoom req = await ReadData<ReqQuitSimRoom>();
-            User user = GetUser();
+            User user = User;
 
             ResQuitSimRoom response = new()
             {

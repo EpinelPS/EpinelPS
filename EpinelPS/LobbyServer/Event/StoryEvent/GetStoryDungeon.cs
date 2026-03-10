@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
         protected override async Task HandleAsync()
         {
             ReqStoryDungeonEventData req = await ReadData<ReqStoryDungeonEventData>();
-            User user = GetUser();
+            User user = User;
 
             // Get user event data, if not exist, create new one
             if (!user.EventInfo.TryGetValue(req.EventId, out EventData? eventData))

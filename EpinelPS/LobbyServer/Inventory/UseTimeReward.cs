@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Inventory
              * Count: int value, how many items to use
             */
             ReqUseTimeReward req = await ReadData<ReqUseTimeReward>();
-            User user = GetUser();
+            User user = User;
             ResUseTimeReward response = new();
 
             DbItemData timeReward = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find time reward with isn " + req.Isn);

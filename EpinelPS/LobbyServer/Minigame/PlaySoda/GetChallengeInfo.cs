@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
         {
             var request = await ReadData<ReqGetArcadePlaySodaChallengeModeInfo>();
 
-            var user = GetUser();
+            var user = User;
 
             ResGetArcadePlaySodaChallengeModeInfo response = new() { WholeUser = LobbyHandler.CreateWholeUserDataFromDbUser(user) };
 

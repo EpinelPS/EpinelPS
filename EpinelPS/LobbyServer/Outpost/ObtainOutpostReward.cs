@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqObtainOutpostBattleReward req = await ReadData<ReqObtainOutpostBattleReward>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainOutpostBattleReward response = new();
 

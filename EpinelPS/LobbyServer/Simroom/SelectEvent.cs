@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             // { "location": { "chapter": 3, "stage": 1, "order": 3 }, "event": 111021115 }
             ReqSelectSimRoomEvent req = await ReadData<ReqSelectSimRoomEvent>();
-            // User user = GetUser();
+            // User user = User;
 
             ResSelectSimRoomEvent response = new()
             {

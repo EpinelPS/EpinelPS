@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Storyline
             ReqGetStorylineBookmarks req = await ReadData<ReqGetStorylineBookmarks>();
 
             ResGetStorylineBookmarks response = new();
-            User user = GetUser();
+            User user = User;
 
             // TODO
 

@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqGetOutpostData req = await ReadData<ReqGetOutpostData>();
-            User user = GetUser();
+            User user = User;
             user.ResetDataIfNeeded();
 
             TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;

@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Sidestory
         protected override async Task HandleAsync()
         {
             ReqClearSideStoryCutForBattle req = await ReadData<ReqClearSideStoryCutForBattle>();
-            User user = GetUser();
+            User user = User;
 
             ResClearSideStoryCutForBattle response = new();
 

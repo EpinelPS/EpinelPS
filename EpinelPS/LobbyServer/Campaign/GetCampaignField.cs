@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Campaign
         protected override async Task HandleAsync()
         {
             ReqGetCampaignFieldData req = await ReadData<ReqGetCampaignFieldData>();
-            User user = GetUser();
+            User user = User;
 
             Console.WriteLine("Map ID: " + req.MapId);
 

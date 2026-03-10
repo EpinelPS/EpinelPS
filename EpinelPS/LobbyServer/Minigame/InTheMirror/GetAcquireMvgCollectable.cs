@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
         {
             var request = await ReadData<ReqAcquireArcadeMvgCollectable>();
 
-            var user = GetUser();
+            var user = User;
 
             user.ArcadeInTheMirrorData.Collectables.Add(request.CollectableId);
 

@@ -8,7 +8,7 @@ public class EnterTutorialMission : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqEnterSurfaceMissionTutorial req = await ReadData<ReqEnterSurfaceMissionTutorial>();
-        User user = GetUser();
+        User user = User;
 
         ResEnterSurfaceMissionTutorial response = new()
         {

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Outpost
             ReqCheckReceiveInfraCoreReward req = await ReadData<ReqCheckReceiveInfraCoreReward>();
             ResCheckReceiveInfraCoreReward response = new();
 
-            User user = GetUser();
+            User user = User;
 
             bool isReceived = false;
             

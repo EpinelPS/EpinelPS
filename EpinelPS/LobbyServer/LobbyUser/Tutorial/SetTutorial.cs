@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.LobbyUser.Tutorial
         protected override async Task HandleAsync()
         {
             ReqSetTutorial req = await ReadData<ReqSetTutorial>();
-            User user = GetUser();
+            User user = User;
 
             if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
             {

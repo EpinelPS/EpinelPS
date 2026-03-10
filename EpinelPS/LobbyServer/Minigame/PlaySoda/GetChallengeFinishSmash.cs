@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
         {
             var request = await ReadData<ReqFinishArcadePlaySodaSmashChallenge>();
 
-            var user = GetUser();
+            var user = User;
 
             var challengeStageId = GameData.Instance.EventPlaySodaChallengeModeTable.First(i => i.Value.GameType == EventPlaySodaGameType.Smash).Key;
 

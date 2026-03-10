@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Subquest
         protected override async Task HandleAsync()
         {
             ReqSetTriggerFromSubQuest req = await ReadData<ReqSetTriggerFromSubQuest>();
-            User user = GetUser();
+            User user = User;
 
             ResSetTriggerFromSubQuest response = new();
 

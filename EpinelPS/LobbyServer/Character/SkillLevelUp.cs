@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqCharacterSkillLevelUp req = await ReadData<ReqCharacterSkillLevelUp>();
-            User user = GetUser();
+            User user = User;
             ResCharacterSkillLevelUp response = new();
 
             CharacterModel character = user.Characters.FirstOrDefault(c => c.Csn == req.Csn) ?? throw new Exception("cannot find character");

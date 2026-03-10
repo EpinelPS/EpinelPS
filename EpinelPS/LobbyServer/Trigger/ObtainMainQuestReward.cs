@@ -16,7 +16,7 @@ namespace EpinelPS.LobbyServer.TriggerController
         protected override async Task HandleAsync()
         {
             ReqObtainMainQuestReward req = await ReadData<ReqObtainMainQuestReward>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainMainQuestReward response = new();
             List<NetRewardData> rewards = [];

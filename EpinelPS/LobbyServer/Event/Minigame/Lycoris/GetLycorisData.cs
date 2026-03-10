@@ -8,7 +8,7 @@ public class GetLycorisData : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqMiniGameLycorisDataInfo req = await ReadData<ReqMiniGameLycorisDataInfo>();
-        User user = GetUser();
+        User user = User;
 
         ResMiniGameLycorisDataInfo response = new()
         {

@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Misc
         protected override async Task HandleAsync()
         {
             ReqRetroactive req = await ReadData<ReqRetroactive>();
-            User user = GetUser();
+            User user = User;
 
             ResRetroactive response = new();
             await WriteDataAsync(response);

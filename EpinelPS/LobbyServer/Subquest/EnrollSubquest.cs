@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Subquest
         protected override async Task HandleAsync()
         {
             ReqEnrollmentSubQuest req = await ReadData<ReqEnrollmentSubQuest>();
-            User user = GetUser();
+            User user = User;
 
             ResEnrollmentSubQuest response = new();
 

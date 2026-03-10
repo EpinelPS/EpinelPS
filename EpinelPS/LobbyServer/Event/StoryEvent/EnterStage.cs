@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
         protected override async Task HandleAsync()
         {
             ReqEnterEventStage req = await ReadData<ReqEnterEventStage>();
-            User user = GetUser();
+            User user = User;
             ResEnterEventStage response = new();
 
             await WriteDataAsync(response);

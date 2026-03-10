@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Badge
         protected override async Task HandleAsync()
         {
             ReqDeleteBadge req = await ReadData<ReqDeleteBadge>();
-            User user = GetUser();
+            User user = User;
 
             ResDeleteBadge response = new();
 

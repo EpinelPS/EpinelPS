@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqGetUserData req = await ReadData<ReqGetUserData>();
             ResGetUserData response = new();
-            User user = GetUser();
+            User user = User;
 
             TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
             long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);

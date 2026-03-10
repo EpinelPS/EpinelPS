@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqClearEquipment req = await ReadData<ReqClearEquipment>();
-            User user = GetUser();
+            User user = User;
 
             ResClearEquipment response = new();
 

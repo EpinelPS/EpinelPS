@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Simroom
             // { "location": { "chapter": 3, "stage": 6, "order": 1 }, "event": 22116, "selectionNumber": 2, "selectionGroupElementId": 221162, "buffToDelete": 2030608 }
             ReqProceedSimRoomBuffFunction req = await ReadData<ReqProceedSimRoomBuffFunction>();
             // ReqProceedSimRoomBuffFunction Field NetSimRoomEventLocationInfo location, int event, int selectionNumber, int selectionGroupElementId, int buffToDelete
-            User user = GetUser();
+            User user = User;
 
             // ReqProceedSimRoomBuffFunction Field SimRoomResult Result, RepeatedField<int> AcquiredBuff, RepeatedField<int> DeletedBuff
             ResProceedSimRoomBuffFunction response = new()

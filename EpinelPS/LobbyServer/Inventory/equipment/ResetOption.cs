@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqAwakeningResetOption req = await ReadData<ReqAwakeningResetOption>();
-            User user = GetUser();
+            User user = User;
 
             ResAwakeningResetOption response = new ResAwakeningResetOption();
 

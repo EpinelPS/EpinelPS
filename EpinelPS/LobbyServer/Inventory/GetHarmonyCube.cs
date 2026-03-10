@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqGetHarmonyCube req = await ReadData<ReqGetHarmonyCube>();
-            User user = GetUser();
+            User user = User;
 
             ResGetHarmonyCube response = new();
 

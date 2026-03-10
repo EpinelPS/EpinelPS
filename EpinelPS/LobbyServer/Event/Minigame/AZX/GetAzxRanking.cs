@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
         {
             // int AzxId
             ReqGetMiniGameAzxRanking req = await ReadData<ReqGetMiniGameAzxRanking>();
-            User user = GetUser();
+            User user = User;
 
             ResGetMiniGameAzxRanking response = new();
             

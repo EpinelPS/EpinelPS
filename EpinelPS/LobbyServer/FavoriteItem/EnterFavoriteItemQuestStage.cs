@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         protected override async Task HandleAsync()
         {
             ReqEnterFavoriteItemQuestStage req = await ReadData<ReqEnterFavoriteItemQuestStage>();
-            User user = GetUser();
+            User user = User;
 
             user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
 

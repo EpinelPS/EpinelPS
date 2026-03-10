@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Event
 
             // types are defined in EventTypes.cs
             ResGetEventList response = new();
-            User user = GetUser();
+            User user = User;
 
             // add events from active lobby banners
             EventHelper.AddEvents(user, ref response);

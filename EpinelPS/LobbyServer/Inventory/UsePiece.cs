@@ -18,7 +18,7 @@ namespace EpinelPS.LobbyServer.Inventory
              * Count: int value, how many time
              */
             ReqUsePiece req = await ReadData<ReqUsePiece>();
-            User user = GetUser();
+            User user = User;
             ResUsePiece response = new();
 
             DbItemData piece = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new InvalidDataException("cannot find piece with isn " + req.Isn);

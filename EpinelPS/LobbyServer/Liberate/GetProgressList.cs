@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Liberate
         protected override async Task HandleAsync()
         {
             ReqGetLiberateProgressList req = await ReadData<ReqGetLiberateProgressList>();
-            User user = GetUser();
+            User user = User;
 
             ResGetLiberateProgressList response = new();
 

@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqEnterLobbyServer req = await ReadData<ReqEnterLobbyServer>();
-            User user = GetUser();
+            User user = User;
 
             TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
             long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100); 

@@ -8,7 +8,7 @@ public class GetLevelPractice : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqGetLevelPracticeSoloRaid>();
-        var user = GetUser();
+        var user = User;
         ResGetLevelPracticeSoloRaid response = new();
         
         try

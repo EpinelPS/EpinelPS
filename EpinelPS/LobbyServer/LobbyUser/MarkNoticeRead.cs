@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqRecordNoticeLog req = await ReadData<ReqRecordNoticeLog>();
             ResRecordNoticeLog r = new();
-            User user = GetUser();
+            User user = User;
 
             // TODO
 

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
         {
             var request = await ReadData<ReqStartArcadeMvgNewGamePlus>();
 
-            var user = GetUser();
+            var user = User;
 
             foreach (var questData in user.ArcadeInTheMirrorData.Quests.Where(q => q.IsReceived == false))
             {

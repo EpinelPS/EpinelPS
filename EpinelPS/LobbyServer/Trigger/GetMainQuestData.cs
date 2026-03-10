@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.TriggerController
         protected override async Task HandleAsync()
         {
             ReqGetMainQuestData req = await ReadData<ReqGetMainQuestData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetMainQuestData response = new();
             foreach (KeyValuePair<int, bool> item in user.MainQuestData)

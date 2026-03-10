@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.CE002
         protected override async Task HandleAsync()
         {
             ReqGetMiniGameCe002Data req = await ReadData<ReqGetMiniGameCe002Data>();
-            User user = GetUser();
+            User user = User;
 
             ResGetMiniGameCe002Data response = new()
             {

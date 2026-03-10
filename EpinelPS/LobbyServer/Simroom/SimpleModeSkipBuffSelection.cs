@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             await ReadData<ReqSkipSimRoomSimpleModeBuffSelection>();
-            User user = GetUser();
+            User user = User;
             ResSkipSimRoomSimpleModeBuffSelection response = new()
             {
                 Result = SimRoomResult.Reset,

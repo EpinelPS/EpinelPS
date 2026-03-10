@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event
         {
             // from client: {"EventId":10051,"CurrentCount":1}
             ReqExecuteEventBoxGacha req = await ReadData<ReqExecuteEventBoxGacha>();
-            User user = GetUser();
+            User user = User;
 
             ResExecuteEventBoxGacha response = new()
             {

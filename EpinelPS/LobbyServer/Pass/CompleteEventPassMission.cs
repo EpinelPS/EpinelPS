@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Pass
         protected override async Task HandleAsync()
         {
             ReqCompleteEventPassMission req = await ReadData<ReqCompleteEventPassMission>(); //fields "PassId", "PassMissionList"
-            User user = GetUser();
+            User user = User;
 
             ResCompleteEventPassMission response = new(); // field Reward
 

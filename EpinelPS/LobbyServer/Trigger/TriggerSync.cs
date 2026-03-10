@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.TriggerController
         protected override async Task HandleAsync()
         {
             ReqSyncTrigger req = await ReadData<ReqSyncTrigger>();
-            User user = GetUser();
+            User user = User;
 
             // This request is responsible for fetching a log for
             // daily, weekly, challenge mission completion.

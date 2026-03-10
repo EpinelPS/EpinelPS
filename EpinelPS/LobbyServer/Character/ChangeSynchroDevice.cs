@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqSynchroChange req = await ReadData<ReqSynchroChange>();
-            User user = GetUser();
+            User user = User;
 
             ResSynchroChange response = new();
 

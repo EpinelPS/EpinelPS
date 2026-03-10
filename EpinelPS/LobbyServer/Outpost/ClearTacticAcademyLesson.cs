@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqTacticAcademyClearLesson req = await ReadData<ReqTacticAcademyClearLesson>();
-            User user = GetUser();
+            User user = User;
 
             ResTacticAcademyClearLesson response = new()
             {

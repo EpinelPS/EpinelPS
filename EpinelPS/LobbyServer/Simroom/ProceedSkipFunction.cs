@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Simroom
             //  int event,
             //  int selectionNumber, 
             //  int selectionGroupElementId,
-            User user = GetUser();
+            User user = User;
             // ResProceedSimRoomSkipFunction Fields
             //  SimRoomResult Result,
             ResProceedSimRoomSkipFunction response = new()

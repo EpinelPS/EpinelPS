@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Auth
             }
             else
             {
-                User user = GetUser();
+                User user = User;
 
                 if (user.IsBanned && user.BanEnd < DateTime.UtcNow)
                 {

@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqSynchroUnregist req = await ReadData<ReqSynchroUnregist>();
-            User user = GetUser();
+            User user = User;
 
             ResSynchroUnregist response = new();
 

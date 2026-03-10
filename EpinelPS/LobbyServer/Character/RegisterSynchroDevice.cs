@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqSynchroRegister req = await ReadData<ReqSynchroRegister>();
-            User user = GetUser();
+            User user = User;
             CharacterModel? targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new Exception("target character does not exist");
             ResSynchroRegister response = new();
             foreach (SynchroSlot item in user.SynchroSlots)

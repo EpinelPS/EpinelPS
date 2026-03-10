@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Messenger
             // This request handles saving user choices
             ReqProceedMessage req = await ReadData<ReqProceedMessage>();
             ResProceedMessage response = new();
-            User user = GetUser();
+            User user = User;
 
             KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
 

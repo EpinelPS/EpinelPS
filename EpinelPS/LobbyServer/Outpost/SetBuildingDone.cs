@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqBuildingIsDone req = await ReadData<ReqBuildingIsDone>();
-            User user = GetUser();
+            User user = User;
 
             ResBuildingIsDone response = new();
           

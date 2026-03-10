@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             ReqLoginEventData req = await ReadData<ReqLoginEventData>();
-            User user = GetUser();
+            User user = User;
             int evId = req.EventId;
             ResLoginEventData response = new()
             {

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Simroom
             var req = await ReadData<ReqSetSimRoomSimpleModeSkipOption>();
             // ReqSetSimRoomSimpleModeSkipOption Fields
             // bool Enabled
-            User user = GetUser();
+            User user = User;
 
             ResSetSimRoomSimpleModeSkipOption response = new();
 

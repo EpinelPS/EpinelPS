@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
         protected override async Task HandleAsync()
         {
             ReqRecycleRunResearch req = await ReadData<ReqRecycleRunResearch>();
-            User user = GetUser();
+            User user = User;
             ResRecycleRunResearch response = new();
 
             user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);

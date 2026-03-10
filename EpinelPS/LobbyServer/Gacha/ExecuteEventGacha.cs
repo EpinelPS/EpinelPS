@@ -23,7 +23,7 @@ namespace EpinelPS.LobbyServer.Gacha
             // Count determines whether we select 1 or 10 characters
             int numberOfPulls =  1;
 
-            User user = GetUser();
+            User user = User;
             ResExecuteDailyFreeGacha response = new();
 
             List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];

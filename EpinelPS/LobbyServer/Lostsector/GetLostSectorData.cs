@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Lostsector
         protected override async Task HandleAsync()
         {
             ReqGetLostSectorData req = await ReadData<ReqGetLostSectorData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetLostSectorData response = new();
 

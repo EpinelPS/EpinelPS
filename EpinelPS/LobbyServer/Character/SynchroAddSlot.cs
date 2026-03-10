@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
-            User user = GetUser();
+            User user = User;
             ResSynchroAddSlot response = new();
 
             SynchroSlot? slot = user.SynchroSlots.FirstOrDefault(x => x.Slot == req.Slot);

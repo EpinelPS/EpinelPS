@@ -9,9 +9,8 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqSetCharacterMainForce req = await ReadData<ReqSetCharacterMainForce>();
-            User user = GetUser();
 
-            foreach (CharacterModel item in user.Characters)
+            foreach (CharacterModel item in User.Characters)
             {
                 if (item.Csn == req.Csn)
                 {

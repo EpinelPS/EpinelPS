@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqCharacterLevelUp req = await ReadData<ReqCharacterLevelUp>();
-            User user = GetUser();
+            User user = User;
             ResCharacterLevelUp response = new();
             Dictionary<int, CharacterLevelRecord> data = GameData.Instance.GetCharacterLevelUpData();
 

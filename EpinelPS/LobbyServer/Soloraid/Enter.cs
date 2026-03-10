@@ -9,7 +9,7 @@ public class Enter : LobbyMsgHandler
     {
         var req = await ReadData<ReqEnterSoloRaid>();
 
-        Logging.WriteLine($"Entering solo raid {req.RaidId} at level {req.RaidLevel} for user {GetUser().ID} team {req.Team} members");
+        Logging.WriteLine($"Entering solo raid {req.RaidId} at level {req.RaidLevel} for user {User.ID} team {req.Team} members");
 
         ResEnterSoloRaid response = new()
         {

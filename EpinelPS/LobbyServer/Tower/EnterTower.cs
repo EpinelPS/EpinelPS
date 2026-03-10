@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Tower
         protected override async Task HandleAsync()
         {
             ReqEnterTower req = await ReadData<ReqEnterTower>();
-            User user = GetUser();
+            User user = User;
 
             ResEnterTower response = new();
 

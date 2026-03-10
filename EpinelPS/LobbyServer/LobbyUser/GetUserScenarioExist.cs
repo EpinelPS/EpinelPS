@@ -25,13 +25,13 @@ namespace EpinelPS.LobbyServer.LobbyUser
 
         private bool FindScenarioInMainStages(string scenarioGroupId)
         {
-            User user = GetUser();
+            User user = User;
             return user.CompletedScenarios.Contains(scenarioGroupId);
         }
 
         private bool FindScenarioInArchiveStages(string scenarioGroupId)
         {
-            User user = GetUser();
+            User user = User;
             foreach (EventData evtData in user.EventInfo.Values)
             {
                 if (evtData.CompletedScenarios.Contains(scenarioGroupId))

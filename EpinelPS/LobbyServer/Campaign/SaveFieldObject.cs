@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Campaign
         protected override async Task HandleAsync()
         {
             ReqSaveCampaignFieldObject req = await ReadData<ReqSaveCampaignFieldObject>();
-            User user = GetUser();
+            User user = User;
 
             ResSaveCampaignFieldObject response = new();
 

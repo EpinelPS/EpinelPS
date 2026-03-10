@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqEquipmentAwakening req = await ReadData<ReqEquipmentAwakening>();
-            User user = GetUser();
+            User user = User;
 
             ResEquipmentAwakening response = new();
 

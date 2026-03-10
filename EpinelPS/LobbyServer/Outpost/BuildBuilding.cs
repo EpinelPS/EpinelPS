@@ -63,7 +63,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqBuilding req = await ReadData<ReqBuilding>();
-            User user = GetUser();
+            User user = User;
             
        
             BuildingCost cost = GetBuildingCost(req.BuildingId);

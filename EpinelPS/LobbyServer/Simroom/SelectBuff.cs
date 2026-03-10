@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             // {"location":{"chapter":3,"stage":4,"order":3},"event":111011152,"buffToAdd":1030504}
             ReqSelectSimRoomBuff req = await ReadData<ReqSelectSimRoomBuff>();
-            User user = GetUser();
+            User user = User;
 
             ResSelectSimRoomBuff response = new()
             {

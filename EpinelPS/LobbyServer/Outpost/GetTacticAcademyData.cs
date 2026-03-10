@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqGetTacticAcademyData req = await ReadData<ReqGetTacticAcademyData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetTacticAcademyData response = new();
             response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);

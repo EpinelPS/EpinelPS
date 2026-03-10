@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Intercept
         protected override async Task HandleAsync()
         {
             ReqEnterIntercept req = await ReadData<ReqEnterIntercept>();
-            User user = GetUser();
+            User user = User;
 
             ResEnterIntercept response = new();
 

@@ -17,7 +17,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqIncreaseExpEquip req = await ReadData<ReqIncreaseExpEquip>();
-            User user = GetUser();
+            User user = User;
             ResIncreaseExpEquip response = new();
             DbItemData destItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn) ?? throw new NullReferenceException();;
             int goldCost = 0;
@@ -122,7 +122,7 @@ namespace EpinelPS.LobbyServer.Inventory
 
         private int GetSourceExp(NetItemData srcItem)
         {
-            DbItemData item = GetUser().Items.FirstOrDefault(x => x.Isn == srcItem.Isn) ?? throw new NullReferenceException();
+            DbItemData item = User.Items.FirstOrDefault(x => x.Isn == srcItem.Isn) ?? throw new NullReferenceException();
             ItemEquipRecord equipRecord = GameData.Instance.ItemEquipTable.Values.FirstOrDefault(x => x.Id == item.ItemType) ?? throw new NullReferenceException();
             ItemEquipGradeExpRecord? levelRecord = GameData.Instance.ItemEquipGradeExpTable.Values.FirstOrDefault(x => x.GradeCoreId == equipRecord.GradeCoreId);
             int[] expNextTable = [.. GameData.Instance.itemEquipExpTable.Values

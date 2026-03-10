@@ -9,7 +9,7 @@ public class SetDamagePractice : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqSetSoloRaidPracticeDamage>();
-        var user = GetUser();
+        var user = User;
         ResSetSoloRaidPracticeDamage response = new();
 
         try

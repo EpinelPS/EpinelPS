@@ -8,7 +8,7 @@ public class FastBattle : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqFastBattleSoloRaid>();
-        var user = GetUser();
+        var user = User;
         ResFastBattleSoloRaid response = new();
 
         try

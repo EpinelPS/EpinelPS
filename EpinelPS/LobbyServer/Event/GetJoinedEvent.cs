@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event
             await ReadData<ReqGetJoinedEvent>();
             //types are defined in EventTypes.cs
             ResGetJoinedEvent response = new();
-            User user = GetUser();
+            User user = User;
 
             // add gacha events from active lobby banners
             EventHelper.AddJoinedEvents(user, ref response);

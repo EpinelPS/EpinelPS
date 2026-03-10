@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Soloraid
         {
             // int RaidId, int RaidLevel
             var req = await ReadData<ReqGetSoloRaidLogs>();
-            var user = GetUser();
+            var user = User;
             ResGetSoloRaidLogs response = new();
 
             try

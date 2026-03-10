@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
         {
             var request = await ReadData<ReqEnterArcadePlaySodaChallengeStage>();
 
-            var user = GetUser();
+            var user = User;
 
             ResEnterArcadePlaySodaChallengeStage response = new()
             {

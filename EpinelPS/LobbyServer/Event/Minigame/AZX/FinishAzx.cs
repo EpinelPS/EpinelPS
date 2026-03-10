@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             // { "azxId": 1, "scoreAndTime": { "score": 50000, "timeToScore": "110.122697s" }, 
             //  "playBoardId": 101, "playCharacterId": 101, "skillUseCountList": [ { "skillId": 102 } ], "cutSceneId": 10101 }
             ReqFinishMiniGameAzx req = await ReadData<ReqFinishMiniGameAzx>();
-            User user = GetUser();
+            User user = User;
             
             ResFinishMiniGameAzx response = new();
 

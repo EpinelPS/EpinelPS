@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Campaign
         protected override async Task HandleAsync()
         {
             ReqObtainCampaignItem req = await ReadData<ReqObtainCampaignItem>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainCampaignItem response = new();
 

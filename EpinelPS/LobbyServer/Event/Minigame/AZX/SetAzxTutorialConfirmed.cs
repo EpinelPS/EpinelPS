@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
         protected override async Task HandleAsync()
         {
             await ReadData<ReqSetMiniGameAzxTutorialConfirmed>();
-            User user = GetUser();
+            User user = User;
 
             ResSetMiniGameAzxTutorialConfirmed response = new();
             

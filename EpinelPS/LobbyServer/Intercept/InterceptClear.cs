@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Intercept
         protected override async Task HandleAsync()
         {
             ReqClearIntercept req = await ReadData<ReqClearIntercept>();
-            User user = GetUser();
+            User user = User;
 
             if (user.ResetableData.InterceptionTickets == 0)
             {

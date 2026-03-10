@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             //  int PlayBoardId
             //  int PlayCharacterId
             ReqEnterMiniGameAzx req = await ReadData<ReqEnterMiniGameAzx>();
-            User user = GetUser();
+            User user = User;
 
             // ResEnterMiniGameAzx Fields
             //  int PreviousSRankCount

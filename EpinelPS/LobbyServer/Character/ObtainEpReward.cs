@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Character
         {
             ReqObtainAttractiveReward req = await ReadData<ReqObtainAttractiveReward>();
             ResObtainAttractiveReward response = new();
-            User user = GetUser();
+            User user = User;
 
             // look up ID from name code and level
             KeyValuePair<int, AttractiveLevelRewardRecord> levelUpRecord = GameData.Instance.AttractiveLevelReward.Where(x => x.Value.AttractiveLevel == req.Lv && x.Value.NameCode == req.NameCode).FirstOrDefault();

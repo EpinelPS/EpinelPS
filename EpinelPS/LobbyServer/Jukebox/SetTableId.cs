@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Jukebox
         protected override async Task HandleAsync()
         {
             ReqSetJukeboxBgmTableId req = await ReadData<ReqSetJukeboxBgmTableId>();
-            User user = GetUser();
+            User user = User;
 
             ResSetJukeboxBgmTableId response = new();
 

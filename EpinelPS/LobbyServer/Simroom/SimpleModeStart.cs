@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             await ReadData<ReqStartSimRoomSimpleMode>();
-            User user = GetUser();
+            User user = User;
 
             // ResStartSimRoomSimpleMode Fields
             //  SimRoomResult Result

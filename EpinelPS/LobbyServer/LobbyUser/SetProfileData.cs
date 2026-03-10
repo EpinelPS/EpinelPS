@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqSetProfileData req = await ReadData<ReqSetProfileData>();
-            User user = GetUser();
+            User user = User;
             user.ProfileIconId = req.Icon;
             user.ProfileIconIsPrism = req.IsPrism;
             user.ProfileFrame = req.Frame;

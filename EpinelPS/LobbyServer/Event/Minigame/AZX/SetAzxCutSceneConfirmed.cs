@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             //  int AzxId
             //  RepeatedField<int> ConfirmedCutSceneIdList
             ReqSetMiniGameAzxCutSceneConfirmed req = await ReadData<ReqSetMiniGameAzxCutSceneConfirmed>();
-            User user = GetUser();
+            User user = User;
 
             ResSetMiniGameAzxCutSceneConfirmed response = new();
             

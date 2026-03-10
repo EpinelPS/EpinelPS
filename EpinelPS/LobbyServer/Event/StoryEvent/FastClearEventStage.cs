@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event.StoryEvent
         protected override async Task HandleAsync()
         {
             ReqFastClearEventStage req = await ReadData<ReqFastClearEventStage>();
-            User user = GetUser();
+            User user = User;
 
             ResFastClearEventStage response = new();
 

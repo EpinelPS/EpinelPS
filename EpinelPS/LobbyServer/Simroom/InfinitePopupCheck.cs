@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Simroom
         protected override async Task HandleAsync()
         {
             await ReadData<ReqInfinitePopupCheck>();
-            var user = GetUser();
+            var user = User;
 
             ResInfinitePopupCheck response = new();
 

@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Stage
         protected override async Task HandleAsync()
         {
             ReqGetStageData req = await ReadData<ReqGetStageData>();
-            User user = GetUser();
+            User user = User;
 
             string mapId = GameData.Instance.GetMapIdFromChapter(req.Chapter, (ChapterMod)req.Mod);
 

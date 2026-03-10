@@ -10,7 +10,7 @@ public class OpenTrial : LobbyMsgHandler
     {
         // { "raidLevel": 8 }
         var req = await ReadData<ReqOpenSoloRaidTrial>();
-        User user = GetUser();
+        User user = User;
         ResOpenSoloRaidTrial response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success,

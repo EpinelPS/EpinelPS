@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqAwakeningLockOption req = await ReadData<ReqAwakeningLockOption>();
-            User user = GetUser();
+            User user = User;
 
             ResAwakeningLockOption response = new ResAwakeningLockOption();
             EquipmentAwakeningData? awakening = user.EquipmentAwakenings.FirstOrDefault(x => x.Isn == req.Isn);

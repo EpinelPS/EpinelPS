@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         protected override async Task HandleAsync()
         {
             ReqClearFavoriteItemQuestStage req = await ReadData<ReqClearFavoriteItemQuestStage>();
-            User user = GetUser();
+            User user = User;
             ResClearFavoriteItemQuestStage response = new();
 
             FavoriteItemQuestStageRecord? stageData = GameData.Instance.GetFavoriteItemQuestStageData(req.StageId);

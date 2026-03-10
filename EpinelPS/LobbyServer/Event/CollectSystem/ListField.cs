@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event.CollectSystem
         protected override async Task HandleAsync()
         {
             ReqListFieldEventCollectData req = await ReadData<ReqListFieldEventCollectData>();
-            User user = GetUser();
+            User user = User;
 
             ResListFieldEventCollectData response = new();
 

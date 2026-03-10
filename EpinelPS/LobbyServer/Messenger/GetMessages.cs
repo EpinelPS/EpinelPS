@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Messenger
         protected override async Task HandleAsync()
         {
             ReqGetMessages req = await ReadData<ReqGetMessages>();
-            User user = GetUser();
+            User user = User;
 
             CheckAndCreateAvailableMessages(user);
 

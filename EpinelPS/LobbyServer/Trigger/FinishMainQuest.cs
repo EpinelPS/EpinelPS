@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.TriggerController
         protected override async Task HandleAsync()
         {
             ReqFinMainQuest req = await ReadData<ReqFinMainQuest>();
-            User user = GetUser();
+            User user = User;
             Console.WriteLine("Complete quest: " + req.Tid);
             user.SetQuest(req.Tid, false);
 

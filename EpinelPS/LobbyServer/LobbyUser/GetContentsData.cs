@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             await ReadData<ReqGetContentsOpenData>();
-            User user = GetUser();
+            User user = User;
 
             // this request returns a list of "special" stages that mark when something is unlocked, ex: the shop or interception
 

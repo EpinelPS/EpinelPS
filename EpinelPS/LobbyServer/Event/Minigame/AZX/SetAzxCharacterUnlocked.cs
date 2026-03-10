@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             //  int AzxId
             //  int CharacterId
             ReqSetMiniGameAzxCharacterUnlocked req = await ReadData<ReqSetMiniGameAzxCharacterUnlocked>();
-            User user = GetUser();
+            User user = User;
 
             ResSetMiniGameAzxCharacterUnlocked response = new();
             

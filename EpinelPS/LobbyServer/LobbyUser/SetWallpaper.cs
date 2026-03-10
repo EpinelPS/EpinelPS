@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqSetWallpaper req = await ReadData<ReqSetWallpaper>();
             ResSetWallpaper response = new();
-            User user = GetUser();
+            User user = User;
             user.WallpaperList = [.. req.WallpaperList];
             user.WallpaperBackground = [.. req.WallpaperBackgroundList];
             user.WallpaperFavoriteList = [.. req.WallpaperFavoriteList];

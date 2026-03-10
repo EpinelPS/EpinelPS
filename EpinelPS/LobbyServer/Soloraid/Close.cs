@@ -9,7 +9,7 @@ public class Close : LobbyMsgHandler
     {
         // int RaidId, int RaidLevel
         var req = await ReadData<ReqCloseSoloRaid>();
-        var user = GetUser();
+        var user = User;
         ResCloseSoloRaid response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success

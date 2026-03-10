@@ -10,7 +10,7 @@ public class Open : LobbyMsgHandler
     {
         // { "raidId": 1000030, "raidLevel": 1 }
         var req = await ReadData<ReqOpenSoloRaid>();
-        User user = GetUser();
+        User user = User;
         ResOpenSoloRaid response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success,

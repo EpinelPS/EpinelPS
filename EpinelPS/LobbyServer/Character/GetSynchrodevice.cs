@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Character
         protected override async Task HandleAsync()
         {
             ReqGetSynchroData req = await ReadData<ReqGetSynchroData>();
-            User user = GetUser();
+            User user = User;
 
             if (user.SynchroSlots.Count == 0)
             {

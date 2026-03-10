@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqUnMarkUserTitleBadge req = await ReadData<ReqUnMarkUserTitleBadge>();
-            User user = GetUser();
+            User user = User;
 
             ResUnMarkUserTitleBadge response = new();
 

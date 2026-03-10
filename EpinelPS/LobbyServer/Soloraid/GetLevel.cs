@@ -8,7 +8,7 @@ public class GetLevel : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqGetLevelSoloRaid>();
-        User user = GetUser();
+        User user = User;
         ResGetLevelSoloRaid response = new();
 
         try

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Archive
             ResGetResettableArchiveScenario response = new(); // has ScenarioIdList field that takes in strings
 
             GameData gameData = GameData.Instance;
-            User user = GetUser();
+            User user = User;
             foreach (ArchiveEventStoryRecord record in gameData.archiveEventStoryRecords.Values)
             {
                 // Add the PrologueScenario to the ScenarioIdList

@@ -8,7 +8,7 @@ public class GetAll : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqGetHexaAll req = await ReadData<ReqGetHexaAll>();
-        User user = GetUser();
+        User user = User;
 
         ResGetHexaAll response = new();
 

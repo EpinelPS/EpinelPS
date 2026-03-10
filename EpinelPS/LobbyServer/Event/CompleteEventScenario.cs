@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             ReqSetEventScenarioComplete req = await ReadData<ReqSetEventScenarioComplete>();
-            User user = GetUser();
+            User user = User;
 
             if (user.EventInfo.TryGetValue(req.EventId, out EventData? evt))
             {

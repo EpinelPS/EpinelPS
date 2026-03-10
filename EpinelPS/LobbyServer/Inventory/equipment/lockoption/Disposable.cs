@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqAwakeningDisposableLockOption req = await ReadData<ReqAwakeningDisposableLockOption>();
-            User user = GetUser();
+            User user = User;
 
             ResAwakeningDisposableLockOption response = new ResAwakeningDisposableLockOption();
             // Find the equipment awakening data

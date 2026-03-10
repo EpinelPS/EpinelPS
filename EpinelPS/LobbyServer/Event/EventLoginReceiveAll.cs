@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Event
         {
             // ReqObtainLoginEventReward Fields: EventId, Day
             ReqObtainAllLoginEventReward req = await ReadData<ReqObtainAllLoginEventReward>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainAllLoginEventReward response = new();
 

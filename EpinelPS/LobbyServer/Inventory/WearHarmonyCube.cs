@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqWearHarmonyCube req = await ReadData<ReqWearHarmonyCube>();
-            User user = GetUser();
+            User user = User;
             ResWearHarmonyCube response = new();
 
             DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);

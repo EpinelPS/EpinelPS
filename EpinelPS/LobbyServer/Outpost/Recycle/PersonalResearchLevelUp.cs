@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
         {
             ReqPersonalResearchRecycleLevelUp req = await ReadData<ReqPersonalResearchRecycleLevelUp>();
             ResPersonalResearchRecycleLevelUp response = new();
-            User user = GetUser();
+            User user = User;
 
             const int personalResearchTid = 1001;
             RecycleRoomResearchProgress personalResearchProgress = user.ResearchProgress[personalResearchTid] ?? throw new Exception("PersonalRearch not found.");

@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqSetProfileTeam req = await ReadData<ReqSetProfileTeam>();
-            User user = GetUser();
+            User user = User;
             for (int i = 0; i < req.Team.Slots.Count - 1; i++)
             {
                 NetTeamSlot slot = req.Team.Slots[i];

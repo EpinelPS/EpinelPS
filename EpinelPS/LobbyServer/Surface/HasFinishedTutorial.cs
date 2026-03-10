@@ -8,7 +8,7 @@ public class HasFinishedTutorial : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqHasFinishedSurfaceTutorial req = await ReadData<ReqHasFinishedSurfaceTutorial>();
-        User user = GetUser();
+        User user = User;
 
         ResHasFinishedSurfaceTutorial response = new();
 

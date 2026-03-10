@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Lostsector
         protected override async Task HandleAsync()
         {
             ReqFastClearLostSectorStage req = await ReadData<ReqFastClearLostSectorStage>();
-            User user = GetUser();
+            User user = User;
 
             ResFastClearLostSectorStage response = new();
 

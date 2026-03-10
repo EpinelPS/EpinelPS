@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqSetProfileIcon req = await ReadData<ReqSetProfileIcon>();
-            User user = GetUser();
+            User user = User;
             user.ProfileIconId = req.Icon;
             user.ProfileIconIsPrism = req.IsPrism;
             JsonDb.Save();

@@ -8,7 +8,7 @@ public class GetInfo : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         await ReadData<ReqGetSoloRaidInfo>();
-        User user = GetUser();
+        User user = User;
 
         // ResGetSoloRaidInfo Fields
         //  NetUserSoloRaidInfo Info

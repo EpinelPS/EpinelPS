@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqShowOutpostBattleReward req = await ReadData<ReqShowOutpostBattleReward>();
-            User user = GetUser();
+            User user = User;
 
             TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
             long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             // { "location": { "chapter": 3, "stage": 6, "order": 1 }, "event": 10040, "selectionNumber": 1, "selectionGroupElementId": 100401 }
             ReqProceedSimRoomNikkeFunction req = await ReadData<ReqProceedSimRoomNikkeFunction>();
-            User user = GetUser();
+            User user = User;
 
             ResProceedSimRoomNikkeFunction response = new()
             {

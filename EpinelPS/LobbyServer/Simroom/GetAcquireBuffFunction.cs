@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Simroom
             //  int SelectionGroupElementId
             // { "location": { "chapter": 3, "stage": 6, "order": 2 }, "event": 22103, "selectionNumber": 2, "selectionGroupElementId": 221033 }
             var req = await ReadData<ReqGetSimRoomAcquireBuffFunction>();
-            var user = GetUser();
+            var user = User;
 
             // ResGetSimRoomAcquireBuffFunction Fields
             //  SimRoomResult Result

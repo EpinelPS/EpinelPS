@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Badge
         protected override async Task HandleAsync()
         {
             ReqPermanentContentBadgeData req = await ReadData<ReqPermanentContentBadgeData>();
-            User user = GetUser();
+            User user = User;
 
             ResPermanentContentBadgeData response = new();
             response.ChampionArenaBadgeData = new();

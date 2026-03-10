@@ -9,7 +9,7 @@ public class StartSuddenEvent : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqStartSuddenEvent req = await ReadData<ReqStartSuddenEvent>();
-        User user = GetUser();
+        User user = User;
 
         if (!user.CanSubtractCurrency(CurrencyType.ContentStamina, 1))
         {

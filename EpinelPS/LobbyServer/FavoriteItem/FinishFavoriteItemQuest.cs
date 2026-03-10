@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         protected override async Task HandleAsync()
         {
             ReqFinishFavoriteItemQuest req = await ReadData<ReqFinishFavoriteItemQuest>();
-            User user = GetUser();
+            User user = User;
 
             FavoriteItemQuestRecord? questData = GetQuestDataFromGameData(req.FavoriteItemQuestId);
             if (questData == null)

@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Stage
         protected override async Task HandleAsync()
         {
             ReqEnterStage req = await ReadData<ReqEnterStage>();
-            User user = GetUser();
+            User user = User;
 
             ResEnterStage response = new();
 

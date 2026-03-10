@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqGetInventoryData req = await ReadData<ReqGetInventoryData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetInventoryData response = new();
             foreach (DbItemData item in user.Items)

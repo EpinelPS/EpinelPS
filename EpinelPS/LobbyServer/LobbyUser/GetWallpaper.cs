@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqGetWallpaper req = await ReadData<ReqGetWallpaper>();
             ResGetWallpaper response = new();
-            User user = GetUser();
+            User user = User;
 
 
             response.WallpaperList.AddRange(user.WallpaperList);

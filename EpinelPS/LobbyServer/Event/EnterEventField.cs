@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Event
         protected override async Task HandleAsync()
         {
             ReqEnterEventField req = await ReadData<ReqEnterEventField>();
-            User user = GetUser();
+            User user = User;
 
             ResEnterEventField response = new()
             {

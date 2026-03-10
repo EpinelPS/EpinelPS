@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event.Minigame.AZX
             // ReqGetMiniGameAzxRedDotData Fields
             //  int AzxId
             ReqGetMiniGameAzxRedDotData req = await ReadData<ReqGetMiniGameAzxRedDotData>();
-            User user = GetUser();
+            User user = User;
             
             // ResGetMiniGameAzxRedDotData Fields
             //  bool IsDailyMissionAvailable

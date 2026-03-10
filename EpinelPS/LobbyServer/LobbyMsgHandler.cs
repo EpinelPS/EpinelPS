@@ -146,10 +146,6 @@ namespace EpinelPS.LobbyServer
             }
         }
 
-        public User GetUser()
-        {
-            return JsonDb.GetUser(UserId) ?? throw new Exception("null user");
-        }
         public User? GetUser(ulong Id)
         {
             return JsonDb.GetUser(Id);

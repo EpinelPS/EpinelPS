@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Messenger
         protected override async Task HandleAsync()
         {
             ReqEnterSubQuestFinMessengerDialog req = await ReadData<ReqEnterSubQuestFinMessengerDialog>();
-            User user = GetUser();
+            User user = User;
 
             ResEnterSubQuestFinMessengerDialog response = new();
 

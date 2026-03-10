@@ -12,7 +12,7 @@ public class OpenPractice : LobbyMsgHandler
         //  int RaidLevel
         //  SoloRaidDifficultyType DifficultyType
         var req = await ReadData<ReqOpenSoloRaidPractice>();
-        User user = GetUser();
+        User user = User;
         ResOpenSoloRaidPractice response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success,

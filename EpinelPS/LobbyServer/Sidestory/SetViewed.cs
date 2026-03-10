@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Sidestory
         protected override async Task HandleAsync()
         {
             ReqSetViewSideStory req = await ReadData<ReqSetViewSideStory>();
-            User user = GetUser();
+            User user = User;
 
             ResSetViewSideStory response = new();
 

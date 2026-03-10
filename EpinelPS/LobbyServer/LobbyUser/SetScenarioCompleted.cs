@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqSetScenarioComplete req = await ReadData<ReqSetScenarioComplete>();
-            User user = GetUser();
+            User user = User;
 
             ResSetScenarioComplete response = new()
             {

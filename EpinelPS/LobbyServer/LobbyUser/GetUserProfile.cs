@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqGetProfileData req = await ReadData<ReqGetProfileData>();
-            User callingUser = GetUser();
+            User callingUser = User;
             User? user = GetUser((ulong)req.TargetUsn);
             ResGetProfileData response = new();
           

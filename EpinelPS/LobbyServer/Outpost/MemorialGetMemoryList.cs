@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqGetMemoryList req = await ReadData<ReqGetMemoryList>();
-            User user = GetUser();
+            User user = User;
 
             ResGetMemoryList response = new();
 

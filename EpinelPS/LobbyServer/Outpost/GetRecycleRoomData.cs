@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.Outpost
         protected override async Task HandleAsync()
         {
             ReqGetRecycleRoomData req = await ReadData<ReqGetRecycleRoomData>();
-            User user = GetUser();
+            User user = User;
             ResGetRecycleRoomData response = new();
 
             response.Recycle.AddRange(user.ResearchProgress.Select(progress =>

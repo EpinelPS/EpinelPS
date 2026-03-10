@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.ContentsOpen
         protected override async Task HandleAsync()
         {
             ReqSetContentsOpenUnlockButtonPlay req = await ReadData<ReqSetContentsOpenUnlockButtonPlay>();
-            User user = GetUser();
+            User user = User;
 
             ResSetContentsOpenUnlockButtonPlay response = new();
 

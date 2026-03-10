@@ -9,7 +9,7 @@ public class GetLevelTrial : LobbyMsgHandler
     {
         // int RaidLevel
         var req = await ReadData<ReqGetLevelTrialSoloRaid>();
-        User user = GetUser();
+        User user = User;
         ResGetLevelTrialSoloRaid response = new();
 
         try

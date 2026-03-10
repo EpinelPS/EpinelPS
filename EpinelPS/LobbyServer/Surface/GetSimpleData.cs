@@ -8,7 +8,7 @@ public class GetSimpleData : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqLobbySurfaceSimpleData req = await ReadData<ReqLobbySurfaceSimpleData>();
-        User user = GetUser();
+        User user = User;
 
         ResLobbySurfaceSimpleData response = new();
 

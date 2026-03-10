@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Badge
         protected override async Task HandleAsync()
         {
             ReqSyncBadge req = await ReadData<ReqSyncBadge>();
-            User user = GetUser();
+            User user = User;
 
             ResSyncBadge response = new();
 

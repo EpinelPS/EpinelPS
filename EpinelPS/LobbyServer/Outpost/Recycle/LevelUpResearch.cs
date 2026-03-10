@@ -15,7 +15,7 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
              * Items: int value, used items.
              */
             ReqRecycleLevelUpResearch req = await ReadData<ReqRecycleLevelUpResearch>();
-            User user = GetUser();
+            User user = User;
             ResRecycleLevelUpResearch response = new();
 
             user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);

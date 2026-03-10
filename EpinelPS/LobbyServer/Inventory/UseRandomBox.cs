@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Inventory
         protected override async Task HandleAsync()
         {
             ReqUseRandomBox req = await ReadData<ReqUseRandomBox>();
-            User user = GetUser();
+            User user = User;
 
             ResUseRandomBox response = new();
 

@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Auth
                 }
             }
             if (UserId == 0) throw new BadHttpRequestException("unknown auth token", 403);
-            User user = GetUser();
+            User user = User;
 
             GameClientInfo rsp = LobbyHandler.GenGameClientTok(req.ClientPublicKey, UserId);
 

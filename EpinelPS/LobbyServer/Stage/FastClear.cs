@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Stage
         {
             ReqFastClearCampaignStage req = await ReadData<ReqFastClearCampaignStage>();
 
-            User user = GetUser();
+            User user = User;
 
             Console.WriteLine($"Stage " + req.CampaignStageId + " completed using quick battle");
 

@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Character.Counsel
         protected override async Task HandleAsync()
         {
             ReqCharacterCounsel req = await ReadData<ReqCharacterCounsel>();
-            User user = GetUser();
+            User user = User;
 
             ResCharacterCounsel response = new();
 

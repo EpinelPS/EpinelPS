@@ -8,7 +8,7 @@ public class GetMaximumAmountAll : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqListAllSurfaceCurrencyMaxAmount req = await ReadData<ReqListAllSurfaceCurrencyMaxAmount>();
-        User user = GetUser();
+        User user = User;
 
         ResListAllSurfaceCurrencyMaxAmount response = new();
 

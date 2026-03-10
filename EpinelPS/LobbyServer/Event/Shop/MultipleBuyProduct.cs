@@ -26,7 +26,7 @@ namespace EpinelPS.LobbyServer.Event.Shop
             {
                 Result = EventShopBuyProductResult.Success
             };
-            User user = GetUser();
+            User user = User;
 
             try
             {

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.PlaySoda
         {
             var request = await ReadData<ReqObtainArcadePlaySodaPointReward>();
 
-            var user = GetUser();
+            var user = User;
 
             var arcadePlaySodaInfo = user.ArcadePlaySodaInfoList.First(i => i.ChallengeStageId == request.ChallengeStageId);
 

@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event.Mission
         protected override async Task HandleAsync()
         {
             var req = await ReadData<ReqGetEventMissionClear>(); //EventId
-            User user = GetUser();
+            User user = User;
 
             ResGetEventMissionClear response = new();
 

@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Tower
             ReqClearTower req = await ReadData<ReqClearTower>();
 
             ResClearTower response = new();
-            User user = GetUser();
+            User user = User;
 
             if (req.BattleResult == 1)
             {

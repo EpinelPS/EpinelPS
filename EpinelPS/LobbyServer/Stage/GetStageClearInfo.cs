@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Stage
         {
             ReqGetStageClearInfo req = await ReadData<ReqGetStageClearInfo>();
             ResGetStageClearInfo response = new();
-            User user = GetUser();
+            User user = User;
 
             response.Historys.AddRange(user.StageClearHistorys);
             

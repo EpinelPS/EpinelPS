@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Character
             // May fix later.
             ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
             
-            User user = GetUser();
+            User user = User;
             ResSynchroAddSlot response = new();
 
             NetSynchroSlot newSlot = new()

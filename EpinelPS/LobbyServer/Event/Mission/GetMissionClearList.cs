@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Event.Mission
         {
             // { "eventIdList": [ 60090, 60092, 20001, 20002 ] }
             ReqGetEventMissionClearList req = await ReadData<ReqGetEventMissionClearList>();
-            User user = GetUser();
+            User user = User;
             ResGetEventMissionClearList response = new(); 
             
             try

@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Archive
             ReqGetNonResettableArchiveScenario req = await ReadData<ReqGetNonResettableArchiveScenario>();
             ResGetNonResettableArchiveScenario response = new();
 
-            User user = GetUser();
+            User user = User;
             foreach (var (evtId, evtData) in user.EventInfo)
             {
                 if (evtId == req.EventId)

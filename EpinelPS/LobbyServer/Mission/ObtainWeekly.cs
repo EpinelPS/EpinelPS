@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Mission
         protected override async Task HandleAsync()
         {
             ReqObtainWeeklyMissionReward req = await ReadData<ReqObtainWeeklyMissionReward>();
-            User user = GetUser();
+            User user = User;
 
             ResObtainWeeklyMissionReward response = new();
 

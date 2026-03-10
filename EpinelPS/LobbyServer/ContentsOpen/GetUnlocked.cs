@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.ContentsOpen
         protected override async Task HandleAsync()
         {
             ReqGetContentsOpenUnlockInfo req = await ReadData<ReqGetContentsOpenUnlockInfo>();
-            User user = GetUser();
+            User user = User;
 
             // This request is used for showing the "Collection Item Unlocked" Popup and button unlock animation
 

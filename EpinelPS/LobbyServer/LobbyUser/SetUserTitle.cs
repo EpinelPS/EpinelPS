@@ -8,7 +8,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         protected override async Task HandleAsync()
         {
             ReqSetUserTitle req = await ReadData<ReqSetUserTitle>();
-            User user = GetUser();
+            User user = User;
 			user.TitleId = req.UserTitleId;
 			JsonDb.Save();
             ResSetUserTitle response = new();

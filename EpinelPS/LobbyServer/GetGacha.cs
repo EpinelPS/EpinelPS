@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer
         protected override async Task HandleAsync()
         {
             ReqGetGachaData req = await ReadData<ReqGetGachaData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetGachaData response = new();
 

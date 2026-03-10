@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
         {
             var request = await ReadData<ReqObtainArcadeMvgQuestReward>();
             
-            var user = GetUser();
+            var user = User;
 
             List<NetRewardData> rewards = [];
 

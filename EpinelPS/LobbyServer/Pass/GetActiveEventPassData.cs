@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Pass
         protected override async Task HandleAsync()
         {
             ReqGetActiveEventPassData req = await ReadData<ReqGetActiveEventPassData>(); // no fields
-            User user = GetUser();
+            User user = User;
 
             ResGetActiveEventPassData response = new(); // fields PassList = NetPassInfo
 

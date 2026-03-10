@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Pass
         {
             // { "passId": 1037, "targetPassRank": 2 }
             ReqBuyPassRank req = await ReadData<ReqBuyPassRank>(); //fields "PassId", "TargetPassRank"
-            User user = GetUser();
+            User user = User;
 
             ResBuyPassRank response = new(); // fields "PassRank", "PassPoint", "Currencies"
 

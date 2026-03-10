@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.FavoriteItem
         protected override async Task HandleAsync()
         {
             ReqIncreaseExpFavoriteItem req = await ReadData<ReqIncreaseExpFavoriteItem>();
-            User user = GetUser();
+            User user = User;
 
             ResEquipFavoriteItem response = new();
 

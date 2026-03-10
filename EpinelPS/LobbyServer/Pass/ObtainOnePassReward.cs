@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Pass
         {
             // { "passId": 1037, "passRank": 1, "premiumReward": true }
             ReqObtainOnePassReward req = await ReadData<ReqObtainOnePassReward>(); //fields "PassId", "PassRank"
-            User user = GetUser();
+            User user = User;
 
             ResObtainOnePassReward response = new(); // field Reward
 

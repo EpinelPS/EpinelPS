@@ -9,7 +9,7 @@ namespace EpinelPS.LobbyServer.Minigame.InTheMirror
         {
             await ReadData<ReqGetArcadeMvgData>();
 
-            var user = GetUser();
+            var user = User;
 
             await WriteDataAsync(new ResGetArcadeMvgData() { Data = user.ArcadeInTheMirrorData });
 

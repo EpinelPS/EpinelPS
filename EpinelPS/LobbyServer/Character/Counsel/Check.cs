@@ -8,7 +8,7 @@ public class CheckCharacterCounsel : LobbyMsgHandler
     protected override async Task HandleAsync()
     {
         ReqCounseledBefore req = await ReadData<ReqCounseledBefore>();
-        User user = GetUser();
+        User user = User;
 
         ResCounseledBefore response = new();
 

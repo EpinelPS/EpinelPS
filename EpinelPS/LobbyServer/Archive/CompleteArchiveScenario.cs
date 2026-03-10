@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Archive
             string scenid = req.ScenarioId;
             int dialtyp = req.DialogType;
 
-            User user = GetUser();
+            User user = User;
 
             // Ensure we are working with the user's EventInfo and not CompletedScenarios
             if (!user.EventInfo.TryGetValue(evid, out EventData? evt))

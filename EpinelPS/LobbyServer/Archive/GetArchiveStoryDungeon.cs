@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Archive
         {
             ReqGetArchiveStoryDungeon req = await ReadData<ReqGetArchiveStoryDungeon>(); // has EventId field
             int evid = req.EventId;
-            User user = GetUser();
+            User user = User;
 
             // Ensure the EventInfo dictionary contains the requested EventId
             if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))

@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Stage
             ReqClearStage req = await ReadData<ReqClearStage>();
 
             ResClearStage response = new();
-            User user = GetUser();
+            User user = User;
 
             Console.WriteLine($"Stage " + req.StageId + " completed, result is " + req.BattleResult);
 

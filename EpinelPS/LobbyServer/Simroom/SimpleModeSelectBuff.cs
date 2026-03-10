@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Simroom
         {
             // { "buffToAdd": 1010106, "buffToDelete": 1010105 }
             ReqSelectSimRoomSimpleModeBuff req = await ReadData<ReqSelectSimRoomSimpleModeBuff>();
-            User user = GetUser();
+            User user = User;
 
 
             List<int> buffs = user.ResetableData.SimRoomData.Buffs;

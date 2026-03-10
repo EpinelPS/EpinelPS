@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Event.Shop
             // int EventId
             var req = await ReadData<ReqEventShopProductList>();
             ResEventShopProductList response = new();
-            User user = GetUser();
+            User user = User;
             
             try
             {

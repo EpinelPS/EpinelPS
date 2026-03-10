@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.Lostsector
         protected override async Task HandleAsync()
         {
             ReqLostSectorPerfectReward req = await ReadData<ReqLostSectorPerfectReward>();
-            User user = GetUser();
+            User user = User;
 
             ResLostSectorPerfectReward response = new();
 

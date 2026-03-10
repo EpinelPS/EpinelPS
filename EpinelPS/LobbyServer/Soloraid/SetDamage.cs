@@ -10,7 +10,7 @@ public class SetDamage : LobbyMsgHandler
     {
         
         var req = await ReadData<ReqSetSoloRaidDamage>();
-        User user = GetUser();
+        User user = User;
 
         ResSetSoloRaidDamage response = new();
 

@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Archive
             int evid = req.EventId;
             int stgid = req.StageId;
             int result = req.BattleResult;
-            User user = GetUser();
+            User user = User;
 
             // Check if the EventInfo exists for the given EventId
             if (!user.EventInfo.TryGetValue(evid, out EventData? eventData))

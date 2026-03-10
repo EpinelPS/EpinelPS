@@ -10,7 +10,7 @@ namespace EpinelPS.LobbyServer.LobbyUser
         {
             ReqBuyLobbyDecoBackground req = await ReadData<ReqBuyLobbyDecoBackground>();
             ResBuyLobbyDecoBackground response = new();
-            User user = GetUser();
+            User user = User;
             
             user.LobbyDecoBackgroundList.Add(req.LobbyDecoBackgroundId);
 

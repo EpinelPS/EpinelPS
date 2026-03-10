@@ -13,7 +13,7 @@ namespace EpinelPS.LobbyServer.Event.Mission
             //  RepeatedField<int> EventMissionIdList
             //  Google.Protobuf.WellKnownTypes.Timestamp RequestTimeStamp
             var req = await ReadData<ReqObtainEventMissionReward>();
-            User user = GetUser();
+            User user = User;
 
             // ResObtainEventMissionReward Fields
             //  NetRewardData Reward

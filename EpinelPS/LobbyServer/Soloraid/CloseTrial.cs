@@ -9,7 +9,7 @@ public class CloseTrial : LobbyMsgHandler
     {
         // int RaidId, int RaidLevel
         var req = await ReadData<ReqCloseSoloRaidTrial>();
-        var user = GetUser();
+        var user = User;
         ResCloseSoloRaidTrial response = new()
         {
             PeriodResult = SoloRaidPeriodResult.Success

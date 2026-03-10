@@ -14,6 +14,8 @@ namespace EpinelPS.LobbyServer.Client
             };
 
             await WriteDataAsync(response);
+
+
         }
     }
 }

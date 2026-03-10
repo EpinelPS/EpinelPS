@@ -12,7 +12,7 @@ namespace EpinelPS.LobbyServer.Pass
         protected override async Task HandleAsync()
         {
             ReqGetActivePassData req = await ReadData<ReqGetActivePassData>();
-            User user = GetUser();
+            User user = User;
 
             ResGetActivePassData response = new()
             {
