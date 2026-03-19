@@ -60,14 +60,13 @@ namespace EpinelPS.LobbyServer.Outpost.Recycle
             }
             else if (statRecord.RecycleType == RecycleType.Class || statRecord.RecycleType == RecycleType.Corporation) // class research or corporation research
             {
-                NetItemData netItem = req.Items.Single();
-                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == netItem.Tid);
+                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == req.Tid);
                 if (usedItem is null)
                     return;
 
-                usedItem.Count -= netItem.Count;
+                usedItem.Count -= 1;
                 response.Items.Add(NetUtils.UserItemDataToNet(usedItem));
-                (int newLevel, int newExp) = CalcCorpAndClassLevelUp(statRecord.RecycleType, netItem.Count, progress.Level, progress.Exp);
+                (int newLevel, int newExp) = CalcCorpAndClassLevelUp(statRecord.RecycleType, 1, progress.Level, progress.Exp);
                 progress.Level = newLevel;
                 progress.Exp = newExp;
                 response.Recycle = new()

@@ -119,6 +119,7 @@ public partial class ArchiveEventDungeonSpotBattleRecord
 	public int SpotId;
 	public int FirstClearRewardId;
 	public int ClearRewardId;
+	public EnterScenarioType EnterScenarioType;
 	public string? EnterScenario;
 	public string? ExitScenario;
 	public int FixedPlayCharacterId;
@@ -1258,6 +1259,23 @@ public partial class ContentsShopInfoRecord
 	public int GroupId;
 	public ContentsShopDescriptionType DescriptionType;
 	public string? DescriptionLocalkey;
+}
+
+[MemoryPackable]
+public partial class ContentsShopOverrideRecord_Raw
+{
+	public int Id;
+	public ShopCategoryType ShopCategory;
+	public DateTime StartDate;
+	public DateTime EndDate;
+	public int FirstViewBundleId;
+	public int ShopNpcResourceId;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public int ShopInfoGroupId;
+	public string? LogoResourceId;
+	public string? BgResourceId;
+	public string? RenewToast;
 }
 
 [MemoryPackable]
@@ -4269,6 +4287,7 @@ public partial class EventDungeonSpotBattleRecord
 	public int SpotId;
 	public int FirstClearRewardId;
 	public int ClearRewardId;
+	public EnterScenarioType EnterScenarioType;
 	public string? EnterScenario;
 	public string? ExitScenario;
 	public int FixedPlayCharacterId;
@@ -4928,6 +4947,7 @@ public partial class EventMVGCharacterCustomActionRecord_Raw
 	public int TimelineValue;
 	public EventMVGCharacterCustomActionTypeData ActionType;
 	public List<EventMVGCharacterCustomActionValueData_Raw> ActionValue;
+	public string? TimelineAnim;
 	public string? SetMuzzleFx;
 	public EventMVGCharacterCustomActionMuzzleTypeData SetMuzzle;
 	public string? ProjResourceId;
@@ -6128,6 +6148,264 @@ public partial class EventPlaySodaStoryModeRecord
 }
 
 [MemoryPackable]
+public partial class EventQuestMVGBalloonRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventMVGBalloonTypeData BalloonType;
+	public int Order;
+	public bool Randomize;
+	public int BalloonShowTime;
+	public int WaitTimeAfterEndBalloon;
+	public string? LocaleName;
+	public string? LocaleKey;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGChallengeLvSettingRecord_Raw
+{
+	public int Id;
+	public int ChallengeStep;
+	public int LevelId;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGChapterInfoRecord_Raw
+{
+	public int Id;
+	public int ChapterId;
+	public string? ChapterName;
+	public string? ChapterImg;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGCharacterCustomActRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int TimelineValue;
+	public EventMVGCharacterCustomActionTypeData ActionType;
+	public List<EventMVGCharacterCustomActionValueData_Raw> ActionValue;
+	public string? TimelineAnim;
+	public string? SetMuzzleFx;
+	public EventMVGCharacterCustomActionMuzzleTypeData SetMuzzle;
+	public string? ProjResourceId;
+	public string? ProjResourceHitId;
+	public EventMVGCharacterCustomActionProjectileTypeData ProjType;
+	public List<EventMVGCharacterCustomActionProjTypeValueData_Raw> ProjTypeValue;
+	public int ProjAmount;
+	public int ProjDuration;
+	public string? AfterDurationFx;
+	public int ProjAfterCollide;
+	public int ProjDmgCount;
+	public int ProjDmgDelay;
+	public int ProjPierce;
+	public double ProjSize;
+	public double ProjSpd;
+	public int ProjAtk;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGCharacterCustomRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventMVGCustomTypeMainData CustomTypeMain;
+	public EventMVGCharacterCustomSubTypeData CustomTypeSub;
+	public EventMVGCharacterCustomLockTypeData SkillLockType;
+	public bool AttackKeep;
+	public int Lv;
+	public int ActionGroupID;
+	public int CoolDownTime;
+	public int GlobalCoolDownTime;
+	public bool IgnoreGlobalCoolDownTime;
+	public List<EventMVGCharacterCustomCustomVariablesData_Raw> CustomVariablesData;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGCharacterSettingRecord_Raw
+{
+	public int Id;
+	public int StatHp;
+	public int StatAtk;
+	public int MaxAbsorbGauge;
+	public int MaxModuleSlot;
+	public int SkillCSetSearchPointLength;
+	public int DefaultSkillALv;
+	public int SkillAIdSet;
+	public int SkillBIdSet;
+	public int SkillCIdSet;
+	public int SkillDIdSet;
+	public int SkillBurstAIdSet;
+	public int SkillBurstBIdSet;
+	public int SkillBurstCIdSet;
+	public int SkillBurstDIdSet;
+	public string? BurstAnim;
+	public string? BurstCharacterFx;
+	public int BurstgaugeCharge;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGCommonSettingsRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public bool IsArchive;
+	public int RoomChangeInvincibleTime;
+	public double CamMoveEaseTime;
+	public double CamZoonAdjustEaseTime;
+	public double CamShakeDecreaseTime;
+	public int GameStartChapterID;
+	public string? GameStartRoomName;
+	public int GameStartSocketID;
+	public int LaserLimitLength;
+	public int TeleportTransitionIN;
+	public int TeleportTransitionOUT;
+	public int DropItemDeleteTime;
+	public string? DropObjectDisappearFX;
+	public int MapCount;
+	public int EndGameStartChapterID;
+	public string? EndGameStartRoomName;
+	public int TutorialHubGroupId;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGDirectorRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Order;
+	public EventMVGDirectorTimeLineActionTypeData TimelineAction;
+	public List<EventMVGDirectorTimelineValueData_Raw> TimelineValue;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGLoadingRecord_Raw
+{
+	public int Id;
+	public string? LoadingTipLocalkey;
+	public int Order;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGMonsterAttackTierRecord_Raw
+{
+	public int Id;
+	public EventMVGMonsterAttackTiertierTypeData Tier;
+	public int AttackPoint;
+	public int EnergyEductedTier;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGMonsterLevelRecord_Raw
+{
+	public int Id;
+	public int StendardAttackTierId;
+	public float AttackSpeed;
+	public float ChaseSpeed;
+	public int Thrash;
+	public int Normal;
+	public int Elite;
+	public int Special;
+	public int Centurion;
+	public int Boss;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGMonsterSettingRecord_Raw
+{
+	public int Id;
+	public string? NameLocalkey;
+	public string? MonsterModelId;
+	public EventMVGMonsterSettinggradeTypeData Grade;
+	public EventMVGMonsterSettingmonstertypeTypeData Type;
+	public string? DeadEffect;
+	public string? Reward;
+	public int DeathChargeBurstgauge;
+	public int RankPoint;
+	public int HpRatio;
+	public int EnergyEductedRatio;
+	public int AttackSpeedRatio;
+	public int FirstRecognitionRange;
+	public float RoamingSpeed;
+	public float RoamingAcceleration;
+	public int ChaseRange;
+	public int ChaseSpeedRatio;
+	public int ReturnRange;
+	public int BattleStartRange;
+	public int RespawnTime;
+	public string? SpotBt;
+	public int SkillId01;
+	public int SkillId02;
+	public int SkillId03;
+	public int SkillId04;
+	public int SkillId05;
+	public int SkillId06;
+	public int SkillId07;
+	public int SkillId08;
+	public int SkillId09;
+	public int SkillId10;
+	public int SkillId11;
+	public int SkillId12;
+	public int SkillId13;
+	public int SkillId14;
+	public int SkillId15;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGMonsterSkillRecord_Raw
+{
+	public int Id;
+	public EventMVGMonsterSkillskilltypeTypeData SkillType;
+	public int AttackTierId;
+	public int CoolTime;
+	public float ProjectileSpeed;
+	public int ProjectileHitNum;
+	public string? ProjectileModelResource;
+	public string? ProjectileMuzResource;
+	public string? ProjectileHitResource;
+	public string? ProjectileCastingResource;
+	public bool Absorbable;
+	public int ChargeBurstgauge;
+	public bool ProjectileExtinction;
+	public int ProjectileHeight;
+	public int ProjectileWidth;
+	public int ChaseAngle;
+	public int ChaseTime;
+	public int ShotLineAngle;
+	public int LaserAttackDelay;
+	public int LaserAttackInterval;
+	public int LaserDuration;
+	public bool ProjectileExplosive;
+	public int ExplosionHeight;
+	public int ExplosionWidth;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGResourceSettingRecord_Raw
+{
+	public int Id;
+	public string? ResourceCategory;
+	public EventMVGResourceTypeData ResourceType;
+	public string? ResourceValue;
+	public string? ActiveFxResource;
+	public string? AnimGOON;
+	public string? AnimON;
+	public string? AnimGOOFF;
+	public string? AnimOFF;
+}
+
+[MemoryPackable]
+public partial class EventQuestMVGTutorialConditionRecord_Raw
+{
+	public int Id;
+	public int HelptipId;
+	public MVGTutorialConditionType HelptipActiveCondition;
+	public int HelptipActiveConditionId;
+	public int HelptipActiveConditionValue;
+}
+
+[MemoryPackable]
 public partial class EventQuestManagerRecord
 {
 	public int Id;
@@ -6226,6 +6504,7 @@ public partial class EventRebuildEdenBuildSetupRecord_Raw
 	public string? LocaleDesc;
 	public int BuildConstructTime;
 	public bool CanDestruct;
+	public bool UnitPlacement;
 	public EventRebuildEdenBuildUnlockConditionType UnlockCondition;
 	public int UnlockValue;
 	public string? UnlockHintLocale;
@@ -6355,7 +6634,8 @@ public partial class EventRebuildEdenManagerRecord_Raw
 	public int Id;
 	public int EventId;
 	public string? Desc;
-	public bool IsArchiveEvent;
+	public int EventGroup;
+	public MiniGameSystemType MinigameType;
 	public string? EnterScenario;
 	public string? MapResourceName;
 	public int DemolitionRefundValue;
@@ -6387,6 +6667,7 @@ public partial class EventRebuildEdenMissionRecord_Raw
 {
 	public int Id;
 	public EventRebuildEdenMissionCategory Type;
+	public int EventGroup;
 	public EventRebuildEdenMissionType MissionType;
 	public List<int> ConditionValue;
 	public int TargetCount;
@@ -6400,6 +6681,7 @@ public partial class EventRebuildEdenQuestRecord_Raw
 	public int Id;
 	public int Groupid;
 	public EventRebuildEdenQuestCategory Type;
+	public int EventGroup;
 	public EventRebuildEdenQuestType MissionType;
 	public List<int> ConditionValue;
 	public int TargetCount;
@@ -7134,6 +7416,8 @@ public partial class EventScenarioDialogRecord
 	public string? JumpTarget;
 	public ScenarioFadeType Fade;
 	public bool IsExitScenario;
+	public int ChoiceEnterScenarioGroupId;
+	public bool SkipStopPoint;
 }
 
 [MemoryPackable]
@@ -9299,7 +9583,7 @@ public partial class ItemConsumeRecord
 }
 
 [MemoryPackable]
-public partial class ItemData2
+public partial class ItemData
 {
 	public int ItemId;
 	public int ItemValue;
@@ -10927,23 +11211,6 @@ public partial class PresetTeamData
 }
 
 [MemoryPackable]
-public partial class ProducePriceData_Raw
-{
-	public SurfaceFactoryPriceType PriceType;
-	public int PriceId;
-	public int PriceValue;
-}
-
-[MemoryPackable]
-public partial class ProduceUnlockData_Raw
-{
-	public SurfaceFactoryUnlockConditionType UnlockConditionType;
-	public int UnlockConditionId;
-	public string? UnlockConditionCategoryLocale;
-	public string? UnlockConditionDescLocale;
-}
-
-[MemoryPackable]
 public partial class ProductOfferRecord
 {
 	public int Id;
@@ -11096,14 +11363,6 @@ public partial class RankingRecord
 	public int ConditionValue;
 	public string? DescriptionLocalkey;
 	public int ServerRewardId;
-}
-
-[MemoryPackable]
-public partial class RecoveryCostData_Raw
-{
-	public RecoveryCostType CostType;
-	public int CostId;
-	public int CostValue;
 }
 
 [MemoryPackable]
@@ -11288,6 +11547,99 @@ public partial class ScenarioCharacterSettingRecord
 	public FrameType FrameType;
 	public string? Address;
 	public string? SdResourceAddress;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceAlbumRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public bool Highlight;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceConditionRecord_Raw
+{
+	public int Id;
+	public int ChoiceEnterScenarioGroup;
+	public List<string?> ConditionDialogGroupId;
+	public List<string?> ConditionDialogId;
+	public string? ConditionDialogScenarioLocalkey;
+	public string? ViewEventScenarioGroupId;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceFlowRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int EventDungeonDifficultId;
+	public string? ScenarioGroupId;
+	public string? ThumbnailResourceId;
+	public string? NameLocalkey;
+	public int HiddenViewConditionId;
+	public int NextFlowId;
+	public List<int> ScenarioChoiceItem;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceItemRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Order;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public CharacterSubIcon CharacterSubIcon;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceItemRequireRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public List<int> RequireItemIdList;
+	public string? ScenarioGroupId;
+	public string? ChoiceConditionId;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceItemUnlockRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int UnlockItemId;
+	public string? ScenarioGroupId;
+	public string? ChoiceConditionId;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int UnlockConditionStageId;
+	public string? FlowPrefabId;
+	public int FlowGroupId;
+	public int ChoiceItemGroupId;
+	public int ChoiceProgressGroupId;
+	public int AlbumGroupId;
+	public string? PlayJukeboxNormal;
+	public string? PlayJukeboxComplete;
+	public int TutorialId;
+}
+
+[MemoryPackable]
+public partial class ScenarioChoiceProgressRewardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int ProgressRatio;
+	public int RewardId;
 }
 
 [MemoryPackable]
@@ -12334,1186 +12686,6 @@ public partial class SupportContentsRecord
 }
 
 [MemoryPackable]
-public partial class SurfaceAlarmListRecord_Raw
-{
-	public int Id;
-	public SurfaceAlarmType SurfaceAlarmType;
-	public int SurfaceAlarmListGroup;
-	public int ListPrintOrder;
-	public bool IsAlarmToast;
-	public string? SurfaceAlarmIcon;
-	public string? SurfaceAlarmToastDescription;
-	public string? SurfaceAlarmListDescription;
-	public bool IsShortCutUse;
-}
-
-[MemoryPackable]
-public partial class SurfaceAmbientRecord_Raw
-{
-	public int Id;
-	public WorldType WorldType;
-	public string? Source;
-}
-
-[MemoryPackable]
-public partial class SurfaceAmbientSkillRecord_Raw
-{
-	public int Id;
-	public SurfaceAmbientSkillType AmbientType;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public string? SkillIcon;
-	public int SurfaceskillFunction1;
-	public int SurfaceskillFunction2;
-	public int SurfaceskillFunction3;
-	public int SurfaceskillFunction4;
-	public List<SurfaceAmbientSkillValueData_Raw> DescriptionValueList;
-}
-
-[MemoryPackable]
-public partial class SurfaceAmbientSkillValueData_Raw
-{
-	public string? DescriptionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceAutoChargeRecord_Raw
-{
-	public int Id;
-	public SurfaceAutoChargeType AutoChargeType;
-	public int SurfaceItemId;
-	public int InitValue;
-	public int AutoChargePlus;
-	public int AutoChargeMax;
-}
-
-[MemoryPackable]
-public partial class SurfaceBGMRecord_Raw
-{
-	public int Id;
-	public WorldType WorldType;
-	public int Order;
-	public string? MainBgm;
-	public string? BattleBgm;
-	public string? TransitionBgm;
-}
-
-[MemoryPackable]
-public partial class SurfaceBattlePowerRecord_Raw
-{
-	public int Id;
-	public int BattlePowerStandard;
-	public int BattlePowerConstant01;
-	public int BattlePowerConstant02;
-	public int BattlePowerConstant03;
-	public int BattlePowerConstant04;
-	public int BattlePowerConstant05;
-	public int BattlePowerConstant06;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuffPartsPrice_Raw
-{
-	public SurfaceBuffPartsPriceType PriceType;
-	public int PriceId;
-	public int PriceValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuffPartsRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int TypeId;
-	public int Level;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public string? Icon;
-	public int SkillId;
-	public List<SurfaceBuffPartsPrice_Raw> SurfaceBuffPartsPrice;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuildConditionData_Raw
-{
-	public SurfaceBuildCondition BuildConditionType;
-	public int BuildConditionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuildingCostData_Raw
-{
-	public SurfaceCostType CostType;
-	public int CostId;
-	public int CostValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuildingDataRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public SurfaceBuildingType SurfaceBuildingType;
-	public int LevelGroupId;
-	public string? BuildingNameLocalkey;
-	public string? BuildingDescriptionLocalkey;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuildingFunctionData_Raw
-{
-	public SurfaceBuildingFunctionType FunctionType;
-	public SurfaceBuildingFunctionValueType FunctionValueType;
-	public int FunctionValue;
-	public string? FunctionNameLocalkey;
-	public string? FunctionDescriptionLocalkey;
-}
-
-[MemoryPackable]
-public partial class SurfaceBuildingLevelRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int Level;
-	public int Time;
-	public List<SurfaceBuildConditionData_Raw> BuildCondition;
-	public List<SurfaceBuildingCostData_Raw> Cost;
-	public List<SurfaceBuildingFunctionData_Raw> Function;
-	public string? BuildingSpriteResource;
-	public string? BuildingPrefab;
-	public string? BuildingUpgradeResourcePrefab;
-}
-
-[MemoryPackable]
-public partial class SurfaceCallingMonsterRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public long MonsterId;
-}
-
-[MemoryPackable]
-public partial class SurfaceCallingSignalGeneratorRecord_Raw
-{
-	public int Id;
-	public int MonsterStatEnhanceId;
-	public string? PrefabId;
-}
-
-[MemoryPackable]
-public partial class SurfaceCategoryRecord_Raw
-{
-	public int Id;
-	public string? SurfaceCategoryNameLocalekey;
-	public string? SurfaceCategoryDescLocalekey;
-	public string? SurfaceCategoryIcon;
-	public string? SurfaceCategoryImg;
-}
-
-[MemoryPackable]
-public partial class SurfaceCharacterRecord_Raw
-{
-	public int Id;
-	public int NameCode;
-	public int TroopCategory;
-	public int SkillId;
-	public int SurfaceBattleArea;
-	public int SurfaceShotRange;
-}
-
-[MemoryPackable]
-public partial class SurfaceConfigRecord_Raw
-{
-	public string? Id;
-	public string? Value;
-}
-
-[MemoryPackable]
-public partial class SurfaceContentsLevelScalingRecord_Raw
-{
-	public int Id;
-	public int LevelScalingGroup;
-	public int WorldId;
-	public SurfaceContentsLevelScalingType ContentsType;
-	public int Sector;
-	public int Difficulty;
-	public bool IsExtraDifficulty;
-	public int ContentsLevel;
-	public int StandardBattlePower;
-	public int RecommendSquadCount;
-	public int WaveTriggerHp;
-	public int TargetWavePresetOrder;
-}
-
-[MemoryPackable]
-public partial class SurfaceContentsRewardGroupRecord_Raw
-{
-	public int Id;
-	public int RewardGroupId;
-	public int WorldId;
-	public int Difficulty;
-	public int RewardId;
-	public SurfaceQuestRank QuestRank;
-}
-
-[MemoryPackable]
-public partial class SurfaceContentsWaveDataScalingRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int Sector;
-	public int Difficulty;
-	public int TargetWavePresetId;
-}
-
-[MemoryPackable]
-public partial class SurfaceCurrencyRecord_Raw
-{
-	public int Id;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public int WorldId;
-	public string? ResourceId;
-	public string? DisplayTypeIcon;
-	public string? DisplayTypeName;
-	public long MaxValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceCurrencyResearchValueRecord_Raw
-{
-	public int Id;
-	public int CurrencyType;
-	public SurfaceCurrencyFunctionValueType CurrencyFunctionValueType;
-	public int ResearchFunctionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceCurrentSituationCategoryRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public string? CategoryNameLocalkey;
-	public int CategoryDataGroup;
-	public string? CategoryDataDescriptionLocalkey;
-}
-
-[MemoryPackable]
-public partial class SurfaceCurrentSituationDataRecord_Raw
-{
-	public int Id;
-	public int CategoryDataGroup;
-	public SurfaceCategoryDataType DataType;
-	public string? DataTypeNameLocalkey;
-	public string? TotalItem;
-	public string? TotalItemDescriptionLocalkey;
-}
-
-[MemoryPackable]
-public partial class SurfaceCurrentSituationRecord_Raw
-{
-	public int Id;
-	public string? TabNameLocalkey;
-	public int CategoryGroupId;
-}
-
-[MemoryPackable]
-public partial class SurfaceDefenseLevelRecord_Raw
-{
-	public int Id;
-	public int AreaGroupId;
-	public int InactiveTime;
-	public SurfaceWaveDifficultyType DifficultyType;
-	public int WaveCorrectionLevel;
-	public int StandardBattlePower;
-	public int RecommendSquadCount;
-}
-
-[MemoryPackable]
-public partial class SurfaceEvlaPurificationRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int PurificationLevel;
-	public string? PurificationDesc;
-	public int ConcentrationEffect;
-	public int SurfaceBattlePowerId;
-	public SurfaceEvlaPurificationOpenConditionType OpenConditionType;
-	public int OpenConditionValue;
-	public int PurificationTime;
-	public List<surface_evla_purification_cost_Raw> SurfaceEvlaPurificationCost;
-	public int HospitalRecoveryCostIncrease;
-	public string? HospitalRecoveryCostIncreaseDesc;
-}
-
-[MemoryPackable]
-public partial class SurfaceFactoryRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int SortId;
-	public List<ProduceUnlockData_Raw> UnlockConditionArray;
-	public int SurfaceItemId;
-	public int SurfaceItemValue;
-	public int ProduceTime;
-	public List<ProducePriceData_Raw> Price;
-	public int ProductionCountMax;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldBossSpawnerRecord_Raw
-{
-	public int Id;
-	public SurfaceBossSpawnerType ContentsType;
-	public long BossMonsterId;
-	public int MonsterLv;
-	public int InteractionRange;
-	public string? InteractionMarkerResource;
-	public bool IsUseWaveBattle;
-	public SurfaceWaveDifficultyType WaveDifficulty;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldBuildingSpawnerRecord_Raw
-{
-	public int Id;
-	public int DefaultLv;
-	public int BuildingData;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldCoinCollectRewardRecord_Raw
-{
-	public int Id;
-	public int RewardGroupId;
-	public int RewardUnlockPercentage;
-	public int RewardId;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldItemRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int FieldId;
-	public int SectorId;
-	public SurfaceFieldItemType ItemType;
-	public SurfaceFieldItemSpawnLogicType ItemSpawnLogicType;
-	public int ItemValue;
-	public string? ItemResource;
-	public bool IsUseAutoScale;
-	public string? ItemSpawnFx;
-	public string? ItemLockFx;
-	public string? ItemGainFx;
-	public string? InteractionMarkerResource;
-	public bool IsResourceDisappearedAfterInteraction;
-	public int InteractionRange;
-	public bool IsSpawned;
-	public int SpawnConditionMonsterKill;
-	public int SpawnConditionMonsterGroupKill;
-	public bool IsLocked;
-	public int UnlockConditionMonsterKill;
-	public int UnlockConditionMonsterGroupKill;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldItemTypeRecord_Raw
-{
-	public int Id;
-	public SurfaceFieldItemType ItemType;
-	public string? MapResourceId;
-	public string? NameLocalkey;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldMissionTargetPointRecord_Raw
-{
-	public int Id;
-	public int RequiredSquadCount;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldMonsterSpawnerRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public long MonsterData;
-	public bool IsQuestMonster;
-	public int MonsterLv;
-	public int SpawnConditionMonsterKill;
-	public int SpawnConditionGroupMonsterKill;
-	public int RewardId;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldWaveTriggerHPRecord_Raw
-{
-	public int Id;
-	public int Sector;
-	public int TriggerHp;
-}
-
-[MemoryPackable]
-public partial class SurfaceFieldWaveTriggerRecord_Raw
-{
-	public int Id;
-	public SurfaceWaveContentsType ContentsType;
-	public string? ObjectResource;
-	public int InteractionRange;
-	public string? InteractionMarkerResource;
-	public SurfaceWaveContentsClearType WaveClearType;
-	public SurfaceWaveDifficultyType WaveDifficulty;
-	public int RecommendSquadCount;
-	public SurfaceTriggerHPType TriggerHpType;
-	public int TriggerFixedHp;
-	public int WaveStartDelay;
-	public int WaveTime;
-}
-
-[MemoryPackable]
-public partial class SurfaceForcedTutorialRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int GroupId;
-	public SurfaceTutorialSubGroup SubGroupId;
-	public SurfaceForcedTriggerType StartTrigger;
-	public SurfaceForcedTriggerType CloseTrigger;
-	public string? TextCharResource;
-	public string? TextLocaleTitle;
-	public string? TextLocaleDescription;
-	public SurfaceTutorialSubGroup TextLocation;
-	public int Background;
-	public string? AddOnResource;
-	public bool MaskControl;
-	public List<string?> UnmaskKey;
-	public string? UnmaskTextLocale;
-	public bool UnmaskInputControl;
-	public int NextId;
-	public bool SaveTutorial;
-	public int ReconnectionTutorialId;
-	public bool SkipButtonControl;
-}
-
-[MemoryPackable]
-public partial class SurfaceGatewayDataRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public SurfaceGatewayType SurfaceGatewayType;
-	public string? SurfaceGatewayNameLocalkey;
-	public string? SurfaceGatewayDescriptionLocalkey;
-	public string? GatewaySpriteResource;
-	public int SurfaceGatewayLevelGroupId;
-	public int SurfaceGatewayDelayTime;
-	public int SurfaceGatewayDurability;
-	public int UseItemId;
-	public int UseItemValue;
-	public int RewardId;
-	public int RetrieveRewardId;
-}
-
-[MemoryPackable]
-public partial class SurfaceGatewayLevelRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public SurfaceWaveDifficultyType DifficultyType;
-	public int WaveCorrectionLevel;
-	public int StandardBattlePower;
-	public int RecommendSquadCount;
-}
-
-[MemoryPackable]
-public partial class SurfaceGatewayTypeRecord_Raw
-{
-	public int Id;
-	public SurfaceGatewayType SurfaceGatewayType;
-	public int SurfaceGatewayWaveTime;
-}
-
-[MemoryPackable]
-public partial class SurfaceHelpTipDescRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int Order;
-	public string? HelptipTitle;
-	public string? HelptipImage;
-	public string? HelptipDescription;
-}
-
-[MemoryPackable]
-public partial class SurfaceHelpTipRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public bool DefaultOpen;
-}
-
-[MemoryPackable]
-public partial class SurfaceHologramComputerRecord_Raw
-{
-	public int Id;
-	public int MonsterStatEnhanceId;
-	public string? PrefabId;
-}
-
-[MemoryPackable]
-public partial class SurfaceHospitalRecoveryCostRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public RecoveryType RecoveryType;
-	public int HpRecoveryValue;
-	public List<RecoveryCostData_Raw> Cost;
-	public int Time;
-}
-
-[MemoryPackable]
-public partial class SurfaceItemConsumeRecord_Raw
-{
-	public int Id;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public int WorldId;
-	public int SortId;
-	public string? ResourceId;
-	public string? DisplayTypeIcon;
-	public string? DisplayTypeName;
-	public SurfaceItemType ItemType;
-	public OriginalRareType ItemRare;
-	public SurfaceItemConsumeUseType UseType;
-	public int UseId;
-	public int UseValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceItemMaterialRecord_Raw
-{
-	public int Id;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public int WorldId;
-	public int SortId;
-	public string? ResourceId;
-	public string? DisplayTypeIcon;
-	public string? DisplayTypeName;
-	public SurfaceItemType ItemType;
-	public OriginalRareType ItemRare;
-	public SurfaceItemMaterialUseType UseType;
-	public int UseId;
-	public int UseValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceMaxAmountValueRecord_Raw
-{
-	public int Id;
-	public int CurrencyType;
-	public int MaxAmountValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceMaxProductionValueRecord_Raw
-{
-	public int Id;
-	public int CurrencyType;
-	public int MaxProductionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceMissionTriggerDataRecord_Raw
-{
-	public int Id;
-	public int MissionTriggerDataGroupId;
-	public int Step;
-	public SurfaceMissionTrigger Trigger;
-	public int ConditionSector;
-	public int ConditionId;
-	public int ConditionValue;
-	public bool PrintValue;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public int RewardId;
-	public SurfaceMissionShortcutType ShortcutType;
-	public int ShortcutValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceMissionTriggerTypeRecord_Raw
-{
-	public int Id;
-	public SurfaceMissionTriggerType MissionType;
-	public int Sector;
-	public int Order;
-	public int MissionTriggerDataGroupId;
-}
-
-[MemoryPackable]
-public partial class SurfaceMissionTutorialDataRecord_Raw
-{
-	public int Id;
-	public int MissionDataGroupId;
-	public bool TouchControl;
-	public int StartDelayTime;
-	public SurfaceMissionTutorialTriggerType Trigger;
-	public string? TriggerValue;
-	public int CloseDelayTime;
-	public int NextId;
-	public bool SkipButtonControl;
-	public int ReconnectTutorialResetPoint;
-}
-
-[MemoryPackable]
-public partial class SurfaceMissionTutorialDialogRecord_Raw
-{
-	public int Id;
-	public string? DialogGroupId;
-	public SurfaceDialogOutputType DialogOutputType;
-	public int DialogOutputTypeValue;
-	public int Background;
-	public SurfaceTutorialSubGroup DialogTextBoxLocation;
-	public SurfaceDialogThumbnailLocation DialogThumbnailLocation;
-	public string? DialogResourceId;
-	public string? DialogLocaleTitle;
-	public string? DialogLocaleDescription;
-	public int NextId;
-	public bool SkipButtonControl;
-}
-
-[MemoryPackable]
-public partial class SurfaceMissionTutorialListRecord_Raw
-{
-	public int Id;
-	public int Order;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public int MissionDataGroupId;
-	public int RewardId;
-}
-
-[MemoryPackable]
-public partial class SurfaceMonsterAIRecord_Raw
-{
-	public int Id;
-	public SurfaceMonsterAction Action;
-	public int ActionValue;
-	public int IsNormalAttack;
-	public SurfaceMonsterPreferTarget PreferTarget;
-	public int UseArea;
-	public int Repeat;
-	public int PreferTargetFix;
-	public int WaitingTime;
-	public SurfaceMonsterTrigger Trigger01;
-	public int TriggerValue01;
-	public SurfaceMonsterTrigger Trigger02;
-	public int TriggerValue02;
-	public int NextIdTriggerAdjust01;
-	public int NextIdTriggerAdjust02;
-	public int NextIdTriggerAdjustAnd;
-	public int NextIdTriggerNotAdjust;
-	public int UseAreaShieldingCheck;
-}
-
-[MemoryPackable]
-public partial class SurfaceMonsterRecord_Raw
-{
-	public long Id;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public SurfaceMonsterRankType RankType;
-	public GradeCondition Grade;
-	public MonsterRangeCondition MonsterRange;
-	public ClassCondition Class;
-	public int ElementId;
-	public string? Model;
-	public int Size;
-	public int ModelScale;
-	public SurfacePreferTarget SurfacePreferTarget;
-	public int StatenhanceId;
-	public int SurfaceBattleArea;
-	public int SurfaceBattleAreaShieldingCheck;
-	public int SurfaceMonsterSkillGroupId;
-	public int SurfaceAiId;
-}
-
-[MemoryPackable]
-public partial class SurfaceMonsterSkillRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public string? SkillIcon;
-	public int ShotId;
-	public SurfaceMonsterFireType FireType;
-	public int CastingTime;
-	public SurfaceMonsterSkillValueType SkillValueType01;
-	public int SkillValue01;
-	public SurfaceMonsterSkillValueType SkillValueType02;
-	public int SkillValue02;
-	public SurfaceMonsterSkillValueType SkillValueType03;
-	public int SkillValue03;
-	public SurfaceMonsterSkillValueType SkillValueType04;
-	public int SkillValue04;
-	public SurfaceMonsterSkillValueType SkillValueType05;
-	public int SkillValue05;
-	public List<int> AdjustFunctionId;
-	public string? CastingStartAnimationResource;
-	public string? CastingLoopAnimationResource;
-	public string? ShotAnimationResource;
-	public int UseTurn;
-}
-
-[MemoryPackable]
-public partial class SurfaceMonsterStatEnhanceRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int Lv;
-	public long LevelHp;
-	public int LevelAttack;
-	public int LevelSurfacePower;
-}
-
-[MemoryPackable]
-public partial class SurfaceNarrativeSignRecord_Raw
-{
-	public int Id;
-	public SurfaceNarrativeSignType NarrativeSignType;
-	public SurfaceNarrativeSignActiveType ActiveType;
-	public int ActiveRange;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public string? UiPrefab;
-	public string? InteractionMarkerResource;
-	public string? IconResource;
-	public BalloonType BalloonType;
-	public int BalloonPrintTime;
-}
-
-[MemoryPackable]
-public partial class SurfaceNextResearch_Raw
-{
-	public int NextResearchGroup;
-}
-
-[MemoryPackable]
-public partial class SurfaceOccupationAreaIndexRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int SectorId;
-	public string? OccupationAreaNameLocalkey;
-	public string? OccupationAreaDescriptionLocalkey;
-	public int OpticalCamouflageItemId;
-	public int OpticalCamouflageItemValue;
-	public int CallingSignalGeneratorItemId;
-	public int ChargeBatteryItemGroupId;
-	public int CallingSignalRepairItemGroupId;
-	public int OccupationAreaLevelGroupId;
-	public int OccupationStartDelayTime;
-	public int OccupationTime;
-	public int DefenseAreaLevelGroupId;
-	public int DefenseStartDelayTime;
-	public int DefenseTime;
-	public int DefenseChargeBatteryGauge;
-	public int BatteryGaugeMaxValue;
-	public int BatteryDecreasePerSec;
-	public int MaxAmountCallingSignalGenerator;
-	public int RewardId;
-	public int BattleAreaRange;
-}
-
-[MemoryPackable]
-public partial class SurfaceOccupationLevelRecord_Raw
-{
-	public int Id;
-	public int AreaGroupId;
-	public SurfaceWaveDifficultyType DifficultyType;
-	public int WaveCorrectionLevel;
-	public int StandardBattlePower;
-	public int RecommendSquadCount;
-}
-
-[MemoryPackable]
-public partial class SurfaceOccupationUseItemGroupRecord_Raw
-{
-	public int Id;
-	public int UseItemGroup;
-	public int SurfaceItemId;
-}
-
-[MemoryPackable]
-public partial class SurfaceOpticalCamouflageRecord_Raw
-{
-	public int Id;
-	public int MonsterStatEnhanceId;
-	public string? PrefabId;
-	public int RetrieveRewardId;
-}
-
-[MemoryPackable]
-public partial class SurfaceProcessingFacilityRecord_Raw
-{
-	public int Id;
-	public int CurrencyType;
-	public int ProduceTime;
-	public int ProduceValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceQuestBonusRewardRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int Order;
-	public int CurrencyId;
-	public int CurrencyConsume;
-}
-
-[MemoryPackable]
-public partial class SurfaceQuestRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int WorldId;
-	public int Sector;
-	public SurfaceQuestRank Rank;
-	public int QuestOpenConditionFieldItem;
-	public string? QuestNameLocalkey;
-	public string? PortraitImageResource;
-	public SurfaceQuestType QuestType;
-	public int SpawnMonsterGroup;
-	public int SpawnItem;
-	public int SpawnWaveTrigger;
-}
-
-[MemoryPackable]
-public partial class SurfaceResearchCategoryRecord_Raw
-{
-	public int Id;
-	public string? ResearchCategoryNameLocalkey;
-	public string? ResearchCategoryIcon;
-	public int ResearchCategoryGroupId;
-}
-
-[MemoryPackable]
-public partial class SurfaceResearchCost_Raw
-{
-	public SurfaceResearchCostType ResearchCostType;
-	public int ResearchCostId;
-	public int ResearchCostValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceResearchGroupRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int ResearchCategoryGroupId;
-	public int ResearchFloor;
-	public bool IsResearchNodeUse;
-	public int ResearchGrade;
-	public int ResearchLevelGroup;
-	public string? ResearchNameLocalkey;
-	public string? ResearchDescriptionLocalkey;
-	public string? ResearchValueLocalkey;
-	public string? ResourceId;
-	public List<SurfaceResearchOpenCondition_Raw> OpenCondition;
-	public List<SurfaceNextResearch_Raw> NextResearchGroup;
-}
-
-[MemoryPackable]
-public partial class SurfaceResearchLevelRecord_Raw
-{
-	public int Id;
-	public int ResearchLevelGroup;
-	public int Level;
-	public int Time;
-	public SurfaceResearchFunctionType ResearchFunctionType;
-	public SurfaceResearchFunctionValueType ResearchFunctionValueType;
-	public int ResearchFunctionValue;
-	public List<SurfaceResearchCost_Raw> ResearchCost;
-}
-
-[MemoryPackable]
-public partial class SurfaceResearchOpenCondition_Raw
-{
-	public ResearchOpenConditionType OpenConditionType;
-	public int OpenConditionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceSectorDataRecord_Raw
-{
-	public int Id;
-	public int SectorGroup;
-	public int Sector;
-	public string? SectorNameLocalkey;
-	public string? SectorDescriptionLocalkey;
-	public SectorOpenConditionType SectorOpenConditionType;
-	public int SectorOpenConditionId;
-	public int CoinCollectRewardGroupId;
-}
-
-[MemoryPackable]
-public partial class SurfaceSkillFunctionRecord_Raw
-{
-	public int Id;
-	public int Group;
-	public int Level;
-	public int SurfaceBattlePower;
-	public SurfaceSkillTypeCondition SurfaceSkillType;
-	public SurfaceSkillValueTypeCondition SurfaceSkillValueType;
-	public int SurfaceSkillValue;
-	public int SurfaceSkillFullCount;
-	public int SurfaceSkillCoolTime;
-	public SurfaceSkillRangeTypeCondition SurfaceSkillRangeType;
-	public int SurfaceSkillRangeValue;
-	public SurfaceTargetCategoryCondition SurfaceSkillTargetCategory;
-	public SurfaceFunctionPreferTarget SurfaceFunctionPreferTarget;
-	public int SurfaceFunctionPreferTargetNum;
-	public SurfaceDurationTypeCondition DurationType;
-	public int DurationValue;
-	public SurfaceTimingTriggerTypeCondition SurfaceTimingTriggerType;
-	public SurfaceTimingTriggerStandardCondition SurfaceTimingTriggerStandard;
-	public int SurfaceTimingTriggerValue;
-	public SurfaceStatusTriggerTypeCondition SurfaceStatusTriggerType1;
-	public SurfaceStatusTriggerStandardCondition SurfaceStatusTriggerStandard1;
-	public int SurfaceStatusTriggerValue1;
-	public SurfaceStatusTriggerTypeCondition SurfaceStatusTriggerType2;
-	public SurfaceStatusTriggerStandardCondition SurfaceStatusTriggerStandard2;
-	public int SurfaceStatusTriggerValue2;
-	public SurfaceKeepingTypeCondition KeepingType;
-	public string? FxPrefab;
-	public SurfacePlatoonSocketPoint FxSocketPoint;
-	public bool LocaleTriggerCheck;
-}
-
-[MemoryPackable]
-public partial class SurfaceSkillRecord_Raw
-{
-	public int Id;
-	public int SkillCategory;
-	public int Level;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public string? SkillIcon;
-	public int SurfaceskillFunction1;
-	public int SurfaceskillFunction2;
-	public int SurfaceskillFunction3;
-	public int SurfaceskillFunction4;
-	public List<SurfaceSkillValueData_Raw> DescriptionValueList;
-}
-
-[MemoryPackable]
-public partial class SurfaceSkillValueData_Raw
-{
-	public string? DescriptionValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceSuddenEventRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public string? SuddenEventLocalkey;
-	public string? SuddenEventCutscene;
-	public int SelectOptionListGroupId;
-}
-
-[MemoryPackable]
-public partial class SurfaceSuddenEventSelectionListRecord_Raw
-{
-	public int Id;
-	public int SelectOptionListGroupId;
-	public int Order;
-	public string? SelectOptionLocalkey;
-	public string? SelectResultLocalkey;
-	public SurfaceSelectEventRewardType RewardType;
-	public int RewardValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceSuppressBonusRewardRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public SurfaceSuppressContentsType SuppressType;
-	public int Order;
-	public int CurrencyId;
-	public int CurrencyConsume;
-}
-
-[MemoryPackable]
-public partial class SurfaceSuppressRecord_Raw
-{
-	public int Id;
-	public int WorldId;
-	public int Sector;
-	public string? ContentsNameLocalkey;
-	public string? ContentsSubNameLocalkey;
-	public string? ContentsDescriptionLocalkey;
-	public string? PortraitIcon;
-	public SurfaceSuppressContentsType SuppressContentsType;
-	public int SpawnBossSpawner;
-	public int SpawnWaveTrigger;
-	public bool IsUseFirstPlay;
-	public int FirstPlayMonsterLevelSetting;
-	public int FirstPlayTargetWavePresetId;
-	public int FirstPlayWaveTriggerHpSetting;
-	public int FirstPlayStandardBattlePower;
-	public int FirstPlayRecommendSquadCount;
-	public int FirstPlayRewardId;
-	public int LevelScalingGroupId;
-	public int RewardGroupId;
-	public string? RewardCrateResource;
-	public string? RewardCrateMarkerResource;
-	public int RewardTicketConsume;
-	public int ContentsRespawnTime;
-	public int WeeklyPlayTime;
-	public int BattleAreaRange;
-}
-
-[MemoryPackable]
-public partial class SurfaceToolEventRecord_Raw
-{
-	public int Id;
-	public SurfaceFieldToolEventGroup EventGroup;
-	public int Order;
-	public string? EventName;
-	public string? EventDescription;
-	public SurfaceFieldEventComponent EventComponent;
-	public bool IsBlocking;
-}
-
-[MemoryPackable]
-public partial class SurfaceToolObjectResourceRecord_Raw
-{
-	public int Id;
-	public SurfaceFieldThemeType Theme;
-	public SurfaceFieldObjectType ObjectType;
-	public int Order;
-	public string? RandomGroup;
-	public string? ObjectResource;
-	public string? ObjectThumbnailResource;
-	public int LayerGroup;
-}
-
-[MemoryPackable]
-public partial class SurfaceToolTileResourceRecord_Raw
-{
-	public int Id;
-	public SurfaceFieldThemeType Theme;
-	public SurfaceFieldTileType TileType;
-	public int Order;
-	public string? RandomGroup;
-	public string? TileResource;
-	public string? TileSideResource;
-	public string? TileThumbnailResource;
-}
-
-[MemoryPackable]
-public partial class SurfaceTutorialCharacterRecord_Raw
-{
-	public int Id;
-	public int GroupId;
-	public int Slot;
-	public int SurfaceCharacterId;
-	public int CharacterId;
-	public int BattlePower;
-	public int TutorialCharacterUtilitySkillId;
-}
-
-[MemoryPackable]
-public partial class SurfaceTutorialSettingRecord_Raw
-{
-	public int Id;
-	public int MissionId;
-	public SurfaceTutorialSettingType TutorialSettingType;
-	public List<SurfaceTutorialSettingValue_Raw> TutorialSettingValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceTutorialSettingValue_Raw
-{
-	public int TutorialSettingValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceViewTypeRecord_Raw
-{
-	public int Id;
-	public SurfaceViewType FieldOfViewType;
-	public int FieldOfViewTypeValue;
-}
-
-[MemoryPackable]
-public partial class SurfaceWaveDataRecord_Raw
-{
-	public long Id;
-	public long WaveGroupId;
-	public int Order;
-	public int StartDelay;
-	public long SpawnMonsterId;
-	public int SpawnCount;
-	public int SpawnDelay;
-	public int MinWavePointOrder;
-	public int MaxWavePointOrder;
-	public SurfaceFieldWaveSpawnType SpawnType;
-	public int WaveLimitMonster;
-}
-
-[MemoryPackable]
-public partial class SurfaceWavePresetRecord_Raw
-{
-	public long Id;
-	public int GroupId;
-	public int Order;
-	public int PresetAppearRatio;
-	public SurfaceWaveDifficultyType PresetDifficulty;
-	public long WaveGroupId;
-	public bool IsRepeatable;
-}
-
-[MemoryPackable]
-public partial class SurfaceWorldFieldDataRecord_Raw
-{
-	public int Id;
-	public int FieldGroup;
-	public int FieldOrder;
-	public string? FieldId;
-	public int SectorGroup;
-	public FieldOpenConditionType OpenConditionType;
-	public int OpenConditionValue;
-	public int CoinItemId;
-}
-
-[MemoryPackable]
-public partial class SurfaceWorldRecord_Raw
-{
-	public int Id;
-	public WorldType WorldType;
-	public int WorldOrder;
-	public string? NameLocalkey;
-	public string? DescriptionLocalkey;
-	public OpenConditionType OpenConditionType;
-	public int OpenConditionValue;
-	public int RequiredSquadCount;
-	public int SuppressBossraidAutoChargeId;
-	public int SuppressLegionraidAutoChargeId;
-	public int QuestTicketAutochargeId;
-	public int QuestLevelScalingGroupId;
-	public int FieldGroup;
-	public int RapidDeploymentItemId;
-	public int RapidDeploymentItemCount;
-	public int RapidDeploymentAutoChargeId;
-	public string? PrologueScenario;
-}
-
-[MemoryPackable]
 public partial class TacticAcademyClassRecord
 {
 	public int Id;
@@ -14017,13 +13189,6 @@ public partial class support_equipment_data
 	public int EquipmentLevel;
 }
 
-[MemoryPackable]
-public partial class surface_evla_purification_cost_Raw
-{
-	public int CostId;
-	public int CostValue;
-}
-
 public enum SBCharacterSkillAffectSkillFactorType : int
 {
 	None = 0,
@@ -14056,7 +13221,8 @@ public enum DialogType : int
 {
 	Normal = 0,
 	NKSmini = 1,
-	Messenger = 2
+	Messenger = 2,
+	ScenarioChoice = 3
 }
 
 public enum ArcadeGameType : int
@@ -14070,7 +13236,8 @@ public enum ArcadeGameType : int
 	PlaySoda = 6,
 	BubbleMarch = 7,
 	DragonDungeonRun = 8,
-	PirateCafe = 9
+	PirateCafe = 9,
+	RebuildEden = 10
 }
 
 public enum EventDungeonOpenCondition : int
@@ -14112,13 +13279,13 @@ public enum RewardType : int
 	ProfileCardObject = 44,
 	ProfileRandomBox = 45,
 	UserTitle = 46,
-	LobbyDecoBackground = 47,
-	SurfaceCurrency = 48,
-	SurfaceItem = 49,
-	HexaBios = 50,
-	HexaBiosUndefined = 51,
-	HexaBlock = 52,
-	HexaBlockUndefined = 53
+	LobbyDecoBackground = 47
+}
+
+public enum EnterScenarioType : int
+{
+	None = 0,
+	ScenarioChoice = 1
 }
 
 public enum QuickBattleType : int
@@ -14247,6 +13414,7 @@ public enum EventSystemType : int
 	CE007MiniGame = 53,
 	AZXAppleMiniGame = 54,
 	TicketGachaEvent = 55,
+	ScenarioChoice = 56,
 	CE008LycorisMiniGame = 57
 }
 
@@ -15058,7 +14226,8 @@ public enum Squad : int
 	CE00603 = 65,
 	OverTheHorizon = 66,
 	CE007 = 67,
-	CE008 = 68
+	CE008 = 68,
+	VeiledOrder = 69
 }
 
 public enum WeaponType : int
@@ -15399,9 +14568,7 @@ public enum ContentsOpen : int
 	CampaignQuickBattle = 82,
 	SoloRaidMuseum = 83,
 	CampaignStory = 84,
-	SimulationRoomSimpleRewardOnly = 85,
-	HexaCode = 86,
-	Surface = 87
+	SimulationRoomSimpleRewardOnly = 85
 }
 
 public enum ContentsOpenCondition : int
@@ -15430,19 +14597,6 @@ public enum ContentsShopDescriptionType : int
 	Stage = 1
 }
 
-public enum add_mark : int
-{
-	None = 0,
-	Event = 1
-}
-
-public enum ShopType : int
-{
-	None = 0,
-	MainShop = 1,
-	EventShop = 2
-}
-
 public enum ShopCategoryType : int
 {
 	None = 0,
@@ -15455,6 +14609,19 @@ public enum ShopCategoryType : int
 	ShopStoryEvent = 7,
 	ShopMileage = 8,
 	ShopTrade = 9
+}
+
+public enum add_mark : int
+{
+	None = 0,
+	Event = 1
+}
+
+public enum ShopType : int
+{
+	None = 0,
+	MainShop = 1,
+	EventShop = 2
 }
 
 public enum RenewType : int
@@ -15501,8 +14668,7 @@ public enum CurrencyType : int
 	SilverMileageTicket = 11000,
 	GoldMileageTicket = 12000,
 	SimulationRoomPoint = 13000,
-	CharacterSkillResetTicket = 14000,
-	HexaCodeCurrency = 15000
+	CharacterSkillResetTicket = 14000
 }
 
 public enum ContentsTutorialSubGroup : int
@@ -15689,12 +14855,7 @@ public enum ContentsTutorialTriggerValue : int
 	AutoPositionButtonTouch = 159,
 	AutoUpgradeButtonTouch = 160,
 	HomeButtonTouch = 161,
-	EnterHexaCodeView = 162,
-	TouchHexaCodeHSTAButton = 163,
-	EnterHexaCodeMainView = 164,
-	TouchHexaCodeBlockChangeButton = 165,
-	EnterHexaCodeBoardView = 166,
-	FinishStoryModeOpenAnimation = 167
+	FinishStoryModeOpenAnimation = 162
 }
 
 public enum ContentsTutorialTextLocation : int
@@ -16684,7 +15845,11 @@ public enum EventMVGCharacterCustomActionTypeData : int
 	GlassAction = 2,
 	InvincibleOFF = 3,
 	CharacterUnlock = 4,
-	None = 5
+	PlayTimelineFx = 5,
+	StopTimelineFx = 6,
+	RaiseHand = 7,
+	LowerHand = 8,
+	None = 9
 }
 
 public enum EventMVGCharacterCustomActionMuzzleTypeData : int
@@ -16708,7 +15873,8 @@ public enum EventMVGCharacterCustomActionProjectileTypeData : int
 	LaserLine = 1,
 	LaserArea = 2,
 	LaserScreen = 3,
-	None = 4
+	InstantAllBoom = 4,
+	None = 5
 }
 
 public enum EventMVGCharacterCustomVariablesTypeData : int
@@ -16817,7 +15983,8 @@ public enum EventMVGCharacterCustomLockTypeData : int
 	SemiLock = 0,
 	HardLock = 1,
 	NoneLock = 2,
-	None = 3
+	AttackLock = 3,
+	None = 4
 }
 
 public enum EventMVGCollectableCategoryData : int
@@ -16853,7 +16020,8 @@ public enum EventMVGDirectorTimeLineActionTypeData : int
 	ObjectStatusChange = 13,
 	LoadTimelineAnimation = 14,
 	StartBossIntroDisplay = 15,
-	GoToLobby = 16
+	GoToLobby = 16,
+	ResultPopup = 17
 }
 
 public enum EventMVGMinimapMarkerType : int
@@ -17335,7 +16503,8 @@ public enum EventQuestStageModeType : int
 public enum EventQuestMiniGameType : int
 {
 	None = 0,
-	TowerDefense = 1
+	TowerDefense = 1,
+	EventQuestMVG = 2
 }
 
 public enum EventRebuildEdenEffectType : int
@@ -18846,7 +18015,8 @@ public enum StatusTriggerType : int
 	IsCheckFunctionOverlap = 63,
 	IsFirstBurstMember = 64,
 	IsNotFirstBurstMember = 65,
-	IsCharging = 66
+	IsCharging = 66,
+	IsCaster = 67
 }
 
 public enum FunctionKeepingType : int
@@ -19406,8 +18576,7 @@ public enum RangeAlignType : int
 public enum MemorialSeriesCategoryType : int
 {
 	Campaign = 0,
-	Event = 1,
-	Surface = 2
+	Event = 1
 }
 
 public enum MemorialCategoryFormType : int
@@ -19832,7 +19001,7 @@ public enum BuildingCategory : int
 	OutdoorPool = 10,
 	FlowerPark = 11,
 	EventBuilding01 = 12,
-	HexaCode = 13
+	RemovedHexaCode = 13
 }
 
 public enum BuildingDisplayCategory : int
@@ -19934,19 +19103,6 @@ public enum PresetTeamType : int
 	Starting = 1
 }
 
-public enum SurfaceFactoryPriceType : int
-{
-	None = 0,
-	SurfaceCurrency = 1,
-	SurfaceItemMaterial = 2
-}
-
-public enum SurfaceFactoryUnlockConditionType : int
-{
-	None = 0,
-	SurfaceFactoryunlockSectorOpen = 1
-}
-
 public enum ProductOfferPopupType : int
 {
 	None = 0,
@@ -19997,13 +19153,6 @@ public enum RankingType : int
 	TowerOverspec = 9,
 	MuseumTotal = 10,
 	MuseumGroup = 11
-}
-
-public enum RecoveryCostType : int
-{
-	None = 0,
-	SurfaceCurrency = 1,
-	SurfaceItem = 2
 }
 
 public enum RecycleType : int
@@ -20095,6 +19244,13 @@ public enum FrameType : int
 	Right = 1,
 	Center = 2,
 	Left = 3
+}
+
+public enum CharacterSubIcon : int
+{
+	None = 0,
+	ArcanaFortuneMate = 1,
+	Privaty = 2
 }
 
 public enum Condition : int
@@ -20625,846 +19781,6 @@ public enum TeamType : int
 	SoloRaidMuseum = 31
 }
 
-public enum SurfaceAlarmType : int
-{
-	None = 0,
-	OccupationSuccess = 1,
-	OccupationFailure = 2,
-	OccupationLowBattery = 3,
-	OccupationDefenseSuccess = 4,
-	OccupationDefenseFailure = 5,
-	GatewaySuccess = 6,
-	GatewayFailure = 7,
-	SuppressBossRaidSuccess = 8,
-	SuppressBossRaidFailure = 9,
-	SuppressLegionRaidSuccess = 10,
-	SuppressLegionRaidFailure = 11,
-	FactoryPause = 12,
-	FactoryOperate = 13,
-	FactoryStop = 14,
-	HospitalPause = 15,
-	SuppressBossRaidUnlockOnFirstClear = 16,
-	SuppressLegionRaidUnlockOnFirstClear = 17,
-	SuppressBossRaidHighDifficultyUnlock = 18,
-	SuppressLegionRaidHighDifficultyUnlock = 19,
-	QuestGroupUnlock = 20,
-	DefeatFieldMonster = 21
-}
-
-public enum WorldType : int
-{
-	None = 0,
-	Test = 1,
-	Tutorial = 2,
-	Challenge = 3
-}
-
-public enum SurfaceAmbientSkillType : int
-{
-	None = 0,
-	PartsBuff = 1,
-	FieldBuff = 2,
-	StaminaDebuff = 3
-}
-
-public enum SurfaceAutoChargeType : int
-{
-	None = 0,
-	Daily = 1,
-	Weekly = 2
-}
-
-public enum SurfaceBuffPartsPriceType : int
-{
-	None = 0,
-	SurfaceCurrency = 1,
-	SurfaceItem = 2
-}
-
-public enum SurfaceBuildCondition : int
-{
-	None = 0,
-	Build = 1
-}
-
-public enum SurfaceCostType : int
-{
-	None = 0,
-	SurfaceCurrency = 1,
-	SurfaceItem = 2
-}
-
-public enum SurfaceBuildingType : int
-{
-	None = 0,
-	Headquarters = 1,
-	Lodging = 2,
-	Hospital = 3,
-	Storage = 4,
-	CorePowderProcessingFacility = 5,
-	GoddesiumProcessingFacility = 6,
-	GeonicProcessingFacility = 7,
-	NeoTitaniumProcessingFacility = 8,
-	Factory = 9
-}
-
-public enum SurfaceBuildingFunctionType : int
-{
-	None = 0,
-	DiscountResearchPriceValue = 1,
-	IncreaseTeamMaximum = 2,
-	ProduceCorePowder = 3,
-	ProduceGoddesium = 4,
-	ProduceGeonic = 5,
-	ProduceNeoTitanium = 6,
-	MaxAmountCorePowder = 7,
-	MaxAmountGoddesium = 8,
-	MaxAmountGeonic = 9,
-	MaxAmountNeoTitanium = 10,
-	MaxProductionCorePowder = 11,
-	MaxProductionGoddesium = 12,
-	MaxProductionGeonic = 13,
-	MaxProductionNeoTitanium = 14,
-	HospitalReturnToUnitSlotUnlock = 15,
-	HospitalRecoverySquadMaxAmount = 16,
-	DecreaseRecoveryTime = 17,
-	FactorySlotUnlock = 18,
-	DecreaseFactoryProductionTime = 19,
-	IncreaseNikkeMaximum = 20,
-	MaxAmountSurfaceCurrency = 21,
-	MaxProductionSurfaceCurrency = 22
-}
-
-public enum SurfaceBuildingFunctionValueType : int
-{
-	None = 0,
-	Integer = 1,
-	Percent = 2,
-	ProcessingFacility = 3,
-	MaxAmountValue = 4,
-	MaxProductionValue = 5
-}
-
-public enum SurfaceContentsLevelScalingType : int
-{
-	None = 0,
-	Quest = 1,
-	Suppress = 2
-}
-
-public enum SurfaceQuestRank : int
-{
-	None = 0,
-	One = 1,
-	Two = 2,
-	Three = 3
-}
-
-public enum SurfaceCurrencyFunctionValueType : int
-{
-	None = 0,
-	Integer = 1,
-	Percent = 2
-}
-
-public enum SurfaceCategoryDataType : int
-{
-	Building = 0,
-	Research = 1,
-	Nikke = 2
-}
-
-public enum SurfaceWaveDifficultyType : int
-{
-	None = 0,
-	Easy = 1,
-	Normal = 2,
-	Hard = 3
-}
-
-public enum SurfaceEvlaPurificationOpenConditionType : int
-{
-	None = 0,
-	SurfaceSectorOpen = 1
-}
-
-public enum SurfaceBossSpawnerType : int
-{
-	None = 0,
-	Common = 1,
-	Suppress = 2
-}
-
-public enum SurfaceFieldItemType : int
-{
-	None = 0,
-	Item = 1,
-	Memory = 2,
-	JukeBox = 3,
-	Quest = 4,
-	Resource = 5,
-	Coin = 6,
-	OCResource = 7,
-	GateResource = 8,
-	Key = 9
-}
-
-public enum SurfaceFieldItemSpawnLogicType : int
-{
-	None = 0,
-	Common = 1,
-	Trigger = 2
-}
-
-public enum SurfaceWaveContentsType : int
-{
-	None = 0,
-	Common = 1,
-	Quest = 2,
-	Suppress = 3
-}
-
-public enum SurfaceWaveContentsClearType : int
-{
-	None = 0,
-	Sweep = 1,
-	Time = 2
-}
-
-public enum SurfaceTriggerHPType : int
-{
-	None = 0,
-	Fixed = 1,
-	Scaling = 2
-}
-
-public enum SurfaceTutorialSubGroup : int
-{
-	None = 0,
-	Top = 1,
-	Middle = 2,
-	Bottom = 3
-}
-
-public enum SurfaceForcedTriggerType : int
-{
-	None = 0,
-	EnterSurfaceSquadInfoPopup = 1,
-	EnterSurfaceHospitalPopup = 2,
-	TouchReturnToUnitButton = 3,
-	EnterSurfaceResearchPopup = 4,
-	EnterSurfaceFactoryPopup = 5,
-	EnterSurfaceStoragePopup = 6,
-	EnterSurfaceSquadSetPopup = 7,
-	EnterSurfaceBuffPartsBuyPopup = 8,
-	TouchSurfaceSquadSetButton = 9,
-	FinishSurfaceLobbyAnimation = 10,
-	CompleteSquadSet = 11,
-	EnterSurfaceStructureInfo = 12,
-	EnterSurfaceEvlaPurification = 13,
-	EnterSurfaceBattleLegionRaidPopup = 14,
-	EnterSurfaceBattleBossRaidPopup = 15,
-	EnterSurfaceBattleOccupationPopup = 16,
-	EnterSurfaceMissionPopup = 17,
-	TouchSurfaceBattleStartButton = 18,
-	TouchSurfaceBattleCloseButton = 19,
-	TouchSurfaceHudHeadQuartersButton = 20,
-	TouchSurfaceStructureInfoEvlaButton = 21,
-	TouchSurfaceEvlaPurificationButton = 22,
-	TouchSurfaceEvlaPurificationfunctionButton = 23,
-	TouchSurfaceEvlaPurificationCloseButton = 24,
-	TouchSurfaceStructureInfoSquadButton = 25,
-	TouchSurfaceSquadTeamSetCorp01Button = 26,
-	TouchSurfaceSquadTeamSetAutoButton = 27,
-	TouchSurfaceSquadTeamSaveButton = 28,
-	TouchSurfaceHudFoldButton = 29,
-	TouchSurfaceHudMissionButton = 30,
-	TouchSurfaceMissionCloseButton = 31,
-	TouchSystemDialogOkButton = 32
-}
-
-public enum SurfaceGatewayType : int
-{
-	None = 0,
-	GatewayTypeA = 1
-}
-
-public enum RecoveryType : int
-{
-	None = 0,
-	RecoveryToSquad = 1,
-	ReturnToUnit = 2
-}
-
-public enum SurfaceItemType : int
-{
-	None = 0,
-	OpticalCamouflage = 1,
-	CallingSignalGenerator = 2,
-	Energy = 3,
-	EnemyLight = 4,
-	GeonicBattery = 5,
-	SurfaceItemMaterial = 6,
-	SurfaceItemConsume = 7
-}
-
-public enum SurfaceItemConsumeUseType : int
-{
-	GetSurfaceCurrencyFixedValue = 0,
-	CharacterHPRecoveryPer = 1,
-	CharacterStaminaRecoveryPer = 2
-}
-
-public enum SurfaceItemMaterialUseType : int
-{
-	None = 0,
-	CallingSignalGenerator = 1,
-	OpticalCamouflage = 2,
-	ChargeBattery = 3,
-	CallingSignalRepair = 4,
-	HologramComputer = 5
-}
-
-public enum SurfaceMissionTrigger : int
-{
-	None = 0,
-	GatewayOpen = 1,
-	ResearchComplete = 2,
-	OccupationComplete = 3,
-	KillMonsterSpecificSector = 4,
-	ItemCraft = 5,
-	EvlaPurificationComplete = 6,
-	ClearQuest = 7,
-	CollectFieldItem = 8,
-	CollectFieldResource = 9,
-	BuildingLevelUpCompleteStack = 10,
-	BossRaidSuppressComplete = 11,
-	LegionRaidSuppressComplete = 12,
-	TeamSetCount = 13
-}
-
-public enum SurfaceMissionShortcutType : int
-{
-	None = 0,
-	HeadquartersLevelUpPopup = 1,
-	Occupation = 2,
-	Gateway = 3,
-	SurfaceResearchLevelUpPopup = 4,
-	EvlaPurificationLevelUpPopup = 5
-}
-
-public enum SurfaceMissionTriggerType : int
-{
-	Main = 0,
-	Side = 1
-}
-
-public enum SurfaceMissionTutorialTriggerType : int
-{
-	None = 0,
-	OnFieldBlocker = 1,
-	OffFieldBlocker = 2,
-	StartDialogGroup = 3,
-	SetMissionLocale = 4,
-	DisableMissionLocale = 5,
-	SpawnTutorialSquad = 6,
-	StartLookAtTrigger = 7,
-	OnSpotLight = 8,
-	OffSpotLight = 9,
-	MoveToSpecificTile = 10,
-	GetItem = 11,
-	CompleteSurfaceSuppress = 12,
-	CompleteSurfaceOccupation = 13,
-	KillMonsterGroup = 14,
-	ActivateWatchTower = 15,
-	ActivateButtonTrigger = 16,
-	CloseNormalRewardPopup = 17,
-	CloseFirstClearRewardPopup = 18,
-	CameraFocusSelectedSquad = 19,
-	TeleportTutorialSquad = 20,
-	DespawnTutorialSquad = 21,
-	SelectSquadByValue = 22
-}
-
-public enum SurfaceDialogOutputType : int
-{
-	None = 0,
-	CameraAnimation = 1
-}
-
-public enum SurfaceDialogThumbnailLocation : int
-{
-	None = 0,
-	Left = 1,
-	Right = 2
-}
-
-public enum SurfaceMonsterAction : int
-{
-	Skill = 0,
-	SelfDestruct = 1
-}
-
-public enum SurfaceMonsterPreferTarget : int
-{
-	None = 0,
-	Near = 1,
-	Far = 2,
-	HighAttack = 3,
-	HighHpRatio = 4,
-	LowHpRatio = 5,
-	Attacker = 6,
-	Defender = 7,
-	Supporter = 8,
-	NonTargetPlatoon = 9,
-	Thrash = 10,
-	Minion = 11,
-	Elite = 12,
-	Centurion = 13,
-	Boss = 14
-}
-
-public enum SurfaceMonsterTrigger : int
-{
-	None = 0,
-	HpRatioUnder = 1,
-	CantAttack = 2
-}
-
-public enum SurfaceMonsterRankType : int
-{
-	None = 0,
-	Radial = 1,
-	HighRank = 2
-}
-
-public enum GradeCondition : int
-{
-	None = 0,
-	Thrash = 1,
-	Minion = 2,
-	Elite = 3,
-	Centurion = 4
-}
-
-public enum MonsterRangeCondition : int
-{
-	None = 0,
-	Near = 1,
-	Mid = 2,
-	Far = 3
-}
-
-public enum ClassCondition : int
-{
-	None = 0,
-	Attacker = 1,
-	Supporter = 2,
-	Defender = 3
-}
-
-public enum SurfacePreferTarget : int
-{
-	Random = 0
-}
-
-public enum SurfaceMonsterFireType : int
-{
-	InstantArea = 0,
-	InstantAreaNum = 1,
-	SurfaceMonsterSetBuff = 2,
-	CallingMonster = 3,
-	DamageAreaDuration = 4,
-	DamageAreaNumDuration = 5,
-	InstantAreaHaveSafeZone = 6
-}
-
-public enum SurfaceMonsterSkillValueType : int
-{
-	None = 0,
-	Integer = 1,
-	Percent = 2
-}
-
-public enum SurfaceNarrativeSignType : int
-{
-	None = 0,
-	Popup = 1,
-	Balloon = 2
-}
-
-public enum SurfaceNarrativeSignActiveType : int
-{
-	None = 0,
-	Auto = 1,
-	Manual = 2
-}
-
-public enum SurfaceQuestType : int
-{
-	None = 0,
-	Annihilation = 1,
-	Collect = 2,
-	Securing = 3
-}
-
-public enum SurfaceResearchCostType : int
-{
-	None = 0,
-	SurfaceItem = 1,
-	SurfaceCurrency = 2
-}
-
-public enum SurfaceResearchFunctionType : int
-{
-	None = 0,
-	IncreaseAttackerStatAtk = 1,
-	IncreaseAttackerStatHp = 2,
-	IncreaseDefenderStatAtk = 3,
-	IncreaseDefenderStatHp = 4,
-	IncreaseSupporterStatAtk = 5,
-	IncreaseSupporterStatHp = 6,
-	IncreaseSquadAtk = 7,
-	IncreaseSquadHp = 8,
-	IncreaseProductionCorePowder = 9,
-	IncreaseProductionGoddesium = 10,
-	IncreaseProductionGeonic = 11,
-	IncreaseProductionNeoTitanium = 12,
-	IncreaseProductionSurfaceCurrency = 13,
-	IncreaseMaxAmountCorePowder = 14,
-	IncreaseMaxAmountGoddesium = 15,
-	IncreaseMaxAmountGeonic = 16,
-	IncreaseMaxAmountNeoTitanium = 17,
-	IncreaseMaxAmountSurfaceCurrency = 18,
-	DecreaseSurfaceBuildingLevelUpTime = 19,
-	DecreaseSurfaceBuildingLevelUpCost = 20,
-	DecreaseFactoryProductionTime = 21,
-	FactorySlotUnlock = 22,
-	HospitalSlotUnlock = 23,
-	DecreaseRecoveryCost = 24,
-	DecreaseRecoveryTime = 25,
-	DecreaseResearchTime = 26,
-	OpenBuffParts = 27,
-	RapidDeploymentUnlock = 28,
-	SuppressBossAutoChargeMaxAmount = 29,
-	SuppressLegionAutoChargeMaxAmount = 30,
-	IncreaseTeamMaxAmount = 31,
-	RapidDeploymentAutoChargeMaxAmount = 32
-}
-
-public enum SurfaceResearchFunctionValueType : int
-{
-	None = 0,
-	Integer = 1,
-	Percent = 2,
-	SurfaceCurrency = 3,
-	BuffParts = 4,
-	NikkeStat = 5
-}
-
-public enum ResearchOpenConditionType : int
-{
-	None = 0,
-	SurfaceResearchLevel = 1,
-	SurfaceBuildingLevel = 2
-}
-
-public enum SectorOpenConditionType : int
-{
-	None = 0,
-	GatewayWaveComplete = 1
-}
-
-public enum SurfaceSkillTypeCondition : int
-{
-	None = 0,
-	SurfaceStatAtk = 1,
-	SurfaceStatMaxHP = 2,
-	SurfaceDamage = 3,
-	SurfaceAddDamage = 4,
-	SurfaceDamageReduction = 5,
-	SurfaceMoveSpeed = 6,
-	SurfaceViewRange = 7,
-	SurfaceHeal = 8,
-	SurfaceHealVariation = 9,
-	SurfaceIncElementDmg = 10,
-	SurfaceIncBonusRangeDmg = 11,
-	SurfaceBarrier = 12,
-	SurfaceAttackCoolTimeChange = 13,
-	SurfaceDamageRecoveryHeal = 14,
-	SurfaceElementDamageReduction = 15,
-	SurfaceHide = 16,
-	SurfaceImmortal = 17,
-	SurfaceShotRangeChange = 18,
-	SurfaceSkillLevelChange = 19,
-	SurfaceSkillRangeChange = 20,
-	SurfaceTaunt = 21,
-	SurfaceMonsterStun = 22,
-	SurfaceStaminaHeal = 23,
-	SurfaceDurationHeal = 24,
-	SurfaceStaminaDurationHeal = 25
-}
-
-public enum SurfaceSkillValueTypeCondition : int
-{
-	Integer = 0,
-	Percent = 1
-}
-
-public enum SurfaceSkillRangeTypeCondition : int
-{
-	None = 0,
-	All = 1,
-	User = 2,
-	UserPlatoon = 3,
-	CurrentAttackTarget = 4,
-	Around = 5,
-	OccupiedArea = 6,
-	UseMonsterUseArea = 7,
-	AroundCallingSignal = 8,
-	AroundNotSelf = 9,
-	BattleZone = 10
-}
-
-public enum SurfaceTargetCategoryCondition : int
-{
-	None = 0,
-	Character = 1,
-	NikkeCharacter = 2,
-	MonsterCharacter = 3,
-	Platoon = 4,
-	NikkePlatoon = 5,
-	MonsterPlatoon = 6,
-	Obstruction = 7,
-	OpticalCamouflage = 8
-}
-
-public enum SurfaceFunctionPreferTarget : int
-{
-	None = 0,
-	Random = 1
-}
-
-public enum SurfaceDurationTypeCondition : int
-{
-	None = 0,
-	Aura = 1,
-	Battles = 2,
-	TimeSec = 3,
-	Attack = 4,
-	Hit = 5
-}
-
-public enum SurfaceTimingTriggerTypeCondition : int
-{
-	None = 0,
-	OnAlways = 1,
-	OnStart = 2,
-	OnAttack = 3,
-	OnHurt = 4,
-	OnBattleStart = 5,
-	OnRetreat = 6,
-	OnKillEnemyPlatoon = 7,
-	OnOccupieStart = 8,
-	OnOccupieWin = 9,
-	OnTimeUse = 10,
-	OnGetCoin = 11,
-	OnHpRatioUnder = 12,
-	OnStaminaRatioUnder = 13
-}
-
-public enum SurfaceTimingTriggerStandardCondition : int
-{
-	None = 0,
-	User = 1,
-	UserPlatoon = 2,
-	Target = 3,
-	TriggerTarget = 4
-}
-
-public enum SurfaceStatusTriggerTypeCondition : int
-{
-	None = 0,
-	IsARNumOver = 1,
-	IsSMGNumOver = 2,
-	IsSGNumOver = 3,
-	IsSRNumOver = 4,
-	IsRLNumOver = 5,
-	IsMGNumOver = 6,
-	IsFireNumOver = 7,
-	IsWaterNumOver = 8,
-	IsWindNumOver = 9,
-	IsElectricNumOver = 10,
-	IsIronNumOver = 11,
-	IsAttackerNumOver = 12,
-	IsSupporterNumOver = 13,
-	IsDefenderNumOver = 14,
-	IsSameSqaudNumOver = 15,
-	IsAttacking = 16,
-	IsDefending = 17,
-	IsInBattleZone = 18,
-	IsStandOnField = 19,
-	IsStop = 20,
-	IsCheckTroopType = 21,
-	IsFieldMonster = 22,
-	IsCheckNearBonusRange = 23,
-	IsCheckMidBonusRange = 24,
-	IsCheckFarBonusRange = 25,
-	IsMoving = 26,
-	IsCheckSkillType = 27,
-	IsInField = 28
-}
-
-public enum SurfaceStatusTriggerStandardCondition : int
-{
-	None = 0,
-	User = 1,
-	UserPlatoon = 2,
-	Target = 3,
-	TriggerTarget = 4
-}
-
-public enum SurfaceKeepingTypeCondition : int
-{
-	On = 0,
-	Off = 1
-}
-
-public enum SurfacePlatoonSocketPoint : int
-{
-	None = 0,
-	Top = 1,
-	Head = 2,
-	Center = 3,
-	Bottom = 4,
-	World = 5
-}
-
-public enum SurfaceSelectEventRewardType : int
-{
-	None = 0,
-	Item = 1,
-	Buff = 2
-}
-
-public enum SurfaceSuppressContentsType : int
-{
-	None = 0,
-	BossRaid = 1,
-	LegionRaid = 2,
-	TutorialBossRaid = 3,
-	TutorialLegionRaid = 4
-}
-
-public enum SurfaceFieldToolEventGroup : int
-{
-	None = 0,
-	SetContents = 1,
-	SetWave = 2,
-	SetTrigger = 3
-}
-
-public enum SurfaceFieldEventComponent : int
-{
-	None = 0,
-	BaseCamp = 1,
-	MonsterSpawner = 2,
-	OccupationArea = 3,
-	BuildingSpawner = 4,
-	WaveManager = 5,
-	WavePoint = 6,
-	StartPoint = 7,
-	ItemSpawner = 8,
-	ButtonTrigger = 9,
-	DrawBridge = 10,
-	Portal = 11,
-	WaveTrigger = 12,
-	Gateway = 13,
-	BossSpawner = 14,
-	Spotlight = 15,
-	WatchTower = 16,
-	SuddenEvent = 17,
-	NarrativeSign = 18,
-	ChasePuzzleTrigger = 19,
-	EffectTrigger = 20,
-	MissionTargetPoint = 21,
-	MissionBlocker = 22,
-	TutorialSquadDeployer = 23,
-	LookAtTrigger = 24,
-	Heliport = 25,
-	TutorialResetPoint = 26,
-	TutorialSquadTeleporter = 27,
-	TutorialSquadDespawner = 28
-}
-
-public enum SurfaceFieldThemeType : int
-{
-	None = 0,
-	CityForest = 1
-}
-
-public enum SurfaceFieldObjectType : int
-{
-	None = 0,
-	Blocking = 1,
-	Decoration = 2,
-	Side = 3,
-	Bridge = 4,
-	Stairs = 5,
-	Event = 6,
-	PassableBlocking = 7
-}
-
-public enum SurfaceFieldTileType : int
-{
-	None = 0,
-	Terrain = 1,
-	Blocking = 2,
-	Water = 3,
-	Smog = 4
-}
-
-public enum SurfaceTutorialSettingType : int
-{
-	None = 0,
-	TeamPosition = 1,
-	MonsterKill = 2,
-	GetFieldItem = 3,
-	AddTeam = 4,
-	CompleteSuppressRaid = 5,
-	SettingSurfaceUserCurrency = 6,
-	CompleteOccupation = 7,
-	DeleteTeam = 8
-}
-
-public enum SurfaceViewType : int
-{
-	None = 0,
-	Squad = 1,
-	BaseArea = 2,
-	OccupiedArea = 3
-}
-
-public enum SurfaceFieldWaveSpawnType : int
-{
-	None = 0,
-	InOrder = 1,
-	Random = 2
-}
-
-public enum FieldOpenConditionType : int
-{
-	None = 0,
-	SectorOpen = 1
-}
-
-public enum OpenConditionType : int
-{
-	None = 0,
-	ChapterClear = 1,
-	StageClear = 2
-}
-
 public enum LessonType : int
 {
 	None = 0,
@@ -21646,7 +19962,9 @@ public enum SpotModType : int
 	CabalShifty = 22,
 	CabalSyuen = 23,
 	SoloRaidMuseum = 24,
-	SoloRaidMuseumNolimit = 25
+	SoloRaidMuseumNolimit = 25,
+	CharacterDetail = 26,
+	CabalMecamiShifty = 27
 }
 
 public enum WaveDataUIThemeType : int
