@@ -499,4 +499,12 @@ namespace EpinelPS.Models
             };
         }
     }
+
+    public class MiniGameStoryChoice
+    {
+        public int Id { get; set; }
+        public List<string> Choices { get; set; } = [];
+        public List<string> SeenChoices { get; set; } = [];
+        public string LastSeen { get; set; }
+    }
 }

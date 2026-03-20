@@ -12,19 +12,24 @@ namespace EpinelPS.LobbyServer.LobbyUser.Tutorial
             ReqSetTutorial req = await ReadData<ReqSetTutorial>();
             User user = GetUser();
 
+            var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
+            var tutorial = new ClearedTutorialData()
+            {
+                ClearedStageId = cleared.ClearedStageId,
+                GroupId = cleared.GroupId,
+                Id = cleared.Id,
+                NextId = cleared.NextId,
+                SaveTutorial = cleared.SaveTutorial,
+                VersionGroup = cleared.VersionGroup
+            };
+
             if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
             {
-                var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
-                cleared.Id = req.LastClearedTid;
-                user.ClearedTutorialData.Add(req.LastClearedTid, new ClearedTutorialData()
-                {
-                    ClearedStageId = cleared.ClearedStageId,
-                    GroupId = cleared.GroupId,
-                    Id = cleared.GroupId,
-                    NextId = cleared.NextId,
-                    SaveTutorial = cleared.SaveTutorial,
-                    VersionGroup = cleared.VersionGroup
-                });
+                user.ClearedTutorialData.Add(req.LastClearedTid, tutorial);
+            }
+            else
+            {
+                user.ClearedTutorialData[req.LastClearedTid] = tutorial;
             }
             JsonDb.Save();
 

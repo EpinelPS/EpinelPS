@@ -223,7 +223,9 @@ namespace EpinelPS.LobbyServer.Event
                     if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-1).Ticks;
                     if (eventData.EventDisableDate == 0) eventData.EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks;
                     if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
-                    response.EventList.Add(eventData);
+
+                    if (eventData.Id != 10046) // todo fix properly
+                        response.EventList.Add(eventData);
                 }
                 else
                 {

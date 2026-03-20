@@ -126,6 +126,7 @@ public class User
 
     public List<int> LobbyPrivateBannerIds = [];
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo = [];
+    public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice = [];
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
