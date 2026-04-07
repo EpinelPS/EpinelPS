@@ -1,5 +1,5 @@
-﻿using EpinelPS.LobbyServer;
-using Sodium;
+﻿using ASodium;
+using EpinelPS.LobbyServer;
 using System.Buffers.Binary;
 using System.IO.Compression;
 using System.Text;
@@ -45,7 +45,7 @@ namespace EpinelPS.Utils
                     GameClientInfo key = LobbyHandler.GetInfo(decryptionToken) ?? throw new BadHttpRequestException("InvalId decryption token");
                     byte[] additionalData = GenerateAdditionalData(decryptionToken, false);
 
-                    byte[] x = SecretAeadXChaCha20Poly1305.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
+                    byte[] x = SodiumSecretAeadXChaCha20Poly1305IETF.Decrypt(bytes, nonce, key.Keys.ReadSharedSecret, [.. additionalData]);
 
                     MemoryStream ms = new(x);
 
@@ -192,7 +192,7 @@ namespace EpinelPS.Utils
 
             msm.Write(message);
 
-            byte[] encryptedBytes = SecretAeadXChaCha20Poly1305.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, [.. additionalData]);
+            byte[] encryptedBytes = SodiumSecretAeadXChaCha20Poly1305IETF.Encrypt(msm.ToArray(), nonce, key.Keys.TransferSharedSecret, [.. additionalData]);
 
             // write encrypted data
             m.Write(encryptedBytes);
