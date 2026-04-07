@@ -17,10 +17,9 @@ namespace EpinelPS.LobbyServer.Subquest
             if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubQuestRecord? record))
                 throw new Exception("no such subquest: " + req.SubquestId);
 
+            user.AddTrigger(record.ClearTrigger, record.ClearConditionValue, record.ClearConditionId);
+            user.AddTrigger(Trigger.SubQuestClear, 1, req.SubquestId); // TODO move elsewhere?
 
-            user.AddTrigger(Trigger.CampaignGroupClear, record.ClearConditionValue, record.ClearConditionId); // TODO this may need to go elsewhere
-user.AddTrigger(Trigger.FieldObjectCollection, record.ClearConditionValue, record.ClearConditionId); // TODO this may need to go elsewhere
-            user.AddTrigger(Trigger.SubQuestClear, 1, req.SubquestId);
 
             JsonDb.Save();
 
