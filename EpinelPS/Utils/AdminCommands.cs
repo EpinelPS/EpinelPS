@@ -213,6 +213,60 @@ namespace EpinelPS.Utils
             return RunCmdResponse.OK;
         }
 
+        public static RunCmdResponse AddAllEq(User user, int amount)
+        {
+            if (amount > 0)
+            {
+                foreach (FavoriteItemRecord tableItem in GameData.Instance.FavoriteItemTable.Values)
+                {
+                    foreach (int i in Enumerable.Range(0, amount))
+                    {
+                        user.FavoriteItems.Add(new NetUserFavoriteItemData
+                        {
+                            FavoriteItemId = user.GenerateUniqueItemId(),
+                            Tid = tableItem.Id,
+                            Csn = 0,
+                            Lv = 15,
+                            Exp = 0
+                        });
+                    }
+                }
+                foreach (ItemConsumeRecord tableItem in GameData.Instance.ConsumableItems.Values)
+                {
+                    user.Items.Add(new DbItemData
+                    {
+                        Isn = user.GenerateUniqueItemId(),
+                        ItemType = tableItem.Id,
+                        Level = 1,
+                        Exp = 1,
+                        Count = amount
+                    });
+                }
+                int[] sequence = { 0, 1, 2, 3, 4, 7 };
+                foreach (int corp in sequence)
+                {
+                    foreach (ItemEquipRecord tableItem in GameData.Instance.ItemEquipTable.Values)
+                    {
+                        foreach (int i in Enumerable.Range(0, amount))
+                        {
+                            user.Items.Add(new DbItemData
+                            {
+                                Isn = user.GenerateUniqueItemId(),
+                                ItemType = tableItem.Id,
+                                Level = 5,
+                                Exp = 0,
+                                Count = 1,
+                                Corp = corp
+                            });
+                        }
+                    }
+                }
+            }
+            Console.WriteLine($"Added {amount} of all favorite items to user " + user.Username);
+            JsonDb.Save();
+            return RunCmdResponse.OK;
+        }
+
         public static RunCmdResponse FinishAllTutorials(User user)
         {
             foreach (var tutorial in GameData.Instance.TutorialTable.Values)

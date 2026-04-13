@@ -233,6 +233,7 @@ namespace EpinelPS
                     Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
                     Console.WriteLine("  AddItem (id) (amount) - Adds an item to the selected user (takes effect on game and server restart)");
                     Console.WriteLine("  AddCharacter (id) - Adds a character to the selected user (takes effect on game and server restart)");
+                    Console.WriteLine("  addallEq (amount) -Adds all Equipment and character favorite collection and Consumable Items");
                 }
                 else if (input == "show users")
                 {
@@ -319,6 +320,34 @@ namespace EpinelPS
                             }
 
                             Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllMaterials(user, amount);
+                            if (!rsp.ok) Console.WriteLine(rsp.error);
+                        }
+                    }
+                }
+                else if (input.StartsWith("addallEq"))
+                {
+                    if (selectedUser == 0)
+                    {
+                        Console.WriteLine("No user selected");
+                    }
+                    else
+                    {
+                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                        if (user == null)
+                        {
+                            Console.WriteLine("Selected user does not exist");
+                            selectedUser = 0;
+                            prompt = "# ";
+                        }
+                        else
+                        {
+                            int amount = 1; // Default amount if not provided
+                            if (args.Length >= 2 && int.TryParse(args[1], out int parsedAmount))
+                            {
+                                amount = parsedAmount;
+                            }
+
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllEq(user, amount);
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                     }
