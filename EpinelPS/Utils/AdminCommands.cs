@@ -262,7 +262,7 @@ namespace EpinelPS.Utils
                     }
                 }
             }
-            Console.WriteLine($"Added {amount} of all favorite items to user " + user.Username);
+            Console.WriteLine($"Added {amount} of all equipment, treasures, and consumables to user " + user.Username);
             JsonDb.Save();
             return RunCmdResponse.OK;
         }
