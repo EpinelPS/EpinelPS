@@ -5,7 +5,7 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4" data-i18n="config.server.title">服务器配置</h1>
+    <h1 class="display-4" data-i18n="config.server.title">Server Configuration</h1>
     <form asp-action="Configuration">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <dl class="row">
@@ -15,10 +15,8 @@
             </dd>
         </dl>
 
-        <button id="reloadDB" type="button" class="btn btn-danger" data-i18n-title="config.server.updateResourcesHint" onclick="runSimpleCmd('updateServer')" data-i18n="config.server.updateResources">Update resources</button>
-
-
         <div class="form-group">
+        <button id="reloadDB" type="button" class="btn btn-danger" data-i18n-title="config.server.updateResourcesHint" onclick="runSimpleCmd('updateServer')" data-i18n="config.server.updateResources">Update resources</button>
             <button type="submit" class="btn btn-primary" data-i18n="common.save"></button>
         </div>
     </form>

@@ -48,7 +48,7 @@
     "logout": "Logout"
   },
   "dashboard": {
-    "title": "Console Overview",
+    "title": "Overview",
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "statsCards": {
