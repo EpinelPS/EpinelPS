@@ -233,7 +233,8 @@ namespace EpinelPS.Utils
                     JsonDb.Save();
                 }
             }
-            if(amount2 > 0) { 
+
+            if (amount2 > 0) { 
                 foreach (ItemConsumeRecord tableItem in GameData.Instance.ConsumableItems.Values)
                 {
                     DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
@@ -244,8 +245,8 @@ namespace EpinelPS.Utils
                         {
                             Isn = user.GenerateUniqueItemId(),
                             ItemType = tableItem.Id,
-                            Level = 1,
-                            Exp = 1,
+                            Level = 0,
+                            Exp = 0,
                             Count = amount2
                         });
                     }
@@ -253,9 +254,28 @@ namespace EpinelPS.Utils
                     {
                         item.Count += amount2;
                     }
-                    
                 }
                 JsonDb.Save();
+                foreach (ItemPieceRecord tableItem in GameData.Instance.PieceItems.Values)
+                {
+                    DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
+
+                    if (item == null)
+                    {
+                        user.Items.Add(new DbItemData
+                        {
+                            Isn = user.GenerateUniqueItemId(),
+                            ItemType = tableItem.Id,
+                            Level = 0,
+                            Exp = 0,
+                            Count = amount2
+                        });
+                    }
+                    else
+                    {
+                        item.Count += amount2;
+                    }
+                }
             }
             if (amount3 > 0) { 
             int[] sequence = { 0, 1, 2, 3, 4, 7 };
