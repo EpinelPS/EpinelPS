@@ -6,7 +6,7 @@
     <h1 class="display-4" data-i18n="events.config.title">活动配置</h1>
 
     <h2>Active events (for all users)</h2>
-    <p>@GameData.Instance.LobbyPrivateBannerTable.Last().Value.PrivateBannerResource.Replace("btn_event_enter_", "") [ID=@GameData.Instance.LobbyPrivateBannerTable.Last().Key]</p>
+    <p>@GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Last().Value.PrivateBannerResource.Replace("btn_event_enter_", "") [ID=@GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Last().Key]</p>
 
     <h2>All events</h2>
 

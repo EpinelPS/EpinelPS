@@ -204,7 +204,7 @@ namespace EpinelPS.LobbyServer.Event
             }
             else
             {
-                lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.OrderBy(b => b.Id).Last());
+                lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.OrderBy(b => b.EventId).Last());
             }
             Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
             log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
