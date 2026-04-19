@@ -213,13 +213,13 @@ namespace EpinelPS.Utils
             return RunCmdResponse.OK;
         }
 
-        public static RunCmdResponse AddAllEq(User user, int amount)
+        public static RunCmdResponse AddAllEq(User user, int amount1, int amount2, int amount3)
         {
-            if (amount > 0)
+            if (amount1 > 0)
             {
                 foreach (FavoriteItemRecord tableItem in GameData.Instance.FavoriteItemTable.Values)
                 {
-                    foreach (int i in Enumerable.Range(0, amount))
+                    foreach (int i in Enumerable.Range(0, amount1))
                     {
                         user.FavoriteItems.Add(new NetUserFavoriteItemData
                         {
@@ -230,39 +230,68 @@ namespace EpinelPS.Utils
                             Exp = 0
                         });
                     }
+                    JsonDb.Save();
                 }
+            }
+            if(amount2 > 0) { 
                 foreach (ItemConsumeRecord tableItem in GameData.Instance.ConsumableItems.Values)
                 {
-                    user.Items.Add(new DbItemData
+                    DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
+
+                    if (item == null)
                     {
-                        Isn = user.GenerateUniqueItemId(),
-                        ItemType = tableItem.Id,
-                        Level = 1,
-                        Exp = 1,
-                        Count = amount
-                    });
+                        user.Items.Add(new DbItemData
+                        {
+                            Isn = user.GenerateUniqueItemId(),
+                            ItemType = tableItem.Id,
+                            Level = 1,
+                            Exp = 1,
+                            Count = amount2
+                        });
+                    }
+                    else
+                    {
+                        item.Count += amount2;
+                    }
+                    
                 }
-                int[] sequence = { 0, 1, 2, 3, 4, 7 };
+                JsonDb.Save();
+            }
+            if (amount3 > 0) { 
+            int[] sequence = { 0, 1, 2, 3, 4, 7 };
+            int[] T9Equment = {3110901,
+            3210901,
+            3310901,
+            3410901,
+            3120901,
+            3220901,
+            3320901,
+            3420901,
+            3130901,
+            3230901,
+            3330901,
+            3430901};
                 foreach (int corp in sequence)
                 {
-                    foreach (ItemEquipRecord tableItem in GameData.Instance.ItemEquipTable.Values)
+                    foreach (int tableItem in T9Equment)
                     {
-                        foreach (int i in Enumerable.Range(0, amount))
+                        foreach (int i in Enumerable.Range(0, amount3))
                         {
                             user.Items.Add(new DbItemData
                             {
                                 Isn = user.GenerateUniqueItemId(),
-                                ItemType = tableItem.Id,
+                                ItemType = tableItem,
                                 Level = 5,
                                 Exp = 0,
                                 Count = 1,
                                 Corp = corp
                             });
                         }
+                        JsonDb.Save();
                     }
                 }
             }
-            Console.WriteLine($"Added {amount} of all equipment, treasures, and consumables to user " + user.Username);
+            Console.WriteLine($"Added {amount1} of all FavoriteItem, {amount2} of all consumables, and {amount3} of all equipment to user " + user.Username);
             JsonDb.Save();
             return RunCmdResponse.OK;
         }

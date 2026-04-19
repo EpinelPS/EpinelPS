@@ -233,7 +233,7 @@ namespace EpinelPS
                     Console.WriteLine("  SetCoreLevel (core level / 0-3 sets stars) - Set all characters' grades based on the input (from 0 to 11)");
                     Console.WriteLine("  AddItem (id) (amount) - Adds an item to the selected user (takes effect on game and server restart)");
                     Console.WriteLine("  AddCharacter (id) - Adds a character to the selected user (takes effect on game and server restart)");
-                    Console.WriteLine("  addallEq (amount) -Adds all Equipment and character favorite collection and Consumable Items");
+                    Console.WriteLine("  addallEq (FavoriteItemAmount) (ConsumableAmount) (T9-EquipmentAmount) -All parameters default to 1. When they are marked as \"~\", they are set to 0.Adds all FavoriteItem and Consumables and T9-Equipment");
                 }
                 else if (input == "show users")
                 {
@@ -341,13 +341,49 @@ namespace EpinelPS
                         }
                         else
                         {
-                            int amount = 1; // Default amount if not provided
-                            if (args.Length >= 2 && int.TryParse(args[1], out int parsedAmount))
+                            int amount1 = 1; // Default amount if not provided
+                            int amount2 = 1;
+                            int amount3 = 1;
+                            var inputs = args.Skip(1).Where(a => !string.IsNullOrWhiteSpace(a)).Take(3).ToArray();
+                            if (inputs.Length >= 1)
                             {
-                                amount = parsedAmount;
+                                if (inputs[0] == "~")
+                                    amount1 = 0;
+                                else if (int.TryParse(inputs[0], out int val1))
+                                    amount1 = val1;
+                                else
+                                {
+                                    Console.WriteLine($"Invalid number: {inputs[0]}");
+                                    return;
+                                }
                             }
 
-                            Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllEq(user, amount);
+                            if (inputs.Length >= 2)
+                            {
+                                if (inputs[1] == "~")
+                                    amount2 = 0;
+                                else if (int.TryParse(inputs[1], out int val2))
+                                    amount2 = val2;
+                                else
+                                {
+                                    Console.WriteLine($"Invalid number: {inputs[1]}");
+                                    return;
+                                }
+                            }
+
+                            if (inputs.Length >= 3)
+                            {
+                                if (inputs[2] == "~")
+                                    amount3 = 0;
+                                else if (int.TryParse(inputs[2], out int val3))
+                                    amount3 = val3;
+                                else
+                                {
+                                    Console.WriteLine($"Invalid number: {inputs[2]}");
+                                    return;
+                                }
+                            }
+                            Models.Admin.RunCmdResponse rsp = AdminCommands.AddAllEq(user, amount1, amount2, amount3 );
                             if (!rsp.ok) Console.WriteLine(rsp.error);
                         }
                     }
