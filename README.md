@@ -16,8 +16,12 @@ Private/local server for a 2d anime rpg game. The goal of this project is to rep
 
 Discord server: https://discord.gg/Ztt6Y9vQjF
 
+For running the game on Linux with EpinelPS, please use https://github.com/EpinelPS/EpinelPSLauncher
+
+
 > [!CAUTION]
-> Please note this GitHub repository (https://github.com/EpinelPS/EpinelPS/) is the only official source for EpinelPS. **If you bought it from someone, you got scammed. Do not download EpinelPS from other sources.** Download link: https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/Server%20and%20Server%20selector.zip
+> Please note this GitHub repository (https://github.com/EpinelPS/EpinelPS/) is the only official source for EpinelPS. **If you bought it from someone, you got scammed. Do not download EpinelPS from other sources.** Download link: https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/Server%20and%20Server%20selector.zip 
+[Download link (Linux)](https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/EpinelPS_linux_x64.zip)
 
 > [!WARNING]
 > This project is in an early state so many functions in the game do not work. It is recommended to download the latest build from GitHub actions.
