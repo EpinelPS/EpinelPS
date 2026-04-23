@@ -647,7 +647,7 @@ public partial class BGMTriggerRecord
 	public int Id;
 	public BGMType BgmType;
 	public BGMSubType BgmSubType;
-	public bool UseStoryMod;
+	public SpotLevel SpotLevel;
 	public string? TypeValue;
 	public int EventId;
 	public bool Default;
@@ -941,6 +941,12 @@ public partial class CharacterData
 }
 
 [MemoryPackable]
+public partial class CharacterInfo_Raw
+{
+	public int CharacterInfo;
+}
+
+[MemoryPackable]
 public partial class CharacterLevelRecord
 {
 	public int Level;
@@ -1191,6 +1197,12 @@ public partial class CollectionSkillGroupData
 }
 
 [MemoryPackable]
+public partial class ColorCodeList_Raw
+{
+	public string? ColorCode;
+}
+
+[MemoryPackable]
 public partial class CommonData
 {
 }
@@ -1339,6 +1351,7 @@ public partial class ContentsTutorialRecord
 	public int VersionGroup;
 	public int GroupId;
 	public ContentsTutorialSubGroup SubGroupId;
+	public ContentsTutorialDisplayType ContentsTutorialDisplayType;
 	public bool IsShow;
 	public int ClearedStageId;
 	public int CloseStageId;
@@ -1364,6 +1377,7 @@ public partial class ContentsTutorialRecord
 	public int ReconnectionTutorialId;
 	public ContentsTutorialTriggerValue ReconnectionTriggerValue;
 	public bool SkipButtonControl;
+	public int MinigameHelpTipId;
 }
 
 [MemoryPackable]
@@ -4730,6 +4744,9 @@ public partial class EventGachaBoardManagerRecord_Raw
 	public int MultiReceiveCount;
 	public string? UiPrefab;
 	public int FeverGroupId;
+	public int NpcResourceId;
+	public string? RewardPopupResourceId;
+	public string? RewardPopupLocale;
 }
 
 [MemoryPackable]
@@ -4790,6 +4807,105 @@ public partial class EventInAppShopRecord
 	public int ProductGroup;
 	public string? BgResourceTable;
 	public string? BgResourceId;
+}
+
+[MemoryPackable]
+public partial class EventItabagBagRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public string? ItabagName;
+	public string? ItabagDescription;
+	public string? ItabagBagResource;
+	public string? ItabagPlasticCoverResource;
+	public int ItabagResourceOrder;
+	public EventItabagType ItabagType;
+	public bool IsDefaultItabag;
+	public bool IsLocked;
+	public int OpenConditionOpenKuji;
+}
+
+[MemoryPackable]
+public partial class EventItabagCollectionRewardRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public int RewardOrder;
+	public int RewardGoalValue;
+	public EventItabagCollectionRewardType RewardType;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventItabagGoodsRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public EventItabagGoodsType ItabagGoodsType;
+	public EventItabagGoodsRank ItabagGoodsRank;
+	public string? ItabagGoodsName;
+	public string? ItabagGoodsDescription;
+	public string? ItabagGoodsResource;
+	public int GoodsScale;
+	public int ItabagGoodsHorizontalGridCount;
+	public int ItabagGoodsVerticalGridCount;
+	public int ItabagGoodsOrder;
+}
+
+[MemoryPackable]
+public partial class EventItabagGoodsTypeRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public EventItabagGoodsType ItabagGoodsType;
+	public string? ItabagGoodsTypeName;
+	public string? ItabagGoodsTypeIcon;
+	public EventItabagVirtualSheetType OutputVirtualSheetSetting;
+}
+
+[MemoryPackable]
+public partial class EventItabagKujiBoxListRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public int ListOrder;
+	public int DropGoodsId;
+	public int DropGoodsBoxValue;
+	public int DropRate;
+}
+
+[MemoryPackable]
+public partial class EventItabagManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? UiPrefab;
+	public int SetField;
+	public int KujiTicketCurrencyId;
+	public int KujiTicketConsume;
+	public string? KujiResource;
+	public int KujiDropValue;
+	public int KujiTicketDailyGiftValue;
+	public DateTime KujiTicketDailyGiftUpgradeTime;
+	public int KujiTicketDailyGiftUpgradeValue;
+	public int MaxZoomScale;
+	public int HorizontalCountVerificationData;
+	public int VerticalCountVerificationData;
+	public int OpenConditionEventStageClear;
+}
+
+[MemoryPackable]
+public partial class EventItabagRibbonRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public string? ItabagRibbonName;
+	public string? ItabagRibbonDescription;
+	public string? ItabagRibbonResource;
+	public int ItabagRibbonResourceOrder;
+	public bool IsDefaultItabagRibbon;
+	public bool IsLocked;
+	public int OpenConditionOpenKuji;
 }
 
 [MemoryPackable]
@@ -7630,6 +7746,118 @@ public partial class EventStoryRecord
 }
 
 [MemoryPackable]
+public partial class EventTTSManagerRecord_Raw
+{
+	public int Id;
+	public string? EnterScenario;
+	public int TutorialMusicId;
+	public double SetLoadingTime;
+	public List<int> LaneSpeedOptionValue;
+	public int HelptipGroupId;
+	public string? AlbumPageResource;
+	public int AlbumCategoryId;
+}
+
+[MemoryPackable]
+public partial class EventTTSMaxScoreRecord_Raw
+{
+	public int Id;
+	public int SongId;
+	public EventTTSPatternType PatternType;
+	public int MaxScore;
+}
+
+[MemoryPackable]
+public partial class EventTTSMissionRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public EventTTSMissionOpenType OpenType;
+	public DateTime StartDate;
+	public DateTime EndDate;
+	public EventTTSMissionType MissionType;
+	public List<int> MissionValue;
+	public string? NameLocale;
+	public string? DescLocale;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventTTSScenarioManagerRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public string? ScenarioGroupId;
+	public int CheckPlayCount;
+}
+
+[MemoryPackable]
+public partial class EventTTSSongGroupManagerRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public string? NameLocale;
+	public List<int> IncludeSongId;
+}
+
+[MemoryPackable]
+public partial class EventTTSSongManagerRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public string? NameLocale;
+	public string? ArtistLocale;
+	public bool ShowList;
+	public string? CoverResourceId;
+	public string? MovieResourceId;
+	public string? PreviewMovieResourceId;
+	public string? MusicResourceId;
+	public string? PreviewMusicResourceId;
+	public int GroupId;
+	public List<string?> Tag;
+	public int CasualLevel;
+	public string? CasualPatternResourceId;
+	public int NormalLevel;
+	public string? NormalPatternResourceId;
+	public int HardLevel;
+	public string? HardPatternResourceId;
+	public int ExpertLevel;
+	public string? ExpertPatternResourceId;
+	public int UnlockConditionPlaycount;
+	public DateTime UnlockConditionDate;
+}
+
+[MemoryPackable]
+public partial class EventTTSTipLocaleRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public string? TipLocale;
+}
+
+[MemoryPackable]
+public partial class EventTTSTutorialRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public int GroupId;
+	public int Order;
+	public int PositionSet;
+	public string? PositionUiKey;
+	public EventTTSTutorialPlayType PlayType;
+	public EventTTSTutorialPlayConditionType PlayCondition;
+	public string? NameLocale;
+	public string? DescLocale;
+	public string? PortraitResource;
+	public double DelayTiming;
+	public string? ImgResource;
+	public List<int> ImgPosition;
+	public string? ImgPositionUiKey;
+	public string? Unmask;
+	public int HelptipId;
+}
+
+[MemoryPackable]
 public partial class EventTargetSpawnerData
 {
 	public string? PositionId;
@@ -8350,6 +8578,65 @@ public partial class FavoriteItemStatData
 {
 	public StatType StatType;
 	public int StatValue;
+}
+
+[MemoryPackable]
+public partial class FieldCamPriorityControlTriggerRecord_Raw
+{
+	public int Id;
+	public FieldCinematicTimelineFieldType FieldType;
+	public int FieldId;
+	public string? InteractionMarker;
+	public bool IsAwakeLoad;
+	public int TargetCinematicTimelineId;
+	public string? TargetVcamName;
+	public bool IsUseSpawnCondition;
+	public DateTime SpawnConditionTime;
+	public int SpawnConditionStage;
+	public int SpawnConditionInteractionActionTrigger;
+	public int SpawnConditionFieldItem;
+	public bool IsUseDespawnCondition;
+	public DateTime DespawnConditionTime;
+	public int DespawnConditionStage;
+	public int DespawnConditionInteractionActionTrigger;
+	public int DespawnConditionFieldItem;
+}
+
+[MemoryPackable]
+public partial class FieldCinematicTimelineControlRecord_Raw
+{
+	public int Id;
+	public int CinematicTimelineId;
+	public FieldCinematicTimelineStartConditionType TimelineStartConditionType;
+	public string? TimelineStartConditionValue;
+	public int GoTo;
+	public int TimelineStartDelay;
+	public int TimelineStartFrame;
+	public int TimelineEndFrame;
+	public bool IsLoopAction;
+	public bool IsUseHudHide;
+	public int SetCameraBlendTime;
+}
+
+[MemoryPackable]
+public partial class FieldCinematicTimelineRecord_Raw
+{
+	public int Id;
+	public FieldCinematicTimelineFieldType FieldType;
+	public int FieldId;
+	public string? TimelineAsset;
+	public bool IsAwakeLoad;
+	public bool IsUseSpawnCondition;
+	public DateTime SpawnConditionTime;
+	public int SpawnConditionStage;
+	public int SpawnConditionInteractionActionTrigger;
+	public int SpawnConditionFieldItem;
+	public bool IsUseDespawnCondition;
+	public DateTime DespawnConditionTime;
+	public int DespawnConditionStage;
+	public int DespawnConditionInteractionActionTrigger;
+	public int DespawnConditionFieldItem;
+	public bool IsSynchronizeWithMusic;
 }
 
 [MemoryPackable]
@@ -9250,6 +9537,59 @@ public partial class InAppShopManagerRecord
 	public InAppShopType ShopType;
 	public InAppShopCategory ShopCategory;
 	public string? ShopPrefabName;
+}
+
+[MemoryPackable]
+public partial class InAppShopPurchasePointManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? PointResourceId;
+	public string? PointNameLocalkey;
+	public int MaxPointValue;
+	public int RewardGroup;
+	public int InappshopProductGroup;
+	public int ShortcutGroup;
+	public string? UiPrefabMain;
+	public string? UiButtonImg;
+}
+
+[MemoryPackable]
+public partial class InAppShopPurchasePointProductRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public ProductType ProductType;
+	public int ProductId;
+	public int GetPoint;
+}
+
+[MemoryPackable]
+public partial class InAppShopPurchasePointRewardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int NeedPoint;
+	public string? NameLocalkey;
+	public string? DescLocalkey;
+	public InAppShopPurchasePointRewardType Type;
+	public string? TypeSelectPrefabId;
+	public int MainRewardId;
+	public int SubRewardId;
+	public List<CharacterInfo_Raw> CharacterInfoList;
+}
+
+[MemoryPackable]
+public partial class InAppShopPurchasePointShortcutRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public ShortcutType ShortcutType;
+	public int ShortcutId;
+	public DateTime StartDate;
+	public DateTime EndDate;
+	public string? NameLocalkey;
+	public string? IcnResourceId;
 }
 
 [MemoryPackable]
@@ -12983,6 +13323,17 @@ public partial class UserTitleConditionObject
 }
 
 [MemoryPackable]
+public partial class UserTitleCountRecord_Raw
+{
+	public int Id;
+	public UserTitleDecoConditionType UserTitleDecoConditionType;
+	public string? CountIconId;
+	public string? BgResourceId;
+	public string? TitleLocaleKey;
+	public List<ColorCodeList_Raw> ColorCodeList;
+}
+
+[MemoryPackable]
 public partial class UserTitleRecord
 {
 	public int Id;
@@ -13279,7 +13630,8 @@ public enum RewardType : int
 	ProfileCardObject = 44,
 	ProfileRandomBox = 45,
 	UserTitle = 46,
-	LobbyDecoBackground = 47
+	LobbyDecoBackground = 47,
+	Album = 48
 }
 
 public enum EnterScenarioType : int
@@ -13322,7 +13674,8 @@ public enum EventFieldChildEventType : int
 	None = 0,
 	Cooperation = 1,
 	ToastMessage = 2,
-	Arcade = 3
+	Arcade = 3,
+	TTSMinigame = 4
 }
 
 public enum EventFieldNPCType : int
@@ -13415,7 +13768,9 @@ public enum EventSystemType : int
 	AZXAppleMiniGame = 54,
 	TicketGachaEvent = 55,
 	ScenarioChoice = 56,
-	CE008LycorisMiniGame = 57
+	CE008LycorisMiniGame = 57,
+	ItabagEvent = 58,
+	InAppShopPurchasePointEvent = 59
 }
 
 public enum Category : int
@@ -13699,12 +14054,22 @@ public enum BGMSubType : int
 	ShootingRange = 15,
 	EventStage = 16,
 	EventField = 17,
-	Gacha = 18,
-	JukeboxLobby = 19,
-	JukeboxCommandcenter = 20,
-	SideStory = 21,
-	Arcade = 22,
-	ArchiveField = 23
+	CostumePick = 18,
+	Gacha = 19,
+	JukeboxLobby = 20,
+	JukeboxCommandcenter = 21,
+	SideStory = 22,
+	Arcade = 23,
+	ArchiveField = 24
+}
+
+public enum SpotLevel : int
+{
+	None = 0,
+	Story = 1,
+	Normal = 2,
+	Hard = 3,
+	EX = 4
 }
 
 public enum BGMTriggerEventType : int
@@ -14001,7 +14366,8 @@ public enum Trigger : int
 	EventMiniGameCE007RewardCheck = 159,
 	EventREBUILDEDENPlayCheck = 160,
 	EventAZXServiceTimeRewardCheck = 161,
-	EventMiniGameCE008RewardCheck = 162
+	EventMiniGameCE008RewardCheck = 162,
+	EventMiniGameTTSPlayCheck = 163
 }
 
 public enum ChapterMod : int
@@ -14446,7 +14812,8 @@ public enum CharacterSkillType : int
 	TargetHitCountGetBuff = 27,
 	HealCharge = 28,
 	TargetingSequentialAttack = 29,
-	InstantAllProjectile = 30
+	InstantAllProjectile = 30,
+	AutoFireWeapon = 31
 }
 
 public enum DurationType : int
@@ -14691,6 +15058,12 @@ public enum ContentsTutorialSubGroup : int
 	SoloRaid = 15
 }
 
+public enum ContentsTutorialDisplayType : int
+{
+	Default = 0,
+	TTSMinigame = 1
+}
+
 public enum ContentsTutorialTriggerValue : int
 {
 	None = 0,
@@ -14855,7 +15228,10 @@ public enum ContentsTutorialTriggerValue : int
 	AutoPositionButtonTouch = 159,
 	AutoUpgradeButtonTouch = 160,
 	HomeButtonTouch = 161,
-	FinishStoryModeOpenAnimation = 162
+	FinishStoryModeOpenAnimation = 162,
+	TTSMinigameEnterResult = 163,
+	TTSMinigameEnterSongList = 164,
+	TTSMinigameEnterDifficultySelect = 165
 }
 
 public enum ContentsTutorialTextLocation : int
@@ -15782,6 +16158,40 @@ public enum EventGachaBoardMissionMissionCondition : int
 	CharacterCollectionItemLevel = 5,
 	CharacterEquipCollection = 6,
 	CharacterEquipItemOverload = 7
+}
+
+public enum EventItabagType : int
+{
+	HandBag = 0,
+	DuffelBag = 1
+}
+
+public enum EventItabagCollectionRewardType : int
+{
+	Reward = 0,
+	Goods = 1
+}
+
+public enum EventItabagGoodsType : int
+{
+	CanBadge = 0,
+	Nuigurumi = 1,
+	Photocard = 2,
+	AcrylicStand = 3
+}
+
+public enum EventItabagGoodsRank : int
+{
+	R = 0,
+	SR = 1,
+	SSR = 2
+}
+
+public enum EventItabagVirtualSheetType : int
+{
+	Inner = 0,
+	Outer = 1,
+	Both = 2
 }
 
 public enum Lycoris3StarConditionType : int
@@ -17064,6 +17474,62 @@ public enum EventSortOutMissionType : int
 	SortOutCount = 3
 }
 
+public enum EventTTSPatternType : int
+{
+	Casual = 0,
+	Normal = 1,
+	Hard = 2,
+	Expert = 3
+}
+
+public enum EventTTSMissionOpenType : int
+{
+	Limited = 0,
+	Normal = 1
+}
+
+public enum EventTTSMissionType : int
+{
+	MusicClearCountByCount = 0,
+	MusicClearCountByRankA = 1,
+	MusicClearCountByRankS = 2,
+	MusicClearCountByRankSS = 3,
+	MusicClearCountByFullCombo = 4,
+	MusicClearCountByPerfect = 5,
+	NoteRankCountByGood = 6,
+	NoteRankCountByGreat = 7,
+	NoteRankCountByPerfect = 8,
+	NoteRankCountByPerfectPlus = 9,
+	SpecificMusicClearCount = 10,
+	ScoreAccumulate = 11,
+	MusicPlayCount = 12,
+	SpecificMusicPlayCount = 13
+}
+
+public enum EventTTSTutorialPlayType : int
+{
+	Outgame = 0,
+	Ingame = 1,
+	IngameExpert = 2,
+	None = 3
+}
+
+public enum EventTTSTutorialPlayConditionType : int
+{
+	EnterSonglist = 0,
+	EnterResult = 1,
+	EnterIngame = 2,
+	AppearNormalNote = 3,
+	AppearSpNote = 4,
+	AppearLongNote = 5,
+	AppearSpLongNote = 6,
+	AppearLeftFlick = 7,
+	AppearRightFlick = 8,
+	AppearLrFlickHold = 9,
+	AppearExtremeFlickNote = 10,
+	None = 11
+}
+
 public enum EventTextAdventurePageType : int
 {
 	None = 0,
@@ -17459,6 +17925,24 @@ public enum FavoriteItemType : int
 	Favorite = 2
 }
 
+public enum FieldCinematicTimelineFieldType : int
+{
+	None = 0,
+	Campaign = 1,
+	LostSector = 2,
+	Event = 3,
+	ArchiveEvent = 4
+}
+
+public enum FieldCinematicTimelineStartConditionType : int
+{
+	None = 0,
+	AfterSpawn = 1,
+	AfterCinematic = 2,
+	StageClear = 3,
+	Time = 4
+}
+
 public enum FieldInteractionActionTriggerFieldType : int
 {
 	None = 0,
@@ -17520,7 +18004,8 @@ public enum FieldItemType : int
 	Memory = 7,
 	BodyCore = 8,
 	BetaCore = 9,
-	Collect = 10
+	Collect = 10,
+	Album = 11
 }
 
 public enum ObtainContentsType : int
@@ -18016,7 +18501,11 @@ public enum StatusTriggerType : int
 	IsFirstBurstMember = 64,
 	IsNotFirstBurstMember = 65,
 	IsCharging = 66,
-	IsCaster = 67
+	IsCaster = 67,
+	IsDefUnder = 68,
+	IsCheckFunctionOverlapUnder = 69,
+	IsCheckTeamBurstNextStepExSelf = 70,
+	IsNotCheckTeamBurstNextStepExSelf = 71
 }
 
 public enum FunctionKeepingType : int
@@ -18187,6 +18676,37 @@ public enum InAppShopCategory : int
 	StepUpPackageShop = 8,
 	CustomPackageShop = 10,
 	PassCostumeShop = 11
+}
+
+public enum ProductType : int
+{
+	None = 0,
+	CashShop = 1,
+	PackageShop = 2,
+	PopupPackageShop = 3,
+	PassShop = 4,
+	MonthlyAmount = 5,
+	CampaignPackageShop = 6,
+	EventPassShop = 7,
+	CostumeShop = 8,
+	StepUpPackageShop = 10,
+	EventInAppShop = 11,
+	CustomPackageShop = 12,
+	PassCostumeShop = 13,
+	TTSAlbumShop = 14
+}
+
+public enum InAppShopPurchasePointRewardType : int
+{
+	Normal = 0,
+	Select = 1
+}
+
+public enum ShortcutType : int
+{
+	InAppShop = 0,
+	EventBoxGacha = 1,
+	EventPass = 2
 }
 
 public enum InfraCoreFunctionType : int
@@ -18626,23 +19146,6 @@ public enum MessengerRoom : int
 	Nikke = 1,
 	Quest = 2,
 	Group = 3
-}
-
-public enum ProductType : int
-{
-	None = 0,
-	CashShop = 1,
-	PackageShop = 2,
-	PopupPackageShop = 3,
-	PassShop = 4,
-	MonthlyAmount = 5,
-	CampaignPackageShop = 6,
-	EventPassShop = 7,
-	CostumeShop = 8,
-	StepUpPackageShop = 10,
-	EventInAppShop = 11,
-	CustomPackageShop = 12,
-	PassCostumeShop = 13
 }
 
 public enum MidasItemType : int
@@ -19928,11 +20431,20 @@ public enum UserTitleAcquireConditionType : int
 	UserTitleSimulationRoomOverclockInfiniteOption = 29
 }
 
+public enum UserTitleDecoConditionType : int
+{
+	None = 0,
+	TTSClearCount = 1,
+	TTSFullComboClearCount = 2,
+	TTSAllPerfectClearCount = 3
+}
+
 public enum UserTitleProductionType : int
 {
 	None = 0,
 	Single = 1,
-	Assembly = 2
+	Assembly = 2,
+	Count = 3
 }
 
 public enum SpotModType : int
