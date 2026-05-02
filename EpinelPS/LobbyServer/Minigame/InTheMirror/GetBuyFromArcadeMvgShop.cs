@@ -1,15 +1,12 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/log/shop")]
+public class GetBuyFromArcadeMvgShop : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/shop")]
-    public class GetBuyFromArcadeMvgShop : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqBuyFromArcadeMvgShop>();
+        await ReadData<ReqBuyFromArcadeMvgShop>();
 
-            await WriteDataAsync(new ResBuyFromArcadeMvgShop());
-        }
+        await WriteDataAsync(new ResBuyFromArcadeMvgShop());
     }
 }

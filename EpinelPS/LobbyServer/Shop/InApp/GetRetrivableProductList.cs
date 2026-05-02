@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop.InApp;
 
-namespace EpinelPS.LobbyServer.Shop.InApp
+[GameRequest("/inappshop/getreceivableproductlist")]
+public class GetRetrivableProductList : LobbyMessage
 {
-    [PacketPath("/inappshop/getreceivableproductlist")]
-    public class GetRetrivableProductList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetInAppShopReceivableProductList x = await ReadData<ReqGetInAppShopReceivableProductList>();
+        ReqGetInAppShopReceivableProductList x = await ReadData<ReqGetInAppShopReceivableProductList>();
 
-            ResGetInAppShopReceivableProductList response = new();
-            // TODO
+        ResGetInAppShopReceivableProductList response = new();
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

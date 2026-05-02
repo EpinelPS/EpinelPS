@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Sidestory;
 
-namespace EpinelPS.LobbyServer.Sidestory
+[GameRequest("/sidestory/cut/clearbattle")]
+public class ClearBattle : LobbyMessage
 {
-    [PacketPath("/sidestory/cut/clearbattle")]
-    public class ClearBattle : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqClearSideStoryCutForBattle req = await ReadData<ReqClearSideStoryCutForBattle>();
-            User user = GetUser();
+        ReqClearSideStoryCutForBattle req = await ReadData<ReqClearSideStoryCutForBattle>();
+        User user = GetUser();
 
-            ResClearSideStoryCutForBattle response = new();
+        ResClearSideStoryCutForBattle response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

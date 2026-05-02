@@ -1,15 +1,12 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/log/module/limit")]
+public class GetMvgLogModuleLimit : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/module/limit")]
-    public class GetMvgLogModuleLimit : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqIncreaseArcadeMvgModuleLimit>();
+        await ReadData<ReqIncreaseArcadeMvgModuleLimit>();
 
-            await WriteDataAsync(new ResIncreaseArcadeMvgModuleLimit());
-        }
+        await WriteDataAsync(new ResIncreaseArcadeMvgModuleLimit());
     }
 }

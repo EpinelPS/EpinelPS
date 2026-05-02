@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Minigame.RebuildEden;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.RebuildEden;
-
-[PacketPath("/event/minigame/rebuildeden/getbadge")]
-public class GetBadgeData : LobbyMsgHandler
+[GameRequest("/event/minigame/rebuildeden/getbadge")]
+public class GetBadgeData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

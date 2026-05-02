@@ -1,58 +1,57 @@
-using EpinelPS.Database;
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Mission
+namespace EpinelPS.LobbyServer.Mission;
+
+[GameRequest("/mission/obtain/daily")]
+public class ObtainDaily : LobbyMessage
 {
-    [PacketPath("/mission/obtain/daily")]
-    public class ObtainDaily : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqObtainDailyMissionReward req = await ReadData<ReqObtainDailyMissionReward>();
+        User user = GetUser();
+
+        ResObtainDailyMissionReward response = new();
+
+        List<NetRewardData> rewards = [];
+
+        int total_points = 0;
+
+        foreach (int item in req.TidList)
         {
-            ReqObtainDailyMissionReward req = await ReadData<ReqObtainDailyMissionReward>();
-            User user = GetUser();
-
-            ResObtainDailyMissionReward response = new();
-
-            List<NetRewardData> rewards = [];
-
-            int total_points = 0;
-
-            foreach (int item in req.TidList)
+            if (user.ResetableData.CompletedDailyMissions.Contains(item))
             {
-                if (user.ResetableData.CompletedDailyMissions.Contains(item))
-                {
-                    Logging.WriteLine("already completed daily mission", LogType.Warning);
-                    continue;
-                }
-
-                if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
-
-                user.ResetableData.CompletedDailyMissions.Add(item);
-
-                if (key.RewardId != 0)
-                {
-                    // Actual reward
-                    RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
-                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
-                }
-                else
-                {
-                    // Point reward
-                    total_points += key.PointValue;
-                }
+                Logging.WriteLine("already completed daily mission", LogType.Warning);
+                continue;
             }
 
-            user.AddTrigger(Trigger.PointRewardDaily, total_points);
-            user.ResetableData.DailyMissionPoints += total_points;
+            if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-            response.Reward = NetUtils.MergeRewards(rewards, user);
-            response.EventBonusReward = new() { PassPoint = new() };
-            response.Reward.PassPoint = new();
+            user.ResetableData.CompletedDailyMissions.Add(item);
 
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
+            if (key.RewardId != 0)
+            {
+                // Actual reward
+                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
+                rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
+            }
+            else
+            {
+                // Point reward
+                total_points += key.PointValue;
+            }
         }
+
+        user.AddTrigger(Trigger.PointRewardDaily, total_points);
+        user.ResetableData.DailyMissionPoints += total_points;
+
+        response.Reward = NetUtils.MergeRewards(rewards, user);
+        response.EventBonusReward = new() { PassPoint = new() };
+        response.Reward.PassPoint = new();
+
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

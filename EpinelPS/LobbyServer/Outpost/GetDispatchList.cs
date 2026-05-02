@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/outpost/dispatch/get")]
+public class GetDispatchList : LobbyMessage
 {
-    [PacketPath("/outpost/dispatch/get")]
-    public class GetDispatchList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetDispatchList req = await ReadData<ReqGetDispatchList>();
+        ReqGetDispatchList req = await ReadData<ReqGetDispatchList>();
 
-            ResGetDispatchList response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResGetDispatchList response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

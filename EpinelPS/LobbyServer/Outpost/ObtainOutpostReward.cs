@@ -1,38 +1,37 @@
-﻿using EpinelPS.Database;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
-using EpinelPS.Data;
 
-namespace EpinelPS.LobbyServer.Outpost
+namespace EpinelPS.LobbyServer.Outpost;
+
+[GameRequest("/outpost/obtainoutpostbattlereward")]
+public class ObtainOutpostReward : LobbyMessage
 {
-    [PacketPath("/outpost/obtainoutpostbattlereward")]
-    public class ObtainOutpostReward : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqObtainOutpostBattleReward req = await ReadData<ReqObtainOutpostBattleReward>();
-            User user = GetUser();
+        ReqObtainOutpostBattleReward req = await ReadData<ReqObtainOutpostBattleReward>();
+        User user = GetUser();
 
-            ResObtainOutpostBattleReward response = new();
+        ResObtainOutpostBattleReward response = new();
 
 
-            TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
-            long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
-            long overBattleTime = battleTimeMs > 864000000000 ? battleTimeMs - 864000000000 : 0;
+        TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
+        long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
+        long overBattleTime = battleTimeMs > 864000000000 ? battleTimeMs - 864000000000 : 0;
 
-            response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = 0, OverBattleTime = 0 };
-            response.BattleTime = 0;
-            response.MaxBattleTime = 864000000000;
+        response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = 0, OverBattleTime = 0 };
+        response.BattleTime = 0;
+        response.MaxBattleTime = 864000000000;
 
-            response.Reward = NetUtils.GetOutpostReward(user, battleTime);
-            NetUtils.RegisterRewardsForUser(user, response.Reward);
+        response.Reward = NetUtils.GetOutpostReward(user, battleTime);
+        NetUtils.RegisterRewardsForUser(user, response.Reward);
 
-            user.BattleTime = DateTime.UtcNow;
+        user.BattleTime = DateTime.UtcNow;
 
-            user.AddTrigger(Trigger.OutpostBattleReward, 1);
+        user.AddTrigger(Trigger.OutpostBattleReward, 1);
 
-            JsonDb.Save();
+        JsonDb.Save();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

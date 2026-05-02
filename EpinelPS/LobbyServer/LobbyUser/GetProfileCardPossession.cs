@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/ProfileCard/Possession/Get")]
+public class GetProfileCardPossession : LobbyMessage
 {
-    [PacketPath("/ProfileCard/Possession/Get")]
-    public class GetProfileCardPossession : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqProfileCardObjectList req = await ReadData<ReqProfileCardObjectList>();
+        ReqProfileCardObjectList req = await ReadData<ReqProfileCardObjectList>();
 
-            ResProfileCardObjectList response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResProfileCardObjectList response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

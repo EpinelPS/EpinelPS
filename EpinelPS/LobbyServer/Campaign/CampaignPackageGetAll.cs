@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Campaign;
 
-namespace EpinelPS.LobbyServer.Campaign
+[GameRequest("/shutdownflags/campaignpackage/getall")]
+public class CampaignPackageGetAll : LobbyMessage
 {
-    [PacketPath("/shutdownflags/campaignpackage/getall")]
-    public class CampaignPackageGetAll : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqCampaignPackageGetAllShutdownFlags req = await ReadData<ReqCampaignPackageGetAllShutdownFlags>();
+        ReqCampaignPackageGetAllShutdownFlags req = await ReadData<ReqCampaignPackageGetAllShutdownFlags>();
 
-            ResCampaignPackageGetAllShutdownFlags response = new();
-            // TODO
+        ResCampaignPackageGetAllShutdownFlags response = new();
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

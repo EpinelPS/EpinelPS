@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Client;
 
-namespace EpinelPS.LobbyServer.Client
+[GameRequest("/system/checkversion")]
+public class CheckClientVersion : LobbyMessage
 {
-    [PacketPath("/system/checkversion")]
-    public class CheckClientVersion : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqCheckClientVersion req = await ReadData<ReqCheckClientVersion>();
+        ResCheckClientVersion response = new()
         {
-            ReqCheckClientVersion req = await ReadData<ReqCheckClientVersion>();
-            ResCheckClientVersion response = new()
-            {
-                Availability = ResCheckClientVersion.Types.Availability.None
-            };
+            Availability = ResCheckClientVersion.Types.Availability.None
+        };
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

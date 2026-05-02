@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Friend;
 
-namespace EpinelPS.LobbyServer.Friend
+[GameRequest("/friend/get")]
+public class GetFriends : LobbyMessage
 {
-    [PacketPath("/friend/get")]
-    public class GetFriends : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetFriendData req = await ReadData<ReqGetFriendData>();
-            ResGetFriendData response = new();
+        ReqGetFriendData req = await ReadData<ReqGetFriendData>();
+        ResGetFriendData response = new();
 
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

@@ -1,21 +1,19 @@
 ﻿using EpinelPS.Data;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Character
+namespace EpinelPS.LobbyServer.Character;
+
+[GameRequest("/character/costume/get")]
+public class GetCharacterCostume : LobbyMessage
 {
-    [PacketPath("/character/costume/get")]
-    public class GetCharacterCostume : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetCharacterCostumeData req = await ReadData<ReqGetCharacterCostumeData>();
+        ReqGetCharacterCostumeData req = await ReadData<ReqGetCharacterCostumeData>();
 
-            ResGetCharacterCostumeData response = new();
+        ResGetCharacterCostumeData response = new();
 
-            // return all
-            response.CostumeIds.AddRange(GameData.Instance.GetAllCostumes());
+        // return all
+        response.CostumeIds.AddRange(GameData.Instance.GetAllCostumes());
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

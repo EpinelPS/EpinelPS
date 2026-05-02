@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event.CollectSystem;
 
-namespace EpinelPS.LobbyServer.Event.CollectSystem
+[GameRequest("/event/collect-system/list-field")]
+public class ListField : LobbyMessage
 {
-    [PacketPath("/event/collect-system/list-field")]
-    public class ListField : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqListFieldEventCollectData req = await ReadData<ReqListFieldEventCollectData>();
-            User user = GetUser();
+        ReqListFieldEventCollectData req = await ReadData<ReqListFieldEventCollectData>();
+        User user = GetUser();
 
-            ResListFieldEventCollectData response = new();
+        ResListFieldEventCollectData response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

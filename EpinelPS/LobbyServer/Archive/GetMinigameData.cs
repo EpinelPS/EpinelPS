@@ -1,21 +1,18 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Archive;
 
-namespace EpinelPS.LobbyServer.Archive
+[GameRequest("/archive/minigame/getdata")]
+public class GetMinigameData : LobbyMessage
 {
-    [PacketPath("/archive/minigame/getdata")]
-    public class GetMinigameData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetArchiveMiniGameData req = await ReadData<ReqGetArchiveMiniGameData>();
+
+        ResGetArchiveMiniGameData response = new()
         {
-            ReqGetArchiveMiniGameData req = await ReadData<ReqGetArchiveMiniGameData>();
+            Json = "{}"
+        };
+        // TODO
 
-            ResGetArchiveMiniGameData response = new()
-            {
-                Json = "{}"
-            };
-            // TODO
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

@@ -1,25 +1,23 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Minigame.PlaySoda
+namespace EpinelPS.LobbyServer.Minigame.PlaySoda;
+
+[GameRequest("/arcade/play-soda/challenge/enter")]
+public class GetChallengeEnter : LobbyMessage
 {
-    [PacketPath("/arcade/play-soda/challenge/enter")]
-    public class GetChallengeEnter : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        var request = await ReadData<ReqEnterArcadePlaySodaChallengeStage>();
+
+        var user = GetUser();
+
+        ResEnterArcadePlaySodaChallengeStage response = new()
         {
-            var request = await ReadData<ReqEnterArcadePlaySodaChallengeStage>();
+            UserMaxScore = user.ArcadePlaySodaInfoList.First(i => i.ChallengeStageId == request.ChallengeStageId).UserRank
+        };
 
-            var user = GetUser();
+        await WriteDataAsync(response);
 
-            ResEnterArcadePlaySodaChallengeStage response = new()
-            {
-                UserMaxScore = user.ArcadePlaySodaInfoList.First(i => i.ChallengeStageId == request.ChallengeStageId).UserRank
-            };
-
-            await WriteDataAsync(response);
-
-            JsonDb.Save();
-        }
+        JsonDb.Save();
     }
 }

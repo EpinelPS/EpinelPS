@@ -1,25 +1,23 @@
-using EpinelPS.Utils;
-namespace EpinelPS.LobbyServer.Archive
+namespace EpinelPS.LobbyServer.Archive;
+
+[GameRequest("/archive/scenario/getnonresettable")]
+public class GetNonResettable : LobbyMessage
 {
-    [PacketPath("/archive/scenario/getnonresettable")]
-    public class GetNonResettable : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetNonResettableArchiveScenario req = await ReadData<ReqGetNonResettableArchiveScenario>();
+        ResGetNonResettableArchiveScenario response = new();
+
+        User user = GetUser();
+        foreach (var (evtId, evtData) in user.EventInfo)
         {
-            ReqGetNonResettableArchiveScenario req = await ReadData<ReqGetNonResettableArchiveScenario>();
-            ResGetNonResettableArchiveScenario response = new();
-
-            User user = GetUser();
-            foreach (var (evtId, evtData) in user.EventInfo)
+            if (evtId == req.EventId)
             {
-                if (evtId == req.EventId)
-                {
-                    response.ScenarioIdList.AddRange(evtData.CompletedScenarios);
-                    break;
-                }
+                response.ScenarioIdList.AddRange(evtData.CompletedScenarios);
+                break;
             }
-
-            await WriteDataAsync(response);
         }
+
+        await WriteDataAsync(response);
     }
 }

@@ -1,21 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Storyline;
 
-namespace EpinelPS.LobbyServer.Storyline
+[GameRequest("/storyline/bookmark/get")]
+public class GetBookmarks : LobbyMessage
 {
-    [PacketPath("/storyline/bookmark/get")]
-    public class GetBookmarks : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetStorylineBookmarks req = await ReadData<ReqGetStorylineBookmarks>();
+        ReqGetStorylineBookmarks req = await ReadData<ReqGetStorylineBookmarks>();
 
-            ResGetStorylineBookmarks response = new();
-            User user = GetUser();
+        ResGetStorylineBookmarks response = new();
+        User user = GetUser();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
-
 }

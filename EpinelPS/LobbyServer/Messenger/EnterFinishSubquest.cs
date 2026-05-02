@@ -1,26 +1,24 @@
-using EpinelPS.Database;
 using EpinelPS.Data;
-using EpinelPS.Utils;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Messenger
+namespace EpinelPS.LobbyServer.Messenger;
+
+[GameRequest("/messenger/subquestfin/enter")]
+public class EnterFinishSubquest : LobbyMessage
 {
-    [PacketPath("/messenger/subquestfin/enter")]
-    public class EnterFinishSubquest : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterSubQuestFinMessengerDialog req = await ReadData<ReqEnterSubQuestFinMessengerDialog>();
-            User user = GetUser();
+        ReqEnterSubQuestFinMessengerDialog req = await ReadData<ReqEnterSubQuestFinMessengerDialog>();
+        User user = GetUser();
 
-            ResEnterSubQuestFinMessengerDialog response = new();
+        ResEnterSubQuestFinMessengerDialog response = new();
 
-            KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-            KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.EndMessengerConversationId && x.Value.IsOpener).First();
-            
-            response.Message = user.CreateMessage(conversation.Value, 1);
-            JsonDb.Save();
-            
-            await WriteDataAsync(response);
-        }
+        KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
+        KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.EndMessengerConversationId && x.Value.IsOpener).First();
+
+        response.Message = user.CreateMessage(conversation.Value, 1);
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

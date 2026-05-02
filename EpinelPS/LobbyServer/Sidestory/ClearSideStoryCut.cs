@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Sidestory;
 
-namespace EpinelPS.LobbyServer.Sidestory
+[GameRequest("/sidestory/cut/clearscenario")]
+public class ClearSideStoryCut : LobbyMessage
 {
-    [PacketPath("/sidestory/cut/clearscenario")]
-    public class ClearSideStoryCut : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqClearSideStoryCutForScenario req = await ReadData<ReqClearSideStoryCutForScenario>();
-            User user = GetUser();
+        ReqClearSideStoryCutForScenario req = await ReadData<ReqClearSideStoryCutForScenario>();
+        User user = GetUser();
 
-            ResClearSideStoryCutForScenario response = new();
+        ResClearSideStoryCutForScenario response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

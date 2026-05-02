@@ -1,21 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Storyline;
 
-namespace EpinelPS.LobbyServer.Storyline
+[GameRequest("/storyline/save")]
+public class SaveStoryline : LobbyMessage
 {
-    [PacketPath("/storyline/save")]
-    public class SaveStoryline : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqSaveRecentStoryline req = await ReadData<ReqSaveRecentStoryline>();
+        ReqSaveRecentStoryline req = await ReadData<ReqSaveRecentStoryline>();
 
-            ResGetStorylineData response = new();
-            User user = GetUser();
+        ResGetStorylineData response = new();
+        User user = GetUser();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
-
 }

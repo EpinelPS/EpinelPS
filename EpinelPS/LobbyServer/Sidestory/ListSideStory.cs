@@ -1,27 +1,25 @@
-﻿using EpinelPS.Utils;
-using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.WellKnownTypes;
 
-namespace EpinelPS.LobbyServer.Sidestory
+namespace EpinelPS.LobbyServer.Sidestory;
+
+[GameRequest("/sidestory/list")]
+public class ListSideStory : LobbyMessage
 {
-    [PacketPath("/sidestory/list")]
-    public class ListSideStory : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqListSideStory req = await ReadData<ReqListSideStory>();
+        User user = GetUser();
+
+        ResListSideStory response = new();
+
+        foreach (int item in user.CompletedSideStoryStages)
         {
-            ReqListSideStory req = await ReadData<ReqListSideStory>();
-            User user = GetUser();
-
-            ResListSideStory response = new();
-
-            foreach (int item in user.CompletedSideStoryStages)
-            {
-                // TODO cleared at
-                response.SideStoryStageDataList.Add(new NetSideStoryStageData() { SideStoryStageId = item, ClearedAt = Timestamp.FromDateTime(DateTime.UtcNow) });
-            }
-
-            response.ViewedSideStoryIds.AddRange(user.ViewedSideStoryStages);
-
-            await WriteDataAsync(response);
+            // TODO cleared at
+            response.SideStoryStageDataList.Add(new NetSideStoryStageData() { SideStoryStageId = item, ClearedAt = Timestamp.FromDateTime(DateTime.UtcNow) });
         }
+
+        response.ViewedSideStoryIds.AddRange(user.ViewedSideStoryStages);
+
+        await WriteDataAsync(response);
     }
 }

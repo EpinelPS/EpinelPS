@@ -1,24 +1,20 @@
-﻿using EpinelPS.Utils;
-using Google.Protobuf;
+﻿namespace EpinelPS.LobbyServer.Badge;
 
-namespace EpinelPS.LobbyServer.Badge
+[GameRequest("/badge/sync")]
+public class SyncBadge : LobbyMessage
 {
-    [PacketPath("/badge/sync")]
-    public class SyncBadge : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSyncBadge req = await ReadData<ReqSyncBadge>();
+        User user = GetUser();
+
+        ResSyncBadge response = new();
+
+        foreach (BadgeModel item in user.Badges)
         {
-            ReqSyncBadge req = await ReadData<ReqSyncBadge>();
-            User user = GetUser();
-
-            ResSyncBadge response = new();
-
-            foreach (BadgeModel item in user.Badges)
-            {
-                response.BadgeList.Add(item.ToNet());
-            }
-
-            await WriteDataAsync(response);
+            response.BadgeList.Add(item.ToNet());
         }
+
+        await WriteDataAsync(response);
     }
 }

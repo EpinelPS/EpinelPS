@@ -1,449 +1,164 @@
-using System.Net;
-using System.Net.Security;
-using System.Net.Sockets;
-using DnsClient;
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer.Stage;
 using EpinelPS.Models.Admin;
 using Google.Protobuf;
+using System.Net.Security;
+using System.Net.Sockets;
 
-namespace EpinelPS.Utils
+namespace EpinelPS.Utils;
+
+public class AdminCommands
 {
-    public class AdminCommands
+    private static readonly HttpClient client;
+
+    private static readonly string serverUrl = "global-lobby.nikke-kr.com";
+    private static string connectingServer = serverUrl;
+    private static string? serverIp;
+    private static string? staticDataUrl;
+    private static string? resourcesUrl;
+    static AdminCommands()
     {
-        private static readonly HttpClient client;
-
-        private static string serverUrl = "global-lobby.nikke-kr.com";
-        private static string connectingServer = serverUrl;
-        private static string? serverIp;
-        private static string? staticDataUrl;
-        private static string? resourcesUrl;
-        static AdminCommands()
+        // Use TLS 1.1 so that tencents cloudflare knockoff wont complain
+        if (!OperatingSystem.IsLinux())
         {
-            // Use TLS 1.1 so that tencents cloudflare knockoff wont complain
-            if (!OperatingSystem.IsLinux())
+            SocketsHttpHandler handler = new()
             {
-                SocketsHttpHandler handler = new()
+                ConnectCallback = static async (context, cancellationToken) =>
                 {
-                    ConnectCallback = static async (context, cancellationToken) =>
+                    Socket socket = new(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
+                    try
                     {
-                        Socket socket = new(SocketType.Stream, ProtocolType.Tcp) { NoDelay = true };
-                        try
+                        await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
+
+                        SslStream sslStream = new(new NetworkStream(socket, ownsSocket: true));
+
+                        // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
+                        await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
                         {
-                            await socket.ConnectAsync(context.DnsEndPoint, cancellationToken);
+                            TargetHost = connectingServer,
+                            EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
 
-                            SslStream sslStream = new(new NetworkStream(socket, ownsSocket: true));
+                        }, cancellationToken);
 
-                            // When using HTTP/2, you must also keep in mind to set options like ApplicationProtocols
-                            await sslStream.AuthenticateAsClientAsync(new SslClientAuthenticationOptions
-                            {
-                                TargetHost = connectingServer,
-                                EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls11
+                        return sslStream;
+                    }
+                    catch
+                    {
+                        socket.Dispose();
+                        throw;
+                    }
+                }
+            };
 
-                            }, cancellationToken);
+            client = new(handler);
+        }
+        else
+        {
+            client = new();
+        }
+        client.DefaultRequestHeaders.Add("Accept", "application/octet-stream+protobuf");
+    }
+    public static RunCmdResponse CompleteStage(ulong userId, string input2)
+    {
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
 
-                            return sslStream;
+        try
+        {
+            bool chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
+            bool stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
+
+            if (chapterParsed && stageParsed)
+            {
+                Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
+
+                // Complete main stages
+                for (int i = 0; i <= chapterNumber; i++)
+                {
+                    IEnumerable<int> stages = GameData.Instance.GetStageIdsForChapter(i, true);
+                    int target = 1;
+                    foreach (int item in stages)
+                    {
+                        CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
+                        if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
+                        {
+                            Console.WriteLine("Completing stage " + item);
+                            ClearStage.CompleteStage(user, item, true);
                         }
-                        catch
+
+                        if (i == chapterNumber && target == stageNumber)
                         {
-                            socket.Dispose();
-                            throw;
+                            break;
+                        }
+
+                        target++;
+                    }
+                }
+
+                // Process scenario and regular stages
+                Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
+
+                for (int chapter = 0; chapter <= chapterNumber; chapter++)
+                {
+                    Console.WriteLine($"Processing chapter: {chapter}");
+
+                    List<string> stages = [.. GameData.Instance.GetScenarioStageIdsForChapter(chapter).Where(stageId => GameData.Instance.IsValIdScenarioStage(stageId, chapterNumber, stageNumber))];
+
+                    Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
+
+                    foreach (string? stage in stages)
+                    {
+                        if (!user.CompletedScenarios.Contains(stage))
+                        {
+                            user.CompletedScenarios.Add(stage);
+                            Console.WriteLine($"Added stage {stage} to CompletedScenarios");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Stage {stage} is already completed");
                         }
                     }
-                };
+                }
 
-                client = new(handler);
+                // get last quest data to remove any gaps
+                if (user.MainQuestData.Count >= 2)
+                {
+                    KeyValuePair<int, bool> last = user.MainQuestData.Last();
+                    Logging.WriteLine("last quest Id: " + last.Key, LogType.Debug);
+                    for (int i = 0; i < last.Key; i++)
+                    {
+                        if (GameData.Instance.QuestDataRecords.ContainsKey(i))
+                            user.MainQuestData.TryAdd(i, false);
+                    }
+                }
+
+                // Save changes to user data
+                JsonDb.Save();
             }
             else
             {
-                client = new();
+                return new RunCmdResponse() { error = "Chapter and stage number must be valId integers" };
             }
-            client.DefaultRequestHeaders.Add("Accept", "application/octet-stream+protobuf");
         }
-        public static RunCmdResponse CompleteStage(ulong userId, string input2)
+        catch (Exception ex)
         {
-            User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-            if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
-
-            try
-            {
-                bool chapterParsed = int.TryParse(input2.Split('-')[0], out int chapterNumber);
-                bool stageParsed = int.TryParse(input2.Split('-')[1], out int stageNumber);
-
-                if (chapterParsed && stageParsed)
-                {
-                    Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
-
-                    // Complete main stages
-                    for (int i = 0; i <= chapterNumber; i++)
-                    {
-                        IEnumerable<int> stages = GameData.Instance.GetStageIdsForChapter(i, true);
-                        int target = 1;
-                        foreach (int item in stages)
-                        {
-                            CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
-                            if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
-                            {
-                                Console.WriteLine("Completing stage " + item);
-                                ClearStage.CompleteStage(user, item, true);
-                            }
-
-                            if (i == chapterNumber && target == stageNumber)
-                            {
-                                break;
-                            }
-
-                            target++;
-                        }
-                    }
-
-                    // Process scenario and regular stages
-                    Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
-
-                    for (int chapter = 0; chapter <= chapterNumber; chapter++)
-                    {
-                        Console.WriteLine($"Processing chapter: {chapter}");
-
-                        List<string> stages = [.. GameData.Instance.GetScenarioStageIdsForChapter(chapter).Where(stageId => GameData.Instance.IsValIdScenarioStage(stageId, chapterNumber, stageNumber))];
-
-                        Console.WriteLine($"Found {stages.Count} stages for chapter {chapter}");
-
-                        foreach (string? stage in stages)
-                        {
-                            if (!user.CompletedScenarios.Contains(stage))
-                            {
-                                user.CompletedScenarios.Add(stage);
-                                Console.WriteLine($"Added stage {stage} to CompletedScenarios");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Stage {stage} is already completed");
-                            }
-                        }
-                    }
-
-                    // get last quest data to remove any gaps
-                    if (user.MainQuestData.Count >= 2)
-                    {
-                        KeyValuePair<int, bool> last = user.MainQuestData.Last();
-                        Logging.WriteLine("last quest Id: " + last.Key, LogType.Debug);
-                        for (int i = 0; i < last.Key; i++)
-                        {
-                            if (GameData.Instance.QuestDataRecords.ContainsKey(i))
-                                user.MainQuestData.TryAdd(i, false);
-                        }
-                    }
-
-                    // Save changes to user data
-                    JsonDb.Save();
-                }
-                else
-                {
-                    return new RunCmdResponse() { error = "Chapter and stage number must be valId integers" };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new RunCmdResponse() { error = "Exception: " + ex.ToString() };
-            }
-
-            return RunCmdResponse.OK;
+            return new RunCmdResponse() { error = "Exception: " + ex.ToString() };
         }
 
-        public static RunCmdResponse AddAllCharacters(User user)
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse AddAllCharacters(User user)
+    {
+        // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201
+        List<CharacterRecord> allCharacters = [.. GameData.Instance.CharacterTable.Values
+            .GroupBy(c => c.NameCode)  // Group by NameCode to treat same NameCode as one character                     3999 = marian
+            .SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
+
+        foreach (CharacterRecord? character in allCharacters)
         {
-            // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201
-            List<CharacterRecord> allCharacters = [.. GameData.Instance.CharacterTable.Values
-                .GroupBy(c => c.NameCode)  // Group by NameCode to treat same NameCode as one character                     3999 = marian
-                .SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
-
-            foreach (CharacterRecord? character in allCharacters)
-            {
-                if (!user.HasCharacter(character.Id))
-                {
-                    user.Characters.Add(new CharacterModel()
-                    {
-                        CostumeId = 0,
-                        Csn = user.GenerateUniqueCharacterId(),
-                        Grade = 0,
-                        Level = 1,
-                        Skill1Lvl = 1,
-                        Skill2Lvl = 1,
-                        Tid = character.Id,  // Tid is the character ID
-                        UltimateLevel = 1
-                    });
-
-                    user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
-                    user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
-                    user.AddTrigger(Trigger.ObtainCharacterNew, 1);
-                }
-            }
-
-            JsonDb.Save();
-
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse AddAllMaterials(User user, int amount)
-        {
-            foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
-            {
-                DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
-
-                if (item == null)
-                {
-                    user.Items.Add(new DbItemData
-                    {
-                        Isn = user.GenerateUniqueItemId(),
-                        ItemType = tableItem.Id,
-                        Level = 1,
-                        Exp = 1,
-                        Count = amount
-                    });
-                }
-                else
-                {
-                    item.Count += amount;
-                }
-            }
-
-            Console.WriteLine($"Added {amount} of all materials to user " + user.Username);
-            JsonDb.Save();
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse AddAllEq(User user, int amount1, int amount2, int amount3)
-        {
-            if (amount1 > 0)
-            {
-                foreach (FavoriteItemRecord tableItem in GameData.Instance.FavoriteItemTable.Values)
-                {
-                    foreach (int i in Enumerable.Range(0, amount1))
-                    {
-                        user.FavoriteItems.Add(new NetUserFavoriteItemData
-                        {
-                            FavoriteItemId = user.GenerateUniqueItemId(),
-                            Tid = tableItem.Id,
-                            Csn = 0,
-                            Lv = 15,
-                            Exp = 0
-                        });
-                    }
-                    JsonDb.Save();
-                }
-            }
-
-            if (amount2 > 0) { 
-                foreach (ItemConsumeRecord tableItem in GameData.Instance.ConsumableItems.Values)
-                {
-                    DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
-
-                    if (item == null)
-                    {
-                        user.Items.Add(new DbItemData
-                        {
-                            Isn = user.GenerateUniqueItemId(),
-                            ItemType = tableItem.Id,
-                            Level = 0,
-                            Exp = 0,
-                            Count = amount2
-                        });
-                    }
-                    else
-                    {
-                        item.Count += amount2;
-                    }
-                }
-                JsonDb.Save();
-                foreach (ItemPieceRecord tableItem in GameData.Instance.PieceItems.Values)
-                {
-                    DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
-
-                    if (item == null)
-                    {
-                        user.Items.Add(new DbItemData
-                        {
-                            Isn = user.GenerateUniqueItemId(),
-                            ItemType = tableItem.Id,
-                            Level = 0,
-                            Exp = 0,
-                            Count = amount2
-                        });
-                    }
-                    else
-                    {
-                        item.Count += amount2;
-                    }
-                }
-            }
-            if (amount3 > 0) { 
-            int[] sequence = { 0, 1, 2, 3, 4, 7 };
-            int[] T9Equment = {3110901,
-            3210901,
-            3310901,
-            3410901,
-            3120901,
-            3220901,
-            3320901,
-            3420901,
-            3130901,
-            3230901,
-            3330901,
-            3430901};
-                foreach (int corp in sequence)
-                {
-                    foreach (int tableItem in T9Equment)
-                    {
-                        foreach (int i in Enumerable.Range(0, amount3))
-                        {
-                            user.Items.Add(new DbItemData
-                            {
-                                Isn = user.GenerateUniqueItemId(),
-                                ItemType = tableItem,
-                                Level = 5,
-                                Exp = 0,
-                                Count = 1,
-                                Corp = corp
-                            });
-                        }
-                        JsonDb.Save();
-                    }
-                }
-            }
-            Console.WriteLine($"Added {amount1} of all FavoriteItem, {amount2} of all consumables, and {amount3} of all equipment to user " + user.Username);
-            JsonDb.Save();
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse FinishAllTutorials(User user)
-        {
-            foreach (var tutorial in GameData.Instance.TutorialTable.Values)
-            {
-                if (!user.ClearedTutorialData.ContainsKey(tutorial.Id))
-                {
-                    user.ClearedTutorialData.Add(tutorial.Id, new ClearedTutorialData()
-                    {
-                        Id = tutorial.Id,
-                        GroupId = tutorial.GroupId,
-                        VersionGroup = tutorial.VersionGroup
-                    });
-                }
-            }
-
-            Console.WriteLine("Finished all tutorials for user " + user.Username);
-            JsonDb.Save();
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse SetCoreLevel(User user, int inputGrade)
-        {
-            if (!(inputGrade >= 0 && inputGrade <= 11)) return new RunCmdResponse() { error = "core level out of range, must be between 0-12" };
-
-            foreach (CharacterModel character in user.Characters)
-            {
-                // Get current character's Tid
-                int tId = character.Tid;
-
-                // Get the character data from the character table
-                if (!GameData.Instance.CharacterTable.TryGetValue(tId, out CharacterRecord? charData))
-                {
-                    Console.WriteLine($"Character data not found for Tid {tId}");
-                    continue;
-                }
-
-                int currentGradeCoreId = charData.GradeCoreId;
-                int nameCode = charData.NameCode;
-                var originalRare = charData.OriginalRare;
-
-                // Skip characters with OriginalRare == "R"
-                if (originalRare == OriginalRareType.R || nameCode == 3999)
-                {
-                    continue;
-                }
-
-                // Now handle normal SR and SSR characters
-                int maxGradeCoreId = 0;
-
-                // If the character is "SSR", it can have a GradeCoreId from 1 to 11
-                if (originalRare == OriginalRareType.SSR)
-                {
-                    maxGradeCoreId = 11;  // SSR characters can go from 1 to 11
-
-                    // Calculate the new GradeCoreId within the bounds
-                    int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
-
-                    // Find the character with the same NameCode and new GradeCoreId
-                    CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
-                        c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
-
-                    if (newCharData != null)
-                    {
-                        // Update the character's Tid and Grade
-                        character.Tid = newCharData.Id;
-                        character.Grade = newGradeCoreId;
-                    }
-
-                }
-
-                // If the character is "SR", it can have a GradeCoreId from 101 to 103
-                else if (originalRare == OriginalRareType.SR)
-                {
-                    maxGradeCoreId = 103;  // SR characters can go from 101 to 103
-
-                    // Start from 101 and increment based on inputGrade (inputGrade 0 -> GradeCoreId 101)
-                    int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
-
-                    // Find the character with the same NameCode and new GradeCoreId
-                    CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
-                        c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
-
-                    if (newCharData != null)
-                    {
-                        // Update the character's Tid and Grade
-                        character.Tid = newCharData.Id;
-                        character.Grade = newGradeCoreId;
-                    }
-
-                }
-            }
-
-            Console.WriteLine($"Core level of all characters have been set to {inputGrade}");
-            JsonDb.Save();
-
-            return RunCmdResponse.OK;
-        }
-
-
-        public static RunCmdResponse SetCharacterLevel(User user, int level)
-        {
-            if (level > 999 || level <= 0) return new RunCmdResponse() { error = "level must be between 1-999" };
-            foreach (CharacterModel character in user.Characters)
-            {
-                character.Level = level;
-            }
-            Console.WriteLine("Set all characters' level to " + level);
-            JsonDb.Save();
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse SetSkillLevel(User user, int skillLevel)
-        {
-            if (skillLevel > 10 || skillLevel < 0) return new RunCmdResponse() { error = "level must be between 1-10" };
-            foreach (CharacterModel character in user.Characters)
-            {
-                character.UltimateLevel = skillLevel;
-                character.Skill1Lvl = skillLevel;
-                character.Skill2Lvl = skillLevel;
-            }
-            Console.WriteLine("Set all characters' skill levels to " + skillLevel);
-            JsonDb.Save();
-            return RunCmdResponse.OK;
-        }
-
-        public static RunCmdResponse AddCharacter(User user, int characterId)
-        {
-            if (!user.HasCharacter(characterId))
+            if (!user.HasCharacter(character.Id))
             {
                 user.Characters.Add(new CharacterModel()
                 {
@@ -453,30 +168,33 @@ namespace EpinelPS.Utils
                     Level = 1,
                     Skill1Lvl = 1,
                     Skill2Lvl = 1,
-                    Tid = characterId,
+                    Tid = character.Id,  // Tid is the character ID
                     UltimateLevel = 1
                 });
 
-                Console.WriteLine($"Added character {characterId} to user {user.Username}");
-                JsonDb.Save();
-                return RunCmdResponse.OK;
-            }
-            else
-            {
-                return new RunCmdResponse() { error = $"User {user.Username} already has character {characterId}" };
+                user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
+                user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
+                user.AddTrigger(Trigger.ObtainCharacterNew, 1);
             }
         }
 
-        public static RunCmdResponse AddItem(User user, int itemId, int amount)
+        JsonDb.Save();
+
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse AddAllMaterials(User user, int amount)
+    {
+        foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
         {
-            DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
+            DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
 
             if (item == null)
             {
                 user.Items.Add(new DbItemData
                 {
                     Isn = user.GenerateUniqueItemId(),
-                    ItemType = itemId,
+                    ItemType = tableItem.Id,
                     Level = 1,
                     Exp = 1,
                     Count = amount
@@ -485,112 +203,393 @@ namespace EpinelPS.Utils
             else
             {
                 item.Count += amount;
+            }
+        }
 
-                if (item.Count < 0)
+        Console.WriteLine($"Added {amount} of all materials to user " + user.Username);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse AddAllEq(User user, int amount1, int amount2, int amount3)
+    {
+        if (amount1 > 0)
+        {
+            foreach (FavoriteItemRecord tableItem in GameData.Instance.FavoriteItemTable.Values)
+            {
+                foreach (int i in Enumerable.Range(0, amount1))
                 {
-                    item.Count = 0;
+                    user.FavoriteItems.Add(new NetUserFavoriteItemData
+                    {
+                        FavoriteItemId = user.GenerateUniqueItemId(),
+                        Tid = tableItem.Id,
+                        Csn = 0,
+                        Lv = 15,
+                        Exp = 0
+                    });
+                }
+                JsonDb.Save();
+            }
+        }
+
+        if (amount2 > 0)
+        {
+            foreach (ItemConsumeRecord tableItem in GameData.Instance.ConsumableItems.Values)
+            {
+                DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
+
+                if (item == null)
+                {
+                    user.Items.Add(new DbItemData
+                    {
+                        Isn = user.GenerateUniqueItemId(),
+                        ItemType = tableItem.Id,
+                        Level = 0,
+                        Exp = 0,
+                        Count = amount2
+                    });
+                }
+                else
+                {
+                    item.Count += amount2;
                 }
             }
+            JsonDb.Save();
+            foreach (ItemPieceRecord tableItem in GameData.Instance.PieceItems.Values)
+            {
+                DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == tableItem.Id);
 
-            Console.WriteLine($"Added {amount} of item {itemId} to user {user.Username}");
+                if (item == null)
+                {
+                    user.Items.Add(new DbItemData
+                    {
+                        Isn = user.GenerateUniqueItemId(),
+                        ItemType = tableItem.Id,
+                        Level = 0,
+                        Exp = 0,
+                        Count = amount2
+                    });
+                }
+                else
+                {
+                    item.Count += amount2;
+                }
+            }
+        }
+        if (amount3 > 0)
+        {
+            int[] sequence = { 0, 1, 2, 3, 4, 7 };
+            int[] T9Equment = {3110901,
+        3210901,
+        3310901,
+        3410901,
+        3120901,
+        3220901,
+        3320901,
+        3420901,
+        3130901,
+        3230901,
+        3330901,
+        3430901};
+            foreach (int corp in sequence)
+            {
+                foreach (int tableItem in T9Equment)
+                {
+                    foreach (int i in Enumerable.Range(0, amount3))
+                    {
+                        user.Items.Add(new DbItemData
+                        {
+                            Isn = user.GenerateUniqueItemId(),
+                            ItemType = tableItem,
+                            Level = 5,
+                            Exp = 0,
+                            Count = 1,
+                            Corp = corp
+                        });
+                    }
+                    JsonDb.Save();
+                }
+            }
+        }
+        Console.WriteLine($"Added {amount1} of all FavoriteItem, {amount2} of all consumables, and {amount3} of all equipment to user " + user.Username);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse FinishAllTutorials(User user)
+    {
+        foreach (var tutorial in GameData.Instance.TutorialTable.Values)
+        {
+            if (!user.ClearedTutorialData.ContainsKey(tutorial.Id))
+            {
+                user.ClearedTutorialData.Add(tutorial.Id, new ClearedTutorialData()
+                {
+                    Id = tutorial.Id,
+                    GroupId = tutorial.GroupId,
+                    VersionGroup = tutorial.VersionGroup
+                });
+            }
+        }
+
+        Console.WriteLine("Finished all tutorials for user " + user.Username);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse SetCoreLevel(User user, int inputGrade)
+    {
+        if (!(inputGrade >= 0 && inputGrade <= 11)) return new RunCmdResponse() { error = "core level out of range, must be between 0-12" };
+
+        foreach (CharacterModel character in user.Characters)
+        {
+            // Get current character's Tid
+            int tId = character.Tid;
+
+            // Get the character data from the character table
+            if (!GameData.Instance.CharacterTable.TryGetValue(tId, out CharacterRecord? charData))
+            {
+                Console.WriteLine($"Character data not found for Tid {tId}");
+                continue;
+            }
+
+            int currentGradeCoreId = charData.GradeCoreId;
+            int nameCode = charData.NameCode;
+            var originalRare = charData.OriginalRare;
+
+            // Skip characters with OriginalRare == "R"
+            if (originalRare == OriginalRareType.R || nameCode == 3999)
+            {
+                continue;
+            }
+
+            // Now handle normal SR and SSR characters
+            int maxGradeCoreId = 0;
+
+            // If the character is "SSR", it can have a GradeCoreId from 1 to 11
+            if (originalRare == OriginalRareType.SSR)
+            {
+                maxGradeCoreId = 11;  // SSR characters can go from 1 to 11
+
+                // Calculate the new GradeCoreId within the bounds
+                int newGradeCoreId = Math.Min(inputGrade + 1, maxGradeCoreId);  // +1 because inputGrade starts from 0 for SSRs
+
+                // Find the character with the same NameCode and new GradeCoreId
+                CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
+                    c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
+
+                if (newCharData != null)
+                {
+                    // Update the character's Tid and Grade
+                    character.Tid = newCharData.Id;
+                    character.Grade = newGradeCoreId;
+                }
+
+            }
+
+            // If the character is "SR", it can have a GradeCoreId from 101 to 103
+            else if (originalRare == OriginalRareType.SR)
+            {
+                maxGradeCoreId = 103;  // SR characters can go from 101 to 103
+
+                // Start from 101 and increment based on inputGrade (inputGrade 0 -> GradeCoreId 101)
+                int newGradeCoreId = Math.Min(101 + inputGrade, maxGradeCoreId);  // Starts at 101
+
+                // Find the character with the same NameCode and new GradeCoreId
+                CharacterRecord? newCharData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c =>
+                    c.NameCode == nameCode && c.GradeCoreId == newGradeCoreId);
+
+                if (newCharData != null)
+                {
+                    // Update the character's Tid and Grade
+                    character.Tid = newCharData.Id;
+                    character.Grade = newGradeCoreId;
+                }
+
+            }
+        }
+
+        Console.WriteLine($"Core level of all characters have been set to {inputGrade}");
+        JsonDb.Save();
+
+        return RunCmdResponse.OK;
+    }
+
+
+    public static RunCmdResponse SetCharacterLevel(User user, int level)
+    {
+        if (level > 999 || level <= 0) return new RunCmdResponse() { error = "level must be between 1-999" };
+        foreach (CharacterModel character in user.Characters)
+        {
+            character.Level = level;
+        }
+        Console.WriteLine("Set all characters' level to " + level);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse SetSkillLevel(User user, int skillLevel)
+    {
+        if (skillLevel > 10 || skillLevel < 0) return new RunCmdResponse() { error = "level must be between 1-10" };
+        foreach (CharacterModel character in user.Characters)
+        {
+            character.UltimateLevel = skillLevel;
+            character.Skill1Lvl = skillLevel;
+            character.Skill2Lvl = skillLevel;
+        }
+        Console.WriteLine("Set all characters' skill levels to " + skillLevel);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse AddCharacter(User user, int characterId)
+    {
+        if (!user.HasCharacter(characterId))
+        {
+            user.Characters.Add(new CharacterModel()
+            {
+                CostumeId = 0,
+                Csn = user.GenerateUniqueCharacterId(),
+                Grade = 0,
+                Level = 1,
+                Skill1Lvl = 1,
+                Skill2Lvl = 1,
+                Tid = characterId,
+                UltimateLevel = 1
+            });
+
+            Console.WriteLine($"Added character {characterId} to user {user.Username}");
             JsonDb.Save();
             return RunCmdResponse.OK;
         }
-
-        internal static async Task<RunCmdResponse> UpdateResources()
+        else
         {
-            Logging.WriteLine("updating static data and resource info...", LogType.Info);
-            if (serverIp == null || staticDataUrl == null || resourcesUrl == null)
+            return new RunCmdResponse() { error = $"User {user.Username} already has character {characterId}" };
+        }
+    }
+
+    public static RunCmdResponse AddItem(User user, int itemId, int amount)
+    {
+        DbItemData? item = user.Items.FirstOrDefault(i => i.ItemType == itemId);
+
+        if (item == null)
+        {
+            user.Items.Add(new DbItemData
             {
-                serverIp = await AssetDownloadUtil.GetIpAsync(serverUrl);
-                staticDataUrl = $"https://{serverIp}/v1/get-static-data-pack-info-mpk";
-                resourcesUrl = $"https://{serverIp}/v1/resourcehosts2";
+                Isn = user.GenerateUniqueItemId(),
+                ItemType = itemId,
+                Level = 1,
+                Exp = 1,
+                Count = amount
+            });
+        }
+        else
+        {
+            item.Count += amount;
+
+            if (item.Count < 0)
+            {
+                item.Count = 0;
             }
-
-            if (serverIp == null)
-                return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
-
-            // Get latest static data info from server
-            /*ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
-                {
-                    Type = StaticDataPackType.Json
-                });
-            if (staticData == null)
-            {
-                Logging.WriteLine("failed to fetch static data", LogType.Error);
-                return new RunCmdResponse() { error = "failed to fetch static data" };
-            }*/
-
-            // Get latest static data info from server
-            ResStaticDataPackInfoMpk? staticData2 = await FetchProtobuf<ResStaticDataPackInfoMpk, ReqStaticDataPackInfoMpk>(staticDataUrl, new ReqStaticDataPackInfoMpk());
-            if (staticData2 == null)
-            {
-                Logging.WriteLine("failed to fetch static data (2)", LogType.Error);
-                return new RunCmdResponse() { error = "failed to fetch static data (2)" };
-            }
-
-
-            ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl);
-            if (resources == null)
-            {
-                Logging.WriteLine("failed to fetch resource data", LogType.Error);
-                return new RunCmdResponse() { error = "failed to fetch resource data" };
-            }
-
-            GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
-            /*GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
-            GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
-            GameConfig.Root.StaticData.Version = staticData.Version;
-            GameConfig.Root.StaticData.Url = staticData.Url;*/
-
-            GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
-            GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
-            GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
-            GameConfig.Root.StaticDataMpk.Url = staticData2.Url;
-            GameConfig.Save();
-
-            return RunCmdResponse.OK;
         }
 
-        private static async Task<T?> FetchProtobuf<T, I>(string url, IMessage? input = null) where T : IMessage, new() where I : IMessage, new()
+        Console.WriteLine($"Added {amount} of item {itemId} to user {user.Username}");
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    internal static async Task<RunCmdResponse> UpdateResources()
+    {
+        Logging.WriteLine("updating static data and resource info...", LogType.Info);
+        if (serverIp == null || staticDataUrl == null || resourcesUrl == null)
         {
-            byte[] inputBytes = [];
-
-            if (input != null)
-            {
-                using MemoryStream ms = new();
-                CodedOutputStream stream = new(ms);
-                input.WriteTo(stream);
-                stream.Flush();
-
-                inputBytes = ms.ToArray();
-            }
-
-            ByteArrayContent staticDataContent = new(inputBytes);
-            client.DefaultRequestHeaders.Host = serverUrl;
-            staticDataContent.Headers.Add("Content-Type", "application/octet-stream+protobuf");
-            connectingServer = serverUrl;
-            HttpResponseMessage? staticDataHttpResponse = await client.PostAsync(url, staticDataContent);
-            if (staticDataHttpResponse == null)
-            {
-                Console.WriteLine($"failed to post {url}");
-                return default;
-            }
-
-            if (!staticDataHttpResponse.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"POST {url} failed with {staticDataHttpResponse.StatusCode}");
-                return default;
-            }
-
-            byte[] staticDataHttpResponseBytes = await staticDataHttpResponse.Content.ReadAsByteArrayAsync();
-
-            // Parse response
-            T response = new();
-            response.MergeFrom(new CodedInputStream(staticDataHttpResponseBytes));
-
-
-            return response;
+            serverIp = await AssetDownloadUtil.GetIpAsync(serverUrl);
+            staticDataUrl = $"https://{serverIp}/v1/get-static-data-pack-info-mpk";
+            resourcesUrl = $"https://{serverIp}/v1/resourcehosts2";
         }
+
+        if (serverIp == null)
+            return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
+
+        // Get latest static data info from server
+        /*ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
+            {
+                Type = StaticDataPackType.Json
+            });
+        if (staticData == null)
+        {
+            Logging.WriteLine("failed to fetch static data", LogType.Error);
+            return new RunCmdResponse() { error = "failed to fetch static data" };
+        }*/
+
+        // Get latest static data info from server
+        ResStaticDataPackInfoMpk? staticData2 = await FetchProtobuf<ResStaticDataPackInfoMpk, ReqStaticDataPackInfoMpk>(staticDataUrl, new ReqStaticDataPackInfoMpk());
+        if (staticData2 == null)
+        {
+            Logging.WriteLine("failed to fetch static data (2)", LogType.Error);
+            return new RunCmdResponse() { error = "failed to fetch static data (2)" };
+        }
+
+
+        ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl);
+        if (resources == null)
+        {
+            Logging.WriteLine("failed to fetch resource data", LogType.Error);
+            return new RunCmdResponse() { error = "failed to fetch resource data" };
+        }
+
+        GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
+        /*GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
+        GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
+        GameConfig.Root.StaticData.Version = staticData.Version;
+        GameConfig.Root.StaticData.Url = staticData.Url;*/
+
+        GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
+        GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
+        GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
+        GameConfig.Root.StaticDataMpk.Url = staticData2.Url;
+        GameConfig.Save();
+
+        return RunCmdResponse.OK;
+    }
+
+    private static async Task<T?> FetchProtobuf<T, I>(string url, IMessage? input = null) where T : IMessage, new() where I : IMessage, new()
+    {
+        byte[] inputBytes = [];
+
+        if (input != null)
+        {
+            using MemoryStream ms = new();
+            CodedOutputStream stream = new(ms);
+            input.WriteTo(stream);
+            stream.Flush();
+
+            inputBytes = ms.ToArray();
+        }
+
+        ByteArrayContent staticDataContent = new(inputBytes);
+        client.DefaultRequestHeaders.Host = serverUrl;
+        staticDataContent.Headers.Add("Content-Type", "application/octet-stream+protobuf");
+        connectingServer = serverUrl;
+        HttpResponseMessage? staticDataHttpResponse = await client.PostAsync(url, staticDataContent);
+        if (staticDataHttpResponse == null)
+        {
+            Console.WriteLine($"failed to post {url}");
+            return default;
+        }
+
+        if (!staticDataHttpResponse.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"POST {url} failed with {staticDataHttpResponse.StatusCode}");
+            return default;
+        }
+
+        byte[] staticDataHttpResponseBytes = await staticDataHttpResponse.Content.ReadAsByteArrayAsync();
+
+        // Parse response
+        T response = new();
+        response.MergeFrom(new CodedInputStream(staticDataHttpResponseBytes));
+
+
+        return response;
     }
 }

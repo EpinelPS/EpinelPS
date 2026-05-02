@@ -1,19 +1,16 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Gacha;
 
-namespace EpinelPS.LobbyServer.Gacha
+[GameRequest("/gacha/getpayback")]
+public class GetPayback : LobbyMessage
 {
-    [PacketPath("/gacha/getpayback")]
-    public class GetPayback : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetGachaPaybackData req = await ReadData<ReqGetGachaPaybackData>();
+        ReqGetGachaPaybackData req = await ReadData<ReqGetGachaPaybackData>();
 
-            ResGetGachaPaybackData response = new();
+        ResGetGachaPaybackData response = new();
 
-            // TODO implement
+        // TODO implement
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

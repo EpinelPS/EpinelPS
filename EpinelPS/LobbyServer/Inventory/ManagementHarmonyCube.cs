@@ -1,190 +1,188 @@
-using EpinelPS.Database;
-using EpinelPS.Utils;
 using EpinelPS.Data;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Inventory
+namespace EpinelPS.LobbyServer.Inventory;
+
+[GameRequest("/inventory/managementharmonycube")]
+public class ManagementHarmonyCube : LobbyMessage
 {
-    [PacketPath("/inventory/managementharmonycube")]
-    public class ManagementHarmonyCube : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqManagementHarmonyCube req = await ReadData<ReqManagementHarmonyCube>();
+        User user = GetUser();
+
+        ResManagementHarmonyCube response = new();
+
+        DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
+        if (harmonyCubeItem == null)
         {
-            ReqManagementHarmonyCube req = await ReadData<ReqManagementHarmonyCube>();
-            User user = GetUser();
+            throw new BadHttpRequestException("Harmony cube not found", 404);
+        }
 
-            ResManagementHarmonyCube response = new();
+        if (!GameData.Instance.ItemHarmonyCubeTable.TryGetValue(harmonyCubeItem.ItemType, out ItemHarmonyCubeRecord? harmonyCubeData))
+        {
+            throw new BadHttpRequestException("Item is not a harmony cube", 400);
+        }
 
-            DbItemData? harmonyCubeItem = user.Items.FirstOrDefault(x => x.Isn == req.Isn);
-            if (harmonyCubeItem == null)
+        ItemHarmonyCubeLevelRecord? currentLevelData = GetCurrentLevelData(harmonyCubeItem, harmonyCubeData);
+        int maxSlots = currentLevelData?.Slot ?? 1;
+
+        foreach (long clearCsn in req.Clears)
+        {
+            if (harmonyCubeItem.CsnList.Contains(clearCsn))
             {
-                throw new BadHttpRequestException("Harmony cube not found", 404);
+                harmonyCubeItem.CsnList.Remove(clearCsn);
             }
 
-            if (!GameData.Instance.ItemHarmonyCubeTable.TryGetValue(harmonyCubeItem.ItemType, out ItemHarmonyCubeRecord? harmonyCubeData))
+            if (harmonyCubeItem.Csn == clearCsn)
             {
-                throw new BadHttpRequestException("Item is not a harmony cube", 400);
+                harmonyCubeItem.Csn = 0;
+                harmonyCubeItem.Position = 0;
             }
+        }
 
-            ItemHarmonyCubeLevelRecord? currentLevelData = GetCurrentLevelData(harmonyCubeItem, harmonyCubeData);
-            int maxSlots = currentLevelData?.Slot ?? 1;
+        foreach (NetWearHarmonyCubeData wearData in req.Wears)
+        {
+            long targetCsn = wearData.Csn;
+            long swapCsn = wearData.SwapCsn;
 
-            foreach (long clearCsn in req.Clears)
+            if (swapCsn > 0)
             {
-                if (harmonyCubeItem.CsnList.Contains(clearCsn))
+                if (harmonyCubeItem.CsnList.Contains(swapCsn))
                 {
-                    harmonyCubeItem.CsnList.Remove(clearCsn);
+                    harmonyCubeItem.CsnList.Remove(swapCsn);
                 }
 
-                if (harmonyCubeItem.Csn == clearCsn)
+                if (harmonyCubeItem.Csn == swapCsn)
                 {
                     harmonyCubeItem.Csn = 0;
                     harmonyCubeItem.Position = 0;
                 }
             }
 
-            foreach (NetWearHarmonyCubeData wearData in req.Wears)
+            if (targetCsn > 0)
             {
-                long targetCsn = wearData.Csn;
-                long swapCsn = wearData.SwapCsn;
-
-                if (swapCsn > 0)
-                {
-                    if (harmonyCubeItem.CsnList.Contains(swapCsn))
-                    {
-                        harmonyCubeItem.CsnList.Remove(swapCsn);
-                    }
-
-                    if (harmonyCubeItem.Csn == swapCsn)
-                    {
-                        harmonyCubeItem.Csn = 0;
-                        harmonyCubeItem.Position = 0;
-                    }
-                }
-
-                if (targetCsn > 0)
-                {
-                    EquipHarmonyCubeToCharacter(user, harmonyCubeItem, harmonyCubeData, targetCsn, maxSlots);
-                }
+                EquipHarmonyCubeToCharacter(user, harmonyCubeItem, harmonyCubeData, targetCsn, maxSlots);
             }
-
-            List<DbItemData> allHarmonyCubes = user.Items.Where(item =>
-                GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
-
-            foreach (DbItemData harmonyCube in allHarmonyCubes)
-            {
-                NetUserHarmonyCubeData netHarmonyCube = new()
-                {
-                    Isn = harmonyCube.Isn,
-                    Tid = harmonyCube.ItemType,
-                    Lv = harmonyCube.Level
-                };
-
-                foreach (long csn in harmonyCube.CsnList)
-                {
-                    netHarmonyCube.CsnList.Add(csn);
-                }
-
-                if (harmonyCube.Csn > 0 && !harmonyCube.CsnList.Contains(harmonyCube.Csn))
-                {
-                    netHarmonyCube.CsnList.Add(harmonyCube.Csn);
-                }
-
-                response.HarmonyCubes.Add(netHarmonyCube);
-            }
-
-            JsonDb.Save();
-            await WriteDataAsync(response);
         }
 
-        private void EquipHarmonyCubeToCharacter(User user, DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
+        List<DbItemData> allHarmonyCubes = user.Items.Where(item =>
+            GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
+
+        foreach (DbItemData harmonyCube in allHarmonyCubes)
         {
-            if (harmonyCubeItem.CsnList.Contains(targetCsn))
+            NetUserHarmonyCubeData netHarmonyCube = new()
             {
-                return; // Already equipped, skip
+                Isn = harmonyCube.Isn,
+                Tid = harmonyCube.ItemType,
+                Lv = harmonyCube.Level
+            };
+
+            foreach (long csn in harmonyCube.CsnList)
+            {
+                netHarmonyCube.CsnList.Add(csn);
             }
 
-            if (harmonyCubeItem.CsnList.Count >= maxSlots)
+            if (harmonyCube.Csn > 0 && !harmonyCube.CsnList.Contains(harmonyCube.Csn))
             {
-                throw new BadHttpRequestException($"Harmony cube slot limit reached. Current level allows {maxSlots} characters.", 400);
+                netHarmonyCube.CsnList.Add(harmonyCube.Csn);
             }
 
-            CharacterModel? character = user.GetCharacterBySerialNumber(targetCsn);
-            if (character == null)
-            {
-                throw new BadHttpRequestException($"Character {targetCsn} not found", 404);
-            }
-
-            if (!IsClassCompatible(character, harmonyCubeData))
-            {
-                throw new BadHttpRequestException($"Character class incompatible with harmony cube", 400);
-            }
-
-            CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
-
-            harmonyCubeItem.CsnList.Add(targetCsn);
-
-            if (harmonyCubeItem.CsnList.Count == 1)
-            {
-                harmonyCubeItem.Csn = targetCsn;
-                harmonyCubeItem.Position = harmonyCubeData.LocationId;
-            }
-
+            response.HarmonyCubes.Add(netHarmonyCube);
         }
 
-        private void CleanupCharacterFromAllHarmonyCubes(User user, long targetCsn, int position, long excludeIsn)
+        JsonDb.Save();
+        await WriteDataAsync(response);
+    }
+
+    private void EquipHarmonyCubeToCharacter(User user, DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData, long targetCsn, int maxSlots)
+    {
+        if (harmonyCubeItem.CsnList.Contains(targetCsn))
         {
-            foreach (DbItemData item in user.Items.ToArray())
+            return; // Already equipped, skip
+        }
+
+        if (harmonyCubeItem.CsnList.Count >= maxSlots)
+        {
+            throw new BadHttpRequestException($"Harmony cube slot limit reached. Current level allows {maxSlots} characters.", 400);
+        }
+
+        CharacterModel? character = user.GetCharacterBySerialNumber(targetCsn);
+        if (character == null)
+        {
+            throw new BadHttpRequestException($"Character {targetCsn} not found", 404);
+        }
+
+        if (!IsClassCompatible(character, harmonyCubeData))
+        {
+            throw new BadHttpRequestException($"Character class incompatible with harmony cube", 400);
+        }
+
+        CleanupCharacterFromAllHarmonyCubes(user, targetCsn, harmonyCubeData.LocationId, harmonyCubeItem.Isn);
+
+        harmonyCubeItem.CsnList.Add(targetCsn);
+
+        if (harmonyCubeItem.CsnList.Count == 1)
+        {
+            harmonyCubeItem.Csn = targetCsn;
+            harmonyCubeItem.Position = harmonyCubeData.LocationId;
+        }
+
+    }
+
+    private void CleanupCharacterFromAllHarmonyCubes(User user, long targetCsn, int position, long excludeIsn)
+    {
+        foreach (DbItemData item in user.Items.ToArray())
+        {
+            if (!GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType) ||
+                item.Isn == excludeIsn)
             {
-                if (!GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType) ||
-                    item.Isn == excludeIsn)
+                continue;
+            }
+
+            if (!GameData.Instance.ItemHarmonyCubeTable.TryGetValue(item.ItemType, out ItemHarmonyCubeRecord? existingHarmonyCubeData))
+            {
+                continue;
+            }
+
+            bool wasInCsnList = item.CsnList.Contains(targetCsn);
+            bool wasInLegacyCsn = item.Csn == targetCsn;
+
+            if (wasInCsnList || wasInLegacyCsn)
+            {
+                item.CsnList.Remove(targetCsn);
+
+                if (item.CsnList.Count > 0)
                 {
-                    continue;
+                    item.Csn = item.CsnList[0];
+                    item.Position = existingHarmonyCubeData.LocationId;
+                }
+                else
+                {
+                    item.Csn = 0;
+                    item.Position = 0;
                 }
 
-                if (!GameData.Instance.ItemHarmonyCubeTable.TryGetValue(item.ItemType, out ItemHarmonyCubeRecord? existingHarmonyCubeData))
-                {
-                    continue;
-                }
-
-                bool wasInCsnList = item.CsnList.Contains(targetCsn);
-                bool wasInLegacyCsn = item.Csn == targetCsn;
-
-                if (wasInCsnList || wasInLegacyCsn)
-                {
-                    item.CsnList.Remove(targetCsn);
-
-                    if (item.CsnList.Count > 0)
-                    {
-                        item.Csn = item.CsnList[0];
-                        item.Position = existingHarmonyCubeData.LocationId;
-                    }
-                    else
-                    {
-                        item.Csn = 0;
-                        item.Position = 0;
-                    }
-
-                }
             }
         }
+    }
 
-        private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
+    private ItemHarmonyCubeLevelRecord? GetCurrentLevelData(DbItemData harmonyCubeItem, ItemHarmonyCubeRecord harmonyCubeData)
+    {
+        List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
+            .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)
+            .OrderBy(x => x.Level)
+            .ToList();
+
+        return levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level);
+    }
+
+    private bool IsClassCompatible(CharacterModel character, ItemHarmonyCubeRecord harmonyCubeData)
+    {
+        if (GameData.Instance.CharacterTable.TryGetValue(character.Tid, out CharacterRecord? characterData))
         {
-            List<ItemHarmonyCubeLevelRecord> levelData = GameData.Instance.ItemHarmonyCubeLevelTable.Values
-                .Where(x => x.LevelEnhanceId == harmonyCubeData.LevelEnhanceId)
-                .OrderBy(x => x.Level)
-                .ToList();
-
-            return levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level);
+            return harmonyCubeData.Class == CharacterClassType.All || harmonyCubeData.Class == characterData.Class;
         }
-
-        private bool IsClassCompatible(CharacterModel character, ItemHarmonyCubeRecord harmonyCubeData)
-        {
-            if (GameData.Instance.CharacterTable.TryGetValue(character.Tid, out CharacterRecord? characterData))
-            {
-                return harmonyCubeData.Class == CharacterClassType.All || harmonyCubeData.Class == characterData.Class;
-            }
-            return false;
-        }
+        return false;
     }
 }

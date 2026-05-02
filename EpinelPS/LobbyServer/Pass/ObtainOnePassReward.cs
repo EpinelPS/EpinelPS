@@ -1,27 +1,24 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Pass;
 
-namespace EpinelPS.LobbyServer.Pass
+[GameRequest("/pass/obtainonereward")]
+public class ObtainOnePassReward : LobbyMessage
 {
-    [PacketPath("/pass/obtainonereward")]
-    public class ObtainOnePassReward : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        // { "passId": 1037, "passRank": 1, "premiumReward": true }
+        ReqObtainOnePassReward req = await ReadData<ReqObtainOnePassReward>(); //fields "PassId", "PassRank"
+        User user = GetUser();
+
+        ResObtainOnePassReward response = new(); // field Reward
+
+        NetRewardData reward = new()
         {
-            // { "passId": 1037, "passRank": 1, "premiumReward": true }
-            ReqObtainOnePassReward req = await ReadData<ReqObtainOnePassReward>(); //fields "PassId", "PassRank"
-            User user = GetUser();
+            PassPoint = { }
+        };
 
-            ResObtainOnePassReward response = new(); // field Reward
+        PassHelper.ObtainOnePassRewards(user, ref reward, req.PassId, req.PassRank, req.PremiumReward);
+        response.Reward = reward;
 
-            NetRewardData reward = new()
-            {
-                PassPoint = { }
-            };
-
-            PassHelper.ObtainOnePassRewards(user, ref reward, req.PassId, req.PassRank, req.PremiumReward);
-            response.Reward = reward;
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

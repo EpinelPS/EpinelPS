@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Minigame.nksv2;
 
-namespace EpinelPS.LobbyServer.Minigame.nksv2
+[GameRequest("/minigame/nksv2/scenario/get")]
+public class GetScenario : LobbyMessage
 {
-    [PacketPath("/minigame/nksv2/scenario/get")]
-    public class GetScenario : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetNKSV2Scenario req = await ReadData<ReqGetNKSV2Scenario>();
-            User user = GetUser();
+        ReqGetNKSV2Scenario req = await ReadData<ReqGetNKSV2Scenario>();
+        User user = GetUser();
 
-            ResGetNKSV2Scenario response = new();
-            response.ScenarioIdList.Add(user.MogInfo.CompletedScenarios);
+        ResGetNKSV2Scenario response = new();
+        response.ScenarioIdList.Add(user.MogInfo.CompletedScenarios);
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

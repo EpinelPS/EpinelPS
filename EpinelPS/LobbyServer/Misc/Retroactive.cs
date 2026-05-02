@@ -1,22 +1,14 @@
-﻿using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EpinelPS.LobbyServer.Misc;
 
-namespace EpinelPS.LobbyServer.Misc
+[GameRequest("/lobby/retroactive")]
+public class LobbyRetroactive : LobbyMessage
 {
-    [PacketPath("/lobby/retroactive")]
-    public class LobbyRetroactive : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqRetroactive req = await ReadData<ReqRetroactive>();
-            User user = GetUser();
+        ReqRetroactive req = await ReadData<ReqRetroactive>();
+        User user = GetUser();
 
-            ResRetroactive response = new();
-            await WriteDataAsync(response);
-        }
+        ResRetroactive response = new();
+        await WriteDataAsync(response);
     }
 }

@@ -1,28 +1,25 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event.Minigame.AZX;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.AZX
+[GameRequest("/event/minigame/azx/get/reddot/data")]
+public class GetAzxRedDotData : LobbyMessage
 {
-    [PacketPath("/event/minigame/azx/get/reddot/data")]
-    public class GetAzxRedDotData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            // ReqGetMiniGameAzxRedDotData Fields
-            //  int AzxId
-            ReqGetMiniGameAzxRedDotData req = await ReadData<ReqGetMiniGameAzxRedDotData>();
-            User user = GetUser();
-            
-            // ResGetMiniGameAzxRedDotData Fields
-            //  bool IsDailyMissionAvailable
-            //  bool AchievementMissionRewardExists
-            ResGetMiniGameAzxRedDotData response = new()
-            {
-                IsDailyMissionAvailable = true,
-                AchievementMissionRewardExists = true
-            };
-            
+        // ReqGetMiniGameAzxRedDotData Fields
+        //  int AzxId
+        ReqGetMiniGameAzxRedDotData req = await ReadData<ReqGetMiniGameAzxRedDotData>();
+        User user = GetUser();
 
-            await WriteDataAsync(response);
-        }
+        // ResGetMiniGameAzxRedDotData Fields
+        //  bool IsDailyMissionAvailable
+        //  bool AchievementMissionRewardExists
+        ResGetMiniGameAzxRedDotData response = new()
+        {
+            IsDailyMissionAvailable = true,
+            AchievementMissionRewardExists = true
+        };
+
+
+        await WriteDataAsync(response);
     }
 }

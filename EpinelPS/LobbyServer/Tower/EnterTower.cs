@@ -1,24 +1,22 @@
-using EpinelPS.Database;
-using EpinelPS.Utils;
 using EpinelPS.Data;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Tower
+namespace EpinelPS.LobbyServer.Tower;
+
+[GameRequest("/tower/entertower")]
+public class EnterTower : LobbyMessage
 {
-    [PacketPath("/tower/entertower")]
-    public class EnterTower : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterTower req = await ReadData<ReqEnterTower>();
-            User user = GetUser();
+        ReqEnterTower req = await ReadData<ReqEnterTower>();
+        User user = GetUser();
 
-            ResEnterTower response = new();
+        ResEnterTower response = new();
 
 
-            user.AddTrigger(Trigger.TowerAllStart, 1);
-            JsonDb.Save();
+        user.AddTrigger(Trigger.TowerAllStart, 1);
+        JsonDb.Save();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

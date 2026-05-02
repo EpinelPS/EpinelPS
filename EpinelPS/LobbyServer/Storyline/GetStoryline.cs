@@ -1,21 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Storyline;
 
-namespace EpinelPS.LobbyServer.Storyline
+[GameRequest("/storyline/get")]
+public class GetStoryline : LobbyMessage
 {
-    [PacketPath("/storyline/get")]
-    public class GetStoryline : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetStorylineData req = await ReadData<ReqGetStorylineData>();
+        ReqGetStorylineData req = await ReadData<ReqGetStorylineData>();
 
-            ResGetStorylineData response = new();
-            User user = GetUser();
+        ResGetStorylineData response = new();
+        User user = GetUser();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
-
 }

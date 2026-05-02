@@ -1,23 +1,19 @@
-using EpinelPS.Utils;
-using EpinelPS.Database;
+namespace EpinelPS.LobbyServer.Simroom;
 
-namespace EpinelPS.LobbyServer.Simroom
+[GameRequest("/simroom/selectevent")]
+public class SelectEvent : LobbyMessage
 {
-    [PacketPath("/simroom/selectevent")]
-    public class SelectEvent : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        // { "location": { "chapter": 3, "stage": 1, "order": 3 }, "event": 111021115 }
+        ReqSelectSimRoomEvent req = await ReadData<ReqSelectSimRoomEvent>();
+        // User user = GetUser();
+
+        ResSelectSimRoomEvent response = new()
         {
-            // { "location": { "chapter": 3, "stage": 1, "order": 3 }, "event": 111021115 }
-            ReqSelectSimRoomEvent req = await ReadData<ReqSelectSimRoomEvent>();
-            // User user = GetUser();
+            Result = SimRoomResult.Success,
+        };
 
-            ResSelectSimRoomEvent response = new()
-            {
-                Result = SimRoomResult.Success,
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

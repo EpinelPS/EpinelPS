@@ -1,83 +1,81 @@
-using EpinelPS.Database;
-using EpinelPS.Utils;
 using EpinelPS.Data;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.FavoriteItem
+namespace EpinelPS.LobbyServer.FavoriteItem;
+
+[GameRequest("/favoriteitem/quest/finish")]
+public class FinishFavoriteItemQuest : LobbyMessage
 {
-    [PacketPath("/favoriteitem/quest/finish")]
-    public class FinishFavoriteItemQuest : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqFinishFavoriteItemQuest req = await ReadData<ReqFinishFavoriteItemQuest>();
-            User user = GetUser();
+        ReqFinishFavoriteItemQuest req = await ReadData<ReqFinishFavoriteItemQuest>();
+        User user = GetUser();
 
-            FavoriteItemQuestRecord? questData = GetQuestDataFromGameData(req.FavoriteItemQuestId);
-            if (questData == null)
+        FavoriteItemQuestRecord? questData = GetQuestDataFromGameData(req.FavoriteItemQuestId);
+        if (questData == null)
+        {
+            ResFinishFavoriteItemQuest errorResponse = new();
+            await WriteDataAsync(errorResponse);
+            return;
+        }
+
+
+        NetUserFavoriteItemQuestData? existingQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == req.FavoriteItemQuestId);
+
+        if (existingQuest != null)
+        {
+            if (existingQuest.Clear)
             {
                 ResFinishFavoriteItemQuest errorResponse = new();
                 await WriteDataAsync(errorResponse);
                 return;
             }
 
+            existingQuest.Clear = true;
+        }
+        else
+        {
+            NetUserFavoriteItemQuestData newQuest = new()
+            {
+                QuestId = req.FavoriteItemQuestId,
+                Clear = true,
+                Received = false
+            };
+            user.FavoriteItemQuests.Add(newQuest);
+        }
 
-            NetUserFavoriteItemQuestData? existingQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == req.FavoriteItemQuestId);
-   
-            if (existingQuest != null)
+
+        if (questData.NextQuestId > 0)
+        {
+            NetUserFavoriteItemQuestData? nextQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == questData.NextQuestId);
+            if (nextQuest == null)
             {
-                if (existingQuest.Clear) 
+                NetUserFavoriteItemQuestData newQuest = new()
                 {
-                    ResFinishFavoriteItemQuest errorResponse = new();
-                    await WriteDataAsync(errorResponse);
-                    return;
-                }
-                
-                existingQuest.Clear = true;
-            }
-            else
-            {
-                NetUserFavoriteItemQuestData newQuest = new NetUserFavoriteItemQuestData
-                {
-                    QuestId = req.FavoriteItemQuestId,
-                    Clear = true,
+                    QuestId = questData.NextQuestId,
+                    Clear = false,
                     Received = false
                 };
                 user.FavoriteItemQuests.Add(newQuest);
             }
-            
-                        
-            if (questData.NextQuestId > 0)
-            {
-                NetUserFavoriteItemQuestData? nextQuest = user.FavoriteItemQuests.FirstOrDefault(q => q.QuestId == questData.NextQuestId);
-                if (nextQuest == null)
-                {
-                    NetUserFavoriteItemQuestData newQuest = new NetUserFavoriteItemQuestData
-                    {
-                        QuestId = questData.NextQuestId,
-                        Clear = false,
-                        Received = false
-                    };
-                    user.FavoriteItemQuests.Add(newQuest);
-                }
-              
-            }
-             
-            JsonDb.Save();
 
-            ResFinishFavoriteItemQuest response = new();
-            await WriteDataAsync(response);
         }
 
-        private FavoriteItemQuestRecord? GetQuestDataFromGameData(int questId)
+        JsonDb.Save();
+
+        ResFinishFavoriteItemQuest response = new();
+        await WriteDataAsync(response);
+    }
+
+    private FavoriteItemQuestRecord? GetQuestDataFromGameData(int questId)
+    {
+        if (GameData.Instance.FavoriteItemQuestTable.TryGetValue(questId, out FavoriteItemQuestRecord? questRecord))
         {
-                if (GameData.Instance.FavoriteItemQuestTable.TryGetValue(questId, out FavoriteItemQuestRecord? questRecord))
-                {
-                    return questRecord;
-                }
-
-                return null;
-           
+            return questRecord;
         }
+
+        return null;
 
     }
+
 }

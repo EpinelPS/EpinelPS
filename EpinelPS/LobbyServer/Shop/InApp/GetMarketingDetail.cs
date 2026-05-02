@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop.InApp;
 
-namespace EpinelPS.LobbyServer.Shop.InApp
+[GameRequest("/inappshop/jupiter/getmarketingdetail")]
+public class GetMarketingDetail : LobbyMessage
 {
-    [PacketPath("/inappshop/jupiter/getmarketingdetail")]
-    public class GetMarketingDetail : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetJupiterMarketingDetail req = await ReadData<ReqGetJupiterMarketingDetail>();
+        ResGetJupiterMarketingDetail response = new()
         {
-            ReqGetJupiterMarketingDetail req = await ReadData<ReqGetJupiterMarketingDetail>();
-            ResGetJupiterMarketingDetail response = new()
-            {
-                MarketingDetail = "{}"
-            };
+            MarketingDetail = "{}"
+        };
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

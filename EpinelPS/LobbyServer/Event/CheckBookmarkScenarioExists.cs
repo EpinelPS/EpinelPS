@@ -1,19 +1,16 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event;
 
-namespace EpinelPS.LobbyServer.Event
+[GameRequest("/bookmark/event/scenario/exist")]
+public class CheckBookmarkScenarioExists : LobbyMessage
 {
-    [PacketPath("/bookmark/event/scenario/exist")]
-    public class CheckBookmarkScenarioExists : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqExistScenarioBookmark req = await ReadData<ReqExistScenarioBookmark>();
+        ReqExistScenarioBookmark req = await ReadData<ReqExistScenarioBookmark>();
 
-            ResExistScenarioBookmark response = new();
+        ResExistScenarioBookmark response = new();
 
-         // TODO
-  
-            await WriteDataAsync(response);
-        }
+        // TODO
+
+        await WriteDataAsync(response);
     }
 }

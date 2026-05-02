@@ -1,23 +1,20 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/ProfileCard/DecorationLayout/Get")]
+public class GetProfileDecoration : LobbyMessage
 {
-    [PacketPath("/ProfileCard/DecorationLayout/Get")]
-    public class GetProfileDecoration : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
+        ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
 
-            ResProfileCardDecorationLayout r = new()
+        ResProfileCardDecorationLayout r = new()
+        {
+            Layout = new ProfileCardDecorationLayout
             {
-                Layout = new ProfileCardDecorationLayout
-                {
-                    BackgroundId = 101002,
-                    ShowCharacterSpine = true
-                }
-            };
-            await WriteDataAsync(r);
-        }
+                BackgroundId = 101002,
+                ShowCharacterSpine = true
+            }
+        };
+        await WriteDataAsync(r);
     }
 }

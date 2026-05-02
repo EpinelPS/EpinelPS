@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Surface;
 
-[PacketPath("/surface/lobby/simpledata")]
-public class GetSimpleData : LobbyMsgHandler
+[GameRequest("/surface/lobby/simpledata")]
+public class GetSimpleData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

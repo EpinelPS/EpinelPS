@@ -1,17 +1,14 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Guild;
 
-namespace EpinelPS.LobbyServer.Guild
+[GameRequest("/guild/recommendlist")]
+public class GetRecommendList : LobbyMessage
 {
-    [PacketPath("/guild/recommendlist")]
-    public class GetRecommendList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqRecommendGuildList req = await ReadData<ReqRecommendGuildList>();
-            ResRecommendGuildList response = new();
+        ReqRecommendGuildList req = await ReadData<ReqRecommendGuildList>();
+        ResRecommendGuildList response = new();
 
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

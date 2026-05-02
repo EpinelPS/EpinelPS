@@ -1,37 +1,32 @@
-using EpinelPS.Utils;
-using Google.Protobuf;
+namespace EpinelPS.LobbyServer.Stage;
 
-namespace EpinelPS.LobbyServer.Stage
+[GameRequest("/stage/fastclearstage")]
+public class FastClear : LobbyMessage
 {
-    [PacketPath("/stage/fastclearstage")]
-    public class FastClear : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqFastClearCampaignStage req = await ReadData<ReqFastClearCampaignStage>();
+
+        User user = GetUser();
+
+        Console.WriteLine($"Stage " + req.CampaignStageId + " completed using quick battle");
+
+        ResClearStage rsp = ClearStage.CompleteStage(user, req.CampaignStageId);
+
+        ResFastClearCampaignStage response = new()
         {
-            ReqFastClearCampaignStage req = await ReadData<ReqFastClearCampaignStage>();
+            OutpostBattle = rsp.OutpostBattle,
+            OutpostBattleLevelReward = rsp.OutpostBattleLevelReward,
+            StageClearReward = rsp.StageClearReward,
+            UserLevelUpReward = rsp.UserLevelUpReward,
+            OutpostTimeRewardBuff = new()
+        };
 
-            User user = GetUser();
-
-            Console.WriteLine($"Stage " + req.CampaignStageId + " completed using quick battle");
-
-            ResClearStage rsp = ClearStage.CompleteStage(user, req.CampaignStageId);
-
-            ResFastClearCampaignStage response = new()
-            {
-                OutpostBattle = rsp.OutpostBattle,
-                OutpostBattleLevelReward = rsp.OutpostBattleLevelReward,
-                StageClearReward = rsp.StageClearReward,
-                UserLevelUpReward = rsp.UserLevelUpReward,
-                OutpostTimeRewardBuff = new()
-            };
-
-            if (rsp.OutpostTimeRewardBuff != null)
-            {
-                response.OutpostTimeRewardBuff.TimeRewardBuffs.AddRange(rsp.OutpostTimeRewardBuff.TimeRewardBuffs);
-            }
-            
-            await WriteDataAsync(response);
+        if (rsp.OutpostTimeRewardBuff != null)
+        {
+            response.OutpostTimeRewardBuff.TimeRewardBuffs.AddRange(rsp.OutpostTimeRewardBuff.TimeRewardBuffs);
         }
-    }
 
+        await WriteDataAsync(response);
+    }
 }

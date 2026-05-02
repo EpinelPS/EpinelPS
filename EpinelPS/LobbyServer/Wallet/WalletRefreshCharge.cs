@@ -1,36 +1,34 @@
 ﻿using EpinelPS.Data;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Wallet
+namespace EpinelPS.LobbyServer.Wallet;
+
+[GameRequest("/wallet/refreshcharge")]
+public class WalletRefreshCharge : LobbyMessage
 {
-    [PacketPath("/wallet/refreshcharge")]
-    public class WalletRefreshCharge : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqRefreshChargeCurrencyData req = await ReadData<ReqRefreshChargeCurrencyData>();
+        User user = GetUser();
+
+        ResRefreshChargeCurrencyData response = new()
         {
-            ReqRefreshChargeCurrencyData req = await ReadData<ReqRefreshChargeCurrencyData>();
-            User user = GetUser();
+            FreeCash = new() { Type = (int)CurrencyType.FreeCash },
+            ChargeCash = new() { Type = (int)CurrencyType.ChargeCash }
+        };
 
-            ResRefreshChargeCurrencyData response = new()
+        foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
+        {
+            if (item.Key == CurrencyType.FreeCash)
             {
-                FreeCash = new() { Type = (int)CurrencyType.FreeCash },
-                ChargeCash = new() { Type = (int)CurrencyType.ChargeCash }
-            };
-
-            foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
-            {
-                if (item.Key == CurrencyType.FreeCash)
-                {
-                    response.FreeCash.Type = (int)item.Key;
-                    response.FreeCash.Value = item.Value;
-                }
-                else if (item.Key == CurrencyType.ChargeCash)
-                {
-                    response.ChargeCash.Type = (int)item.Key;
-                    response.ChargeCash.Value = item.Value;
-                }
+                response.FreeCash.Type = (int)item.Key;
+                response.FreeCash.Value = item.Value;
             }
-            await WriteDataAsync(response);
+            else if (item.Key == CurrencyType.ChargeCash)
+            {
+                response.ChargeCash.Type = (int)item.Key;
+                response.ChargeCash.Value = item.Value;
+            }
         }
+        await WriteDataAsync(response);
     }
 }

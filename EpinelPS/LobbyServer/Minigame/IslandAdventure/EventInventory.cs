@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
 
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+[GameRequest("/event/minigame/islandadventure/get/inventory")]
+public class MiniGameIslandAdventureInventory : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/get/inventory")]
-    public class MiniGameIslandAdventureInventory : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetMiniGameIslandAdventureInventory req = await ReadData<ReqGetMiniGameIslandAdventureInventory>();
+
+        ResGetMiniGameIslandAdventureInventory response = new()
         {
-            ReqGetMiniGameIslandAdventureInventory req = await ReadData<ReqGetMiniGameIslandAdventureInventory>();
 
-            ResGetMiniGameIslandAdventureInventory response = new()
-            {
+        };
 
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
 
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+[GameRequest("/event/minigame/islandadventure/list/mission")]
+public class ListMission : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/list/mission")]
-    public class ListMission : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetIslandAdventureMissionProgress req = await ReadData<ReqGetIslandAdventureMissionProgress>();
+        ReqGetIslandAdventureMissionProgress req = await ReadData<ReqGetIslandAdventureMissionProgress>();
 
-            ResGetIslandAdventureMissionProgress response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResGetIslandAdventureMissionProgress response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

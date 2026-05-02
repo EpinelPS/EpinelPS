@@ -1,38 +1,36 @@
-using EpinelPS.Utils;
 using EpinelPS.Data;
 
-namespace EpinelPS.LobbyServer.Archive
+namespace EpinelPS.LobbyServer.Archive;
+
+[GameRequest("/archive/messenger/get")]
+public class GetArchiveMessenger : LobbyMessage
 {
-    [PacketPath("/archive/messenger/get")]
-    public class GetArchiveMessenger : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        // Read the request containing ArchiveMessengerGroupId
+        ReqGetArchiveMessenger req = await ReadData<ReqGetArchiveMessenger>();
+        int groupId = req.ArchiveMessengerGroupId;
+
+        // Initialize the response object
+        ResGetArchiveMessenger response = new();
+
+        // Get the relevant data from ArchiveMessengerConditionTable
+        GameData gameData = GameData.Instance;
+
+        if (gameData.archiveMessengerConditionRecords.TryGetValue(groupId, out ArchiveMessengerConditionRecord? conditionRecord))
         {
-            // Read the request containing ArchiveMessengerGroupId
-            ReqGetArchiveMessenger req = await ReadData<ReqGetArchiveMessenger>();
-            int groupId = req.ArchiveMessengerGroupId;
-
-            // Initialize the response object
-            ResGetArchiveMessenger response = new();
-
-            // Get the relevant data from ArchiveMessengerConditionTable
-            GameData gameData = GameData.Instance;
-
-            if (gameData.archiveMessengerConditionRecords.TryGetValue(groupId, out ArchiveMessengerConditionRecord? conditionRecord))
+            foreach (var condition in conditionRecord.ArchiveMessengerConditionList)
             {
-                foreach (var condition in conditionRecord.ArchiveMessengerConditionList)
+                // Add each condition as a NetArchiveMessage in the response
+                response.ArchiveMessageList.Add(new NetArchiveMessage
                 {
-                    // Add each condition as a NetArchiveMessage in the response
-                    response.ArchiveMessageList.Add(new NetArchiveMessage
-                    {
-                        ConditionId = condition.ConditionId,
-                        MessageId = conditionRecord.Tid // Correctly using tId as MessageId
-                    });
-                }
+                    ConditionId = condition.ConditionId,
+                    MessageId = conditionRecord.Tid // Correctly using tId as MessageId
+                });
             }
-
-            // Write the response back
-            await WriteDataAsync(response);
         }
+
+        // Write the response back
+        await WriteDataAsync(response);
     }
 }

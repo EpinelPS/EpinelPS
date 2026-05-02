@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Messenger;
 
-namespace EpinelPS.LobbyServer.Messenger
+[GameRequest("/messenger/random/pick")]
+public class GetRandomPick : LobbyMessage
 {
-    [PacketPath("/messenger/random/pick")]
-    public class GetRandomPick : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqPickTodayRandomMessage req = await ReadData<ReqPickTodayRandomMessage>();
+        ReqPickTodayRandomMessage req = await ReadData<ReqPickTodayRandomMessage>();
 
-            // TODO: get proper response
-            ResPickTodayRandomMessage response = new();
+        // TODO: get proper response
+        ResPickTodayRandomMessage response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

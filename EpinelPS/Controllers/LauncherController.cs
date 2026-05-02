@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace EpinelPS.Controllers
+namespace EpinelPS.Controllers;
+
+[Route("/api/v1")]
+[ApiController]
+public class LauncherController : Controller
 {
-    [Route("/api/v1")]
-    [ApiController]
-    public class LauncherController : Controller
+    [HttpPost]
+    [Route("fleet.auth.game.AuthSvr/Login")]
+    public string LauncherLogin()
     {
-        [HttpPost]
-        [Route("fleet.auth.game.AuthSvr/Login")]
-        public string LauncherLogin()
-        {
-            return @"{
+        return @"{
     ""result"": {
         ""error_code"": 0,
         ""error_message"": ""COMM_SUCC""
@@ -26,13 +26,13 @@ namespace EpinelPS.Controllers
     ""login_ticket"": """",
     ""third_uid"": """"
 }";
-        }
+    }
 
-        [HttpPost]
-        [Route("fleet.repo.game.RepoSVC/GetRegion")]
-        public string LauncherGetRegion()
-        {
-            return @"{
+    [HttpPost]
+    [Route("fleet.repo.game.RepoSVC/GetRegion")]
+    public string LauncherGetRegion()
+    {
+        return @"{
     ""result"": {
         ""error_code"": 0,
         ""error_message"": ""success""
@@ -61,13 +61,13 @@ namespace EpinelPS.Controllers
         }
     ]
 }";
-        }
+    }
 
-        [HttpPost]
-        [Route("fleet.repo.game.RepoSVC/GetGameLauncher")]
-        public string LauncherGetLauncher()
-        {
-            return @"{
+    [HttpPost]
+    [Route("fleet.repo.game.RepoSVC/GetGameLauncher")]
+    public string LauncherGetLauncher()
+    {
+        return @"{
     ""result"": {
         ""error_code"": 0,
         ""error_message"": ""COMM_SUCC""
@@ -85,24 +85,23 @@ namespace EpinelPS.Controllers
         }
     ]
 }";
+    }
+
+    [HttpPost]
+    [Route("fleet.repo.game.RepoSVC/GetVersion")]
+    public string LauncherGetVersion([FromBody] LauncherVersionRequest? body)
+    {
+        if (body == null)
+        {
+            return "{}";
         }
 
-        [HttpPost]
-        [Route("fleet.repo.game.RepoSVC/GetVersion")]
-        public string LauncherGetVersion([FromBody] LauncherVersionRequest? body)
-        {
-            if (body == null)
-            {
-                return "{}";
-            }
-            
-            return System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gameversion.json"));
-        }
+        return System.IO.File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gameversion.json"));
+    }
 
-        public class LauncherVersionRequest
-        {
-            public int game_id {get;set;}
-            public int branch_id { get; set; }
-        }
+    public class LauncherVersionRequest
+    {
+        public int game_id { get; set; }
+        public int branch_id { get; set; }
     }
 }

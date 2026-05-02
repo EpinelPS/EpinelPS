@@ -1,24 +1,22 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Simroom
+namespace EpinelPS.LobbyServer.Simroom;
+
+[GameRequest("/simroom/simplemode/setskipoption")]
+public class SimpleModeSetSkipOption : LobbyMessage
 {
-    [PacketPath("/simroom/simplemode/setskipoption")]
-    public class SimpleModeSetSkipOption : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            var req = await ReadData<ReqSetSimRoomSimpleModeSkipOption>();
-            // ReqSetSimRoomSimpleModeSkipOption Fields
-            // bool Enabled
-            User user = GetUser();
+        var req = await ReadData<ReqSetSimRoomSimpleModeSkipOption>();
+        // ReqSetSimRoomSimpleModeSkipOption Fields
+        // bool Enabled
+        User user = GetUser();
 
-            ResSetSimRoomSimpleModeSkipOption response = new();
+        ResSetSimRoomSimpleModeSkipOption response = new();
 
-            user.ResetableData.SimRoomData.IsSimpleModeSkipEnabled = req.Enabled;
+        user.ResetableData.SimRoomData.IsSimpleModeSkipEnabled = req.Enabled;
 
-            JsonDb.Save();
-            await WriteDataAsync(response);
-        }
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }

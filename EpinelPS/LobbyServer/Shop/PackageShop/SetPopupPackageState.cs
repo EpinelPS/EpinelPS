@@ -1,16 +1,13 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Shop.PackageShop;
 
-namespace EpinelPS.LobbyServer.Shop.PackageShop
+[GameRequest("/packageshop/setpopuppackagestate")]
+public class SetPopupPackageState : LobbyMessage
 {
-    [PacketPath("/packageshop/setpopuppackagestate")]
-    public class SetPopupPackageState : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqSetPopupPackageState req = await ReadData<ReqSetPopupPackageState>();
+        ReqSetPopupPackageState req = await ReadData<ReqSetPopupPackageState>();
 
-            ResSetPopupPackageState response = new();
-            await WriteDataAsync(response);
-        }
+        ResSetPopupPackageState response = new();
+        await WriteDataAsync(response);
     }
 }

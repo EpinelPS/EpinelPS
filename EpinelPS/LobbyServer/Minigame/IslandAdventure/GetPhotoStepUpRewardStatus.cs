@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
 
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+[GameRequest("/event/minigame/islandadventure/get/photo/stepupreward")]
+public class GetPhotoStepUpRewardStatus : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/get/photo/stepupreward")]
-    public class GetPhotoStepUpRewardStatus : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetIslandAdventurePhotoStepUpRewardStatus req = await ReadData<ReqGetIslandAdventurePhotoStepUpRewardStatus>();
+        ReqGetIslandAdventurePhotoStepUpRewardStatus req = await ReadData<ReqGetIslandAdventurePhotoStepUpRewardStatus>();
 
-            ResGetIslandAdventurePhotoStepUpRewardStatus response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResGetIslandAdventurePhotoStepUpRewardStatus response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

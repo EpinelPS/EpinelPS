@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Surface;
 
-[PacketPath("/Surface/Export/MaxAmount/All")]
-public class GetMaximumAmountAll : LobbyMsgHandler
+[GameRequest("/Surface/Export/MaxAmount/All")]
+public class GetMaximumAmountAll : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

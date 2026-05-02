@@ -1,22 +1,20 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.AZX
+namespace EpinelPS.LobbyServer.Event.Minigame.AZX;
+
+[GameRequest("/event/minigame/azx/set/tutorial/confirmed")]
+public class SetAzxTutorialConfirmed : LobbyMessage
 {
-    [PacketPath("/event/minigame/azx/set/tutorial/confirmed")]
-    public class SetAzxTutorialConfirmed : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqSetMiniGameAzxTutorialConfirmed>();
-            User user = GetUser();
+        await ReadData<ReqSetMiniGameAzxTutorialConfirmed>();
+        User user = GetUser();
 
-            ResSetMiniGameAzxTutorialConfirmed response = new();
-            
-            AzxHelper.SetTutorialConfirmed(user, 1);
+        ResSetMiniGameAzxTutorialConfirmed response = new();
 
-            JsonDb.Save();
-            await WriteDataAsync(response);
-        }
+        AzxHelper.SetTutorialConfirmed(user, 1);
+
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }

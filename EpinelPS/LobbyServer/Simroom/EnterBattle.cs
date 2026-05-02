@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Simroom;
 
-namespace EpinelPS.LobbyServer.Simroom
+[GameRequest("/simroom/enterbattle")]
+public class EnterBattle : LobbyMessage
 {
-    [PacketPath("/simroom/enterbattle")]
-    public class EnterBattle : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        await ReadData<ReqEnterSimRoomBattle>();
+
+        ResEnterSimRoomBattle response = new()
         {
-            await ReadData<ReqEnterSimRoomBattle>();
+            Result = SimRoomResult.Success
+        };
 
-            ResEnterSimRoomBattle response = new()
-            {
-                Result = SimRoomResult.Success
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

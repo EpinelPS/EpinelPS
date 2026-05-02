@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Liberate;
 
-namespace EpinelPS.LobbyServer.Liberate
+[GameRequest("/liberate/get")]
+public class GetLiberateData : LobbyMessage
 {
-    [PacketPath("/liberate/get")]
-    public class GetLiberateData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetLiberateData req = await ReadData<ReqGetLiberateData>();
-            User user = GetUser();
+        ReqGetLiberateData req = await ReadData<ReqGetLiberateData>();
+        User user = GetUser();
 
-            ResGetLiberateData response = new() { };
+        ResGetLiberateData response = new() { };
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

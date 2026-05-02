@@ -1,18 +1,15 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/get")]
+public class GetMvgData : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/get")]
-    public class GetMvgData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqGetArcadeMvgData>();
+        await ReadData<ReqGetArcadeMvgData>();
 
-            var user = GetUser();
+        var user = GetUser();
 
-            await WriteDataAsync(new ResGetArcadeMvgData() { Data = user.ArcadeInTheMirrorData });
+        await WriteDataAsync(new ResGetArcadeMvgData() { Data = user.ArcadeInTheMirrorData });
 
-        }
     }
 }

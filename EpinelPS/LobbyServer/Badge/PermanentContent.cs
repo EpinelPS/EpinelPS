@@ -1,26 +1,22 @@
-using EpinelPS.Utils;
-using Google.Protobuf;
+namespace EpinelPS.LobbyServer.Badge;
 
-namespace EpinelPS.LobbyServer.Badge
+[GameRequest("/badge/permanentcontent")]
+public class PermanentContent : LobbyMessage
 {
-    [PacketPath("/badge/permanentcontent")]
-    public class PermanentContent : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqPermanentContentBadgeData req = await ReadData<ReqPermanentContentBadgeData>();
-            User user = GetUser();
+        ReqPermanentContentBadgeData req = await ReadData<ReqPermanentContentBadgeData>();
+        User user = GetUser();
 
-            ResPermanentContentBadgeData response = new();
-            response.ChampionArenaBadgeData = new();
-            response.SoloRaidMuseumBadgeData = new();
-            response.ChampionArenaBadgeData.Schedule = new();
-            response.ChampionArenaBadgeData.NextSchedule = new();
-            response.ChampionArenaBadgeData.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
-            response.ChampionArenaBadgeData.CurrentOrLastSeasonStartAt = new();
-            // TODO
+        ResPermanentContentBadgeData response = new();
+        response.ChampionArenaBadgeData = new();
+        response.SoloRaidMuseumBadgeData = new();
+        response.ChampionArenaBadgeData.Schedule = new();
+        response.ChampionArenaBadgeData.NextSchedule = new();
+        response.ChampionArenaBadgeData.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
+        response.ChampionArenaBadgeData.CurrentOrLastSeasonStartAt = new();
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

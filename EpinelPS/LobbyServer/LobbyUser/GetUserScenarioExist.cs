@@ -1,45 +1,43 @@
-﻿using EpinelPS.Utils;
-namespace EpinelPS.LobbyServer.LobbyUser
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
+
+[GameRequest("/user/scenario/exist")]
+public class GetUserScenarioExist : LobbyMessage
 {
-    [PacketPath("/user/scenario/exist")]
-    public class GetUserScenarioExist : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqExistScenario req = await ReadData<ReqExistScenario>();
+
+        // TODO: Check response from real server
+
+        ResExistScenario response = new();
+
+        foreach (string? item in req.ScenarioGroupIds)
         {
-            ReqExistScenario req = await ReadData<ReqExistScenario>();
-
-            // TODO: Check response from real server
-
-            ResExistScenario response = new();
-
-            foreach (string? item in req.ScenarioGroupIds)
+            if (FindScenarioInMainStages(item) || FindScenarioInArchiveStages(item))
             {
-                if (FindScenarioInMainStages(item) || FindScenarioInArchiveStages(item))
-                {
-                    response.ExistGroupIds.Add(item);
-                }
+                response.ExistGroupIds.Add(item);
             }
-
-            await WriteDataAsync(response);
         }
 
-        private bool FindScenarioInMainStages(string scenarioGroupId)
-        {
-            User user = GetUser();
-            return user.CompletedScenarios.Contains(scenarioGroupId);
-        }
+        await WriteDataAsync(response);
+    }
 
-        private bool FindScenarioInArchiveStages(string scenarioGroupId)
+    private bool FindScenarioInMainStages(string scenarioGroupId)
+    {
+        User user = GetUser();
+        return user.CompletedScenarios.Contains(scenarioGroupId);
+    }
+
+    private bool FindScenarioInArchiveStages(string scenarioGroupId)
+    {
+        User user = GetUser();
+        foreach (EventData evtData in user.EventInfo.Values)
         {
-            User user = GetUser();
-            foreach (EventData evtData in user.EventInfo.Values)
+            if (evtData.CompletedScenarios.Contains(scenarioGroupId))
             {
-                if (evtData.CompletedScenarios.Contains(scenarioGroupId))
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
         }
+        return false;
     }
 }

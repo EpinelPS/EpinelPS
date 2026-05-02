@@ -3,8 +3,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/practice/setdamage")]
-public class SetDamagePractice : LobbyMsgHandler
+[GameRequest("/soloraid/practice/setdamage")]
+public class SetDamagePractice : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

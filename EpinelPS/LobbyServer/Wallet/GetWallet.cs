@@ -1,24 +1,22 @@
 ﻿using EpinelPS.Data;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Wallet
+namespace EpinelPS.LobbyServer.Wallet;
+
+[GameRequest("/wallet/get")]
+public class GetWallet : LobbyMessage
 {
-    [PacketPath("/wallet/get")]
-    public class GetWallet : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetCurrencyData req = await ReadData<ReqGetCurrencyData>();
+        User user = GetUser();
+
+        ResGetCurrencyData response = new();
+
+        foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
         {
-            ReqGetCurrencyData req = await ReadData<ReqGetCurrencyData>();
-            User user = GetUser();
-
-            ResGetCurrencyData response = new();
-
-            foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
-            {
-                response.Currency.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
-            }
-
-            await WriteDataAsync(response);
+            response.Currency.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
         }
+
+        await WriteDataAsync(response);
     }
 }

@@ -2,28 +2,27 @@
 using EpinelPS.Utils;
 using Google.Protobuf;
 
-namespace EpinelPS.LobbyServer.Misc
+namespace EpinelPS.LobbyServer.Misc;
+
+[GameRequest("/get-static-data-pack-info-mpk")]
+public class GetStaticDataPackNew : LobbyMessage
 {
-    [PacketPath("/get-static-data-pack-info-mpk")]
-    public class GetStaticDataPackNew : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqStaticDataPackInfoMpk req = await ReadData<ReqStaticDataPackInfoMpk>();
+
+        StaticData data = GameConfig.Root.StaticDataMpk;
+
+        ResStaticDataPackInfoMpk r = new()
         {
-            ReqStaticDataPackInfoMpk req = await ReadData<ReqStaticDataPackInfoMpk>();
+            Url = data.Url,
+            Version = data.Version,
+            Size = GameData.Instance.MpkSize,
+            Sha256Sum = ByteString.CopyFrom(GameData.Instance.MpkHash),
+            Salt1 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt1)),
+            Salt2 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt2))
+        };
 
-            StaticData data = GameConfig.Root.StaticDataMpk;
-
-            ResStaticDataPackInfoMpk r = new()
-            {
-                Url = data.Url,
-                Version = data.Version,
-                Size = GameData.Instance.MpkSize,
-                Sha256Sum = ByteString.CopyFrom(GameData.Instance.MpkHash),
-                Salt1 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt1)),
-                Salt2 = ByteString.CopyFrom(Convert.FromBase64String(data.Salt2))
-            };
-
-            await WriteDataAsync(r);
-        }
+        await WriteDataAsync(r);
     }
 }

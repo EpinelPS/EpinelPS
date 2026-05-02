@@ -1,21 +1,18 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Misc;
 
-namespace EpinelPS.LobbyServer.Misc
+[GameRequest("/shutdownflags/gacha/getall")]
+public class GachaGetAllShutdownFlags : LobbyMessage
 {
-    [PacketPath("/shutdownflags/gacha/getall")]
-    public class GachaGetAllShutdownFlags : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGachaGetAllShutdownFlags req = await ReadData<ReqGachaGetAllShutdownFlags>();
-            User user = GetUser();
+        ReqGachaGetAllShutdownFlags req = await ReadData<ReqGachaGetAllShutdownFlags>();
+        User user = GetUser();
 
-            ResGachaGetAllShutdownFlags response = new();
-            if (user.GachaTutorialPlayCount > 0)
-                response.Unavailables.Add(3);
+        ResGachaGetAllShutdownFlags response = new();
+        if (user.GachaTutorialPlayCount > 0)
+            response.Unavailables.Add(3);
 
-            // TODO: Validate response from real server and pull info from user info
-            await WriteDataAsync(response);
-        }
+        // TODO: Validate response from real server and pull info from user info
+        await WriteDataAsync(response);
     }
 }

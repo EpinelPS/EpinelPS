@@ -1,46 +1,45 @@
-using EpinelPS.Database;
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Mission
+namespace EpinelPS.LobbyServer.Mission;
+
+[GameRequest("/mission/obtain/achievement")]
+public class ObtainAchievement : LobbyMessage
 {
-    [PacketPath("/mission/obtain/achievement")]
-    public class ObtainAchievement : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqObtainAchievementReward req = await ReadData<ReqObtainAchievementReward>();
+        User user = GetUser();
+
+        ResObtainAchievementReward response = new();
+
+        List<NetRewardData> rewards = [];
+
+        int total_points = 0;
+
+        foreach (int item in req.TidList)
         {
-            ReqObtainAchievementReward req = await ReadData<ReqObtainAchievementReward>();
-            User user = GetUser();
+            if (user.CompletedAchievements.Contains(item)) continue;
 
-            ResObtainAchievementReward response = new();
+            if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-            List<NetRewardData> rewards = [];
+            RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
 
-            int total_points = 0;
+            NetRewardData reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
+            rewards.Add(reward);
 
-            foreach (int item in req.TidList)
-            {
-                if (user.CompletedAchievements.Contains(item)) continue;
+            user.CompletedAchievements.Add(item);
 
-                if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
-
-                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
-
-                NetRewardData reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
-                rewards.Add(reward);
-
-                user.CompletedAchievements.Add(item);
-
-                total_points++;
-            }
-
-            user.AddTrigger(Trigger.PointRewardAchievement, total_points);
-
-            response.Reward = NetUtils.MergeRewards(rewards, user);
-
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
+            total_points++;
         }
+
+        user.AddTrigger(Trigger.PointRewardAchievement, total_points);
+
+        response.Reward = NetUtils.MergeRewards(rewards, user);
+
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

@@ -1,10 +1,9 @@
 using EpinelPS.Data;
-using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost;
 
-[PacketPath("/outpost/suddenevent/start")]
-public class StartSuddenEvent : LobbyMsgHandler
+[GameRequest("/outpost/suddenevent/start")]
+public class StartSuddenEvent : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

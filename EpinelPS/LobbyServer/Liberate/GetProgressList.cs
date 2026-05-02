@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Liberate;
 
-namespace EpinelPS.LobbyServer.Liberate
+[GameRequest("/liberate/getprogresslist")]
+public class GetProgressList : LobbyMessage
 {
-    [PacketPath("/liberate/getprogresslist")]
-    public class GetProgressList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetLiberateProgressList req = await ReadData<ReqGetLiberateProgressList>();
-            User user = GetUser();
+        ReqGetLiberateProgressList req = await ReadData<ReqGetLiberateProgressList>();
+        User user = GetUser();
 
-            ResGetLiberateProgressList response = new();
+        ResGetLiberateProgressList response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

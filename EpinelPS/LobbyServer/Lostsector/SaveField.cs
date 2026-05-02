@@ -1,27 +1,24 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Lostsector;
 
-namespace EpinelPS.LobbyServer.Lostsector
+[GameRequest("/lostsector/savefield")]
+public class SaveField : LobbyMessage
 {
-    [PacketPath("/lostsector/savefield")]
-    public class SaveField : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqSaveLostSectorField req = await ReadData<ReqSaveLostSectorField>();
-            User user = GetUser();
+        ReqSaveLostSectorField req = await ReadData<ReqSaveLostSectorField>();
+        User user = GetUser();
 
-            ResSaveLostSectorField response = new();
+        ResSaveLostSectorField response = new();
 
-            if (!user.LostSectorData.TryGetValue(req.SectorId, out LostSectorData? value))
-                user.LostSectorData.Add(req.SectorId, new LostSectorData()
-                {
-                    Json = req.Json
-                });
-            else
-                value.Json = req.Json;
+        if (!user.LostSectorData.TryGetValue(req.SectorId, out LostSectorData? value))
+            user.LostSectorData.Add(req.SectorId, new LostSectorData()
+            {
+                Json = req.Json
+            });
+        else
+            value.Json = req.Json;
 
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

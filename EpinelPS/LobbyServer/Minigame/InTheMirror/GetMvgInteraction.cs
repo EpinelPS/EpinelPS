@@ -1,16 +1,13 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/log/interaction")]
+public class GetMvgLogInteraction : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/interaction")]
-    public class GetMvgLogInteraction : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqLogArcadeMvgInteraction>();
+        await ReadData<ReqLogArcadeMvgInteraction>();
 
-            await WriteDataAsync(new ResLogArcadeMvgInteraction());
+        await WriteDataAsync(new ResLogArcadeMvgInteraction());
 
-        }
     }
 }

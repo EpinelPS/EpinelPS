@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Ranking;
 
-namespace EpinelPS.LobbyServer.Ranking
+[GameRequest("/ranking/updateserverreward")]
+public class UpdateServerReward : LobbyMessage
 {
-    [PacketPath("/ranking/updateserverreward")]
-    public class UpdateServerReward : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqUpdateRankingServerReward req = await ReadData<ReqUpdateRankingServerReward>();
-            ResUpdateRankingServerReward response = new();
+        ReqUpdateRankingServerReward req = await ReadData<ReqUpdateRankingServerReward>();
+        ResUpdateRankingServerReward response = new();
 
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

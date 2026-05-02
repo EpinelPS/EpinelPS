@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Minigame.Lycoris;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.Lycoris;
-
-[PacketPath("/event/minigame/lycoris/getdata")]
-public class GetLycorisData : LobbyMsgHandler
+[GameRequest("/event/minigame/lycoris/getdata")]
+public class GetLycorisData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

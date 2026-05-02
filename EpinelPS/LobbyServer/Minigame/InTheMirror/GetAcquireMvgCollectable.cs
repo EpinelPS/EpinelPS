@@ -1,22 +1,20 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
+
+[GameRequest("/arcade/mvg/log/collectable")]
+public class GetAcquireMvgCollectable : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/collectable")]
-    public class GetAcquireMvgCollectable : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            var request = await ReadData<ReqAcquireArcadeMvgCollectable>();
+        var request = await ReadData<ReqAcquireArcadeMvgCollectable>();
 
-            var user = GetUser();
+        var user = GetUser();
 
-            user.ArcadeInTheMirrorData.Collectables.Add(request.CollectableId);
+        user.ArcadeInTheMirrorData.Collectables.Add(request.CollectableId);
 
-            await WriteDataAsync(new ResAcquireArcadeMvgCollectable());
+        await WriteDataAsync(new ResAcquireArcadeMvgCollectable());
 
-            JsonDb.Save();
-        }
+        JsonDb.Save();
     }
 }

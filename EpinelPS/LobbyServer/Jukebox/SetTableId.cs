@@ -1,31 +1,29 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Jukebox
+namespace EpinelPS.LobbyServer.Jukebox;
+
+[GameRequest("/jukebox/set/tableid")]
+public class SetTableId : LobbyMessage
 {
-    [PacketPath("/jukebox/set/tableid")]
-    public class SetTableId : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSetJukeboxBgmTableId req = await ReadData<ReqSetJukeboxBgmTableId>();
+        User user = GetUser();
+
+        ResSetJukeboxBgmTableId response = new();
+
+        if (req.Location == NetJukeboxLocation.CommanderRoom)
         {
-            ReqSetJukeboxBgmTableId req = await ReadData<ReqSetJukeboxBgmTableId>();
-            User user = GetUser();
-
-            ResSetJukeboxBgmTableId response = new();
-
-            if (req.Location == NetJukeboxLocation.CommanderRoom)
-            {
-                user.CommanderMusic.TableId = req.JukeboxTableId;
-                user.CommanderMusic.Type = NetJukeboxBgmType.JukeboxTableId;
-            }
-            else if (req.Location == NetJukeboxLocation.Lobby)
-            {
-                user.LobbyMusic.TableId = req.JukeboxTableId;
-                user.LobbyMusic.Type = NetJukeboxBgmType.JukeboxTableId;
-            }
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
+            user.CommanderMusic.TableId = req.JukeboxTableId;
+            user.CommanderMusic.Type = NetJukeboxBgmType.JukeboxTableId;
         }
+        else if (req.Location == NetJukeboxLocation.Lobby)
+        {
+            user.LobbyMusic.TableId = req.JukeboxTableId;
+            user.LobbyMusic.Type = NetJukeboxBgmType.JukeboxTableId;
+        }
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

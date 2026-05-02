@@ -1,18 +1,15 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Archive;
 
-namespace EpinelPS.LobbyServer.Archive
+[GameRequest("/archive/storydungeon/enterstage")]
+public class EnterArchiveStage : LobbyMessage
 {
-    [PacketPath("/archive/storydungeon/enterstage")]
-    public class EnterArchiveStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterArchiveStage req = await ReadData<ReqEnterArchiveStage>();// has fields EventId StageId TeamNumber
-            int evid = req.EventId;
+        ReqEnterArchiveStage req = await ReadData<ReqEnterArchiveStage>();// has fields EventId StageId TeamNumber
+        int evid = req.EventId;
 
-            ResEnterArchiveStage response = new();
+        ResEnterArchiveStage response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

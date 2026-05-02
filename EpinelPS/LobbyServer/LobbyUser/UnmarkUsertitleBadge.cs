@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/lobby/usertitle/unmark-badge")]
+public class UnmarkUserTitleBase : LobbyMessage
 {
-    [PacketPath("/lobby/usertitle/unmark-badge")]
-    public class UnmarkUserTitleBase : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqUnMarkUserTitleBadge req = await ReadData<ReqUnMarkUserTitleBadge>();
-            User user = GetUser();
+        ReqUnMarkUserTitleBadge req = await ReadData<ReqUnMarkUserTitleBadge>();
+        User user = GetUser();
 
-            ResUnMarkUserTitleBadge response = new();
+        ResUnMarkUserTitleBadge response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

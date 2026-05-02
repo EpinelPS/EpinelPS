@@ -1,32 +1,31 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+namespace EpinelPS.LobbyServer.LobbyUser;
+
+[GameRequest("/User/SetScenarioComplete")]
+public class SetScenarioCompleted : LobbyMessage
 {
-    [PacketPath("/User/SetScenarioComplete")]
-    public class SetScenarioCompleted : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSetScenarioComplete req = await ReadData<ReqSetScenarioComplete>();
+        User user = GetUser();
+
+        ResSetScenarioComplete response = new()
         {
-            ReqSetScenarioComplete req = await ReadData<ReqSetScenarioComplete>();
-            User user = GetUser();
+            Reward = new NetRewardData()
+        };
 
-            ResSetScenarioComplete response = new()
-            {
-                Reward = new NetRewardData()
-            };
+        user.CompletedScenarios.Add(req.ScenarioId);
 
-            user.CompletedScenarios.Add(req.ScenarioId);
-
-            if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardsRecord? record))
-            {
-                response.Reward = RewardUtils.RegisterRewardsForUser(user, record.RewardId);
-            }
-
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
+        if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardsRecord? record))
+        {
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, record.RewardId);
         }
+
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

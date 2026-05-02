@@ -11,7 +11,7 @@ public class ServerSwitcher
     private const string HostsStartMarker = "# begin ServerSelector entries";
     private const string HostsEndMarker = "# end ServerSelector entries";
 
-    private static PathUtil util = new();
+    private static readonly PathUtil util = new();
 
     public static bool IsUsingLocalServer()
     {

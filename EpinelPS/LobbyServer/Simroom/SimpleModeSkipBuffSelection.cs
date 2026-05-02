@@ -1,25 +1,23 @@
-using EpinelPS.Utils;
 using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Simroom
+namespace EpinelPS.LobbyServer.Simroom;
+
+[GameRequest("/simroom/simplemode/skipbuffselection")]
+public class SimpleModeSkipBuffSelection : LobbyMessage
 {
-    [PacketPath("/simroom/simplemode/skipbuffselection")]
-    public class SimpleModeSkipBuffSelection : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        await ReadData<ReqSkipSimRoomSimpleModeBuffSelection>();
+        User user = GetUser();
+        ResSkipSimRoomSimpleModeBuffSelection response = new()
         {
-            await ReadData<ReqSkipSimRoomSimpleModeBuffSelection>();
-            User user = GetUser();
-            ResSkipSimRoomSimpleModeBuffSelection response = new()
-            {
-                Result = SimRoomResult.Reset,
-            };
-            
-            user.ResetableData.SimRoomData.Entered = false;
+            Result = SimRoomResult.Reset,
+        };
 
-            JsonDb.Save();
+        user.ResetableData.SimRoomData.Entered = false;
 
-            await WriteDataAsync(response);
-        }
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

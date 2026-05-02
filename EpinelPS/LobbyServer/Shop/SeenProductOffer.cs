@@ -1,19 +1,16 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Shop;
 
-namespace EpinelPS.LobbyServer.Shop
+[GameRequest("/productoffer/setseen")]
+public class SeenProductOffer : LobbyMessage
 {
-    [PacketPath("/productoffer/setseen")]
-    public class SeenProductOffer : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqSetSetSeenProductOffer x = await ReadData<ReqSetSetSeenProductOffer>();
+        ReqSetSetSeenProductOffer x = await ReadData<ReqSetSetSeenProductOffer>();
 
-            // TODO: Figure out a way to disable ads
+        // TODO: Figure out a way to disable ads
 
-            ResSetSetSeenProductOffer response = new();
+        ResSetSetSeenProductOffer response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

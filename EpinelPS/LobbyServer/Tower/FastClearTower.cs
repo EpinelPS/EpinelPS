@@ -1,17 +1,14 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Tower;
 
-namespace EpinelPS.LobbyServer.Tower
+[GameRequest("/tower/fastcleartower")]
+public class FastClearTower : LobbyMessage
 {
-    [PacketPath("/tower/fastcleartower")]
-    public class FastClearTower : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqFastClearTower req = await ReadData<ReqFastClearTower>();
+        ReqFastClearTower req = await ReadData<ReqFastClearTower>();
 
-            ResFastClearTower response = new();
+        ResFastClearTower response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

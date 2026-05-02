@@ -1,10 +1,9 @@
-namespace EpinelPS.Data
-{
-    [System.AttributeUsage(System.AttributeTargets.Field)]
+namespace EpinelPS.Data;
 
-    public class LoadRecordAttribute(string file, string primaryKey) : Attribute
-    {
-        public string File { get; set; } = file;
-        public string PrimaryKey { get; set; } = primaryKey;
-    }
+[System.AttributeUsage(System.AttributeTargets.Field)]
+
+public class LoadRecordAttribute(string file, string primaryKey) : Attribute
+{
+    public string File { get; set; } = file;
+    public string PrimaryKey { get; set; } = primaryKey;
 }

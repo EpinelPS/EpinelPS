@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Misc;
 
-namespace EpinelPS.LobbyServer.Misc
+[GameRequest("/featureflags/get")]
+public class GetFeatureFlags : LobbyMessage
 {
-    [PacketPath("/featureflags/get")]
-    public class GetFeatureFlags : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetFeatureFlag req = await ReadData<ReqGetFeatureFlag>();
+
+        ResGetFeatureFlag r = new()
         {
-            ReqGetFeatureFlag req = await ReadData<ReqGetFeatureFlag>();
+            IsOpen = true
+        };
 
-            ResGetFeatureFlag r = new()
-            {
-                IsOpen = true
-            };
-
-            await WriteDataAsync(r);
-        }
+        await WriteDataAsync(r);
     }
 }

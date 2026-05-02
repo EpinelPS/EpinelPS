@@ -1,24 +1,21 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.FavoriteItem;
 
-namespace EpinelPS.LobbyServer.FavoriteItem
+[GameRequest("/favoriteitem/list")]
+public class ListFavoriteItem : LobbyMessage
 {
-    [PacketPath("/favoriteitem/list")]
-    public class ListFavoriteItem : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqListFavoriteItem req = await ReadData<ReqListFavoriteItem>();
+        User user = GetUser();
+
+        ResListFavoriteItem response = new();
+
+        // Add all user's favorite items to the response
+        foreach (NetUserFavoriteItemData favoriteItem in user.FavoriteItems)
         {
-            ReqListFavoriteItem req = await ReadData<ReqListFavoriteItem>();
-            User user = GetUser();
-
-            ResListFavoriteItem response = new();
-
-            // Add all user's favorite items to the response
-            foreach (NetUserFavoriteItemData favoriteItem in user.FavoriteItems)
-            {
-                response.FavoriteItems.Add(favoriteItem);
-            }
-
-            await WriteDataAsync(response);
+            response.FavoriteItems.Add(favoriteItem);
         }
+
+        await WriteDataAsync(response);
     }
 }

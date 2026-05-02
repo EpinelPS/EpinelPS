@@ -1,19 +1,17 @@
-using EpinelPS.Utils;
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
+
+[GameRequest("/event/minigame/islandadventure/get/currency")]
+public class MiniGameIslandAdventureCurrency : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/get/currency")]
-    public class MiniGameIslandAdventureCurrency : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetMiniGameIslandAdventureCurrency req = await ReadData<ReqGetMiniGameIslandAdventureCurrency>();
+
+        ResGetMiniGameIslandAdventureCurrency response = new()
         {
-            ReqGetMiniGameIslandAdventureCurrency req = await ReadData<ReqGetMiniGameIslandAdventureCurrency>();
+            Currency = 90000
+        };
 
-            ResGetMiniGameIslandAdventureCurrency response = new()
-            {
-                Currency = 90000  
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

@@ -1,26 +1,24 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+namespace EpinelPS.LobbyServer.LobbyUser;
+
+[GameRequest("/User/SetNickNameInTutorial")]
+public class SetNicknameInTutorial : LobbyMessage
 {
-    [PacketPath("/User/SetNickNameInTutorial")]
-    public class SetNicknameInTutorial : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSetNicknameInTutorial req = await ReadData<ReqSetNicknameInTutorial>();
+        User user = GetUser();
+        user.Nickname = req.Nickname;
+
+        ResSetNicknameInTutorial response = new()
         {
-            ReqSetNicknameInTutorial req = await ReadData<ReqSetNicknameInTutorial>();
-            User user = GetUser();
-            user.Nickname = req.Nickname;
+            Result = SetNicknameResult.Okay,
+            Nickname = req.Nickname
+        };
 
-            ResSetNicknameInTutorial response = new()
-            {
-                Result = SetNicknameResult.Okay,
-                Nickname = req.Nickname
-            };
+        JsonDb.Save();
 
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

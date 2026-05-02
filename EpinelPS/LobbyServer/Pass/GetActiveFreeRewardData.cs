@@ -1,16 +1,13 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Pass;
 
-namespace EpinelPS.LobbyServer.Pass
+[GameRequest("/pass/event/freereward/getactive")]
+public class GetActiveFreeRewardData : LobbyMessage
 {
-    [PacketPath("/pass/event/freereward/getactive")]
-    public class GetActiveFreeRewardData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetActiveFreeRewardPassData req = await ReadData<ReqGetActiveFreeRewardPassData>();
-            ResGetActiveFreeRewardPassData response = new();
+        ReqGetActiveFreeRewardPassData req = await ReadData<ReqGetActiveFreeRewardPassData>();
+        ResGetActiveFreeRewardPassData response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

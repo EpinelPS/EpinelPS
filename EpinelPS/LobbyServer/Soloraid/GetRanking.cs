@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/getranking")]
-public class GetRanking : LobbyMsgHandler
+[GameRequest("/soloraid/getranking")]
+public class GetRanking : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

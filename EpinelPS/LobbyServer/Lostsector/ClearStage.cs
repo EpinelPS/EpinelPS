@@ -1,42 +1,39 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
-using EpinelPS.Utils;
-using Org.BouncyCastle.Ocsp;
 
-namespace EpinelPS.LobbyServer.Lostsector
+namespace EpinelPS.LobbyServer.Lostsector;
+
+[GameRequest("/lostsector/clearstage")]
+public class ClearStage : LobbyMessage
 {
-    [PacketPath("/lostsector/clearstage")]
-    public class ClearStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqClearLostSectorStage req = await ReadData<ReqClearLostSectorStage>();
+        User user = GetUser();
+
+        ResClearLostSectorStage response = new();
+
+        if (req.BattleResult == 1)
         {
-            ReqClearLostSectorStage req = await ReadData<ReqClearLostSectorStage>();
-            User user = GetUser();
-
-            ResClearLostSectorStage response = new();
-
-            if (req.BattleResult == 1)
-            {
-                ClearLostSectorStage(user, req.StageId);
-                JsonDb.Save();
-            }
-
-            await WriteDataAsync(response);
+            ClearLostSectorStage(user, req.StageId);
+            JsonDb.Save();
         }
 
-        public static void ClearLostSectorStage(User user, int stageId)
-        {
-            // get lost sector Id from stage Id
-            int sector = GameData.Instance.LostSectorStages[stageId].Sector;
+        await WriteDataAsync(response);
+    }
 
-            // get position ID from stage Id in map data
+    public static void ClearLostSectorStage(User user, int stageId)
+    {
+        // get lost sector Id from stage Id
+        int sector = GameData.Instance.LostSectorStages[stageId].Sector;
 
-            LostSectorRecord sectorData = GameData.Instance.LostSector[sector];
-            var mapInfo = GameData.Instance.MapData[sectorData.FieldId];
+        // get position ID from stage Id in map data
 
-            var stage = mapInfo.StageSpawner.Where(x => x.StageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
+        LostSectorRecord sectorData = GameData.Instance.LostSector[sector];
+        var mapInfo = GameData.Instance.MapData[sectorData.FieldId];
 
-            user.LostSectorData[sector].ClearedStages.Add(stage.PositionId, stageId);
-        }
+        var stage = mapInfo.StageSpawner.Where(x => x.StageId == stageId).FirstOrDefault() ?? throw new Exception("cannot find stage in map data");
+
+        user.LostSectorData[sector].ClearedStages.Add(stage.PositionId, stageId);
     }
 }

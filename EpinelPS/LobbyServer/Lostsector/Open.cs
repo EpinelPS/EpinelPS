@@ -1,39 +1,37 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Lostsector
+namespace EpinelPS.LobbyServer.Lostsector;
+
+[GameRequest("/lostsector/open")]
+public class Open : LobbyMessage
 {
-    [PacketPath("/lostsector/open")]
-    public class Open : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqOpenLostSector req = await ReadData<ReqOpenLostSector>();
-            User user = GetUser();
+        ReqOpenLostSector req = await ReadData<ReqOpenLostSector>();
+        User user = GetUser();
 
-            ResOpenLostSector response = new();
+        ResOpenLostSector response = new();
 
-            if (!user.LostSectorData.ContainsKey(req.SectorId))
-                user.LostSectorData.Add(req.SectorId, new LostSectorData()
-                {
-                    IsOpen = true
-                });
-
-            LostSectorData val = user.LostSectorData[req.SectorId];
-            response.Lostsector = new NetUserLostSectorData()
+        if (!user.LostSectorData.ContainsKey(req.SectorId))
+            user.LostSectorData.Add(req.SectorId, new LostSectorData()
             {
-                IsOpen = val.IsOpen,
-                SectorId = req.SectorId,
-                IsPlaying = val.IsPlaying,
-                CurrentClearStageCount = val.ClearedStages.Count,
-                RewardCount = val.ObtainedRewards,
-                IsFinalReward = val.RecievedFinalReward,
-                IsPerfectReward = val.CompletedPerfectly,
-                MaxClearStageCount = 0, // TODO
-            };
+                IsOpen = true
+            });
 
-            JsonDb.Save();
-            await WriteDataAsync(response);
-        }
+        LostSectorData val = user.LostSectorData[req.SectorId];
+        response.Lostsector = new NetUserLostSectorData()
+        {
+            IsOpen = val.IsOpen,
+            SectorId = req.SectorId,
+            IsPlaying = val.IsPlaying,
+            CurrentClearStageCount = val.ClearedStages.Count,
+            RewardCount = val.ObtainedRewards,
+            IsFinalReward = val.RecievedFinalReward,
+            IsPerfectReward = val.CompletedPerfectly,
+            MaxClearStageCount = 0, // TODO
+        };
+
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }

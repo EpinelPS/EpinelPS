@@ -1,25 +1,23 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using EpinelPS.Utils;
-using EpinelPS.Database;
+﻿using EpinelPS.Database;
+using Google.Protobuf.WellKnownTypes;
 
-namespace EpinelPS.LobbyServer
+namespace EpinelPS.LobbyServer;
+
+[GameRequest("/now")]
+public class GetCurrentTime : LobbyMessage
 {
-    [PacketPath("/now")]
-    public class GetCurrentTime : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetNow req = await ReadData<ReqGetNow>();
+
+        ResGetNow response = new()
         {
-            ReqGetNow req = await ReadData<ReqGetNow>();
+            Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            ResetHour = JsonDb.Instance.ResetHourUtcTime,
+            CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
+        };
+        // todo: valIdate response with actual server
 
-            ResGetNow response = new()
-            {
-                Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                ResetHour = JsonDb.Instance.ResetHourUtcTime,
-                CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
-            };
-            // todo: valIdate response with actual server
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

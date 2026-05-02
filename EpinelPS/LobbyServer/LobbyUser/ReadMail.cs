@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/mail/read")]
+public class ReadMail : LobbyMessage
 {
-    [PacketPath("/mail/read")]
-    public class ReadMail : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqReadMail req = await ReadData<ReqReadMail>();
+        ReqReadMail req = await ReadData<ReqReadMail>();
 
-            ResReadMail r = new();
-            //TODO
-            await WriteDataAsync(r);
-        }
+        ResReadMail r = new();
+        //TODO
+        await WriteDataAsync(r);
     }
 }

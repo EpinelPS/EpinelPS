@@ -2,106 +2,105 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Outpost.Recycle
+namespace EpinelPS.LobbyServer.Outpost.Recycle;
+
+[GameRequest("/outpost/RecycleRoom/LevelUpResearch")]
+public class LevelUpResearch : LobbyMessage
 {
-    [PacketPath("/outpost/RecycleRoom/LevelUpResearch")]
-    public class LevelUpResearch : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        /*
+         * Req Contains:
+         * Tid: int value, research tId
+         * Items: int value, used items.
+         */
+        ReqRecycleLevelUpResearch req = await ReadData<ReqRecycleLevelUpResearch>();
+        User user = GetUser();
+        ResRecycleLevelUpResearch response = new();
+
+        user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);
+
+        // Check progress is null, null means research is not unlocked.
+        if (progress != null)
         {
-            /*
-             * Req Contains:
-             * Tid: int value, research tId
-             * Items: int value, used items.
-             */
-            ReqRecycleLevelUpResearch req = await ReadData<ReqRecycleLevelUpResearch>();
-            User user = GetUser();
-            ResRecycleLevelUpResearch response = new();
-
-            user.ResearchProgress.TryGetValue(req.Tid, out RecycleRoomResearchProgress? progress);
-
-            // Check progress is null, null means research is not unlocked.
-            if (progress != null)
-            {
-                AddProgressToResearch(response, user, progress, req);
-            }
-
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
+            AddProgressToResearch(response, user, progress, req);
         }
 
-        private static void AddProgressToResearch(ResRecycleLevelUpResearch response, User user, RecycleRoomResearchProgress progress, ReqRecycleLevelUpResearch req)
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
+    }
+
+    private static void AddProgressToResearch(ResRecycleLevelUpResearch response, User user, RecycleRoomResearchProgress progress, ReqRecycleLevelUpResearch req)
+    {
+        GameData.Instance.RecycleResearchStats.TryGetValue(req.Tid, out RecycleResearchStatRecord? statRecord);
+        if (statRecord is null)
+            return;
+        RecycleResearchLevelRecord? levelRecord = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.RecycleType == statRecord.RecycleType)
+            .FirstOrDefault(e => e.RecycleLevel == progress.Level);
+        if (levelRecord is null)
+            return;
+
+        if (statRecord.RecycleType == RecycleType.Personal) // main research
         {
-            GameData.Instance.RecycleResearchStats.TryGetValue(req.Tid, out RecycleResearchStatRecord? statRecord);
-            if (statRecord is null)
+            DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.ItemId); // item_Id equals level-up item's tId.
+            if (usedItem is null || usedItem.Count < levelRecord.ItemValue)
                 return;
-            RecycleResearchLevelRecord? levelRecord = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.RecycleType == statRecord.RecycleType)
-                .FirstOrDefault(e => e.RecycleLevel == progress.Level);
-            if (levelRecord is null)
+
+            usedItem.Count -= levelRecord.ItemValue;
+            response.Items.Add(NetUtils.UserItemDataToNet(usedItem));
+
+            progress.Level += 1;
+            progress.Hp = statRecord.Hp * progress.Level;
+            response.Recycle = new()
+            {
+                Tid = req.Tid,
+                Lv = progress.Level,
+            };
+        }
+        else if (statRecord.RecycleType == RecycleType.Class || statRecord.RecycleType == RecycleType.Corporation) // class research or corporation research
+        {
+            DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == req.Tid);
+            if (usedItem is null)
                 return;
 
-            if (statRecord.RecycleType == RecycleType.Personal) // main research
+            usedItem.Count -= 1;
+            response.Items.Add(NetUtils.UserItemDataToNet(usedItem));
+            (int newLevel, int newExp) = CalcCorpAndClassLevelUp(statRecord.RecycleType, 1, progress.Level, progress.Exp);
+            progress.Level = newLevel;
+            progress.Exp = newExp;
+            response.Recycle = new()
             {
-                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == levelRecord.ItemId); // item_Id equals level-up item's tId.
-                if (usedItem is null || usedItem.Count < levelRecord.ItemValue)
-                    return;
-
-                usedItem.Count -= levelRecord.ItemValue;
-                response.Items.Add(NetUtils.UserItemDataToNet(usedItem));
-
-                progress.Level += 1;
-                progress.Hp = statRecord.Hp * progress.Level;
-                response.Recycle = new()
-                {
-                    Tid = req.Tid,
-                    Lv = progress.Level,
-                };
-            }
-            else if (statRecord.RecycleType == RecycleType.Class || statRecord.RecycleType == RecycleType.Corporation) // class research or corporation research
-            {
-                DbItemData? usedItem = user.Items.FirstOrDefault(e => e.ItemType == req.Tid);
-                if (usedItem is null)
-                    return;
-
-                usedItem.Count -= 1;
-                response.Items.Add(NetUtils.UserItemDataToNet(usedItem));
-                (int newLevel, int newExp) = CalcCorpAndClassLevelUp(statRecord.RecycleType, 1, progress.Level, progress.Exp);
-                progress.Level = newLevel;
-                progress.Exp = newExp;
-                response.Recycle = new()
-                {
-                    Tid = req.Tid,
-                    Lv = newLevel,
-                    Exp = newExp,
-                };
-            }
-            else
-            {
-                throw new Exception($"unknown recycle type {statRecord.RecycleType}");
-            }
+                Tid = req.Tid,
+                Lv = newLevel,
+                Exp = newExp,
+            };
         }
-
-        // First: level, Second: exp
-        private static (int, int) CalcCorpAndClassLevelUp(RecycleType researchType, int itemCount, int startLevel = 1, int startExp = 0)
+        else
         {
-            // levelRecord.exp is required exp to level up.
-            IEnumerable<RecycleResearchLevelRecord> levelRecords = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.RecycleType == researchType && e.RecycleLevel > startLevel);
+            throw new Exception($"unknown recycle type {statRecord.RecycleType}");
+        }
+    }
 
-            foreach (RecycleResearchLevelRecord? record in levelRecords)
+    // First: level, Second: exp
+    private static (int, int) CalcCorpAndClassLevelUp(RecycleType researchType, int itemCount, int startLevel = 1, int startExp = 0)
+    {
+        // levelRecord.exp is required exp to level up.
+        IEnumerable<RecycleResearchLevelRecord> levelRecords = GameData.Instance.RecycleResearchLevels.Values.Where(e => e.RecycleType == researchType && e.RecycleLevel > startLevel);
+
+        foreach (RecycleResearchLevelRecord? record in levelRecords)
+        {
+            if (itemCount < record.ItemValue)
             {
-                if (itemCount < record.ItemValue)
-                {
-                    startExp += itemCount;
-                    break;
-                }
-
-                itemCount -= record.ItemValue - startExp;
-                startLevel += 1;
-                startExp = 0;
+                startExp += itemCount;
+                break;
             }
 
-            return (startLevel, startExp);
+            itemCount -= record.ItemValue - startExp;
+            startLevel += 1;
+            startExp = 0;
         }
+
+        return (startLevel, startExp);
     }
 }

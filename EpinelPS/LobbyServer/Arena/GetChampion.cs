@@ -1,23 +1,19 @@
-﻿using EpinelPS.Utils;
-using Google.Protobuf.WellKnownTypes;
+﻿namespace EpinelPS.LobbyServer.Arena;
 
-namespace EpinelPS.LobbyServer.Arena
+[GameRequest("/arena/champion/get")]
+public class GetChampion : LobbyMessage
 {
-    [PacketPath("/arena/champion/get")]
-    public class GetChampion : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetChampionArena req = await ReadData<ReqGetChampionArena>();
+
+        ResGetChampionArena response = new()
         {
-            ReqGetChampionArena req = await ReadData<ReqGetChampionArena>();
+            Schedule = new NetChampionArenaSchedule()
+        };
 
-            ResGetChampionArena response = new()
-            {
-                Schedule = new NetChampionArenaSchedule()
-            };
+        // TODO
 
-            // TODO
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

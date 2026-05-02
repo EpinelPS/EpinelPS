@@ -1,29 +1,27 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Character
+namespace EpinelPS.LobbyServer.Character;
+
+[GameRequest("/character/costume/set")]
+public class SetCharacterCostume : LobbyMessage
 {
-    [PacketPath("/character/costume/set")]
-    public class SetCharacterCostume : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSetCharacterCostume req = await ReadData<ReqSetCharacterCostume>();
+        User user = GetUser();
+
+        foreach (CharacterModel item in user.Characters)
         {
-            ReqSetCharacterCostume req = await ReadData<ReqSetCharacterCostume>();
-            User user = GetUser();
-
-            foreach (CharacterModel item in user.Characters)
+            if (item.Csn == req.Csn)
             {
-                if (item.Csn == req.Csn)
-                {
-                    item.CostumeId = req.CostumeId;
-                    break;
-                }
+                item.CostumeId = req.CostumeId;
+                break;
             }
-            JsonDb.Save();
-
-            ResSetCharacterCostume response = new();
-
-            await WriteDataAsync(response);
         }
+        JsonDb.Save();
+
+        ResSetCharacterCostume response = new();
+
+        await WriteDataAsync(response);
     }
 }

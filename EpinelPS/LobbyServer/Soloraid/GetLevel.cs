@@ -2,8 +2,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/getlevel")]
-public class GetLevel : LobbyMsgHandler
+[GameRequest("/soloraid/getlevel")]
+public class GetLevel : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

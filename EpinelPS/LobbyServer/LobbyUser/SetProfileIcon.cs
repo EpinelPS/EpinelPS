@@ -1,21 +1,19 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+namespace EpinelPS.LobbyServer.LobbyUser;
+
+[GameRequest("/user/setprofileicon")]
+public class SetProfileIcon : LobbyMessage
 {
-    [PacketPath("/user/setprofileicon")]
-    public class SetProfileIcon : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqSetProfileIcon req = await ReadData<ReqSetProfileIcon>();
-            User user = GetUser();
-            user.ProfileIconId = req.Icon;
-            user.ProfileIconIsPrism = req.IsPrism;
-            JsonDb.Save();
-            ResSetProfileIcon response = new();
+        ReqSetProfileIcon req = await ReadData<ReqSetProfileIcon>();
+        User user = GetUser();
+        user.ProfileIconId = req.Icon;
+        user.ProfileIconIsPrism = req.IsPrism;
+        JsonDb.Save();
+        ResSetProfileIcon response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

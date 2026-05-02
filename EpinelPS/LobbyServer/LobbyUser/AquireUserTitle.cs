@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/lobby/usertitle/acquire")]
+public class AquireUserTitle : LobbyMessage
 {
-    [PacketPath("/lobby/usertitle/acquire")]
-    public class AquireUserTitle : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqAcquireUserTitle req = await ReadData<ReqAcquireUserTitle>();
-            User user = GetUser();
+        ReqAcquireUserTitle req = await ReadData<ReqAcquireUserTitle>();
+        User user = GetUser();
 
-            ResAcquireUserTitle response = new();
-            
-            // TODO
+        ResAcquireUserTitle response = new();
 
-            await WriteDataAsync(response);
-        }
+        // TODO
+
+        await WriteDataAsync(response);
     }
 }

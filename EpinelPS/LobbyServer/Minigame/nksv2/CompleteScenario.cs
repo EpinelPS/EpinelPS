@@ -1,21 +1,19 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Minigame.nksv2
+namespace EpinelPS.LobbyServer.Minigame.nksv2;
+
+[GameRequest("/minigame/nksv2/scenario/complete")]
+public class CompleteScenario : LobbyMessage
 {
-    [PacketPath("/minigame/nksv2/scenario/complete")]
-    public class CompleteScenario : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqCompleteNKSV2Scenario req = await ReadData<ReqCompleteNKSV2Scenario>();
-            User user = GetUser();
+        ReqCompleteNKSV2Scenario req = await ReadData<ReqCompleteNKSV2Scenario>();
+        User user = GetUser();
 
-            ResCompleteNKSV2Scenario response = new();
-            user.MogInfo.CompletedScenarios.Add(req.ScenarioId);
-            JsonDb.Save();
+        ResCompleteNKSV2Scenario response = new();
+        user.MogInfo.CompletedScenarios.Add(req.ScenarioId);
+        JsonDb.Save();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

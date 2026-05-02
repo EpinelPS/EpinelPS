@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Intercept;
 
-namespace EpinelPS.LobbyServer.Intercept
+[GameRequest("/intercept/check")]
+public class CheckClearInterceptToday : LobbyMessage
 {
-    [PacketPath("/intercept/check")]
-    public class CheckClearInterceptToday : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqCheckClearInterceptToday req = await ReadData<ReqCheckClearInterceptToday>();
+
+        ResCheckClearInterceptToday response = new()
         {
-            ReqCheckClearInterceptToday req = await ReadData<ReqCheckClearInterceptToday>();
+            Clear = true
+        };
 
-            ResCheckClearInterceptToday response = new()
-            {
-                Clear = true
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

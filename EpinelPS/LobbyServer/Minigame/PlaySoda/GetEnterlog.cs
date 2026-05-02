@@ -1,15 +1,12 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.PlaySoda;
 
-namespace EpinelPS.LobbyServer.Minigame.PlaySoda
+[GameRequest("/arcade/enterlog")]
+public class GetEnterArcadeLog : LobbyMessage
 {
-    [PacketPath("/arcade/enterlog")]
-    public class GetEnterArcadeLog : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            var request = await ReadData<ReqEnterArcadeLog>();
+        var request = await ReadData<ReqEnterArcadeLog>();
 
-            await WriteDataAsync(new ResEnterArcadeLog());
-        }
+        await WriteDataAsync(new ResEnterArcadeLog());
     }
 }

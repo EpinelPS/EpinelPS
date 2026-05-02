@@ -1,33 +1,18 @@
-﻿using EpinelPS.Utils;
-//Idk why i dId this but it still works as long as IsWhitelisted is set to true
-namespace EpinelPS.LobbyServer.Misc
+﻿namespace EpinelPS.LobbyServer.Misc;
+
+[GameRequest("/maintenancenotice")]
+public class GetMaintenanceNotice : LobbyMessage
 {
-    [PacketPath("/maintenancenotice")]
-    public class GetMaintenanceNotice : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqMaintenanceNotice req = await ReadData<ReqMaintenanceNotice>(); // field string OpenId
-            string oId = req.OpenId;
+        ReqMaintenanceNotice req = await ReadData<ReqMaintenanceNotice>(); // field string OpenId
+        string oId = req.OpenId;
 
-            // Create a new instance of ResMaintenanceNotice
-            ResMaintenanceNotice r = new()
-            {
-                IsWhitelisted = true
-            };
+        // Create a new instance of ResMaintenanceNotice
+        ResMaintenanceNotice r = new();
 
-            // Define maintenance window timestamps
-            /*Google.Protobuf.WellKnownTypes.Timestamp maintenanceFrom = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-2)); // Example: 2 hour ago
-            Google.Protobuf.WellKnownTypes.Timestamp maintenanceTo = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1));   // Example: 1 hour ago
+        // TODO: add a way to define maintenance in admin panel
 
-            // Add a new maintenance window
-            r.MaintenanceWindow = new NetMaintenanceWindow
-            {
-                From = maintenanceFrom,
-                To = maintenanceTo
-            };*/
-
-            await WriteDataAsync(r);
-        }
+        await WriteDataAsync(r);
     }
 }

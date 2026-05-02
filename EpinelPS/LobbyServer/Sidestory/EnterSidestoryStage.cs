@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Sidestory;
 
-namespace EpinelPS.LobbyServer.Sidestory
+[GameRequest("/sidestory/stage/enter")]
+public class EnterSidestoryStage : LobbyMessage
 {
-    [PacketPath("/sidestory/stage/enter")]
-    public class EnterSidestoryStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterSideStoryStage req = await ReadData<ReqEnterSideStoryStage>();
-            User user = GetUser();
+        ReqEnterSideStoryStage req = await ReadData<ReqEnterSideStoryStage>();
+        User user = GetUser();
 
-            ResEnterSideStoryStage response = new();
+        ResEnterSideStoryStage response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

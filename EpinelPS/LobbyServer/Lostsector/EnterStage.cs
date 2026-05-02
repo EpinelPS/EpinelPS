@@ -1,17 +1,14 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Lostsector;
 
-namespace EpinelPS.LobbyServer.Lostsector
+[GameRequest("/lostsector/enterstage")]
+public class EnterStage : LobbyMessage
 {
-    [PacketPath("/lostsector/enterstage")]
-    public class EnterStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterLostSectorStage req = await ReadData<ReqEnterLostSectorStage>();
+        ReqEnterLostSectorStage req = await ReadData<ReqEnterLostSectorStage>();
 
-            ResEnterLostSectorStage response = new();
+        ResEnterLostSectorStage response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

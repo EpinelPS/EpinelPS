@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event.Field;
 
-namespace EpinelPS.LobbyServer.Event.Field
+[GameRequest("/event/field/password-door/list")]
+public class ListPasswordDoor : LobbyMessage
 {
-    [PacketPath("/event/field/password-door/list")]
-    public class ListPasswordDoor : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqListFieldPasswordDoorData req = await ReadData<ReqListFieldPasswordDoorData>();
-            User user = GetUser();
+        ReqListFieldPasswordDoorData req = await ReadData<ReqListFieldPasswordDoorData>();
+        User user = GetUser();
 
-            ResListFieldPasswordDoorData response = new();
+        ResListFieldPasswordDoorData response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

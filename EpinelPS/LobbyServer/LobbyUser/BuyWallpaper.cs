@@ -1,24 +1,22 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+namespace EpinelPS.LobbyServer.LobbyUser;
+
+[GameRequest("/user/wallpaper/buy")]
+public class BuyWallpaper : LobbyMessage
 {
-    [PacketPath("/user/wallpaper/buy")]
-    public class BuyWallpaper : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqBuyLobbyDecoBackground req = await ReadData<ReqBuyLobbyDecoBackground>();
-            ResBuyLobbyDecoBackground response = new();
-            User user = GetUser();
-            
-            user.LobbyDecoBackgroundList.Add(req.LobbyDecoBackgroundId);
+        ReqBuyLobbyDecoBackground req = await ReadData<ReqBuyLobbyDecoBackground>();
+        ResBuyLobbyDecoBackground response = new();
+        User user = GetUser();
 
-            response.OwnedLobbyDecoBackgroundIdList.Add(user.LobbyDecoBackgroundList);
+        user.LobbyDecoBackgroundList.Add(req.LobbyDecoBackgroundId);
 
-            JsonDb.Save();
+        response.OwnedLobbyDecoBackgroundIdList.Add(user.LobbyDecoBackgroundList);
 
-            await WriteDataAsync(response);
-        }
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

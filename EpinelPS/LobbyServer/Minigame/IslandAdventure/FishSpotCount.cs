@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
 
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+[GameRequest("/event/minigame/islandadventure/get/fish/spotcount")]
+public class MiniGameIslandAdventureFishingSpotCountHistory : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/get/fish/spotcount")]
-    public class MiniGameIslandAdventureFishingSpotCountHistory : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqMiniGameIslandAdventureFishingSpotCountHistory req = await ReadData<ReqMiniGameIslandAdventureFishingSpotCountHistory>();
+
+        ResMiniGameIslandAdventureFishingSpotCountHistory response = new()
         {
-            ReqMiniGameIslandAdventureFishingSpotCountHistory req = await ReadData<ReqMiniGameIslandAdventureFishingSpotCountHistory>();
 
-            ResMiniGameIslandAdventureFishingSpotCountHistory response = new()
-            {
+        };
 
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

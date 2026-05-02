@@ -1,54 +1,50 @@
-﻿using System;
-using System.Globalization; // Ensure this is included
-using System.Linq;
-using System.Threading.Tasks;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Utils;
+using System.Globalization; // Ensure this is included
 
-namespace EpinelPS.LobbyServer.Shop
+namespace EpinelPS.LobbyServer.Shop;
+
+[GameRequest("/inappshop/jupiter/getproductlist")]
+public class GetProductList : LobbyMessage
 {
-    [PacketPath("/inappshop/jupiter/getproductlist")]
-    public class GetProductList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetJupiterProductList x = await ReadData<ReqGetJupiterProductList>();
+
+        ResGetJupiterProductList response = new();
+        foreach (string? item in x.ProductIdList)
         {
-            ReqGetJupiterProductList x = await ReadData<ReqGetJupiterProductList>();
+            IEnumerable<KeyValuePair<string, MidasProductRecord>> product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
 
-            ResGetJupiterProductList response = new();
-            foreach (string? item in x.ProductIdList)
+            if (product.Any())
             {
-                IEnumerable<KeyValuePair<string, MidasProductRecord>> product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
-
-                if (product.Any())
+                MidasProductRecord? record = product.FirstOrDefault().Value;
+                if (record != null)
                 {
-                    MidasProductRecord? record = product.FirstOrDefault().Value;
-                    if (record != null)
+                    string normalizedCost = record.Cost.Replace(',', '.');
+
+                    if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
                     {
-                        string normalizedCost = record.Cost.Replace(',', '.');
-
-                        if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
-                        {
-                            Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
-                            continue;
-                        }
-
-                        long microPrice = (long)(price * 1000000);
-                        response.ProductInfoList.Add(new NetJupiterProductInfo
-                        {
-                            CurrencyCode = "USD",
-                            CurrencySymbol = "$",
-                            MicroPrice = microPrice,
-                            Price = record.Cost,
-                            ProductId = item
-                        });
+                        Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
+                        continue;
                     }
-                }
-                else
-                {
-                    Console.WriteLine($"Missing!!!! {item}");
+
+                    long microPrice = (long)(price * 1000000);
+                    response.ProductInfoList.Add(new NetJupiterProductInfo
+                    {
+                        CurrencyCode = "USD",
+                        CurrencySymbol = "$",
+                        MicroPrice = microPrice,
+                        Price = record.Cost,
+                        ProductId = item
+                    });
                 }
             }
-            await WriteDataAsync(response);
+            else
+            {
+                Console.WriteLine($"Missing!!!! {item}");
+            }
         }
+        await WriteDataAsync(response);
     }
 }

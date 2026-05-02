@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Antibot;
 
-namespace EpinelPS.LobbyServer.Antibot
+[GameRequest("/antibot/recvdata")]
+public class RecieveAntibotData : LobbyMessage
 {
-    [PacketPath("/antibot/recvdata")]
-    public class RecieveAntibotData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqAntibotRecvData req = await ReadData<ReqAntibotRecvData>();
+        ReqAntibotRecvData req = await ReadData<ReqAntibotRecvData>();
 
-            // I don't really care about reimplementing the server side anticheat, so return
+        // I don't really care about reimplementing the server side anticheat, so return
 
-            ResAntibotRecvData response = new();
+        ResAntibotRecvData response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

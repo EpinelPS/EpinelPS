@@ -1,28 +1,24 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Stage;
 
-namespace EpinelPS.LobbyServer.Stage
+[GameRequest("/stage/checkclear")]
+public class CheckCleared : LobbyMessage
 {
-    [PacketPath("/stage/checkclear")]
-    public class CheckCleared : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqCheckStageClear req = await ReadData<ReqCheckStageClear>();
+
+        ResCheckStageClear response = new();
+        User user = GetUser();
+
+        foreach (KeyValuePair<string, FieldInfoNew> fields in user.FieldInfoNew)
         {
-            ReqCheckStageClear req = await ReadData<ReqCheckStageClear>();
-
-            ResCheckStageClear response = new();
-            User user = GetUser();
-
-            foreach (KeyValuePair<string, FieldInfoNew> fields in user.FieldInfoNew)
+            foreach (int stages in fields.Value.CompletedStages)
             {
-                foreach (int stages in fields.Value.CompletedStages)
-                {
-                    if (req.StageIds.Contains(stages))
-                        response.ClearedStageIds.Add(stages);
-                }
+                if (req.StageIds.Contains(stages))
+                    response.ClearedStageIds.Add(stages);
             }
-
-            await WriteDataAsync(response);
         }
-    }
 
+        await WriteDataAsync(response);
+    }
 }

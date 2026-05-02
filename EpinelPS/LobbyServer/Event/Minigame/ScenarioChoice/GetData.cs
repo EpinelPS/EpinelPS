@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Minigame.ScenarioChoice;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.ScenarioChoice;
-
-[PacketPath("/event/minigame/scenariochoice/get")]
-public class GetData : LobbyMsgHandler
+[GameRequest("/event/minigame/scenariochoice/get")]
+public class GetData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

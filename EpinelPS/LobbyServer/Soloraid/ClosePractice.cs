@@ -2,8 +2,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/practice/close")]
-public class ClosePractice : LobbyMsgHandler
+[GameRequest("/soloraid/practice/close")]
+public class ClosePractice : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
@@ -18,7 +18,8 @@ public class ClosePractice : LobbyMsgHandler
         try
         {
             SoloRaidHelper.CloseSoloRaid(user, req.RaidId, req.RaidLevel, SoloRaidType.Practice);
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             Logging.WriteLine($"CloseSoloRaidPractice Error: {ex.Message}", LogType.Error);
         }

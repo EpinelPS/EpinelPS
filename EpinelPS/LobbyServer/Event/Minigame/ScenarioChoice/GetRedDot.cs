@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Minigame.ScenarioChoiceis;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.ScenarioChoiceis;
-
-[PacketPath("/event/minigame/scenariochoice/reddot")]
-public class GetRedDot : LobbyMsgHandler
+[GameRequest("/event/minigame/scenariochoice/reddot")]
+public class GetRedDot : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
@@ -12,7 +10,7 @@ public class GetRedDot : LobbyMsgHandler
 
         ResExistScenarioChoiceRedDotData response = new()
         {
-            
+
         };
 
         // TODO implement properly

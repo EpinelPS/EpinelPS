@@ -1,54 +1,53 @@
-using EpinelPS.Database;
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Mission
+namespace EpinelPS.LobbyServer.Mission;
+
+[GameRequest("/mission/obtain/weekly")]
+public class ObtainWeekly : LobbyMessage
 {
-    [PacketPath("/mission/obtain/weekly")]
-    public class ObtainWeekly : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqObtainWeeklyMissionReward req = await ReadData<ReqObtainWeeklyMissionReward>();
+        User user = GetUser();
+
+        ResObtainWeeklyMissionReward response = new();
+
+        List<NetRewardData> rewards = [];
+
+        int total_points = 0;
+
+        foreach (int item in req.TidList)
         {
-            ReqObtainWeeklyMissionReward req = await ReadData<ReqObtainWeeklyMissionReward>();
-            User user = GetUser();
+            if (user.WeeklyResetableData.CompletedWeeklyMissions.Contains(item)) continue;
 
-            ResObtainWeeklyMissionReward response = new();
+            if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
 
-            List<NetRewardData> rewards = [];
+            user.WeeklyResetableData.CompletedWeeklyMissions.Add(item);
 
-            int total_points = 0;
-
-            foreach (int item in req.TidList)
+            if (key.RewardId != 0)
             {
-                if (user.WeeklyResetableData.CompletedWeeklyMissions.Contains(item)) continue;
-
-                if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
-
-                user.WeeklyResetableData.CompletedWeeklyMissions.Add(item);
-
-                if (key.RewardId != 0)
-                {
-                    // Actual reward
-                    RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
-                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
-                }
-                else
-                {
-                    // Point reward
-                    total_points += key.PointValue;
-                }
+                // Actual reward
+                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
+                rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
             }
-
-            user.AddTrigger(Trigger.PointRewardWeekly, total_points);
-            user.WeeklyResetableData.WeeklyMissionPoints += total_points;
-
-            response.Reward = NetUtils.MergeRewards(rewards, user);
-            response.EventBonusReward = new() { PassPoint = new() };
-            response.Reward.PassPoint = new();
-
-            JsonDb.Save();
-            
-            await WriteDataAsync(response);
+            else
+            {
+                // Point reward
+                total_points += key.PointValue;
+            }
         }
+
+        user.AddTrigger(Trigger.PointRewardWeekly, total_points);
+        user.WeeklyResetableData.WeeklyMissionPoints += total_points;
+
+        response.Reward = NetUtils.MergeRewards(rewards, user);
+        response.EventBonusReward = new() { PassPoint = new() };
+        response.Reward.PassPoint = new();
+
+        JsonDb.Save();
+
+        await WriteDataAsync(response);
     }
 }

@@ -2,30 +2,29 @@
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Lostsector
+namespace EpinelPS.LobbyServer.Lostsector;
+
+[GameRequest("/lostsector/perfectreward")]
+public class GetPerfectReward : LobbyMessage
 {
-    [PacketPath("/lostsector/perfectreward")]
-    public class GetPerfectReward : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqLostSectorPerfectReward req = await ReadData<ReqLostSectorPerfectReward>();
+        User user = GetUser();
+
+        ResLostSectorPerfectReward response = new();
+
+        if (user.LostSectorData.TryGetValue(req.SectorId, out LostSectorData? lostSectorData))
         {
-            ReqLostSectorPerfectReward req = await ReadData<ReqLostSectorPerfectReward>();
-            User user = GetUser();
+            lostSectorData.CompletedPerfectly = true;
 
-            ResLostSectorPerfectReward response = new();
+            LostSectorRecord sectorInfo = GameData.Instance.LostSector[req.SectorId];
 
-            if (user.LostSectorData.TryGetValue(req.SectorId, out LostSectorData? lostSectorData))
-            {
-                lostSectorData.CompletedPerfectly = true;
-
-                LostSectorRecord sectorInfo = GameData.Instance.LostSector[req.SectorId];
-
-                response.Reward = RewardUtils.RegisterRewardsForUser(user, sectorInfo.ExplorationReward);
-            }
-
-            JsonDb.Save();
-            await WriteDataAsync(response);
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, sectorInfo.ExplorationReward);
         }
+
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }
 

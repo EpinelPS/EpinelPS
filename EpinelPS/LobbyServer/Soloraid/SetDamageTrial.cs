@@ -3,12 +3,12 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/trial/setdamage")]
-public class SetDamageTrial : LobbyMsgHandler
+[GameRequest("/soloraid/trial/setdamage")]
+public class SetDamageTrial : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        
+
         var req = await ReadData<ReqSetSoloRaidTrialDamage>();
         User user = GetUser();
 

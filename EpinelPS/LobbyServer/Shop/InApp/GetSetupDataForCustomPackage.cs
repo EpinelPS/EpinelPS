@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop.InApp;
 
-namespace EpinelPS.LobbyServer.Shop.InApp
+[GameRequest("/inappshop/custompackage/getsetupdata")]
+public class GetCharacterAttractiveList : LobbyMessage
 {
-    [PacketPath("/inappshop/custompackage/getsetupdata")]
-    public class GetCharacterAttractiveList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetCustomPackageSetupData req = await ReadData<ReqGetCustomPackageSetupData>();
+        ReqGetCustomPackageSetupData req = await ReadData<ReqGetCustomPackageSetupData>();
 
-            ResGetCustomPackageSetupData response = new();
+        ResGetCustomPackageSetupData response = new();
 
-            // TODO: Validate response from real server and pull info from user info
-            await WriteDataAsync(response);
-        }
+        // TODO: Validate response from real server and pull info from user info
+        await WriteDataAsync(response);
     }
 }

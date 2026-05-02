@@ -1,22 +1,14 @@
-﻿using EpinelPS.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/user/speciallobbyslot/get")]
+public class GetSpecialLobbySlotData : LobbyMessage
 {
-    [PacketPath("/user/speciallobbyslot/get")]
-    public class GetSpecialLobbySlotData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetSpecialLobbySlotData req = await ReadData<ReqGetSpecialLobbySlotData>();
+        ReqGetSpecialLobbySlotData req = await ReadData<ReqGetSpecialLobbySlotData>();
 
-            ResGetSpecialLobbySlotData response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResGetSpecialLobbySlotData response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

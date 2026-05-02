@@ -1,21 +1,18 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event;
 
-namespace EpinelPS.LobbyServer.Event
+[GameRequest("/event/scenario/exist")]
+public class CheckScenarioExists : LobbyMessage
 {
-    [PacketPath("/event/scenario/exist")]
-    public class CheckScenarioExists : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqExistEventScenario req = await ReadData<ReqExistEventScenario>();
+        ReqExistEventScenario req = await ReadData<ReqExistEventScenario>();
 
-            ResExistEventScenario response = new();
+        ResExistEventScenario response = new();
 
-            foreach (string? item in req.ScenarioGroupIds)
+        foreach (string? item in req.ScenarioGroupIds)
             response.ExistGroupIds.Add(item);
 
-  
-            await WriteDataAsync(response);
-        }
+
+        await WriteDataAsync(response);
     }
 }

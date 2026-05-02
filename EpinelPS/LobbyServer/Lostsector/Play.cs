@@ -1,41 +1,39 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Lostsector
+namespace EpinelPS.LobbyServer.Lostsector;
+
+[GameRequest("/lostsector/play")]
+public class Play : LobbyMessage
 {
-    [PacketPath("/lostsector/play")]
-    public class Play : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqPlayLostSector req = await ReadData<ReqPlayLostSector>();
-            User user = GetUser();
+        ReqPlayLostSector req = await ReadData<ReqPlayLostSector>();
+        User user = GetUser();
 
-            ResPlayLostSector response = new();
+        ResPlayLostSector response = new();
 
-            if (!user.LostSectorData.ContainsKey(req.SectorId))
-                user.LostSectorData.Add(req.SectorId, new LostSectorData()
-                {
-                    IsPlaying = true
-                });
-
-            LostSectorData lostSectorData = user.LostSectorData[req.SectorId];
-            lostSectorData.IsPlaying = true;
-
-            response.Lostsector = new NetUserLostSectorData()
+        if (!user.LostSectorData.ContainsKey(req.SectorId))
+            user.LostSectorData.Add(req.SectorId, new LostSectorData()
             {
-                IsOpen = lostSectorData.IsOpen,
-                SectorId = req.SectorId,
-                IsPlaying = lostSectorData.IsPlaying,
-                CurrentClearStageCount = lostSectorData.ClearedStages.Count,
-                RewardCount = lostSectorData.ObtainedRewards,
-                IsFinalReward = lostSectorData.RecievedFinalReward,
-                IsPerfectReward = lostSectorData.CompletedPerfectly,
-                MaxClearStageCount = 0, // TODO
-            };
+                IsPlaying = true
+            });
 
-            JsonDb.Save();
-            await WriteDataAsync(response);
-        }
+        LostSectorData lostSectorData = user.LostSectorData[req.SectorId];
+        lostSectorData.IsPlaying = true;
+
+        response.Lostsector = new NetUserLostSectorData()
+        {
+            IsOpen = lostSectorData.IsOpen,
+            SectorId = req.SectorId,
+            IsPlaying = lostSectorData.IsPlaying,
+            CurrentClearStageCount = lostSectorData.ClearedStages.Count,
+            RewardCount = lostSectorData.ObtainedRewards,
+            IsFinalReward = lostSectorData.RecievedFinalReward,
+            IsPerfectReward = lostSectorData.CompletedPerfectly,
+            MaxClearStageCount = 0, // TODO
+        };
+
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }

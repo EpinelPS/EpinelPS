@@ -1,19 +1,16 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/record/notice")]
+public class MarkNoticeRead : LobbyMessage
 {
-    [PacketPath("/record/notice")]
-    public class MarkNoticeRead : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqRecordNoticeLog req = await ReadData<ReqRecordNoticeLog>();
-            ResRecordNoticeLog r = new();
-            User user = GetUser();
+        ReqRecordNoticeLog req = await ReadData<ReqRecordNoticeLog>();
+        ResRecordNoticeLog r = new();
+        User user = GetUser();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(r);
-        }
+        await WriteDataAsync(r);
     }
 }

@@ -2,8 +2,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/fastbattle")]
-public class FastBattle : LobbyMsgHandler
+[GameRequest("/soloraid/fastbattle")]
+public class FastBattle : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

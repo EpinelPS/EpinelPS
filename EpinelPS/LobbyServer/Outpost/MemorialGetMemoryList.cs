@@ -1,22 +1,19 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/outpost/memorial/getmemorylist")]
+public class MemorialGetMemoryList : LobbyMessage
 {
-    [PacketPath("/outpost/memorial/getmemorylist")]
-    public class MemorialGetMemoryList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetMemoryList req = await ReadData<ReqGetMemoryList>();
-            User user = GetUser();
+        ReqGetMemoryList req = await ReadData<ReqGetMemoryList>();
+        User user = GetUser();
 
-            ResGetMemoryList response = new();
+        ResGetMemoryList response = new();
 
-            response.MemoryList.AddRange(user.Memorial);
+        response.MemoryList.AddRange(user.Memorial);
 
-            // TODO rewards
+        // TODO rewards
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

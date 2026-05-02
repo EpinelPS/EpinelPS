@@ -1,19 +1,16 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Ranking;
 
-namespace EpinelPS.LobbyServer.Ranking
+[GameRequest("/ranking/rankachievementtop")]
+public class GetRankAchieventTop : LobbyMessage
 {
-    [PacketPath("/ranking/rankachievementtop")]
-    public class GetRankAchieventTop : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetRankAchievementTop req = await ReadData<ReqGetRankAchievementTop>();
+        ReqGetRankAchievementTop req = await ReadData<ReqGetRankAchievementTop>();
 
-            ResGetRankAchievementTop response = new();
+        ResGetRankAchievementTop response = new();
 
-            // TODO
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

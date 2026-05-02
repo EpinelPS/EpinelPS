@@ -1,27 +1,24 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/outpost/recycleroom/get")]
+public class GetRecycleRoomData : LobbyMessage
 {
-    [PacketPath("/outpost/recycleroom/get")]
-    public class GetRecycleRoomData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetRecycleRoomData req = await ReadData<ReqGetRecycleRoomData>();
+        User user = GetUser();
+        ResGetRecycleRoomData response = new();
+
+        response.Recycle.AddRange(user.ResearchProgress.Select(progress =>
         {
-            ReqGetRecycleRoomData req = await ReadData<ReqGetRecycleRoomData>();
-            User user = GetUser();
-            ResGetRecycleRoomData response = new();
-
-            response.Recycle.AddRange(user.ResearchProgress.Select(progress =>
+            return new NetUserRecycleRoomData()
             {
-                return new NetUserRecycleRoomData()
-                {
-                    Tid = progress.Key,
-                    Lv = progress.Value.Level,
-                    Exp = progress.Value.Exp
-                };
-            }));
+                Tid = progress.Key,
+                Lv = progress.Value.Level,
+                Exp = progress.Value.Exp
+            };
+        }));
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

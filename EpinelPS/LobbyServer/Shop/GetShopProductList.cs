@@ -1,16 +1,13 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop;
 
-namespace EpinelPS.LobbyServer.Shop
+[GameRequest("/shop/productlist")]
+public class GetShopProductList : LobbyMessage
 {
-    [PacketPath("/shop/productlist")]
-    public class GetShopProductList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqShopProductList req = await ReadData<ReqShopProductList>();
-            ResShopProductList response = new();
+        ReqShopProductList req = await ReadData<ReqShopProductList>();
+        ResShopProductList response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

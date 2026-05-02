@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/outpost/tactic/get")]
+public class GetTacticAcademyData : LobbyMessage
 {
-    [PacketPath("/outpost/tactic/get")]
-    public class GetTacticAcademyData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetTacticAcademyData req = await ReadData<ReqGetTacticAcademyData>();
-            User user = GetUser();
+        ReqGetTacticAcademyData req = await ReadData<ReqGetTacticAcademyData>();
+        User user = GetUser();
 
-            ResGetTacticAcademyData response = new();
-            response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
+        ResGetTacticAcademyData response = new();
+        response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

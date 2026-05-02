@@ -1,16 +1,12 @@
-using EpinelPS.Database;
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/log/unlock")]
+public class GetMvgLogUpdate : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/unlock")]
-    public class GetMvgLogUpdate : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqUnlockArcadeMvg>();
+        await ReadData<ReqUnlockArcadeMvg>();
 
-            await WriteDataAsync(new ResUnlockArcadeMvg());
-        }
+        await WriteDataAsync(new ResUnlockArcadeMvg());
     }
 }

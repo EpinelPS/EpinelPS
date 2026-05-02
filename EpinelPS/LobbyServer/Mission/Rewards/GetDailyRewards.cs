@@ -1,21 +1,18 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Mission.Rewards;
 
-namespace EpinelPS.LobbyServer.Mission.Rewards
+[GameRequest("/mission/getrewarded/daily")]
+public class GetDailyRewards : LobbyMessage
 {
-    [PacketPath("/mission/getrewarded/daily")]
-    public class GetDailyRewards : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqGetDailyRewardedData>();
-            User user = GetUser();
+        await ReadData<ReqGetDailyRewardedData>();
+        User user = GetUser();
 
-            user.ResetDataIfNeeded();
+        user.ResetDataIfNeeded();
 
-            ResGetDailyRewardedData response = new();
-            response.Ids.Add(user.ResetableData.CompletedDailyMissions);
+        ResGetDailyRewardedData response = new();
+        response.Ids.Add(user.ResetableData.CompletedDailyMissions);
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

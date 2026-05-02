@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Surface;
 
-[PacketPath("/Surface/Tutorial/Mission/Enter")]
-public class EnterTutorialMission : LobbyMsgHandler
+[GameRequest("/Surface/Tutorial/Mission/Enter")]
+public class EnterTutorialMission : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
@@ -12,7 +10,7 @@ public class EnterTutorialMission : LobbyMsgHandler
 
         ResEnterSurfaceMissionTutorial response = new()
         {
-            
+
         };
 
         // TODO

@@ -3,8 +3,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/open")]
-public class Open : LobbyMsgHandler
+[GameRequest("/soloraid/open")]
+public class Open : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

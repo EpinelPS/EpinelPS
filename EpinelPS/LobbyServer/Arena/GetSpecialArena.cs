@@ -1,23 +1,21 @@
-using EpinelPS.Utils;
 using Google.Protobuf.WellKnownTypes;
 
-namespace EpinelPS.LobbyServer.Arena
+namespace EpinelPS.LobbyServer.Arena;
+
+[GameRequest("/arena/special/get")]
+public class GetSpecialArena : LobbyMessage
 {
-    [PacketPath("/arena/special/get")]
-    public class GetSpecialArena : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetSpecialArena req = await ReadData<ReqGetSpecialArena>();
+        User user = GetUser();
+
+        ResGetSpecialArena response = new()
         {
-            ReqGetSpecialArena req = await ReadData<ReqGetSpecialArena>();
-            User user = GetUser();
+            BanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) },
+            User = new NetArenaData() { User = LobbyHandler.CreateWholeUserDataFromDbUser(user) }
+        };
 
-            ResGetSpecialArena response = new()
-            {
-                BanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) },
-                User = new NetArenaData() { User = LobbyHandler.CreateWholeUserDataFromDbUser(user) }
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

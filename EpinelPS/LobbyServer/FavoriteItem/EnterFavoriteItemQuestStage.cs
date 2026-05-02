@@ -1,23 +1,21 @@
-using EpinelPS.Database;
-using EpinelPS.Utils;
 using EpinelPS.Data;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.FavoriteItem
+namespace EpinelPS.LobbyServer.FavoriteItem;
+
+[GameRequest("/favoriteitem/quest/stage/enter")]
+public class EnterFavoriteItemQuestStage : LobbyMessage
 {
-    [PacketPath("/favoriteitem/quest/stage/enter")]
-    public class EnterFavoriteItemQuestStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqEnterFavoriteItemQuestStage req = await ReadData<ReqEnterFavoriteItemQuestStage>();
-            User user = GetUser();
+        ReqEnterFavoriteItemQuestStage req = await ReadData<ReqEnterFavoriteItemQuestStage>();
+        User user = GetUser();
 
-            user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
+        user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
 
-            JsonDb.Save();
+        JsonDb.Save();
 
-            ResEnterFavoriteItemQuestStage response = new();
-            await WriteDataAsync(response);
-        }
+        ResEnterFavoriteItemQuestStage response = new();
+        await WriteDataAsync(response);
     }
 }

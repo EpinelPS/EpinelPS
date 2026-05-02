@@ -2,8 +2,8 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Soloraid;
 
-[PacketPath("/soloraid/trial/enter")]
-public class EnterTrial : LobbyMsgHandler
+[GameRequest("/soloraid/trial/enter")]
+public class EnterTrial : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

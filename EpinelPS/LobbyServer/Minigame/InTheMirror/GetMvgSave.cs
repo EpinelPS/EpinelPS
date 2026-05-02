@@ -1,22 +1,20 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
+
+[GameRequest("/arcade/mvg/save")]
+public class GetMvgSave : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/save")]
-    public class GetMvgSave : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            var request = await ReadData<ReqSaveArcadeMvgData>();
+        var request = await ReadData<ReqSaveArcadeMvgData>();
 
-            var user = GetUser();
+        var user = GetUser();
 
-            user.ArcadeInTheMirrorData = request.Data;
+        user.ArcadeInTheMirrorData = request.Data;
 
-            await WriteDataAsync(new ResSaveArcadeMvgData());
+        await WriteDataAsync(new ResSaveArcadeMvgData());
 
-            JsonDb.Save();
-        }
+        JsonDb.Save();
     }
 }

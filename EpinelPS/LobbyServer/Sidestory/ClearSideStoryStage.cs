@@ -1,38 +1,36 @@
-﻿using EpinelPS.Database;
-using EpinelPS.LobbyServer.Stage;
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Sidestory
+namespace EpinelPS.LobbyServer.Sidestory;
+
+[GameRequest("/sidestory/stage/clear")]
+public class ClearSideStoryStage : LobbyMessage
 {
-    [PacketPath("/sidestory/stage/clear")]
-    public class ClearSideStoryStage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqClearSideStoryStage req = await ReadData<ReqClearSideStoryStage>();
+        User user = GetUser();
+
+        ResClearSideStoryStage response = new();
+
+        if (!user.CompletedSideStoryStages.Contains(req.SideStoryStageId))
         {
-            ReqClearSideStoryStage req = await ReadData<ReqClearSideStoryStage>();
-            User user = GetUser();
+            user.CompletedSideStoryStages.Add(req.SideStoryStageId);
 
-            ResClearSideStoryStage response = new();
-
-            if (!user.CompletedSideStoryStages.Contains(req.SideStoryStageId))
+            if (GameData.Instance.SidestoryRewardTable.TryGetValue(req.SideStoryStageId, out SideStoryStageRecord? value))
             {
-                user.CompletedSideStoryStages.Add(req.SideStoryStageId);
-
-                if (GameData.Instance.SidestoryRewardTable.TryGetValue(req.SideStoryStageId, out SideStoryStageRecord? value))
-                {
-                    RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(value.FirstClearReward);
-                    if (rewardData != null)
-                        response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);
-                    else
-                        throw new Exception("failed to find reward");
-                }
-
-                JsonDb.Save();
+                RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(value.FirstClearReward);
+                if (rewardData != null)
+                    response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);
+                else
+                    throw new Exception("failed to find reward");
             }
 
-
-            await WriteDataAsync(response);
+            JsonDb.Save();
         }
+
+
+        await WriteDataAsync(response);
     }
 }

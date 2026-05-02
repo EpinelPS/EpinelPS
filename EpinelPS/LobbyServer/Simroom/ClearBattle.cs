@@ -1,61 +1,59 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 using log4net;
 
-namespace EpinelPS.LobbyServer.Simroom
+namespace EpinelPS.LobbyServer.Simroom;
+
+[GameRequest("/simroom/clearbattle")]
+public class ClearBattle : LobbyMessage
 {
-    [PacketPath("/simroom/clearbattle")]
-    public class ClearBattle : LobbyMsgHandler
+    private static readonly ILog log = LogManager.GetLogger(typeof(ClearBattle));
+
+    protected override async Task HandleAsync()
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ClearBattle));
+        // {"location":{"chapter":3,"stage":3,"order":2},"event":111011143,"teamNumber":1,"antiCheatAdditionalInfo":{"clientLocalTime":"638993283799771900"}}
+        ReqClearSimRoomBattle req = await ReadData<ReqClearSimRoomBattle>();
+        User user = GetUser();
 
-        protected override async Task HandleAsync()
+        ResClearSimRoomBattle response = new()
         {
-            // {"location":{"chapter":3,"stage":3,"order":2},"event":111011143,"teamNumber":1,"antiCheatAdditionalInfo":{"clientLocalTime":"638993283799771900"}}
-            ReqClearSimRoomBattle req = await ReadData<ReqClearSimRoomBattle>();
-            User user = GetUser();
+            Result = SimRoomResult.Success
+        };
 
-            ResClearSimRoomBattle response = new()
-            {
-                Result = SimRoomResult.Success
-            };
+        // OverclockOptionChangedHps
 
-            // OverclockOptionChangedHps
+        // Teams
+        try
+        {
+            var team = SimRoomHelper.GetTeamData(user, req.TeamNumber, [.. req.RemainingHps]);
+            if (team is not null) response.Teams.Add(team);
+        }
+        catch (Exception e)
+        {
+            log.Error($"ClearBattle Response Team Exception :{e.Message}");
+        }
 
-            // Teams
+        SimRoomHelper.UpdateUserRemainingHps(user, [.. req.RemainingHps], req.TeamNumber);
+
+        if (req.BattleResult == 1)
+        {
+            // BuffOptions
             try
             {
-                var team = SimRoomHelper.GetTeamData(user, req.TeamNumber, [.. req.RemainingHps]);
-                if (team is not null) response.Teams.Add(team);
+                var buffOptions = SimRoomHelper.GetBuffOptions(user, req.Location);
+                if (buffOptions is not null && buffOptions.Count > 0)
+                {
+                    response.BuffOptions.AddRange(buffOptions);
+                }
             }
             catch (Exception e)
             {
-                log.Error($"ClearBattle Response Team Exception :{e.Message}");
+                log.Error($"ClearBattle Response BuffOptions Exception :{e.Message}");
             }
-
-            SimRoomHelper.UpdateUserRemainingHps(user, [.. req.RemainingHps], req.TeamNumber);
-
-            if (req.BattleResult == 1)
-            {
-                // BuffOptions
-                try
-                {
-                    var buffOptions = SimRoomHelper.GetBuffOptions(user, req.Location);
-                    if (buffOptions is not null && buffOptions.Count > 0)
-                    {
-                        response.BuffOptions.AddRange(buffOptions);
-                    }
-                }
-                catch (Exception e)
-                {
-                    log.Error($"ClearBattle Response BuffOptions Exception :{e.Message}");
-                }
-            }
-
-            JsonDb.Save();
-            await WriteDataAsync(response);
         }
 
-
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
+
+
 }

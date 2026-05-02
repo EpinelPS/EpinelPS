@@ -1,21 +1,20 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Misc
+namespace EpinelPS.LobbyServer.Misc;
+
+[GameRequest("/resourcehosts2")]
+public class CheckClientVersion : LobbyMessage
 {
-    [PacketPath("/resourcehosts2")]
-    public class CheckClientVersion : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqGetResourceHosts2 req = await ReadData<ReqGetResourceHosts2>();
+
+        ResGetResourceHosts2 r = new()
         {
-            ReqGetResourceHosts2 req = await ReadData<ReqGetResourceHosts2>();
+            BaseUrl = GameConfig.Root.ResourceBaseURL,
+            Version = req.Version
+        };
 
-            ResGetResourceHosts2 r = new()
-            {
-                BaseUrl = GameConfig.Root.ResourceBaseURL,
-                Version = req.Version
-            };
-
-            await WriteDataAsync(r);
-        }
+        await WriteDataAsync(r);
     }
 }

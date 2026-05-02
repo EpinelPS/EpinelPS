@@ -1,18 +1,14 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Auth;
 
-namespace EpinelPS.LobbyServer.Auth
+[GameRequest("/auth/logout")]
+public class AuthLogout : LobbyMessage
 {
-    [PacketPath("/auth/logout")]
-    public class AuthLogout : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqLogout req = await ReadData<ReqLogout>();
+        ReqLogout req = await ReadData<ReqLogout>();
 
-            // TODO remove UsedAuthToken
+        // TODO remove UsedAuthToken
 
-            await WriteDataAsync(new ResLogout());
-        }
+        await WriteDataAsync(new ResLogout());
     }
 }

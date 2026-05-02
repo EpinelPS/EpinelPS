@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Misc;
 
-namespace EpinelPS.LobbyServer.Misc
+[GameRequest("/useronlinestatelog")]
+public class GetUserOnlineStateLog : LobbyMessage
 {
-    [PacketPath("/useronlinestatelog")]
-    public class GetUserOnlineStateLog : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqUserOnlineStateLog req = await ReadData<ReqUserOnlineStateLog>();
-            User user = GetUser();
+        ReqUserOnlineStateLog req = await ReadData<ReqUserOnlineStateLog>();
+        User user = GetUser();
 
-            ResUserOnlineStateLog response = new();
-            user.LastLogin = DateTime.UtcNow;
-            await WriteDataAsync(response);
-        }
+        ResUserOnlineStateLog response = new();
+        user.LastLogin = DateTime.UtcNow;
+        await WriteDataAsync(response);
     }
 }

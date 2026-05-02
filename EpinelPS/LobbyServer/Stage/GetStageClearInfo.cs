@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Stage;
 
-namespace EpinelPS.LobbyServer.Stage
+[GameRequest("/stageclearinfo/get")]
+public class GetStageClearInfo : LobbyMessage
 {
-    [PacketPath("/stageclearinfo/get")]
-    public class GetStageClearInfo : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetStageClearInfo req = await ReadData<ReqGetStageClearInfo>();
-            ResGetStageClearInfo response = new();
-            User user = GetUser();
+        ReqGetStageClearInfo req = await ReadData<ReqGetStageClearInfo>();
+        ResGetStageClearInfo response = new();
+        User user = GetUser();
 
-            response.Historys.AddRange(user.StageClearHistorys);
-            
-            await WriteDataAsync(response);
-        }
+        response.Historys.AddRange(user.StageClearHistorys);
+
+        await WriteDataAsync(response);
     }
 }

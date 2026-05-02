@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Character.Counsel;
 
-[PacketPath("/character/attractive/check")]
-public class CheckCharacterCounsel : LobbyMsgHandler
+[GameRequest("/character/attractive/check")]
+public class CheckCharacterCounsel : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

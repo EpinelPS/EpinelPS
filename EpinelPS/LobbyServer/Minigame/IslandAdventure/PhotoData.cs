@@ -1,20 +1,17 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.IslandAdventure;
 
-namespace EpinelPS.LobbyServer.Minigame.IslandAdventure
+[GameRequest("/event/minigame/islandadventure/get/photo/album")]
+public class MiniGameIslandAdventurePhotoAlbum : LobbyMessage
 {
-    [PacketPath("/event/minigame/islandadventure/get/photo/album")]
-    public class MiniGameIslandAdventurePhotoAlbum : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqMiniGameIslandAdventurePhotoAlbum req = await ReadData<ReqMiniGameIslandAdventurePhotoAlbum>();
+
+        ResMiniGameIslandAdventurePhotoAlbum response = new()
         {
-            ReqMiniGameIslandAdventurePhotoAlbum req = await ReadData<ReqMiniGameIslandAdventurePhotoAlbum>();
 
-            ResMiniGameIslandAdventurePhotoAlbum response = new()
-            {
+        };
 
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

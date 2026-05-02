@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Minigame.CE006;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.CE006
+[GameRequest("/event/minigame/stellar-blade/statistics/get")]
+public class GetSBStats : LobbyMessage
 {
-    [PacketPath("/event/minigame/stellar-blade/statistics/get")]
-    public class GetSBStats : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetStellarBladeStatistics req = await ReadData<ReqGetStellarBladeStatistics>();
-            User user = GetUser();
+        ReqGetStellarBladeStatistics req = await ReadData<ReqGetStellarBladeStatistics>();
+        User user = GetUser();
 
-            ResGetStellarBladeStatistics response = new();
+        ResGetStellarBladeStatistics response = new();
 
-            // TODO implement
+        // TODO implement
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

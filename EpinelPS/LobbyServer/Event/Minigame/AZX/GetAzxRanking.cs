@@ -1,23 +1,20 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Event.Minigame.AZX;
 
-namespace EpinelPS.LobbyServer.Event.Minigame.AZX
+[GameRequest("/event/minigame/azx/get/ranking")]
+public class GetAzxRanking : LobbyMessage
 {
-    [PacketPath("/event/minigame/azx/get/ranking")]
-    public class GetAzxRanking : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            // int AzxId
-            ReqGetMiniGameAzxRanking req = await ReadData<ReqGetMiniGameAzxRanking>();
-            User user = GetUser();
+        // int AzxId
+        ReqGetMiniGameAzxRanking req = await ReadData<ReqGetMiniGameAzxRanking>();
+        User user = GetUser();
 
-            ResGetMiniGameAzxRanking response = new();
-            
-            if (req.AzxId > 0)
-                AzxHelper.GetRanking(user, req.AzxId, ref response);
+        ResGetMiniGameAzxRanking response = new();
 
-            
-            await WriteDataAsync(response);
-        }
+        if (req.AzxId > 0)
+            AzxHelper.GetRanking(user, req.AzxId, ref response);
+
+
+        await WriteDataAsync(response);
     }
 }

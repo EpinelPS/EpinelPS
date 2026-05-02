@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event.Itabag;
 
-namespace EpinelPS.LobbyServer.Event.Itabag;
-
-[PacketPath("/Event/Itabag/RedDotData")]
-public class GetRedDot : LobbyMsgHandler
+[GameRequest("/Event/Itabag/RedDotData")]
+public class GetRedDot : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

@@ -1,23 +1,21 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Intercept
+namespace EpinelPS.LobbyServer.Intercept;
+
+[GameRequest("/intercept/fastclear")]
+public class FastClearInterceptData : LobbyMessage
 {
-    [PacketPath("/intercept/fastclear")]
-    public class FastClearInterceptData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqFastClearIntercept req = await ReadData<ReqFastClearIntercept>();
+
+        ResFastClearIntercept response = new()
         {
-            ReqFastClearIntercept req = await ReadData<ReqFastClearIntercept>();
+            TicketCount = User.ResetableData.InterceptionTickets,
+            MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,
+            Damage = 0
+        };
 
-            ResFastClearIntercept response = new()
-            {
-                TicketCount = User.ResetableData.InterceptionTickets,
-                MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,
-                Damage = 0
-            };
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

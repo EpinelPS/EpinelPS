@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Episode;
 
-namespace EpinelPS.LobbyServer.Episode
+[GameRequest("/episode/mission/enter")]
+public class ListMission : LobbyMessage
 {
-    [PacketPath("/episode/mission/enter")]
-    public class ListMission : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqListValidEpMission req = await ReadData<ReqListValidEpMission>();
+        ReqListValidEpMission req = await ReadData<ReqListValidEpMission>();
 
-            ResListValidEpMission response = new();
+        ResListValidEpMission response = new();
 
-            // TOOD
+        // TOOD
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

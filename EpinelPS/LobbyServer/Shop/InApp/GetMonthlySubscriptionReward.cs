@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop.InApp;
 
-namespace EpinelPS.LobbyServer.Shop.InApp
+[GameRequest("/inappshop/getmonthlysubscriptionreward")]
+public class GetMonthlySubscriptionReward : LobbyMessage
 {
-    [PacketPath("/inappshop/getmonthlysubscriptionreward")]
-    public class GetMonthlySubscriptionReward : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetMonthlySubscriptionReward req = await ReadData<ReqGetMonthlySubscriptionReward>();
+        ReqGetMonthlySubscriptionReward req = await ReadData<ReqGetMonthlySubscriptionReward>();
 
-            ResGetMonthlySubscriptionReward response = new();
+        ResGetMonthlySubscriptionReward response = new();
 
-            // TODO: ValIdate response from real server
-            await WriteDataAsync(response);
-        }
+        // TODO: ValIdate response from real server
+        await WriteDataAsync(response);
     }
 }

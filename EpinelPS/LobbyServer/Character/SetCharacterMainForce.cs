@@ -1,29 +1,27 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Character
+namespace EpinelPS.LobbyServer.Character;
+
+[GameRequest("/character/mainforce/set")]
+public class SetCharacterMainForce : LobbyMessage
 {
-    [PacketPath("/character/mainforce/set")]
-    public class SetCharacterMainForce : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqSetCharacterMainForce req = await ReadData<ReqSetCharacterMainForce>();
+        User user = GetUser();
+
+        foreach (CharacterModel item in user.Characters)
         {
-            ReqSetCharacterMainForce req = await ReadData<ReqSetCharacterMainForce>();
-            User user = GetUser();
-
-            foreach (CharacterModel item in user.Characters)
+            if (item.Csn == req.Csn)
             {
-                if (item.Csn == req.Csn)
-                {
-                    item.IsMainForce = req.IsMainForce;
-                    break;
-                }
+                item.IsMainForce = req.IsMainForce;
+                break;
             }
-            JsonDb.Save();
-
-            ResSetCharacterMainForce response = new();
-
-            await WriteDataAsync(response);
         }
+        JsonDb.Save();
+
+        ResSetCharacterMainForce response = new();
+
+        await WriteDataAsync(response);
     }
 }

@@ -1,67 +1,65 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Data;
-using EpinelPS.Utils;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 
-namespace EpinelPS.LobbyServer.Outpost
+namespace EpinelPS.LobbyServer.Outpost;
+
+[GameRequest("/outpost/tactic/clearlesson")]
+public class ClearTacticAcademyLesson : LobbyMessage
 {
-    [PacketPath("/outpost/tactic/clearlesson")]
-    public class ClearTacticAcademyLesson : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqTacticAcademyClearLesson req = await ReadData<ReqTacticAcademyClearLesson>();
+        User user = GetUser();
+
+        ResTacticAcademyClearLesson response = new()
         {
-            ReqTacticAcademyClearLesson req = await ReadData<ReqTacticAcademyClearLesson>();
-            User user = GetUser();
+            ClearLessonTid = req.LessonTid
+        };
 
-            ResTacticAcademyClearLesson response = new()
+        TacticAcademyFunctionRecord x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
+
+        if (user.CanSubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue))
+        {
+            user.SubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue);
+
+            user.CompletedTacticAcademyLessons.Add(req.LessonTid);
+
+            ProcessLessonReward(user, x);
+
+            foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
             {
-                ClearLessonTid = req.LessonTid
-            };
-
-            TacticAcademyFunctionRecord x = GameData.Instance.GetTacticAcademyLesson(req.LessonTid);
-
-            if (user.CanSubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue))
-            {
-                user.SubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue);
-
-                user.CompletedTacticAcademyLessons.Add(req.LessonTid);
-
-                ProcessLessonReward(user, x);
-
-                foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
-                {
-                    response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
-                }
-                JsonDb.Save();
+                response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
             }
-            else
-            {
-                Console.WriteLine($"User {user.PlayerName} tried to clear lesson {req.LessonTid} without enough currency");
-            }
-            await WriteDataAsync(response);
+            JsonDb.Save();
+        }
+        else
+        {
+            Console.WriteLine($"User {user.PlayerName} tried to clear lesson {req.LessonTid} without enough currency");
+        }
+        await WriteDataAsync(response);
+    }
+
+    private static void ProcessLessonReward(User user, TacticAcademyFunctionRecord r)
+    {
+        if (r.LessonReward == null)
+        {
+            Console.WriteLine("Warning: lesson_reward shouldnt be null");
+            return;
         }
 
-        private static void ProcessLessonReward(User user, TacticAcademyFunctionRecord r)
+        if (r.LessonType == LessonType.OutpostBattle)
         {
-            if (r.LessonReward == null)
+            foreach (var item in r.LessonReward)
             {
-                Console.WriteLine("Warning: lesson_reward shouldnt be null");
-                return;
-            }
-
-            if (r.LessonType == LessonType.OutpostBattle)
-            {
-                foreach (var item in r.LessonReward)
+                if (item.LessonRewardId != 0 && item.LessonRewardValue != 0)
                 {
-                    if (item.LessonRewardId != 0 && item.LessonRewardValue != 0)
-                    {
-                        user.OutpostBuffs.GetPercentages((CurrencyType)item.LessonRewardId).Add(item.LessonRewardValue);
-                    }
+                    user.OutpostBuffs.GetPercentages((CurrencyType)item.LessonRewardId).Add(item.LessonRewardValue);
                 }
             }
-            else
-            {
-                Console.WriteLine("Warning: unknown lesson type: " + r.LessonType);
-            }
+        }
+        else
+        {
+            Console.WriteLine("Warning: unknown lesson type: " + r.LessonType);
         }
     }
 }

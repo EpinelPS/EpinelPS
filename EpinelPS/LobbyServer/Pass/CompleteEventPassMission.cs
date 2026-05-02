@@ -1,28 +1,26 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Pass
+namespace EpinelPS.LobbyServer.Pass;
+
+[GameRequest("/pass/event/completemission")]
+public class CompleteEventPassMission : LobbyMessage
 {
-    [PacketPath("/pass/event/completemission")]
-    public class CompleteEventPassMission : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqCompleteEventPassMission req = await ReadData<ReqCompleteEventPassMission>(); //fields "PassId", "PassMissionList"
+        User user = GetUser();
+
+        ResCompleteEventPassMission response = new(); // field Reward
+
+        NetRewardData reward = new()
         {
-            ReqCompleteEventPassMission req = await ReadData<ReqCompleteEventPassMission>(); //fields "PassId", "PassMissionList"
-            User user = GetUser();
+            PassPoint = { }
+        };
 
-            ResCompleteEventPassMission response = new(); // field Reward
+        PassHelper.CompletePassMissions(user, ref reward, req.PassId, [.. req.PassMissionList]);
+        response.Reward = reward;
 
-            NetRewardData reward = new()
-            {
-                PassPoint = { }
-            };
-
-            PassHelper.CompletePassMissions(user, ref reward, req.PassId, [.. req.PassMissionList]);
-            response.Reward = reward;
-            
-            JsonDb.Save();
-            await WriteDataAsync(response);
-        }
+        JsonDb.Save();
+        await WriteDataAsync(response);
     }
 }

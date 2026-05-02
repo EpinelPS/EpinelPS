@@ -1,32 +1,29 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
-using EpinelPS.Data;
 
-namespace EpinelPS.LobbyServer.FavoriteItem
+namespace EpinelPS.LobbyServer.FavoriteItem;
+
+[GameRequest("/favoriteitem/quest/start")]
+public class StartFavoriteItemQuest : LobbyMessage
 {
-    [PacketPath("/favoriteitem/quest/start")]
-    public class StartFavoriteItemQuest : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        ReqStartFavoriteItemQuest req = await ReadData<ReqStartFavoriteItemQuest>();
+        User user = GetUser();
+
+        var newQuest = new NetUserFavoriteItemQuestData
         {
-            ReqStartFavoriteItemQuest req = await ReadData<ReqStartFavoriteItemQuest>();
-            User user = GetUser();
+            QuestId = req.FavoriteItemQuestId,
+            Clear = false,
+            Received = false
+        };
 
-            var newQuest = new NetUserFavoriteItemQuestData
-            {
-                QuestId = req.FavoriteItemQuestId,
-                Clear = false,
-                Received = false
-            };
+        user.FavoriteItemQuests.Add(newQuest);
 
-            user.FavoriteItemQuests.Add(newQuest);
+        JsonDb.Save();
 
-            JsonDb.Save();
-
-            ResStartFavoriteItemQuest response = new();
-            await WriteDataAsync(response);
-        }
-
-
+        ResStartFavoriteItemQuest response = new();
+        await WriteDataAsync(response);
     }
+
+
 }

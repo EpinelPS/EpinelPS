@@ -1,22 +1,19 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Mission;
 
-namespace EpinelPS.LobbyServer.Mission
+[GameRequest("/mission/getrewarded/all")]
+public class GetAllRewards : LobbyMessage
 {
-    [PacketPath("/mission/getrewarded/all")]
-    public class GetAllRewards : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetRewardedData req = await ReadData<ReqGetRewardedData>();
-            User user = GetUser();
+        ReqGetRewardedData req = await ReadData<ReqGetRewardedData>();
+        User user = GetUser();
 
-            ResGetRewardedData response = new();
+        ResGetRewardedData response = new();
 
-            response.AchievementIds.Add(user.CompletedAchievements);
-            response.WeeklyIds.Add(user.WeeklyResetableData.CompletedWeeklyMissions);
-            response.DailyIds.Add(user.ResetableData.CompletedDailyMissions);
+        response.AchievementIds.Add(user.CompletedAchievements);
+        response.WeeklyIds.Add(user.WeeklyResetableData.CompletedWeeklyMissions);
+        response.DailyIds.Add(user.ResetableData.CompletedDailyMissions);
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

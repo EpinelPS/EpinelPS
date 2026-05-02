@@ -1,16 +1,13 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/jukebox/record/playhistory")]
+public class JukeboxPlayHistory : LobbyMessage
 {
-    [PacketPath("/jukebox/record/playhistory")]
-    public class JukeboxPlayHistory : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqRecordJukeboxPlayHistory req = await ReadData<ReqRecordJukeboxPlayHistory>();
+        ReqRecordJukeboxPlayHistory req = await ReadData<ReqRecordJukeboxPlayHistory>();
 
-            ResRecordJukeboxPlayHistory response = new();
-            await WriteDataAsync(response);
-        }
+        ResRecordJukeboxPlayHistory response = new();
+        await WriteDataAsync(response);
     }
 }

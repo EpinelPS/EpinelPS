@@ -1,15 +1,12 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Minigame.InTheMirror;
 
-namespace EpinelPS.LobbyServer.Minigame.InTheMirror
+[GameRequest("/arcade/mvg/log/upgrade")]
+public class GetMvgLogUpgrade : LobbyMessage
 {
-    [PacketPath("/arcade/mvg/log/upgrade")]
-    public class GetMvgLogUpgrade : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqBuyFromArcadeMvgUpgradeShop>();
+        await ReadData<ReqBuyFromArcadeMvgUpgradeShop>();
 
-            await WriteDataAsync(new ResBuyFromArcadeMvgUpgradeShop() );
-        }
+        await WriteDataAsync(new ResBuyFromArcadeMvgUpgradeShop());
     }
 }

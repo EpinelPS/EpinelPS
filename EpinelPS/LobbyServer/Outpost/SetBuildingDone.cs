@@ -1,20 +1,17 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Outpost;
 
-namespace EpinelPS.LobbyServer.Outpost
+[GameRequest("/outpost/buildingisdone")]
+public class SetBuildingDone : LobbyMessage
 {
-    [PacketPath("/outpost/buildingisdone")]
-    public class SetBuildingDone : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqBuildingIsDone req = await ReadData<ReqBuildingIsDone>();
-            User user = GetUser();
+        ReqBuildingIsDone req = await ReadData<ReqBuildingIsDone>();
+        User user = GetUser();
 
-            ResBuildingIsDone response = new();
-          
+        ResBuildingIsDone response = new();
 
 
-            await WriteDataAsync(response);
-        }
+
+        await WriteDataAsync(response);
     }
 }

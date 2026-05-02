@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.PartyMatch;
 
-namespace EpinelPS.LobbyServer.PartyMatch
+[GameRequest("/partymatch/listinvitation")]
+public class ListPartyMatchInvitations : LobbyMessage
 {
-    [PacketPath("/partymatch/listinvitation")]
-    public class ListPartyMatchInvitations : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqListInvitation req = await ReadData<ReqListInvitation>();
-            User user = GetUser();
+        ReqListInvitation req = await ReadData<ReqListInvitation>();
+        User user = GetUser();
 
-            ResListInvitation response = new();
-            // TODO
-            await WriteDataAsync(response);
-        }
+        ResListInvitation response = new();
+        // TODO
+        await WriteDataAsync(response);
     }
 }

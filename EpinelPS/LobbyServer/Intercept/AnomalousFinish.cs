@@ -1,17 +1,14 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Intercept;
 
-namespace EpinelPS.LobbyServer.Intercept
+[GameRequest("/intercept/Anomalous/Finish")]
+public class FinishAnomalousIntercept : LobbyMessage
 {
-    [PacketPath("/intercept/Anomalous/Finish")]
-    public class FinishAnomalousIntercept : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqFinishInterceptAnomalous req = await ReadData<ReqFinishInterceptAnomalous>();
+        ReqFinishInterceptAnomalous req = await ReadData<ReqFinishInterceptAnomalous>();
 
-            ResFinishInterceptAnomalous response = new();
+        ResFinishInterceptAnomalous response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

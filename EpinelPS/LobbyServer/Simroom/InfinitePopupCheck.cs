@@ -1,22 +1,20 @@
 using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Simroom
+namespace EpinelPS.LobbyServer.Simroom;
+
+[GameRequest("/simroom/popup-check/infinite")]
+public class InfinitePopupCheck : LobbyMessage
 {
-    [PacketPath("/simroom/popup-check/infinite")]
-    public class InfinitePopupCheck : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            await ReadData<ReqInfinitePopupCheck>();
-            var user = GetUser();
+        await ReadData<ReqInfinitePopupCheck>();
+        var user = GetUser();
 
-            ResInfinitePopupCheck response = new();
+        ResInfinitePopupCheck response = new();
 
-            user.ResetableData.SimRoomData.CurrentSeasonData.WasInfinitePopupChecked = true;
-            JsonDb.Save();
+        user.ResetableData.SimRoomData.CurrentSeasonData.WasInfinitePopupChecked = true;
+        JsonDb.Save();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

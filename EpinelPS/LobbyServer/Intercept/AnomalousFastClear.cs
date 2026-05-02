@@ -1,17 +1,14 @@
-using EpinelPS.Utils;
+namespace EpinelPS.LobbyServer.Intercept;
 
-namespace EpinelPS.LobbyServer.Intercept
+[GameRequest("/intercept/Anomalous/FastClear")]
+public class AnomalousFastClear : LobbyMessage
 {
-    [PacketPath("/intercept/Anomalous/FastClear")]
-    public class AnomalousFastClear : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqFastClearInterceptAnomalous req = await ReadData<ReqFastClearInterceptAnomalous>();
+        ReqFastClearInterceptAnomalous req = await ReadData<ReqFastClearInterceptAnomalous>();
 
-            ResFastClearInterceptAnomalous response = new();
+        ResFastClearInterceptAnomalous response = new();
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

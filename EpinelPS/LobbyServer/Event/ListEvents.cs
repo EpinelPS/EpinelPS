@@ -1,22 +1,19 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Event;
 
-namespace EpinelPS.LobbyServer.Event
+[GameRequest("/event/list")]
+public class ListEvents : LobbyMessage
 {
-    [PacketPath("/event/list")]
-    public class ListEvents : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetEventList req = await ReadData<ReqGetEventList>();
+        ReqGetEventList req = await ReadData<ReqGetEventList>();
 
-            // types are defined in EventTypes.cs
-            ResGetEventList response = new();
-            User user = GetUser();
+        // types are defined in EventTypes.cs
+        ResGetEventList response = new();
+        User user = GetUser();
 
-            // add events from active lobby banners
-            EventHelper.AddEvents(user, ref response);
+        // add events from active lobby banners
+        EventHelper.AddEvents(user, ref response);
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

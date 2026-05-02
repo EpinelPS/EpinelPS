@@ -1,19 +1,16 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.LobbyUser;
 
-namespace EpinelPS.LobbyServer.LobbyUser
+[GameRequest("/user/getfieldtalklist")]
+public class GetFieldTalkList : LobbyMessage
 {
-    [PacketPath("/user/getfieldtalklist")]
-    public class GetFieldTalkList : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetFieldTalkList req = await ReadData<ReqGetFieldTalkList>();
-            User user = GetUser();
+        ReqGetFieldTalkList req = await ReadData<ReqGetFieldTalkList>();
+        User user = GetUser();
 
-            ResGetFieldTalkList response = new();
-            // TODO
+        ResGetFieldTalkList response = new();
+        // TODO
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

@@ -1,6 +1,7 @@
 using EpinelPS.Utils;
 
 namespace EpinelPS.Models;
+
 public class CoreInfo
 {
     public int DbVersion = 5;

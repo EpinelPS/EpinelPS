@@ -1,9 +1,7 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Sidestory;
 
-namespace EpinelPS.LobbyServer.Sidestory;
-
-[PacketPath("/eventfield/sidestory/recommendation/reddot")]
-public class GetRecommendationRedDot : LobbyMsgHandler
+[GameRequest("/eventfield/sidestory/recommendation/reddot")]
+public class GetRecommendationRedDot : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Shop.PackageShop;
 
-namespace EpinelPS.LobbyServer.Shop.PackageShop
+[GameRequest("/packageshop/campaign/get")]
+public class PackageShopGetCampaignPackage : LobbyMessage
 {
-    [PacketPath("/packageshop/campaign/get")]
-    public class PackageShopGetCampaignPackage : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqGetCampaignPackage req = await ReadData<ReqGetCampaignPackage>();
+        ReqGetCampaignPackage req = await ReadData<ReqGetCampaignPackage>();
 
-            ResGetCampaignPackage response = new();
+        ResGetCampaignPackage response = new();
 
-            // TODO: Validate response from real server and pull info from user info
-            await WriteDataAsync(response);
-        }
+        // TODO: Validate response from real server and pull info from user info
+        await WriteDataAsync(response);
     }
 }

@@ -1,9 +1,7 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Surface;
 
-[PacketPath("/Surface/HasFinishedTutorial")]
-public class HasFinishedTutorial : LobbyMsgHandler
+[GameRequest("/Surface/HasFinishedTutorial")]
+public class HasFinishedTutorial : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

@@ -1,39 +1,37 @@
 ﻿using EpinelPS.Database;
-using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Character
+namespace EpinelPS.LobbyServer.Character;
+
+[GameRequest("/character/synchrodevice/addslotbyitem")]
+public class SynchroAddSlotByItem : LobbyMessage
 {
-    [PacketPath("/character/synchrodevice/addslotbyitem")]
-    public class SynchroAddSlotByItem : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
+        // Broken protocol so we dIdn't validate request data.
+        // May fix later.
+        ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
+
+        User user = GetUser();
+        ResSynchroAddSlot response = new();
+
+        NetSynchroSlot newSlot = new()
         {
-            // Broken protocol so we dIdn't validate request data.
-            // May fix later.
-            ReqSynchroAddSlot req = await ReadData<ReqSynchroAddSlot>();
-            
-            User user = GetUser();
-            ResSynchroAddSlot response = new();
+            Csn = 0,
+            Slot = user.SynchroSlots.Last().Slot + 1, // any upper bound?
+            AvailableRegisterAt = 0
+        };
 
-            NetSynchroSlot newSlot = new()
-            {
-                Csn = 0,
-                Slot = user.SynchroSlots.Last().Slot + 1, // any upper bound?
-                AvailableRegisterAt = 0
-            };
+        user.SynchroSlots.Add(new SynchroSlot()
+        {
+            Slot = newSlot.Slot,
+            CharacterSerialNumber = newSlot.Csn,
+            AvailableAt = newSlot.AvailableRegisterAt
+        });
 
-            user.SynchroSlots.Add(new SynchroSlot()
-            {
-                Slot = newSlot.Slot,
-                CharacterSerialNumber = newSlot.Csn,
-                AvailableAt = newSlot.AvailableRegisterAt
-            });
+        response.Slot = newSlot;
 
-            response.Slot = newSlot;
+        JsonDb.Save();
 
-            JsonDb.Save();
-
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }

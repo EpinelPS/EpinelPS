@@ -1,18 +1,15 @@
-﻿using EpinelPS.Utils;
+﻿namespace EpinelPS.LobbyServer.Antibot;
 
-namespace EpinelPS.LobbyServer.Antibot
+[GameRequest("/antibot/battlereportdata")]
+public class BattleReportData : LobbyMessage
 {
-    [PacketPath("/antibot/battlereportdata")]
-    public class BattleReportData : LobbyMsgHandler
+    protected override async Task HandleAsync()
     {
-        protected override async Task HandleAsync()
-        {
-            ReqBattleReportData req = await ReadData<ReqBattleReportData>();
-            ResBattleReportData response = new();
+        ReqBattleReportData req = await ReadData<ReqBattleReportData>();
+        ResBattleReportData response = new();
 
-            // this is responsible for server side anticheat
+        // this is responsible for server side anticheat
 
-            await WriteDataAsync(response);
-        }
+        await WriteDataAsync(response);
     }
 }
