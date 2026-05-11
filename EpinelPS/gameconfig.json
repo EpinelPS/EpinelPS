@@ -1,4 +1,4 @@
-{
+﻿{
   "StaticDataMpk": {
     "Url": "https://cloud.nikke-kr.com/prdenv/145-c7899d1c9d/staticdata/data/qa-260423-04b/520993/mpk/StaticData.pack",
     "Version": "data/qa-260423-04b/520993",
@@ -8,5 +8,5 @@
   "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/145-bd67b127b6/{Platform}",
   "GameMinVer": "100.0.1",
   "GameMaxVer": "150.0.2",
-  "TargetVersion": "145.8.12"
+  "TargetVersion": "145.10.4"
 }

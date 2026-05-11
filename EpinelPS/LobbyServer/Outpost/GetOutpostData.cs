@@ -1,4 +1,4 @@
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 namespace EpinelPS.LobbyServer.Outpost;
@@ -75,6 +75,7 @@ public class GetOutpostData : LobbyMessage
         }
 
         response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
+        response.ConditionTriggerTidList.AddRange(user.ClearedOutpostScenarioIds);
 
         // TODO
         await WriteDataAsync(response);

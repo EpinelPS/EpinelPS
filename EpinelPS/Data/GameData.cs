@@ -193,10 +193,14 @@ public class GameData
     public readonly Dictionary<int, GachaGradeProbRecord> GachaGradeProb = [];
     [LoadRecord("GachaListProbTable.json", "Id")]
     public readonly Dictionary<int, GachaListProbRecord> GachaListProb = [];
+
+    // Outpost
     [LoadRecord("RecycleResearchStatTable.json", "Id")]
     public readonly Dictionary<int, RecycleResearchStatRecord> RecycleResearchStats = [];
     [LoadRecord("RecycleResearchLevelTable.json", "Id")]
     public readonly Dictionary<int, RecycleResearchLevelRecord> RecycleResearchLevels = [];
+    [LoadRecord("OutpostConditionTriggerTable.json", "Id")]
+    public readonly Dictionary<int, OutpostConditionTriggerRecord> SuddenEventConditions = [];
 
     // Harmony Cube  Data Tables
     [LoadRecord("ItemHarmonyCubeTable.json", "Id")]

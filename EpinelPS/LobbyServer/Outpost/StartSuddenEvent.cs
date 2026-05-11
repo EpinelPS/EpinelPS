@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost;
 
@@ -9,6 +10,9 @@ public class StartSuddenEvent : LobbyMessage
     {
         ReqStartSuddenEvent req = await ReadData<ReqStartSuddenEvent>();
         User user = GetUser();
+
+        var suddenEvent = GameData.Instance.SuddenEventConditions[req.Tid];
+        if (user.ClearedOutpostScenarioIds.Contains(suddenEvent.Id)) throw new InvalidOperationException();
 
         if (!user.CanSubtractCurrency(CurrencyType.ContentStamina, 1))
         {
@@ -23,8 +27,11 @@ public class StartSuddenEvent : LobbyMessage
             {
                 Type = (int)CurrencyType.ContentStamina,
                 Value = user.GetCurrencyVal(CurrencyType.ContentStamina)
-            }
+            },
+            Reward = RewardUtils.RegisterRewardsForUser(user, GameData.Instance.GetRewardTableEntry(suddenEvent.RewardId))
         };
+
+        user.ClearedOutpostScenarioIds.Add(suddenEvent.Id);
 
         await WriteDataAsync(response);
     }

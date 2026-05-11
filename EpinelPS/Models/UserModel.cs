@@ -87,6 +87,7 @@ public class User
     public List<int> CompletedTacticAcademyLessons = [];
     public List<int> CompletedSideStoryStages = [];
     public List<int> ViewedSideStoryStages = [];
+    public List<int> ClearedOutpostScenarioIds = [];
 
     public List<int> Memorial = [];
     public List<int> JukeboxBgm = [];
