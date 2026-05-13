@@ -5,8 +5,8 @@ public class GetUserScenarioExist : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        var user = GetUser();
         ReqExistScenario req = await ReadData<ReqExistScenario>();
+        var user = GetUser();
         ResExistScenario response = new();
 
         foreach (string? item in req.ScenarioGroupIds)
