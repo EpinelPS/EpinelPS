@@ -6,122 +6,122 @@ namespace EpinelPS.Models;
 
 public class ClearedTutorialData
 {
-    public int Id;
+    public int Id { get; set; }
     public int VersionGroup;
-    public int GroupId;
-    public int ClearedStageId;
-    public int NextId;
-    public bool SaveTutorial;
+    public int GroupId { get; set; }
+    public int ClearedStageId { get; set; }
+    public int NextId { get; set; }
+    public bool SaveTutorial { get; set; }
 }
 public class User
 {
     // User info
-    public string? Username;
-    public string? Password;
-    public string? PlayerName;
-    public ulong ID;
-    public long RegisterTime;
-    public int LastNormalStageCleared;
-    public int LastStoryStageCleared;
-    public int LastHardStageCleared;
-    public int LastClearedDifficulty;
-    public string? Nickname;
-    public int ProfileIconId = 39900;
-    public bool ProfileIconIsPrism = false;
-    public int ProfileFrame = 25;
-    public bool IsAdmin = false;
-    public bool sickpulls = false;
-    public bool IsBanned = false;
-    public int TitleId = 1;
-    public DateTime BanStart;
-    public DateTime BanEnd;
-    public int BanId = 0;
-    public DateTime LastReset = DateTime.MinValue;
-    public DateTime LastWeeklyReset = DateTime.MinValue;
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public string? PlayerName { get; set; }
+    public ulong ID { get; set; }
+    public long RegisterTime { get; set; }
+    public int LastNormalStageCleared { get; set; }
+    public int LastStoryStageCleared { get; set; }
+    public int LastHardStageCleared { get; set; }
+    public int LastClearedDifficulty { get; set; }
+    public string? Nickname { get; set; }
+    public int ProfileIconId { get; set; } = 39900;
+    public bool ProfileIconIsPrism { get; set; } = false;
+    public int ProfileFrame { get; set; } = 25;
+    public bool IsAdmin { get; set; } = false;
+    public bool sickpulls { get; set; } = false;
+    public bool IsBanned { get; set; } = false;
+    public int TitleId { get; set; } = 1;
+    public DateTime BanStart { get; set; }
+    public DateTime BanEnd { get; set; }
+    public int BanId { get; set; } = 0;
+    public DateTime LastReset { get; set; } = DateTime.MinValue;
+    public DateTime LastWeeklyReset { get; set; } = DateTime.MinValue;
 
     // Game data
-    public List<string> CompletedScenarios = [];
-    public Dictionary<string, FieldInfo> FieldInfo = []; // here for backwards compatibility
+    public List<string> CompletedScenarios { get; set; } = [];
+    public Dictionary<string, FieldInfo> FieldInfo { get; set; } = []; // here for backwards compatibility
 
-    public Dictionary<string, FieldInfoNew> FieldInfoNew = [];
-    public Dictionary<string, string> MapJson = [];
-    public Dictionary<CurrencyType, long> Currency = new() {
+    public Dictionary<string, FieldInfoNew> FieldInfoNew { get; set; } = [];
+    public Dictionary<string, string> MapJson { get; set; } = [];
+    public Dictionary<CurrencyType, long> Currency { get; set; } = new() {
             { CurrencyType.ContentStamina, 2 }
         };
-    public List<SynchroSlot> SynchroSlots = [];
-    public bool SynchroDeviceUpgraded = false;
-    public int SynchroDeviceLevel = 200;
-    public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress = [];
+    public List<SynchroSlot> SynchroSlots { get; set; } = [];
+    public bool SynchroDeviceUpgraded { get; set; } = false;
+    public int SynchroDeviceLevel { get; set; } = 200;
+    public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress { get; set; } = [];
 
-    public ResetableData ResetableData = new();
-    public WeeklyResetableData WeeklyResetableData = new();
-    public List<DbItemData> Items = [];
-    public List<CharacterModel> Characters = [];
-    public List<EquipmentAwakeningData> EquipmentAwakenings = [];
-    public long[] RepresentationTeamDataNew = [];
-    public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
+    public ResetableData ResetableData { get; set; } = new();
+    public WeeklyResetableData WeeklyResetableData { get; set; } = new();
+    public List<DbItemData> Items { get; set; } = [];
+    public List<CharacterModel> Characters { get; set; } = [];
+    public List<EquipmentAwakeningData> EquipmentAwakenings { get; set; } = [];
+    public long[] RepresentationTeamDataNew { get; set; } = [];
+    public Dictionary<int, ClearedTutorialData> ClearedTutorialData { get; set; } = [];
 
     // Outpost buildings data
-    public List<NetUserOutpostData> OutpostBuildings = [];
+    public List<NetUserOutpostData> OutpostBuildings { get; set; } = [];
 
-    public NetWallpaperData[] WallpaperList = [];
-    public NetWallpaperBackground[] WallpaperBackground = [];
-    public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];
-    public NetWallpaperPlaylist[] WallpaperPlaylistList = [];
-    public NetWallpaperJukebox[] WallpaperJukeboxList = [];
-    public List<int> LobbyDecoBackgroundList = [];
+    public NetWallpaperData[] WallpaperList { get; set; } = [];
+    public NetWallpaperBackground[] WallpaperBackground { get; set; } = [];
+    public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList { get; set; } = [];
+    public NetWallpaperPlaylist[] WallpaperPlaylistList { get; set; } = [];
+    public NetWallpaperJukebox[] WallpaperJukeboxList { get; set; } = [];
+    public List<int> LobbyDecoBackgroundList { get; set; } = [];
 
 
-    public Dictionary<int, NetUserTeamData> UserTeams = [];
-    public Dictionary<int, bool> MainQuestData = [];
-    public Dictionary<int, bool> SubQuestData = [];
-    public int InfraCoreExp = 0;
-    public int InfraCoreLvl = 1;
-    public Dictionary<int, bool> InfraCoreRewardReceived = [];
-    public UserPointData userPointData = new();
-    public DateTime LastLogin = DateTime.UtcNow;
-    public DateTime BattleTime = DateTime.UtcNow;
+    public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
+    public Dictionary<int, bool> MainQuestData { get; set; } = [];
+    public Dictionary<int, bool> SubQuestData { get; set; } = [];
+    public int InfraCoreExp { get; set; } = 0;
+    public int InfraCoreLvl { get; set; } = 1;
+    public Dictionary<int, bool> InfraCoreRewardReceived { get; set; } = [];
+    public UserPointData userPointData { get; set; } = new();
+    public DateTime LastLogin { get; set; } = DateTime.UtcNow;
+    public DateTime BattleTime { get; set; } = DateTime.UtcNow;
 
-    public NetOutpostBattleLevel OutpostBattleLevel = new() { Level = 1 };
-    public int GachaTutorialPlayCount = 0;
-    public List<int> CompletedTacticAcademyLessons = [];
-    public List<int> CompletedSideStoryStages = [];
-    public List<int> ViewedSideStoryStages = [];
-    public List<int> ClearedOutpostScenarioIds = [];
+    public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
+    public int GachaTutorialPlayCount { get; set; } = 0;
+    public List<int> CompletedTacticAcademyLessons { get; set; } = [];
+    public List<int> CompletedSideStoryStages { get; set; } = [];
+    public List<int> ViewedSideStoryStages { get; set; } = [];
+    public List<int> ClearedOutpostScenarioIds { get; set; } = [];
 
-    public List<int> Memorial = [];
-    public List<int> JukeboxBgm = [];
-    public List<NetUserFavoriteItemData> FavoriteItems = [];
+    public List<int> Memorial { get; set; } = [];
+    public List<int> JukeboxBgm { get; set; } = [];
+    public List<NetUserFavoriteItemData> FavoriteItems { get; set; } = [];
 
-    public List<NetUserFavoriteItemQuestData> FavoriteItemQuests = [];
-    public Dictionary<int, int> TowerProgress = [];
+    public List<NetUserFavoriteItemQuestData> FavoriteItemQuests { get; set; } = [];
+    public Dictionary<int, int> TowerProgress { get; set; } = [];
 
-    public JukeBoxSetting LobbyMusic = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
-    public JukeBoxSetting CommanderMusic = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
-    public OutpostBuffs OutpostBuffs = new();
-    public Dictionary<int, UnlockData> ContentsOpenUnlocked = [];
+    public JukeBoxSetting LobbyMusic { get; set; } = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
+    public JukeBoxSetting CommanderMusic { get; set; } = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
+    public OutpostBuffs OutpostBuffs { get; set; } = new();
+    public Dictionary<int, UnlockData> ContentsOpenUnlocked { get; set; } = [];
 
-    public List<NetStageClearInfo> StageClearHistorys = [];
+    public List<NetStageClearInfo> StageClearHistorys { get; set; } = [];
 
-    public List<BadgeModel> Badges = [];
+    public List<BadgeModel> Badges { get; set; } = [];
 
-    public List<NetUserAttractiveData> BondInfo = [];
-    public List<TriggerModel> Triggers = [];
-    public int LastTriggerId = 1;
-    public List<int> CompletedAchievements = [];
-    public List<NetMessage> MessengerData = [];
-    public ulong LastMessageId = 1;
-    public long LastBadgeSeq = 1;
-    public Dictionary<int, LostSectorData> LostSectorData = [];
+    public List<NetUserAttractiveData> BondInfo { get; set; } = [];
+    public List<TriggerModel> Triggers { get; set; } = [];
+    public int LastTriggerId { get; set; } = 1;
+    public List<int> CompletedAchievements { get; set; } = [];
+    public List<NetMessage> MessengerData { get; set; } = [];
+    public ulong LastMessageId { get; set; } = 1;
+    public long LastBadgeSeq { get; set; } = 1;
+    public Dictionary<int, LostSectorData> LostSectorData { get; set; } = [];
 
     // Event data
-    public Dictionary<int, EventData> EventInfo = [];
-    public Dictionary<int, LoginEventData> LoginEventInfo = [];
-    public Dictionary<int, EventMissionData> EventMissionInfo = []; // key: eventId
-    public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo = []; // key: eventId
-    public MogMinigameInfo MogInfo = new();
-    public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
-    public NetArcadeMvgData ArcadeInTheMirrorData = new();
+    public Dictionary<int, EventData> EventInfo { get; set; } = [];
+    public Dictionary<int, LoginEventData> LoginEventInfo { get; set; } = [];
+    public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
+    public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
+    public MogMinigameInfo MogInfo { get; set; } = new();
+    public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
+    public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
 
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 

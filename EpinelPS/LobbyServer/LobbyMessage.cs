@@ -10,7 +10,6 @@ public abstract class LobbyMessage
 {
     protected HttpContext? ctx;
     protected ulong UserId;
-    protected string UsedAuthToken = "";
     public byte[] ReturnBytes = [];
     public byte[] Contents = [];
 
@@ -31,7 +30,6 @@ public abstract class LobbyMessage
     {
         Contents = [];
         ReturnBytes = [];
-        UsedAuthToken = "";
         UserId = 0;
         ctx = null;
     }
@@ -39,21 +37,10 @@ public abstract class LobbyMessage
     public async Task HandleAsync(HttpContext ctx)
     {
         this.ctx = ctx;
-        if (ctx.Request.Headers.ContainsKey("Authorization"))
-        {
-            string? token = ctx.Request.Headers.Authorization.FirstOrDefault();
-            if (token != null)
-            {
-                UsedAuthToken = token;
-            }
-        }
-
         await HandleAsync();
     }
     public async Task HandleAsync(string authToken)
     {
-        this.UsedAuthToken = authToken;
-
         PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                          .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                          .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true });
@@ -99,13 +86,6 @@ public abstract class LobbyMessage
             data.WriteTo(x);
 
             x.Flush();
-
-            if (encrypted)
-            {
-                ctx.Response.Headers.ContentEncoding = new Microsoft.Extensions.Primitives.StringValues("gzip,enc");
-                byte[] enc = PacketDecryption.EncryptData(((MemoryStream)responseBytes).ToArray(), UsedAuthToken);
-                await ctx.Response.Body.WriteAsync(enc);
-            }
         }
     }
     protected async Task<T> ReadData<T>() where T : IMessage, new()
@@ -130,8 +110,7 @@ public abstract class LobbyMessage
             T msg = new();
             Logging.WriteLine("Reading " + msg.GetType().Name, LogType.Debug);
 
-            PacketDecryptResponse bin = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
-            msg.MergeFrom(bin.Contents);
+            msg.MergeFrom(ctx.Request.Body);
 
             if (msg.GetType().Name != "ReqSyncBadge")
             {
@@ -139,8 +118,7 @@ public abstract class LobbyMessage
                 Logging.WriteLine("", LogType.Debug);
             }
 
-            UserId = bin.UserId;
-            UsedAuthToken = bin.UsedAuthToken;
+            UserId = (ulong)ctx.Items["UserID"]; //bin.UserId;
 
             return msg;
         }

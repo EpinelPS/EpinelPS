@@ -21,8 +21,7 @@ public class DoWipeout : LobbyMessage
         user.ResetableData.WipeoutCount++;
         response.FastBattleCount = user.ResetableData.WipeoutCount;
 
-        response.Reward = NetUtils.GetOutpostReward(user, TimeSpan.FromHours(2));
-        NetUtils.RegisterRewardsForUser(user, response.Reward);
+        response.Reward = NetUtils.GetOutpostReward(user, TimeSpan.FromHours(2), true);
 
         // TODO subtract currency as needed
         foreach (KeyValuePair<CurrencyType, long> item in user.Currency)

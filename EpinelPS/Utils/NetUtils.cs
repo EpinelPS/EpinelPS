@@ -244,7 +244,7 @@ public class NetUtils
         return CalcOutpostRewardAmount(value, ratio, boost, mins);
     }
 
-    public static NetRewardData GetOutpostReward(User user, TimeSpan duration)
+    public static NetRewardData GetOutpostReward(User user, TimeSpan duration, bool addToUser = false)
     {
         //duration = TimeSpan.FromHours(1);
         NetRewardData result = new();
@@ -257,6 +257,7 @@ public class NetUtils
             FinalValue = 0,
             Value = CalcOutpostRewardAmount(battleData.CharacterExp2, 1, 1, duration.TotalMinutes)
         });
+        if (addToUser) user.AddCurrency(CurrencyType.CharacterExp2, result.Currency.Last().Value);
 
         result.Currency.Add(new NetCurrencyData()
         {
@@ -264,6 +265,7 @@ public class NetUtils
             FinalValue = 0,
             Value = CalcOutpostRewardAmount(battleData.CharacterExp1, 3, 1, duration.TotalMinutes)
         });
+        if (addToUser) user.AddCurrency(CurrencyType.CharacterExp, result.Currency.Last().Value);
 
         result.Currency.Add(new NetCurrencyData()
         {
@@ -271,6 +273,7 @@ public class NetUtils
             FinalValue = 0,
             Value = CalcOutpostRewardAmount(battleData.Credit, 3, 1, duration.TotalMinutes)
         });
+        if (addToUser) user.AddCurrency(CurrencyType.Gold, result.Currency.Last().Value);
 
         result.Currency.Add(new NetCurrencyData()
         {
@@ -278,18 +281,9 @@ public class NetUtils
             FinalValue = 0,
             Value = CalcOutpostRewardAmount(battleData.UserExp, 3, 1, duration.TotalMinutes)
         });
+        if (addToUser) user.AddCurrency(CurrencyType.UserExp, result.Currency.Last().Value);
 
         return result;
-    }
-
-    public static void RegisterRewardsForUser(User user, NetRewardData rewardData)
-    {
-        foreach (NetCurrencyData? item in rewardData.Currency)
-        {
-            user.AddCurrency((CurrencyType)item.Type, item.Value);
-        }
-
-        // TODO: other things that are used by the function above
     }
 
     internal static List<NetTimeReward> GetOutpostTimeReward(User user)

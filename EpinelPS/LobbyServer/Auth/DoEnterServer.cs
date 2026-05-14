@@ -15,10 +15,9 @@ public class GetUserOnlineStateLog : LobbyMessage
         ReqEnterServer req = await ReadData<ReqEnterServer>();
 
         // request has auth token
-        UsedAuthToken = req.AuthToken;
         foreach (AccessToken item in JsonDb.Instance.LauncherAccessTokens)
         {
-            if (item.Token == UsedAuthToken)
+            if (item.Token == req.AuthToken)
             {
                 UserId = item.UserID;
             }

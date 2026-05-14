@@ -5,67 +5,67 @@ namespace EpinelPS.Models;
 
 public class AccessToken
 {
-    public string Token = "";
-    public long ExpirationTime;
-    public ulong UserID;
+    public string Token { get; set; } = "";
+    public long ExpirationTime { get; set; }
+    public ulong UserID { get; set; }
 }
 public class FieldInfo
 {
-    public List<NetFieldStageData> CompletedStages = [];
-    public List<NetFieldObject> CompletedObjects = [];
+    public List<NetFieldStageData> CompletedStages { get; set; } = [];
+    public List<NetFieldObject> CompletedObjects { get; set; } = [];
 }
 
 public class FieldInfoNew
 {
-    public List<int> CompletedStages = [];
-    public List<NetFieldObject> CompletedObjects = [];
-    public bool BossEntered = false;
+    public List<int> CompletedStages { get; set; } = [];
+    public List<NetFieldObject> CompletedObjects { get; set; } = [];
+    public bool BossEntered { get; set; } = false;
 }
 
 public class CharacterModel
 {
-    public int Csn = 0;
-    public int Tid = 0;
-    public int CostumeId = 0;
-    public int Level = 1;
-    public int UltimateLevel = 1;
-    public int Skill1Lvl = 1;
-    public int Skill2Lvl = 1;
-    public int Grade = 0;
-    public bool IsMainForce = false;
+    public int Csn { get; set; } = 0;
+    public int Tid { get; set; } = 0;
+    public int CostumeId { get; set; } = 0;
+    public int Level { get; set; } = 1;
+    public int UltimateLevel { get; set; } = 1;
+    public int Skill1Lvl { get; set; } = 1;
+    public int Skill2Lvl { get; set; } = 1;
+    public int Grade { get; set; } = 0;
+    public bool IsMainForce { get; set; } = false;
 }
 public class MainQuestData
 {
-    public int TableId = 0;
-    public bool IsReceieved = false;
+    public int TableId { get; set; } = 0;
+    public bool IsReceieved { get; set; } = false;
 }
 
 public class UserPointData
 {
-    public int UserLevel = 1;
-    public int ExperiencePoint = 0;
+    public int UserLevel { get; set; } = 1;
+    public int ExperiencePoint { get; set; } = 0;
 }
 
 public class DbItemData
 {
-    public int ItemType;
-    public long Csn;
-    public int Count;
-    public int Level;
-    public int Exp;
-    public int Position;
-    public int Corp;
-    public long Isn;
+    public int ItemType { get; set; }
+    public long Csn { get; set; }
+    public int Count { get; set; }
+    public int Level { get; set; }
+    public int Exp { get; set; }
+    public int Position { get; set; }
+    public int Corp { get; set; }
+    public long Isn { get; set; }
 
     // For harmony cubes that can be equipped to multiple characters
-    public List<long> CsnList = [];
+    public List<long> CsnList { get; set; } = [];
 }
 
 public class EquipmentAwakeningData
 {
-    public long Isn;
-    public NetEquipmentAwakeningOption Option;
-    public bool IsNewData;
+    public long Isn { get; set; }
+    public NetEquipmentAwakeningOption Option { get; set; }
+    public bool IsNewData { get; set; }
 
     public EquipmentAwakeningData()
     {
@@ -75,38 +75,38 @@ public class EquipmentAwakeningData
 }
 public class EventData
 {
-    public List<string> CompletedScenarios = [];
-    public List<int> ClearedStages = []; // List of cleared stage IDs
-    public int Diff = 0; // Default value for Diff
-    public int LastStage = 0; // Default value for LastStage
-    public int LastDay = 0;
-    public int FreeTicket = 0;
+    public List<string> CompletedScenarios { get; set; } = [];
+    public List<int> ClearedStages { get; set; } = []; // List of cleared stage IDs
+    public int Diff { get; set; } = 0; // Default value for Diff
+    public int LastStage { get; set; } = 0; // Default value for LastStage
+    public int LastDay { get; set; } = 0;
+    public int FreeTicket { get; set; } = 0;
 }
 public class LoginEventData
 {
-    public List<int> Days = [];
-    public int LastDay = 0; // Default value for LastDay
-    public long LastDate = 0; // Default value for LastDate
+    public List<int> Days { get; set; } = [];
+    public int LastDay { get; set; } = 0; // Default value for LastDay
+    public long LastDate { get; set; } = 0; // Default value for LastDate
 }
 // EventMissionData
 public class EventMissionData
 {
-    public List<int> MissionIdList = [];
-    public List<int> DailyMissionIdList = [];
-    public int LastDay = 0; // yyyyMMdd
-    public long LastDate = 0; // Default value for LastDate
+    public List<int> MissionIdList { get; set; } = [];
+    public List<int> DailyMissionIdList { get; set; } = [];
+    public int LastDay { get; set; } = 0; // yyyyMMdd
+    public long LastDate { get; set; } = 0; // Default value for LastDate
 }
 // EventShopBuyCountData
 public class EventShopProductData
 {
-    public int ProductTid = 0;
-    public int BuyCount = 0;
+    public int ProductTid { get; set; } = 0;
+    public int BuyCount { get; set; } = 0;
 }
 
 public class EventShopBuyCountData
 {
-    public int EventId = 0;
-    public List<EventShopProductData> datas = [];
+    public int EventId { get; set; } = 0;
+    public List<EventShopProductData> datas { get; set; } = [];
 }
 
 public class SynchroSlot
@@ -114,130 +114,130 @@ public class SynchroSlot
     /// <summary>
     /// Index of slot, 1 based
     /// </summary>
-    public int Slot;
+    public int Slot { get; set; }
     /// <summary>
     /// Character CSN
     /// </summary>
-    public long CharacterSerialNumber;
+    public long CharacterSerialNumber { get; set; }
     /// <summary>
     /// Time when slot cooldown expires
     /// </summary>
-    public long AvailableAt;
+    public long AvailableAt { get; set; }
 }
 public class RecycleRoomResearchProgress
 {
-    public int Level = 1;
-    public int Exp;
-    public int Attack;
-    public int Defense;
-    public int Hp;
+    public int Level { get; set; } = 1;
+    public int Exp { get; set; }
+    public int Attack { get; set; }
+    public int Defense { get; set; }
+    public int Hp { get; set; }
 }
 
 // Simroom Data
 public class SimRoomData
 {
-    public int CurrentDifficulty;
-    public int CurrentChapter;
-    public List<int> Buffs = [];
-    public List<int> LegacyBuffs = [];
-    public List<SimRoomEvent> Events = [];
-    public List<SimRoomCharacterHp> RemainingHps = [];
-    public List<SimRoomChapterInfo> ReceivedRewardChapters = [];
-    public bool IsSimpleModeSkipEnabled = false;
-    public bool Entered = false;
-    public OverclockData CurrentSeasonData = new();
+    public int CurrentDifficulty { get; set; }
+    public int CurrentChapter { get; set; }
+    public List<int> Buffs { get; set; } = [];
+    public List<int> LegacyBuffs { get; set; } = [];
+    public List<SimRoomEvent> Events { get; set; } = [];
+    public List<SimRoomCharacterHp> RemainingHps { get; set; } = [];
+    public List<SimRoomChapterInfo> ReceivedRewardChapters { get; set; } = [];
+    public bool IsSimpleModeSkipEnabled { get; set; } = false;
+    public bool Entered { get; set; } = false;
+    public OverclockData CurrentSeasonData { get; set; } = new();
 }
 public class OverclockData
 {
-    public int CurrentSeason;
-    public int CurrentSubSeason;
-    public List<int> CurrentOptionList = [];
-    public bool IsOverclock = false;
-    public bool HasClearedLevel50 = false;
-    public bool WasInfinitePopupChecked = false;
-    public bool WasMainSeasonResetPopupChecked = true;
-    public bool WasSubSeasonResetPopupChecked = true;
-    public OverclockHighScoreData CurrentSeasonHighScore = new();
-    public OverclockHighScoreData CurrentSubSeasonHighScore = new();
-    public OverclockHighScoreData LatestOption = new();
+    public int CurrentSeason { get; set; }
+    public int CurrentSubSeason { get; set; }
+    public List<int> CurrentOptionList { get; set; } = [];
+    public bool IsOverclock { get; set; } = false;
+    public bool HasClearedLevel50 { get; set; } = false;
+    public bool WasInfinitePopupChecked { get; set; } = false;
+    public bool WasMainSeasonResetPopupChecked { get; set; } = true;
+    public bool WasSubSeasonResetPopupChecked { get; set; } = true;
+    public OverclockHighScoreData CurrentSeasonHighScore { get; set; }
+    public OverclockHighScoreData CurrentSubSeasonHighScore { get; set; }
+    public OverclockHighScoreData LatestOption { get; set; }
 }
 public class OverclockHighScoreData
 {
-    public int Season;
-    public int SubSeason;
-    public List<int> OptionList = [];
-    public int OptionLevel;
-    public Google.Protobuf.WellKnownTypes.Timestamp? CreatedAt;
+    public int Season { get; set; }
+    public int SubSeason { get; set; }
+    public List<int> OptionList { get; set; } = [];
+    public int OptionLevel { get; set; }
+    public Google.Protobuf.WellKnownTypes.Timestamp? CreatedAt { get; set; }
 }
 public class SimRoomEvent
 {
-    public SimRoomEventLocationInfo Location = new();
-    public bool Selected;
-    public SimRoomBattleEvent Battle = new();
-    public SimRoomSelectionEvent Selection = new();
-    public int EventCase;
+    public SimRoomEventLocationInfo Location { get; set; } = new();
+    public bool Selected { get; set; }
+    public SimRoomBattleEvent Battle { get; set; } = new();
+    public SimRoomSelectionEvent Selection { get; set; } = new();
+    public int EventCase { get; set; }
 }
 public class SimRoomEventLocationInfo
 {
-    public int Chapter;
-    public int Stage;
-    public int Order;
+    public int Chapter { get; set; }
+    public int Stage { get; set; }
+    public int Order { get; set; }
 }
 public class SimRoomChapterInfo
 {
-    public int Difficulty;
-    public int Chapter;
+    public int Difficulty { get; set; }
+    public int Chapter { get; set; }
 }
 public class SimRoomBattleEvent
 {
-    public int Id;
-    public List<int> BuffOptions = [];
-    public int Progress;
-    public int RemainingTargetHealth;
-    public int BuffPreviewId;
+    public int Id { get; set; }
+    public List<int> BuffOptions { get; set; } = [];
+    public int Progress { get; set; }
+    public int RemainingTargetHealth { get; set; }
+    public int BuffPreviewId { get; set; }
 }
 public class SimRoomSelectionEvent
 {
-    public int Id;
-    public int SelectedNumber;
-    public List<SimRoomSelectionGroupElement> Group = [];
+    public int Id { get; set; }
+    public int SelectedNumber { get; set; }
+    public List<SimRoomSelectionGroupElement> Group { get; set; } = [];
 }
 public class SimRoomSelectionGroupElement
 {
-    public int SelectionNumber;
-    public int Id;
-    public bool IsDone;
-    public int RandomBuff;
+    public int SelectionNumber { get; set; }
+    public int Id { get; set; }
+    public bool IsDone { get; set; }
+    public int RandomBuff { get; set; }
 }
 public class SimRoomCharacterHp
 {
-    public long Csn;
-    public int Hp;
+    public long Csn { get; set; }
+    public int Hp { get; set; }
 }
 
 public class ResetableData
 {
-    public int WipeoutCount = 0;
-    public bool ClearedSimulationRoom = false;
-    public int InterceptionTickets = 3;
-    public List<int> CompletedDailyMissions = [];
-    public int DailyMissionPoints;
-    public SimRoomData SimRoomData = new();
+    public int WipeoutCount { get; set; } = 0;
+    public bool ClearedSimulationRoom { get; set; } = false;
+    public int InterceptionTickets { get; set; } = 3;
+    public List<int> CompletedDailyMissions { get; set; } = [];
+    public int DailyMissionPoints { get; set; }
+    public SimRoomData SimRoomData { get; set; } = new();
 
-    public Dictionary<int, int> DailyCounselCount = [];
+    public Dictionary<int, int> DailyCounselCount { get; set; } = [];
 
 }
 public class WeeklyResetableData
 {
-    public List<int> CompletedWeeklyMissions = [];
-    public int WeeklyMissionPoints;
+    public List<int> CompletedWeeklyMissions { get; set; } = [];
+    public int WeeklyMissionPoints { get; set; }
 }
 public class OutpostBuffs
 {
-    public List<int> CreditPercentages = [];
-    public List<int> CoreDustPercentages = [];
-    public List<int> BattleDataPercentages = [];
-    public List<int> UserExpPercentages = [];
+    public List<int> CreditPercentages { get; set; } = [];
+    public List<int> CoreDustPercentages { get; set; } = [];
+    public List<int> BattleDataPercentages { get; set; } = [];
+    public List<int> UserExpPercentages { get; set; } = [];
 
     public List<int> GetPercentages(CurrencyType currency)
     {
@@ -267,15 +267,15 @@ public class OutpostBuffs
 
 public class JukeBoxSetting
 {
-    public NetJukeboxLocation Location;
-    public NetJukeboxBgmType Type;
-    public int TableId;
+    public NetJukeboxLocation Location { get; set; }
+    public NetJukeboxBgmType Type { get; set; }
+    public int TableId { get; set; }
 }
 
 public class UnlockData
 {
-    public bool ButtonAnimationPlayed = false;
-    public bool PopupAnimationPlayed = false;
+    public bool ButtonAnimationPlayed { get; set; } = false;
+    public bool PopupAnimationPlayed { get; set; } = false;
 
     public UnlockData() { }
     public UnlockData(bool button, bool popup)
@@ -287,14 +287,14 @@ public class UnlockData
 
 public class MogMinigameInfo
 {
-    public List<string> CompletedScenarios = [];
+    public List<string> CompletedScenarios { get; set; } = [];
 }
 public class BadgeModel
 {
-    public string Location = "";
-    public long Seq;
-    public BadgeContents BadgeContent;
-    public string BadgeGuid = "";
+    public string Location { get; set; } = "";
+    public long Seq { get; set; }
+    public BadgeContents BadgeContent { get; set; }
+    public string BadgeGuid { get; set; } = "";
 
     public BadgeModel() { }
     public BadgeModel(NetBadge badge)
@@ -319,11 +319,11 @@ public class BadgeModel
 
 public class TriggerModel
 {
-    public Trigger Type;
-    public long Id;
-    public long CreatedAt;
-    public int ConditionId;
-    public int Value;
+    public Trigger Type { get; set; }
+    public long Id { get; set; }
+    public long CreatedAt { get; set; }
+    public int ConditionId { get; set; }
+    public int Value { get; set; }
 
     public NetTrigger ToNet()
     {

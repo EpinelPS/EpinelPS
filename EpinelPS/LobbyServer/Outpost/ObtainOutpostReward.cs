@@ -23,8 +23,7 @@ public class ObtainOutpostReward : LobbyMessage
         response.BattleTime = 0;
         response.MaxBattleTime = 864000000000;
 
-        response.Reward = NetUtils.GetOutpostReward(user, battleTime);
-        NetUtils.RegisterRewardsForUser(user, response.Reward);
+        response.Reward = NetUtils.GetOutpostReward(user, battleTime, true);
 
         user.BattleTime = DateTime.UtcNow;
 

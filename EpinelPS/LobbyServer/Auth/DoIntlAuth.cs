@@ -10,11 +10,9 @@ public class DoIntlAuth : LobbyMessage
     {
         ReqAuthIntl req = await ReadData<ReqAuthIntl>();
         ResAuth response = new();
-
-        UsedAuthToken = req.Token;
         foreach (AccessToken item in JsonDb.Instance.LauncherAccessTokens)
         {
-            if (item.Token == UsedAuthToken)
+            if (item.Token == req.Token)
             {
                 UserId = item.UserID;
             }
