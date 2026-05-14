@@ -4,16 +4,16 @@ namespace EpinelPS.Models;
 
 public class CoreInfo
 {
-    public int DbVersion = 5;
-    public List<User> Users = [];
+    public int DbVersion { get; set; } = 5;
+    public List<User> Users { get; set; } = [];
 
-    public List<AccessToken> LauncherAccessTokens = [];
-    public Dictionary<string, ulong> AdminAuthTokens = [];
+    public List<AccessToken> LauncherAccessTokens { get; set; } = [];
+    public Dictionary<string, ulong> AdminAuthTokens { get; set; } = [];
 
-    public byte[] LauncherTokenKey = [];
-    public byte[] EncryptionTokenKey = [];
-    public LogType LogLevel = LogType.Debug;
+    public byte[] LauncherTokenKey { get; set; } = [];
+    public byte[] EncryptionTokenKey { get; set; } = [];
+    public LogType LogLevel { get; set; } = LogType.Debug;
 
-    public int MaxInterceptionCount = 3;
-    public int ResetHourUtcTime = 20;
+    public int MaxInterceptionCount { get; set; } = 3;
+    public int ResetHourUtcTime { get; set; } = 20;
 }

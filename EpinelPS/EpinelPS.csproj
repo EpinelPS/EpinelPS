@@ -10,7 +10,7 @@
 		<SelfContained>true</SelfContained>
 		<IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
 		<NoWarn>$(NoWarn);SYSLIB0057</NoWarn>
-		<Version>0.145.8.0</Version>
+		<Version>0.146.0.0</Version>
 		<CETCompat>false</CETCompat>
 		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ASodium" Version="0.6.5" />
+		<PackageReference Include="ASodium" Version="0.6.7" />
 		<PackageReference Include="DnsClient" Version="1.8.0" />
 		<PackageReference Include="Google.Api.CommonProtos" Version="2.17.0" />
 		<PackageReference Include="Google.Protobuf.Tools" Version="3.34.1" />
@@ -35,7 +35,7 @@
 		<PackageReference Include="Paseto.Core" Version="1.5.0" />
 		<PackageReference Include="SharpZipLib" Version="1.4.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="log4net" Version="3.3.0" />
+		<PackageReference Include="log4net" Version="3.3.1" />
 	</ItemGroup>
 
 	<ItemGroup>

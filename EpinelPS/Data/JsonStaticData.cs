@@ -381,6 +381,7 @@ public partial class ArchiveRecordManagerRecord
 	public int UnlockTicketId;
 	public int UnlockTicketCount;
 	public int RewardInfoListId;
+	public int UnlockRewardId;
 	public int EventQuestClearRewardId;
 	public int RecommendedStoryListId;
 	public int MessengerGroupId;
@@ -3439,7 +3440,7 @@ public partial class EventCE004MiniGameStageTimeRecord_Raw
 public partial class EventCanCollectListRecord_Raw
 {
 	public int Id;
-	public int ManagerId;
+	public int GroupId;
 	public int FieldItemId;
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
@@ -3465,11 +3466,12 @@ public partial class EventCanCollectListRecord_Raw
 public partial class EventCanCollectProgressRewardRecord_Raw
 {
 	public int Id;
-	public int ManagerId;
+	public int GroupId;
 	public int Order;
 	public int GoalValue;
 	public int RewardId;
 	public string? RewardDescription;
+	public bool IsUseInArchive;
 }
 
 [MemoryPackable]
@@ -3594,6 +3596,8 @@ public partial class EventClimbingTimeDifficultRecord
 public partial class EventCollectManagerRecord_Raw
 {
 	public int Id;
+	public int GroupId;
+	public bool IsArchive;
 	public int EventId;
 	public FieldCollectContentsType ContentsType;
 	public string? UiPrefab;
@@ -4626,6 +4630,7 @@ public partial class EventFieldNPCRecord
 public partial class EventFieldNoticePopupRecord_Raw
 {
 	public int Id;
+	public bool IsArchiveData;
 	public int EventFieldId;
 	public EventFieldNoticePopupPrintConditionType PrintConditionType;
 	public int PrintConditionValue;
@@ -7292,6 +7297,7 @@ public partial class EventSBManagerRecord_Raw
 	public int Id;
 	public int EventId;
 	public string? EnterScenario;
+	public MiniGameSystemType MinigameType;
 	public int StageGroupId;
 	public int CharacterId;
 	public int CharacterSkillGroupId;
@@ -7444,7 +7450,7 @@ public partial class EventSBStageRecord_Raw
 	public int UnlockDate;
 	public int UnlockConditionStage;
 	public List<UnlockConditionLocaleData_Raw> UnlockConditionLocale;
-	public int StageFirstClearReward;
+	public List<StageFirstClearRewardData_Raw> StageFirstClearReward;
 	public int StageClearReward;
 	public int StageFailureReward;
 	public bool IngameGuideUse;
@@ -7797,7 +7803,9 @@ public partial class EventTTSSongGroupManagerRecord_Raw
 	public int Id;
 	public string? Desc;
 	public string? NameLocale;
-	public List<int> IncludeSongId;
+	public bool BasicMusicGroup;
+	public string? GroupImageResource;
+	public DateTime ReleaseDate;
 }
 
 [MemoryPackable]
@@ -7814,7 +7822,7 @@ public partial class EventTTSSongManagerRecord_Raw
 	public string? MusicResourceId;
 	public string? PreviewMusicResourceId;
 	public int GroupId;
-	public List<string?> Tag;
+	public List<EventTTSTagValue> Tag;
 	public int CasualLevel;
 	public string? CasualPatternResourceId;
 	public int NormalLevel;
@@ -8783,7 +8791,6 @@ public partial class FieldPasswordRecord_Raw
 	public string? ObtainScenario;
 	public bool IsFinalReward;
 	public DateTime SpawnTime;
-	public bool IsArchivePassword;
 	public int SpawnConditionStage;
 	public int StoryEventId;
 	public int SpawnConditionItem;
@@ -12889,6 +12896,12 @@ public partial class SquadInfoRecord
 }
 
 [MemoryPackable]
+public partial class StageFirstClearRewardData_Raw
+{
+	public int StageFirstClearReward;
+}
+
+[MemoryPackable]
 public partial class StageSpawnerData
 {
 	public string? PositionId;
@@ -13023,6 +13036,17 @@ public partial class SupportContentsRecord
 	public TeamType ContentsType;
 	public int UseValue;
 	public int GroupId;
+}
+
+[MemoryPackable]
+public partial class TTSAlbumShopRecord_Raw
+{
+	public int Id;
+	public string? NameLocalkey;
+	public string? DescLocalkey;
+	public int SongGroupId;
+	public int MidasProductId;
+	public bool IsActive;
 }
 
 [MemoryPackable]
@@ -13588,7 +13612,8 @@ public enum ArcadeGameType : int
 	BubbleMarch = 7,
 	DragonDungeonRun = 8,
 	PirateCafe = 9,
-	RebuildEden = 10
+	RebuildEden = 10,
+	NativeRaid = 11
 }
 
 public enum EventDungeonOpenCondition : int
@@ -13864,7 +13889,8 @@ public enum ArchiveRecordType : int
 
 public enum RewardDataLoadType : int
 {
-	EventDungeonDifficult = 0
+	EventDungeonDifficult = 0,
+	ArchiveRecordManager = 1
 }
 
 public enum ArenaChampionTotalRankConditionType : int
@@ -14593,7 +14619,8 @@ public enum Squad : int
 	OverTheHorizon = 66,
 	CE007 = 67,
 	CE008 = 68,
-	VeiledOrder = 69
+	VeiledOrder = 69,
+	TTSTAR = 70
 }
 
 public enum WeaponType : int
@@ -14743,7 +14770,8 @@ public enum PreferTargetconditionType : int
 	OnlyWater = 15,
 	OnlyWind = 16,
 	OnlyElectronic = 17,
-	OnlyIron = 18
+	OnlyIron = 18,
+	ExcludeInactiveParts = 19
 }
 
 public enum ShotTimingType : int
@@ -17504,6 +17532,16 @@ public enum EventTTSMissionType : int
 	ScoreAccumulate = 11,
 	MusicPlayCount = 12,
 	SpecificMusicPlayCount = 13
+}
+
+public enum EventTTSTagValue : int
+{
+	Vocal = 0,
+	Event = 1,
+	Battle = 2,
+	Story = 3,
+	Menu = 4,
+	TTSTAR = 5
 }
 
 public enum EventTTSTutorialPlayType : int

@@ -1,6 +1,7 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer;
+using EpinelPS.Networking;
 using EpinelPS.Utils;
 using log4net.Config;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -80,6 +81,7 @@ internal class Program
 
                 app.UseDefaultFiles();
                 app.UseStaticFiles();
+                app.UseMiddleware<EncryptionMiddleware>();
 
                 // Configure the HTTP request pipeline.
                 if (app.Environment.IsDevelopment())
@@ -676,12 +678,8 @@ internal class Program
 
     private static async Task HandleBatchRequests(HttpContext ctx)
     {
-        PacketDecryptResponse theBytes = await PacketDecryption.DecryptOrReturnContentAsync(ctx);
-
         // this actually uses gzip compression, unlike other requests.
-
-        using MemoryStream streamforparser = new(theBytes.Contents);
-        StreamContent content = new(streamforparser);
+        using StreamContent content = new(ctx.Request.Body);
         content.Headers.Remove("Content-Type");
         content.Headers.TryAddWithoutValidation("Content-Type", (string?)ctx.Request.Headers["Content-Type"]);
 
