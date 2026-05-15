@@ -1,7 +1,62 @@
 @model EpinelPS.Models.Admin.ModUserModel
+@using EpinelPS.Data
+@using EpinelPS.Models
+@using EpinelPS.Utils
 
 @{
     ViewData["Title"] = "修改用户";
+}
+@{
+    var fullUser = JsonDb.Instance.Users.FirstOrDefault(u => u.ID == Model.ID);
+    
+    // Map Item ISN -> Character CSN
+    var equipmentMap = fullUser?.Items?
+        .Where(i => i.Csn > 0)
+        .ToDictionary(i => i.Isn, i => i.Csn) ?? new Dictionary<long, long>();
+
+    // Grouping logic: Corp -> Group of Gear
+    // Grouping logic: Corp -> Group of Gear
+    var corpGroups = fullUser?.EquipmentAwakenings?
+        .GroupBy(g =>
+        {
+            var ownerCsn = equipmentMap.ContainsKey(g.Isn) ? equipmentMap[g.Isn] : 0;
+            var character = fullUser.Characters.FirstOrDefault(c => c.Csn == ownerCsn);
+            if(character != null && GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var meta))
+            {
+                // Convert the enum to string first, then handle nulls
+                return meta.Corporation.ToString() ?? "Other";
+            }
+            return "Inventory";
+        })
+        .OrderBy(g => g.Key)
+        .ToList();
+
+    // Helper to calculate actual percentage based on common OL scaling
+    // Helper to calculate actual percentage based on correct scaling
+    string GetStatValue(int baseId, int phase)
+    {
+        if(baseId == 0 || phase <= 0) return "0.00%";
+        
+        var statTable = new Dictionary<int, double[]>
+        {
+            { 7000800, new double[] { 4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63 } }, // ATK
+            { 7000700, new double[] { 27.84, 31.95, 36.06, 40.17, 44.28, 48.39, 52.50, 56.60, 60.71, 64.82, 68.93, 73.04, 77.15, 81.26, 85.37 } }, // Max Ammo
+            { 7000500, new double[] { 9.54, 10.94, 12.34, 13.75, 15.15, 16.55, 17.95, 19.35, 20.75, 22.15, 23.56, 24.96, 26.36, 27.76, 29.16 } }, // Ele Dmg
+            { 7001000, new double[] { 1.98, 2.28, 2.57, 2.86, 3.16, 3.45, 3.75, 4.04, 4.33, 4.63, 4.92, 5.21, 5.51, 5.80, 6.09 } }, // Charge Spd
+            { 7000900, new double[] { 4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63 } }, // Charge Dmg
+            { 7000600, new double[] { 4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63 } }, // Hit Rate
+            { 7001100, new double[] { 2.30, 2.64, 2.98, 3.32, 3.66, 4.00, 4.35, 4.69, 5.03, 5.37, 5.70, 6.05, 6.39, 6.73, 7.07 } }, // Crit Rate
+            { 7001200, new double[] { 6.64, 7.62, 8.60, 9.58, 10.56, 11.54, 12.52, 13.50, 14.48, 15.46, 16.44, 17.42, 18.40, 19.38, 20.36 } }, // Crit Dmg
+            { 7001300, new double[] { 4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63 } }  // DEF
+        };
+
+        if(statTable.TryGetValue(baseId, out var values))
+        {
+            int idx = Math.Clamp(phase - 1, 0, 14);
+            return values[idx].ToString("0.00") + "%";
+        }
+        return "0.00%";
+    }
 }
 
 <div class="nikke-dashboard">
@@ -132,9 +187,147 @@
                 </div>
             </div>
         </div>
+        </div>
+
+       @* OL GEAR MAIN CONTAINER *@
+<div class="card mt-4">
+    <!-- Main Title Header -->
+    <div class="card-header d-flex justify-content-between align-items-center py-3">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-microchip text-accent me-3 fs-4"></i>
+            <h3 class="mb-0 text-uppercase fw-bold" style="letter-spacing: 1px;">Modify Overload Gear</h3>
+        </div>
+        <button type="button" class="btn btn-accent btn-sm px-4 fw-bold" onclick="saveAllNikkes(this)">
+            <i class="fas fa-save me-2"></i> SAVE ALL DATA
+        </button>
+    </div>
+
+    <!-- Navigation Sub-Header -->
+    <div class="card-header bg-dark border-bottom border-secondary p-0">
+        <ul class="nav nav-pills nav-fill" id="corpTab" role="tablist">
+            @for(int i = 0; i < corpGroups.Count; i++)
+            {
+                var corpName = corpGroups[i].Key;
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link @(i == 0 ? "active" : "") rounded-0 py-3 text-uppercase fw-bold"
+                            id="tab-@i" data-bs-toggle="pill" data-bs-target="#content-@i" type="button" role="tab">
+                        @corpName
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="card-body p-4" style="background: #0a0a0a;">
+        <div class="tab-content" id="corpTabContent">
+            @for(int i = 0; i < corpGroups.Count; i++)
+            {
+                var group = corpGroups[i];
+                var gearByNikke = group.GroupBy(g => equipmentMap.ContainsKey(g.Isn) ? equipmentMap[g.Isn] : 0);
+
+                <div class="tab-pane fade @(i == 0 ? "show active" : "")" id="content-@i" role="tabpanel">
+                    @foreach(var nikkeGroup in gearByNikke)
+                    {
+                        var character = fullUser.Characters.FirstOrDefault(c => c.Csn == nikkeGroup.Key);
+                        var meta = character != null && GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var m) ? m : null;
+
+                        <!-- Individual Nikke Entry Card -->
+                        <div class="card mb-4 bg-dark border-secondary nikke-container nikke-form-wrapper">
+                            <form action="/admin/Users/ModifyNikkeGear" method="post" class="nikke-form">
+                                <input type="hidden" name="userId" value="@Model.ID" />
+                                
+                                @* Section Title for each Nikke *@
+                                <div class="card-header d-flex justify-content-between align-items-center bg-black p-3">
+                                    <div>
+                                        @* Character ID (Pink) *@
+                                        <span class="text-accent fw-bold fs-5">@(meta?.Id.ToString() ?? "Storage")</span>
+        
+                                        @if (character != null)
+                                        {
+                                            @* Level Badge *@
+                                            <span class="badge bg-secondary ms-2 opacity-75">LV. @character.Level</span>
+            
+                                            @* Skills (Cyan/Info) *@
+                                            <span class="text-info ms-2 fw-bold" style="letter-spacing: 1px;">
+                                                @character.Skill1Lvl / @character.Skill2Lvl / @character.UltimateLevel
+                                            </span>
+
+                                            @* Squad Name (Brighter Gray) *@
+                                            <span class="ms-2 text-light opacity-50 small text-uppercase fw-semibold" style="letter-spacing: 0.5px;">
+                                                @(meta?.Squad.ToString() ?? "N/A")
+                                            </span>
+                                        }
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-xs btn-outline-warning" onclick="maxNikkeStats(this)">
+                                            <i class="fas fa-bolt"></i> MAX
+                                        </button>
+                                        <button type="submit" class="btn btn-xs btn-info">
+                                            <i class="fas fa-save"></i> SAVE
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-2">
+                                    <div class="row g-2">
+                                        @foreach(var gear in nikkeGroup)
+                                        {
+                                            <div class="col-xl-3 col-md-6">
+                                                <div class="gear-card p-2 border border-secondary rounded" style="background: #111;">
+                                                    <input type="hidden" name="gearIsns" value="@gear.Isn" />
+                                                    <div class="text-info mb-1">ISN: @gear.Isn</div>
+
+                                                    @for(int slot = 1; slot <= 3; slot++)
+                                                    {
+                                                        var prop = gear.Option.GetType().GetProperty($"Option{slot}Id");
+                                                        var rawId = (int)(prop?.GetValue(gear.Option) ?? 0);
+                                                        var baseId = (rawId / 100) * 100;
+                                                        var phase = rawId % 100;
+
+                                                        <div class="mb-1">
+                                                            <div class="input-group input-group-sm">
+                                                                <select name="baseIds" class="form-select bg-dark text-light border-secondary py-0 small"
+                                                                        style="font-size: 0.75rem;" onchange="togglePhaseInput(this)">
+                                                                    <option value="0" selected="@(baseId == 0)">-- NONE --</option>
+                                                                    <option value="7000800" selected="@(baseId == 7000800)">ATK %</option>
+                                                                    <option value="7000700" selected="@(baseId == 7000700)">Ammo %</option>
+                                                                    <option value="7000500" selected="@(baseId == 7000500)">Ele %</option>
+                                                                    <option value="7001000" selected="@(baseId == 7001000)">ChgSpd %</option>
+                                                                    <option value="7000900" selected="@(baseId == 7000900)">ChgDmg %</option>
+                                                                    <option value="7000600" selected="@(baseId == 7000600)">Hit %</option>
+                                                                    <option value="7001100" selected="@(baseId == 7001100)">CritR %</option>
+                                                                    <option value="7001200" selected="@(baseId == 7001200)">CritD %</option>
+                                                                    <option value="7001300" selected="@(baseId == 7001300)">DEF %</option>
+                                                                </select>
+        
+                                                                <input type="number" name="phases"
+                                                                       class="form-control bg-dark text-light border-secondary text-center phase-input"
+                                                                       style="max-width: 45px; font-size: 0.75rem;" 
+                                                                       value="@(baseId == 0 ? 0 : phase)"
+                                                                       max="15">
+
+                                                                <span class="input-group-text bg-black border-secondary text-info stat-preview" 
+                                                                      style="min-width: 60px; font-size: 0.65rem;">
+                                                                    @GetStatValue(baseId, phase)
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>
-
+</div>
 <style>
     /* NIKKE风格卡片标题 */
     .card-header {
@@ -248,3 +441,325 @@
         opacity: 1;
     }
 </style>
+
+
+        <style>
+    .nav-pills .nav-link { color: #aaa; border: 1px solid transparent; transition: 0.3s; }
+    .nav-pills .nav-link.active { background-color: var(--nikke-accent) !important; color: white !important; border-color: var(--nikke-accent); }
+    .text-accent { color: var(--nikke-accent); }
+    .x-small { font-size: 0.7rem; }
+</style>
+<style>
+    /* NIKKE风格卡片标题 */
+    .card-header {
+        background-color: var(--nikke-primary);
+        color: var(--nikke-light);
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        padding: 15px 20px;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    /* 作弊功能部分 */
+    .cheats-section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        color: var(--nikke-accent);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--nikke-gray);
+        padding-bottom: 8px;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* 自定义按钮 */
+    .btn-accent {
+        background-color: var(--nikke-accent-dark);
+        color: white;
+        border: none;
+        transition: all var(--transition-fast);
+    }
+
+    .btn-accent:hover {
+        background-color: var(--nikke-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(232, 62, 140, 0.4);
+        color: white;
+    }
+
+    /* 自定义复选框样式 */
+    .nikke-checkbox-group {
+        margin-top: 10px;
+    }
+
+    .nikke-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .nikke-checkbox-input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .nikke-checkbox-label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nikke-checkbox-label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background-color: var(--nikke-gray);
+        border: 1px solid var(--nikke-gray-light);
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:before {
+        background-color: var(--nikke-accent);
+        border-color: var(--nikke-accent);
+    }
+
+    .nikke-checkbox-label:after {
+        content: '\f00c';
+        font-family: 'Font Awesome 5 Free', serif;
+        font-weight: 900;
+        position: absolute;
+        left: 3px;
+        top: 1px;
+        color: white;
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+        font-size: 14px;
+    }
+
+    .nikke-checkbox-input:checked + .nikke-checkbox-label:after {
+        opacity: 1;
+    }
+
+    /* Gear Workshop Specifics */
+    .border-accent { border: 2px solid var(--nikke-accent) !important; }
+    .gear-card { background: linear-gradient(145deg, #1a1a1a, #252525); }
+    .gear-card:hover { border-color: var(--nikke-info) !important; }
+
+    /* Form Controls */
+    .phase-input { text-align: center; }
+    .phase-input:focus {
+        background-color: #1a1a1a !important;
+        color: var(--nikke-accent) !important;
+        border-color: var(--nikke-accent) !important;
+        box-shadow: none;
+    }
+
+    /* Centers percentage text perfectly on both axes */
+    .stat-preview {
+        /* Centering logic */
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        
+        /* Layout fixes */
+        line-height: 1;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        
+        /* Colors match your Cheats theme */
+        background-color: #000 !important;
+        color: #0dcaf0 !important; /* text-info */
+        border-color: #444 !important;
+    }
+
+    /* Hide the input-group-text default styling that adds padding */
+    .input-group > .stat-preview {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+</style>
+
+<script>
+// Official Overload Gear Stat Scaling Table
+const overspecTable = {
+    7000800: [4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63],
+    7000700: [27.84, 31.95, 36.06, 40.17, 44.28, 48.39, 52.50, 56.60, 60.71, 64.82, 68.93, 73.04, 77.15, 81.26, 85.37],
+    7000500: [9.54, 10.94, 12.34, 13.75, 15.15, 16.55, 17.95, 19.35, 20.75, 22.15, 23.56, 24.96, 26.36, 27.76, 29.16],
+    7001000: [1.98, 2.28, 2.57, 2.86, 3.16, 3.45, 3.75, 4.04, 4.33, 4.63, 4.92, 5.21, 5.51, 5.80, 6.09],
+    7000900: [4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63],
+    7000600: [4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63],
+    7001100: [2.30, 2.64, 2.98, 3.32, 3.66, 4.00, 4.35, 4.69, 5.03, 5.37, 5.70, 6.05, 6.39, 6.73, 7.07],
+    7001200: [6.64, 7.62, 8.60, 9.58, 10.56, 11.54, 12.52, 13.50, 14.48, 15.46, 16.44, 17.42, 18.40, 19.38, 20.36],
+    7001300: [4.77, 5.47, 6.18, 6.88, 7.59, 8.29, 9.00, 9.70, 10.40, 11.11, 11.81, 12.52, 13.22, 13.93, 14.63]
+};
+
+/**
+ * Toggles visibility of the phase input and stat preview based on selection
+ */
+function togglePhaseInput(selectElement) {
+    const container = selectElement.closest('.input-group');
+    const phaseInput = container.querySelector('.phase-input');
+    const statPreview = container.querySelector('.stat-preview');
+
+    if (selectElement.value === "0") {
+        // NONE state: Allow 0 to be submitted to clear the slot
+        phaseInput.style.display = 'none';
+        statPreview.style.display = 'none';
+        phaseInput.value = 0;
+        phaseInput.setAttribute('min', '0'); 
+    } else {
+        // ACTIVE state: Enforce min 1 for valid stats
+        phaseInput.style.display = 'block';
+        statPreview.style.display = 'flex'; // Use flex for centering logic
+        
+        if (parseInt(phaseInput.value) < 1) {
+            phaseInput.value = 1;
+        }
+        phaseInput.setAttribute('min', '1');
+    }
+    refreshStatPreview(selectElement);
+}
+
+/**
+ * Updates the text preview (e.g., "11.81%") based on the selected Stat and Phase
+ */
+function refreshStatPreview(element) {
+    const container = element.closest('.input-group');
+    const baseIdSelect = container.querySelector('select[name="baseIds"]');
+    if (!baseIdSelect) return;
+
+    const baseId = parseInt(baseIdSelect.value);
+    const phaseInput = container.querySelector('.phase-input');
+    const phase = parseInt(phaseInput.value);
+    const preview = container.querySelector('.stat-preview');
+
+    // Only show % if we have a valid stat and a phase within the table range (1-15)
+    if (baseId > 0 && phase >= 1 && phase <= 15) {
+        const value = overspecTable[baseId][phase - 1];
+        preview.innerText = value.toFixed(2) + "%";
+    } else {
+        preview.innerText = "";
+    }
+}
+
+/**
+ * Maxes out all gear slots for a specific Nikke card (15 for all active slots)
+ */
+function maxNikkeStats(btn) {
+    const container = btn.closest('.nikke-container');
+    const selects = container.querySelectorAll('select[name="baseIds"]');
+    
+    selects.forEach(select => {
+        if (select.value !== "0") {
+            const group = select.closest('.input-group');
+            const phaseInput = group.querySelector('.phase-input');
+            phaseInput.value = 15;
+            refreshStatPreview(phaseInput);
+        }
+    });
+
+    // Visual Feedback Flash
+    btn.classList.replace('btn-outline-warning', 'btn-warning');
+    setTimeout(() => btn.classList.replace('btn-warning', 'btn-outline-warning'), 300);
+}
+
+/**
+ * Global function to max out all phase inputs within a form
+ */
+function maxAllSlots(button) {
+    const form = button.closest('form');
+    const phaseInputs = form.querySelectorAll('.phase-input');
+    phaseInputs.forEach(input => {
+        input.value = 15;
+        refreshStatPreview(input);
+    });
+}
+
+/**
+ * True Save All: Iterates through every Nikke form on the page 
+ * and submits their data to the server.
+ */
+async function saveAllNikkes(btn) {
+    const forms = document.querySelectorAll('.nikke-form'); 
+    if (forms.length === 0) return;
+
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    btn.disabled = true;
+
+    try {
+        // We use a simple for...of loop to save them one-by-one
+        // This prevents the "File in use" IOException
+        for (const form of forms) {
+            await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            });
+        }
+
+        btn.classList.replace('btn-accent', 'btn-success');
+        btn.innerHTML = '<i class="fas fa-check"></i> All Saved!';
+        
+        setTimeout(() => {
+            window.location.reload(); 
+        }, 800);
+    } catch (err) {
+        console.error("Save failed:", err);
+        btn.innerHTML = 'Error!';
+        btn.disabled = false;
+    }
+}
+
+// Tab Persistence: Remembers the active tab after refresh
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initial State: Setup visibility and calculate initial percentages on load
+    document.querySelectorAll('select[name="baseIds"]').forEach(select => {
+        togglePhaseInput(select);
+    });
+
+    // 2. Global Listener: Catch manual number changes in phase inputs
+    document.body.addEventListener('input', (e) => {
+        if (e.target.classList.contains('phase-input')) {
+            refreshStatPreview(e.target);
+        }
+    });
+
+    // 3. Tab Persistence: Remembers active tab 
+    const lastActiveTab = localStorage.getItem('selectedNikkeTab');
+    if (lastActiveTab) {
+        const tabTrigger = document.querySelector(`[data-bs-target="${lastActiveTab}"]`);
+        if (tabTrigger) {
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+        }
+    }
+    document.querySelectorAll('button[data-bs-toggle="pill"]').forEach(link => {
+        link.addEventListener('shown.bs.tab', (e) => {
+            localStorage.setItem('selectedNikkeTab', e.target.getAttribute('data-bs-target'));
+        });
+    });
+});
+
+</script>
