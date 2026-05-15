@@ -320,14 +320,21 @@ public class AdminCommands
     {
         foreach (var tutorial in GameData.Instance.TutorialTable.Values)
         {
-            if (!user.ClearedTutorialData.ContainsKey(tutorial.Id))
+            if (!user.ClearedTutorialDataNew.ContainsKey(tutorial.GroupId))
             {
-                user.ClearedTutorialData.Add(tutorial.Id, new ClearedTutorialData()
+                user.ClearedTutorialDataNew.Add(tutorial.GroupId, new ClearedTutorialData()
                 {
                     Id = tutorial.Id,
-                    GroupId = tutorial.GroupId,
                     VersionGroup = tutorial.VersionGroup
                 });
+            }
+            else
+            {
+                if (tutorial.Id > user.ClearedTutorialDataNew[tutorial.GroupId].Id)
+                {
+                    user.ClearedTutorialDataNew[tutorial.GroupId].Id = tutorial.Id;
+                    user.ClearedTutorialDataNew[tutorial.GroupId].VersionGroup = tutorial.VersionGroup;
+                }
             }
         }
 
@@ -511,17 +518,6 @@ public class AdminCommands
             return new RunCmdResponse() { error = "failed to get real server ip, check internet connection" };
 
         // Get latest static data info from server
-        /*ResStaticDataPackInfoV2? staticData = await FetchProtobuf<ResStaticDataPackInfoV2, ReqStaticDataPackInfoV2>(staticDataUrl, new ReqStaticDataPackInfoV2()
-            {
-                Type = StaticDataPackType.Json
-            });
-        if (staticData == null)
-        {
-            Logging.WriteLine("failed to fetch static data", LogType.Error);
-            return new RunCmdResponse() { error = "failed to fetch static data" };
-        }*/
-
-        // Get latest static data info from server
         ResStaticDataPackInfoMpk? staticData2 = await FetchProtobuf<ResStaticDataPackInfoMpk, ReqStaticDataPackInfoMpk>(staticDataUrl, new ReqStaticDataPackInfoMpk());
         if (staticData2 == null)
         {
@@ -538,16 +534,13 @@ public class AdminCommands
         }
 
         GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
-        /*GameConfig.Root.StaticData.Salt1 = staticData.Salt1.ToBase64();
-        GameConfig.Root.StaticData.Salt2 = staticData.Salt2.ToBase64();
-        GameConfig.Root.StaticData.Version = staticData.Version;
-        GameConfig.Root.StaticData.Url = staticData.Url;*/
-
         GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
         GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
         GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
         GameConfig.Root.StaticDataMpk.Url = staticData2.Url;
         GameConfig.Save();
+
+        await GameData.CreateAsync();
 
         return RunCmdResponse.OK;
     }

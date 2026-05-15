@@ -14,21 +14,17 @@ public class SetTutorial : LobbyMessage
         var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
         var tutorial = new ClearedTutorialData()
         {
-            ClearedStageId = cleared.ClearedStageId,
-            GroupId = cleared.GroupId,
             Id = cleared.Id,
-            NextId = cleared.NextId,
-            SaveTutorial = cleared.SaveTutorial,
             VersionGroup = cleared.VersionGroup
         };
 
-        if (!user.ClearedTutorialData.ContainsKey(req.LastClearedTid))
+        if (!user.ClearedTutorialDataNew.ContainsKey(cleared.GroupId))
         {
-            user.ClearedTutorialData.Add(req.LastClearedTid, tutorial);
+            user.ClearedTutorialDataNew.Add(cleared.GroupId, tutorial);
         }
         else
         {
-            user.ClearedTutorialData[req.LastClearedTid] = tutorial;
+            user.ClearedTutorialDataNew[cleared.GroupId] = tutorial;
         }
         JsonDb.Save();
 

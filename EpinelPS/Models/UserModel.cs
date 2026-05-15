@@ -8,10 +8,6 @@ public class ClearedTutorialData
 {
     public int Id { get; set; }
     public int VersionGroup;
-    public int GroupId { get; set; }
-    public int ClearedStageId { get; set; }
-    public int NextId { get; set; }
-    public bool SaveTutorial { get; set; }
 }
 public class User
 {
@@ -59,7 +55,7 @@ public class User
     public List<CharacterModel> Characters { get; set; } = [];
     public List<EquipmentAwakeningData> EquipmentAwakenings { get; set; } = [];
     public long[] RepresentationTeamDataNew { get; set; } = [];
-    public Dictionary<int, ClearedTutorialData> ClearedTutorialData { get; set; } = [];
+    public Dictionary<int, ClearedTutorialData> ClearedTutorialDataNew { get; set; } = [];
 
     // Outpost buildings data
     public List<NetUserOutpostData> OutpostBuildings { get; set; } = [];

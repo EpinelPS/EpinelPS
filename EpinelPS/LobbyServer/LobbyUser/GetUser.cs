@@ -35,12 +35,14 @@ public class GetUser : LobbyMessage
         response.LastClearedMod = user.LastClearedDifficulty;
 
         // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
+        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialDataNew)
         {
-            int groupId = item.Value.GroupId;
-            int version = item.Value.VersionGroup;
-
-            response.User.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
+            response.User.Tutorials.Add(new NetTutorialData()
+            {
+                GroupId = item.Key,
+                LastClearedTid = item.Value.Id,
+                LastClearedVersion = item.Value.VersionGroup
+            });
         }
 
         response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };

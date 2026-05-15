@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace EpinelPS.Utils;
 
@@ -41,31 +42,41 @@ public static class GameConfig
         {
             if (_root == null)
             {
-                if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"))
-                {
-                    Console.WriteLine("Gameconfig.json is not found, the game WILL NOT work!");
-                    _root = new GameConfigRoot();
-                }
-                Console.WriteLine("Loaded game config");
-
-
-                _root = JsonConvert.DeserializeObject<GameConfigRoot>(File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json"));
+                Load();
 
                 if (_root == null)
-                {
                     throw new Exception("Failed to read gameconfig.json");
-                }
             }
 
             return _root;
         }
     }
 
+    private static string GetConfigPath()
+    {
+        // write to project root if running under debugger
+        return Debugger.IsAttached ?
+            AppDomain.CurrentDomain.BaseDirectory + "/../../../../gameconfig.json" :
+        AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json";
+    }
+
+    public static void Load()
+    {
+        string configPath = GetConfigPath();
+        if (!File.Exists(configPath))
+        {
+            Console.WriteLine("Gameconfig.json is not found, the game WILL NOT work!");
+            _root = new GameConfigRoot();
+        }
+        Console.WriteLine("Loaded game config");
+        _root = JsonConvert.DeserializeObject<GameConfigRoot>(File.ReadAllText(configPath));
+    }
+
     internal static void Save()
     {
         if (Root != null)
         {
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/gameconfig.json", JsonConvert.SerializeObject(Root, Formatting.Indented));
+            File.WriteAllText(GetConfigPath(), JsonConvert.SerializeObject(Root, Formatting.Indented));
         }
     }
 }
