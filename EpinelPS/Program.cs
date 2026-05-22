@@ -54,7 +54,11 @@ internal class Program
                             listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
                             listenOptions.UseHttps(AppDomain.CurrentDomain.BaseDirectory + @"site.pfx", "");
                         });
-
+                    serverOptions.Listen(IPAddress.Loopback, 80,
+                   listenOptions =>
+                   {
+                       listenOptions.Protocols = HttpProtocols.Http1;
+                   });
                     // TODO
                     serverOptions.AllowSynchronousIO = true;
                 });
@@ -62,10 +66,15 @@ internal class Program
 
                 // Add services to the container.
 
-                builder.Services.AddControllersWithViews();
+                builder.Services.AddControllersWithViews(options =>
+                {
+                    options.AllowEmptyInputInBodyModelBinding = true;
+                    options.OutputFormatters.Insert(0, new ProtobufOutputFormatter());
+                });
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddRouting();
+                builder.Services.AddHttpClient();
 
                 builder.Logging.ClearProviders();
                 builder.Logging.AddColorConsoleLogger(configuration =>
@@ -82,17 +91,12 @@ internal class Program
                 app.UseDefaultFiles();
                 app.UseStaticFiles();
                 app.UseMiddleware<EncryptionMiddleware>();
+                
 
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-
-                }
-
-                app.UseHttpsRedirection();
+               // app.UseHttpsRedirection();
 
                 app.UseAuthorization();
-                app.UseHttpsRedirection();
+                //app.UseHttpsRedirection();
                 app.UseRouting();
                 app.MapControllerRoute(
            name: "default",
@@ -100,7 +104,6 @@ internal class Program
 
                 app.MapControllers();
 
-                app.MapPost("/$batch", HandleBatchRequests);
                 app.MapGet("/prdenv/{**all}", AssetDownloadUtil.HandleReq);
                 app.MapGet("/PC/{**all}", AssetDownloadUtil.HandleReq);
                 app.MapGet("/media/{**all}", AssetDownloadUtil.HandleReq);
@@ -676,169 +679,9 @@ internal class Program
     private static readonly string LauncherEndpoint = Encoding.UTF8.GetString(Convert.FromBase64String("L25pa2tlX2xhdW5jaGVy"));
 
 
-    private static async Task HandleBatchRequests(HttpContext ctx)
-    {
-        // this actually uses gzip compression, unlike other requests.
-        using StreamContent content = new(ctx.Request.Body);
-        content.Headers.Remove("Content-Type");
-        content.Headers.TryAddWithoutValidation("Content-Type", (string?)ctx.Request.Headers["Content-Type"]);
-
-        // we have the form contents, 
-        MultipartMemoryStreamProvider multipart = await content.ReadAsMultipartAsync();
-
-        HttpClient cl = new();
-
-        var id = Guid.NewGuid();
-        List<byte> response = [.. Encoding.UTF8.GetBytes($"--{id}\r\n")];
-
-        int i = 0;
-        foreach (HttpContent? item in multipart.Contents)
-        {
-            i++;
-            response.AddRange(Encoding.UTF8.GetBytes("Content-Type: application/http\r\n"));
-            response.AddRange(Encoding.UTF8.GetBytes($"Content-ID: {item.Headers.NonValidated["Content-ID"]}\r\n"));
-            response.AddRange(Encoding.UTF8.GetBytes("\r\n"));
-
-            byte[] bin = await item.ReadAsByteArrayAsync();
-            try
-            {
-                byte[]? res = await SendReqLocalAndReadResponseAsync(bin);
-
-                if (res != null)
-                {
-                    List<byte> ResponseWithBytes =
-[
-    .. Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\n"),
-                        .. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
-                        .. Encoding.UTF8.GetBytes($"Content-Length: {res.Length}\r\n"),
-                        .. Encoding.UTF8.GetBytes($"\r\n"),
-                        .. res,
-                    ];
-                    response.AddRange([.. ResponseWithBytes]);
-                }
-                else
-                {
-                    List<byte> ResponseWithBytes =
-                    [
-                        .. Encoding.UTF8.GetBytes("HTTP/1.1 404 Not Found\r\n"),
-                        //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
-                        .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
-                        .. Encoding.UTF8.GetBytes($"\r\n"),
-                    ];
-                    response.AddRange([.. ResponseWithBytes]);
-                }
-            }
-            catch (Exception ex)
-            {
-                List<byte> ResponseWithBytes =
-                    [
-                        .. Encoding.UTF8.GetBytes("HTTP/1.1 500 Internal Server Error\r\n"),
-                        //.. Encoding.UTF8.GetBytes($"Content-Type: application/octet-stream+protobuf\r\n"),
-                        .. Encoding.UTF8.GetBytes($"Content-Length: 0\r\n"),
-                        .. Encoding.UTF8.GetBytes($"\r\n"),
-                    ];
-                response.AddRange([.. ResponseWithBytes]);
-
-                Console.WriteLine("Exception during batch request: " + ex.ToString());
-            }
-
-            // add boundary, also include http newline if there is binary content
-
-            if (i == multipart.Contents.Count)
-                response.AddRange(Encoding.UTF8.GetBytes($"\r\n--{id}--\r\n"));
-            else
-                response.AddRange(Encoding.UTF8.GetBytes($"\r\n--{id}\r\n"));
-
-        }
-
-        byte[] responseBytes = [.. response];
-        ctx.Response.ContentType = $"multipart/mixed; boundary=\"{id}\"";
-        ctx.Response.Body.Write(responseBytes);
-    }
     public static string GetCachePathForPath(string path)
     {
         return AppDomain.CurrentDomain.BaseDirectory + "cache/" + path;
     }
-    private static (string key, string value) GetHeader(string line)
-    {
-        string[] pieces = line.Split([':'], 2);
-
-        return (pieces[0].Trim(), pieces[1].Trim());
-    }
-    private static async Task<byte[]?> SendReqLocalAndReadResponseAsync(byte[] bytes)
-    {
-        int line = 0;
-        string bodyStartStr = Encoding.UTF8.GetString(bytes);
-
-        string method;
-        string url = "";
-        string httpVer;
-        string authToken = "";
-        List<NameValueHeaderValue> headers = [];
-
-        int currentByte = 0;
-
-        foreach (string item in bodyStartStr.Split("\r\n"))
-        {
-            if (line == 0)
-            {
-                string[] parts = item.Split(" ");
-                method = parts[0];
-                url = parts[1];
-                httpVer = parts[2];
-            }
-            else if (item == null || string.IsNullOrEmpty(item))
-            {
-                currentByte += 2;
-                break;
-            }
-            else
-            {
-                (string key, string value) = GetHeader(item);
-                headers.Add(new NameValueHeaderValue(key, value));
-
-                if (key == "Authorization")
-                {
-                    authToken = value.Replace("Bearer ", "");
-                }
-            }
-            currentByte += 2 + item.Length;
-            line++;
-        }
-        byte[] body;
-        if (currentByte == bytes.Length)
-        {
-            // empty body
-            body = [];
-        }
-        else
-        {
-            body = [.. bytes.Skip(currentByte)];
-        }
-
-        if (!url.StartsWith("/v1/"))
-        {
-            throw new NotImplementedException("handler for " + url + " not implemented");
-        }
-
-        url = url.Replace("/v1", "");
-
-        // find appropriate handler
-        Logging.WriteLine("BATCH " + url, LogType.Info);
-
-        foreach (KeyValuePair<string, LobbyMessage> item in LobbyHandler.Handlers)
-        {
-            if (item.Key == url)
-            {
-                item.Value.Reset();
-                item.Value.Contents = body;
-                await item.Value.HandleAsync(authToken);
-                return item.Value.ReturnBytes;
-            }
-        }
-
-        Logging.WriteLine("Handler not found: " + url, LogType.Error);
-
-        return null;
-    }
+  
 }

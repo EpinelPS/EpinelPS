@@ -6,6 +6,9 @@ using Paseto.Builder;
 
 namespace EpinelPS.LobbyServer;
 
+/// <summary>
+/// Old way of handling requests. Will be removed in the future and replaced with ASP.NET controllers
+/// </summary>
 public abstract class LobbyMessage
 {
     protected HttpContext? ctx;
@@ -37,17 +40,12 @@ public abstract class LobbyMessage
     public async Task HandleAsync(HttpContext ctx)
     {
         this.ctx = ctx;
+
         await HandleAsync();
     }
     public async Task HandleAsync(string authToken)
     {
-        PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
-                         .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                         .Decode(authToken, new PasetoTokenValidationParameters() { ValidateLifetime = true });
-
-        UserId = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
-
-        if (UserId == 0) throw new Exception("403");
+      
         await HandleAsync();
     }
 
@@ -118,7 +116,9 @@ public abstract class LobbyMessage
                 Logging.WriteLine("", LogType.Debug);
             }
 
-            UserId = (ulong)ctx.Items["UserID"]; //bin.UserId;
+            var id = ctx.Items["UserID"];
+            if (id != null && id is ulong u)
+                UserId = u;
 
             return msg;
         }
@@ -126,7 +126,7 @@ public abstract class LobbyMessage
 
     public User GetUser()
     {
-        return JsonDb.GetUser(UserId) ?? throw new Exception("null user");
+        return JsonDb.GetUser(UserId) ?? throw new Exception("Invalid authentication token");
     }
     public User? GetUser(ulong Id)
     {

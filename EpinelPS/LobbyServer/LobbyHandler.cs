@@ -44,6 +44,24 @@ public static class LobbyHandler
         string fullPath = ctx.Request.Path.Value ?? throw new Exception();
         string path = fullPath.Replace("/v1", "");
 
+
+        // handle authentication
+        if (ctx.Request.Headers.ContainsKey("Authorization"))
+        {
+            PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                           .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+                           .Decode(ctx.Request.Headers.Authorization.ToString().Replace("Bearer ", ""), new PasetoTokenValidationParameters() { ValidateLifetime = true });
+
+            if (encryptionToken.IsValid)
+            {
+                var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
+
+                if (id == 0) throw new Exception("403");
+
+                ctx.Items["UserID"] = id;
+            }
+        }
+
         foreach (KeyValuePair<string, LobbyMessage> item in Handlers)
         {
             if (path == item.Key)
@@ -127,12 +145,14 @@ public static class LobbyHandler
 
 
         // Restore completed tutorials.
-        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
+        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialDataNew)
         {
-            int groupId = item.Value.GroupId;
-            int version = item.Value.VersionGroup;
-
-            ret.Tutorials.Add(new NetTutorialData() { GroupId = groupId, LastClearedTid = item.Key, LastClearedVersion = version });
+            ret.Tutorials.Add(new NetTutorialData()
+            {
+                GroupId = item.Key,
+                LastClearedTid = item.Value.Id,
+                LastClearedVersion = item.Value.VersionGroup
+            });
         }
 
         return ret;
