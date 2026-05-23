@@ -25,16 +25,16 @@ public sealed class ProtobufOutputFormatter : OutputFormatter
         if (context.Object is IMessage message)
         {
             using MemoryStream ms = new(); // Required to determine the amount of bytes written
-            using CodedOutputStream x = new CodedOutputStream(ms);
+            using CodedOutputStream x = new(ms);
             message.WriteTo(x);
 
             x.Flush();
             ms.Flush();
 
+            response.Headers.ContentLength = ms.Length;
+
             ms.Position = 0;
             ms.CopyTo(response.Body);
-
-            response.Headers.ContentLength = ms.Length;
         }
         await response.Body.FlushAsync();
     }
