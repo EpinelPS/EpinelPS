@@ -66,8 +66,8 @@ public abstract class LobbyMessage
 
         if (ctx == null)
         {
-            MemoryStream ms = new();
-            CodedOutputStream x2 = new(ms);
+            using MemoryStream ms = new();
+            using CodedOutputStream x2 = new(ms);
             data.WriteTo(x2);
             x2.Flush();
             ReturnBytes = ms.ToArray();
@@ -77,10 +77,7 @@ public abstract class LobbyMessage
         {
             ctx.Response.ContentType = "application/octet-stream+protobuf";
             ctx.Response.ContentLength = data.CalculateSize();
-            bool encrypted = ctx.Request.Headers.ContentEncoding.Contains("enc");
-            encrypted = false; //TODO implement, although client does not complain
-            Stream responseBytes = encrypted ? new MemoryStream() : ctx.Response.Body;
-            CodedOutputStream x = new(responseBytes);
+            using CodedOutputStream x = new(ctx.Response.Body);
             data.WriteTo(x);
 
             x.Flush();
@@ -126,7 +123,7 @@ public abstract class LobbyMessage
 
     public User GetUser()
     {
-        return JsonDb.GetUser(UserId) ?? throw new Exception("Invalid authentication token");
+        return JsonDb.GetUser(UserId) ?? throw new UnauthorizedAccessException("Invalid authentication token");
     }
     public User? GetUser(ulong Id)
     {

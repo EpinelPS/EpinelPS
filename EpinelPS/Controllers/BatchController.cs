@@ -142,6 +142,13 @@ public class BatchController : ControllerBase
                 request.Headers.TryAddWithoutValidation(item.Name, item.Value);
             }
         }
+        if (body.Length > 0)
+        {
+            ByteArrayContent content = new(body);
+            request.Content = content;
+            request.Headers.TryAddWithoutValidation("Content-Type", "application/octet-stream+protobuf");
+            request.Headers.TryAddWithoutValidation("Accept", "application/octet-stream+protobuf");
+        }
         var rsp = await client.SendAsync(request);
 
         var contentType = rsp.Content.Headers.ContentType;
