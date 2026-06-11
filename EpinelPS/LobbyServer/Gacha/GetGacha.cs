@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer;
+﻿namespace EpinelPS.LobbyServer.Gacha;
 
 [GameRequest("/Gacha/Get")]
 public class GetGacha : LobbyMessage
