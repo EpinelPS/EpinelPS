@@ -343,6 +343,7 @@ public partial class ArchiveProgressEventRecord
 	public DateTime ConditionTime;
 	public FieldProgressEventType EventType;
 	public string? EventValue;
+	public bool TimelineActionObjectIsAwakeLoad;
 	public FieldProgressEventCheckCondition EventCheckCondition;
 }
 
@@ -2402,6 +2403,7 @@ public partial class EventBTGManagerRecord_Raw
 {
 	public int Id;
 	public int EventId;
+	public MiniGameSystemType MinigameType;
 	public string? EnterScenario;
 	public int DailyRewardPoint;
 	public int DailyRewardId;
@@ -4535,6 +4537,312 @@ public partial class EventEvaMiniGameWingmanTeamRecord_Raw
 	public string? Group;
 	public double DamageCoefficient;
 	public List<double> FluctuationCoefficient;
+}
+
+[MemoryPackable]
+public partial class EventFARBackGroundRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? BackgroundResource;
+	public List<string?> UseFog;
+	public string? BarricadeResource;
+	public int ChangeBackgroundWaveId;
+}
+
+[MemoryPackable]
+public partial class EventFARCharacterLevelRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Lv;
+	public bool MinLv;
+	public bool MaxLv;
+	public int Exp;
+	public int LevelUpSelectPassiveId;
+}
+
+[MemoryPackable]
+public partial class EventFARCharacterRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? UiCharacterResource;
+	public string? CharacterResource;
+	public string? CharacterWeaponResource;
+	public string? NameLocale;
+	public string? SkillNameLocale;
+	public string? SkillDescriptionLocale;
+	public string? SkillIcon;
+	public int OpenDate;
+	public string? OpenConditionLocale;
+	public int StartHp;
+	public int CharacterExpGroup;
+	public FARCharacterSkillType SkillType;
+	public List<FARSkillValueData_Raw> SkillValue;
+	public List<FARSkillResourceData_Raw> SkillResource;
+	public bool SkillInfinity;
+	public int SkillUseCount;
+	public int SkillCooltime;
+	public string? SkillCutsceneResource;
+	public int DefaultWeapon;
+	public int InventoryGroupId;
+}
+
+[MemoryPackable]
+public partial class EventFARCollectionRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int WeaponId;
+	public int Order;
+}
+
+[MemoryPackable]
+public partial class EventFARInGamePassiveRecord_Raw
+{
+	public int Id;
+	public List<int> FirstSlotUsePassiveGroupId;
+	public List<int> SecondSlotUsePassiveGroupId;
+	public List<int> ThirdSlotUsePassiveGroupId;
+	public List<int> FourthSlotUsePassiveGroupId;
+}
+
+[MemoryPackable]
+public partial class EventFARInventoryRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int RowNumber;
+	public List<FARInventorySlotData_Raw> Slot;
+}
+
+[MemoryPackable]
+public partial class EventFARManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? EnterScenario;
+	public MiniGameSystemType MinigameType;
+	public int CharacterGroupId;
+	public int UseWaveGroupId;
+	public int BackgroundGroupId;
+	public string? BarricadeResource;
+	public string? BackgroundFogResource;
+	public int CharacterMonsterMinDistance;
+	public int DefaultExpRatio;
+	public int MinionExp;
+	public int EliteExp;
+	public int BossExp;
+	public int MinionPoint;
+	public int ElitePoint;
+	public int BossPoint;
+	public int MinionDropGold;
+	public int EliteDropGold;
+	public int BossDropGold;
+	public int CriticalProbability;
+	public int CriticalDamageRatio;
+	public int SameWeaponGroupShootDelay;
+	public int DefaultShopItemCount;
+	public int MaximumKeepWeaponCount;
+	public int DefaultRerollCount;
+	public int GoldRerollUseGold;
+	public int DefaultBanWeaponCount;
+	public int PassiveRerollDefaultCount;
+	public int MinReloadCooltime;
+	public int EnhanceGroupId;
+	public int CollectionGroupId;
+	public int IngamePassiveSelectRow;
+	public int IngamePassiveAddRow;
+	public string? StartBackgroundResource;
+	public int MinionKnockBackCooltime;
+	public int EliteKnockBackCooltime;
+	public int BossKnockBackCooltime;
+	public int DailyMissionPoint;
+	public int DailyMissionReward;
+	public int ScoreLimitPerGame;
+}
+
+[MemoryPackable]
+public partial class EventFARMissionRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public EventFARConditionType ConditionType;
+	public int ConditionId;
+	public int ConditionValue;
+	public string? NameLocalkey;
+	public int Order;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventFARMonsterRecord_Raw
+{
+	public int Id;
+	public string? MonsterResource;
+	public int MonsterSize;
+	public FARMonsterType MonsterType;
+	public FARMonsterAttackType MonsterAtkType;
+	public FARMonsterSkillType MonsterSkillType;
+	public List<FARMonsterSkillValueData_Raw> MonsterSkillValue;
+	public string? MonsterSkillResource;
+	public string? ProjectileResource;
+	public int ProjectileSpeed;
+	public int MonsterMoveSpeed;
+	public int MonsterHp;
+	public bool ShowHp;
+	public int MonsterAtk;
+	public int MonsterDef;
+	public int MonsterAtkCooltime;
+	public int MonsterAtkRange;
+	public string? DeadFxResource;
+}
+
+[MemoryPackable]
+public partial class EventFAROutGamePassiveRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int UsePassiveGroupId;
+}
+
+[MemoryPackable]
+public partial class EventFARPassiveRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public FARPassiveType PassiveType;
+	public string? PassiveIcon;
+	public string? NameLocale;
+	public FARPassiveSkillType SkillType;
+	public List<FARPassiveSkillValueData_Raw> PassiveSkillValue;
+	public string? SkillLocale;
+	public List<int> LinkWeaponGroupId;
+	public int PassiveLevel;
+	public bool MaxLevel;
+	public int LevelUpCost;
+	public bool RepeatedAcquisition;
+	public int AppearanceAbleCharacterLevel;
+	public int AppearanceValue;
+	public int AddAppearanceValue;
+}
+
+[MemoryPackable]
+public partial class EventFARShopRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int UseWeaponId;
+	public int WeaponAppearanceValue;
+	public int Level1AppearanceValue;
+	public int Level2AppearanceValue;
+	public int Level3AppearanceValue;
+	public int Level4AppearanceValue;
+	public int AddWeaponAppearanceValue;
+}
+
+[MemoryPackable]
+public partial class EventFARTutorialRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public int TutorialPageId;
+	public FARTutorialOutputType TutorialOutputType;
+	public int TutorialOutputValue;
+	public string? TutorialTitleLocalkey;
+	public bool IsOpened;
+}
+
+[MemoryPackable]
+public partial class EventFARWavePresetRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int SpawnMonsterId;
+	public bool RandomSpawn;
+	public int SpawnPoint;
+	public bool BossSpawn;
+	public int MonsterSpawnTime;
+	public int MonsterHpRatio;
+	public int MonsterAtkRatio;
+	public int MonsterDefRatio;
+	public int MonsterMoveSpeedRatio;
+}
+
+[MemoryPackable]
+public partial class EventFARWaveRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public bool IsSettingStep;
+	public bool IsFinalWave;
+	public int WaveOrder;
+	public int WavePresetGroupId;
+	public bool WaveRepeat;
+	public int WaveRepeatCount;
+	public bool IsInventoryUpgrade;
+	public int InventoryUpgradePoint;
+	public bool IsOpenShop;
+	public int ShopGroupId;
+	public int PointAndGoldRatio;
+	public int BurstSkillDamageRatio;
+}
+
+[MemoryPackable]
+public partial class EventFARWeaponRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? NameLocale;
+	public string? DescriptionLocale;
+	public string? WeaponResource;
+	public string? WeaponIcon;
+	public int WeaponSize;
+	public int WeaponOpenDate;
+	public int WeaponLevel;
+	public bool MaxLevel;
+	public EventFARWeaponType WeaponType;
+	public EventFARFocusTargetType FocusTargetType;
+	public EventFARWeaponAtkType WeaponAtkType;
+	public EventFARWeaponTagType WeaponTag;
+	public EventFARWeaponAttackerType WeaponAttacker;
+	public string? FireFxResource;
+	public string? ProjResource;
+	public string? ProjHitResource;
+	public int ProjLifeTime;
+	public int ProjSpeed;
+	public int ProjReturnDistance;
+	public int ChangeProjSpeed;
+	public int ProjSize;
+	public int OneShotProjAmount;
+	public int TotalProjAmount;
+	public int ProjAtkTerm;
+	public bool ProjPierce;
+	public int ProjKnockbackValue;
+	public int ProjRandomBombingDistance;
+	public bool ContactExplosion;
+	public int ExplosionRange;
+	public string? ExplosionResource;
+	public string? RangeAtkResource;
+	public int RangeAtkRange;
+	public int RangeAtkDuration;
+	public int RangeAtkTerm;
+	public int RangeAtkAngle;
+	public int WeaponAtk;
+	public int WeaponReloadTime;
+	public int AtkStartRange;
+	public List<FARSkillData01_Raw> SkillData01;
+	public List<FARSkillData02_Raw> SkillData02;
+}
+
+[MemoryPackable]
+public partial class EventFARWeaponShapeRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int RowNumber;
+	public List<FARSlotData_Raw> Slot;
 }
 
 [MemoryPackable]
@@ -8468,6 +8776,84 @@ public partial class ExtraStageListRecord
 }
 
 [MemoryPackable]
+public partial class FARInventorySlotData_Raw
+{
+	public int Slot;
+}
+
+[MemoryPackable]
+public partial class FARMonsterSkillValueData_Raw
+{
+	public int MonsterSkillValue;
+}
+
+[MemoryPackable]
+public partial class FARPassiveSkillValueData_Raw
+{
+	public int SkillValue;
+}
+
+[MemoryPackable]
+public partial class FARSkillData01_Raw
+{
+	public EventFARWeaponSkillType SkillType01;
+	public List<FARSkillValueData01_Raw> SkillValue01;
+	public List<FARSkillResourceData01_Raw> SkillResource01;
+	public string? SkillDescriptionLocale01;
+}
+
+[MemoryPackable]
+public partial class FARSkillData02_Raw
+{
+	public EventFARWeaponSkillType SkillType02;
+	public List<FARSkillValueData02_Raw> SkillValue02;
+	public List<FARSkillResourceData02_Raw> SkillResource02;
+	public string? SkillDescriptionLocale02;
+}
+
+[MemoryPackable]
+public partial class FARSkillResourceData01_Raw
+{
+	public string? SkillResource01;
+}
+
+[MemoryPackable]
+public partial class FARSkillResourceData02_Raw
+{
+	public string? SkillResource02;
+}
+
+[MemoryPackable]
+public partial class FARSkillResourceData_Raw
+{
+	public string? SkillResource;
+}
+
+[MemoryPackable]
+public partial class FARSkillValueData01_Raw
+{
+	public int SkillValue01;
+}
+
+[MemoryPackable]
+public partial class FARSkillValueData02_Raw
+{
+	public int SkillValue02;
+}
+
+[MemoryPackable]
+public partial class FARSkillValueData_Raw
+{
+	public int SkillValue;
+}
+
+[MemoryPackable]
+public partial class FARSlotData_Raw
+{
+	public int Slot;
+}
+
+[MemoryPackable]
 public partial class FavoriteItemExpRecord
 {
 	public int Id;
@@ -8680,6 +9066,7 @@ public partial class FieldInteractionActionTriggerRecord
 	public bool IsUseCameraAction;
 	public bool IsUseHudHide;
 	public bool IsUseFadeInOut;
+	public bool IsSquadFocusAfterCameraEnd;
 	public int FadeInOutDelay;
 	public int OutroFadeInOutStartTime;
 }
@@ -9249,6 +9636,17 @@ public partial class GachaTypeRecord
 	public int GachaPlayMaxCountRewardId;
 	public int PreviousGachaId;
 	public string? GachaQuickBannerResourceId;
+}
+
+[MemoryPackable]
+public partial class GooglePlayAchievementRecord_Raw
+{
+	public int Id;
+	public string? GooglePlayIdGl;
+	public string? GooglePlayIdHmt;
+	public GooglePlayAchievementConditionType ConditionType;
+	public int ConditionId;
+	public int ConditionValue;
 }
 
 [MemoryPackable]
@@ -9913,6 +10311,8 @@ public partial class ItemConsumeRecord
 	public int Id;
 	public UseCondition UseConditionType;
 	public int UseConditionValue;
+	public List<InventoryFilterType> InventoryFilter;
+	public int Order;
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
 	public string? ResourceId;
@@ -10099,6 +10499,8 @@ public partial class ItemOptionLocaleData
 public partial class ItemPieceRecord
 {
 	public int Id;
+	public List<InventoryFilterType> InventoryFilter;
+	public int Order;
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
 	public int ResourceId;
@@ -10621,6 +11023,7 @@ public partial class MidasProductRecord
 	public MidasItemType ItemType;
 	public string? MidasProductIdProximabeta;
 	public string? MidasProductIdGamamobi;
+	public bool IsActive;
 	public bool IsFree;
 	public string? Cost;
 }
@@ -10829,6 +11232,7 @@ public partial class MonsterSkillRecord
 	public List<double> ObjectPosition;
 	public bool IsUsingTimeline;
 	public int ControlGauge;
+	public bool ShowBreakableTime;
 	public List<PartsType> ControlParts;
 	public CancelType CancelType;
 	public PartsType LinkedParts;
@@ -11608,6 +12012,7 @@ public partial class ProgressEventRecord
 	public DateTime ConditionTime;
 	public FieldProgressEventType EventType;
 	public string? EventValue;
+	public bool TimelineActionObjectIsAwakeLoad;
 	public FieldProgressEventCheckCondition EventCheckCondition;
 }
 
@@ -12865,6 +13270,7 @@ public partial class SpotTutorialRecord
 	public int TriggerTimeValue;
 	public SpotTutorialTriggerValue TriggerEnumValue;
 	public long TriggerEnumValueId;
+	public int PopupGroupId;
 	public SpotTutorialCloseType CloseType;
 	public int CloseTimeValue;
 	public SpotTutorialCloseValue CloseValue;
@@ -13209,6 +13615,25 @@ public partial class TriggerRecord
 	public string? DescriptionLocalkey;
 	public int PointValue;
 	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class TutorialGuidePopupDescRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Order;
+	public string? GuideTitle;
+	public string? GuideImage;
+	public string? GuideDescription;
+}
+
+[MemoryPackable]
+public partial class TutorialGuidePopupRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? PrefabId;
 }
 
 [MemoryPackable]
@@ -13613,7 +14038,8 @@ public enum ArcadeGameType : int
 	DragonDungeonRun = 8,
 	PirateCafe = 9,
 	RebuildEden = 10,
-	NativeRaid = 11
+	NativeRaid = 11,
+	BTG = 12
 }
 
 public enum EventDungeonOpenCondition : int
@@ -13795,7 +14221,8 @@ public enum EventSystemType : int
 	ScenarioChoice = 56,
 	CE008LycorisMiniGame = 57,
 	ItabagEvent = 58,
-	InAppShopPurchasePointEvent = 59
+	InAppShopPurchasePointEvent = 59,
+	FARMiniGame = 60
 }
 
 public enum Category : int
@@ -13964,7 +14391,8 @@ public enum ThemeType : int
 	SwamplandJungle = 32,
 	Surface = 33,
 	MotherwhaleField = 34,
-	WhiteArkcity = 35
+	WhiteArkcity = 35,
+	Skyfall = 36
 }
 
 public enum ThemeTimeType : int
@@ -14393,7 +14821,8 @@ public enum Trigger : int
 	EventREBUILDEDENPlayCheck = 160,
 	EventAZXServiceTimeRewardCheck = 161,
 	EventMiniGameCE008RewardCheck = 162,
-	EventMiniGameTTSPlayCheck = 163
+	EventMiniGameTTSPlayCheck = 163,
+	EventMiniGameFARRewardCheck = 164
 }
 
 public enum ChapterMod : int
@@ -14620,7 +15049,8 @@ public enum Squad : int
 	CE007 = 67,
 	CE008 = 68,
 	VeiledOrder = 69,
-	TTSTAR = 70
+	TTSTAR = 70,
+	ArkRanger = 71
 }
 
 public enum WeaponType : int
@@ -15513,6 +15943,13 @@ public enum CutSceneConditionType : int
 	SkillBDeath = 2
 }
 
+public enum MiniGameSystemType : int
+{
+	Normal = 0,
+	Archive = 1,
+	Arcade = 2
+}
+
 public enum EventBTGMissionConditionType : int
 {
 	None = 0,
@@ -15610,13 +16047,6 @@ public enum EBMCharacterSkillAreaType : int
 {
 	None = 0,
 	Area = 1
-}
-
-public enum MiniGameSystemType : int
-{
-	Normal = 0,
-	Archive = 1,
-	Arcade = 2
 }
 
 public enum EventBubbleMarchMissionType : int
@@ -16115,6 +16545,134 @@ public enum EvaStageType : int
 	Common = 1,
 	Hard = 2,
 	Ranking = 3
+}
+
+public enum FARCharacterSkillType : int
+{
+	Knockback = 0,
+	CarpetBombing = 1,
+	Support = 2,
+	LaserBeam = 3,
+	GravityBomb = 4
+}
+
+public enum EventFARConditionType : int
+{
+	None = 0,
+	GainPoint = 1,
+	GainGold = 2,
+	UseSkill = 3,
+	PlayCharacterCount = 4
+}
+
+public enum FARMonsterType : int
+{
+	Minion = 0,
+	Elite = 1,
+	Boss = 2
+}
+
+public enum FARMonsterAttackType : int
+{
+	Near = 0,
+	Projectile = 1
+}
+
+public enum FARMonsterSkillType : int
+{
+	None = 0,
+	DefUp = 1,
+	Split = 2
+}
+
+public enum FARPassiveType : int
+{
+	InGame = 0,
+	OutGame = 1
+}
+
+public enum FARPassiveSkillType : int
+{
+	GainExpUp = 0,
+	GainGoldRatioUp = 1,
+	AllWeaponDamageRatioUp = 2,
+	RangeUp = 3,
+	RangeAtkDamageUp = 4,
+	ProjectileDamageUp = 5,
+	PierceAtkDamageUp = 6,
+	RangeAtkReloadTimeDown = 7,
+	ProjectileReloadTimeDown = 8,
+	PierceAtkReloadTimeDown = 9,
+	AllWeaponReloadTimeDown = 10,
+	CarpetHoldingTimeUp = 11,
+	DebuffHoldingTimeUp = 12,
+	DotHoldingTimeUp = 13,
+	KnockBackDistanceUp = 14,
+	GainGoldUp = 15,
+	AllWeaponAtkUp = 16,
+	AddHighLevelWeaponAppearanceValue = 17,
+	AddBanCount = 18,
+	AddRerollCount = 19,
+	HPUp = 20,
+	AddInventoryUpgrade = 21,
+	AddSelectPassive = 22,
+	AddPassiveRerollCount = 23,
+	SummonDamageUp = 24,
+	SummonReloadTimeDown = 25
+}
+
+public enum FARTutorialOutputType : int
+{
+	FirstEnterBattle = 0,
+	FirstOpenInGamePassive = 1,
+	FirstOpenInventoryUpgrade = 2,
+	FirstEnterEnhance = 3
+}
+
+public enum EventFARWeaponType : int
+{
+	Firearms = 0,
+	Subweapon = 1
+}
+
+public enum EventFARFocusTargetType : int
+{
+	None = 0,
+	Near = 1,
+	Random = 2
+}
+
+public enum EventFARWeaponAtkType : int
+{
+	None = 0,
+	Projectile = 1,
+	ProjectileMultiShot = 2,
+	ProjectileBomb = 3,
+	Range = 4,
+	GuidedProjectileBomb = 5,
+	ProjectileReturn = 6,
+	ProjectileSlowDown = 7,
+	ProjectileBounce = 8,
+	ProjectileDoublePistol = 9
+}
+
+public enum EventFARWeaponTagType : int
+{
+	None = 0,
+	Projectile = 1,
+	Pierce = 2,
+	Range = 3,
+	Summon = 4
+}
+
+public enum EventFARWeaponAttackerType : int
+{
+	None = 0,
+	Character = 1,
+	Turret = 2,
+	Boomerang = 3,
+	DoublePistol = 4,
+	Shuriken = 5
 }
 
 public enum EventFieldCurrencyType : int
@@ -17948,6 +18506,37 @@ public enum TowerDefenseStartingPointType : int
 	Forced = 2
 }
 
+public enum EventFARWeaponSkillType : int
+{
+	None = 0,
+	IgnoreDef = 1,
+	BombProjectile = 2,
+	ReinforcedProj = 3,
+	CriticalAttack = 4,
+	DefDown = 5,
+	SplitProj = 6,
+	BounceProj = 7,
+	DotDebuff = 8,
+	DebuffCarpet = 9,
+	ElectricDebuff = 10,
+	DotDamageCarpet = 11,
+	GainExpUp = 12,
+	GainGoldRatioUp = 13,
+	AllWeaponDamageRatioUp = 14,
+	BarricadeHpUp = 15,
+	BarricadeHpDown = 16,
+	DamageReflection = 17,
+	BarricadeHpRecovery = 18,
+	CriticalProbabilityUp = 19,
+	CriticalDamageUp = 20,
+	ReloadTimeUp = 21,
+	SplitProjAngle = 22,
+	DebuffAdditionalDamage = 23,
+	DotCircle = 24,
+	SlowDown = 25,
+	HitAtkUp = 26
+}
+
 public enum FavoriteItemRare : int
 {
 	None = 0,
@@ -18632,6 +19221,30 @@ public enum GachaPrefabType : int
 	ReLimited = 3
 }
 
+public enum GooglePlayAchievementConditionType : int
+{
+	Login = 0,
+	InterceptPlay = 1,
+	InterceptAnomalousClear = 2,
+	SimulationRoomPlay = 3,
+	SimulationRoomClear = 4,
+	SimulationRoomOverclockClear = 5,
+	TribeTowerClear = 6,
+	ElysionTowerClear = 7,
+	MissilisTowerClear = 8,
+	TetraTowerClear = 9,
+	PilgrimTowerClear = 10,
+	Counsel = 11,
+	FriendshipSend = 12,
+	ArcadePlay = 13,
+	Dispatch = 14,
+	RookieArena = 15,
+	SpecialArena = 16,
+	ChapterClear = 17,
+	CharacterCore = 18,
+	SynchroDeviceUpgrade = 19
+}
+
 public enum HelpTipDescriptionType : int
 {
 	None = 0,
@@ -18878,6 +19491,16 @@ public enum UseCondition : int
 	None = 0,
 	UserLevel = 1,
 	StageClear = 2
+}
+
+public enum InventoryFilterType : int
+{
+	Nikke = 0,
+	Equipment = 1,
+	Favoriteitem = 2,
+	Grow = 3,
+	Skill = 4,
+	Etc = 5
 }
 
 public enum ItemType : int
@@ -19296,7 +19919,17 @@ public enum PartsType : int
 	Weapon07 = 19,
 	Weapon08 = 20,
 	Weapon09 = 21,
-	Weapon10 = 22
+	Weapon10 = 22,
+	Weapon11 = 23,
+	Weapon12 = 24,
+	Weapon13 = 25,
+	Weapon14 = 26,
+	Weapon15 = 27,
+	Weapon16 = 28,
+	Weapon17 = 29,
+	Weapon18 = 30,
+	Weapon19 = 31,
+	Weapon20 = 32
 }
 
 public enum MonsterDestroyAnimTrigger : int
@@ -20241,7 +20874,8 @@ public enum SpotTutorialCloseValue : int
 	UseMonsterSkill = 8,
 	OnCoveredMode = 9,
 	OffCoveredMode = 10,
-	UseLockOn = 11
+	UseLockOn = 11,
+	CloseTutorialGuidePopup = 12
 }
 
 public enum TutorialFunctionType : int
