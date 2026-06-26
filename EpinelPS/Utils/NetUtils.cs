@@ -244,44 +244,56 @@ public class NetUtils
         return CalcOutpostRewardAmount(value, ratio, boost, mins);
     }
 
+    private static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost, double ratio)
+    {
+        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+        double boost = 1.0;
+        if (includeBoost)
+            boost += CalculateBoostValueForOutpost(user, type);
+
+        int value = type switch
+        {
+            CurrencyType.CharacterExp2 => battleData.CharacterExp2,
+            CurrencyType.CharacterExp => battleData.CharacterExp1,
+            CurrencyType.Gold => battleData.Credit,
+            CurrencyType.UserExp => battleData.UserExp,
+            _ => 0
+        };
+
+        return CalcOutpostRewardAmount(value, ratio, boost, mins);
+    }
+
+    private static void AddOutpostRewardCurrency(User user, NetRewardData reward, CurrencyType type, TimeSpan duration, bool addToUser, double ratio)
+    {
+        long rewardValue = GetOutpostRewardAmount(user, type, duration.TotalMinutes, true, ratio);
+        long finalValue;
+
+        if (addToUser)
+        {
+            user.AddCurrency(type, rewardValue);
+            finalValue = user.GetCurrencyVal(type);
+        }
+        else
+        {
+            finalValue = user.Currency.TryGetValue(type, out long currentValue) ? currentValue + rewardValue : rewardValue;
+        }
+
+        reward.Currency.Add(new NetCurrencyData()
+        {
+            Type = (int)type,
+            Value = rewardValue,
+            FinalValue = finalValue
+        });
+    }
+
     public static NetRewardData GetOutpostReward(User user, TimeSpan duration, bool addToUser = false)
     {
-        //duration = TimeSpan.FromHours(1);
         NetRewardData result = new();
 
-        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
-
-        result.Currency.Add(new NetCurrencyData()
-        {
-            Type = (int)CurrencyType.CharacterExp2,
-            FinalValue = 0,
-            Value = CalcOutpostRewardAmount(battleData.CharacterExp2, 1, 1, duration.TotalMinutes)
-        });
-        if (addToUser) user.AddCurrency(CurrencyType.CharacterExp2, result.Currency.Last().Value);
-
-        result.Currency.Add(new NetCurrencyData()
-        {
-            Type = (int)CurrencyType.CharacterExp,
-            FinalValue = 0,
-            Value = CalcOutpostRewardAmount(battleData.CharacterExp1, 3, 1, duration.TotalMinutes)
-        });
-        if (addToUser) user.AddCurrency(CurrencyType.CharacterExp, result.Currency.Last().Value);
-
-        result.Currency.Add(new NetCurrencyData()
-        {
-            Type = (int)CurrencyType.Gold,
-            FinalValue = 0,
-            Value = CalcOutpostRewardAmount(battleData.Credit, 3, 1, duration.TotalMinutes)
-        });
-        if (addToUser) user.AddCurrency(CurrencyType.Gold, result.Currency.Last().Value);
-
-        result.Currency.Add(new NetCurrencyData()
-        {
-            Type = (int)CurrencyType.UserExp,
-            FinalValue = 0,
-            Value = CalcOutpostRewardAmount(battleData.UserExp, 3, 1, duration.TotalMinutes)
-        });
-        if (addToUser) user.AddCurrency(CurrencyType.UserExp, result.Currency.Last().Value);
+        AddOutpostRewardCurrency(user, result, CurrencyType.CharacterExp2, duration, addToUser, 1);
+        AddOutpostRewardCurrency(user, result, CurrencyType.CharacterExp, duration, addToUser, 3);
+        AddOutpostRewardCurrency(user, result, CurrencyType.Gold, duration, addToUser, 3);
+        AddOutpostRewardCurrency(user, result, CurrencyType.UserExp, duration, addToUser, 3);
 
         return result;
     }
