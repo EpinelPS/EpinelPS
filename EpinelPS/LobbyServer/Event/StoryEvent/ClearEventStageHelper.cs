@@ -37,7 +37,7 @@ public static class ClearEventStageHelper
     {
         int rewardId = GetRewardId(stageId);
         if (rewardId == 0) return;
-        RecievedReward(user, ref reward, rewardId, clearCount);
+        ReceivedReward(user, ref reward, rewardId, clearCount);
     }
 
     /// <summary>
@@ -52,10 +52,10 @@ public static class ClearEventStageHelper
     {
         int rewardId = GetBonusRewardId(stageId);
         if (rewardId == 0) return;
-        RecievedReward(user, ref bonusReward, rewardId, clearCount);
+        ReceivedReward(user, ref bonusReward, rewardId, clearCount);
     }
 
-    private static void RecievedReward(User user, ref NetRewardData reward, int rewardId, int clearCount)
+    private static void ReceivedReward(User user, ref NetRewardData reward, int rewardId, int clearCount)
     {
         RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(rewardId);
         if (rewardData == null)

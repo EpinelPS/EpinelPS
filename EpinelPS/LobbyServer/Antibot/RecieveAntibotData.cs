@@ -1,7 +1,7 @@
 ﻿namespace EpinelPS.LobbyServer.Antibot;
 
 [GameRequest("/antibot/recvdata")]
-public class RecieveAntibotData : LobbyMessage
+public class ReceiveAntibotData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {

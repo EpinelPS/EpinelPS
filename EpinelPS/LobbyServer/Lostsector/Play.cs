@@ -28,7 +28,7 @@ public class Play : LobbyMessage
             IsPlaying = lostSectorData.IsPlaying,
             CurrentClearStageCount = lostSectorData.ClearedStages.Count,
             RewardCount = lostSectorData.ObtainedRewards,
-            IsFinalReward = lostSectorData.RecievedFinalReward,
+            IsFinalReward = lostSectorData.ReceivedFinalReward,
             IsPerfectReward = lostSectorData.CompletedPerfectly,
             MaxClearStageCount = 0, // TODO
         };

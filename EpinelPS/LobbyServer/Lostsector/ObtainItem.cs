@@ -35,7 +35,7 @@ public class ObtainItem : LobbyMessage
 
         if (positionReward.IsFinalReward)
         {
-            lostSectorUser.RecievedFinalReward = true;
+            lostSectorUser.ReceivedFinalReward = true;
         }
 
         JsonDb.Save();

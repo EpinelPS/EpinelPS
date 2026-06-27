@@ -29,7 +29,7 @@ public class GetLostSectorData : LobbyMessage
                     IsPlaying = val.IsPlaying,
                     CurrentClearStageCount = val.ClearedStages.Count,
                     RewardCount = val.ObtainedRewards,
-                    IsFinalReward = val.RecievedFinalReward,
+                    IsFinalReward = val.ReceivedFinalReward,
                     IsPerfectReward = val.CompletedPerfectly,
                     MaxClearStageCount = map.StageSpawner.Count
                 });

@@ -157,9 +157,9 @@ public class OverclockData
     public bool WasInfinitePopupChecked { get; set; } = false;
     public bool WasMainSeasonResetPopupChecked { get; set; } = true;
     public bool WasSubSeasonResetPopupChecked { get; set; } = true;
-    public OverclockHighScoreData CurrentSeasonHighScore { get; set; }
-    public OverclockHighScoreData CurrentSubSeasonHighScore { get; set; }
-    public OverclockHighScoreData LatestOption { get; set; }
+    public OverclockHighScoreData CurrentSeasonHighScore { get; set; } = new();
+    public OverclockHighScoreData CurrentSubSeasonHighScore { get; set; } = new();
+    public OverclockHighScoreData LatestOption { get; set; } = new();
 }
 public class OverclockHighScoreData
 {
@@ -358,7 +358,7 @@ public class LostSectorData
     public Dictionary<string, int> ClearedStages { get; set; } = [];
     public List<NetLostSectorTeamPosition> TeamPositions { get; set; } = [];
     public int ObtainedRewards { get; set; } = 0;
-    public bool RecievedFinalReward { get; set; }
+    public bool ReceivedFinalReward { get; set; }
     public bool CompletedPerfectly { get; set; }
 }
 

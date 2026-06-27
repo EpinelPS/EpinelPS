@@ -161,20 +161,20 @@ public class User
     }
 
 
-    public void SetQuest(int tId, bool recievedReward)
+    public void SetQuest(int tId, bool ReceivedReward)
     {
-        if (!MainQuestData.TryAdd(tId, recievedReward))
+        if (!MainQuestData.TryAdd(tId, ReceivedReward))
         {
-            MainQuestData[tId] = recievedReward;
+            MainQuestData[tId] = ReceivedReward;
             return;
         }
     }
 
-    public void SetSubQuest(int tId, bool recievedReward)
+    public void SetSubQuest(int tId, bool ReceivedReward)
     {
-        if (!SubQuestData.TryAdd(tId, recievedReward))
+        if (!SubQuestData.TryAdd(tId, ReceivedReward))
         {
-            SubQuestData[tId] = recievedReward;
+            SubQuestData[tId] = ReceivedReward;
             return;
         }
     }
