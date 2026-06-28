@@ -20,13 +20,13 @@ public class ExecGacha : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqExecuteGacha req = await ReadData<ReqExecuteGacha>();
-        int IncreasedChanceCharacterID = req.Tid;
+        User user = GetUser();
+        int IncreasedChanceCharacterID = GachaPoolResolver.ResolveFeaturedCharacterId(req.Tid, user);
 
 
         // Count determines whether we select 1 or 10 characters
         int numberOfPulls = req.Count == 1 ? 1 : 10;
 
-        User user = GetUser();
         ResExecuteGacha response = new() { Reward = new NetRewardData() { PassPoint = new() } };
 
         List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
@@ -57,7 +57,8 @@ public class ExecGacha : LobbyMessage
             // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
             for (int i = 0; i < numberOfPulls; i++)
             {
-                CharacterRecord character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList, IncreasedChanceCharacterID, allCharacterData);
+                CharacterRecord character = GachaPoolResolver.SelectCharacter(req.Tid, user, normalPullsExclusionList) ??
+                    SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList, IncreasedChanceCharacterID, allCharacterData);
                 selectedCharacters.Add(character);
             }
         }

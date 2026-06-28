@@ -109,6 +109,13 @@ public class EventShopBuyCountData
     public List<EventShopProductData> datas { get; set; } = [];
 }
 
+public class EventBoxGachaState
+{
+    public int EventId { get; set; }
+    public int GachaCount { get; set; }
+    public List<int> RewardOrders { get; set; } = [];
+}
+
 public class SynchroSlot
 {
     /// <summary>
@@ -382,6 +389,19 @@ public class PassData
     public string LastCompleteAt { get; set; } = "";
     public List<PassRankData> PassRankList { get; set; } = [];
     public List<PassMissionData> PassMissionList { get; set; } = [];
+}
+
+public class MonthlySubscriptionState
+{
+    public int Tid { get; set; }
+    public long ExpiredAt { get; set; }
+    public int LastRewardDateDay { get; set; }
+}
+
+public class CampaignPackageRewardState
+{
+    public int PackageShopId { get; set; }
+    public int PackageGroupTableId { get; set; }
 }
 
 // MiniGameAzxData

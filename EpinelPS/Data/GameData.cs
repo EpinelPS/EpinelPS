@@ -50,6 +50,9 @@ public class GameData
     [LoadRecord("CharacterCostumeTable.json", "Id")]
     public readonly Dictionary<int, CharacterCostumeRecord> CharacterCostumeTable = [];
 
+    [LoadRecord("CostumeShopTable.json", "Id")]
+    public readonly Dictionary<int, CostumeShopRecord> CostumeShopTable = [];
+
     [LoadRecord("CharacterTable.json", "Id")]
     public readonly Dictionary<int, CharacterRecord> CharacterTable = [];
 
@@ -134,6 +137,30 @@ public class GameData
     [LoadRecord("MidasProductTable.json", "MidasProductIdProximabeta")]
     public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
 
+    [LoadRecord("CashShopTable.json", "Id")]
+    public readonly Dictionary<int, CashShopRecord> CashShopTable = [];
+
+    [LoadRecord("CampaignPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, CampaignPackageShopRecord> CampaignPackageShopTable = [];
+
+    [LoadRecord("CampaignPackageGroupTable.json", "Id")]
+    public readonly Dictionary<int, CampaignPackageGroupRecord> CampaignPackageGroupTable = [];
+
+    [LoadRecord("MonthlyAmountTable.json", "Id")]
+    public readonly Dictionary<int, MonthlyAmountRecord> MonthlyAmountTable = [];
+
+    [LoadRecord("InAppShopManagerTable.json", "Id")]
+    public readonly Dictionary<int, InAppShopManagerRecord> InAppShopManagerTable = [];
+
+    [LoadRecord("PackageShopTable.json", "Id")]
+    public readonly Dictionary<int, PackageShopRecord> PackageShopTable = [];
+
+    [LoadRecord("PackageListTable.json", "Id")]
+    public readonly Dictionary<int, PackageListRecord> PackageListTable = [];
+
+    [LoadRecord("PackageGroupTable.json", "Id")]
+    public readonly Dictionary<int, PackageGroupRecord> PackageGroupTable = [];
+
     [LoadRecord("TowerTable.json", "Id")]
     public readonly Dictionary<int, TowerRecord> towerTable = [];
 
@@ -193,6 +220,18 @@ public class GameData
     public readonly Dictionary<int, GachaGradeProbRecord> GachaGradeProb = [];
     [LoadRecord("GachaListProbTable.json", "Id")]
     public readonly Dictionary<int, GachaListProbRecord> GachaListProb = [];
+
+    [LoadRecord("GachaSelectupListTable.json", "Id")]
+    public readonly Dictionary<int, GachaSelectupListRecord_Raw> GachaSelectupList = [];
+
+    [LoadRecord("EventBoxGachaPriceTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaPriceRecord> EventBoxGachaPriceTable = [];
+    [LoadRecord("EventBoxGachaProbTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaProbRecord> EventBoxGachaProbTable = [];
+    [LoadRecord("EventBoxGachaTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaRecord> EventBoxGachaTable = [];
+    [LoadRecord("EventBoxGachaRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaRewardRecord> EventBoxGachaRewardTable = [];
 
     // Outpost
     [LoadRecord("RecycleResearchStatTable.json", "Id")]

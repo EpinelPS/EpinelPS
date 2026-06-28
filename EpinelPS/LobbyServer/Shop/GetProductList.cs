@@ -21,11 +21,21 @@ public class GetProductList : LobbyMessage
                 MidasProductRecord? record = product.FirstOrDefault().Value;
                 if (record != null)
                 {
+                    if (!record.IsActive)
+                    {
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(record.Cost))
+                    {
+                        continue;
+                    }
+
                     string normalizedCost = record.Cost.Replace(',', '.');
 
                     if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
                     {
-                        Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
+                        Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Warning);
                         continue;
                     }
 
@@ -38,13 +48,16 @@ public class GetProductList : LobbyMessage
                         Price = record.Cost,
                         ProductId = item
                     });
+
+                    InAppShopCatalog.Record(record);
                 }
             }
             else
             {
-                Console.WriteLine($"Missing!!!! {item}");
+                Logging.WriteLine($"Jupiter/getproductlist missing productId={item}", LogType.Warning);
             }
         }
+
         await WriteDataAsync(response);
     }
 }

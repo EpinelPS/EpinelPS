@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Shop;
+namespace EpinelPS.LobbyServer.Shop;
 
 [GameRequest("/shop/get")]
 public class GetShop : LobbyMessage
@@ -9,13 +9,9 @@ public class GetShop : LobbyMessage
 
         ResGetShop response = new()
         {
-            Shop = new NetShopProductData
-            {
-                ShopCategory = x.ShopCategory
-            }
+            Shop = ShopCatalogBuilder.BuildContentShops(x.ShopCategory).FirstOrDefault()
+                ?? new NetShopProductData { ShopCategory = x.ShopCategory }
         };
-
-        // TODO
 
         await WriteDataAsync(response);
     }

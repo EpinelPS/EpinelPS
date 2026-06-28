@@ -1,4 +1,5 @@
 using EpinelPS.Database;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.ContentsOpen;
 
@@ -14,7 +15,17 @@ public class GetUnlocked : LobbyMessage
 
         ResGetContentsOpenUnlockInfo response = new();
 
-        if (user.ContentsOpenUnlocked.Count == 0)
+        int beforeCount = user.ContentsOpenUnlocked.Count;
+
+        foreach (int contentsOpenId in GameData.Instance.ContentsOpenTable.Keys.Select(key => (int)key))
+        {
+            if (!user.ContentsOpenUnlocked.ContainsKey(contentsOpenId))
+            {
+                user.ContentsOpenUnlocked.Add(contentsOpenId, new(true, true));
+            }
+        }
+
+        if (user.ContentsOpenUnlocked.Count == beforeCount && user.ContentsOpenUnlocked.Count == 0)
         {
             // These Always returned as true by official server
             // Fixes "Recruitment unlocked" during chapter 0
@@ -27,6 +38,10 @@ public class GetUnlocked : LobbyMessage
             user.ContentsOpenUnlocked.Add(16, new(true, true));
             user.ContentsOpenUnlocked.Add(18, new(true, true));
             user.ContentsOpenUnlocked.Add(19, new(true, true));
+        }
+
+        if (user.ContentsOpenUnlocked.Count != beforeCount)
+        {
             JsonDb.Save();
         }
 

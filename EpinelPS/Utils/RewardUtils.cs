@@ -212,6 +212,10 @@ public class RewardUtils
             if (!user.JukeboxBgm.Contains(rewardId)) user.JukeboxBgm.Add(rewardId);
             ret.JukeboxBgm.Add(rewardId);
         }
+        else if (rewardType == RewardType.CharacterCostume)
+        {
+            ret.CharacterCostume.Add(rewardId);
+        }
         else if (rewardType == RewardType.InfraCoreExp)
         {
             int beforeLv = user.InfraCoreLvl;

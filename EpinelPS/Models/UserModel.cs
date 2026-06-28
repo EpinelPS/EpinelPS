@@ -80,6 +80,7 @@ public class User
 
     public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
     public int GachaTutorialPlayCount { get; set; } = 0;
+    public Dictionary<int, int> GachaSelectupSelections { get; set; } = [];
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
     public List<int> ViewedSideStoryStages { get; set; } = [];
@@ -115,11 +116,14 @@ public class User
     public Dictionary<int, LoginEventData> LoginEventInfo { get; set; } = [];
     public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
+    public Dictionary<int, EventBoxGachaState> EventBoxGachaStates { get; set; } = [];
     public MogMinigameInfo MogInfo { get; set; } = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
     public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
 
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
+    public Dictionary<int, MonthlySubscriptionState> MonthlySubscriptions { get; set; } = [];
+    public List<CampaignPackageRewardState> CampaignPackageRewards { get; set; } = [];
 
     public List<int> LobbyPrivateBannerIds = [];
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo = [];

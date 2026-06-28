@@ -21,7 +21,7 @@ public class GetContentsData : LobbyMessage
         {
             foreach (var condition in item.Value.OpenCondition)
             {
-                if (condition.OpenConditionType == ContentsOpenCondition.StageClear && !stages.Contains(condition.OpenConditionValue) && user.IsStageCompleted(condition.OpenConditionValue))
+                if (condition.OpenConditionType == ContentsOpenCondition.StageClear && !stages.Contains(condition.OpenConditionValue))
                 {
                     stages.Add(condition.OpenConditionValue);
                 }
@@ -33,9 +33,10 @@ public class GetContentsData : LobbyMessage
 
         foreach (var item in specialStages)
         {
-            if (!stages.Contains(item) && user.IsStageCompleted(item)) stages.Add(item);
+            if (!stages.Contains(item)) stages.Add(item);
         }
 
+        response.GuildLevel = 1;
         response.ClearStageList.AddRange(stages);
         response.MaxGachaCount = user.GachaTutorialPlayCount;
         response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;

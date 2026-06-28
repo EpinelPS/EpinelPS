@@ -9,10 +9,7 @@ public class ExecuteEventBoxGacha : LobbyMessage
         ReqExecuteEventBoxGacha req = await ReadData<ReqExecuteEventBoxGacha>();
         User user = GetUser();
 
-        ResExecuteEventBoxGacha response = new()
-        {
-
-        };
+        ResExecuteEventBoxGacha response = EventBoxGachaHelper.Execute(user, req.EventId, req.CurrentCount);
 
         await WriteDataAsync(response);
     }

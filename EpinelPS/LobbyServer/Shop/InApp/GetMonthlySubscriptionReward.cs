@@ -9,7 +9,16 @@ public class GetMonthlySubscriptionReward : LobbyMessage
 
         ResGetMonthlySubscriptionReward response = new();
 
-        // TODO: ValIdate response from real server
+        bool changed = InAppPurchaseStateService.AppendMonthlySubscriptionData(
+            User,
+            response,
+            "InAppShop/getmonthlysubscriptionreward");
+
+        if (changed)
+        {
+            EpinelPS.Database.JsonDb.Save();
+        }
+
         await WriteDataAsync(response);
     }
 }

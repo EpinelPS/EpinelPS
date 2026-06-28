@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.Gacha;
+using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.Gacha;
 
 [GameRequest("/gacha/event/check")]
 public class CheckGachaDailyEvent : LobbyMessage
@@ -6,21 +8,23 @@ public class CheckGachaDailyEvent : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqCheckDailyFreeGacha req = await ReadData<ReqCheckDailyFreeGacha>();
-        ResCheckDailyFreeGacha response = new()
+        ResCheckDailyFreeGacha response = new();
+
+        if (GameData.Instance.gachaTypes.TryGetValue(req.GachaId, out GachaTypeRecord? gacha)
+            && gacha.DailyFreeGachaEventId != 0
+            && GameData.Instance.eventManagers.TryGetValue(gacha.DailyFreeGachaEventId, out EventManagerRecord? dailyFreeEvent))
         {
-            // TODO implement
-            FreeCount = 1,
-            EventData = new NetEventData()
+            response.FreeCount = 1;
+            response.EventData = new NetEventData()
             {
-                Id = 80005,
-                EventSystemType = 21,
-                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(7)).Ticks,
+                Id = dailyFreeEvent.Id,
+                EventSystemType = (int)dailyFreeEvent.EventSystemType,
+                EventVisibleDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
                 EventStartDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)).Ticks,
-                EventEndDate = DateTime.Now.AddDays(20).Ticks,
-                EventDisableDate = DateTime.Now.AddDays(20).Ticks
-            }
-        };
-        // this is net event data i think it should be the same as in list events and get joined event only for free pull gacha event 
+                EventEndDate = DateTime.UtcNow.AddDays(30).Ticks,
+                EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks
+            };
+        }
 
         await WriteDataAsync(response);
     }
