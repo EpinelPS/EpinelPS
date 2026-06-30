@@ -7,6 +7,8 @@ public class CoreInfo
     public int DbVersion { get; set; } = 5;
     public List<User> Users { get; set; } = [];
 
+    public RankData RankDatas { get; set; } = new();
+
     public List<AccessToken> LauncherAccessTokens { get; set; } = [];
     public Dictionary<string, ulong> AdminAuthTokens { get; set; } = [];
 

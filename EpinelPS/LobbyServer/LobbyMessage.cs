@@ -129,4 +129,9 @@ public abstract class LobbyMessage
     {
         return JsonDb.GetUser(Id);
     }
+
+    public RankData GetRank()
+    {
+        return JsonDb.GetRank();
+    }
 }

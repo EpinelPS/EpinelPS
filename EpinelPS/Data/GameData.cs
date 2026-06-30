@@ -96,13 +96,10 @@ public class GameData
     public readonly Dictionary<int, EventManagerRecord> eventManagers = [];
 
     [LoadRecord("LiveWallpaperTable.json", "Id")]
-    public readonly Dictionary<int, LiveWallpaperRecord> lwptablemgrs = [];
+    public readonly Dictionary<int, LiveWallpaperRecord> LiveWallpaperTable = [];
 
     [LoadRecord("AlbumResourceTable.json", "Id")]
-    public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
-
-    [LoadRecord("UserFrameTable.json", "Id")]
-    public readonly Dictionary<int, UserFrameRecord> userFrameTable = [];
+    public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];    
 
     [LoadRecord("ArchiveRecordManagerTable.json", "Id")]
     public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
@@ -114,10 +111,7 @@ public class GameData
     public readonly Dictionary<int, ArchiveEventQuestRecord_Raw> archiveEventQuestRecords = [];
 
     [LoadRecord("ArchiveEventDungeonStageTable.json", "Id")]
-    public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
-
-    [LoadRecord("UserTitleTable.json", "Id")]
-    public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
+    public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];    
 
     [LoadRecord("ArchiveMessengerConditionTable.json", "Id")]
     public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
@@ -267,6 +261,50 @@ public class GameData
 
     [LoadRecord("LoginEventTable.json", "Id")]
     public readonly Dictionary<int, LoginEventRecord> LoginEventTable = [];
+
+    //小游戏
+    [LoadRecord("ArcadeConfigTable.json", "Id")]
+    public readonly Dictionary<string, ArcadeConfigRecord_Raw> ArcadeConfigTable = [];
+    [LoadRecord("ArcadeManagerTable.json", "Id")]
+    public readonly Dictionary<int, ArcadeManagerRecord_Raw> ArcadeManagerTable = [];
+
+    //小游戏 TTs Game
+    [LoadRecord("EventTTSManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSManagerRecord_Raw> EventTTSManagerTable = [];
+    [LoadRecord("EventTTSMaxScoreTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSMaxScoreRecord_Raw> EventTTSMaxScoreTable = [];
+    [LoadRecord("EventTTSMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSMissionRecord_Raw> EventTTSMissionTable = [];
+    [LoadRecord("EventTTSScenarioManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSScenarioManagerRecord_Raw> EventTTSScenarioManagerTable = [];
+    [LoadRecord("EventTTSSongGroupManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSSongGroupManagerRecord_Raw> EventTTSSongGroupManagerTable = [];
+    [LoadRecord("EventTTSSongManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSSongManagerRecord_Raw> EventTTSSongManagerTable = [];
+    [LoadRecord("EventTTSTipLocaleTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSTipLocaleRecord_Raw> EventTTSTipLocaleTable = [];
+    [LoadRecord("EventTTSTutorialTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSTutorialRecord_Raw> EventTTSTutorialTable = [];
+    [LoadRecord("TTSAlbumShopTable.json", "Id")]
+    public readonly Dictionary<int, TTSAlbumShopRecord_Raw> TTSAlbumShopTable = [];
+
+
+    //个人面板
+    [LoadRecord("ProfileCardObjectTable.json", "Id")]
+    public readonly Dictionary<int, ProfileCardObjectRecord> ProfileCardObjectTable = [];
+    [LoadRecord("UserIconTable.json", "Id")]
+    public readonly Dictionary<int, UserIconRecord> UserIconTable = [];        
+    [LoadRecord("UserTitleAcquireConditionTable.json", "Id")]
+    public readonly Dictionary<int, UserTitleAcquireConditionRecord> UserTitleAcquireConditionTable = [];
+    [LoadRecord("UserTitleAssemblyTable.json", "Id")]
+    public readonly Dictionary<int, UserTitleAssemblyRecord>  UserTitleAssemblyTable = [];
+    [LoadRecord("UserTitleSingleTable.json", "Id")]
+    public readonly Dictionary<int, UserTitleSingleRecord> UserTitleSingleTable = [];
+    [LoadRecord("UserTitleTable.json", "Id")]
+    public readonly Dictionary<int, UserTitleRecord> userTitleRecords = [];
+    [LoadRecord("UserFrameTable.json", "Id")]
+    public readonly Dictionary<int, UserFrameRecord> userFrameTable = [];
+
 
     // Contents Shop Data Tables
     [LoadRecord("ContentsShopTable.json", "Id")]
@@ -641,6 +679,34 @@ public class GameData
             }
         }
         return -1;
+    }
+
+
+    /// <summary>
+    /// 获取基础核心等级
+    /// </summary>
+    /// <param name="targetExp">经验</param>
+    /// <returns>等级</returns>
+    /// <exception cref="Exception"></exception>
+    public int GetInfraCoreLev(int targetExp)
+    {
+        int prevLevel = 0;
+        int prevValue = 0;
+        for (int i = 1; i < InfracoreTable.Count + 1; i++)
+        {
+            InfraCoreGradeRecord item = InfracoreTable[i];
+
+            if (prevValue < targetExp)
+            {
+                prevLevel = item.Grade;
+                prevValue = item.InfraCoreExp;
+            }
+            else
+            {
+                return (prevLevel);
+            }
+        }
+        return (1);
     }
     public IEnumerable<int> GetAllCostumes()
     {

@@ -67,6 +67,19 @@ public class User
     public NetWallpaperJukebox[] WallpaperJukeboxList { get; set; } = [];
     public List<int> LobbyDecoBackgroundList { get; set; } = [];
 
+    //角色时装
+    public List<int> CostumeList { get; set; } = [];
+
+    public List<int> JukeboxThemeList { get; set; } = [];
+
+    //个人面板
+    public List<int> StickerList { get; set; } = [];
+    public List<int> BackgroundList { get; set; } = [];
+    public ProfileCardDecorationLayout DecorationLayout { get; set; } = new();
+    public List<int> IconList { get; set; } = [];
+    public List<int> FrameList { get; set; } = [];
+    public List<int> TitleList { get; set; } = [];
+    public List<int> LiveWallpaperList { get; set; } = [];
 
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
@@ -122,11 +135,43 @@ public class User
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
     public List<int> LobbyPrivateBannerIds = [];
-    public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo = [];
-    public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice = [];
+    
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
+
+    //OutpostConditionTable
+    public List<int> OutpostConditionList { get; set; } = [];
+
+    //派遣
+    public int DispatchLv { get; set; } = 1;
+    public int DispatchCollectionLv { get; set; } = 0;
+    public int DispatchFavoriteLv { get; set; } = 0;
+    public int DispatchResetCount { get; set; } = 0;
+    public List<int> DispatchClearList { get; set; } = [];
+    public List<NetSelectableDispatchData> SelectableDispatchData { get; set; } = [];
+    public DispatchData UserDispatchData { get; set; } = new();
+
+    //工会
+    public GuildData Guild { get; set; } = new();
+
+    //小游戏
+    public Dictionary<int,MiniGameScenarios> MiniGameScenarios { get;set;  } = new();
+    public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo { get; set; } = [];
+    public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice { get; set; } = [];
+    public NetArcadeBBQData BBQInfoData { get; set; } = new();
+    public List<NetPlaySodaEachGameInfo> PlaySodaInfoData { get; set; } = [];
+    public List<NetRebuildEdenData> RebuildedenData { get; set; } = [];
+
+    public Dictionary<int, TtsDatas> TTSGameData { get; set; } = new();
+
+    //播放列表
+    public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
+    public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
+
+
+
+    
     public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
     {
         TriggerModel t = new()
@@ -160,6 +205,14 @@ public class User
         return badge;
     }
 
+
+    public void AddUnique<T>(List<T> list, T item)
+    {
+        if (!list.Contains(item))
+        {
+            list.Add(item);
+        }
+    }
 
     public void SetQuest(int tId, bool ReceivedReward)
     {
