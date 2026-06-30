@@ -20,7 +20,8 @@ internal class JsonDb
             Console.WriteLine("users: warning: configuration not found, writing default data");
             Instance = new CoreInfo();
             Save();
-        }
+        }       
+       
 
         var text = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json");
         if (text.Contains("Char_Premium_Ticket"))
@@ -111,6 +112,12 @@ internal class JsonDb
     {
         return Instance.Users.Where(x => x.ID == id).FirstOrDefault();
     }
+
+    public static RankData GetRank()
+    {
+        return Instance.RankDatas;
+    }
+
     public static void Save()
     {
         if (Instance != null)

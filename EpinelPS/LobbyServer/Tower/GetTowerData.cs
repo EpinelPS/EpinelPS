@@ -7,15 +7,27 @@ public class GetTowerData : LobbyMessage
     {
         ReqGetTowerData req = await ReadData<ReqGetTowerData>();
 
-        ResGetTowerData response = new();
+            
+
+            ResGetTowerData response = new();
 
         User user = GetUser();
 
+        Dictionary<int, int>? count = user.ResetableData.TowerCount;
+        if (count.Count == 0 || count == null)
+        {
+            count[1] = 0;
+            count[2] = 0;
+            count[3] = 0;
+            count[4] = 0;
+        }
+
+
         // TODO: Load remain count for these
-        NetTowerData t0 = new() { Type = 1, RemainCount = 3 };
-        NetTowerData t1 = new() { Type = 2, RemainCount = 3 };
-        NetTowerData t2 = new() { Type = 3, RemainCount = 3 };
-        NetTowerData t3 = new() { Type = 4, RemainCount = 3 };
+        NetTowerData t0 = new() { Type = 1, RemainCount = 3 - count[1] };
+        NetTowerData t1 = new() { Type = 2, RemainCount = 3 - count[2] };
+        NetTowerData t2 = new() { Type = 3, RemainCount = 3 - count[3] };
+        NetTowerData t3 = new() { Type = 4, RemainCount = 3 - count[4] };
         NetTowerData t4 = new() { Type = 5 };
 
         // setup schedules
@@ -41,6 +53,8 @@ public class GetTowerData : LobbyMessage
         response.Data.Add(t2);
         response.Data.Add(t3);
         response.Data.Add(t4);
+
+        
 
         await WriteDataAsync(response);
     }

@@ -41,6 +41,7 @@ public class IncreaseEquipmentExp : LobbyMessage
             Value = user.GetCurrencyVal(CurrencyType.Gold) - MathUtils.Clamp(goldCost, 0, CalcTotalExp(destItem))
         };
 
+        NetRewardData ret = new();
         // TODO: need reward handling function first
         if (modules > 0)
         {
@@ -48,14 +49,21 @@ public class IncreaseEquipmentExp : LobbyMessage
 
             if (t1 > 0)
             {
+                RewardUtils.AddSingleObject(user, ref ret, 7010001, RewardType.Item, t1);
             }
             if (t2 > 0)
             {
+                RewardUtils.AddSingleObject(user, ref ret, 7010002, RewardType.Item, t2);
             }
             if (t3 > 0)
             {
+                RewardUtils.AddSingleObject(user, ref ret, 7010003, RewardType.Item, t3);
             }
-        }
+
+
+            response.Reward = ret;
+
+        } 
 
         // we NEED to make sure the target item itself is in the delta list, or the UI won't update!
         response.Items.Add(NetUtils.ToNet(destItem));
