@@ -29,8 +29,40 @@ public class GameData
 
     public readonly Dictionary<string, FieldMapRecord> MapData = [];
 
-    [LoadRecord("MainQuestTable.json", "Id")]
-    public readonly Dictionary<int, MainQuestRecord> QuestDataRecords = [];
+        //ArchiveEvent
+        [LoadRecord("ArchiveEventDungeonTable.json", "Id")]
+        public readonly Dictionary<int, ArchiveEventDungeonRecord> ArchiveEventDungeonreRecordRaws = [];
+
+        [LoadRecord("ArchiveEventDungeonSpotBattleTable.json", "Id")]
+        public readonly Dictionary<int, ArchiveEventDungeonSpotBattleRecord> ArchiveEventDungeonSpotBattleRecords = [];
+
+        [LoadRecord("ArchiveEventDungeonDifficultTable.json", "Id")]
+        public readonly Dictionary<int, ArchiveEventDungeonDifficultRecord> ArchiveEventDungeonDifficultRecords = [];
+
+        [LoadRecord("ArchiveEventDungeonStageTable.json", "Id")]
+        public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
+
+
+
+
+
+
+        [LoadRecord("CashShopTable.json", "Id")]
+        public readonly Dictionary<int, CashShopRecord> CashShopRecords = [];
+
+
+        [LoadRecord("FunctionTable.json", "Id")]
+        public readonly Dictionary<int, FunctionRecord> FunctionRecords = [];
+
+
+
+        [LoadRecord("ItemSelectOptionTable.json", "Id")]
+        public readonly Dictionary<int, ItemSelectOptionRecord> SelectItem = [];
+
+        [LoadRecord("ItemSelectOptionRowTable.json", "Id")]
+        public readonly Dictionary<int, ItemSelectOptionRowRecord> SelectRowItem = [];
+        [LoadRecord("MainQuestTable.json", "Id")]
+        public readonly Dictionary<int, MainQuestRecord> QuestDataRecords = [];
 
     [LoadRecord("CampaignStageTable.json", "Id")]
     public readonly Dictionary<int, CampaignStageRecord> StageDataRecords = [];
@@ -110,8 +142,7 @@ public class GameData
     [LoadRecord("ArchiveEventQuestTable.json", "Id")]
     public readonly Dictionary<int, ArchiveEventQuestRecord_Raw> archiveEventQuestRecords = [];
 
-    [LoadRecord("ArchiveEventDungeonStageTable.json", "Id")]
-    public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];    
+        
 
     [LoadRecord("ArchiveMessengerConditionTable.json", "Id")]
     public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];

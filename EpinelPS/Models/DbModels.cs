@@ -224,7 +224,7 @@ public class ResetableData
     public List<int> CompletedDailyMissions { get; set; } = [];
     public int DailyMissionPoints { get; set; }
     public SimRoomData SimRoomData { get; set; } = new();
-
+    public Dictionary<int, int> TowerCount { get; set; } = [];
     public Dictionary<int, int> DailyCounselCount { get; set; } = [];
 
 }

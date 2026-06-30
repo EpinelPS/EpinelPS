@@ -12,11 +12,11 @@ public class EnterTower : LobbyMessage
         User user = GetUser();
 
         ResEnterTower response = new();
-
+        
 
         user.AddTrigger(Trigger.TowerAllStart, 1);
         JsonDb.Save();
-
+        
         await WriteDataAsync(response);
     }
 }

@@ -103,7 +103,7 @@ public class User
     public List<NetUserFavoriteItemData> FavoriteItems { get; set; } = [];
 
     public List<NetUserFavoriteItemQuestData> FavoriteItemQuests { get; set; } = [];
-    public Dictionary<int, int> TowerProgress { get; set; } = [];
+    public Dictionary<int, int> TowerProgress { get; set; } = [];    
 
     public JukeBoxSetting LobbyMusic { get; set; } = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
     public JukeBoxSetting CommanderMusic { get; set; } = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
