@@ -1,56 +1,49 @@
 :root {
-  /* NIKKE主题色系 */
-  --nikke-primary: #2b3990;  /* NIKKE蓝色 */
-  --nikke-primary-light: #4754b9;
-  --nikke-primary-dark: #1a2370;
+  --adminui-primary: #38B279;
+  --adminui-primary-light: #1e6c5f;
+  --adminui-primary-dark: #1a5970;
+  --adminui-bg2: #161615;
   
-  --nikke-accent: #e83e8c;  /* NIKKE粉色 */
-  --nikke-accent-light: #f16eac;
-  --nikke-accent-dark: #c72c70;
+  --adminui-accent: #3B724B;
+  --adminui-accent-light: #1c952a;
+  --adminui-accent-dark: #12a138;
   
-  /* 中性色 */
-  --nikke-dark: #17171f;
-  --nikke-gray-dark: #23232d;
-  --nikke-gray: #3a3a48;
-  --nikke-gray-light: #7c7c8a;
-  --nikke-light: #f8f9fc;
+  --adminui-dark: #17171f;
+  --adminui-gray-dark: #23232d;
+  --adminui-gray: #3a3a48;
+  --adminui-gray-light: #7c7c8a;
+  --adminui-light: #f8f9fc;
   
-  /* 功能色 */
-  --nikke-success: #32d296;
-  --nikke-warning: #faa05a;
-  --nikke-danger: #f44283;
-  --nikke-info: #3fafec;
+  --adminui-success: #32d296;
+  --adminui-warning: #faa05a;
+  --adminui-danger: #f44283;
+  --adminui-info: #3fafec;
   
-  /* 尺寸 */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   
-  /* 阴影 */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.25);
-  --shadow-neon: 0 0 10px rgba(232, 62, 140, 0.5);
+  --shadow-neon: 0 0 10px rgba(158, 0, 0, 0.5);
   
-  /* 过渡 */
-  --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-normal: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-slow: 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-fast: 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-normal: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   
-  /* 圆角 */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-full: 9999px;
 }
 
-/* 全局样式 */
 body {
-  font-family: 'Exo 2', 'Noto Sans SC', sans-serif;
-  background: linear-gradient(135deg, var(--nikke-dark) 0%, rgba(26, 35, 112, 0.9) 100%);
-  color: var(--nikke-light);
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--adminui-bg2);
+  color: var(--adminui-light);
   line-height: 1.6;
   position: relative;
 }
@@ -62,7 +55,6 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/assets/img/nikke-bg-pattern.png');
   background-size: cover;
   background-position: center;
   opacity: 0.2;
@@ -73,30 +65,26 @@ body::before {
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-bottom: var(--spacing-md);
-  color: var(--nikke-light);
-  text-transform: uppercase;
+  color: var(--adminui-light);
   letter-spacing: 1px;
 }
 
 .display-4 {
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: var(--spacing-lg);
-  color: var(--nikke-light);
-  text-shadow: 0 0 10px rgba(232, 62, 140, 0.5);
+  color: var(--adminui-light);
 }
 
 a {
-  color: var(--nikke-accent);
+  color: var(--adminui-accent);
   text-decoration: none;
   transition: all var(--transition-fast);
   position: relative;
 }
 
 a:hover {
-  color: var(--nikke-accent-light);
-  text-shadow: 0 0 8px rgba(232, 62, 140, 0.4);
+  color: var(--adminui-accent-light);
 }
 
 a.nav-link:after {
@@ -106,7 +94,7 @@ a.nav-link:after {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: var(--nikke-accent);
+  background-color: var(--adminui-accent);
   transition: width var(--transition-normal);
 }
 
@@ -116,17 +104,16 @@ a.nav-link:hover:after {
 
 /* 导航栏样式 */
 .navbar {
-  background-color: var(--nikke-primary-dark) !important;
+  background-color: var(--adminui-primary-dark) !important;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid rgba(232, 62, 140, 0.3) !important;
+  border-bottom: 1px solid rgba(8, 156, 200, 0.3) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
 
 .navbar-brand {
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--nikke-light) !important;
+  color: var(--adminui-light) !important;
   font-size: 1.4rem;
   display: flex;
   align-items: center;
@@ -153,29 +140,29 @@ a.nav-link:hover:after {
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link:focus,
 .navbar-light .navbar-nav .nav-link.active {
-  color: var(--nikke-light) !important;
-  background-color: rgba(232, 62, 140, 0.2);
+  color: var(--adminui-light) !important;
+  background-color: rgba(62, 232, 136, 0.2);
 }
 
 /* 容器样式 */
 .container, .container-fluid {
-  padding-top: var(--spacing-lg);
-  padding-bottom: var(--spacing-lg);
+  padding-top: var(--spacing-sm);
+  padding-bottom: var(--spacing-sm);
 }
 
 /* 表格样式 */
 .table {
-  background-color: var(--nikke-gray-dark);
+  background-color: var(--adminui-gray-dark);
   border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid var(--nikke-gray);
+  border: 1px solid var(--adminui-gray);
   box-shadow: var(--shadow-md);
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 .table thead th {
-  background-color: var(--nikke-primary);
-  color: var(--nikke-light);
+  background-color: var(--adminui-primary);
+  color: var(--adminui-light);
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 1px;
@@ -184,7 +171,7 @@ a.nav-link:hover:after {
 }
 
 .table tbody tr:nth-of-type(odd) {
-  background-color: rgba(43, 57, 144, 0.1);
+  background-color: rgba(58, 58, 59, 0.1);
 }
 
 .table tbody tr {
@@ -192,19 +179,22 @@ a.nav-link:hover:after {
 }
 
 .table tbody tr:hover {
-  background-color: rgba(232, 62, 140, 0.1);
+  background-color: #38b27941;
 }
 
 .table td {
   padding: 0.85rem 1rem;
   vertical-align: middle;
-  border-top: 1px solid var(--nikke-gray);
+  border-top: 1px solid var(--adminui-gray);
+}
+
+.table-hover>tbody>tr:hover>* {
+  color:white;
 }
 
 /* 按钮样式 */
 .btn {
   border-radius: var(--radius-md);
-  text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;
   padding: 0.5rem 1.25rem;
@@ -214,78 +204,77 @@ a.nav-link:hover:after {
 }
 
 .btn-primary {
-  background-color: var(--nikke-primary);
-  border-color: var(--nikke-primary);
-  color: var(--nikke-light);
+  background-color: var(--adminui-primary);
+  border-color: var(--adminui-primary);
+  color: var(--adminui-light);
 }
 
 .btn-primary:hover {
-  background-color: var(--nikke-primary-light);
-  border-color: var(--nikke-primary-light);
-  transform: translateY(-2px);
+  background-color: var(--adminui-primary-light);
+  border-color: var(--adminui-primary-light);
   box-shadow: 0 4px 12px rgba(43, 57, 144, 0.4);
 }
 
 .btn-primary:focus, .btn-primary:active {
-  background-color: var(--nikke-primary-dark) !important;
-  border-color: var(--nikke-primary-dark) !important;
+  background-color: var(--adminui-primary-dark) !important;
+  border-color: var(--adminui-primary-dark) !important;
   box-shadow: 0 0 0 0.25rem rgba(43, 57, 144, 0.5) !important;
 }
 
 .btn-danger {
-  background-color: var(--nikke-danger);
-  border-color: var(--nikke-danger);
+  background-color: var(--adminui-danger);
+  border-color: var(--adminui-danger);
 }
 
 .btn-danger:hover {
-  background-color: var(--nikke-accent-dark);
-  border-color: var(--nikke-accent-dark);
+  background-color: var(--adminui-accent-dark);
+  border-color: var(--adminui-accent-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(232, 62, 140, 0.4);
 }
 
 .btn-outline-primary {
-  color: var(--nikke-primary);
-  border-color: var(--nikke-primary);
+  color: var(--adminui-primary);
+  border-color: var(--adminui-primary);
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--nikke-primary);
-  color: var(--nikke-light);
+  background-color: var(--adminui-primary);
+  color: var(--adminui-light);
   transform: translateY(-2px);
 }
 
 /* 表单样式 */
 .form-control, .form-select {
-  background-color: var(--nikke-gray-dark);
-  border: 1px solid var(--nikke-gray);
-  color: var(--nikke-light);
+  background-color: var(--adminui-gray-dark);
+  border: 1px solid var(--adminui-gray);
+  color: var(--adminui-light);
   border-radius: var(--radius-md);
   padding: 0.6rem 1rem;
   transition: all var(--transition-fast);
 }
 
 .form-control:focus, .form-select:focus {
-  background-color: var(--nikke-gray);
-  border-color: var(--nikke-accent);
-  color: var(--nikke-light);
-  box-shadow: 0 0 0 0.25rem rgba(232, 62, 140, 0.25);
+  background-color: var(--adminui-gray);
+  border-color: var(--adminui-accent);
+  color: var(--adminui-light);
+  box-shadow: 0 0 0 0.25rem rgba(62, 232, 73, 0.25);
 }
 
 .form-label {
-  color: var(--nikke-light);
+  color: var(--adminui-light);
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
 .form-control::placeholder {
-  color: var(--nikke-gray-light);
+  color: var(--adminui-gray-light);
 }
 
 /* 卡片样式 */
 .card {
-  background-color: var(--nikke-gray-dark);
-  border: 1px solid var(--nikke-gray);
+  background-color: var(--adminui-gray-dark);
+  border: 1px solid var(--adminui-gray);
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-md);
@@ -293,23 +282,21 @@ a.nav-link:hover:after {
 }
 
 .card:hover {
-  transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
 }
 
 .card-header {
-  background-color: var(--nikke-primary);
-  color: var(--nikke-light);
+  background-color: var(--adminui-primary);
+  color: var(--adminui-light);
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 1px;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--nikke-primary-dark);
+  border-bottom: 1px solid var(--adminui-primary-dark);
 }
 
 .card-body {
   padding: 1.5rem;
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 /* 徽章样式 */
@@ -321,32 +308,21 @@ a.nav-link:hover:after {
 }
 
 .badge-admin {
-  background-color: var(--nikke-accent);
-  color: var(--nikke-light);
+  background-color: var(--adminui-accent);
+  color: var(--adminui-light);
 }
 
 /* 页脚样式 */
 .footer {
-  background-color: var(--nikke-gray-dark);
-  color: var(--nikke-gray-light);
+  background-color: var(--adminui-gray-dark);
+  color: var(--adminui-gray-light);
   padding: var(--spacing-md) 0;
-  border-top: 1px solid var(--nikke-gray);
-}
-
-/* 动画和效果 */
-@keyframes glow {
-  0% { box-shadow: 0 0 5px rgba(232, 62, 140, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(232, 62, 140, 0.8); }
-  100% { box-shadow: 0 0 5px rgba(232, 62, 140, 0.5); }
-}
-
-.glow-effect {
-  animation: glow 2s infinite;
+  border-top: 1px solid var(--adminui-gray);
 }
 
 /* 数据表格特殊样式 */
 .admin-badge {
-  background-color: var(--nikke-accent);
+  background-color: var(--adminui-accent);
   color: white;
   padding: 0.25em 0.5em;
   border-radius: var(--radius-sm);
@@ -357,8 +333,8 @@ a.nav-link:hover:after {
 
 /* 自定义组件 */
 .stat-card {
-  background-color: var(--nikke-gray-dark);
-  border: 1px solid var(--nikke-gray);
+  background-color: var(--adminui-gray-dark);
+  border: 1px solid var(--adminui-gray);
   border-radius: var(--radius-md);
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
@@ -392,21 +368,21 @@ a.nav-link:hover:after {
 .stat-card .icon {
   font-size: 2.5rem;
   margin-bottom: var(--spacing-md);
-  color: var(--nikke-accent);
+  color: var(--adminui-accent);
 }
 
 .stat-card .value {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 .stat-card .label {
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--nikke-gray-light);
+  color: var(--adminui-gray-light);
 }
 
 /* 响应式调整 */

@@ -1,11 +1,11 @@
 /**
- * NIKKE控制台国际化支持 - 同步版
+ * adminui控制台国际化支持 - 同步版
  */
-class NikkeI18n {
+class adminuiI18n {
   constructor() {
     this.supportedLanguages = ['zh', 'en', 'ja', 'ko'];
     this.languageNames = {'zh': '简体中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어'};
-    this.currentLang = localStorage.getItem('nikke_lang') || this.detectBrowserLanguage() || 'zh';
+    this.currentLang = localStorage.getItem('adminui_lang') || this.detectBrowserLanguage() || 'zh';
     this.resources = {
     };
     this.isApplyingLanguage = false;
@@ -23,7 +23,7 @@ class NikkeI18n {
       this.applyLanguage();
       this.registerEventListeners();
       this.renderLanguageSwitcher();
-      window.dispatchEvent(new CustomEvent('nikke:i18n-ready'));
+      window.dispatchEvent(new CustomEvent('adminui:i18n-ready'));
     } catch (error) {
       console.error('初始化失败:', error);
       this.fallbackToDefaultLanguage();
@@ -46,7 +46,7 @@ class NikkeI18n {
   fallbackToDefaultLanguage() {
     this.currentLang = 'en';
     try {
-      localStorage.setItem('nikke_lang', this.currentLang);
+      localStorage.setItem('adminui_lang', this.currentLang);
     } catch (e) {}
     this.applyLanguage();
   }
@@ -83,7 +83,7 @@ class NikkeI18n {
       console.warn(`当前语言 ${this.currentLang} 加载失败，回退到英文`);
       this.currentLang = 'en';
       try {
-        localStorage.setItem('nikke_lang', 'en');
+        localStorage.setItem('adminui_lang', 'en');
       } catch (e) {}
     }
   }
@@ -119,10 +119,10 @@ class NikkeI18n {
       }
 
       this.currentLang = lang;
-      localStorage.setItem('nikke_lang', lang);
+      localStorage.setItem('adminui_lang', lang);
       this.applyLanguage();
       this.updateLanguageSwitcher();
-      window.dispatchEvent(new CustomEvent('nikke:languageChanged', {detail: {lang}}));
+      window.dispatchEvent(new CustomEvent('adminui:languageChanged', {detail: {lang}}));
     } catch (error) {
       console.error(`切换失败: ${lang}`, error);
     } finally {
@@ -216,7 +216,7 @@ class NikkeI18n {
 
           if (node.classList && (
               node.classList.contains('language-switcher') ||
-              node.id === 'nikke-i18n-styles'
+              node.id === 'adminui-i18n-styles'
           )) return false;
 
           return (
@@ -235,7 +235,7 @@ class NikkeI18n {
       }
     });
 
-    const mainContent = document.querySelector('.login-container, .nikke-dashboard') || document.body;
+    const mainContent = document.querySelector('.login-container, .adminui-dashboard') || document.body;
     this.observer.observe(mainContent, {childList: true, subtree: true});
 
     if (document.readyState === 'loading') {
@@ -354,4 +354,4 @@ class NikkeI18n {
 }
 
 // 实例化
-window.i18n = new NikkeI18n();
+window.i18n = new adminuiI18n();

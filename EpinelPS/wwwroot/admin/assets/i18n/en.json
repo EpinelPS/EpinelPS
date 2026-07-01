@@ -1,7 +1,6 @@
 {
   "app": {
-    "name": "EpinelPS Admin Console",
-    "version": "Version v1.0.0",
+    "name": "EpinelPS",
     "footer": "© 2025 EpinelPS"
   },
   "auth": {
@@ -27,6 +26,8 @@
     "edit": "Edit",
     "actions": "Actions",
     "search": "Search",
+    "add": "Add",
+    "back": "Back",
     "status": {
       "online": "Online",
       "offline": "Offline"
@@ -37,7 +38,7 @@
     }
   },
   "nav": {
-    "dashboard": "Dashboard",
+    "dashboard": "Overview",
     "events": "Events",
     "users": "Users",
     "mail": "Mail",
@@ -101,7 +102,7 @@
       },
       "database": {
         "title": "Database",
-        "desc": "Manage and maintain game database"
+        "desc": "Configure database"
       },
       "enter": "Enter"
     }
@@ -167,6 +168,7 @@
       "setCoreLevel": "Set Core Level",
       "inventory": "Inventory:",
       "addAllEquip": "Add All Equipment",
+      "addCurrency": "Add Currency",
       "addItem": "Add Item",
       "misc": "Miscellaneous:",
       "finishTutorials": "Finish All Tutorials",

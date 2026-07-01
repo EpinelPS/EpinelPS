@@ -2,7 +2,7 @@
     ViewData["Title"] = "仪表盘";
 }
 
-<div class="nikke-dashboard">
+<div class="adminui-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="display-4 mb-0" data-i18n="dashboard.title">Overview</h1>
         <!--<button class="btn btn-primary" onclick="refreshDashboard()">
@@ -10,7 +10,7 @@
         </button>-->
     </div>
 
-    <!--<div class="nikke-stats">
+    <!--<div class="adminui-stats">
         <div class="stats-card">
             <div class="icon">
                 <i class="fas fa-users"></i>
@@ -75,22 +75,22 @@
                     <div class="row align-items-center h-100">
                         <div class="col-md-4 text-center">
                             <div class="mb-2" data-i18n="dashboard.serverStats.cpu">CPU 使用率</div>
-                            <div class="nikke-progress">
-                                <div class="nikke-progress-bar" style="width: 45%"></div>
+                            <div class="adminui-progress">
+                                <div class="adminui-progress-bar" style="width: 45%"></div>
                             </div>
                             <div class="text-end mt-1">45%</div>
                         </div>
                         <div class="col-md-4 text-center">
                             <div class="mb-2" data-i18n="dashboard.serverStats.memory">内存使用率</div>
-                            <div class="nikke-progress">
-                                <div class="nikke-progress-bar" style="width: 68%"></div>
+                            <div class="adminui-progress">
+                                <div class="adminui-progress-bar" style="width: 68%"></div>
                             </div>
                             <div class="text-end mt-1">68%</div>
                         </div>
                         <div class="col-md-4 text-center">
                             <div class="mb-2" data-i18n="dashboard.serverStats.storage">存储使用率</div>
-                            <div class="nikke-progress">
-                                <div class="nikke-progress-bar" style="width: 32%"></div>
+                            <div class="adminui-progress">
+                                <div class="adminui-progress-bar" style="width: 32%"></div>
                             </div>
                             <div class="text-end mt-1">32%</div>
                         </div>
@@ -105,7 +105,7 @@
                     <i class="fas fa-bell me-2"></i> <span data-i18n="dashboard.activity.title">最近活动</span>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-accent);">
+                    <div class="activity-icon" style="background-color: var(--adminui-accent);">
                         <i class="fas fa-user-plus"></i>
                     </div>
                     <div class="activity-content">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-warning);">
+                    <div class="activity-icon" style="background-color: var(--adminui-warning);">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="activity-content">
@@ -123,7 +123,7 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-primary);">
+                    <div class="activity-icon" style="background-color: var(--adminui-primary);">
                         <i class="fas fa-cog"></i>
                     </div>
                     <div class="activity-content">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-success);">
+                    <div class="activity-icon" style="background-color: var(--adminui-success);">
                         <i class="fas fa-gift"></i>
                     </div>
                     <div class="activity-content">
@@ -141,7 +141,7 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-info);">
+                    <div class="activity-icon" style="background-color: var(--adminui-info);">
                         <i class="fas fa-calendar-plus"></i>
                     </div>
                     <div class="activity-content">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
                 <div class="activity-item">
-                    <div class="activity-icon" style="background-color: var(--nikke-danger);">
+                    <div class="activity-icon" style="background-color: var(--adminui-danger);">
                         <i class="fas fa-bug"></i>
                     </div>
                     <div class="activity-content">
@@ -167,7 +167,7 @@
         <div class="col-md-6 col-lg-3 mb-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="fas fa-users fa-3x mb-3" style="color: var(--nikke-primary);"></i>
+                    <i class="fas fa-users fa-3x mb-3" style="color: var(--adminui-primary);"></i>
                     <h5 data-i18n="dashboard.quickAccess.users.title">用户管理</h5>
                     <p data-i18n="dashboard.quickAccess.users.desc">管理游戏用户账号，权限和角色</p>
                     <a href="/admin/Users/" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
@@ -177,7 +177,7 @@
         <div class="col-md-6 col-lg-3 mb-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="fas fa-calendar-alt fa-3x mb-3" style="color: var(--nikke-accent);"></i>
+                    <i class="fas fa-calendar-alt fa-3x mb-3" style="color: var(--adminui-accent);"></i>
                     <h5 data-i18n="dashboard.quickAccess.events.title">活动管理</h5>
                     <p data-i18n="dashboard.quickAccess.events.desc">创建、编辑和监控游戏活动</p>
                     <a href="/admin/Events" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
@@ -187,7 +187,7 @@
         <div class="col-md-6 col-lg-3 mb-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="fas fa-envelope fa-3x mb-3" style="color: var(--nikke-success);"></i>
+                    <i class="fas fa-envelope fa-3x mb-3" style="color: var(--adminui-success);"></i>
                     <h5 data-i18n="dashboard.quickAccess.mail.title">邮件系统</h5>
                     <p data-i18n="dashboard.quickAccess.mail.desc">发送系统邮件和奖励给玩家</p>
                     <a href="/admin/Mail" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
@@ -197,7 +197,7 @@
         <div class="col-md-6 col-lg-3 mb-4">
             <div class="card h-100">
                 <div class="card-body text-center">
-                    <i class="fas fa-database fa-3x mb-3" style="color: var(--nikke-warning);"></i>
+                    <i class="fas fa-database fa-3x mb-3" style="color: var(--adminui-warning);"></i>
                     <h5 data-i18n="dashboard.quickAccess.database.title">数据库</h5>
                     <p data-i18n="dashboard.quickAccess.database.desc">管理和维护游戏数据库</p>
                     <a href="/admin/Database" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">进入</a>
@@ -209,66 +209,7 @@
 
 @section Scripts {
     <script>
-        // 初始化图表
-        document.addEventListener('DOMContentLoaded', function() {
-            // 玩家活跃度图表
-            const playerCtx = document.getElementById('playerChart').getContext('2d');
-            // 保存图表实例到window对象
-            window.playerChart = new Chart(playerCtx, {
-                type: 'line',
-                data: {
-                    labels: getWeekdayLabels(),
-                    datasets: [{
-                        label: i18n.t('dashboard.statsCards.users'),
-                        data: [1200, 1900, 1700, 2100, 2500, 1800, 1500],
-                        borderColor: 'rgba(232, 62, 140, 1)',
-                        backgroundColor: 'rgba(232, 62, 140, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }, {
-                        label: i18n.t('dashboard.activity.newUser'),
-                        data: [800, 1200, 950, 1300, 1700, 1100, 900],
-                        borderColor: 'rgba(43, 57, 144, 1)',
-                        backgroundColor: 'rgba(43, 57, 144, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                color: 'rgba(255, 255, 255, 0.8)'
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)'
-                            }
-                        }
-                    }
-                }
-            });
-
+      
             // 周/月切换按钮
             document.querySelectorAll('[data-period]').forEach(button => {
                 button.addEventListener('click', function() {
@@ -287,7 +228,7 @@
             });
 
             // 监听语言变更事件
-            window.addEventListener('nikke:languageChanged', function() {
+            window.addEventListener('adminui:languageChanged', function() {
                 // 更新图表标签
                 if (window.playerChart) {
                     window.playerChart.data.datasets[0].label = i18n.t('dashboard.statsCards.users');
@@ -369,7 +310,7 @@
             refreshBtn.disabled = true;
 
             // 随机更新进度条
-            document.querySelectorAll('.nikke-progress-bar').forEach(bar => {
+            document.querySelectorAll('.adminui-progress-bar').forEach(bar => {
                 const newWidth = Math.floor(Math.random() * 90) + 10;
                 setTimeout(() => {
                     bar.style.width = newWidth + '%';

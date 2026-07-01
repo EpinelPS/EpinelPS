@@ -4,7 +4,7 @@
     ViewData["Title"] = "修改用户";
 }
 
-<div class="nikke-dashboard">
+<div class="adminui-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="display-4 mb-0" data-i18n="users.modify.title">修改用户信息</h1>
         <a asp-action="Index" class="btn btn-outline-light">
@@ -41,22 +41,22 @@
 
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <div class="nikke-checkbox-group">
-                                    <div class="nikke-checkbox mb-2">
-                                        <input asp-for="IsAdmin" class="nikke-checkbox-input" />
-                                        <label asp-for="IsAdmin" class="nikke-checkbox-label" data-i18n="users.modify.isAdmin">管理员权限</label>
+                                <div class="adminui-checkbox-group">
+                                    <div class="adminui-checkbox mb-2">
+                                        <input asp-for="IsAdmin" class="adminui-checkbox-input" />
+                                        <label asp-for="IsAdmin" class="adminui-checkbox-label" data-i18n="users.modify.isAdmin">管理员权限</label>
                                         <span asp-validation-for="IsAdmin" class="text-danger"></span>
                                     </div>
 
-                                    <div class="nikke-checkbox mb-2">
-                                        <input asp-for="sickpulls" class="nikke-checkbox-input" data-i18n-title="users.modify.disableGachaHint" />
-                                        <label asp-for="sickpulls" class="nikke-checkbox-label" data-i18n="users.modify.disableGacha" data-i18n-title="users.modify.disableGachaHint">禁用抽卡系统</label>
+                                    <div class="adminui-checkbox mb-2">
+                                        <input asp-for="sickpulls" class="adminui-checkbox-input" data-i18n-title="users.modify.disableGachaHint" />
+                                        <label asp-for="sickpulls" class="adminui-checkbox-label" data-i18n="users.modify.disableGacha" data-i18n-title="users.modify.disableGachaHint">禁用抽卡系统</label>
                                         <span asp-validation-for="sickpulls" class="text-danger"></span>
                                     </div>
 
-                                    <div class="nikke-checkbox">
-                                        <input asp-for="IsBanned" class="nikke-checkbox-input" />
-                                        <label asp-for="IsBanned" class="nikke-checkbox-label" data-i18n="users.modify.isBanned">禁止登录</label>
+                                    <div class="adminui-checkbox">
+                                        <input asp-for="IsBanned" class="adminui-checkbox-input" />
+                                        <label asp-for="IsBanned" class="adminui-checkbox-label" data-i18n="users.modify.isBanned">禁止登录</label>
                                         <span asp-validation-for="IsBanned" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="cheats-section mb-4">
-                        <h4 class="section-title" data-i18n="users.modify.characters">角色</h4>
+                        <h4 class="section-title" data-i18n="users.modify.characters">Characters:</h4>
                         <div class="button-group">
                             <button class="btn btn-accent" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">
                                 <i class="fas fa-users me-2"></i> <span data-i18n="users.modify.addAllChars">添加所有角色</span>
@@ -110,7 +110,7 @@
                     </div>
 
                     <div class="cheats-section mb-4">
-                        <h4 class="section-title" data-i18n="users.modify.inventory">物品</h4>
+                        <h4 class="section-title" data-i18n="users.modify.inventory">Inventory</h4>
                         <div class="button-group">
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">
                                 <i class="fas fa-tools me-2"></i> <span data-i18n="users.modify.addAllEquip">添加所有装备</span>
@@ -118,6 +118,11 @@
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">
                                 <i class="fas fa-box-open me-2"></i> <span data-i18n="users.modify.addItem">添加物品</span>
                             </button>
+                            <a asp-action="Currency" asp-route-id="@Model.ID">
+                                <button class="btn btn-accent">
+                                    <i class="fas fa-coins me-2"></i> <span data-i18n="users.modify.addCurrency">Add Currency</span>
+                                </button>
+                            </a>
                         </div>
                     </div>
 
@@ -136,11 +141,10 @@
 </div>
 
 <style>
-    /* NIKKE风格卡片标题 */
+    /* adminui风格卡片标题 */
     .card-header {
-        background-color: var(--nikke-primary);
-        color: var(--nikke-light);
-        text-transform: uppercase;
+        background-color: var(--adminui-primary);
+        color: var(--adminui-light);
         font-weight: 600;
         letter-spacing: 1px;
         padding: 15px 20px;
@@ -157,13 +161,12 @@
     }
 
     .section-title {
-        color: var(--nikke-accent);
+        color: var(--adminui-accent);
         font-size: 1.1rem;
         margin-bottom: 10px;
-        text-transform: uppercase;
         font-weight: 600;
         letter-spacing: 1px;
-        border-bottom: 1px solid var(--nikke-gray);
+        border-bottom: 1px solid var(--adminui-gray);
         padding-bottom: 8px;
     }
 
@@ -175,63 +178,63 @@
 
     /* 自定义按钮 */
     .btn-accent {
-        background-color: var(--nikke-accent-dark);
+        background-color: var(--adminui-accent-dark);
         color: white;
         border: none;
         transition: all var(--transition-fast);
     }
 
     .btn-accent:hover {
-        background-color: var(--nikke-accent);
+        background-color: var(--adminui-accent);
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(232, 62, 140, 0.4);
         color: white;
     }
 
     /* 自定义复选框样式 */
-    .nikke-checkbox-group {
+    .adminui-checkbox-group {
         margin-top: 10px;
     }
 
-    .nikke-checkbox {
+    .adminui-checkbox {
         display: flex;
         align-items: center;
         margin-bottom: 0;
     }
 
-    .nikke-checkbox-input {
+    .adminui-checkbox-input {
         position: absolute;
         opacity: 0;
         height: 0;
         width: 0;
     }
 
-    .nikke-checkbox-label {
+    .adminui-checkbox-label {
         position: relative;
         padding-left: 30px;
         cursor: pointer;
         user-select: none;
     }
 
-    .nikke-checkbox-label:before {
+    .adminui-checkbox-label:before {
         content: '';
         position: absolute;
         left: 0;
         top: 0;
         width: 20px;
         height: 20px;
-        background-color: var(--nikke-gray);
-        border: 1px solid var(--nikke-gray-light);
+        background-color: var(--adminui-gray);
+        border: 1px solid var(--adminui-gray-light);
         border-radius: var(--radius-sm);
         transition: all var(--transition-fast);
     }
 
-    .nikke-checkbox-input:checked + .nikke-checkbox-label:before {
-        background-color: var(--nikke-accent);
-        border-color: var(--nikke-accent);
+    .adminui-checkbox-input:checked + .adminui-checkbox-label:before {
+        background-color: var(--adminui-accent);
+        border-color: var(--adminui-accent);
     }
 
-    .nikke-checkbox-label:after {
+    .adminui-checkbox-label:after {
         content: '\f00c';
         font-family: 'Font Awesome 5 Free', serif;
         font-weight: 900;
@@ -244,7 +247,7 @@
         font-size: 14px;
     }
 
-    .nikke-checkbox-input:checked + .nikke-checkbox-label:after {
+    .adminui-checkbox-input:checked + .adminui-checkbox-label:after {
         opacity: 1;
     }
 </style>

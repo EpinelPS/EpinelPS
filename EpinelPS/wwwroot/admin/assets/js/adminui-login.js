@@ -1,4 +1,4 @@
-﻿// NIKKE登录页专用脚本
+﻿// adminui登录页专用脚本
 document.addEventListener('DOMContentLoaded', function() {
     // 设置表单提交事件
     const form = document.getElementById('loginForm');

@@ -1,0 +1,181 @@
+@model EpinelPS.Models.Admin.ModUserCurrencyModel
+
+@{
+    ViewData["Title"] = "Modify Currency";
+}
+
+<div class="adminui-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0">Modify user currency</h1>
+        <a asp-action="Index" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i> <span data-i18n="users.modify.backToList">返回列表</span>
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Currency" asp-route-id="@Model.ID">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <dl class="row">
+                            <dt class="col-sm-3">Currency type:</dt>
+                            <dd class="col-sm-8">
+                                @Html.DropDownListFor(model => model.ToModify,
+                                Html.GetEnumSelectList<EpinelPS.Data.CurrencyType>().Where(f => f.Text != "None"), null,
+                                new { @class =
+                                "form-control" })
+                            </dd>
+                        </dl>
+                        <dl class="row">
+                            <dt class="col-sm-3">Currency type:</dt>
+                            <dd class="col-sm-8">
+                                <div class="input-group">
+                                    <input asp-for="Amount" type="password" id="newPassword" class="form-control"
+                                        required placeholder="Amount" type="number" value="" />
+                                </div>
+                        </dl>
+                        </dd>
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-primary" data-i18n="common.add">
+                                <i class="fas fa-save me-2"></i> Add
+                            </button>
+
+                            <a asp-action="Modify" asp-route-id="@Model.ID">
+                                <button formnovalidate class="btn btn-secondary" data-i18n="users.password.backToList"
+                                    type="button">
+                                    <i class="fas fa-save me-2"></i> Back</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Current currency</h3>
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.Current)
+                    {
+                        <p>@item.Key = @item.Value</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* adminui风格卡片标题 */
+    .card-header {
+        background-color: var(--adminui-primary);
+        color: var(--adminui-light);
+        font-weight: 600;
+        letter-spacing: 1px;
+        padding: 15px 20px;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    /* 作弊功能部分 */
+    .cheats-section {
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        color: var(--adminui-accent);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--adminui-gray);
+        padding-bottom: 8px;
+    }
+
+    .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* 自定义按钮 */
+    .btn-accent {
+        background-color: var(--adminui-accent-dark);
+        color: white;
+        border: none;
+        transition: all var(--transition-fast);
+    }
+
+    .btn-accent:hover {
+        background-color: var(--adminui-accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(232, 62, 140, 0.4);
+        color: white;
+    }
+
+    /* 自定义复选框样式 */
+    .adminui-checkbox-group {
+        margin-top: 10px;
+    }
+
+    .adminui-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+    }
+
+    .adminui-checkbox-input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+    }
+
+    .adminui-checkbox-label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .adminui-checkbox-label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background-color: var(--adminui-gray);
+        border: 1px solid var(--adminui-gray-light);
+        border-radius: var(--radius-sm);
+        transition: all var(--transition-fast);
+    }
+
+    .adminui-checkbox-input:checked+.adminui-checkbox-label:before {
+        background-color: var(--adminui-accent);
+        border-color: var(--adminui-accent);
+    }
+
+    .adminui-checkbox-label:after {
+        content: '\f00c';
+        font-family: 'Font Awesome 5 Free', serif;
+        font-weight: 900;
+        position: absolute;
+        left: 3px;
+        top: 1px;
+        color: white;
+        opacity: 0;
+        transition: opacity var(--transition-fast);
+        font-size: 14px;
+    }
+
+    .adminui-checkbox-input:checked+.adminui-checkbox-label:after {
+        opacity: 1;
+    }
+</style>
