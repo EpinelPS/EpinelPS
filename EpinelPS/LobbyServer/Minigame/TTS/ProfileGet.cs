@@ -11,7 +11,6 @@ public class ProfileGet : LobbyMessage
         User user = GetUser();
         ResGetMiniGameTtsProfile response = new();
         RankData rank = GetRank();
-        //Logging.WriteLine($"{req.EventTtsManagerTableId}", LogType.Info);
 
         NetMyMiniGameTtsTotalRankData mytotal = new(); 
         NetMiniGameTtsTotalRankData? myrank = rank.TtsRankDatas.TotalGetUserRank((long)user.ID, MiniGameTtsRankingType.Server);
@@ -28,7 +27,6 @@ public class ProfileGet : LobbyMessage
         }
 
         response.MyServerRankData = mytotal;
-        // TODO
         await WriteDataAsync(response);
     }
 }

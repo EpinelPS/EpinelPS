@@ -13,15 +13,12 @@ public class PlayTimeSave : LobbyMessage
         User user = GetUser();
         ResSaveMiniGameTtsPlayTime response = new();
 
-        //Logging.WriteLine($"{req.EventTtsManagerTableId},{req.TotalPlayTime}", LogType.Info);
-
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
             ttsData.TotalPlayTime = req.TotalPlayTime;
         }
 
         JsonDb.Save();
-        // TODO
         await WriteDataAsync(response);
     }
 }

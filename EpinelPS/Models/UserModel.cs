@@ -143,7 +143,7 @@ public class User
     //OutpostConditionTable
     public List<int> OutpostConditionList { get; set; } = [];
 
-    //派遣
+    // Outpost dispatch
     public int DispatchLv { get; set; } = 1;
     public int DispatchCollectionLv { get; set; } = 0;
     public int DispatchFavoriteLv { get; set; } = 0;
@@ -152,10 +152,9 @@ public class User
     public List<NetSelectableDispatchData> SelectableDispatchData { get; set; } = [];
     public DispatchData UserDispatchData { get; set; } = new();
 
-    //工会
     public GuildData Guild { get; set; } = new();
 
-    //小游戏
+    // Minigame data
     public Dictionary<int,MiniGameScenarios> MiniGameScenarios { get;set;  } = new();
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo { get; set; } = [];
     public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice { get; set; } = [];
@@ -167,7 +166,7 @@ public class User
     public Dictionary<int, StellarBladeDatas> StellarBladeDatas { get; set; } = new();
     public Dictionary<int, TowerDefenseData> TowerDefenseDatas { get; set; } = new();
 
-    //播放列表
+    // Jukebox
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
@@ -580,8 +579,6 @@ public class User
         int dis2 = GameData.Instance.DispatchBoardTable.Values.Where(x => x.DispatchType == DispatchType.DispatchCollection && x.DispatchBoardLv == DispatchCollectionLv).FirstOrDefault()?.DispatchMax ?? 0;
         int dis3 = GameData.Instance.DispatchBoardTable.Values
             .Where(x => x.DispatchType == DispatchType.DispatchFavorite && x.DispatchBoardLv == DispatchFavoriteLv).FirstOrDefault()?.DispatchMax ?? 0;
-
-        Logging.WriteLine($"获取派遣次数 {dis1},{dis2},{dis3}");
 
         return dis1 + dis2 + dis3;
     }

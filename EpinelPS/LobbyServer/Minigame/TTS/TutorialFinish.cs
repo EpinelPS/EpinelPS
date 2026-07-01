@@ -12,8 +12,6 @@ public class TutorialFinish : LobbyMessage
         User user = GetUser();
         ResFinishMiniGameTtsTutorial response = new();
 
-        //Logging.WriteLine($"{req.EventTtsManagerTableId}", LogType.Info);
-
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
             ttsData.IsFinishTutorial = true;
@@ -21,8 +19,6 @@ public class TutorialFinish : LobbyMessage
 
         JsonDb.Save();
 
-        
-        // TODO
         await WriteDataAsync(response);
     }
 }

@@ -14,8 +14,6 @@ public class TTSEnter : LobbyMessage
         User user = GetUser();
         ResEnterMiniGameTtsTitle response = new();
 
-        //Logging.WriteLine($"{req.EventTtsManagerTableId}", LogType.Info);
-
         List<EventTTSSongGroupManagerRecord_Raw>? songlist = GameData.Instance.EventTTSSongGroupManagerTable.Values
             .Where(x=>x.BasicMusicGroup == true).ToList();
 
@@ -126,10 +124,6 @@ public class TTSEnter : LobbyMessage
             response.MyUnionTotalRankData = new();
         }
 
-
-       
-
-
         response.UserData = LobbyHandler.CreateWholeUserDataFromDbUser(user);
 
         JsonDb.Save();     
@@ -140,11 +134,7 @@ public class TTSEnter : LobbyMessage
 
     public static void IntMission(ref TtsDatas ttsDatas)
     {
-        if (ttsDatas.MissionData.Count > 0)
-        {
-
-        }
-        else
+        if (ttsDatas.MissionData.Count == 0)
         {
             var mlist = GameData.Instance.EventTTSMissionTable.Values.ToList();
             foreach (var item in mlist)
@@ -158,5 +148,4 @@ public class TTSEnter : LobbyMessage
             }
         }
     }
-
 }

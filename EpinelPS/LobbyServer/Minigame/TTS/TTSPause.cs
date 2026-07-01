@@ -10,10 +10,8 @@ public class TTSPause : LobbyMessage
         ReqPauseMiniGameTtsPlay req = await ReadData<ReqPauseMiniGameTtsPlay>();
         //User user = GetUser();
         ResPauseMiniGameTtsPlay response = new();
-
-        //Logging.WriteLine($"{req.EventTtsManagerTableId}", LogType.Info);
         
-        // TODO NO
+        // TODO
         await WriteDataAsync(response);
     }
 }

@@ -14,14 +14,10 @@ public class ClearTower : LobbyMessage
 
         ResClearTower response = new();
         User user = GetUser();
-
-            //Console.WriteLine($"[ClearTower] 战役结果 : {req.BattleResult}");
-            
-
-            if (req.BattleResult == 1)
-            {
-                response = CompleteTower(user, req.TowerId);
-            }
+        if (req.BattleResult == 1)
+        {
+            response = CompleteTower(user, req.TowerId);
+        }
 
         await WriteDataAsync(response);
     }
@@ -31,14 +27,8 @@ public class ClearTower : LobbyMessage
         ResClearTower response = new();
 
         if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with Id " + TowerId);
-
-            //Console.WriteLine($"[ClearTower] 通关塔ID : {record.Id} , 类型：{record.Type} , 层：{record.Floor}");
-
-            // Parse TowerId to get TowerType and FloorNumber
-            //int TowerType = (TowerId / 10000) - 1; // For some weird reason the Type here doesn't match up with NetTowerData, thus the -1
-            //int FloorNumber = TowerId % 10000;
-            int TowerType = (int)record.Type;
-            int FloorNumber = record.Floor;
+        int TowerType = (int)record.Type;
+        int FloorNumber = record.Floor;
 
 
         // Update user's TowerProgress
@@ -73,15 +63,11 @@ public class ClearTower : LobbyMessage
         }
         else if (record.Type == CorporationTowerType.ALL)
         {
-
             user.AddTrigger(Trigger.TowerBasicClear, 1, TowerId);
         }
 
-            RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.RewardId) ?? throw new Exception("failed to get reward");
-
-            //Console.WriteLine($"[ClearTower] 奖励ID : {record.RewardId}");
-
-            response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
+        RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.RewardId) ?? throw new Exception("failed to get reward");
+        response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
 
         JsonDb.Save();

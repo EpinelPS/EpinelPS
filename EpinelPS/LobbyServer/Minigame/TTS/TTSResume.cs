@@ -11,14 +11,10 @@ public class TTSResume : LobbyMessage
         User user = GetUser();
         ResResumeMiniGameTtsPlay response = new();
 
-       // Logging.WriteLine($"{req.EventTtsManagerTableId},{req.PauseDuration}", LogType.Info);
-
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
             ttsData.TotalPlayTime = TtsHelper.Subtract(ttsData.TotalPlayTime, req.PauseDuration);
         }
-
-        // TODO NO
         await WriteDataAsync(response);
     }
 }

@@ -12,7 +12,6 @@ public class SongRankingGet : LobbyMessage
         User user = GetUser();
         ResGetMiniGameTtsSongRanking response = new();
 
-        //Logging.WriteLine($"{req.EventTtsManagerTableId},{req.EventTtsSongManagerTableId},{req.RankingType}", LogType.Info);
         var entities = TtsHelper.GetBySongIdAndRankTypeWithRank(req.EventTtsSongManagerTableId, req.RankingType);
         if (entities.Count > 0)
         {
@@ -44,7 +43,6 @@ public class SongRankingGet : LobbyMessage
             response.MyRankData = rankData;
         }        
         
-        // TODO
         await WriteDataAsync(response);
     }
 }

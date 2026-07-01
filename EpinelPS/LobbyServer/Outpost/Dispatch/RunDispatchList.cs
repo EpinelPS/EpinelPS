@@ -12,14 +12,13 @@ public class RunDispatchList : LobbyMessage
 
         ResRunDispatchList response = new();
 
-        //Logging.WriteLine($"获取 {req}", LogType.Info);
         User user = GetUser();
         DateTime startTime = DateTime.UtcNow;
 
         foreach (var item in req.DispatchData)
         {
             DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values
-            .Where(x => x.Id == item.Tid).FirstOrDefault();                
+            .Where(x => x.Id == item.Tid).FirstOrDefault();
 
             var dispatchData = user.UserDispatchData.dispatchDatas.FirstOrDefault(x => x.Tid == item.Tid);
             if (dispatchData != null)
@@ -43,14 +42,7 @@ public class RunDispatchList : LobbyMessage
 
             response.SuccessTidList.Add(item.Tid);
         }
-                
-        
-
         JsonDb.Save();
-
-
-
-        // TODO
         await WriteDataAsync(response);
     }
 }
