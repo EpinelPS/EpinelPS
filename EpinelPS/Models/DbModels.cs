@@ -20,6 +20,9 @@ public class FieldInfoNew
 {
     public List<int> CompletedStages { get; set; } = [];
     public List<NetFieldObject> CompletedObjects { get; set; } = [];
+    public List<int> FieldItemTableIdList { get; set; } = [];
+    public List<int> AcquiredPasswordList { get; set; } = [];
+    public List<int> UnlockedDoorList { get; set; } = [];
     public bool BossEntered { get; set; } = false;
 }
 
@@ -96,6 +99,7 @@ public class EventMissionData
     public List<int> DailyMissionIdList { get; set; } = [];
     public int LastDay { get; set; } = 0; // yyyyMMdd
     public long LastDate { get; set; } = 0; // Default value for LastDate
+    public bool AllClear { get; set; } = false;//存储活动事件是否完成
 }
 // EventShopBuyCountData
 public class EventShopProductData
@@ -226,6 +230,7 @@ public class ResetableData
     public SimRoomData SimRoomData { get; set; } = new();
     public Dictionary<int, int> TowerCount { get; set; } = [];
     public Dictionary<int, int> DailyCounselCount { get; set; } = [];
+    public int DispatchCount { get; set; } = 0;
 
 }
 public class WeeklyResetableData
@@ -526,7 +531,29 @@ public class GuildData
        
 }
 
+public class StellarBladeDatas
+{
+    public List< NetStellarBladeCurrency> Currency { get; set; } = [] ;
+    public NetStellarBladeCharacterData CharacterData { get; set; } = new();
+    public List< NetStellarBladeMissionData> MissionData { get; set; } =[];
+    public List<NetStellarBladeMissionData> DailyMissionData { get; set; } =[];
+    public List<NetStellarBladeMissionData> DailyPointMissionData { get; set; } = [];    
+    public Dictionary<int, ResArcadeGetStellarBladeStatistics.Types.NetStatisticsData> StatisticsData { get; set; } = [];
+    public Dictionary<int, SBStageDatas> BestStageDatas { get; set; } = [];
+    public List<int> TutorialList { get; set; } = [];
+    public int LastEnteredStageId { get; set; }
+    public List<int> SbItemIdList { get; set; } = [];
+    public int DailyPoint { get; set; } = 0;
+    public int Today { get; set; }
+}
 
+public class SBStageDatas
+{
+    public int BestDealtDamage { get; set; }
+    public int BestScore { get; set; }
+    public Duration BestDuration { get; set; }
+
+}
 
 
 public class TtsDatas
@@ -579,6 +606,17 @@ public class SongRankKey
     
 }
 
+
+public class TowerDefenseData
+{
+    public int ChallengeMaxScore { get; set; } = 0;
+    public List<int> ClearedStageIdList { get; set; } = [];
+    public List<int> ClearedTutorialIdList { get; set; } = [];
+    public List<NetArcadeTowerDefenseMissionProgress> MissionProgressList { get; set; } = [];
+    public int UpgradeCurrency { get; set; } = 0;
+    public List<int> UpgradeIdList { get; set; } = [];
+    public int LastEnteredStageId { get; set; } = 0;
+}
 
 public class SongRankData
 {

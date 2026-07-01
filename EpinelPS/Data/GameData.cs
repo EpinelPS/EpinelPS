@@ -112,6 +112,13 @@ public class GameData
     [LoadRecord("FieldItemTable.json", "Id")]
     public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
 
+    //派遣
+    [LoadRecord("DispatchTable.json", "Id")]
+    public readonly Dictionary<int, DispatchRecord> DispatchTable = [];
+    [LoadRecord("DispatchResetTable.json", "Id")]
+    public readonly Dictionary<int, DispatchResetRecord> DispatchResetTable = [];
+    [LoadRecord("DispatchBoardTable.json", "Id")]
+    public readonly Dictionary<int, DispatchBoardRecord> DispatchBoardTable = [];
     [LoadRecord("OutpostBattleTable.json", "Id")]
     public readonly Dictionary<int, OutpostBattleRecord> OutpostBattle = [];
 

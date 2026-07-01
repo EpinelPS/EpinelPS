@@ -9,7 +9,7 @@ public class SetProfileTeam : LobbyMessage
     {
         ReqSetProfileTeam req = await ReadData<ReqSetProfileTeam>();
         User user = GetUser();
-        for (int i = 0; i < req.Team.Slots.Count - 1; i++)
+        for (int i = 0; i < req.Team.Slots.Count; i++)
         {
             NetTeamSlot slot = req.Team.Slots[i];
 

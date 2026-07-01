@@ -66,6 +66,7 @@ public class User
     public NetWallpaperPlaylist[] WallpaperPlaylistList { get; set; } = [];
     public NetWallpaperJukebox[] WallpaperJukeboxList { get; set; } = [];
     public List<int> LobbyDecoBackgroundList { get; set; } = [];
+    public List<int> LiveWallpaperList { get; set; } = [];
 
     //角色时装
     public List<int> CostumeList { get; set; } = [];
@@ -79,7 +80,6 @@ public class User
     public List<int> IconList { get; set; } = [];
     public List<int> FrameList { get; set; } = [];
     public List<int> TitleList { get; set; } = [];
-    public List<int> LiveWallpaperList { get; set; } = [];
 
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
@@ -164,6 +164,8 @@ public class User
     public List<NetRebuildEdenData> RebuildedenData { get; set; } = [];
 
     public Dictionary<int, TtsDatas> TTSGameData { get; set; } = new();
+    public Dictionary<int, StellarBladeDatas> StellarBladeDatas { get; set; } = new();
+    public Dictionary<int, TowerDefenseData> TowerDefenseDatas { get; set; } = new();
 
     //播放列表
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
@@ -509,25 +511,8 @@ public class User
     public void ResetDataIfNeeded()
     {
         bool needsSave = false;
+        var infracore = GameData.Instance.InfracoreTable.Values.Where(x => x.Grade == InfraCoreLvl).FirstOrDefault();
 
-        // Check daily reset
-        if (ShouldResetUser())
-        {
-            Logging.WriteLine("Resetting daily user data...", LogType.Warning);
-
-            LastReset = DateTime.UtcNow;
-            ResetableData = new()
-            {
-                SimRoomData = new()
-                {
-                    LegacyBuffs = ResetableData.SimRoomData.LegacyBuffs, // Retain old LegacyBuffs data
-                    CurrentDifficulty = ResetableData.SimRoomData.CurrentDifficulty,
-                    CurrentChapter = ResetableData.SimRoomData.CurrentChapter,
-                    CurrentSeasonData = ResetableData.SimRoomData.CurrentSeasonData,
-                }
-            };
-            needsSave = true;
-        }
 
         // Check weekly reset
         if (ShouldResetWeekly())
@@ -550,6 +535,31 @@ public class User
             needsSave = true;
         }
 
+        // Check daily reset
+        if (ShouldResetUser())
+        {
+            Logging.WriteLine("Resetting daily user data...", LogType.Warning);
+
+            LastReset = DateTime.UtcNow;
+            ResetableData = new()
+            {
+                SimRoomData = new()
+                {
+                    LegacyBuffs = ResetableData.SimRoomData.LegacyBuffs, // Retain old LegacyBuffs data
+                    CurrentDifficulty = ResetableData.SimRoomData.CurrentDifficulty,
+                    CurrentChapter = ResetableData.SimRoomData.CurrentChapter,
+                    CurrentSeasonData = ResetableData.SimRoomData.CurrentSeasonData,
+                }
+            };
+
+            DispatchResetCount = 0;
+            ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
+            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;           
+
+            needsSave = true;
+        }
+
+
         if (needsSave)
         {
             JsonDb.Save();
@@ -560,5 +570,19 @@ public class User
         // +4 每天4点重新计算 yyyyMMdd
         DateTime dateTime = DateTime.UtcNow.AddHours(4);
         return dateTime.Year * 10000 + dateTime.Month * 100 + dateTime.Day;
+    }
+
+    public int GetDispatchCount()
+    {
+
+        int dis1 = GameData.Instance.DispatchBoardTable.Values
+            .Where(x => x.DispatchType == DispatchType.Dispatch && x.DispatchBoardLv == DispatchLv).FirstOrDefault().DispatchMax;
+        int dis2 = GameData.Instance.DispatchBoardTable.Values.Where(x => x.DispatchType == DispatchType.DispatchCollection && x.DispatchBoardLv == DispatchCollectionLv).FirstOrDefault()?.DispatchMax ?? 0;
+        int dis3 = GameData.Instance.DispatchBoardTable.Values
+            .Where(x => x.DispatchType == DispatchType.DispatchFavorite && x.DispatchBoardLv == DispatchFavoriteLv).FirstOrDefault()?.DispatchMax ?? 0;
+
+        Logging.WriteLine($"获取派遣次数 {dis1},{dis2},{dis3}");
+
+        return dis1 + dis2 + dis3;
     }
 }

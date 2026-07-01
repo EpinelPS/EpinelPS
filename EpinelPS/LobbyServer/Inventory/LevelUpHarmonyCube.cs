@@ -41,15 +41,9 @@ public class LevelUpHarmonyCube : LobbyMessage
             throw new BadHttpRequestException("Current level data not found", 400);
         }
 
-        ItemHarmonyCubeLevelRecord? nextLevelData = levelData.FirstOrDefault(x => x.Level == harmonyCubeItem.Level + 1);
-        if (nextLevelData == null)
-        {
-            throw new BadHttpRequestException("Harmony cube is already at max level", 400);
-        }
-
-        int requiredMaterialCount = nextLevelData.MaterialValue;
-        int requiredMaterialId = nextLevelData.MaterialId;
-        int requiredGold = nextLevelData.GoldValue;
+        int requiredMaterialCount = currentLevelData.MaterialValue;
+        int requiredMaterialId = currentLevelData.MaterialId;
+        int requiredGold = currentLevelData.GoldValue;
 
         DbItemData? materialItem = user.Items.FirstOrDefault(x => x.ItemType == requiredMaterialId && x.Count >= requiredMaterialCount);
         if (materialItem == null)
@@ -69,7 +63,7 @@ public class LevelUpHarmonyCube : LobbyMessage
         }
         else
         {
-            response.Items.Add(NetUtils.ToNet(materialItem));
+            response.Items.Add(NetUtils.UserItemDataToNet(materialItem));
         }
 
         user.Currency[CurrencyType.Gold] -= requiredGold;
@@ -85,7 +79,7 @@ public class LevelUpHarmonyCube : LobbyMessage
             user.AddTrigger(Trigger.HarmonyCubeLevelMax, 1, harmonyCubeItem.ItemType);
         }
 
-        response.Items.Add(NetUtils.ToNet(harmonyCubeItem));
+        response.Items.Add(NetUtils.UserItemDataToNet(harmonyCubeItem));
 
         response.Currency = new NetUserCurrencyData
         {
