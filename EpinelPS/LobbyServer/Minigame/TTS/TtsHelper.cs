@@ -11,11 +11,7 @@ public static class TtsHelper
    
     public static Duration Add(this Duration left, Duration right)
     {
-        //Logging.WriteLine($"{left},{right}", LogType.Info);        
-        Duration all = Duration.FromTimeSpan(left.ToTimeSpan()+ right.ToTimeSpan());
-        //Logging.WriteLine($"All: {all}", LogType.Info);
-
-        return all;
+        return Duration.FromTimeSpan(left.ToTimeSpan()+ right.ToTimeSpan());
     }
 
     public static Duration Subtract(this Duration left, Duration right)

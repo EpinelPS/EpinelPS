@@ -10,12 +10,6 @@ public class TTSStart : LobbyMessage
         ReqStartMiniGameTtsPlay req = await ReadData<ReqStartMiniGameTtsPlay>();
         User user = GetUser();
         ResStartMiniGameTtsPlay response = new();
-
-        //Logging.WriteLine($"{req.EventTtsManagerTableId},{req.IsRestart},{req.TotalPlayTime}", LogType.Info);
-
-
-        
-        // TODO NO
         await WriteDataAsync(response);
     }
 }

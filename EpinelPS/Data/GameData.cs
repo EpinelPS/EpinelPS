@@ -29,40 +29,29 @@ public class GameData
 
     public readonly Dictionary<string, FieldMapRecord> MapData = [];
 
-        //ArchiveEvent
-        [LoadRecord("ArchiveEventDungeonTable.json", "Id")]
-        public readonly Dictionary<int, ArchiveEventDungeonRecord> ArchiveEventDungeonreRecordRaws = [];
+    //ArchiveEvent
+    [LoadRecord("ArchiveEventDungeonTable.json", "Id")]
+    public readonly Dictionary<int, ArchiveEventDungeonRecord> ArchiveEventDungeonreRecordRaws = [];
 
-        [LoadRecord("ArchiveEventDungeonSpotBattleTable.json", "Id")]
-        public readonly Dictionary<int, ArchiveEventDungeonSpotBattleRecord> ArchiveEventDungeonSpotBattleRecords = [];
+    [LoadRecord("ArchiveEventDungeonSpotBattleTable.json", "Id")]
+    public readonly Dictionary<int, ArchiveEventDungeonSpotBattleRecord> ArchiveEventDungeonSpotBattleRecords = [];
 
-        [LoadRecord("ArchiveEventDungeonDifficultTable.json", "Id")]
-        public readonly Dictionary<int, ArchiveEventDungeonDifficultRecord> ArchiveEventDungeonDifficultRecords = [];
+    [LoadRecord("ArchiveEventDungeonDifficultTable.json", "Id")]
+    public readonly Dictionary<int, ArchiveEventDungeonDifficultRecord> ArchiveEventDungeonDifficultRecords = [];
 
-        [LoadRecord("ArchiveEventDungeonStageTable.json", "Id")]
-        public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
+    [LoadRecord("ArchiveEventDungeonStageTable.json", "Id")]
+    public readonly Dictionary<int, ArchiveEventDungeonStageRecord> archiveEventDungeonStageRecords = [];
+    [LoadRecord("CashShopTable.json", "Id")]
+    public readonly Dictionary<int, CashShopRecord> CashShopRecords = [];
+    [LoadRecord("FunctionTable.json", "Id")]
+    public readonly Dictionary<int, FunctionRecord> FunctionRecords = [];
+    [LoadRecord("ItemSelectOptionTable.json", "Id")]
+    public readonly Dictionary<int, ItemSelectOptionRecord> SelectItem = [];
 
-
-
-
-
-
-        [LoadRecord("CashShopTable.json", "Id")]
-        public readonly Dictionary<int, CashShopRecord> CashShopRecords = [];
-
-
-        [LoadRecord("FunctionTable.json", "Id")]
-        public readonly Dictionary<int, FunctionRecord> FunctionRecords = [];
-
-
-
-        [LoadRecord("ItemSelectOptionTable.json", "Id")]
-        public readonly Dictionary<int, ItemSelectOptionRecord> SelectItem = [];
-
-        [LoadRecord("ItemSelectOptionRowTable.json", "Id")]
-        public readonly Dictionary<int, ItemSelectOptionRowRecord> SelectRowItem = [];
-        [LoadRecord("MainQuestTable.json", "Id")]
-        public readonly Dictionary<int, MainQuestRecord> QuestDataRecords = [];
+    [LoadRecord("ItemSelectOptionRowTable.json", "Id")]
+    public readonly Dictionary<int, ItemSelectOptionRowRecord> SelectRowItem = [];
+    [LoadRecord("MainQuestTable.json", "Id")]
+    public readonly Dictionary<int, MainQuestRecord> QuestDataRecords = [];
 
     [LoadRecord("CampaignStageTable.json", "Id")]
     public readonly Dictionary<int, CampaignStageRecord> StageDataRecords = [];
@@ -111,8 +100,6 @@ public class GameData
 
     [LoadRecord("FieldItemTable.json", "Id")]
     public readonly Dictionary<int, FieldItemRecord> FieldItems = [];
-
-    //派遣
     [LoadRecord("DispatchTable.json", "Id")]
     public readonly Dictionary<int, DispatchRecord> DispatchTable = [];
     [LoadRecord("DispatchResetTable.json", "Id")]
@@ -138,7 +125,7 @@ public class GameData
     public readonly Dictionary<int, LiveWallpaperRecord> LiveWallpaperTable = [];
 
     [LoadRecord("AlbumResourceTable.json", "Id")]
-    public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];    
+    public readonly Dictionary<int, AlbumResourceRecord> albumResourceRecords = [];
 
     [LoadRecord("ArchiveRecordManagerTable.json", "Id")]
     public readonly Dictionary<int, ArchiveRecordManagerRecord> archiveRecordManagerTable = [];
@@ -148,9 +135,6 @@ public class GameData
 
     [LoadRecord("ArchiveEventQuestTable.json", "Id")]
     public readonly Dictionary<int, ArchiveEventQuestRecord_Raw> archiveEventQuestRecords = [];
-
-        
-
     [LoadRecord("ArchiveMessengerConditionTable.json", "Id")]
     public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
 
@@ -325,17 +309,14 @@ public class GameData
     public readonly Dictionary<int, EventTTSTutorialRecord_Raw> EventTTSTutorialTable = [];
     [LoadRecord("TTSAlbumShopTable.json", "Id")]
     public readonly Dictionary<int, TTSAlbumShopRecord_Raw> TTSAlbumShopTable = [];
-
-
-    //个人面板
     [LoadRecord("ProfileCardObjectTable.json", "Id")]
     public readonly Dictionary<int, ProfileCardObjectRecord> ProfileCardObjectTable = [];
     [LoadRecord("UserIconTable.json", "Id")]
-    public readonly Dictionary<int, UserIconRecord> UserIconTable = [];        
+    public readonly Dictionary<int, UserIconRecord> UserIconTable = [];
     [LoadRecord("UserTitleAcquireConditionTable.json", "Id")]
     public readonly Dictionary<int, UserTitleAcquireConditionRecord> UserTitleAcquireConditionTable = [];
     [LoadRecord("UserTitleAssemblyTable.json", "Id")]
-    public readonly Dictionary<int, UserTitleAssemblyRecord>  UserTitleAssemblyTable = [];
+    public readonly Dictionary<int, UserTitleAssemblyRecord> UserTitleAssemblyTable = [];
     [LoadRecord("UserTitleSingleTable.json", "Id")]
     public readonly Dictionary<int, UserTitleSingleRecord> UserTitleSingleTable = [];
     [LoadRecord("UserTitleTable.json", "Id")]

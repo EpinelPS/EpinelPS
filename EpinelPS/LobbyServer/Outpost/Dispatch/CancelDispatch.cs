@@ -11,7 +11,6 @@ public class CancelDispatch : LobbyMessage
     {
         ReqCancelDispatch req = await ReadData<ReqCancelDispatch>();
         ResCancelDispatch response = new();
-        //Logging.WriteLine($"获取 {req}", LogType.Info);
         User user = GetUser();
         DateTime startTime = DateTime.UtcNow;
 

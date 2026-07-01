@@ -99,7 +99,7 @@ public class EventMissionData
     public List<int> DailyMissionIdList { get; set; } = [];
     public int LastDay { get; set; } = 0; // yyyyMMdd
     public long LastDate { get; set; } = 0; // Default value for LastDate
-    public bool AllClear { get; set; } = false;//存储活动事件是否完成
+    public bool AllClear { get; set; } = false;// activity event has been completed
 }
 // EventShopBuyCountData
 public class EventShopProductData

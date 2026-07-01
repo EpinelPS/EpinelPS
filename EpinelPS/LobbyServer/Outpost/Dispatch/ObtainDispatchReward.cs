@@ -13,7 +13,6 @@ public class ObtainDispatchReward : LobbyMessage
         ReqObtainDispatchReward req = await ReadData<ReqObtainDispatchReward>();
 
         ResObtainDispatchReward response = new();
-        //Logging.WriteLine($"获取 {req.TidList}", LogType.Info);
         User user = GetUser();
         NetRewardData rewardData = new();
         List<NetUserDispatchData> dispatchDatas = user.UserDispatchData.dispatchDatas;
@@ -21,7 +20,7 @@ public class ObtainDispatchReward : LobbyMessage
         foreach (var item in req.TidList)
         {
             DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values.Where(c => c.Id == item).FirstOrDefault();
-            int rewardid = dispatch.RewardId;                       
+            int rewardid = dispatch.RewardId;
             PassHelper.RewardsForUser(user, ref rewardData, rewardid);
             user.AddUnique(user.DispatchClearList, item);
             user.UserDispatchData.dispatchDatas.RemoveAll(x => x.Tid == item);
@@ -39,8 +38,7 @@ public class ObtainDispatchReward : LobbyMessage
         response.SelectableDispatchList.AddRange(dispatchtable);
 
         JsonDb.Save();
-         // TODO
-         await WriteDataAsync(response);
+        await WriteDataAsync(response);
     }
 
 }

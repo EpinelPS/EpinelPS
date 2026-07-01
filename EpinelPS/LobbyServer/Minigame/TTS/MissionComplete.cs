@@ -14,7 +14,6 @@ public class MissionComplete : LobbyMessage
         User user = GetUser();
         ResCompleteMiniGameTtsMission response = new();
 
-        //Logging.WriteLine($"{req.EventTtsManagerTableId},{req.EventTtsMissionTableIdList}", LogType.Info);
         NetRewardData ret = new();
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
@@ -29,7 +28,6 @@ public class MissionComplete : LobbyMessage
                 {
                     ttsData.MissionCompleteList.Add(item);
                 }
-                
 
                 if (ttsData.MissionData.TryGetValue(item, out var miss))
                 {
@@ -46,7 +44,6 @@ public class MissionComplete : LobbyMessage
         }
 
         JsonDb.Save();
-        // TODO
         await WriteDataAsync(response);
     }
 }

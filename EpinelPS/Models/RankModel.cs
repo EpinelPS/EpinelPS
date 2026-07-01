@@ -7,11 +7,6 @@ public class RankData
 {
     public Dictionary<int, List<SongRankData>> SongRankDatas { get; set; } = [];
     public MiniGameTtsTotalRankData TtsRankDatas { get; set; } = new();
-
-
-
-
-   
 }
 
 

@@ -13,8 +13,6 @@ public class GetDispatchList : LobbyMessage
         Random random = new Random();
         ResGetDispatchList response = new();
 
-        //Logging.WriteLine($"获取 {req}",LogType.Info);
-
         User user = GetUser();
 
         List<DispatchBoardData> dispatch = GameData.Instance.DispatchBoardTable.Values
@@ -139,7 +137,4 @@ public class GetDispatchList : LobbyMessage
         // TODO
         await WriteDataAsync(response);
     }
-
-
-       
 }

@@ -10,21 +10,18 @@ public class TotalGet : LobbyMessage
         ReqGetMiniGameTtsTotalRanking req = await ReadData<ReqGetMiniGameTtsTotalRanking>();
         User user = GetUser();
         ResGetMiniGameTtsTotalRanking response = new();
-
-        //Logging.WriteLine($"{req.RankingType},{req.EventTtsManagerTableId}", LogType.Info);
-
         RankData rank = GetRank();
 
         List<NetMiniGameTtsTotalRankData>? entities = rank.TtsRankDatas.TotalGetLeaderboardByRankType(req.RankingType);
         NetMiniGameTtsTotalRankData? myrank = rank.TtsRankDatas.TotalGetUserRank((long)user.ID, req.RankingType);
 
-       
-        if (entities.Count>0)
+
+        if (entities.Count > 0)
         {
             response.TopRankDataList.AddRange(entities);
         }
 
-        if (myrank!=null)
+        if (myrank != null)
         {
             NetMyMiniGameTtsTotalRankData mrank = new()
             {
@@ -34,10 +31,6 @@ public class TotalGet : LobbyMessage
 
             response.MyRankData = mrank;
         }
-        
-        
-        
-        // TODO
         await WriteDataAsync(response);
     }
 }

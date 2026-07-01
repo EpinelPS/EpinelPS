@@ -13,7 +13,6 @@ public class RunDispatch : LobbyMessage
 
         ResRunDispatch response = new();
 
-        //Logging.WriteLine($"获取 {req}:{req.SelectSlotId},{req.Tid},{req.CsnList}", LogType.Info);
         User user = GetUser();
         DateTime startTime = DateTime.UtcNow;
 

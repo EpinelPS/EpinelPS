@@ -11,10 +11,9 @@ public class ResetDispatchList : LobbyMessage
         ReqResetDispatchList req = await ReadData<ReqResetDispatchList>();
 
         ResResetDispatchList response = new();
-        //Logging.WriteLine($"获取 {req}", LogType.Info); 
         User user = GetUser();
         DateTime startTime = DateTime.UtcNow;
-        Random random = new Random();
+        Random random = new();
         user.DispatchResetCount++;
 
         var reset = GameData.Instance.DispatchResetTable.Values.Where(x=>x.Id == user.DispatchResetCount).FirstOrDefault();
@@ -66,7 +65,6 @@ public class ResetDispatchList : LobbyMessage
         response.DispatchList.AddRange(olist);
         response.DispatchResetCount = user.DispatchResetCount;
         //response.SelectableDispatchList.AddRange(dontdispatcht);
-        // TODO
         await WriteDataAsync(response);
     }
 }

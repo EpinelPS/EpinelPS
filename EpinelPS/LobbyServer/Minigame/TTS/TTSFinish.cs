@@ -14,11 +14,6 @@ public class TTSFinish : LobbyMessage
         User user = GetUser();
         ResFinishMiniGameTtsPlay response = new();
 
-        //Logging.WriteLine($"{req.ComboCount},{req.Difficulty},{req.EventTtsManagerTableId}" +
-        //    $",{req.EventTtsSongManagerTableId},{req.GoodCount},{req.GreatCount},{req.IsAllPerfect}" +
-        //    $",{req.IsCleared},{req.IsFullCombo},{req.JudgeTimeDiffInMilliSeconds},{req.LaneSpeed}" +
-        //    $",{req.MissCount},{req.PerfectCount},{req.PerfectPlusCount},{req.Rank},{req.Score},{req.TotalPlayTime}", LogType.Info);
-
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
            NetMiniGameTtsSongPlayData? predata  = ttsData.SongPlayData
@@ -27,15 +22,8 @@ public class TTSFinish : LobbyMessage
             {
                 response.PreviousSongPlayData = predata;
             }
-            
-            
-            //次数
             ttsData.AllPlayCount += 1;
-
-            //总分
             ttsData.TotalScore += req.Score;
-
-            //歌曲排行榜
             TtsHelper.InsertOrUpdate(new()
             {
                 Difficulty = req.Difficulty,
@@ -68,15 +56,13 @@ public class TTSFinish : LobbyMessage
                 UserId = (long)user.ID,
                 UpdateTime = DateTime.Now.Ticks
             });
-
-            //总排行榜
             RankData rank = JsonDb.GetRank();
 
             rank.TtsRankDatas.InsertOrUpdate((long)user.ID, MiniGameTtsRankingType.Server, ttsData.TotalScore);
             rank.TtsRankDatas.InsertOrUpdate((long)user.ID, MiniGameTtsRankingType.Friend, ttsData.TotalScore);
             rank.TtsRankDatas.InsertOrUpdate((long)user.ID, MiniGameTtsRankingType.Union, ttsData.TotalScore);
 
-            //ScoreData、PlayCount
+            //ScoreData, PlayCount
             AddScoreData(req, ref ttsData);
 
             if (req.IsCleared)
@@ -109,11 +95,7 @@ public class TTSFinish : LobbyMessage
             UpMission(ref ttsData, req);
         }
 
-        
-       
-
         JsonDb.Save();
-        // TODO
         await WriteDataAsync(response);
     }
 
@@ -135,9 +117,7 @@ public class TTSFinish : LobbyMessage
 
     private static void UpMission(ref TtsDatas ttsData, ReqFinishMiniGameTtsPlay req)
     {
-        List<EventTTSMissionType> lable = new();
-        lable.Add(EventTTSMissionType.MusicPlayCount);
-        lable.Add(EventTTSMissionType.ScoreAccumulate);
+        List<EventTTSMissionType> lable = [EventTTSMissionType.MusicPlayCount, EventTTSMissionType.ScoreAccumulate];
 
         if ((int)req.Rank >= (int)MiniGameTtsRank.A)
         {
@@ -168,10 +148,9 @@ public class TTSFinish : LobbyMessage
             lable.Add(EventTTSMissionType.NoteRankCountByPerfectPlus);
         }
 
-        List<int>? specificMusic = GameData.Instance.EventTTSMissionTable.Values
+        List<int>? specificMusic = [.. GameData.Instance.EventTTSMissionTable.Values
             .Where(s => s.MissionType == EventTTSMissionType.SpecificMusicPlayCount)
-            .SelectMany(s => s.MissionValue) 
-            .ToList();
+            .SelectMany(s => s.MissionValue)];
 
         if (specificMusic.Contains(req.EventTtsSongManagerTableId))
         {
@@ -282,12 +261,10 @@ public class TTSFinish : LobbyMessage
         x.Difficulty == req.Difficulty);
         if (existing != null)
         {
-            // 存在则更新（只更新更高分）
             existing.Score = Math.Max(existing.Score, req.Score);
         }
         else
         {
-            // 不存在则添加
             ttsData.ScoreData.Add(new NetMiniGameTtsScoreData
             {
                 Difficulty = req.Difficulty,
@@ -306,7 +283,6 @@ public class TTSFinish : LobbyMessage
         }
         else
         {
-            // 不存在则添加
             ttsData.SongPlayCount.Add(new NetMiniGameTtsSongPlayCount ()
             {
                 Difficulty = req.Difficulty,
@@ -364,12 +340,7 @@ public class TTSFinish : LobbyMessage
                 Rank = req.Rank
             };
 
-            // 不存在则添加
             ttsData.SongPlayData.Add(newplay);
         }
-
-
-
-
     }
 }
