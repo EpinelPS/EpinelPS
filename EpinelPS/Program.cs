@@ -1,7 +1,9 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Interfaces;
 using EpinelPS.LobbyServer;
 using EpinelPS.Networking;
+using EpinelPS.Services;
 using EpinelPS.Utils;
 using log4net.Config;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -65,7 +67,8 @@ internal class Program
 
 
                 // Add services to the container.
-
+                builder.Services.AddHttpContextAccessor();
+                builder.Services.AddScoped<IUserService, UserService>();
                 builder.Services.AddControllersWithViews(options =>
                 {
                     options.AllowEmptyInputInBodyModelBinding = true;
