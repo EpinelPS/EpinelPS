@@ -1,13 +1,13 @@
-/* NIKKE 仪表盘专用样式 */
+/* adminui 仪表盘专用样式 */
 
 /* 仪表板容器 */
-.nikke-dashboard {
+.adminui-dashboard {
   padding: var(--spacing-lg);
   min-height: calc(100vh - 120px);
 }
 
 /* 统计卡片 */
-.nikke-stats {
+.adminui-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-lg);
@@ -15,7 +15,7 @@
 }
 
 .stats-card {
-  background-color: var(--nikke-gray-dark);
+  background-color: var(--adminui-gray-dark);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   position: relative;
@@ -24,25 +24,25 @@
   display: flex;
   flex-direction: column;
   transition: all var(--transition-normal);
-  border: 1px solid var(--nikke-gray);
+  border: 1px solid var(--adminui-gray);
 }
 
 .stats-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--nikke-accent);
+  border-color: var(--adminui-accent);
 }
 
 .stats-card .icon {
   font-size: 2.5rem;
   margin-bottom: var(--spacing-md);
-  color: var(--nikke-accent);
+  color: var(--adminui-accent);
 }
 
 .stats-card .value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--nikke-light);
+  color: var(--adminui-light);
   margin-bottom: 0.5rem;
 }
 
@@ -50,7 +50,7 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--nikke-gray-light);
+  color: var(--adminui-gray-light);
   font-weight: normal;
   padding: 0;
   display: block;
@@ -63,17 +63,17 @@
   right: 0;
   height: 100%;
   width: 5px;
-  background: linear-gradient(to bottom, var(--nikke-accent), transparent);
+  background: linear-gradient(to bottom, var(--adminui-accent), transparent);
 }
 
 /* 图表卡片 */
 .chart-card {
-  background-color: var(--nikke-gray-dark);
+  background-color: var(--adminui-gray-dark);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--nikke-gray);
+  border: 1px solid var(--adminui-gray);
   transition: all var(--transition-normal);
 }
 
@@ -91,7 +91,7 @@
 
 .chart-title {
   font-weight: 600;
-  color: var(--nikke-light);
+  color: var(--adminui-light);
   font-size: 1.2rem;
   margin: 0;
 }
@@ -102,8 +102,8 @@
 }
 
 .chart-card .btn-outline-light {
-  color: var(--nikke-gray-light);
-  border-color: var(--nikke-gray);
+  color: var(--adminui-gray-light);
+  border-color: var(--adminui-gray);
   background-color: transparent;
   font-size: 0.85rem;
   padding: 0.25rem 0.75rem;
@@ -111,43 +111,43 @@
 
 .chart-card .btn-outline-light:hover,
 .chart-card .btn-outline-light.active {
-  color: var(--nikke-light);
-  background-color: var(--nikke-accent);
-  border-color: var(--nikke-accent);
+  color: var(--adminui-light);
+  background-color: var(--adminui-accent);
+  border-color: var(--adminui-accent);
 }
 
 /* 进度条 */
-.nikke-progress {
+.adminui-progress {
   height: 8px;
-  background-color: var(--nikke-gray);
+  background-color: var(--adminui-gray);
   border-radius: var(--radius-full);
   overflow: hidden;
   margin: 0.5rem 0;
 }
 
-.nikke-progress-bar {
+.adminui-progress-bar {
   height: 100%;
-  background: linear-gradient(to right, var(--nikke-accent-dark), var(--nikke-accent));
+  background: linear-gradient(to right, var(--adminui-accent-dark), var(--adminui-accent));
   border-radius: var(--radius-full);
 }
 
 /* 活动列表 */
 .activity-list {
-  background-color: var(--nikke-gray-dark);
+  background-color: var(--adminui-gray-dark);
   border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid var(--nikke-gray);
+  border: 1px solid var(--adminui-gray);
   box-shadow: var(--shadow-md);
   height: 100%;
 }
 
 .activity-header {
-  background-color: var(--nikke-primary);
-  color: var(--nikke-light);
+  background-color: var(--adminui-primary);
+  color: var(--adminui-light);
   padding: var(--spacing-md) var(--spacing-lg);
   font-weight: 600;
   font-size: 1.1rem;
-  border-bottom: 1px solid var(--nikke-primary-dark);
+  border-bottom: 1px solid var(--adminui-primary-dark);
 }
 
 .activity-item {
@@ -170,7 +170,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--nikke-primary);
+  background-color: var(--adminui-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,12 +184,12 @@
 }
 
 .activity-title {
-  color: var(--nikke-light);
+  color: var(--adminui-light);
   margin-bottom: 5px;
 }
 
 .activity-time {
-  color: var(--nikke-gray-light);
+  color: var(--adminui-gray-light);
   font-size: 0.85rem;
 }
 
@@ -204,18 +204,18 @@
   height: 40px;
   border-radius: 50%;
   margin-right: var(--spacing-md);
-  border: 2px solid var(--nikke-accent);
-  background-color: var(--nikke-gray);
+  border: 2px solid var(--adminui-accent);
+  background-color: var(--adminui-gray);
 }
 
 .user-name {
   font-weight: 500;
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 .badge-admin {
   display: inline-block;
-  background-color: var(--nikke-accent);
+  background-color: var(--adminui-accent);
   color: white;
   padding: 0.35em 0.65em;
   font-size: 0.75em;
@@ -228,14 +228,14 @@
 }
 
 /* 通知 */
-.nikke-notification {
+.adminui-notification {
   position: fixed;
   bottom: 20px;
   right: 20px;
   min-width: 300px;
   padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--nikke-gray-dark);
-  color: var(--nikke-light);
+  background-color: var(--adminui-gray-dark);
+  color: var(--adminui-light);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   z-index: 1050;
@@ -244,25 +244,25 @@
   transition: all var(--transition-normal);
 }
 
-.nikke-notification.show {
+.adminui-notification.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-.nikke-notification.info {
-  border-left: 5px solid var(--nikke-info);
+.adminui-notification.info {
+  border-left: 5px solid var(--adminui-info);
 }
 
-.nikke-notification.success {
-  border-left: 5px solid var(--nikke-success);
+.adminui-notification.success {
+  border-left: 5px solid var(--adminui-success);
 }
 
-.nikke-notification.warning {
-  border-left: 5px solid var(--nikke-warning);
+.adminui-notification.warning {
+  border-left: 5px solid var(--adminui-warning);
 }
 
-.nikke-notification.error {
-  border-left: 5px solid var(--nikke-danger);
+.adminui-notification.error {
+  border-left: 5px solid var(--adminui-danger);
 }
 
 .notification-header {
@@ -279,12 +279,12 @@
 .notification-close {
   background: none;
   border: none;
-  color: var(--nikke-gray-light);
+  color: var(--adminui-gray-light);
   cursor: pointer;
 }
 
 .notification-close:hover {
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 .notification-body {
@@ -293,13 +293,13 @@
 
 /* 仪表盘适应性 */
 @media (max-width: 1199.98px) {
-  .nikke-stats {
+  .adminui-stats {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 767.98px) {
-  .nikke-stats {
+  .adminui-stats {
     grid-template-columns: 1fr;
   }
   
@@ -307,7 +307,7 @@
     margin-bottom: var(--spacing-md);
   }
   
-  .nikke-notification {
+  .adminui-notification {
     min-width: calc(100% - 40px);
     left: 20px;
     right: 20px;
@@ -321,14 +321,14 @@ canvas {
 
 /* 确保图表中的文字使用正确的颜色 */
 .chartjs-render-monitor {
-  color: var(--nikke-light);
+  color: var(--adminui-light);
 }
 
 /* 图表工具提示定制 */
 .chartjs-tooltip {
-  background-color: var(--nikke-gray-dark) !important;
-  border: 1px solid var(--nikke-gray) !important;
-  color: var(--nikke-light) !important;
+  background-color: var(--adminui-gray-dark) !important;
+  border: 1px solid var(--adminui-gray) !important;
+  color: var(--adminui-light) !important;
   border-radius: var(--radius-sm) !important;
   box-shadow: var(--shadow-md) !important;
   padding: var(--spacing-sm) var(--spacing-md) !important;
@@ -353,8 +353,8 @@ canvas {
 .dashboard-spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid var(--nikke-gray);
-  border-top: 3px solid var(--nikke-accent);
+  border: 3px solid var(--adminui-gray);
+  border-top: 3px solid var(--adminui-accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

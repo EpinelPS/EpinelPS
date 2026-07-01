@@ -79,6 +79,50 @@ public class UsersController(ILogger<UsersController> logger) : Controller
         });
     }
 
+    [Route("Currency/{id}")]
+    public IActionResult Currency(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return View(
+            new ModUserCurrencyModel()
+            {
+                ID = user.ID,
+                Current = user.Currency
+            }
+        );
+    }
+
+    [Route("Currency/{id}"), ActionName("Currency")]
+    [HttpPost]
+    public IActionResult CurrencyModify(ulong id, [FromForm] ModUserCurrencyModel model)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        user.AddCurrency(model.ToModify, model.Amount);
+        JsonDb.Save();
+
+        return View(
+            new ModUserCurrencyModel()
+            {
+                ID = user.ID,
+                Current = user.Currency
+            }
+        );
+    }
+
     [Route("SetPassword/{id}")]
     public IActionResult SetPassword(ulong id)
     {

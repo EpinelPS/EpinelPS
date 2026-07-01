@@ -1,4 +1,4 @@
-/* NIKKE 国际化支持样式 */
+/* adminui 国际化支持样式 */
 [data-i18n], 
 [data-i18n-placeholder], 
 [data-i18n-title] {
@@ -66,7 +66,7 @@ body:not(.login-page) .language-switcher {
 
 .language-switcher-toggle i.fa-globe {
   margin-right: 8px;
-  color: var(--nikke-accent-light, #f16eac);
+  color: var(--adminui-accent-light, #f16eac);
 }
 
 .language-switcher-toggle i.fa-chevron-down {
@@ -126,7 +126,7 @@ body:not(.login-page) .language-switcher {
   top: 0;
   bottom: 0;
   width: 3px;
-  background-color: var(--nikke-accent, #e83e8c);
+  background-color: var(--adminui-accent, #e83e8c);
 }
 
 .language-name {
@@ -174,7 +174,7 @@ html[lang="ko"] body {
 
 /* 提高可访问性 */
 .language-option:focus {
-  outline: 2px solid var(--nikke-accent, #e83e8c);
+  outline: 2px solid var(--adminui-accent, #e83e8c);
   outline-offset: -2px;
 }
 
