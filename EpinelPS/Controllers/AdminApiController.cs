@@ -158,6 +158,48 @@ public class AdminApiController : ControllerBase
                     string[] s = req.p2.Split("-");
                     return AdminCommands.AddItem(user, int.Parse(s[0]), int.Parse(s[1]));
                 }
+            case "SendMail":
+                {
+                    string[] parts = req.p1.Split('|');
+                    if (parts.Length < 6)
+                        return new RunCmdResponse() { error = "参数不足" };
+                    if (!ulong.TryParse(parts[0], out ulong userId))
+                        return new RunCmdResponse() { error = "无效的用户ID" };
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+                    if (user == null)
+                        return new RunCmdResponse() { error = "用户不存在" };
+                    if (!int.TryParse(parts[1], out int senderId))
+                        return new RunCmdResponse() { error = "无效的发件人ID" };
+                    string title = parts[2];
+                    string content = parts[3];
+                    if (!int.TryParse(parts[4], out int validDays))
+                        return new RunCmdResponse() { error = "无效的有效天数" };
+                    var attachments = new List<MailAttachment>();
+                    string attachmentsParam = parts.Length > 5 ? parts[5] : "";
+
+                    if (!string.IsNullOrEmpty(attachmentsParam))
+                    {
+                        foreach (var item in attachmentsParam.Split(','))
+                        {
+                            string[] attParts = item.Split('-');
+                            if (attParts.Length != 3) continue;
+
+                            if (int.TryParse(attParts[0], out int type) &&
+                                int.TryParse(attParts[1], out int id) &&
+                                int.TryParse(attParts[2], out int count))
+                            {
+                                attachments.Add(new MailAttachment
+                                {
+                                    Type = type,
+                                    Id = id,
+                                    Count = count
+                                });
+                            }
+                        }
+                    }
+
+                    return AdminCommands.SendMail(user, senderId, title, content, validDays, attachments);
+                }
             case "updateServer":
                 {
                     return await AdminCommands.UpdateResources();

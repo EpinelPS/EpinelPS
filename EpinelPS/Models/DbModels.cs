@@ -645,3 +645,9 @@ public class SqlSongRankKey
     public MiniGameTtsRankingType RankType { get; set; }
     public MiniGameTtsDifficulty Difficulty { get; set; }
 }
+public class MailAttachment
+{
+    public int Type { get; set; }   // RewardType
+    public int Id { get; set; }      // RewardId
+    public int Count { get; set; }   // RewardValue
+}

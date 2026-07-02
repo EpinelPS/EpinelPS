@@ -169,10 +169,13 @@
       "inventory": "物品:",
       "addAllEquip": "添加所有装备",
       "addItem": "添加物品",
+      "addCurrency": "添加货币",
       "misc": "其他:",
+      "itemAmount": "数量",
       "finishTutorials": "完成所有教程",
       "backToList": "返回列表"
     },
+
     "password": {
       "title": "修改密码",
       "changeButton": "修改密码",
@@ -198,8 +201,42 @@
     }
   },
   "mail": {
-    "title": "游戏内邮件",
-    "comingSoon": "即将上线！"
+    "title": "发送邮件",
+    "backToList": "返回",
+    "compose": "邮件内容",
+    "recipientId": "收件人ID",
+    "sender": "发件人",
+    "titleLabel": "标题",
+    "content": "内容",
+    "validDays": "有效时间",
+    "attachments": "添加物品",
+    "send": "发送邮件",
+    "success": "邮件发送成功！",
+    "error": "发送失败",
+    "unknownError": "未知错误",
+    "missingRecipient": "请输入收件人ID",
+    "invalidRecipient": "收件人ID必须为纯数字",
+    "missingTitle": "请输入邮件标题",
+    "missingContent": "请输入邮件内容",
+    "atLeastOneRow": "至少保留一行",
+    "itemType": "物品类型",
+    "itemId": "物品ID",
+    "quantity": "数量",
+    "action": "操作",
+    "addRow": "添加行",
+    "days": "天",
+    "confirm": "确定"
+  },
+  "currency": {
+    "title": "修改用户货币",
+    "backToModify": "返回修改用户",
+    "addTitle": "添加货币",
+    "type": "货币类型",
+    "amount": "数量",
+    "add": "添加",
+    "back": "返回",
+    "current": "当前货币",
+    "noCurrency": "暂无货币数据"
   },
   "config": {
     "server": {

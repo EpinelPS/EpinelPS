@@ -28,21 +28,21 @@ public class SongGet : LobbyMessage
             if (frank.Count > 0)
             {
                 var (Entity, Rank) = frank.OrderBy(x => x.Rank).First();
-               // response.MyFriendSongRankData = new NetMyMiniGameTtsSongRankData() { Difficulty = Entity.Difficulty, Position = Rank, Score = Entity.Score };
+                response.MyFriendSongRankDataList.Add(new NetMyMiniGameTtsSongRankData() { Difficulty = Entity.Difficulty, Position = Rank, Score = Entity.Score });
             }
             else
             {
-               // response.MyFriendSongRankData = rankData;
+                response.MyFriendSongRankDataList.Add(rankData);
             }
 
             if (urank.Count > 0 && user.Guild.guildId > 0)
             {
                 var (Entity, Rank) = urank.OrderBy(x => x.Rank).First();
-               // response.MyUnionSongRankData = new NetMyMiniGameTtsSongRankData() { Difficulty = Entity.Difficulty, Position = Rank, Score = Entity.Score };
+                response.MyUnionSongRankDataList.Add(new NetMyMiniGameTtsSongRankData() { Difficulty = Entity.Difficulty, Position = Rank, Score = Entity.Score });
             }
             else
             {
-               // response.MyUnionSongRankData = rankData;
+                response.MyUnionSongRankDataList.Add(rankData);
             }
             //response.NewBadgeEventTtsSongManagerTableIds.AddRange(ttsData.BadgeSongId);
 

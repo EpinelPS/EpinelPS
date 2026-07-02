@@ -174,7 +174,7 @@ public class AdminCommands
 
                 user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
-                user.AddTrigger(Trigger.ObtainCharacterNew, 1);
+                user.AddTrigger(Trigger.ObtainCharacterNew, 1, 0);
             }
         }
 
@@ -504,6 +504,49 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    public static RunCmdResponse SendMail(User user, int senderId, string title, string content, int validDays, List<MailAttachment> attachments)
+    {
+        try
+        {
+            // 创建邮件
+            NetUserMailData mailData = new()
+            {
+                Sender = senderId,
+                Msn =User.GenerateMsn(),
+                CreatedAt = DateTime.Now.Ticks,
+                HasReward = attachments != null && attachments.Count > 0,
+                Nickname = "",
+                Title = new() { IsPlain = true, Str = title },
+                Text = new() { IsPlain = true, Str = content },
+                State = 1,  // 1-未领取，2-已领取
+                Type = 1,
+                Period = validDays
+            };
+            // 添加附件
+            if (attachments != null && attachments.Count > 0)
+            {
+                foreach (var att in attachments)
+                {
+                    mailData.Items.Add(new NetMailRewardItem()
+                    {
+                        ExpiredAt = DateTime.Now.AddDays(validDays).Ticks,
+                        RewardId = att.Id,
+                        RewardType = att.Type,
+                        RewardValue = att.Count
+                    });
+                }
+            }
+            // 保存到用户邮件
+            user.MailDatas.TryAdd(mailData.Msn, mailData);
+            JsonDb.Save();
+
+            return RunCmdResponse.OK;
+        }
+        catch (Exception ex)
+        {
+            return new RunCmdResponse { error = $"发送失败: {ex.Message}" };
+        }
+    }
     internal static async Task<RunCmdResponse> UpdateResources()
     {
         Logging.WriteLine("updating static data and resource info...", LogType.Info);

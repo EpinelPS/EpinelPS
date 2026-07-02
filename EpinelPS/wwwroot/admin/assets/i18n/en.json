@@ -199,8 +199,42 @@
     }
   },
   "mail": {
-    "title": "In-game Mail",
-    "comingSoon": "Coming Soon!"
+    "title": "Send Mail",
+    "backToList": "Back",
+    "compose": "Mail Content",
+    "recipientId": "Recipient ID",
+    "sender": "Sender",
+    "titleLabel": "Title",
+    "content": "Content",
+    "validDays": "Valid Days",
+    "attachments": "Attachments",
+    "send": "Send Mail",
+    "success": "Mail sent successfully!",
+    "error": "Send Failed",
+    "unknownError": "Unknown Error",
+    "missingRecipient": "Please enter recipient ID",
+    "invalidRecipient": "Recipient ID must be numeric",
+    "missingTitle": "Please enter mail title",
+    "missingContent": "Please enter mail content",
+    "atLeastOneRow": "At least one row is required",
+    "itemType": "Item Type",
+    "itemId": "Item ID",
+    "quantity": "Quantity",
+    "action": "Action",
+    "addRow": "Add Row",
+    "days": "days",
+    "confirm": "Confirm"
+  },
+  "currency": {
+    "title": "Modify User Currency",
+    "backToModify": "Back to Modify User",
+    "addTitle": "Add Currency",
+    "type": "Currency Type",
+    "amount": "Amount",
+    "add": "Add",
+    "back": "Back",
+    "current": "Current Currency",
+    "noCurrency": "No currency data"
   },
   "config": {
     "server": {
