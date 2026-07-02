@@ -1199,12 +1199,6 @@ public partial class CollectionSkillGroupData
 }
 
 [MemoryPackable]
-public partial class ColorCodeList_Raw
-{
-	public string? ColorCode;
-}
-
-[MemoryPackable]
 public partial class CommonData
 {
 }
@@ -1417,9 +1411,11 @@ public partial class CooperationEventReportRecord
 [MemoryPackable]
 public partial class CorporationInfoRecord
 {
+	public int Id;
 	public CorporationType Corporation;
 	public CorporationSubType CorporationSubType;
 	public string? CorporationName;
+	public string? CorporationNameLineBreak;
 	public string? CorporationDescription;
 	public string? ResourceId;
 }
@@ -5123,6 +5119,203 @@ public partial class EventInAppShopRecord
 }
 
 [MemoryPackable]
+public partial class EventIslandBreakerBallRecord_Raw
+{
+	public int Id;
+	public int SummonGroup;
+	public int Order;
+	public IslandBreakerGradeType Grade;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public int Attack;
+	public int ChargePoint;
+	public string? SummonEffect;
+	public string? SummonBgEffect;
+	public IslandBreakerBallSkillType BallSkillType;
+	public int BallSkillValue;
+	public int BallSkillRatio;
+	public string? BallSkillEffect;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerBlockColorRecord_Raw
+{
+	public int Id;
+	public int BlockGroup;
+	public int HpMin;
+	public int HpMax;
+	public string? BlockColor;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerBlockRecord_Raw
+{
+	public int Id;
+	public int BlockGroup;
+	public IslandBreakerBlockType BlockType;
+	public int BlockValue;
+	public string? ResourceId;
+	public string? HitResourceId;
+	public int HitRemainTime;
+	public int RewardCurrencyCount;
+	public string? RewardEffect;
+	public string? BonusResourceId;
+	public string? BonusHitResourceId;
+	public int BonusCurrencyCount;
+	public string? BonusEffect;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerBuffRecord_Raw
+{
+	public int Id;
+	public int BuffGroup;
+	public int Order;
+	public int BuffLevel;
+	public string? ResourceId;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? NextLevelDescriptionLocalkey;
+	public IslandBreakerBuffType BuffType;
+	public int BuffValue01;
+	public int BuffValue02;
+	public int BuffCurrencyCount;
+	public int OpenConditionDay;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerCharacterRecord_Raw
+{
+	public int Id;
+	public int CharacterGroup;
+	public string? NameLocalkey;
+	public string? CharacterPrefabs;
+	public string? EffectSkill;
+	public string? EffectRetry;
+	public int OpenConditionDay;
+	public IslandBreakerCharacterSkillType SkillType;
+	public int SkillLevelGroup;
+	public string? SkillNameLocalkey;
+	public string? SkillDescLocalkey;
+	public string? SkillResourceId;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerCurrencyRecord_Raw
+{
+	public int Id;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public IslandBreakerCurrencyType CurrencyType;
+	public int Limit1Day;
+	public int Limit1Max;
+	public int Limit2Day;
+	public int Limit2Max;
+	public int Limit3Day;
+	public int Limit3Max;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerImageRecord_Raw
+{
+	public int Id;
+	public int ImageGroup;
+	public int Order;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public int ConditionWave;
+	public int ConditionCharacter;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public MiniGameSystemType MinigameType;
+	public string? EnterScenario;
+	public int HelptipHubGroup;
+	public int DefaultBallCount;
+	public int SummonCurrencyId;
+	public int SummonCurrencyCount;
+	public int LaunchAngle;
+	public int LaunchCountDefault;
+	public int LaunchTimeDefault;
+	public int LaunchTimeDelayDivide;
+	public int DefaultGameSpeed;
+	public int AccelerationSec;
+	public int AccelerationValue;
+	public int AccelerationMax;
+	public int DailyRewardId;
+	public int BuffCurrencyId;
+	public int BuffCurrencyRewardValue;
+	public int RepeatWave;
+	public int WaveGroup;
+	public int SummonGroup;
+	public int BlockGroup;
+	public int CharacterGroup;
+	public int MissionGroup;
+	public int BuffGroup;
+	public int ImageGroup;
+	public int MaxScore;
+	public int ComboUiChange;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerMissionRecord_Raw
+{
+	public int Id;
+	public int MissionGroup;
+	public int Order;
+	public IslandBreakerMissionType ConditionType;
+	public int ConditionId;
+	public int ConditionValue;
+	public string? NameLocalkey;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerSkillLevelRecord_Raw
+{
+	public int Id;
+	public int SkillLevelGroup;
+	public int WaveMin;
+	public int WaveMax;
+	public int SkillLevel;
+	public int Attack;
+	public int NeedChargePoint;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerSummonRecord_Raw
+{
+	public int Id;
+	public int SummonGroup;
+	public int Order;
+	public string? NameLocalkey;
+	public int SummonCount;
+	public int NeedSummonCurrencyCount;
+	public int RatioR;
+	public int RatioSr;
+	public int RatioSsr;
+}
+
+[MemoryPackable]
+public partial class EventIslandBreakerWaveRecord_Raw
+{
+	public int Id;
+	public int WaveGroup;
+	public int Wave;
+	public int TotalBlockCount;
+	public int EliteBlockCount;
+	public int BonusCount;
+	public int BlockHp;
+}
+
+[MemoryPackable]
 public partial class EventItabagBagRecord_Raw
 {
 	public int Id;
@@ -8097,12 +8290,40 @@ public partial class EventTTSMissionRecord_Raw
 }
 
 [MemoryPackable]
+public partial class EventTTSProductNoticeManagerRecord_Raw
+{
+	public int Id;
+	public DateTime NoticeDate;
+	public string? BannerImage;
+}
+
+[MemoryPackable]
 public partial class EventTTSScenarioManagerRecord_Raw
 {
 	public int Id;
 	public string? Desc;
 	public string? ScenarioGroupId;
 	public int CheckPlayCount;
+}
+
+[MemoryPackable]
+public partial class EventTTSSkinObjectRecord_Raw
+{
+	public int Id;
+	public EventTTSSkinObjectType SkinObjectType;
+	public int Order;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public string? SiResourceId;
+	public string? MiResourceId;
+	public string? FullResourceId;
+	public bool IsFree;
+	public int CostCurrencyId;
+	public int CostCurrencyValue;
+	public int ExchangeItemId;
+	public int ExchangeItemValue;
+	public DateTime ReleaseDate;
 }
 
 [MemoryPackable]
@@ -9008,6 +9229,7 @@ public partial class FieldCinematicTimelineControlRecord_Raw
 	public int TimelineStartFrame;
 	public int TimelineEndFrame;
 	public bool IsLoopAction;
+	public bool IsUseCamera;
 	public bool IsUseHudHide;
 	public int SetCameraBlendTime;
 }
@@ -10413,7 +10635,7 @@ public partial class ItemEquipRecord
 	public int GradeCoreId;
 	public int GrowGrade;
 	public List<StatData> Stat;
-	public List<OptionSlot2> OptionSlot;
+	public List<OptionSlot> OptionSlot;
 	public int OptionCost;
 	public int OptionChangeCost;
 	public int OptionLockCost;
@@ -11544,9 +11766,9 @@ public partial class OptionGroup_Raw
 }
 
 [MemoryPackable]
-public partial class OptionSlot2
+public partial class OptionSlot
 {
-	public int OptionSlot;
+	public int OptionSlot2;
 	public int OptionSlotSuccessRatio;
 }
 
@@ -13779,7 +14001,6 @@ public partial class UserTitleCountRecord_Raw
 	public string? CountIconId;
 	public string? BgResourceId;
 	public string? TitleLocaleKey;
-	public List<ColorCodeList_Raw> ColorCodeList;
 }
 
 [MemoryPackable]
@@ -14222,7 +14443,8 @@ public enum EventSystemType : int
 	CE008LycorisMiniGame = 57,
 	ItabagEvent = 58,
 	InAppShopPurchasePointEvent = 59,
-	FARMiniGame = 60
+	FARMiniGame = 60,
+	IslandBreakerMiniGame = 61
 }
 
 public enum Category : int
@@ -14822,7 +15044,8 @@ public enum Trigger : int
 	EventAZXServiceTimeRewardCheck = 161,
 	EventMiniGameCE008RewardCheck = 162,
 	EventMiniGameTTSPlayCheck = 163,
-	EventMiniGameFARRewardCheck = 164
+	EventMiniGameFARRewardCheck = 164,
+	EventIslandBreakerRewardCheck = 165
 }
 
 public enum ChapterMod : int
@@ -16746,6 +16969,64 @@ public enum EventGachaBoardMissionMissionCondition : int
 	CharacterEquipItemOverload = 7
 }
 
+public enum IslandBreakerGradeType : int
+{
+	R = 0,
+	SR = 1,
+	SSR = 2
+}
+
+public enum IslandBreakerBallSkillType : int
+{
+	None = 0,
+	Burn = 1,
+	Shock = 2,
+	Bomb = 3,
+	RangeWidth = 4,
+	RangeLength = 5,
+	RangeCross = 6
+}
+
+public enum IslandBreakerBlockType : int
+{
+	NORMAL = 0,
+	ELITE = 1
+}
+
+public enum IslandBreakerBuffType : int
+{
+	None = 0,
+	IncreaseGetSummonCurrency = 1,
+	StartSummonCurrencyCount = 2,
+	IncreaseCharacterSkillDamage = 3,
+	IncreaseSummonRatio = 4,
+	CharacterRebirth = 5
+}
+
+public enum IslandBreakerCharacterSkillType : int
+{
+	None = 0,
+	WidthBottom = 1,
+	RandomLengthCenter = 2,
+	WidthTop = 3
+}
+
+public enum IslandBreakerCurrencyType : int
+{
+	SummonCurrency = 0,
+	BuffCurrency = 1
+}
+
+public enum IslandBreakerMissionType : int
+{
+	None = 0,
+	WaveCount = 1,
+	PlayPoint = 2,
+	PlayCharacterPoint = 3,
+	SummonBall = 4,
+	GetCurrency = 5
+}
+
 public enum EventItabagType : int
 {
 	HandBag = 0,
@@ -18089,7 +18370,17 @@ public enum EventTTSMissionType : int
 	SpecificMusicClearCount = 10,
 	ScoreAccumulate = 11,
 	MusicPlayCount = 12,
-	SpecificMusicPlayCount = 13
+	SpecificMusicPlayCount = 13,
+	SpecificMusicPlayCountWithSkinObject = 14,
+	AnyMusicPlayCountWithSkinObject = 15,
+	EnterTTSPackageShop = 16
+}
+
+public enum EventTTSSkinObjectType : int
+{
+	BG = 0,
+	Character = 1,
+	Note = 2
 }
 
 public enum EventTTSTagValue : int
@@ -18939,7 +19230,11 @@ public enum FunctionType : int
 	ChangeMaxTargetingCount = 211,
 	InstantSequentialAttackDamageRatio = 212,
 	BarrierImmuneDamage = 213,
-	AddTeamAmmo = 214
+	AddTeamAmmo = 214,
+	ChangeWeaponEnd = 215,
+	ChangeWeaponMaxAmmo = 216,
+	CoreDamage = 217,
+	AddFunctionTimer = 218
 }
 
 public enum FunctionStandardType : int
@@ -19056,7 +19351,9 @@ public enum TimingTriggerType : int
 	OnDeadComplete = 89,
 	OnFullChargeCoreHitNum = 90,
 	OnBrokenBarrier = 91,
-	OnProjectileBrokenNum = 92
+	OnProjectileBrokenNum = 92,
+	OnReturnDefaultWeapon = 93,
+	OnSpawnMonsterIncludeNoneType = 94
 }
 
 public enum StatusTriggerType : int
@@ -19132,7 +19429,9 @@ public enum StatusTriggerType : int
 	IsDefUnder = 68,
 	IsCheckFunctionOverlapUnder = 69,
 	IsCheckTeamBurstNextStepExSelf = 70,
-	IsNotCheckTeamBurstNextStepExSelf = 71
+	IsNotCheckTeamBurstNextStepExSelf = 71,
+	IsCheckMonsterUnder = 72,
+	IsActiveMonsterCore = 73
 }
 
 public enum FunctionKeepingType : int
