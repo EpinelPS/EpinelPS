@@ -22,22 +22,22 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" data-i18n="mail.recipientId">收件人ID</label>
-                                    <input type="text" id="recipientId" class="form-control" placeholder="输入收件人ID或选择用户" list="userList" autocomplete="off" />
-                                    <datalist id="userList">
-                                        <!-- 由 JavaScript 动态填充 -->
-                                    </datalist>
-                                    <small class="text-muted">输入纯数字，或从下拉列表中选择用户</small>
+                                    <input type="text" id="recipientId" class="form-control"
+                                           placeholder="输入收件人ID或选择用户"
+                                           data-i18n-placeholder="mail.placeholderRecipient"
+                                           list="userList" autocomplete="off" />
+                                    <small class="text-muted" data-i18n="mail.hintRecipient">输入纯数字，或从下拉列表中选择用户</small>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" data-i18n="mail.sender">发件人</label>
                                     <select id="senderId" class="form-select">
-                                        <option value="1">谢芙蒂</option>
-                                        <option value="2">谢芙蒂</option>
-                                        <option value="3">谢芙蒂</option>
-                                        <option value="4">马士丁</option>
-                                        <option value="5">安德森</option>
+                                        <option value="1" data-i18n="mail.syephy">谢芙蒂</option>
+                                        <option value="2" data-i18n="mail.syephy">谢芙蒂</option>
+                                        <option value="3" data-i18n="mail.syephy">谢芙蒂</option>
+                                        <option value="4" data-i18n="mail.mustang">马士丁</option>
+                                        <option value="5" data-i18n="mail.andersen">安德森</option>
                                     </select>
                                 </div>
                             </div>
@@ -46,8 +46,9 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="mail.title">标题</label>
-                                    <input type="text" id="mailTitle" class="form-control" placeholder="请输入邮件标题" />
+                                    <label class="form-label" data-i18n="mail.ftitle">标题</label>
+                                    <input type="text" id="mailTitle" class="form-control"
+                                           placeholder="请输入邮件标题" data-i18n-placeholder="mail.placeholderTitle" />
                                 </div>
                             </div>
                         </div>
@@ -56,7 +57,9 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label" data-i18n="mail.content">内容</label>
-                                    <textarea id="mailContent" class="form-control" rows="5" placeholder="请输入邮件内容"></textarea>
+                                    <textarea id="mailContent" class="form-control" rows="5"
+                                              placeholder="请输入邮件内容" data-i18n-placeholder="mail.placeholderContent"></textarea>
+
                                 </div>
                             </div>
                         </div>
@@ -66,8 +69,9 @@
                                 <div class="form-group">
                                     <label class="form-label" data-i18n="mail.validDays">有效时间</label>
                                     <div class="input-group">
-                                        <input type="number" id="validDays" class="form-control" placeholder="输入天数" value="30" min="1" />
-                                        <span class="input-group-text">天</span>
+                                        <input type="number" id="validDays" class="form-control"
+                                               placeholder="输入天数" data-i18n-placeholder="mail.placeholderDays" value="30" min="1" />
+                                        <span class="input-group-text" data-i18n="mail.days">天</span>
                                     </div>
                                 </div>
                             </div>
@@ -81,10 +85,10 @@
                                         <table class="table adminui-table table-bordered" id="attachmentTable">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 30%;">物品类型</th>
-                                                    <th style="width: 25%;">物品ID</th>
-                                                    <th style="width: 25%;">数量</th>
-                                                    <th style="width: 20%;">操作</th>
+                                                    <th data-i18n="mail.itemType">物品类型</th>
+                                                    <th data-i18n="mail.itemId">物品ID</th>
+                                                    <th data-i18n="mail.quantity">数量</th>
+                                                    <th data-i18n="mail.action">操作</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="attachmentBody">
@@ -93,7 +97,7 @@
                                         </table>
                                     </div>
                                     <button type="button" class="btn btn-primary btn-sm mt-2" onclick="addRow()">
-                                        <i class="fas fa-plus me-2"></i> 添加行
+                                        <i class="fas fa-plus me-2"></i> <span data-i18n="mail.addRow">添加行</span>
                                     </button>
                                 </div>
                             </div>
@@ -101,7 +105,7 @@
 
                         <div class="form-group mt-4 text-center">
                             <button type="button" class="btn btn-primary btn-lg" onclick="sendMail()">
-                                <i class="fas fa-envelope me-2"></i> 发送邮件
+                                <i class="fas fa-envelope me-2"></i> <span data-i18n="mail.send">发送邮件</span>
                             </button>
                         </div>
                     </form>
@@ -489,13 +493,14 @@
         tbody.appendChild(row);
     }
 
+        // removeRow 中的提示
     function removeRow(btn) {
         const row = btn.closest('tr');
         const tbody = document.getElementById('attachmentBody');
         if (tbody.children.length > 1) {
             row.remove();
         } else {
-            showAdminuiAlert('至少保留一行', 'error');
+            showAdminuiAlert(i18n.t('mail.needOneRow') || '至少保留一行', 'error');
         }
     }
 
@@ -524,7 +529,7 @@
         return hasData ? attachments : [];
     }
 
-    // ============================================================
+        // ============================================================
     // 5. 弹窗
     // ============================================================
     function showAdminuiAlert(message, type) {
@@ -537,38 +542,17 @@
         if (type === 'success') {
             icon.className = 'fas fa-check-circle';
             icon.style.color = 'var(--adminui-success)';
-            title.textContent = '操作成功';
+            title.textContent = i18n.t('mail.alertSuccess') || '操作成功';
         } else {
             icon.className = 'fas fa-exclamation-circle';
             icon.style.color = 'var(--adminui-danger)';
-            title.textContent = '错误';
+            title.textContent = i18n.t('mail.alertError') || '错误';
         }
 
         msg.textContent = message;
         modal.style.display = 'block';
         setTimeout(() => modal.classList.add('show'), 10);
     }
-
-    function closeAdminuiAlert() {
-        const modal = document.getElementById('adminuiAlert');
-        modal.classList.remove('show');
-        setTimeout(() => modal.style.display = 'none', 300);
-    }
-
-    // 点击外部关闭
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('adminuiAlert');
-        if (event.target === modal) {
-            closeAdminuiAlert();
-        }
-    });
-
-    // ESC键关闭
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeAdminuiAlert();
-        }
-    });
 
     // ============================================================
     // 6. 发送邮件
@@ -580,24 +564,24 @@
         const content = document.getElementById('mailContent').value.trim();
         const validDays = parseInt(document.getElementById('validDays').value) || 30;
 
-        // 验证
+        // 验证 - 使用 i18n
         if (!recipientId) {
-            showAdminuiAlert('请输入收件人ID', 'error');
+            showAdminuiAlert(i18n.t('mail.needRecipient') || '请输入收件人ID', 'error');
             return;
         }
 
         if (!/^\d+$/.test(recipientId)) {
-            showAdminuiAlert('收件人ID必须为纯数字', 'error');
+            showAdminuiAlert(i18n.t('mail.invalidRecipient') || '收件人ID必须为纯数字', 'error');
             return;
         }
 
         if (!title) {
-            showAdminuiAlert('请输入邮件标题', 'error');
+            showAdminuiAlert(i18n.t('mail.needTitle') || '请输入邮件标题', 'error');
             return;
         }
 
         if (!content) {
-            showAdminuiAlert('请输入邮件内容', 'error');
+            showAdminuiAlert(i18n.t('mail.needContent') || '请输入邮件内容', 'error');
             return;
         }
 
@@ -605,15 +589,15 @@
         const attachments = getAttachments();
         let attachmentParam = attachments.map(a => `${a.Type}-${a.Id}-${a.Count}`).join(',');
 
-        // 构建参数: userId|senderId|title|content|validDays|attachments
+        // 构建参数
         const param = `${recipientId}|${senderId}|${title}|${content}|${validDays}|${attachmentParam}`;
 
         // 调用 runCmd 发送邮件
         runCmd('SendMail', function(json) {
             if (json && json.ok) {
-                showAdminuiAlert('邮件发送成功！', 'success');
+                showAdminuiAlert(i18n.t('mail.sendSuccess') || '邮件发送成功！', 'success');
             } else {
-                showAdminuiAlert('发送失败: ' + (json?.error || '未知错误'), 'error');
+                showAdminuiAlert((i18n.t('mail.sendFailed') || '发送失败') + ': ' + (json?.error || i18n.t('mail.unknownError') || '未知错误'), 'error');
             }
         }, param);
     }

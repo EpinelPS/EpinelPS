@@ -162,18 +162,18 @@ public class AdminApiController : ControllerBase
                 {
                     string[] parts = req.p1.Split('|');
                     if (parts.Length < 6)
-                        return new RunCmdResponse() { error = "参数不足" };
+                        return new RunCmdResponse() { error = "Insufficient parameters" };
                     if (!ulong.TryParse(parts[0], out ulong userId))
-                        return new RunCmdResponse() { error = "无效的用户ID" };
+                        return new RunCmdResponse() { error = "Invalid user ID" };
                     User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
                     if (user == null)
-                        return new RunCmdResponse() { error = "用户不存在" };
+                        return new RunCmdResponse() { error = "User not found" };
                     if (!int.TryParse(parts[1], out int senderId))
-                        return new RunCmdResponse() { error = "无效的发件人ID" };
+                        return new RunCmdResponse() { error = "Invalid sender ID" };
                     string title = parts[2];
                     string content = parts[3];
                     if (!int.TryParse(parts[4], out int validDays))
-                        return new RunCmdResponse() { error = "无效的有效天数" };
+                        return new RunCmdResponse() { error = "Invalid validity days" };
                     var attachments = new List<MailAttachment>();
                     string attachmentsParam = parts.Length > 5 ? parts[5] : "";
 

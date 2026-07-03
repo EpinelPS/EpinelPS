@@ -285,6 +285,29 @@ public class User
     }
     public bool SubtractCurrency(CurrencyType type, long val)
     {
+        if (type == CurrencyType.FreeCash)
+        {
+            if (Currency.ContainsKey(type))
+            {
+                if (Currency[type] < val)
+                {
+                    long diff = val - Currency[type];
+                    if (Currency.ContainsKey(CurrencyType.ChargeCash))
+                    {
+                        if (Currency[CurrencyType.ChargeCash] > diff)
+                        {
+                            Currency[type] = 0;
+                            Currency[CurrencyType.ChargeCash] -= diff;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
         if (Currency.ContainsKey(type)) Currency[type] -= val;
         else return false;
 

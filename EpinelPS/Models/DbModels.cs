@@ -526,8 +526,8 @@ public class DispatchData
 
 public class GuildData
 {
-    public int? guildId { get; set; }
-    public long? LeaveAt { get; set; }
+    public int guildId { get; set; } = 0;
+    public long LeaveAt { get; set; } = 0;
        
 }
 
@@ -563,7 +563,8 @@ public class TtsDatas
     public List<NetMiniGameTtsScoreData> ScoreData { get; set; } = [];
     public List<NetMiniGameTtsSongPlayCount> SongPlayCount { get; set; } = [];
     public List<NetMiniGameTtsSongPlayData> SongPlayData { get; set; } = [];
-
+    public NetUserMiniGameTtsSkinData SkinData { get; set; } = new();
+    public List<int> BuySkinObject { get; set; } = [];
 
     public List<int> MissionCompleteList { get; set; } = [];
 
@@ -650,4 +651,14 @@ public class MailAttachment
     public int Type { get; set; }   // RewardType
     public int Id { get; set; }      // RewardId
     public int Count { get; set; }   // RewardValue
+}
+
+public class ArcadeScoreRecord
+{
+    public int Id { get; set; }
+    public long GuildId { get; set; }
+    public ulong UserId { get; set; }
+    public long Score { get; set; }
+    public int ArcadeId { get; set; }
+    public int ModeId { get; set; }
 }

@@ -50,6 +50,38 @@ public class TTSEnter : LobbyMessage
             response.AvailableEventTtsSongManagerTableIds.AddRange(ttsData.UnlockSongId);
             response.AlbumRedDotCutoffDateFromNewProductPopUp = ttsData.NewProductPopUp;
             response.AlbumRedDotCutoffDateFromShop = ttsData.DateFromShop;
+            response.HasSelectProceedOnExpertAlertPopUp = true;
+            EventTTSProductNoticeManagerRecord_Raw? noticeid = GameData.Instance.EventTTSProductNoticeManagerTable.Values
+                .Where(x => x.NoticeDate < DateTime.Now).FirstOrDefault();
+            if (noticeid != null)
+            {
+                response.NewEventTtsProductNoticeManagerTableId = noticeid.Id;
+            }            
+            if (ttsData.SkinData.BackgroundSkinObjectId ==0)
+            {
+                List<EventTTSSkinObjectRecord_Raw>? skin = GameData.Instance.EventTTSSkinObjectTable.Values
+                    .Where(x => x.IsFree == true).ToList();
+                NetUserMiniGameTtsSkinData ttsSkinData = new();
+                ttsSkinData.BackgroundSkinObjectId = skin.FirstOrDefault(x => x.SkinObjectType == EventTTSSkinObjectType.BG).Id;
+                ttsSkinData.NoteSkinObjectId = skin.FirstOrDefault(x => x.SkinObjectType == EventTTSSkinObjectType.Note).Id;
+                var charskin = skin.Where(x => x.SkinObjectType == EventTTSSkinObjectType.Character).ToList();
+                if (charskin.Count == 3)
+                {
+                    ttsSkinData.FirstCharacterSkinObjectId = charskin[0].Id;
+                    ttsSkinData.SecondCharacterSkinObjectId = charskin[1].Id;
+                    ttsSkinData.ThirdCharacterSkinObjectId = charskin[2].Id;
+                }
+                ttsData.SkinData = ttsSkinData;
+                response.UserSkinData = ttsData.SkinData;
+                foreach (var item in skin)
+                {
+                    ttsData.BuySkinObject.Add(item.Id);
+                }
+            }
+            else
+            {
+                response.UserSkinData = ttsData.SkinData;
+            }
 
             if (ttsData.PurchasedAlbumIds.Count>0)
             {
@@ -109,8 +141,28 @@ public class TTSEnter : LobbyMessage
         {
             TtsDatas newttsdata = new();            
             newttsdata.UnlockSongId.AddRange(Unlocksong);
+            newttsdata.PurchasedAlbumIds.AddRange([1001, 1002]);
+            IntMission(ref newttsdata);
 
             user.TTSGameData.TryAdd(req.EventTtsManagerTableId,newttsdata);
+            List<EventTTSSkinObjectRecord_Raw>? skin = GameData.Instance.EventTTSSkinObjectTable.Values
+                    .Where(x => x.IsFree == true).ToList();
+            NetUserMiniGameTtsSkinData ttsSkinData = new();
+            ttsSkinData.BackgroundSkinObjectId = skin.FirstOrDefault(x => x.SkinObjectType == EventTTSSkinObjectType.BG).Id;
+            ttsSkinData.NoteSkinObjectId = skin.FirstOrDefault(x => x.SkinObjectType == EventTTSSkinObjectType.Note).Id;
+            var charskin = skin.Where(x => x.SkinObjectType == EventTTSSkinObjectType.Character).ToList();
+            if (charskin.Count == 3)
+            {
+                ttsSkinData.FirstCharacterSkinObjectId = charskin[0].Id;
+                ttsSkinData.SecondCharacterSkinObjectId = charskin[1].Id;
+                ttsSkinData.ThirdCharacterSkinObjectId = charskin[2].Id;
+            }
+            user.TTSGameData[req.EventTtsManagerTableId].SkinData = ttsSkinData;
+            foreach (var item in skin)
+            {
+                user.TTSGameData[req.EventTtsManagerTableId].BuySkinObject.Add( item.Id);
+            }
+            response.MissionDataList.AddRange(newttsdata.MissionData.Values.ToList());
             response.HasFinishedTutorial = false;
             response.LastPlayedDifficulty = MiniGameTtsDifficulty.Normal;
             response.ServerTimeStamp = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-5));
@@ -122,6 +174,13 @@ public class TTSEnter : LobbyMessage
             response.ExpertUnlockResult = MiniGameTtsExpertUnlockResult.NotUnlocked;
             response.MyFriendTotalRankData = new();
             response.MyUnionTotalRankData = new();
+            response.HasSelectProceedOnExpertAlertPopUp = false;
+            EventTTSProductNoticeManagerRecord_Raw? noticeid = GameData.Instance.EventTTSProductNoticeManagerTable.Values
+                .Where(x => x.NoticeDate < DateTime.Now).FirstOrDefault();
+            if (noticeid != null)
+            {
+                response.NewEventTtsProductNoticeManagerTableId = noticeid.Id;
+            }
         }
 
         response.UserData = LobbyHandler.CreateWholeUserDataFromDbUser(user);
@@ -134,7 +193,26 @@ public class TTSEnter : LobbyMessage
 
     public static void IntMission(ref TtsDatas ttsDatas)
     {
-        if (ttsDatas.MissionData.Count == 0)
+        if (ttsDatas.MissionData.Count > 0)
+        {
+            var mlist = GameData.Instance.EventTTSMissionTable.Values.ToList();
+            if (mlist.Count > ttsDatas.MissionData.Count)
+            {
+                foreach (var item in mlist)
+                {
+                    if (!ttsDatas.MissionData.ContainsKey(item.Id))
+                    {
+                        ttsDatas.MissionData.TryAdd(item.Id, new()
+                        {
+                            IsReceived = false,
+                            MissionId = item.Id,
+                            Progress = 0
+                        });
+                    }
+                }
+            }
+        }
+        else
         {
             var mlist = GameData.Instance.EventTTSMissionTable.Values.ToList();
             foreach (var item in mlist)

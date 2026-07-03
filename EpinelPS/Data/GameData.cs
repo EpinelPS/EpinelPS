@@ -309,6 +309,73 @@ public class GameData
     public readonly Dictionary<int, EventTTSTutorialRecord_Raw> EventTTSTutorialTable = [];
     [LoadRecord("TTSAlbumShopTable.json", "Id")]
     public readonly Dictionary<int, TTSAlbumShopRecord_Raw> TTSAlbumShopTable = [];
+    [LoadRecord("EventTTSProductNoticeManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSProductNoticeManagerRecord_Raw> EventTTSProductNoticeManagerTable = [];
+    [LoadRecord("EventTTSSkinObjectTable.json", "Id")]
+    public readonly Dictionary<int, EventTTSSkinObjectRecord_Raw> EventTTSSkinObjectTable = [];
+
+    //小游戏Stellar Blade
+    [LoadRecord("EventSBCharacterAttackTable.json", "Id")]
+    public readonly Dictionary<int, EventSBCharacterAttackRecord_Raw> EventSBCharacterAttackTable = [];
+    [LoadRecord("EventSBCharacterEnhanceTable.json", "Id")]
+    public readonly Dictionary<int, EventSBCharacterEnhanceRecord_Raw> EventSBCharacterEnhanceTable = [];
+    [LoadRecord("EventSBCharacterSkillTable.json", "Id")]
+    public readonly Dictionary<int, EventSBCharacterSkillRecord_Raw> EventSBCharacterSkillTable = [];
+    [LoadRecord("EventSBCharacterTable.json", "Id")]
+    public readonly Dictionary<int, EventSBCharacterRecord_Raw> EventSBCharacterTable = [];
+    [LoadRecord("EventSBCurrencyTable.json", "Id")]
+    public readonly Dictionary<int, EventSBCurrencyRecord_Raw> EventSBCurrencyTable = [];
+    [LoadRecord("EventSBInGameGuideTable.json", "Id")]
+    public readonly Dictionary<int, EventSBInGameGuideRecord_Raw> EventSBInGameGuideTable = [];
+    [LoadRecord("EventSBItemTable.json", "Id")]
+    public readonly Dictionary<int, EventSBItemRecord_Raw> EventSBItemTable = [];
+    [LoadRecord("EventSBManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventSBManagerRecord_Raw> EventSBManagerTable = [];
+    [LoadRecord("EventSBMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventSBMissionRecord_Raw> EventSBMissionTable = [];
+    [LoadRecord("EventSBMonsterAttackStateTable.json", "Id")]
+    public readonly Dictionary<int, EventSBMonsterAttackStateRecord_Raw> EventSBMonsterAttackStateTable = [];
+    [LoadRecord("EventSBMonsterAttackTable.json", "Id")]
+    public readonly Dictionary<int, EventSBMonsterAttackRecord_Raw> EventSBMonsterAttackTable = [];
+    [LoadRecord("EventSBMonsterTable.json", "Id")]
+    public readonly Dictionary<int, EventSBMonsterRecord_Raw> EventSBMonsterTable = [];
+    [LoadRecord("EventSBShopTable.json", "Id")]
+    public readonly Dictionary<int, EventSBShopRecord_Raw> EventSBShopTable = [];
+    [LoadRecord("EventSBStageRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventSBStageRewardRecord_Raw> EventSBStageRewardTable = [];
+    [LoadRecord("EventSBStageTable.json", "Id")]
+    public readonly Dictionary<int, EventSBStageRecord_Raw> EventSBStageTable = [];
+    [LoadRecord("EventSBTimeLineTable.json", "Id")]
+    public readonly Dictionary<int, EventSBTimeLineRecord_Raw> EventSBTimeLineTable = [];
+    [LoadRecord("EventSBTutorialListTable.json", "Id")]
+    public readonly Dictionary<int, EventSBTutorialListRecord_Raw> EventSBTutorialListTable = [];
+
+    //小游戏TowerDefense
+    [LoadRecord("EventTowerDefenseArcadeManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseArcadeManagerRecord_Raw> EventTowerDefenseArcadeManagerTable = [];    
+    [LoadRecord("EventTowerDefenseArchiveManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseArchiveManagerRecord_Raw> EventTowerDefenseArchiveManagerTable = [];
+    [LoadRecord("EventTowerDefenseManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseManagerRecord> EventTowerDefenseManagerTable = [];
+    [LoadRecord("EventTowerDefenseMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseMissionRecord> EventTowerDefenseMissionTable = [];
+    [LoadRecord("EventTowerDefenseStageTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseStageRecord> EventTowerDefenseStageTable = [];
+    [LoadRecord("EventTowerDefenseTutorialListTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseTutorialListRecord> EventTowerDefenseTutorialListTable = [];
+    [LoadRecord("EventTowerDefenseTutorialPageTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseTutorialPageRecord> EventTowerDefenseTutorialPageTable = [];
+    [LoadRecord("EventTowerDefenseTutorialTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseTutorialRecord> EventTowerDefenseTutorialTable = [];
+    [LoadRecord("EventTowerDefenseUpgradeGroupTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseUpgradeGroupRecord> EventTowerDefenseUpgradeGroupTable = [];
+    [LoadRecord("EventTowerDefenseUpgradeListTable.json", "Id")]
+    public readonly Dictionary<int, EventTowerDefenseUpgradeListRecord> EventTowerDefenseUpgradeListTable = [];
+
+    //BBQ
+    [LoadRecord("EventBBQTycoonStepUpRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventBBQTycoonStepUpRewardRecord> EventBBQTycoonStepUpRewardTable = [];
+
     [LoadRecord("ProfileCardObjectTable.json", "Id")]
     public readonly Dictionary<int, ProfileCardObjectRecord> ProfileCardObjectTable = [];
     [LoadRecord("UserIconTable.json", "Id")]
