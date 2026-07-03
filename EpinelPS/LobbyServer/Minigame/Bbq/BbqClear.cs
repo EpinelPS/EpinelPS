@@ -20,7 +20,7 @@ public class BbqClear : LobbyMessage
 
             if (user.Guild.guildId > 0)
             {
-                MiniGameHelper.InsertOrUpdate(req.ArcadeId, user.ID, user.Guild.guildId, newscore, 0);
+                MiniGameHelper.InsertOrUpdate(req.ArcadeId, user.ID, user.Guild.guildId.Value, newscore, 0);
             }
 
             user.AddTrigger(Trigger.EventBBQTycoonHighScore, newscore, 0);

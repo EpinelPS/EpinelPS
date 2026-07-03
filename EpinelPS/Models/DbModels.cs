@@ -526,8 +526,8 @@ public class DispatchData
 
 public class GuildData
 {
-    public int guildId { get; set; } = 0;
-    public long LeaveAt { get; set; } = 0;
+    public int? guildId { get; set; }
+    public long? LeaveAt { get; set; }
        
 }
 
