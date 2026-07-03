@@ -1,4 +1,5 @@
-﻿using EpinelPS.Utils;
+﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Minigame.TTS;
 
@@ -25,6 +26,7 @@ public class AlbumRedDotCutoffDateUpdate : LobbyMessage
                 break;
         }
 
+        JsonDb.Save();
         // TODO
         await WriteDataAsync(response);
     }

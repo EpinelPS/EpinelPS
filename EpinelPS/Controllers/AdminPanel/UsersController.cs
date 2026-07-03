@@ -172,4 +172,13 @@ public class UsersController(ILogger<UsersController> logger) : Controller
 
         return View(userToUpdate);
     }
+    [Route("GetUsersList")]
+    public IActionResult GetUsersList()
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var users = JsonDb.Instance.Users
+            .Select(u => new { u.ID, u.Nickname })
+            .ToList();
+        return Ok(users);
+    }
 }

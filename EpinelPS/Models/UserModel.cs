@@ -80,6 +80,7 @@ public class User
     public List<int> IconList { get; set; } = [];
     public List<int> FrameList { get; set; } = [];
     public List<int> TitleList { get; set; } = [];
+    public Dictionary<long, NetUserMailData> MailDatas { get; set; } = [];       
 
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
@@ -284,6 +285,29 @@ public class User
     }
     public bool SubtractCurrency(CurrencyType type, long val)
     {
+        if (type == CurrencyType.FreeCash)
+        {
+            if (Currency.ContainsKey(type))
+            {
+                if (Currency[type] < val)
+                {
+                    long diff = val - Currency[type];
+                    if (Currency.ContainsKey(CurrencyType.ChargeCash))
+                    {
+                        if (Currency[CurrencyType.ChargeCash] > diff)
+                        {
+                            Currency[type] = 0;
+                            Currency[CurrencyType.ChargeCash] -= diff;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
         if (Currency.ContainsKey(type)) Currency[type] -= val;
         else return false;
 
@@ -581,5 +605,12 @@ public class User
             .Where(x => x.DispatchType == DispatchType.DispatchFavorite && x.DispatchBoardLv == DispatchFavoriteLv).FirstOrDefault()?.DispatchMax ?? 0;
 
         return dis1 + dis2 + dis3;
+    }
+    public static int GenerateMsn()
+    {
+        long timestamp = DateTime.UtcNow.Ticks;
+        int seed = (int)(timestamp & 0x7FFFFFFF) ^ (int)(timestamp >> 32);
+        var random = new Random(seed);
+        return random.Next(100000000, 1000000000);
     }
 }
