@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EpinelPS.Models.User>
+﻿@model IEnumerable<EpinelPS.Database.SdkUser>
 @{
     ViewData["Title"] = "用户管理";
 }
@@ -51,10 +51,10 @@
                     <thead>
                     <tr>
                         <th style="width: 40%">
-                            <i class="fas fa-user me-2"></i> <span data-i18n="users.table.username">@Html.DisplayNameFor(model => model.Username)</span>
+                            <i class="fas fa-user me-2"></i> <span data-i18n="users.table.username">@Html.DisplayNameFor(model => model.Email)</span>
                         </th>
                         <th style="width: 30%">
-                            <i class="fas fa-id-card me-2"></i> <span data-i18n="users.table.nickname">@Html.DisplayNameFor(model => model.Nickname)</span>
+                            <i class="fas fa-id-card me-2"></i> <span data-i18n="users.table.nickname">@Html.DisplayNameFor(model => model.PlayerName)</span>
                         </th>
                         <th style="width: 15%">
                             <i class="fas fa-user-shield me-2"></i> <span data-i18n="users.table.isAdmin">@Html.DisplayNameFor(model => model.IsAdmin)</span>
@@ -68,13 +68,13 @@
                             <td class="align-middle">
                                 <div class="user-item">
                                     <div>
-                                        <div class="user-name">@Html.DisplayFor(modelItem => item.Username)</div>
+                                        <div class="user-name">@Html.DisplayFor(modelItem => item.Email)</div>
                                         <small class="text-muted"><span data-i18n="users.table.id">ID</span>: @item.ID</small>
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.Nickname)
+                                @Html.DisplayFor(modelItem => item.PlayerName)
                             </td>
                             <td class="align-middle">
                                 @if (item.IsAdmin) {

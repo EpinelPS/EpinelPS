@@ -7,16 +7,17 @@ using System.Text;
 namespace EpinelPS.Controllers.AdminPanel;
 
 [Route("admin/Users")]
-public class UsersController(ILogger<UsersController> logger) : Controller
+public class UsersController(ILogger<UsersController> logger, GameContext dbContext) : Controller
 {
     private readonly ILogger<UsersController> _logger = logger;
+    private readonly GameContext _db = dbContext;
     private static readonly MD5 sha = MD5.Create();
 
     public IActionResult Index()
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        return View(JsonDb.Instance.Users);
+        return View(_db.SdkUsers);
     }
 
     [Route("Modify/{id}")]
@@ -30,14 +31,17 @@ public class UsersController(ILogger<UsersController> logger) : Controller
             return NotFound();
         }
 
+        var sdkUser = _db.SdkUsers.Find(id);
+        if (sdkUser == null) return NotFound();
+
         return View(
             new ModUserModel()
             {
-                IsAdmin = user.IsAdmin,
+                IsAdmin = sdkUser.IsAdmin,
                 IsBanned = user.IsBanned,
                 Nickname = user.Nickname ?? "Unknown nickname",
                 sickpulls = user.sickpulls,
-                Username = user.Username ?? "Unknown username",
+                Username = sdkUser.Email ?? "Unknown username",
                 ID = user.ID
             }
         );
@@ -61,8 +65,12 @@ public class UsersController(ILogger<UsersController> logger) : Controller
         if (string.IsNullOrEmpty(toSet.Username))
             throw new Exception("username cannot be empty");
 
-        user.Username = toSet.Username;
-        user.IsAdmin = toSet.IsAdmin;
+        var sdkUser = _db.SdkUsers.Find(id);
+        if (sdkUser == null) return NotFound();
+        sdkUser.Email = toSet.Username;
+        sdkUser.IsAdmin = toSet.IsAdmin;
+        _db.SaveChanges();
+
         user.sickpulls = toSet.sickpulls;
         user.IsBanned = toSet.IsBanned;
         user.Nickname = toSet.Nickname;
@@ -70,11 +78,11 @@ public class UsersController(ILogger<UsersController> logger) : Controller
 
         return View(new ModUserModel()
         {
-            IsAdmin = user.IsAdmin,
+            IsAdmin = sdkUser.IsAdmin,
             IsBanned = user.IsBanned,
             Nickname = user.Nickname,
             sickpulls = user.sickpulls,
-            Username = user.Username,
+            Username = sdkUser.Email,
             ID = user.ID
         });
     }
@@ -128,15 +136,14 @@ public class UsersController(ILogger<UsersController> logger) : Controller
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-        if (user == null)
+        SdkUser? user = _db.SdkUsers.Find(id);
+        if (user == null) return NotFound();
+
+        return View(new ChangeUserPasswordModel()
         {
-            return NotFound();
-        }
-
-        user.Password = ""; // do not return the password
-
-        return View(user);
+            Email = user.Email,
+            ID = user.ID
+        });
     }
 
 
@@ -161,16 +168,16 @@ public class UsersController(ILogger<UsersController> logger) : Controller
         }
 
         // TODO: use bcrypt
+        SdkUser? user = _db.SdkUsers.Find(id);
+        if (user == null) return NotFound();
+        user.PasswordHash = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower();
+        _db.SaveChanges();
 
-        User? userToUpdate = JsonDb.Instance.Users.Where(s => s.ID == id).FirstOrDefault();
-        if (userToUpdate == null)
+        return View(new ChangeUserPasswordModel()
         {
-            return NotFound();
-        }
-
-        userToUpdate.Password = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower();
-
-        return View(userToUpdate);
+            Email = user.Email,
+            ID = user.ID
+        });
     }
     [Route("GetUsersList")]
     public IActionResult GetUsersList()

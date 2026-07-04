@@ -153,7 +153,7 @@ public class WearHarmonyCube : LobbyMessage
             harmonyCubeItem.Position = harmonyCubeData.LocationId;
         }
 
-        Console.WriteLine($"Equipped harmony cube {harmonyCubeItem.ItemType} to character {targetCsn} for user {user.Username} (slot {harmonyCubeItem.CsnList.Count}/{maxSlots})");
+        Console.WriteLine($"Equipped harmony cube {harmonyCubeItem.ItemType} to character {targetCsn} for user {user.ID} (slot {harmonyCubeItem.CsnList.Count}/{maxSlots})");
 
         return modifiedItems;
     }

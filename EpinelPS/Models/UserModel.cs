@@ -12,10 +12,14 @@ public class ClearedTutorialData
 public class User
 {
     // User info
+    [Obsolete]
     public string? Username { get; set; }
+    [Obsolete]
     public string? Password { get; set; }
+    [Obsolete]
     public string? PlayerName { get; set; }
     public ulong ID { get; set; }
+    [Obsolete]
     public long RegisterTime { get; set; }
     public int LastNormalStageCleared { get; set; }
     public int LastStoryStageCleared { get; set; }
@@ -25,6 +29,7 @@ public class User
     public int ProfileIconId { get; set; } = 39900;
     public bool ProfileIconIsPrism { get; set; } = false;
     public int ProfileFrame { get; set; } = 25;
+    [Obsolete]
     public bool IsAdmin { get; set; } = false;
     public bool sickpulls { get; set; } = false;
     public bool IsBanned { get; set; } = false;

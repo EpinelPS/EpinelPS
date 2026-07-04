@@ -1,7 +1,9 @@
-@model EpinelPS.Models.User
+@model EpinelPS.Models.Admin.DeleteUserModel
+@inject GameContext db
 
 @{
     ViewData["Title"] = "Delete user";
+    var user = db.SdkUsers.Find(Model.ID) ?? throw new InvalidDataException("expected SdkUser record to exist for user");
 }
 
 <h1 data-i18n="users.delete.title">删除用户</h1>
@@ -21,19 +23,19 @@
             用户名
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Username)
+            @Html.DisplayFor(user => user.Email)
         </dd>
         <dt class="col-sm-2" data-i18n="users.table.isAdmin">
             管理员权限
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsAdmin)
+            @Html.DisplayFor(user => user.IsAdmin)
         </dd>
         <dt class="col-sm-2" data-i18n="users.table.playerName">
             玩家名称
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PlayerName)
+            @Html.DisplayFor(user => user.PlayerName)
         </dd>
         <dt class="col-sm-2" data-i18n="users.table.nickname">
             昵称

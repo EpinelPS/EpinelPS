@@ -1,32 +1,36 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Paseto;
+using Paseto.Builder;
 
 namespace EpinelPS.Controllers;
 
 [Route("account")]
 [ApiController]
-public class AccountController : ControllerBase
+public class AccountController(GameContext DbContext) : ControllerBase
 {
+    private readonly GameContext dbContext = DbContext;
     private const string BadAuthToken = "{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"123" + "\"}";
 
     [HttpPost]
     [Route("login")]
     public string Login(string seq, [FromBody] LoginEndpoint2Req req)
     {
-        foreach (User item in JsonDb.Instance.Users)
-        {
-            if (item.Username == req.account && item.Password == req.password)
-            {
-                AccessToken tok = CreateLauncherTokenForUser(item);
-                item.LastLogin = DateTime.UtcNow;
-                JsonDb.Save();
+        var userResults = dbContext.SdkUsers.Where(x => x.Email == req.account && x.PasswordHash == req.password);
 
-                return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":true,\"msg\":\"Success\",\"register_time\":" + item.RegisterTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + item.ID + "\"}";
-            }
+        if (!userResults.Any())
+        {
+            return "{\"msg\":\"login failed; invalid account or password!\",\"ret\":2002,\"seq\":\"" + seq + "\"}";
         }
 
-        return "{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"" + seq + "\"}";
+        var user = userResults.First();
+        
+        AccessToken tok = CreateLauncherTokenForUser(user.ID);
+        user.LastLogin = DateTime.UtcNow;
+        dbContext.SaveChanges();
+
+        return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":true,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}";
     }
 
 
@@ -50,9 +54,9 @@ public class AccountController : ControllerBase
     [Route("getuserinfo")]
     public string GetUserInfo(string seq, [FromBody] AuthPkt2 req)
     {
-        (User?, AccessToken?) res;
-        if ((res = NetUtils.GetUser(req.token)).Item1 == null) return BadAuthToken;
-        User user = res.Item1;
+        (SdkUser?, AccessToken?) res;
+        if ((res = NetUtils.GetUser(req.token, HttpContext)).Item1 == null) return BadAuthToken;
+        SdkUser user = res.Item1;
         AccessToken? tok = res.Item2;
 
         if (tok == null)
@@ -62,7 +66,7 @@ public class AccountController : ControllerBase
         }
 
         // Pretend that code is valid
-        return "{\"account_type\":1,\"birthday\":\"1970-01\",\"email\":\"" + user.Username + "\",\"expire\":" + tok.ExpirationTime + ",\"is_receive_email\":1,\"is_receive_email_in_night\":0,\"is_receive_video\":-1,\"lang_type\":\"en\",\"msg\":\"Success\",\"nick_name\":\"\",\"phone\":\"\",\"phone_area_code\":\"\",\"privacy_policy\":\"1\",\"privacy_update_time\":1717783097,\"region\":\"724\",\"ret\":0,\"seq\":\"" + seq + "\",\"terms_of_service\":\"\",\"terms_update_time\":0,\"uid\":\"" + user.ID + "\",\"user_agreed_dt\":\"\",\"user_agreed_pp\":\"1\",\"user_agreed_tos\":\"\",\"user_name\":\"" + user.PlayerName + "\",\"username_pass_verify\":0}";
+        return "{\"account_type\":1,\"birthday\":\"1970-01\",\"email\":\"" + user.Email + "\",\"expire\":" + tok.ExpirationTime + ",\"is_receive_email\":1,\"is_receive_email_in_night\":0,\"is_receive_video\":-1,\"lang_type\":\"en\",\"msg\":\"Success\",\"nick_name\":\"\",\"phone\":\"\",\"phone_area_code\":\"\",\"privacy_policy\":\"1\",\"privacy_update_time\":1717783097,\"region\":\"724\",\"ret\":0,\"seq\":\"" + seq + "\",\"terms_of_service\":\"\",\"terms_update_time\":0,\"uid\":\"" + user.ID + "\",\"user_agreed_dt\":\"\",\"user_agreed_pp\":\"1\",\"user_agreed_tos\":\"\",\"user_name\":\"" + user.PlayerName + "\",\"username_pass_verify\":0}";
     }
 
     [HttpPost]
@@ -70,13 +74,8 @@ public class AccountController : ControllerBase
     public string RegisterAccount(string seq, [FromBody] RegisterEPReq req)
     {
         // check if the account already exists
-        foreach (User item in JsonDb.Instance.Users)
-        {
-            if (item.Username == req.account)
-            {
-                return "{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seq + "\"}";
-            }
-        }
+        if (dbContext.SdkUsers.Any(x => x.Email == req.account))
+             return "{\"msg\":\"send code failed; invalid account\",\"ret\":2112,\"seq\":\"" + seq + "\"}";
 
         ulong uid = (ulong)new Random().Next(1, int.MaxValue);
 
@@ -89,34 +88,41 @@ public class AccountController : ControllerBase
             }
         }
 
-        User user = new()
+        bool admin = JsonDb.Instance.Users.Count == 0;
+        var registerTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        JsonDb.Instance.Users.Add(new User()
+        {
+            ID = uid
+        });
+
+        dbContext.SdkUsers.Add(new SdkUser()
         {
             ID = uid,
-            Password = req.password,
-            RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-            Username = req.account,
+            Email = req.account,
+            PasswordHash = req.password,
+            RegisterTime = registerTime,
+            IsAdmin = admin,
             PlayerName = "Player_" + Rng.RandomString(8),
-            IsAdmin = JsonDb.Instance.Users.Count == 0
-        };
+        });
 
-        JsonDb.Instance.Users.Add(user);
+        AccessToken tok = CreateLauncherTokenForUser(uid);
 
-        AccessToken tok = CreateLauncherTokenForUser(user);
-
-        return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + user.RegisterTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + user.ID + "\"}";
+        return "{\"expire\":" + tok.ExpirationTime + ",\"is_login\":false,\"msg\":\"Success\",\"register_time\":" + registerTime + ",\"ret\":0,\"seq\":\"" + seq + "\",\"token\":\"" + tok.Token + "\",\"uid\":\"" + uid + "\"}";
     }
-    public static AccessToken CreateLauncherTokenForUser(User user)
+    public static AccessToken CreateLauncherTokenForUser(ulong id)
     {
         // TODO: implement access token expiration
-        AccessToken token = new()
+        return new()
         {
-            ExpirationTime = DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds(),
-            Token = Rng.RandomString(64),
-            UserID = user.ID
+            Token = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+        .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+        .AddClaim("userId", id)
+        .IssuedAt(DateTime.UtcNow)
+        //.Expiration(DateTime.UtcNow.AddDays(2))
+        .Encode(),
+            UserID = id,
+            ExpirationTime = DateTime.UtcNow.AddDays(2).Ticks
         };
-        JsonDb.Instance.LauncherAccessTokens.Add(token);
-        JsonDb.Save();
-
-        return token;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Paseto;
@@ -15,14 +16,9 @@ public class GetUserOnlineStateLog : LobbyMessage
         ReqEnterServer req = await ReadData<ReqEnterServer>();
 
         // request has auth token
-        foreach (AccessToken item in JsonDb.Instance.LauncherAccessTokens)
-        {
-            if (item.Token == req.AuthToken)
-            {
-                UserId = item.UserID;
-            }
-        }
-        if (UserId == 0) throw new BadHttpRequestException("unknown auth token", 403);
+        var sdkUser = NetUtils.GetUser(req.AuthToken, this.ctx).Item1;
+        if (sdkUser == null) throw new BadHttpRequestException("unknown auth token", 403);
+        UserId = sdkUser.ID;
         User user = GetUser();
 
         GameClientInfo rsp = LobbyHandler.GenGameClientTok(req.ClientPublicKey, UserId);

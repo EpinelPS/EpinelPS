@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using EpinelPS.Utils;
 using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.Auth;
@@ -10,19 +11,15 @@ public class DoIntlAuth : LobbyMessage
     {
         ReqAuthIntl req = await ReadData<ReqAuthIntl>();
         ResAuth response = new();
-        foreach (AccessToken item in JsonDb.Instance.LauncherAccessTokens)
-        {
-            if (item.Token == req.Token)
-            {
-                UserId = item.UserID;
-            }
-        }
-        if (UserId == 0)
+        var sdkUser = NetUtils.GetUser(req.Token, this.ctx).Item1;
+
+        if (sdkUser == null)
         {
             response.AuthError = new NetAuthError() { ErrorCode = AuthErrorCode.Error };
         }
         else
         {
+            UserId = sdkUser.ID;
             User user = GetUser();
 
             if (user.IsBanned && user.BanEnd < DateTime.UtcNow)

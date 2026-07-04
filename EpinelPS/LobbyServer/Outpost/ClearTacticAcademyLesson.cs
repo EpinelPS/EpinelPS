@@ -34,7 +34,7 @@ public class ClearTacticAcademyLesson : LobbyMessage
         }
         else
         {
-            Console.WriteLine($"User {user.PlayerName} tried to clear lesson {req.LessonTid} without enough currency");
+            Console.WriteLine($"User {user.ID} tried to clear lesson {req.LessonTid} without enough currency");
         }
         await WriteDataAsync(response);
     }
