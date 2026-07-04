@@ -67,10 +67,30 @@ internal class Program
 
             // Add services to the container.
             string connectionString = builder.Configuration.GetConnectionString("EpinelPSConnection").Replace("(startupDirectory)", AppDomain.CurrentDomain.BaseDirectory);
-            Logging.WriteLine("Database connection string: " + connectionString);
+            string connectionType = builder.Configuration.GetConnectionString("EpinelPSConnectionType").ToLower();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddDbContext<GameContext>(options => options.UseSqlite(connectionString));
+            builder.Services.AddDbContext<GameContext>(options =>
+            {
+                switch (connectionType?.ToLowerInvariant())
+                {
+                    case "sql":
+                        options.UseSqlServer(connectionString);
+                        break;
+
+                    case "mysql":
+                        options.UseMySQL(connectionString);
+                        break;
+
+                    case "npgsql":
+                        options.UseNpgsql(connectionString);
+                        break;
+
+                    default:
+                        options.UseSqlite(connectionString);
+                        break;
+                }
+            });
             builder.Services.AddControllersWithViews(options =>
             {
                 options.AllowEmptyInputInBodyModelBinding = true;
@@ -187,11 +207,11 @@ internal class Program
                 return $"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/";
             });
 
-            app.Run();
             new Thread(() =>
             {
                 CliLoop();
             }).Start();
+            app.Run();
         }
         catch (Exception ex) when (ex is not HostAbortedException && ex.Source != "Microsoft.EntityFrameworkCore.Design") // see https://github.com/dotnet/efcore/issues/29923
         {
@@ -266,10 +286,10 @@ internal class Program
             }
             else if (input == "show users")
             {
-                Console.WriteLine("Id,Username,Nickname");
-                foreach (User item in JsonDb.Instance.Users)
+                Console.WriteLine("Id, Email, Player Name, Is admin");
+                foreach (SdkUser item in GameContext.Instance.SdkUsers)
                 {
-                    Console.WriteLine($"{item.ID},{item.Username},{item.Nickname}");
+                    Console.WriteLine($"{item.ID},{item.Email},{item.PlayerName},{item.IsAdmin}");
                 }
             }
             else if (input.StartsWith("user"))
@@ -283,8 +303,8 @@ internal class Program
                         if (user != null)
                         {
                             selectedUser = user.ID;
-                            Console.WriteLine("Selected user: " + user.Username);
-                            prompt = "/users/" + user.Username + "# ";
+                            Console.WriteLine("Selected user: " + user.ID);
+                            prompt = "/users/" + user.ID + "# ";
                         }
                         else
                         {
@@ -491,12 +511,12 @@ internal class Program
                         if (currentSickPulls)
                         {
                             user.sickpulls = false;
-                            Console.WriteLine("sickpulls is now set to false for user " + user.Username);
+                            Console.WriteLine("sickpulls is now set to false for user " + user.ID);
                         }
                         else
                         {
                             user.sickpulls = true;
-                            Console.WriteLine("sickpulls is now set to true for user " + user.Username);
+                            Console.WriteLine("sickpulls is now set to true for user " + user.ID);
                         }
 
                         // Save the changes to the database
@@ -577,7 +597,7 @@ internal class Program
                     }
                     else
                     {
-                        Console.Write("Are you sure you want to delete user " + user.Username + "? (y/n) ");
+                        Console.Write("Are you sure you want to delete user " + user.ID + "? (y/n) ");
                         string? confirm = Console.ReadLine();
                         if (confirm == "y")
                         {

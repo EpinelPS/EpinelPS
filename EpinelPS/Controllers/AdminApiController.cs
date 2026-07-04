@@ -3,6 +3,8 @@ using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Paseto;
+using Paseto.Builder;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,24 +12,25 @@ namespace EpinelPS.Controllers;
 
 [Route("adminapi")]
 [ApiController]
-public class AdminApiController : ControllerBase
+public class AdminApiController(GameContext DbContext) : ControllerBase
 {
+    private readonly GameContext dbContext = DbContext;
     private static readonly MD5 md5 = MD5.Create();
 
     [HttpPost]
     [Route("login")]
     public LoginApiResponse Login([FromBody] LoginApiBody b)
     {
-        User? user = null;
+        SdkUser? user = null;
         bool nullusernames = false;
         if (b.Username != null && b.Password != null)
         {
             string passwordHash = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(b.Password))).ToLower();
-            foreach (User item in JsonDb.Instance.Users)
+            foreach (var item in dbContext.SdkUsers)
             {
-                if (item.Username == b.Username && item.Password != null)
+                if (item.Email == b.Username && item.PasswordHash != null)
                 {
-                    if (item.Password.Equals(passwordHash, StringComparison.OrdinalIgnoreCase))
+                    if (item.PasswordHash.Equals(passwordHash, StringComparison.OrdinalIgnoreCase))
                     {
                         user = item;
                     }
@@ -49,7 +52,12 @@ public class AdminApiController : ControllerBase
         {
             if (user.IsAdmin)
             {
-                string tok = CreateAuthToken(user);
+                string tok = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                    .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+                    .AddClaim("userId", user.ID)
+                    .IssuedAt(DateTime.UtcNow)
+                    .Expiration(DateTime.UtcNow.AddDays(2))
+                    .Encode();
                 HttpContext.Response.Cookies.Append("token", tok);
                 return new LoginApiResponse() { OK = true, Token = tok };
             }
@@ -65,7 +73,7 @@ public class AdminApiController : ControllerBase
     {
         if (!AdminController.CheckAuth(HttpContext) && JsonDb.Instance.Users.Count != 0) return new RunCmdResponse() { error = "bad token" };
 
-        if (JsonDb.Instance.Users.Where(x => x.Username == req.Email).Count() != 0)
+        if (dbContext.SdkUsers.Where(x => x.Email == req.Email).Count() != 0)
         {
             return new RunCmdResponse() { error = $"Email {req.Email} already exists" };
         }
@@ -81,14 +89,21 @@ public class AdminApiController : ControllerBase
             }
         }
 
+        bool admin = JsonDb.Instance.Users.Count == 0;
+
         JsonDb.Instance.Users.Add(new User()
         {
-            Username = req.Email,
-            Password = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(req.Password))).ToLower(),
-            RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            ID = uid
+        });
+
+        dbContext.SdkUsers.Add(new SdkUser()
+        {
             ID = uid,
+            Email = req.Email,
+            PasswordHash = Convert.ToHexString(md5.ComputeHash(Encoding.ASCII.GetBytes(req.Password))).ToLower(),
+            RegisterTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            IsAdmin = admin,
             PlayerName = "Player_" + Rng.RandomString(8),
-            IsAdmin = JsonDb.Instance.Users.Count == 0
         });
 
         JsonDb.Save();
@@ -206,21 +221,5 @@ public class AdminApiController : ControllerBase
                 }
         }
         return new RunCmdResponse() { error = "Not implemented" };
-    }
-
-    private static string CreateAuthToken(User user)
-    {
-        string tok = RandomString(128);
-        // 只保留一个token
-        JsonDb.Instance.AdminAuthTokens.Clear();
-        JsonDb.Instance.AdminAuthTokens.Add(tok, user.ID);
-        JsonDb.Save();
-        return tok;
-    }
-
-    public static string RandomString(int length)
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string([.. Enumerable.Repeat(chars, length).Select(static s => s[new Random().Next(s.Length)])]);
     }
 }

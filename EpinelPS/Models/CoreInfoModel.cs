@@ -8,10 +8,6 @@ public class CoreInfo
     public List<User> Users { get; set; } = [];
 
     public RankData RankDatas { get; set; } = new();
-
-    public List<AccessToken> LauncherAccessTokens { get; set; } = [];
-    public Dictionary<string, ulong> AdminAuthTokens { get; set; } = [];
-
     public byte[] LauncherTokenKey { get; set; } = [];
     public byte[] EncryptionTokenKey { get; set; } = [];
     public LogType LogLevel { get; set; } = LogType.Debug;

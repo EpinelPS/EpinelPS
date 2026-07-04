@@ -206,7 +206,6 @@ public class AdminCommands
             }
         }
 
-        Console.WriteLine($"Added {amount} of all materials to user " + user.Username);
         JsonDb.Save();
         return RunCmdResponse.OK;
     }
@@ -311,7 +310,7 @@ public class AdminCommands
                 }
             }
         }
-        Console.WriteLine($"Added {amount1} of all FavoriteItem, {amount2} of all consumables, and {amount3} of all equipment to user " + user.Username);
+        Console.WriteLine($"Added {amount1} of all FavoriteItem, {amount2} of all consumables, and {amount3} of all equipment to user " + user.ID);
         JsonDb.Save();
         return RunCmdResponse.OK;
     }
@@ -338,7 +337,6 @@ public class AdminCommands
             }
         }
 
-        Console.WriteLine("Finished all tutorials for user " + user.Username);
         JsonDb.Save();
         return RunCmdResponse.OK;
     }
@@ -464,13 +462,13 @@ public class AdminCommands
                 UltimateLevel = 1
             });
 
-            Console.WriteLine($"Added character {characterId} to user {user.Username}");
+            Console.WriteLine($"Added character {characterId} to user");
             JsonDb.Save();
             return RunCmdResponse.OK;
         }
         else
         {
-            return new RunCmdResponse() { error = $"User {user.Username} already has character {characterId}" };
+            return new RunCmdResponse() { error = $"User already has character {characterId}" };
         }
     }
 
@@ -499,7 +497,6 @@ public class AdminCommands
             }
         }
 
-        Console.WriteLine($"Added {amount} of item {itemId} to user {user.Username}");
         JsonDb.Save();
         return RunCmdResponse.OK;
     }
