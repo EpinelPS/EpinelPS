@@ -15,6 +15,7 @@ public abstract class LobbyMessage
     protected ulong UserId;
     public byte[] ReturnBytes = [];
     public byte[] Contents = [];
+    public GameContext GameContext = null!;
 
     public User User
     {
@@ -40,15 +41,9 @@ public abstract class LobbyMessage
     public async Task HandleAsync(HttpContext ctx)
     {
         this.ctx = ctx;
-
+        GameContext = ctx.RequestServices.GetRequiredService<GameContext>();
         await HandleAsync();
     }
-    public async Task HandleAsync(string authToken)
-    {
-      
-        await HandleAsync();
-    }
-
     protected abstract Task HandleAsync();
 
 

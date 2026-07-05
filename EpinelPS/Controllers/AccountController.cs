@@ -105,6 +105,11 @@ public class AccountController(GameContext DbContext) : ControllerBase
             IsAdmin = admin,
             PlayerName = "Player_" + Rng.RandomString(8),
         });
+        dbContext.Users.Add(new GameUser()
+        {
+            ID = uid // todo remove later
+        });
+        dbContext.SaveChanges();
 
         AccessToken tok = CreateLauncherTokenForUser(uid);
 

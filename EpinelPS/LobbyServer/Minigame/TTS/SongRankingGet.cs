@@ -22,7 +22,7 @@ public class SongRankingGet : LobbyMessage
                     Difficulty = item.Entity.Difficulty,
                     Position = item.Rank,
                     Score = item.Entity.Score,
-                    User = TtsHelper.CreateWholeUserDataFromDbUser(item.Entity.UserId)
+                    User = LobbyHandler.CreateWholeUserDataFromDbUser((ulong)item.Entity.UserId)
                 };
                 response.TopRankDataList.Add(data);
             }

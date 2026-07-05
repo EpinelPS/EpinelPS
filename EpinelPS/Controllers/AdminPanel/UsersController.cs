@@ -34,12 +34,15 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         var sdkUser = _db.SdkUsers.Find(id);
         if (sdkUser == null) return NotFound();
 
+        var gameUser = _db.Users.Find(id);
+        if (gameUser == null) return NotFound();
+
         return View(
             new ModUserModel()
             {
                 IsAdmin = sdkUser.IsAdmin,
                 IsBanned = user.IsBanned,
-                Nickname = user.Nickname ?? "Unknown nickname",
+                Nickname = gameUser.Nickname ?? "Unknown nickname",
                 sickpulls = user.sickpulls,
                 Username = sdkUser.Email ?? "Unknown username",
                 ID = user.ID
@@ -67,20 +70,22 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
 
         var sdkUser = _db.SdkUsers.Find(id);
         if (sdkUser == null) return NotFound();
+        var gameUser = _db.Users.Find(id);
+        if (gameUser == null) return NotFound();
         sdkUser.Email = toSet.Username;
         sdkUser.IsAdmin = toSet.IsAdmin;
+        gameUser.Nickname = toSet.Nickname;
         _db.SaveChanges();
 
         user.sickpulls = toSet.sickpulls;
         user.IsBanned = toSet.IsBanned;
-        user.Nickname = toSet.Nickname;
         JsonDb.Save();
 
         return View(new ModUserModel()
         {
             IsAdmin = sdkUser.IsAdmin,
             IsBanned = user.IsBanned,
-            Nickname = user.Nickname,
+            Nickname = gameUser.Nickname,
             sickpulls = user.sickpulls,
             Username = sdkUser.Email,
             ID = user.ID
@@ -183,7 +188,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     public IActionResult GetUsersList()
     {
         if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
-        var users = JsonDb.Instance.Users
+        var users = _db.Users
             .Select(u => new { u.ID, u.Nickname })
             .ToList();
         return Ok(users);

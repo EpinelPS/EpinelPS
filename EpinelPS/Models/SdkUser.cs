@@ -1,7 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace EpinelPS.Database;
+namespace EpinelPS.Models;
 
 public class SdkUser
 {

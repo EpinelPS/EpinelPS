@@ -106,7 +106,13 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             PlayerName = "Player_" + Rng.RandomString(8),
         });
 
+        dbContext.Users.Add(new GameUser()
+        {
+            ID = uid // todo remove later
+        });
+
         JsonDb.Save();
+        dbContext.SaveChanges();
 
         return new RunCmdResponse() { ok = true };
     }

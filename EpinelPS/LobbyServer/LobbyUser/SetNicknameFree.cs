@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpinelPS.LobbyServer.LobbyUser;
 
@@ -8,16 +9,13 @@ public class SetNicknameFree : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqSetNicknameFree req = await ReadData<ReqSetNicknameFree>();
-        User user = GetUser();
-        user.Nickname = req.Nickname;
+        GameContext.Users.Where(u => u.ID == UserId).ExecuteUpdate(setters => setters.SetProperty(u => u.Nickname, req.Nickname));
 
         ResSetNicknameFree response = new()
         {
             Result = SetNicknameResult.Okay,
             Nickname = req.Nickname
         };
-
-        JsonDb.Save();
 
         await WriteDataAsync(response);
     }
