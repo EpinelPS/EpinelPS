@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost;
@@ -12,8 +13,9 @@ public class ObtainInfracoreReward : LobbyMessage
         ResObtainInfraCoreReward response = new();
 
         User user = GetUser();
+        GameUser userNew = GetUserNew();
 
-        int currentLevel = user.InfraCoreLvl;
+        int currentLevel = userNew.InfraCoreLvl;
 
         Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
         if (gradeTable.TryGetValue(currentLevel, out var gradeData))
@@ -26,11 +28,13 @@ public class ObtainInfracoreReward : LobbyMessage
                 {
                     user.InfraCoreRewardReceived[currentLevel] = true;
 
-                    var reward = RewardUtils.RegisterRewardsForUser(user, gradeData.RewardId);
+                    var reward = RewardUtils.RegisterRewardsForUser(userNew, gradeData.RewardId);
                     response.Reward = reward;
                 }
             }
         }
+        JsonDb.Save();
+        await GameContext.SaveChangesAsync();
 
         await WriteDataAsync(response);
     }

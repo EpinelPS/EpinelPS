@@ -151,16 +151,4 @@ internal class JsonDb
         position = (position == 2 && activeJukeboxBgm.Count > 1) ? 2 : 1;
         return activeJukeboxBgm[position - 1];
     }
-
-    public static bool IsSickPulls(User selectedUser)
-    {
-        if (selectedUser != null)
-        {
-            return selectedUser.sickpulls;
-        }
-        else
-        {
-            throw new Exception($"User not found");
-        }
-    }
 }

@@ -19,14 +19,14 @@ public class ClearStage : LobbyMessage
         // TODO: check if user has already cleared this stage
         if (req.BattleResult == 1)
         {
-            response = CompleteStage(user, req.StageId);
+            response = CompleteStage(user, GetUserNew(), req.StageId);
         }
 
         await WriteDataAsync(response);
     }
 
 
-    public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
+    public static ResClearStage CompleteStage(User user, GameUser userNew, int StageId, bool forceCompleteScenarios = false)
     {
         ResClearStage response = new()
         {
@@ -56,7 +56,7 @@ public class ClearStage : LobbyMessage
             }
         }
 
-        int oldLevel = user.userPointData.UserLevel;
+        int oldLevel = userNew.UserLevel;
         int oldOutpostLevel = user.OutpostBattleLevel.Level;
 
         if (rewardData != null)
@@ -69,13 +69,13 @@ public class ClearStage : LobbyMessage
         response.OutpostBattleLevelReward = new NetRewardData() { PassPoint = new() };
 
         // Check if user level changed, if so return the reward
-        if (user.userPointData.UserLevel != oldLevel)
+        if (userNew.UserLevel != oldLevel)
         {
             response.UserLevelUpReward = new NetRewardData();
             response.UserLevelUpReward.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.FreeCash,
-                Value = 30 * (user.userPointData.UserLevel - oldLevel),
+                Value = 30 * (userNew.UserLevel - oldLevel),
                 FinalValue = user.GetCurrencyVal(CurrencyType.FreeCash)
             });
         }
@@ -95,18 +95,18 @@ public class ClearStage : LobbyMessage
         {
             if (clearedStage.ChapterMod == ChapterMod.Hard)
             {
-                if (StageId > user.LastHardStageCleared)
-                    user.LastHardStageCleared = StageId;
+                if (StageId > userNew.LastHardStageCleared)
+                    userNew.LastHardStageCleared = StageId;
             }
             else if (clearedStage.ChapterMod == ChapterMod.Story)
             {
-                if (StageId > user.LastStoryStageCleared)
-                    user.LastStoryStageCleared = StageId;
+                if (StageId > userNew.LastStoryStageCleared)
+                    userNew.LastStoryStageCleared = StageId;
             }
             else if (clearedStage.ChapterMod == ChapterMod.Normal)
             {
-                if (StageId > user.LastNormalStageCleared)
-                    user.LastNormalStageCleared = StageId;
+                if (StageId > userNew.LastNormalStageCleared)
+                    userNew.LastNormalStageCleared = StageId;
             }
             else throw new NotImplementedException();
         }
@@ -115,7 +115,7 @@ public class ClearStage : LobbyMessage
             Logging.Warn("Unknown stage category " + clearedStage.StageCategory);
         }
 
-        user.LastClearedDifficulty = (int)clearedStage.ChapterMod;
+        userNew.LastClearedDifficulty = (int)clearedStage.ChapterMod;
 
         if (clearedStage.StageType != StageType.Sub && clearedStage.ChapterMod != ChapterMod.Story)
         {
@@ -152,6 +152,7 @@ public class ClearStage : LobbyMessage
 
         user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
         JsonDb.Save();
+        GameContext.Instance.SaveChanges();
         return response;
     }
 

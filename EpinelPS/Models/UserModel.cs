@@ -21,25 +21,59 @@ public class User
     public ulong ID { get; set; }
     [Obsolete]
     public long RegisterTime { get; set; }
-    public int LastNormalStageCleared { get; set; }
-    public int LastStoryStageCleared { get; set; }
-    public int LastHardStageCleared { get; set; }
-    public int LastClearedDifficulty { get; set; }
     [Obsolete]
     public string? Nickname { get; set; }
-    public int ProfileIconId { get; set; } = 39900;
-    public bool ProfileIconIsPrism { get; set; } = false;
-    public int ProfileFrame { get; set; } = 25;
     [Obsolete]
     public bool IsAdmin { get; set; } = false;
+    [Obsolete]
+    public int LastNormalStageCleared { get; set; }
+    [Obsolete]
+    public int LastStoryStageCleared { get; set; }
+    [Obsolete]
+    public int LastHardStageCleared { get; set; }
+    [Obsolete]
+    public int LastClearedDifficulty { get; set; }
+    [Obsolete]
+    public int ProfileIconId { get; set; } = 39900;
+    [Obsolete]
+    public bool ProfileIconIsPrism { get; set; } = false;
+    [Obsolete]
+    public int ProfileFrame { get; set; } = 25;
+    [Obsolete]
     public bool sickpulls { get; set; } = false;
+    [Obsolete]
     public bool IsBanned { get; set; } = false;
+    [Obsolete]
     public int TitleId { get; set; } = 1;
+    [Obsolete]
     public DateTime BanStart { get; set; }
+    [Obsolete]
     public DateTime BanEnd { get; set; }
+    [Obsolete]
     public int BanId { get; set; } = 0;
+    [Obsolete]
     public DateTime LastReset { get; set; } = DateTime.MinValue;
+    [Obsolete]
     public DateTime LastWeeklyReset { get; set; } = DateTime.MinValue;
+    [Obsolete]
+    public bool SynchroDeviceUpgraded { get; set; } = false;
+    [Obsolete]
+    public int SynchroDeviceLevel { get; set; } = 200;
+[Obsolete]
+    public int InfraCoreExp { get; set; } = 0;
+    [Obsolete]
+    public int InfraCoreLvl { get; set; } = 1;
+    [Obsolete]
+    public int GachaTutorialPlayCount { get; set; } = 0;
+
+[Obsolete]
+    public int DispatchLv { get; set; } = 1;
+    [Obsolete]
+    public int DispatchCollectionLv { get; set; } = 0;
+    [Obsolete]
+    public int DispatchFavoriteLv { get; set; } = 0;
+    [Obsolete]
+    public int DispatchResetCount { get; set; } = 0;
 
     // Game data
     public List<string> CompletedScenarios { get; set; } = [];
@@ -51,8 +85,6 @@ public class User
             { CurrencyType.ContentStamina, 2 }
         };
     public List<SynchroSlot> SynchroSlots { get; set; } = [];
-    public bool SynchroDeviceUpgraded { get; set; } = false;
-    public int SynchroDeviceLevel { get; set; } = 200;
     public Dictionary<int, RecycleRoomResearchProgress> ResearchProgress { get; set; } = [];
 
     public ResetableData ResetableData { get; set; } = new();
@@ -61,6 +93,7 @@ public class User
     public List<CharacterModel> Characters { get; set; } = [];
     public List<EquipmentAwakeningData> EquipmentAwakenings { get; set; } = [];
     public long[] RepresentationTeamDataNew { get; set; } = [];
+    [Obsolete]
     public Dictionary<int, ClearedTutorialData> ClearedTutorialDataNew { get; set; } = [];
 
     // Outpost buildings data
@@ -91,15 +124,12 @@ public class User
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
     public Dictionary<int, bool> SubQuestData { get; set; } = [];
-    public int InfraCoreExp { get; set; } = 0;
-    public int InfraCoreLvl { get; set; } = 1;
     public Dictionary<int, bool> InfraCoreRewardReceived { get; set; } = [];
     public UserPointData userPointData { get; set; } = new();
     public DateTime LastLogin { get; set; } = DateTime.UtcNow;
     public DateTime BattleTime { get; set; } = DateTime.UtcNow;
 
     public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
-    public int GachaTutorialPlayCount { get; set; } = 0;
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
     public List<int> ViewedSideStoryStages { get; set; } = [];
@@ -124,7 +154,6 @@ public class User
     public List<NetUserAttractiveData> BondInfo { get; set; } = [];
     [Obsolete]
     public List<TriggerModel> Triggers { get; set; } = [];
-    public int LastTriggerId { get; set; } = 1;
     public List<int> CompletedAchievements { get; set; } = [];
     public List<NetMessage> MessengerData { get; set; } = [];
     public ulong LastMessageId { get; set; } = 1;
@@ -152,10 +181,6 @@ public class User
     public List<int> OutpostConditionList { get; set; } = [];
 
     // Outpost dispatch
-    public int DispatchLv { get; set; } = 1;
-    public int DispatchCollectionLv { get; set; } = 0;
-    public int DispatchFavoriteLv { get; set; } = 0;
-    public int DispatchResetCount { get; set; } = 0;
     public List<int> DispatchClearList { get; set; } = [];
     public List<NetSelectableDispatchData> SelectableDispatchData { get; set; } = [];
     public DispatchData UserDispatchData { get; set; } = new();

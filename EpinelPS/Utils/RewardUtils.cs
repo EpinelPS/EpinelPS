@@ -6,12 +6,12 @@ namespace EpinelPS.Utils;
 // Calculate rewards for various messages
 public class RewardUtils
 {
-    public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
+    public static NetRewardData RegisterRewardsForUser(GameUser user, int rewardId)
     {
         RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward Id {rewardId}");
         return RegisterRewardsForUser(user, rewardData);
     }
-    public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData)
+    public static NetRewardData RegisterRewardsForUser(GameUser user, RewardRecord rewardData)
     {
         NetRewardData ret = new()
         {
@@ -21,10 +21,10 @@ public class RewardUtils
 
         if (rewardData.UserExp != 0)
         {
-            int newXp = rewardData.UserExp + user.userPointData.ExperiencePoint;
+            int newXp = rewardData.UserExp + user.ExperiencePoint;
 
-            int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
-            int newLevel = user.userPointData.UserLevel;
+            int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.UserLevel);
+            int newLevel = user.UserLevel;
 
             if (newLevelExp == -1)
             {
@@ -52,8 +52,8 @@ public class RewardUtils
 
             ret.UserExp = new NetIncreaseExpData()
             {
-                BeforeExp = user.userPointData.ExperiencePoint,
-                BeforeLv = user.userPointData.UserLevel,
+                BeforeExp = user.ExperiencePoint,
+                BeforeLv = user.UserLevel,
 
                 // IncreaseExp = rewardData.UserExp,
                 CurrentExp = newXp,
@@ -62,9 +62,9 @@ public class RewardUtils
                 GainExp = rewardData.UserExp,
 
             };
-            user.userPointData.ExperiencePoint = newXp;
+            user.ExperiencePoint = newXp;
 
-            user.userPointData.UserLevel = newLevel;
+            user.UserLevel = newLevel;
         }
 
         foreach (var item in rewardData.Rewards)
@@ -206,10 +206,9 @@ public class RewardUtils
     /// <param name="rewardType"></param>
     /// <param name="rewardCount"></param>
     /// <exception cref="Exception"></exception>
-    public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
+    public static void AddSingleObject(GameUser user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
     {
         if (rewardType == RewardType.None) return;
-        Logging.WriteLine($"[DEBUG]��������{rewardType}", LogType.Info);
         if (rewardType == RewardType.Currency)
         {
             AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
@@ -269,9 +268,6 @@ public class RewardUtils
             }
             else if (rewardType.ToString().StartsWith("Equipment"))
             {
-
-                Console.WriteLine($"[UseBundleBox] װ����Ʒ Id{rewardId} ��������װ����");
-
                 int level = 0; // Default to 0
                 ItemSubType itemSubType = GameData.Instance.GetItemSubType(rewardId);
 
@@ -383,7 +379,6 @@ public class RewardUtils
             {
                 user.InfraCoreLvl = newLevel;
             }*/
-            Logging.WriteLine($"�������ľ��� {user.InfraCoreExp} ,�ȼ� {user.InfraCoreLvl}");
             ret.InfraCoreExp = new NetIncreaseExpData()
             {
                 BeforeLv = beforeLv,
@@ -456,7 +451,6 @@ public class RewardUtils
             {
                 DbItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.PieceId);
                 int maxLimitBroken = GetValueByRarity(character.OriginalRare, 0, 2, 11) - 1;
-                Logging.WriteLine($"[UseRandomBox] ��ɫ�����Ƭ: {maxLimitBroken}��������Ƭ���� {spareItem.Count}");
 
                 bool canIncreaseItem = character.OriginalRare != OriginalRareType.R && ownedCharacter.Grade + (spareItem?.Count ?? 0) < maxLimitBroken;
                 (int newSpareItemCount, int dissoluteCharacterCount) = canIncreaseItem ? (1, 0) : (0, 1);

@@ -11,6 +11,7 @@ public class ObtainWeekly : LobbyMessage
     {
         ReqObtainWeeklyMissionReward req = await ReadData<ReqObtainWeeklyMissionReward>();
         User user = GetUser();
+        GameUser gameUser = GetUserNew();
 
         ResObtainWeeklyMissionReward response = new();
 
@@ -30,7 +31,7 @@ public class ObtainWeekly : LobbyMessage
             {
                 // Actual reward
                 RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
-                rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
+                rewards.Add(RewardUtils.RegisterRewardsForUser(gameUser, rewardRecord));
             }
             else
             {

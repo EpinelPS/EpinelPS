@@ -161,7 +161,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 }
             case "finishalltutorials":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                     GameUser? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.FinishAllTutorials(user);
                 }

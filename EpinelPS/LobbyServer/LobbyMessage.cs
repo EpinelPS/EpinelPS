@@ -120,11 +120,18 @@ public abstract class LobbyMessage
     {
         return JsonDb.GetUser(UserId) ?? throw new UnauthorizedAccessException("Invalid authentication token");
     }
+    public GameUser GetUserNew()
+    {
+        return GameContext.Users.Find(UserId) ?? throw new UnauthorizedAccessException("Invalid authentication token");
+    }
     public User? GetUser(ulong Id)
     {
         return JsonDb.GetUser(Id);
     }
-
+    public GameUser? GetUserNew(ulong Id)
+    {
+        return GameContext.Users.Find(Id) ?? throw new UnauthorizedAccessException("Invalid authentication token");
+    }
     public RankData GetRank()
     {
         return JsonDb.GetRank();

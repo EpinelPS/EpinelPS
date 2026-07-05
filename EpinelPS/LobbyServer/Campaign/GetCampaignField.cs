@@ -9,6 +9,7 @@ public class GetCampaignField : LobbyMessage
     {
         ReqGetCampaignFieldData req = await ReadData<ReqGetCampaignFieldData>();
         User user = GetUser();
+        GameUser gameUser = GetUserNew();
 
         Console.WriteLine("Map ID: " + req.MapId);
 
@@ -19,7 +20,7 @@ public class GetCampaignField : LobbyMessage
             // todo save this data
             Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 }
         };
-        if (user.LastNormalStageCleared >= 6000003)
+        if (gameUser.LastNormalStageCleared >= 6000003)
         {
             NetTeamData team = new() { TeamNumber = 1 };
             team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });

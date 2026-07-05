@@ -23,12 +23,12 @@ public class GetRanking : LobbyMessage
             {
                 foreach (var item in allBoard)
                 {
-                    User? user0 = GetUser(item.Record.UserId);
+                    GameUser? targetUser = GetUserNew(item.Record.UserId);
                     NetArcadeBBQRankingData? guild = new NetArcadeBBQRankingData()
                     {
                         Rank = item.Rank,
                         Score = item.Record.Score,
-                        User = LobbyHandler.CreateWholeUserDataFromDbUser(user0)
+                        User = LobbyHandler.CreateWholeUserDataFromDbUser(targetUser)
                     };
 
                     response.GuildRankingList.Add(guild);

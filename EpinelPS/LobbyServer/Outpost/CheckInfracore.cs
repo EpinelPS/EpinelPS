@@ -11,10 +11,11 @@ public class CheckInfracore : LobbyMessage
         ResCheckReceiveInfraCoreReward response = new();
 
         User user = GetUser();
+        GameUser userNew = GetUserNew();
 
         bool isReceived = false;
 
-        int currentLevel = user.InfraCoreLvl;
+        int currentLevel = userNew.InfraCoreLvl;
 
         Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
         if (gradeTable.TryGetValue(currentLevel, out var gradeData))

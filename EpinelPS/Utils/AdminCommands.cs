@@ -62,7 +62,8 @@ public class AdminCommands
     public static RunCmdResponse CompleteStage(ulong userId, string input2)
     {
         User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
+        GameUser? userNew = GameContext.Instance.Users.Find(userId);
+        if (user == null || userNew == null) return new RunCmdResponse() { error = "invalId user ID" };
 
         try
         {
@@ -84,7 +85,7 @@ public class AdminCommands
                         if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
                         {
                             Console.WriteLine("Completing stage " + item);
-                            ClearStage.CompleteStage(user, item, true);
+                            ClearStage.CompleteStage(user, userNew, item, true);
                         }
 
                         if (i == chapterNumber && target == stageNumber)
@@ -315,13 +316,13 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
-    public static RunCmdResponse FinishAllTutorials(User user)
+    public static RunCmdResponse FinishAllTutorials(GameUser user)
     {
         foreach (var tutorial in GameData.Instance.TutorialTable.Values)
         {
-            if (!user.ClearedTutorialDataNew.ContainsKey(tutorial.GroupId))
+            if (!user.ClearedTutorialData.ContainsKey(tutorial.GroupId))
             {
-                user.ClearedTutorialDataNew.Add(tutorial.GroupId, new ClearedTutorialData()
+                user.ClearedTutorialData.Add(tutorial.GroupId, new ClearedTutorialData()
                 {
                     Id = tutorial.Id,
                     VersionGroup = tutorial.VersionGroup
@@ -329,10 +330,10 @@ public class AdminCommands
             }
             else
             {
-                if (tutorial.Id > user.ClearedTutorialDataNew[tutorial.GroupId].Id)
+                if (tutorial.Id > user.ClearedTutorialData[tutorial.GroupId].Id)
                 {
-                    user.ClearedTutorialDataNew[tutorial.GroupId].Id = tutorial.Id;
-                    user.ClearedTutorialDataNew[tutorial.GroupId].VersionGroup = tutorial.VersionGroup;
+                    user.ClearedTutorialData[tutorial.GroupId].Id = tutorial.Id;
+                    user.ClearedTutorialData[tutorial.GroupId].VersionGroup = tutorial.VersionGroup;
                 }
             }
         }

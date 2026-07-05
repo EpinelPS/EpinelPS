@@ -11,6 +11,7 @@ public class ClearSideStoryStage : LobbyMessage
     {
         ReqClearSideStoryStage req = await ReadData<ReqClearSideStoryStage>();
         User user = GetUser();
+        GameUser gameUser = GetUserNew();
 
         ResClearSideStoryStage response = new();
 
@@ -22,7 +23,7 @@ public class ClearSideStoryStage : LobbyMessage
             {
                 RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(value.FirstClearReward);
                 if (rewardData != null)
-                    response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);
+                    response.Reward = RewardUtils.RegisterRewardsForUser(gameUser, rewardData);
                 else
                     throw new Exception("failed to find reward");
             }

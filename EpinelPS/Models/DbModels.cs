@@ -46,7 +46,9 @@ public class MainQuestData
 
 public class UserPointData
 {
+    [Obsolete]
     public int UserLevel { get; set; } = 1;
+    [Obsolete]
     public int ExperiencePoint { get; set; } = 0;
 }
 

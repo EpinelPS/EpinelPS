@@ -129,12 +129,12 @@ public static class LobbyHandler
         // By calling this function, we force .NET to initialize handler dictanary to catch errors early on.
     }
 
-    public static NetUserData CreateNetUserDataFromUser(User user)
+    public static NetUserData CreateNetUserDataFromUser(GameUser user)
     {
         NetUserData ret = new()
         {
-            Lv = user.userPointData.UserLevel,
-            Exp = user.userPointData.ExperiencePoint,
+            Lv = user.UserLevel,
+            Exp = user.ExperiencePoint,
             CostumeLv = 1,
             Frame = user.ProfileFrame,
             Icon = user.ProfileIconId,
@@ -145,7 +145,7 @@ public static class LobbyHandler
 
 
         // Restore completed tutorials.
-        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialDataNew)
+        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
         {
             ret.Tutorials.Add(new NetTutorialData()
             {
@@ -157,17 +157,16 @@ public static class LobbyHandler
 
         return ret;
     }
-    public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
+    public static NetWholeUserData CreateWholeUserDataFromDbUser(GameUser user)
     {
-        var userDB = GameContext.Instance.Users.Find((ulong)user.ID);
         NetWholeUserData ret = new()
         {
-            Lv = user.userPointData.UserLevel,
+            Lv = user.UserLevel,
             Frame = user.ProfileFrame,
             Icon = user.ProfileIconId,
             IconPrism = user.ProfileIconIsPrism,
             UserTitleId = user.TitleId,
-            Nickname = userDB.Nickname,
+            Nickname = user.Nickname,
             Usn = (long)user.ID,
             LastActionAt = DateTimeOffset.UtcNow.Ticks,
             Server = 1001
@@ -178,22 +177,7 @@ public static class LobbyHandler
 
     public static NetWholeUserData CreateWholeUserDataFromDbUser(ulong id)
     {
-        var userDB = GameContext.Instance.Users.Find((ulong)id);
-        var user = JsonDb.Instance.Users.Where(x=>x.ID == id).FirstOrDefault();
-        NetWholeUserData ret = new()
-        {
-            Lv = user.userPointData.UserLevel,
-            Frame = user.ProfileFrame,
-            Icon = user.ProfileIconId,
-            IconPrism = user.ProfileIconIsPrism,
-            UserTitleId = user.TitleId,
-            Nickname = userDB.Nickname,
-            Usn = (long)user.ID,
-            LastActionAt = DateTimeOffset.UtcNow.Ticks,
-            Server = 1001
-        };
-
-        return ret;
+        return CreateWholeUserDataFromDbUser(GameContext.Instance.Users.Find(id) ?? throw new InvalidDataException());
     }
 }
 

@@ -445,7 +445,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    GameUser? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -497,7 +497,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    GameUser? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -506,21 +506,11 @@ internal class Program
                     }
                     else
                     {
-                        // Check current value of sickpulls and toggle it
-                        bool currentSickPulls = EpinelPS.Database.JsonDb.IsSickPulls(user);
-                        if (currentSickPulls)
-                        {
-                            user.sickpulls = false;
-                            Console.WriteLine("sickpulls is now set to false for user " + user.ID);
-                        }
-                        else
-                        {
-                            user.sickpulls = true;
-                            Console.WriteLine("sickpulls is now set to true for user " + user.ID);
-                        }
+                        user.sickpulls = !user.sickpulls;
+                        Console.WriteLine("sickpulls is now set to true for user " + user.ID);
 
                         // Save the changes to the database
-                        JsonDb.Save();
+                        GameContext.Instance.SaveChangesAsync();
                     }
                 }
             }

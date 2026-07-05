@@ -41,9 +41,9 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
             new ModUserModel()
             {
                 IsAdmin = sdkUser.IsAdmin,
-                IsBanned = user.IsBanned,
+                IsBanned = gameUser.IsBanned,
                 Nickname = gameUser.Nickname ?? "Unknown nickname",
-                sickpulls = user.sickpulls,
+                sickpulls = gameUser.sickpulls,
                 Username = sdkUser.Email ?? "Unknown username",
                 ID = user.ID
             }
@@ -59,12 +59,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
 
         if (!ModelState.IsValid) throw new Exception("model state invalid");
 
-        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-        if (user == null)
-        {
-            return NotFound();
-        }
-
         if (string.IsNullOrEmpty(toSet.Username))
             throw new Exception("username cannot be empty");
 
@@ -75,20 +69,18 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         sdkUser.Email = toSet.Username;
         sdkUser.IsAdmin = toSet.IsAdmin;
         gameUser.Nickname = toSet.Nickname;
+        gameUser.sickpulls = toSet.sickpulls;
+        gameUser.IsBanned = toSet.IsBanned;
         _db.SaveChanges();
-
-        user.sickpulls = toSet.sickpulls;
-        user.IsBanned = toSet.IsBanned;
-        JsonDb.Save();
 
         return View(new ModUserModel()
         {
             IsAdmin = sdkUser.IsAdmin,
-            IsBanned = user.IsBanned,
+            IsBanned = gameUser.IsBanned,
             Nickname = gameUser.Nickname,
-            sickpulls = user.sickpulls,
+            sickpulls = gameUser.sickpulls,
             Username = sdkUser.Email,
-            ID = user.ID
+            ID = id
         });
     }
 

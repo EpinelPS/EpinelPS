@@ -27,6 +27,7 @@ public class ExecGacha : LobbyMessage
         int numberOfPulls = req.Count == 1 ? 1 : 10;
 
         User user = GetUser();
+        GameUser userNew = GetUserNew();
         ResExecuteGacha response = new() { Reward = new NetRewardData() { PassPoint = new() } };
 
         List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
@@ -47,7 +48,7 @@ public class ExecGacha : LobbyMessage
         List<CharacterRecord> selectedCharacters = [];
 
         // Check if user has 'sickpulls' set to true to use old method
-        if (user.sickpulls)
+        if (userNew.sickpulls)
         {
             // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
             selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.Id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
@@ -337,9 +338,10 @@ public class ExecGacha : LobbyMessage
         if (ticketType == CurrencyType.ChargeCash)
             ApplyCurrency(CurrencyType.GoldMileageTicket, numberOfPulls);
 
-        user.GachaTutorialPlayCount++;
+        userNew.GachaTutorialPlayCount++;
 
         JsonDb.Save();
+        await GameContext.SaveChangesAsync();
 
         await WriteDataAsync(response);
     }

@@ -31,4 +31,13 @@ public class GameContext : DbContext
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    modelBuilder.Entity<GameUser>()
+        .OwnsOne(u => u.ClearedTutorialData, ownedNavigationBuilder =>
+        {
+            ownedNavigationBuilder.ToJson();
+        });
+    }
 }

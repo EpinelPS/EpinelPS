@@ -10,6 +10,7 @@ public class SynchroLevelUp : LobbyMessage
     {
         ReqSynchroLevelUp req = await ReadData<ReqSynchroLevelUp>();
         User user = GetUser();
+        GameUser gameUser = GetUserNew();
 
         ResSynchroLevelUp response = new();
         Dictionary<int, CharacterLevelRecord> data = GameData.Instance.GetCharacterLevelUpData();
@@ -18,7 +19,7 @@ public class SynchroLevelUp : LobbyMessage
         int requiredCredit = 0;
         int requiredBattleData = 0;
         int requiredCoreDust = 0;
-        CharacterLevelRecord levelUpData = data[user.SynchroDeviceLevel + 1];
+        CharacterLevelRecord levelUpData = data[gameUser.SynchroDeviceLevel + 1];
         requiredCredit += levelUpData.Gold;
         requiredBattleData += levelUpData.CharacterExp;
         requiredCoreDust += levelUpData.CharacterExp2;
@@ -30,7 +31,7 @@ public class SynchroLevelUp : LobbyMessage
             user.SubtractCurrency(CurrencyType.Gold, requiredCredit);
             user.SubtractCurrency(CurrencyType.CharacterExp, requiredBattleData);
             user.SubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
-            user.SynchroDeviceLevel++;
+            gameUser.SynchroDeviceLevel++;
         }
         else
         {
@@ -44,7 +45,7 @@ public class SynchroLevelUp : LobbyMessage
         {
             response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
         }
-        response.SynchroLv = user.SynchroDeviceLevel;
+        response.SynchroLv = gameUser.SynchroDeviceLevel;
 
         user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
 

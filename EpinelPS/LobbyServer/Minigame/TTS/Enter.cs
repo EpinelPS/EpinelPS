@@ -12,6 +12,7 @@ public class TTSEnter : LobbyMessage
     {
         ReqEnterMiniGameTtsTitle req = await ReadData<ReqEnterMiniGameTtsTitle>();
         User user = GetUser();
+        GameUser userNew = GetUserNew();
         ResEnterMiniGameTtsTitle response = new();
 
         List<EventTTSSongGroupManagerRecord_Raw>? songlist = GameData.Instance.EventTTSSongGroupManagerTable.Values
@@ -183,7 +184,7 @@ public class TTSEnter : LobbyMessage
             }
         }
 
-        response.UserData = LobbyHandler.CreateWholeUserDataFromDbUser(user);
+        response.UserData = LobbyHandler.CreateWholeUserDataFromDbUser(userNew);
 
         JsonDb.Save();     
 

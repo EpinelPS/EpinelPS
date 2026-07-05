@@ -12,6 +12,7 @@ public class EnterLobbyServer : LobbyMessage
     {
         ReqEnterLobbyServer req = await ReadData<ReqEnterLobbyServer>();
         User user = GetUser();
+        GameUser gameUser = GetUserNew();
         var userDB = GameContext.Instance.Users.Find((ulong)UserId);
 
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
@@ -25,7 +26,7 @@ public class EnterLobbyServer : LobbyMessage
 
         ResEnterLobbyServer response = new()
         {
-            User = LobbyHandler.CreateNetUserDataFromUser(user),
+            User = LobbyHandler.CreateNetUserDataFromUser(gameUser),
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
             Nickname = userDB.Nickname,
             SynchroLv = 1,
@@ -109,10 +110,10 @@ public class EnterLobbyServer : LobbyMessage
             JsonDb.Save();
         }
 
-        response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
-        response.LastClearedStoryStageId = user.LastStoryStageCleared;
-        response.LastClearedHardMainStageId = user.LastHardStageCleared;
-        response.LastClearedMod = user.LastClearedDifficulty;
+        response.LastClearedNormalMainStageId = userDB.LastNormalStageCleared;
+        response.LastClearedStoryStageId = userDB.LastStoryStageCleared;
+        response.LastClearedHardMainStageId = userDB.LastHardStageCleared;
+        response.LastClearedMod = userDB.LastClearedDifficulty;
 
         response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
 

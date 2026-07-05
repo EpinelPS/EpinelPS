@@ -8,19 +8,20 @@ public class GetUserProfile : LobbyMessage
         ReqGetProfileData req = await ReadData<ReqGetProfileData>();
         User callingUser = GetUser();
         User? user = GetUser((ulong)req.TargetUsn);
+        GameUser? userNew = GetUserNew((ulong)req.TargetUsn);
         ResGetProfileData response = new();
 
-        if (user != null)
+        if (user != null && userNew != null)
         {
             response.Data = new NetProfileData
             {
-                User = LobbyHandler.CreateWholeUserDataFromDbUser(user),
+                User = LobbyHandler.CreateWholeUserDataFromDbUser(userNew),
                 LastActionAt = DateTimeOffset.UtcNow.Ticks,
             };
             response.Data.CharacterCount.Add(new NetCharacterCount() { Count = user.Characters.Count });
-            response.Data.InfraCoreLv = user.InfraCoreLvl;
-            response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
-            response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
+            response.Data.InfraCoreLv = userNew.InfraCoreLvl;
+            response.Data.LastCampaignNormalStageId = userNew.LastNormalStageCleared;
+            response.Data.LastCampaignHardStageId = userNew.LastHardStageCleared;
             response.Data.OutpostOpenState = user.MainQuestData.ContainsKey(25);
 
             for (int i = 0; i < user.RepresentationTeamDataNew.Length; i++)
