@@ -14,16 +14,15 @@ public class GetDispatchList : LobbyMessage
         ResGetDispatchList response = new();
 
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         List<DispatchBoardData> dispatch = GameData.Instance.DispatchBoardTable.Values
-            .Where(x => x.DispatchType == DispatchType.Dispatch && x.DispatchBoardLv == userNew.DispatchLv)
+            .Where(x => x.DispatchType == DispatchType.Dispatch && x.DispatchBoardLv == user.DispatchLv)
             .FirstOrDefault().DispatchList;
         DispatchBoardRecord? dispatchcol = GameData.Instance.DispatchBoardTable.Values
             .Where(x => x.DispatchType == DispatchType.DispatchCollection &&
-                        x.DispatchBoardLv == userNew.DispatchCollectionLv).FirstOrDefault();
+                        x.DispatchBoardLv == user.DispatchCollectionLv).FirstOrDefault();
         DispatchBoardRecord? dispatchfav = GameData.Instance.DispatchBoardTable.Values
-            .Where(x => x.DispatchType == DispatchType.DispatchFavorite && x.DispatchBoardLv == userNew.DispatchFavoriteLv)
+            .Where(x => x.DispatchType == DispatchType.DispatchFavorite && x.DispatchBoardLv == user.DispatchFavoriteLv)
             .FirstOrDefault();
 
         DateTime startTime = DateTime.UtcNow;
@@ -35,7 +34,7 @@ public class GetDispatchList : LobbyMessage
             user.UserDispatchData.dispatchDatas = new();
             user.DispatchClearList = new();
             user.SelectableDispatchData = new();
-            userNew.DispatchResetCount = 0;
+            user.DispatchResetCount = 0;
 
             //记录已选中的任务
             List<DispatchRecord> availableDispatchTable = new List<DispatchRecord>();
@@ -132,7 +131,7 @@ public class GetDispatchList : LobbyMessage
 
         List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
 
-        response.DispatchResetCount = userNew.DispatchResetCount;
+        response.DispatchResetCount = user.DispatchResetCount;
         //response.SelectableDispatchList.AddRange(dontdispatcht);
         JsonDb.Save();
         await GameContext.SaveChangesAsync();

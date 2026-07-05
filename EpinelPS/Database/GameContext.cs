@@ -13,7 +13,7 @@ public class GameContext : DbContext
     /// <summary>
     /// Contains in-game user information
     /// </summary>
-    public DbSet<GameUser> Users { get; set; }
+    public DbSet<User> Users { get; set; }
 
     /// <summary>
     /// Contains trigger information
@@ -34,10 +34,59 @@ public class GameContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-    modelBuilder.Entity<GameUser>()
-        .OwnsOne(u => u.ClearedTutorialData, ownedNavigationBuilder =>
-        {
-            ownedNavigationBuilder.ToJson();
-        });
+        modelBuilder.Entity<User>()
+            .OwnsOne(u => u.ClearedTutorialData, ownedNavigationBuilder =>
+            {
+                ownedNavigationBuilder.ToJson();
+            }).OwnsOne(u => u.ContentsOpenUnlocked, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson()
+            ).OwnsOne(u => u.LostSectorData, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.EventInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.LoginEventInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.EventShopBuyCountInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.SoloRaidData, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MiniGameScenarios, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MiniGameAzxInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MiniGameStoryChoice, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.TTSGameData, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.StellarBladeDatas, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.TowerDefenseDatas, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+             .OwnsOne(u => u.Currency, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.UserPassInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.EventMissionInfo, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.FieldInfoNew, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MapJson, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.ResearchProgress, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.InfraCoreRewardReceived, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MainQuestData, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.SubQuestData, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.UserTeams, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.MailDatas, ownedNavigationBuilder =>
+            ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.TowerProgress, ownedNavigationBuilder =>
+        ownedNavigationBuilder.ToJson())
+            .OwnsOne(u => u.ResetableData, ownedNavigationBuilder =>
+        ownedNavigationBuilder.ToJson());
     }
 }

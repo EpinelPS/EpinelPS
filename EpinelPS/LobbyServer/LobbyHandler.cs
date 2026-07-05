@@ -129,7 +129,7 @@ public static class LobbyHandler
         // By calling this function, we force .NET to initialize handler dictanary to catch errors early on.
     }
 
-    public static NetUserData CreateNetUserDataFromUser(GameUser user)
+    public static NetUserData CreateNetUserDataFromUser(User user)
     {
         NetUserData ret = new()
         {
@@ -157,7 +157,7 @@ public static class LobbyHandler
 
         return ret;
     }
-    public static NetWholeUserData CreateWholeUserDataFromDbUser(GameUser user)
+    public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
     {
         NetWholeUserData ret = new()
         {

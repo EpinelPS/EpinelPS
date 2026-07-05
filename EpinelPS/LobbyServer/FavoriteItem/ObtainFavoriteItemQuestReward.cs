@@ -11,7 +11,6 @@ public class ObtainFavoriteItemQuestReward : LobbyMessage
     {
         ReqObtainFavoriteItemQuestReward req = await ReadData<ReqObtainFavoriteItemQuestReward>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
 
         FavoriteItemQuestRecord? questData = GameData.Instance.GetFavoriteItemQuestTableData(req.QuestId);
         if (questData == null)
@@ -45,7 +44,7 @@ public class ObtainFavoriteItemQuestReward : LobbyMessage
         {
             if (questData.RewardId > 0 && reward != null)
             {
-                NetRewardData rewardData = RewardUtils.RegisterRewardsForUser(gameUser, reward);
+                NetRewardData rewardData = RewardUtils.RegisterRewardsForUser(user, reward);
                 ResObtainFavoriteItemQuestReward genericResponse = new() { UserReward = rewardData };
                 userQuest.Received = true;
                 JsonDb.Save();
@@ -65,7 +64,7 @@ public class ObtainFavoriteItemQuestReward : LobbyMessage
             }
         }
 
-        NetRewardData finalRewardData = RewardUtils.RegisterRewardsForUser(gameUser, reward);
+        NetRewardData finalRewardData = RewardUtils.RegisterRewardsForUser(user, reward);
 
         if (character != null && finalRewardData.UserFavoriteItems.Count > 0)
         {

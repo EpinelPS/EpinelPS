@@ -113,10 +113,10 @@ public static class PassHelper
 
             if (rewardData.UserExp != 0)
             {
-                int newXp = rewardData.UserExp + user.userPointData.ExperiencePoint;
+                int newXp = rewardData.UserExp + user.ExperiencePoint;
 
-                int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
-                int newLevel = user.userPointData.UserLevel;
+                int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.UserLevel);
+                int newLevel = user.UserLevel;
 
                 if (newLevelExp == -1)
                 {
@@ -143,16 +143,16 @@ public static class PassHelper
 
                 reward.UserExp = new NetIncreaseExpData()
                 {
-                    BeforeExp = user.userPointData.ExperiencePoint,
-                    BeforeLv = user.userPointData.UserLevel,
+                    BeforeExp = user.ExperiencePoint,
+                    BeforeLv = user.UserLevel,
 
                     // IncreaseExp = rewardData.UserExp,
                     CurrentExp = newXp,
                     CurrentLv = newLevel,
                     GainExp = rewardData.UserExp,
                 };
-                user.userPointData.ExperiencePoint = newXp;
-                user.userPointData.UserLevel = newLevel;
+                user.ExperiencePoint = newXp;
+                user.UserLevel = newLevel;
             }
 
             foreach (var item in rewardData.Rewards)

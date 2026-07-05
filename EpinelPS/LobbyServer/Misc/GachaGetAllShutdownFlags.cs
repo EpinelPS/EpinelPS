@@ -6,7 +6,7 @@ public class GachaGetAllShutdownFlags : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqGachaGetAllShutdownFlags req = await ReadData<ReqGachaGetAllShutdownFlags>();
-        GameUser user = GetUserNew();
+        User user = GetUser();
 
         ResGachaGetAllShutdownFlags response = new();
         if (user.GachaTutorialPlayCount > 0)

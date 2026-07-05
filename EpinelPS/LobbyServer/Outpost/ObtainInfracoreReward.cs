@@ -13,9 +13,8 @@ public class ObtainInfracoreReward : LobbyMessage
         ResObtainInfraCoreReward response = new();
 
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
-        int currentLevel = userNew.InfraCoreLvl;
+        int currentLevel = user.InfraCoreLvl;
 
         Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
         if (gradeTable.TryGetValue(currentLevel, out var gradeData))
@@ -28,7 +27,7 @@ public class ObtainInfracoreReward : LobbyMessage
                 {
                     user.InfraCoreRewardReceived[currentLevel] = true;
 
-                    var reward = RewardUtils.RegisterRewardsForUser(userNew, gradeData.RewardId);
+                    var reward = RewardUtils.RegisterRewardsForUser(user, gradeData.RewardId);
                     response.Reward = reward;
                 }
             }

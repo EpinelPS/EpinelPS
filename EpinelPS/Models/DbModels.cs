@@ -231,9 +231,21 @@ public class ResetableData
     public int DailyMissionPoints { get; set; }
     public SimRoomData SimRoomData { get; set; } = new();
     public Dictionary<int, int> TowerCount { get; set; } = [];
-    public Dictionary<int, int> DailyCounselCount { get; set; } = [];
+    //public Dictionary<int, int> DailyCounselCount { get; set; } = [];
     public int DispatchCount { get; set; } = 0;
+}
 
+public class ResetableDataNew
+{
+    public int WipeoutCount { get; set; } = 0;
+    public bool ClearedSimulationRoom { get; set; } = false;
+    public int InterceptionTickets { get; set; } = 3;
+    public List<int> CompletedDailyMissions { get; set; } = [];
+    public int DailyMissionPoints { get; set; }
+    public SimRoomData SimRoomData { get; set; } = new();
+    public int[] TowerCount { get; set; } = [0,0,0,0];
+    //public Dictionary<int, int> DailyCounselCount { get; set; } = [];
+    public int DispatchCount { get; set; } = 0;
 }
 public class WeeklyResetableData
 {

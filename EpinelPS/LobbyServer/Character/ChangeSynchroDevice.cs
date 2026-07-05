@@ -9,7 +9,6 @@ public class ChangeSynchroDevice : LobbyMessage
     {
         ReqSynchroChange req = await ReadData<ReqSynchroChange>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
 
         ResSynchroChange response = new();
 
@@ -38,7 +37,7 @@ public class ChangeSynchroDevice : LobbyMessage
             slot++;
         }
 
-        gameUser.SynchroDeviceUpgraded = true;
+        user.SynchroDeviceUpgraded = true;
 
         foreach (SynchroSlot item in user.SynchroSlots)
         {

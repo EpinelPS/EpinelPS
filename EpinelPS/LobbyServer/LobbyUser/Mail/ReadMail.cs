@@ -8,7 +8,7 @@ public class ReadMail : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqReadMail req = await ReadData<ReqReadMail>();
-        //User user = GetUser();
+        //GameUser user = GetUser();
         ResReadMail response = new();        
 
         //TODO

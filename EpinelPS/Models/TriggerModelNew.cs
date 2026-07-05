@@ -11,7 +11,7 @@ public class TriggerModelNew
     public int Value { get; set; }
 
     [ForeignKey(nameof(UserId))]
-    public GameUser User { get; set; }
+    public User User { get; set; }
     public ulong UserId { get; set; }
     
     public NetTrigger ToNet()

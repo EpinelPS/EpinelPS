@@ -25,12 +25,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-        if (user == null)
-        {
-            return NotFound();
-        }
-
         var sdkUser = _db.SdkUsers.Find(id);
         if (sdkUser == null) return NotFound();
 
@@ -45,7 +39,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
                 Nickname = gameUser.Nickname ?? "Unknown nickname",
                 sickpulls = gameUser.sickpulls,
                 Username = sdkUser.Email ?? "Unknown username",
-                ID = user.ID
+                ID = id
             }
         );
     }
@@ -89,11 +83,8 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-        if (user == null)
-        {
-            return NotFound();
-        }
+        User? user = _db.Users.Find(id);
+        if (user == null) return NotFound();
 
         return View(
             new ModUserCurrencyModel()
@@ -110,14 +101,11 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        User? user = JsonDb.Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-        if (user == null)
-        {
-            return NotFound();
-        }
+        User? user = _db.Users.Find(id);
+        if (user == null) return NotFound();
 
         user.AddCurrency(model.ToModify, model.Amount);
-        JsonDb.Save();
+        GameContext.Instance.SaveChanges();
 
         return View(
             new ModUserCurrencyModel()

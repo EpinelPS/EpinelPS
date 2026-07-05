@@ -11,9 +11,8 @@ public class GetChallengeInfo : LobbyMessage
         var request = await ReadData<ReqGetArcadePlaySodaChallengeModeInfo>();
 
         var user = GetUser();
-        var userNew = GetUserNew();
 
-        ResGetArcadePlaySodaChallengeModeInfo response = new() { WholeUser = LobbyHandler.CreateWholeUserDataFromDbUser(userNew) };
+        ResGetArcadePlaySodaChallengeModeInfo response = new() { WholeUser = LobbyHandler.CreateWholeUserDataFromDbUser(user) };
 
         for (int i = 0; i < GameData.Instance.EventPlaySodaChallengeModeTable.Count; i++)
         {

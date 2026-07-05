@@ -10,7 +10,6 @@ public class GetContentsData : LobbyMessage
     {
         await ReadData<ReqGetContentsOpenData>();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         // this request returns a list of "special" stages that mark when something is unlocked, ex: the shop or interception
 
@@ -38,10 +37,10 @@ public class GetContentsData : LobbyMessage
         }
 
         response.ClearStageList.AddRange(stages);
-        response.MaxGachaCount = userNew.GachaTutorialPlayCount;
-        response.MaxGachaPremiumCount = userNew.GachaTutorialPlayCount;
+        response.MaxGachaCount = user.GachaTutorialPlayCount;
+        response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;
         // todo tutorial playcount of gacha
-        response.TutorialGachaPlayCount = userNew.GachaTutorialPlayCount;
+        response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
 
         // ClearSimRoomChapterList: 已通关的章节列表，用于显示超频选项 SimRoomOC
         response.ClearSimRoomChapterList.AddRange(GetClearSimRoomChapterList(user));

@@ -61,9 +61,8 @@ public class AdminCommands
     }
     public static RunCmdResponse CompleteStage(ulong userId, string input2)
     {
-        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-        GameUser? userNew = GameContext.Instance.Users.Find(userId);
-        if (user == null || userNew == null) return new RunCmdResponse() { error = "invalId user ID" };
+        User? user = GameContext.Instance.Users.Find(userId);
+        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
 
         try
         {
@@ -85,7 +84,7 @@ public class AdminCommands
                         if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
                         {
                             Console.WriteLine("Completing stage " + item);
-                            ClearStage.CompleteStage(user, userNew, item, true);
+                            ClearStage.CompleteStage(user, item, true);
                         }
 
                         if (i == chapterNumber && target == stageNumber)
@@ -316,7 +315,7 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
-    public static RunCmdResponse FinishAllTutorials(GameUser user)
+    public static RunCmdResponse FinishAllTutorials(User user)
     {
         foreach (var tutorial in GameData.Instance.TutorialTable.Values)
         {

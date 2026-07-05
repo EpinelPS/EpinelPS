@@ -21,20 +21,19 @@ public class DoIntlAuth : LobbyMessage
         {
             UserId = sdkUser.ID;
             User user = GetUser();
-            GameUser gameUser = GetUserNew();
 
-            if (gameUser.IsBanned && gameUser.BanEnd < DateTime.UtcNow)
+            if (user.IsBanned && user.BanEnd < DateTime.UtcNow)
             {
-                gameUser.IsBanned = false;
-                gameUser.BanId = 0;
-                gameUser.BanStart = DateTime.MinValue;
-                gameUser.BanEnd = DateTime.MinValue;
+                user.IsBanned = false;
+                user.BanId = 0;
+                user.BanStart = DateTime.MinValue;
+                user.BanEnd = DateTime.MinValue;
                 JsonDb.Save();
             }
 
-            if (gameUser.IsBanned)
+            if (user.IsBanned)
             {
-                response.BanInfo = new NetBanInfo() { BanId = gameUser.BanId, Description = "Unused", StartAt = Timestamp.FromDateTime(DateTime.SpecifyKind(gameUser.BanStart, DateTimeKind.Utc)), EndAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanEnd, DateTimeKind.Utc)) };
+                response.BanInfo = new NetBanInfo() { BanId = user.BanId, Description = "Unused", StartAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanStart, DateTimeKind.Utc)), EndAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanEnd, DateTimeKind.Utc)) };
             }
             else
             {

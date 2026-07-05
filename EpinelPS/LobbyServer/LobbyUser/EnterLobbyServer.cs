@@ -12,7 +12,6 @@ public class EnterLobbyServer : LobbyMessage
     {
         ReqEnterLobbyServer req = await ReadData<ReqEnterLobbyServer>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
         var userDB = GameContext.Instance.Users.Find((ulong)UserId);
 
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
@@ -26,7 +25,7 @@ public class EnterLobbyServer : LobbyMessage
 
         ResEnterLobbyServer response = new()
         {
-            User = LobbyHandler.CreateNetUserDataFromUser(gameUser),
+            User = LobbyHandler.CreateNetUserDataFromUser(user),
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
             Nickname = userDB.Nickname,
             SynchroLv = 1,

@@ -23,7 +23,7 @@ public class GetRanking : LobbyMessage
             {
                 foreach (var item in allBoard)
                 {
-                    GameUser? targetUser = GetUserNew(item.Record.UserId);
+                    User? targetUser = GetUser(item.Record.UserId);
                     NetArcadeBBQRankingData? guild = new NetArcadeBBQRankingData()
                     {
                         Rank = item.Rank,

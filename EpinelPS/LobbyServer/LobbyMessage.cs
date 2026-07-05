@@ -21,9 +21,7 @@ public abstract class LobbyMessage
     {
         get
         {
-            if (UserId == 0) throw new UnauthorizedAccessException();
-
-            return JsonDb.GetUser(UserId) ?? throw new InvalidDataException();
+            return GetUser();
         }
     }
 
@@ -118,17 +116,9 @@ public abstract class LobbyMessage
 
     public User GetUser()
     {
-        return JsonDb.GetUser(UserId) ?? throw new UnauthorizedAccessException("Invalid authentication token");
-    }
-    public GameUser GetUserNew()
-    {
         return GameContext.Users.Find(UserId) ?? throw new UnauthorizedAccessException("Invalid authentication token");
     }
     public User? GetUser(ulong Id)
-    {
-        return JsonDb.GetUser(Id);
-    }
-    public GameUser? GetUserNew(ulong Id)
     {
         return GameContext.Users.Find(Id) ?? throw new UnauthorizedAccessException("Invalid authentication token");
     }

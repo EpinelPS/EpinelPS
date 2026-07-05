@@ -8,7 +8,7 @@ public class GetSpecialArena : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqGetSpecialArena req = await ReadData<ReqGetSpecialArena>();
-        GameUser gameUser = GetUserNew();
+        User gameUser = GetUser();
 
         ResGetSpecialArena response = new()
         {

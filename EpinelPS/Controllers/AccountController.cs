@@ -1,6 +1,7 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Paseto;
 using Paseto.Builder;
 
@@ -8,9 +9,9 @@ namespace EpinelPS.Controllers;
 
 [Route("account")]
 [ApiController]
-public class AccountController(GameContext DbContext) : ControllerBase
+public class AccountController(GameContext dbContext) : ControllerBase
 {
-    private readonly GameContext dbContext = DbContext;
+    private readonly GameContext dbContext = dbContext;
     private const string BadAuthToken = "{\"msg\":\"the account does not exists!\",\"ret\":2001,\"seq\":\"123" + "\"}";
 
     [HttpPost]
@@ -79,22 +80,8 @@ public class AccountController(GameContext DbContext) : ControllerBase
 
         ulong uid = (ulong)new Random().Next(1, int.MaxValue);
 
-        // Check if we havent generated a UID that exists
-        foreach (User item in JsonDb.Instance.Users)
-        {
-            if (item.ID == uid)
-            {
-                uid -= (ulong)new Random().Next(1, 1221);
-            }
-        }
-
-        bool admin = JsonDb.Instance.Users.Count == 0;
+        bool admin = dbContext.SdkUsers.Count() == 0;
         var registerTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-        JsonDb.Instance.Users.Add(new User()
-        {
-            ID = uid
-        });
 
         dbContext.SdkUsers.Add(new SdkUser()
         {
@@ -105,7 +92,7 @@ public class AccountController(GameContext DbContext) : ControllerBase
             IsAdmin = admin,
             PlayerName = "Player_" + Rng.RandomString(8),
         });
-        dbContext.Users.Add(new GameUser()
+        dbContext.Users.Add(new User()
         {
             ID = uid // todo remove later
         });

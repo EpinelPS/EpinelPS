@@ -12,12 +12,11 @@ public class ResetDispatchList : LobbyMessage
 
         ResResetDispatchList response = new();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
         DateTime startTime = DateTime.UtcNow;
         Random random = new();
-        userNew.DispatchResetCount++;
+        user.DispatchResetCount++;
 
-        var reset = GameData.Instance.DispatchResetTable.Values.Where(x => x.Id == userNew.DispatchResetCount).FirstOrDefault();
+        var reset = GameData.Instance.DispatchResetTable.Values.Where(x => x.Id == user.DispatchResetCount).FirstOrDefault();
         if (reset != null)
         {
             response.Currencies.Add(new NetUserCurrencyData() { Type = (int)reset.CurrencyType, Value = reset.CurrencyValue });
@@ -64,7 +63,7 @@ public class ResetDispatchList : LobbyMessage
         List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
 
         response.DispatchList.AddRange(olist);
-        response.DispatchResetCount = userNew.DispatchResetCount;
+        response.DispatchResetCount = user.DispatchResetCount;
         await GameContext.SaveChangesAsync();
         //response.SelectableDispatchList.AddRange(dontdispatcht);
         await WriteDataAsync(response);

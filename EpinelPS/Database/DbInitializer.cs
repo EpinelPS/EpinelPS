@@ -36,7 +36,7 @@ public static class DbInitializer
             if (!context.Users.Where(x => x.ID == user.ID).Any())
             {
                 changed = true;
-                var gameUser = new GameUser()
+                var gameUser = new User()
                 {
                     ID = user.ID,
                     Nickname = user.Nickname ?? "Guest",

@@ -11,7 +11,6 @@ public class SetScenarioCompleted : LobbyMessage
     {
         ReqSetScenarioComplete req = await ReadData<ReqSetScenarioComplete>();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         ResSetScenarioComplete response = new()
         {
@@ -22,7 +21,7 @@ public class SetScenarioCompleted : LobbyMessage
 
         if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardsRecord? record))
         {
-            response.Reward = RewardUtils.RegisterRewardsForUser(userNew, record.RewardId);
+            response.Reward = RewardUtils.RegisterRewardsForUser(user, record.RewardId);
         }
 
         JsonDb.Save();

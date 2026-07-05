@@ -8,7 +8,7 @@ public class TTSPause : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqPauseMiniGameTtsPlay req = await ReadData<ReqPauseMiniGameTtsPlay>();
-        //User user = GetUser();
+        //GameUser user = GetUser();
         ResPauseMiniGameTtsPlay response = new();
         
         // TODO

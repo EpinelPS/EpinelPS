@@ -11,7 +11,6 @@ public class FinishSubquest : LobbyMessage
     {
         ReqFinSubQuest req = await ReadData<ReqFinSubQuest>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
 
         ResFinSubQuest response = new();
 
@@ -25,7 +24,7 @@ public class FinishSubquest : LobbyMessage
         NetMessage conversationRecordUser = user.MessengerData.Where(x => x.MessageId == req.MessageId).First();
         conversationRecordUser.State = 2; // mark as claimed
 
-        response.Reward = RewardUtils.RegisterRewardsForUser(gameUser, rewardRecord);
+        response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
         JsonDb.Save();
 
         await WriteDataAsync(response);

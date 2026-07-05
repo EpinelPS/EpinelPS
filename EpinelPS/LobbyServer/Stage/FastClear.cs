@@ -8,11 +8,10 @@ public class FastClear : LobbyMessage
         ReqFastClearCampaignStage req = await ReadData<ReqFastClearCampaignStage>();
 
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         Console.WriteLine($"Stage " + req.CampaignStageId + " completed using quick battle");
 
-        ResClearStage rsp = ClearStage.CompleteStage(user, userNew, req.CampaignStageId);
+        ResClearStage rsp = ClearStage.CompleteStage(user, req.CampaignStageId);
 
         ResFastClearCampaignStage response = new()
         {

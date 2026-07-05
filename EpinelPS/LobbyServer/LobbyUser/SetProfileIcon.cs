@@ -8,7 +8,7 @@ public class SetProfileIcon : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqSetProfileIcon req = await ReadData<ReqSetProfileIcon>();
-        GameUser user = GetUserNew();
+        User user = GetUser();
         user.ProfileIconId = req.Icon;
         user.ProfileIconIsPrism = req.IsPrism;
         await GameContext.SaveChangesAsync();

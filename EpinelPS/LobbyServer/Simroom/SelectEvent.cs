@@ -7,7 +7,7 @@ public class SelectEvent : LobbyMessage
     {
         // { "location": { "chapter": 3, "stage": 1, "order": 3 }, "event": 111021115 }
         ReqSelectSimRoomEvent req = await ReadData<ReqSelectSimRoomEvent>();
-        // User user = GetUser();
+        // GameUser user = GetUser();
 
         ResSelectSimRoomEvent response = new()
         {

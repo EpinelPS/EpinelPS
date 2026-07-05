@@ -13,8 +13,8 @@ public class GetTowerData : LobbyMessage
 
         User user = GetUser();
 
-        Dictionary<int, int>? count = user.ResetableData.TowerCount;
-        if (count.Count == 0 || count == null)
+        int[]? count = user.ResetableData.TowerCount;
+        if (count == null)
         {
             count[1] = 0;
             count[2] = 0;

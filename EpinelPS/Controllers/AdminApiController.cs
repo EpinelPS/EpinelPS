@@ -71,7 +71,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     [HttpPost("RegisterAccount")]
     public RunCmdResponse RegisterAccount([FromBody] RegisterAccountReg req)
     {
-        if (!AdminController.CheckAuth(HttpContext) && JsonDb.Instance.Users.Count != 0) return new RunCmdResponse() { error = "bad token" };
+        if (!AdminController.CheckAuth(HttpContext) && dbContext.SdkUsers.Count() != 0) return new RunCmdResponse() { error = "bad token" };
 
         if (dbContext.SdkUsers.Where(x => x.Email == req.Email).Count() != 0)
         {
@@ -80,21 +80,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
 
         ulong uid = (ulong)new Random().Next(1, int.MaxValue);
 
-        // Check if we havent generated a UID that exists
-        foreach (User item in JsonDb.Instance.Users)
-        {
-            if (item.ID == uid)
-            {
-                uid -= (ulong)new Random().Next(1, 1221);
-            }
-        }
-
-        bool admin = JsonDb.Instance.Users.Count == 0;
-
-        JsonDb.Instance.Users.Add(new User()
-        {
-            ID = uid
-        });
+        bool admin = dbContext.SdkUsers.Count() == 0;
 
         dbContext.SdkUsers.Add(new SdkUser()
         {
@@ -106,7 +92,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             PlayerName = "Player_" + Rng.RandomString(8),
         });
 
-        dbContext.Users.Add(new GameUser()
+        dbContext.Users.Add(new User()
         {
             ID = uid // todo remove later
         });
@@ -131,49 +117,49 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
             case "addallcharacters":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddAllCharacters(user);
                 }
             case "addallmaterials":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddAllMaterials(user, int.Parse(req.p2));
                 }
             case "SetLevel":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.SetCharacterLevel(user, int.Parse(req.p2));
                 }
             case "SetSkillLevel":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.SetSkillLevel(user, int.Parse(req.p2));
                 }
             case "SetCoreLevel":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.SetCoreLevel(user, int.Parse(req.p2));
                 }
             case "finishalltutorials":
                 {
-                     GameUser? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.FinishAllTutorials(user);
                 }
             case "AddCharacter":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddCharacter(user, int.Parse(req.p2));
                 }
             case "AddItem":
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
 
                     string[] s = req.p2.Split("-");
@@ -186,7 +172,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                         return new RunCmdResponse() { error = "Insufficient parameters" };
                     if (!ulong.TryParse(parts[0], out ulong userId))
                         return new RunCmdResponse() { error = "Invalid user ID" };
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+                    User? user = GameContext.Instance.Users.Find(ulong.Parse(req.p1));
                     if (user == null)
                         return new RunCmdResponse() { error = "User not found" };
                     if (!int.TryParse(parts[1], out int senderId))

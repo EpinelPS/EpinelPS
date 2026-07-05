@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "仪表盘";
 }
+@inject GameContext db
 
 <div class="adminui-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -15,7 +16,7 @@
             <div class="icon">
                 <i class="fas fa-users"></i>
             </div>
-            <div class="value">@JsonDb.Instance.Users.Count</div>
+            <div class="value">@db.Users.Count()</div>
             <div class="label" data-i18n="dashboard.statsCards.users">注册用户</div>
             <div class="decoration"></div>
         </div>

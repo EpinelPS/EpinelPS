@@ -12,13 +12,12 @@ public class GetUser : LobbyMessage
         ReqGetUserData req = await ReadData<ReqGetUserData>();
         ResGetUserData response = new();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
 
-        response.User = LobbyHandler.CreateNetUserDataFromUser(userNew);
+        response.User = LobbyHandler.CreateNetUserDataFromUser(user);
         response.ResetHour = JsonDb.Instance.ResetHourUtcTime;
         response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
         response.OutpostBattleLevel = user.OutpostBattleLevel;
@@ -30,13 +29,13 @@ public class GetUser : LobbyMessage
         }
         response.RepresentationTeam = NetUtils.GetDisplayedTeam(user);
 
-        response.LastClearedNormalMainStageId = userNew.LastNormalStageCleared;
-        response.LastClearedStoryStageId = userNew.LastStoryStageCleared;
-        response.LastClearedHardMainStageId = userNew.LastHardStageCleared;
-        response.LastClearedMod = userNew.LastClearedDifficulty;
+        response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
+        response.LastClearedStoryStageId = user.LastStoryStageCleared;
+        response.LastClearedHardMainStageId = user.LastHardStageCleared;
+        response.LastClearedMod = user.LastClearedDifficulty;
 
         // Restore completed tutorials. GroupID is the first 4 digits of the Table ID.
-        foreach (KeyValuePair<int, ClearedTutorialData> item in userNew.ClearedTutorialData)
+        foreach (KeyValuePair<int, ClearedTutorialData> item in user.ClearedTutorialData)
         {
             response.User.Tutorials.Add(new NetTutorialData()
             {

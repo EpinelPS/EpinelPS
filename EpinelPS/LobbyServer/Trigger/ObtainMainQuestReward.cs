@@ -11,7 +11,6 @@ public class ObtainMainQuestReward : LobbyMessage
     {
         ReqObtainMainQuestReward req = await ReadData<ReqObtainMainQuestReward>();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         ResObtainMainQuestReward response = new();
         List<NetRewardData> rewards = [];
@@ -25,7 +24,7 @@ public class ObtainMainQuestReward : LobbyMessage
 
                 MainQuestRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest Id " + item.Key);
                 RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.RewardId) ?? throw new Exception("failed to lookup reward Id " + questInfo.RewardId);
-                rewards.Add(RewardUtils.RegisterRewardsForUser(userNew, reward));
+                rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
             }
         }
 

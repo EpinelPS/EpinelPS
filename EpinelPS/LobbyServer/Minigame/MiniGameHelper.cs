@@ -61,7 +61,7 @@ public class MiniGameHelper
         if (allBoard.Count() > 0)
         {
             foreach (var item in allBoard)
-            {                
+            {
                 if (item.Record.UserId == userid)
                 {
 
@@ -71,7 +71,7 @@ public class MiniGameHelper
                         Score = item.Record.Score,
                         User = LobbyHandler.CreateWholeUserDataFromDbUser(item.Record.UserId)
                     };
-                    
+
                     return rankdata;
                 }
 
@@ -171,7 +171,7 @@ public class MiniGameHelper
     }
 
 
-    public static void InitStellarBladeData(User user,int arcadeId)
+    public static void InitStellarBladeData(User user, int arcadeId)
     {
         if (!user.StellarBladeDatas.TryGetValue(arcadeId, out var stellar))
         {
@@ -263,13 +263,13 @@ public class MiniGameHelper
 
             stellar.CharacterData.LearnedSkillIdList.AddRange(learnskilllist);
             foreach (SBCharacterEnhanceType type in System.Enum.GetValues<SBCharacterEnhanceType>())
-            {               
-                stellar.CharacterData.EnhanceDataList.Add(new NetStellarBladeCharacterData.Types.NetEnhanceData() { EnhanceLevel = 1, EnhanceType =  (int)type});
+            {
+                stellar.CharacterData.EnhanceDataList.Add(new NetStellarBladeCharacterData.Types.NetEnhanceData() { EnhanceLevel = 1, EnhanceType = (int)type });
             }
 
 
             var first = GameData.Instance.EventSBStageTable.Values
-                .Where(s=>s.GroupId == sbm.StageGroupId).FirstOrDefault();
+                .Where(s => s.GroupId == sbm.StageGroupId).FirstOrDefault();
 
             stellar.LastEnteredStageId = first.Id;
 
@@ -295,7 +295,7 @@ public class MiniGameHelper
                             NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
                             dmiss.Progress += 1;
                             break;
-                        case SBMissionCategory.DailyPoint:                            
+                        case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
                             NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
@@ -305,7 +305,7 @@ public class MiniGameHelper
                             break;
                     }
 
-                    
+
                 }
                 EventSBMissionRecord_Raw? spstage = GameData.Instance.EventSBMissionTable.Values
                     .Where(x => x.GroupId == missionGroupId && x.MissionType == missionType && x.MissionTargetId == stage).FirstOrDefault();
@@ -357,7 +357,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                   
+
                 }
                 break;
             case SBMissionType.Damage:
@@ -413,7 +413,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                    
+
                 }
                 break;
             case SBMissionType.UsePotion:
@@ -436,7 +436,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                   
+
                 }
                 break;
             case SBMissionType.DailyPointReward:
@@ -477,7 +477,7 @@ public class MiniGameHelper
             case SBRewardType.SBCurrency:
 
                 EventSBCurrencyRecord_Raw? ctype = GameData.Instance.EventSBCurrencyTable.Values
-                    .Where(x=>x.Id == reward.RewardId).FirstOrDefault();
+                    .Where(x => x.Id == reward.RewardId).FirstOrDefault();
 
 
                 NetStellarBladeCurrency? existing = ret.CurrencyList.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
@@ -493,7 +493,7 @@ public class MiniGameHelper
                         Amount = reward.RewardAmount
                     });
                 }
-                
+
                 NetStellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
                 if (currency != null)
                 {
@@ -509,11 +509,11 @@ public class MiniGameHelper
     }
 
 
-    public static List<int> GetMissionReward(ref NetStellarBladeRewardData ret, ref StellarBladeDatas stellar,User user, EventSBMissionRecord_Raw mission)
+    public static List<int> GetMissionReward(ref NetStellarBladeRewardData ret, ref StellarBladeDatas stellar, User user, EventSBMissionRecord_Raw mission)
     {
         List<int> result = new List<int>();
 
-        int dateDay =user.GetDateDay();
+        int dateDay = user.GetDateDay();
         switch (mission.RewardType)
         {
             case SBMissionRewardType.DailyPoint:
@@ -530,7 +530,7 @@ public class MiniGameHelper
                     {
                         miss.Progress = mission.RewardValue;
                     }
-                }                
+                }
                 break;
             case SBMissionRewardType.RewardId:
                 result.Add(mission.RewardValue);

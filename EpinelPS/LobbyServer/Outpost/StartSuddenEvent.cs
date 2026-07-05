@@ -10,7 +10,6 @@ public class StartSuddenEvent : LobbyMessage
     {
         ReqStartSuddenEvent req = await ReadData<ReqStartSuddenEvent>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
 
         var suddenEvent = GameData.Instance.SuddenEventConditions[req.Tid];
         if (user.ClearedOutpostScenarioIds.Contains(suddenEvent.Id)) throw new InvalidOperationException();
@@ -29,7 +28,7 @@ public class StartSuddenEvent : LobbyMessage
                 Type = (int)CurrencyType.ContentStamina,
                 Value = user.GetCurrencyVal(CurrencyType.ContentStamina)
             },
-            Reward = RewardUtils.RegisterRewardsForUser(gameUser, GameData.Instance.GetRewardTableEntry(suddenEvent.RewardId))
+            Reward = RewardUtils.RegisterRewardsForUser(user, GameData.Instance.GetRewardTableEntry(suddenEvent.RewardId))
         };
 
         user.ClearedOutpostScenarioIds.Add(suddenEvent.Id);

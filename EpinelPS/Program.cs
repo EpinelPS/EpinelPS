@@ -299,7 +299,7 @@ internal class Program
                     if (ulong.TryParse(args[1], out ulong id))
                     {
                         // check if user id exists
-                        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+                        User? user = GameContext.Instance.Users.Find(selectedUser);
                         if (user != null)
                         {
                             selectedUser = user.ID;
@@ -331,7 +331,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -353,7 +353,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -381,7 +381,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -445,7 +445,7 @@ internal class Program
                 }
                 else
                 {
-                    GameUser? user = GameContext.Instance.Users.Find(selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -467,7 +467,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -497,7 +497,7 @@ internal class Program
                 }
                 else
                 {
-                    GameUser? user = GameContext.Instance.Users.Find(selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -522,7 +522,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -551,7 +551,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -578,7 +578,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -591,7 +591,7 @@ internal class Program
                         string? confirm = Console.ReadLine();
                         if (confirm == "y")
                         {
-                            JsonDb.Instance.Users.Remove(user);
+                            GameContext.Instance.Users.Remove(user);
                             JsonDb.Save();
                             Console.WriteLine("User deleted");
                             selectedUser = 0;
@@ -632,7 +632,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");
@@ -668,7 +668,7 @@ internal class Program
                 }
                 else
                 {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == selectedUser);
+                    User? user = GameContext.Instance.Users.Find(selectedUser);
                     if (user == null)
                     {
                         Console.WriteLine("Selected user does not exist");

@@ -10,7 +10,6 @@ public class SetTutorial : LobbyMessage
     {
         ReqSetTutorial req = await ReadData<ReqSetTutorial>();
         User user = GetUser();
-        GameUser gameUser = GetUserNew();
 
         var cleared = GameData.Instance.GetTutorialDataById(req.LastClearedTid);
         var tutorial = new ClearedTutorialData()
@@ -19,13 +18,13 @@ public class SetTutorial : LobbyMessage
             VersionGroup = cleared.VersionGroup
         };
 
-        if (!gameUser.ClearedTutorialData.ContainsKey(cleared.GroupId))
+        if (!user.ClearedTutorialData.ContainsKey(cleared.GroupId))
         {
-            gameUser.ClearedTutorialData.Add(cleared.GroupId, tutorial);
+            user.ClearedTutorialData.Add(cleared.GroupId, tutorial);
         }
         else
         {
-            gameUser.ClearedTutorialData[cleared.GroupId] = tutorial;
+            user.ClearedTutorialData[cleared.GroupId] = tutorial;
         }
         await GameContext.SaveChangesAsync();
 

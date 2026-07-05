@@ -9,12 +9,11 @@ public class GetArena : LobbyMessage
     {
         ReqGetArena req = await ReadData<ReqGetArena>();
         User user = GetUser();
-        GameUser userNew = GetUserNew();
 
         ResGetArena response = new()
         {
             BanInfo = new NetArenaBanInfo() { Description = "Not Implemented", StartAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), EndAt = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddYears(10)) },
-            User = new NetArenaData() { User = LobbyHandler.CreateWholeUserDataFromDbUser(userNew) }
+            User = new NetArenaData() { User = LobbyHandler.CreateWholeUserDataFromDbUser(user) }
         };
 
 

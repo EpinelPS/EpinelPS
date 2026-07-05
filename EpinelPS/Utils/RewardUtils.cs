@@ -6,12 +6,12 @@ namespace EpinelPS.Utils;
 // Calculate rewards for various messages
 public class RewardUtils
 {
-    public static NetRewardData RegisterRewardsForUser(GameUser user, int rewardId)
+    public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
     {
         RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward Id {rewardId}");
         return RegisterRewardsForUser(user, rewardData);
     }
-    public static NetRewardData RegisterRewardsForUser(GameUser user, RewardRecord rewardData)
+    public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData)
     {
         NetRewardData ret = new()
         {
@@ -101,9 +101,9 @@ public class RewardUtils
                 {
                     if (rewardData.UserExp != 0)
                     {
-                        int newXp = rewardData.UserExp + user.userPointData.ExperiencePoint;
-                        int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.userPointData.UserLevel);
-                        int newLevel = user.userPointData.UserLevel;
+                        int newXp = rewardData.UserExp + user.ExperiencePoint;
+                        int newLevelExp = GameData.Instance.GetUserMinXpForLevel(user.UserLevel);
+                        int newLevel = user.UserLevel;
                         if (newLevelExp == -1)
                         {
                             Console.WriteLine("Unknown user level value for xp " + newXp);
@@ -131,8 +131,8 @@ public class RewardUtils
 
                         ret.UserExp = new NetIncreaseExpData()
                         {
-                            BeforeExp = user.userPointData.ExperiencePoint,
-                            BeforeLv = user.userPointData.UserLevel,
+                            BeforeExp = user.ExperiencePoint,
+                            BeforeLv = user.UserLevel,
 
                             // IncreaseExp = rewardData.UserExp,
                             CurrentExp = newXp,
@@ -141,9 +141,9 @@ public class RewardUtils
                             GainExp = rewardData.UserExp,
 
                         };
-                        user.userPointData.ExperiencePoint = newXp;
+                        user.ExperiencePoint = newXp;
 
-                        user.userPointData.UserLevel = newLevel;
+                        user.UserLevel = newLevel;
                     }
 
                     foreach (var item in rewardData.Rewards)
@@ -206,7 +206,7 @@ public class RewardUtils
     /// <param name="rewardType"></param>
     /// <param name="rewardCount"></param>
     /// <exception cref="Exception"></exception>
-    public static void AddSingleObject(GameUser user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
+    public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
     {
         if (rewardType == RewardType.None) return;
         if (rewardType == RewardType.Currency)
