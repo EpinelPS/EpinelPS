@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.TriggerController;
+﻿using EpinelPS.Database;
+
+namespace EpinelPS.LobbyServer.TriggerController;
 
 [GameRequest("/trigger/sync")]
 public class TriggerSync : LobbyMessage
@@ -22,11 +24,11 @@ public class TriggerSync : LobbyMessage
         Console.WriteLine("needs " + req.Seq);
 
         // Look for triggers past that amount
-        TriggerModel[] newTriggers = [.. user.Triggers.Where(x => x.Id > req.Seq)];
+        TriggerModelNew[] newTriggers = [.. GameContext.Triggers.Where(x => x.Id > req.Seq && x.UserId == user.ID)];
 
         // Return all triggers
         int triggerCount = 0;
-        foreach (TriggerModel item in newTriggers)
+        foreach (TriggerModelNew item in newTriggers)
         {
             triggerCount++;
 

@@ -2,13 +2,18 @@ using EpinelPS.Utils;
 
 namespace EpinelPS.Models;
 
+/// <summary>
+/// NOTE: OBSOLETE: Add new entries to GameContext
+/// </summary>
 public class CoreInfo
 {
-    public int DbVersion { get; set; } = 5;
+    // TODO: Move to GameContext
     public List<User> Users { get; set; } = [];
-
     public RankData RankDatas { get; set; } = new();
+
+    // General configuration will stay here
     public byte[] LauncherTokenKey { get; set; } = [];
+    public int DbVersion { get; set; } = 5;
     public byte[] EncryptionTokenKey { get; set; } = [];
     public LogType LogLevel { get; set; } = LogType.Debug;
 

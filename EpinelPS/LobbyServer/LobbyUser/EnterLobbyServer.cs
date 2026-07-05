@@ -1,6 +1,7 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpinelPS.LobbyServer.LobbyUser;
 
@@ -11,23 +12,22 @@ public class EnterLobbyServer : LobbyMessage
     {
         ReqEnterLobbyServer req = await ReadData<ReqEnterLobbyServer>();
         User user = GetUser();
+        var userDB = GameContext.Instance.Users.Find((ulong)UserId);
 
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
         // NOTE: Keep this in sync with GetUser code
-
-        if (user.Nickname == null)
+        if (userDB.Nickname == null)
         {
-            user.Nickname = "Unknown";
-            JsonDb.Save();
+            GameContext.Users.Where(u => u.ID == UserId).ExecuteUpdate(setters => setters.SetProperty(u => u.Nickname, "Player"));
         }
 
         ResEnterLobbyServer response = new()
         {
             User = LobbyHandler.CreateNetUserDataFromUser(user),
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
-            Nickname = user.Nickname,
+            Nickname = userDB.Nickname,
             SynchroLv = 1,
             OutpostBattleLevel = user.OutpostBattleLevel,
             OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs },

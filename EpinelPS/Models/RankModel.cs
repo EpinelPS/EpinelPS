@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using EpinelPS.LobbyServer;
 using System.Reflection.PortableExecutable;
 
 namespace EpinelPS.Models;
@@ -92,7 +93,7 @@ public class MiniGameTtsTotalRankData
         {
             var data = new NetMiniGameTtsTotalRankData
             {
-                User = CreateWholeUserDataFromDbUser(ranked[i].UserId),
+                User = LobbyHandler.CreateWholeUserDataFromDbUser((ulong)ranked[i].UserId),
                 Score = ranked[i].Score,
                 Position = i + 1
             };
@@ -131,7 +132,7 @@ public class MiniGameTtsTotalRankData
         // 构建返回数据
         return new NetMiniGameTtsTotalRankData
         {
-            User = CreateWholeUserDataFromDbUser(userRecord.UserId),
+            User = LobbyHandler.CreateWholeUserDataFromDbUser((ulong)userRecord.UserId),
             Score = userRecord.Score,
             Position = rankPosition
         };
@@ -186,7 +187,7 @@ public class MiniGameTtsTotalRankData
         {
             var data = new NetMiniGameTtsTotalRankData
             {
-                User = CreateWholeUserDataFromDbUser(ranked[i].UserId),
+                User = LobbyHandler.CreateWholeUserDataFromDbUser((ulong)ranked[i].UserId),
                 Score = ranked[i].Score,
                 Position = i + 1
             };
@@ -272,39 +273,5 @@ public class MiniGameTtsTotalRankData
     public int GetRecordCount(MiniGameTtsRankingType rankType)
     {
         return TtsTotalRankRecords.Count(r => r.RankType == rankType);
-    }
-
-    /// <summary>
-    /// 通过id创建用户数据
-    /// </summary>
-    /// <param name="userid"></param>
-    /// <returns></returns>
-    public static NetWholeUserData CreateWholeUserDataFromDbUser(long userid)
-    {
-
-        User? user = JsonDb.GetUser((ulong)userid);
-        if (user != null)
-        {
-
-
-            NetWholeUserData ret = new()
-            {
-                Lv = user.userPointData.UserLevel,
-                Frame = user.ProfileFrame,
-                Icon = user.ProfileIconId,
-                IconPrism = user.ProfileIconIsPrism,
-                UserTitleId = user.TitleId,
-                Nickname = user.Nickname,
-                Usn = (long)user.ID,
-                LastActionAt = DateTimeOffset.UtcNow.Ticks,
-                Server = 1001
-            };
-
-            return ret;
-        }
-        else
-        {
-            return null;
-        }
     }
 }

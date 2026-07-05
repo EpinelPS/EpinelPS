@@ -159,6 +159,7 @@ public static class LobbyHandler
     }
     public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
     {
+        var userDB = GameContext.Instance.Users.Find((ulong)user.ID);
         NetWholeUserData ret = new()
         {
             Lv = user.userPointData.UserLevel,
@@ -166,7 +167,27 @@ public static class LobbyHandler
             Icon = user.ProfileIconId,
             IconPrism = user.ProfileIconIsPrism,
             UserTitleId = user.TitleId,
-            Nickname = user.Nickname,
+            Nickname = userDB.Nickname,
+            Usn = (long)user.ID,
+            LastActionAt = DateTimeOffset.UtcNow.Ticks,
+            Server = 1001
+        };
+
+        return ret;
+    }
+
+    public static NetWholeUserData CreateWholeUserDataFromDbUser(ulong id)
+    {
+        var userDB = GameContext.Instance.Users.Find((ulong)id);
+        var user = JsonDb.Instance.Users.Where(x=>x.ID == id).FirstOrDefault();
+        NetWholeUserData ret = new()
+        {
+            Lv = user.userPointData.UserLevel,
+            Frame = user.ProfileFrame,
+            Icon = user.ProfileIconId,
+            IconPrism = user.ProfileIconIsPrism,
+            UserTitleId = user.TitleId,
+            Nickname = userDB.Nickname,
             Usn = (long)user.ID,
             LastActionAt = DateTimeOffset.UtcNow.Ticks,
             Server = 1001

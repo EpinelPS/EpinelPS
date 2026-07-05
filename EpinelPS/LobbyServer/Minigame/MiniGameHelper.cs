@@ -69,7 +69,7 @@ public class MiniGameHelper
                     {
                         Rank = item.Rank,
                         Score = item.Record.Score,
-                        User = CreateWholeUserDataFromDbUser((long)item.Record.UserId)
+                        User = LobbyHandler.CreateWholeUserDataFromDbUser(item.Record.UserId)
                     };
                     
                     return rankdata;
@@ -170,45 +170,9 @@ public class MiniGameHelper
         JsonDb.Save();
     }
 
-    /// <summary>
-    /// 通过id创建用户数据
-    /// </summary>
-    /// <param name="userid"></param>
-    /// <returns></returns>
-    public static NetWholeUserData CreateWholeUserDataFromDbUser(long userid)
-    {
-
-        User? user = JsonDb.GetUser((ulong)userid);
-        if (user != null)
-        {
-
-
-            NetWholeUserData ret = new()
-            {
-                Lv = user.userPointData.UserLevel,
-                Frame = user.ProfileFrame,
-                Icon = user.ProfileIconId,
-                IconPrism = user.ProfileIconIsPrism,
-                UserTitleId = user.TitleId,
-                Nickname = user.Nickname,
-                Usn = (long)user.ID,
-                LastActionAt = DateTimeOffset.UtcNow.Ticks,
-                Server = 1001
-            };
-
-            return ret;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
 
     public static void InitStellarBladeData(User user,int arcadeId)
     {
-
-
         if (!user.StellarBladeDatas.TryGetValue(arcadeId, out var stellar))
         {
             stellar = new StellarBladeDatas();

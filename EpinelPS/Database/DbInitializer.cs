@@ -1,4 +1,5 @@
 
+using EpinelPS.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpinelPS.Database;
@@ -8,6 +9,8 @@ public static class DbInitializer
 {
     public static void Initialize(GameContext context)
     {
+        Logging.WriteLine("Initializing & migrating database...");
+        context.Database.Migrate();
         context.Database.EnsureCreated();
 
         bool changed = false;
@@ -28,6 +31,31 @@ public static class DbInitializer
                     IsAdmin = user.IsAdmin,
                     LastLogin = user.LastLogin
                 });
+            }
+
+            if (!context.Users.Where(x => x.ID == user.ID).Any())
+            {
+                changed = true;
+                var gameUser = new GameUser()
+                {
+                    ID = user.ID,
+                    Nickname = user.Nickname ?? "Guest",
+                    LastAction = user.LastLogin
+                };
+                foreach(var item in user.Triggers)
+                {
+                    gameUser.Triggers.Add(new TriggerModelNew()
+                    {
+                        ConditionId = item.ConditionId,
+                        CreatedAt = item.CreatedAt,
+                        Type = item.Type,
+                        User = gameUser,
+                        Value = item.Value
+                    });
+                }
+
+            //    user.Triggers.Clear();
+                context.Users.Add(gameUser);
             }
         }
 

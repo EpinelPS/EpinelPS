@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpinelPS.LobbyServer.LobbyUser;
 
@@ -9,15 +10,13 @@ public class SetNicknameInTutorial : LobbyMessage
     {
         ReqSetNicknameInTutorial req = await ReadData<ReqSetNicknameInTutorial>();
         User user = GetUser();
-        user.Nickname = req.Nickname;
+        GameContext.Users.Where(u => u.ID == UserId).ExecuteUpdate(setters => setters.SetProperty(u => u.Nickname, req.Nickname));
 
         ResSetNicknameInTutorial response = new()
         {
             Result = SetNicknameResult.Okay,
             Nickname = req.Nickname
         };
-
-        JsonDb.Save();
 
         await WriteDataAsync(response);
     }

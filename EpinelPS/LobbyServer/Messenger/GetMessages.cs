@@ -24,7 +24,7 @@ public class GetMessages : LobbyMessage
         await WriteDataAsync(response);
     }
 
-    private static void CheckAndCreateAvailableMessages(User user)
+    private void CheckAndCreateAvailableMessages(User user)
     {
         foreach (KeyValuePair<int, MessengerConditionTriggerRecord> messageCondition in GameData.Instance.MessageConditions)
         {
@@ -48,7 +48,7 @@ public class GetMessages : LobbyMessage
         }
     }
 
-    private static bool IsMessageConditionSatisfied(User user, int conditionId)
+    private bool IsMessageConditionSatisfied(User user, int conditionId)
     {
         if (!GameData.Instance.MessageConditions.TryGetValue(conditionId, out MessengerConditionTriggerRecord? msgCondition))
         {
@@ -69,9 +69,10 @@ public class GetMessages : LobbyMessage
         return true;
     }
 
-    private static bool CheckTriggerCondition(User user, TriggerData trigger)
+    private bool CheckTriggerCondition(User user, TriggerData trigger)
     {
-        return user.Triggers.Any(t =>
+        return GameContext.Triggers.Any(t =>
+            t.UserId == user.ID &&
             t.Type == trigger.Trigger &&
             t.ConditionId == trigger.ConditionId &&
             t.Value >= trigger.ConditionValue);

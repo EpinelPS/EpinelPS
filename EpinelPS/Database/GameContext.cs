@@ -6,9 +6,19 @@ namespace EpinelPS.Database;
 public class GameContext : DbContext
 {
     /// <summary>
-    /// Contains user information
+    /// Contains user login information
     /// </summary>
     public DbSet<SdkUser> SdkUsers { get; set; }
+
+    /// <summary>
+    /// Contains in-game user information
+    /// </summary>
+    public DbSet<GameUser> Users { get; set; }
+
+    /// <summary>
+    /// Contains trigger information
+    /// </summary>
+    public DbSet<TriggerModelNew> Triggers { get; set; }
 
     /// <summary>
     /// GameContext instance. Should only be used in console thread.

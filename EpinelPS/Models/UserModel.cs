@@ -25,6 +25,7 @@ public class User
     public int LastStoryStageCleared { get; set; }
     public int LastHardStageCleared { get; set; }
     public int LastClearedDifficulty { get; set; }
+    [Obsolete]
     public string? Nickname { get; set; }
     public int ProfileIconId { get; set; } = 39900;
     public bool ProfileIconIsPrism { get; set; } = false;
@@ -121,6 +122,7 @@ public class User
     public List<BadgeModel> Badges { get; set; } = [];
 
     public List<NetUserAttractiveData> BondInfo { get; set; } = [];
+    [Obsolete]
     public List<TriggerModel> Triggers { get; set; } = [];
     public int LastTriggerId { get; set; } = 1;
     public List<int> CompletedAchievements { get; set; } = [];
@@ -179,18 +181,19 @@ public class User
 
 
     
-    public TriggerModel AddTrigger(Trigger type, int value, int conditionId = 0)
+    public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
     {
-        TriggerModel t = new()
+        TriggerModelNew t = new()
         {
-            Id = LastTriggerId++,
             Type = type,
             ConditionId = conditionId,
             CreatedAt = DateTime.UtcNow.AddHours(9).Ticks,
             Value = value
         };
 
-        Triggers.Add(t);
+        var gameUser = GameContext.Instance.Users.Find(ID) ?? throw new InvalidDataException("user not found in Users table");
+        gameUser.Triggers.Add(t);
+        GameContext.Instance.SaveChanges();
 
         return t;
     }

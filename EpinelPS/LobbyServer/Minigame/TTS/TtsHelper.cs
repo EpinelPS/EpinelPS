@@ -411,35 +411,4 @@ public static class TtsHelper
 
         return result;
     }
-
-    /// <summary>
-    /// 通过id创建用户数据
-    /// </summary>
-    /// <param name="userid"></param>
-    /// <returns></returns>
-    public static NetWholeUserData CreateWholeUserDataFromDbUser(long userid)
-    {
-        User? user = JsonDb.GetUser((ulong)userid);
-        if (user != null)
-        {
-            NetWholeUserData ret = new()
-            {
-                Lv = user.userPointData.UserLevel,
-                Frame = user.ProfileFrame,
-                Icon = user.ProfileIconId,
-                IconPrism = user.ProfileIconIsPrism,
-                UserTitleId = user.TitleId,
-                Nickname = user.Nickname,
-                Usn = (long)user.ID,
-                LastActionAt = DateTimeOffset.UtcNow.Ticks,
-                Server = 1001
-            };
-
-            return ret;
-        }
-        else
-        {
-            return null;
-        }
-    }
 }

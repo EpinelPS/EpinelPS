@@ -81,19 +81,7 @@ public static class AzxHelper
                 Score = score,
                 TimeToScore = timeToScore
             },
-            User = new NetWholeUserData()
-            {
-                Usn = (long)user.ID,
-                Server = 10001,
-                Nickname = user.Nickname,
-                Lv = user.userPointData?.UserLevel ?? 99,
-                Icon = user.ProfileIconId,
-                IconPrism = user.ProfileIconIsPrism,
-                Frame = user.ProfileFrame,
-                LastActionAt = user.LastLogin.Ticks,
-                UserTitleId = user.TitleId,
-                GuildName = user.Nickname,
-            }
+            User = LobbyHandler.CreateWholeUserDataFromDbUser(user.ID)
         };
         response.GuildRankingList.Add(new NetMiniGameAzxRankingData()
         {
@@ -103,19 +91,7 @@ public static class AzxHelper
                 Score = 80000,
                 TimeToScore = new Duration() { Seconds = 118, Nanos = 432877000 }
             },
-            User = new NetWholeUserData()
-            {
-                Usn = (long)user.ID,
-                Server = 10001,
-                Nickname = user.Nickname,
-                Lv = user.userPointData?.UserLevel ?? 99,
-                Icon = user.ProfileIconId,
-                IconPrism = user.ProfileIconIsPrism,
-                Frame = user.ProfileFrame,
-                LastActionAt = user.LastLogin.Ticks,
-                UserTitleId = user.TitleId,
-                GuildName = user.Nickname,
-            }
+            User = LobbyHandler.CreateWholeUserDataFromDbUser(user.ID)
         });
 
         JsonDb.Save();
