@@ -12,3 +12,26 @@ public class MathUtils
             return value;
     }
 }
+
+public static class ListExtensions
+{
+    public static void AddUnique<T>(this List<T> list, T item)
+    {
+        if (!list.Contains(item))
+        {
+            list.Add(item);
+        }
+    }
+
+    public static void AddRangeUnique<T>(this List<T> list, IEnumerable<T> items)
+    {
+        foreach (var item in items)
+        {
+            if (!list.Contains(item))
+            {
+                list.Add(item);
+            }
+        }
+    }
+
+}
