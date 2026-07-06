@@ -67,10 +67,7 @@ public class TTSFinish : LobbyMessage
 
             if (req.IsCleared)
             {
-                if (!ttsData.BadgeSongId.Contains(req.EventTtsSongManagerTableId))
-                {
-                    ttsData.BadgeSongId.Add(req.EventTtsSongManagerTableId);
-                }
+                user.AddUnique(ttsData.BadgeSongId, req.EventTtsSongManagerTableId);
 
                 
                 Dictionary<int, NetMiniGameTtsBadgeData> badge = new();
@@ -117,7 +114,9 @@ public class TTSFinish : LobbyMessage
 
     private static void UpMission(ref TtsDatas ttsData, ReqFinishMiniGameTtsPlay req)
     {
-        List<EventTTSMissionType> lable = [EventTTSMissionType.MusicPlayCount, EventTTSMissionType.ScoreAccumulate];
+        List<EventTTSMissionType> lable = new();
+        lable.Add(EventTTSMissionType.MusicPlayCount);
+        lable.Add(EventTTSMissionType.ScoreAccumulate);
 
         if ((int)req.Rank >= (int)MiniGameTtsRank.A)
         {
@@ -156,6 +155,20 @@ public class TTSFinish : LobbyMessage
         {
             lable.Add(EventTTSMissionType.SpecificMusicPlayCount);
         }
+        List<int>? skinlist = GameData.Instance.EventTTSSkinObjectTable.Values
+            .Where(x => x.IsFree == false)
+            .Select(x=>x.Id)
+            .ToList();
+        List<int> userlist = new();
+        userlist.AddUnique(ttsData.SkinData.FirstCharacterSkinObjectId);
+        userlist.AddUnique(ttsData.SkinData.SecondCharacterSkinObjectId);
+        userlist.AddUnique(ttsData.SkinData.ThirdCharacterSkinObjectId);
+        bool hasAny = skinlist.Any(x => userlist.Contains(x));
+        if (hasAny)
+        {
+            lable.Add(EventTTSMissionType.AnyMusicPlayCountWithSkinObject);
+        }
+        List<int> matchedItems = skinlist.Intersect(userlist).ToList();
 
         foreach (var item in lable)
         {
@@ -243,6 +256,24 @@ public class TTSFinish : LobbyMessage
                         if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
                         {
                             vale.Progress += 1;
+                        }
+                    }
+                    break;
+                case EventTTSMissionType.AnyMusicPlayCountWithSkinObject:
+
+                    foreach (var aitem in matchedItems)
+                    {
+                        List<EventTTSMissionRecord_Raw>? amissions = GameData.Instance.EventTTSMissionTable.Values
+                        .Where(s => s.MissionType == EventTTSMissionType.AnyMusicPlayCountWithSkinObject &&
+                        s.MissionValue.Contains(aitem))
+                        .ToList();
+
+                        foreach (var miss in amissions)
+                        {
+                            if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                            {
+                                vale.Progress += 1;
+                            }
                         }
                     }
                     break;

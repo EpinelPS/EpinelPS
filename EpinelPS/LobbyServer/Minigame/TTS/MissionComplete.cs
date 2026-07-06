@@ -24,10 +24,7 @@ public class MissionComplete : LobbyMessage
                 EventTTSMissionRecord_Raw? mission = GameData.Instance.EventTTSMissionTable.Values
                 .Where(m => m.Id == item).FirstOrDefault();
 
-                if (!ttsData.MissionCompleteList.Contains(item))
-                {
-                    ttsData.MissionCompleteList.Add(item);
-                }
+                user.AddUnique(ttsData.MissionCompleteList, item);
 
                 if (ttsData.MissionData.TryGetValue(item, out var miss))
                 {

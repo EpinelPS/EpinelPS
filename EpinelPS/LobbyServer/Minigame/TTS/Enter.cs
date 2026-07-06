@@ -52,7 +52,7 @@ public class TTSEnter : LobbyMessage
             response.AlbumRedDotCutoffDateFromShop = ttsData.DateFromShop;
             response.HasSelectProceedOnExpertAlertPopUp = true;
             EventTTSProductNoticeManagerRecord_Raw? noticeid = GameData.Instance.EventTTSProductNoticeManagerTable.Values
-                .Where(x => x.NoticeDate < DateTime.Now).FirstOrDefault();
+                .Where(x => x.NoticeDate.AddDays(1) > DateTime.Now).FirstOrDefault();
             if (noticeid != null)
             {
                 response.NewEventTtsProductNoticeManagerTableId = noticeid.Id;
