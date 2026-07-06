@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EpinelPS.Data;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpinelPS.Models;
 
@@ -28,6 +31,7 @@ public class FieldInfoNew
 
 public class CharacterModel
 {
+    [Key]
     public int Csn { get; set; } = 0;
     public int Tid { get; set; } = 0;
     public int CostumeId { get; set; } = 0;
@@ -37,6 +41,9 @@ public class CharacterModel
     public int Skill2Lvl { get; set; } = 1;
     public int Grade { get; set; } = 0;
     public bool IsMainForce { get; set; } = false;
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
+    public ulong UserId { get; set; }
 }
 public class MainQuestData
 {
@@ -55,6 +62,7 @@ public class UserPointData
 public class DbItemData
 {
     public int ItemType { get; set; }
+    [Key]
     public long Csn { get; set; }
     public int Count { get; set; }
     public int Level { get; set; }
@@ -65,6 +73,9 @@ public class DbItemData
 
     // For harmony cubes that can be equipped to multiple characters
     public List<long> CsnList { get; set; } = [];
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
+    public ulong UserId { get; set; }
 }
 
 public class EquipmentAwakeningData
@@ -243,7 +254,7 @@ public class ResetableDataNew
     public List<int> CompletedDailyMissions { get; set; } = [];
     public int DailyMissionPoints { get; set; }
     public SimRoomData SimRoomData { get; set; } = new();
-    public int[] TowerCount { get; set; } = [0,0,0,0];
+    public int[] TowerCount { get; set; } = [0, 0, 0, 0];
     //public Dictionary<int, int> DailyCounselCount { get; set; } = [];
     public int DispatchCount { get; set; } = 0;
 }
@@ -312,9 +323,13 @@ public class MogMinigameInfo
 public class BadgeModel
 {
     public string Location { get; set; } = "";
+    [Key]
     public long Seq { get; set; }
     public BadgeContents BadgeContent { get; set; }
     public string BadgeGuid { get; set; } = "";
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
+    public ulong UserId { get; set; }
 
     public BadgeModel() { }
     public BadgeModel(NetBadge badge)
@@ -542,16 +557,16 @@ public class GuildData
 {
     public int? guildId { get; set; }
     public long? LeaveAt { get; set; }
-       
+
 }
 
 public class StellarBladeDatas
 {
-    public List< NetStellarBladeCurrency> Currency { get; set; } = [] ;
+    public List<NetStellarBladeCurrency> Currency { get; set; } = [];
     public NetStellarBladeCharacterData CharacterData { get; set; } = new();
-    public List< NetStellarBladeMissionData> MissionData { get; set; } =[];
-    public List<NetStellarBladeMissionData> DailyMissionData { get; set; } =[];
-    public List<NetStellarBladeMissionData> DailyPointMissionData { get; set; } = [];    
+    public List<NetStellarBladeMissionData> MissionData { get; set; } = [];
+    public List<NetStellarBladeMissionData> DailyMissionData { get; set; } = [];
+    public List<NetStellarBladeMissionData> DailyPointMissionData { get; set; } = [];
     public Dictionary<int, ResArcadeGetStellarBladeStatistics.Types.NetStatisticsData> StatisticsData { get; set; } = [];
     public Dictionary<int, SBStageDatas> BestStageDatas { get; set; } = [];
     public List<int> TutorialList { get; set; } = [];
@@ -572,8 +587,8 @@ public class SBStageDatas
 
 public class TtsDatas
 {
-    public Dictionary<MiniGameTtsDifficulty,Dictionary<int, NetMiniGameTtsBadgeData>> BadgeData { get; set; } = [];
-    public Dictionary<int,NetMiniGameTtsMissionData> MissionData { get; set; } =[];
+    public Dictionary<MiniGameTtsDifficulty, Dictionary<int, NetMiniGameTtsBadgeData>> BadgeData { get; set; } = [];
+    public Dictionary<int, NetMiniGameTtsMissionData> MissionData { get; set; } = [];
     public List<NetMiniGameTtsScoreData> ScoreData { get; set; } = [];
     public List<NetMiniGameTtsSongPlayCount> SongPlayCount { get; set; } = [];
     public List<NetMiniGameTtsSongPlayData> SongPlayData { get; set; } = [];
@@ -618,7 +633,7 @@ public class SongRankKey
 {
     public int SongId { get; set; }
     public MiniGameTtsRankingType RankType { get; set; }   // Server, Friend, Guild
-    
+
 }
 
 
@@ -635,7 +650,7 @@ public class TowerDefenseData
 
 public class SongRankData
 {
-    
+
     public long UserId { get; set; }               // 用户ID（新增）
     public int SongId { get; set; }
     public MiniGameTtsRankingType RankType { get; set; }
@@ -646,7 +661,7 @@ public class SongRankData
 }
 
 public class MiniGameTtsTotalRankRecord
-{    
+{
     public long UserId { get; set; }
     public long Score { get; set; }
     public MiniGameTtsRankingType RankType { get; set; }

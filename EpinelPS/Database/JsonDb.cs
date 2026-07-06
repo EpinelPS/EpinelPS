@@ -100,7 +100,10 @@ internal class JsonDb
     {
         if (Instance != null)
         {
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
+            //File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
+
+        if (GameContext.Instance != null)
+            GameContext.Instance.SaveChanges();
     }
 }

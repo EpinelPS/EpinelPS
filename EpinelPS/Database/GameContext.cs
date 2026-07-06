@@ -34,7 +34,7 @@ public class GameContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
+      /*  modelBuilder.Entity<User>()
             .OwnsOne(u => u.ClearedTutorialData, ownedNavigationBuilder =>
             {
                 ownedNavigationBuilder.ToJson();
@@ -87,6 +87,6 @@ public class GameContext : DbContext
             .OwnsOne(u => u.TowerProgress, ownedNavigationBuilder =>
         ownedNavigationBuilder.ToJson())
             .OwnsOne(u => u.ResetableData, ownedNavigationBuilder =>
-        ownedNavigationBuilder.ToJson());
+        ownedNavigationBuilder.ToJson());*/
     }
 }
