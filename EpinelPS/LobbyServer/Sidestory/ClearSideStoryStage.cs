@@ -23,8 +23,6 @@ public class ClearSideStoryStage : LobbyMessage
                 RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(value.FirstClearReward);
                 if (rewardData != null)
                     response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardData);
-                else
-                    throw new Exception("failed to find reward");
             }
 
             JsonDb.Save();

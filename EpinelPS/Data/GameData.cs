@@ -725,7 +725,7 @@ public class GameData
     }
     public RewardRecord? GetRewardTableEntry(int rewardId)
     {
-        return RewardDataRecords[rewardId];
+        return RewardDataRecords.TryGetValue(rewardId, out RewardRecord? record) ? record : null;
     }
     /// <summary>
     /// Returns the level and its minimum value for XP value
