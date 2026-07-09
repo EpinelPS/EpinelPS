@@ -21,7 +21,7 @@ public class FinishSubquest : LobbyMessage
 
         user.SetSubQuest(req.SubQuestId, true);
 
-        NetMessage conversationRecordUser = user.MessengerData.Where(x => x.MessageId == req.MessageId).First();
+        var conversationRecordUser = user.MessengerData.Where(x => x.MessageId == req.MessageId).First();
         conversationRecordUser.State = 2; // mark as claimed
 
         response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);

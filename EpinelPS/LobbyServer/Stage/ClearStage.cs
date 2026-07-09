@@ -36,9 +36,13 @@ public class ClearStage : LobbyMessage
 
         string stageMapId = GameData.Instance.GetMapIdFromChapter(clearedStage.ChapterId, clearedStage.ChapterMod);
 
-        if (user.FieldInfoNew.Count == 0)
+        if (user.FieldInfo.Count == 0)
         {
-            user.FieldInfoNew.Add(stageMapId, new FieldInfoNew() { });
+            user.FieldInfo.Add(new FieldInfoNew()
+            {
+                MapName = stageMapId
+            });
+            GameContext.Instance.SaveChanges();
         }
 
         DoQuestSpecificUserOperations(user, StageId);
@@ -57,7 +61,7 @@ public class ClearStage : LobbyMessage
         }
 
         int oldLevel = user.UserLevel;
-        int oldOutpostLevel = user.OutpostBattleLevel.Level;
+        int oldOutpostLevel = user.OutpostBattleLevel;
 
         if (rewardData != null)
             response.StageClearReward = RewardUtils.RegisterRewardsForUser(user, rewardData);
@@ -80,13 +84,13 @@ public class ClearStage : LobbyMessage
             });
         }
         // Check if outpost level changed, if so return the reward
-        if (user.OutpostBattleLevel.Level != oldOutpostLevel)
+        if (user.OutpostBattleLevel != oldOutpostLevel)
         {
             response.OutpostBattleLevelReward = new NetRewardData();
             response.OutpostBattleLevelReward.Currency.Add(new NetCurrencyData()
             {
                 Type = (int)CurrencyType.FreeCash,
-                Value = 100 * (user.OutpostBattleLevel.Level - oldOutpostLevel),
+                Value = 100 * (user.OutpostBattleLevel - oldOutpostLevel),
                 FinalValue = user.GetCurrencyVal(CurrencyType.FreeCash)
             });
         }
@@ -122,17 +126,17 @@ public class ClearStage : LobbyMessage
             // add outpost reward level if unlocked
             if (user.MainQuestData.TryGetValue(21, out bool _))
             {
-                user.OutpostBattleLevel.Exp++;
-                if (user.OutpostBattleLevel.Exp >= 5)
+                user.OutpostBattleLevelExp++;
+                if (user.OutpostBattleLevelExp >= 5)
                 {
-                    user.OutpostBattleLevel.Exp = 0;
-                    user.OutpostBattleLevel.Level++;
-                    response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = true, Exp = 0, Level = user.OutpostBattleLevel.Level };
+                    user.OutpostBattleLevelExp = 0;
+                    user.OutpostBattleLevel++;
+                    response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = true, Exp = 0, Level = user.OutpostBattleLevel };
                     user.AddCurrency(CurrencyType.FreeCash, 100); // todo is reward the same for all level upgrades
                 }
                 else
                 {
-                    response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = false, Exp = user.OutpostBattleLevel.Exp, Level = user.OutpostBattleLevel.Level };
+                    response.OutpostBattle = new NetOutpostBattleLevel() { IsLevelUp = false, Exp = user.OutpostBattleLevelExp, Level = user.OutpostBattleLevel };
                 }
             }
         }
@@ -147,11 +151,17 @@ public class ClearStage : LobbyMessage
                 user.AddTrigger(Trigger.ChapterClear, 1, clearedStage.ChapterId);
         }
 
-        if (!user.FieldInfoNew.ContainsKey(stageMapId))
-            user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == stageMapId);
 
-        user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
-        JsonDb.Save();
+        if (field == null)
+        {
+            field = new FieldInfoNew
+            {
+                MapName = stageMapId
+            };
+            user.FieldInfo.Add(field);
+        }
+
         GameContext.Instance.SaveChanges();
         return response;
     }
@@ -181,14 +191,11 @@ public class ClearStage : LobbyMessage
                 LastContentsTeamNumber = 1
             };
 
-            user.Characters.Add(new CharacterModel() { Csn = 47263455, Tid = 201001 });
-            user.Characters.Add(new CharacterModel() { Csn = 47273456, Tid = 330501 });
-            user.Characters.Add(new CharacterModel() { Csn = 47263457, Tid = 130201 });
-            user.Characters.Add(new CharacterModel() { Csn = 47263458, Tid = 230101 });
-            user.Characters.Add(new CharacterModel() { Csn = 47263459, Tid = 301201 });
-
-            user.BondInfo.Add(new() { NameCode = 3001, Lv = 1 });
-            user.BondInfo.Add(new() { NameCode = 3005, Lv = 1 });
+            user.Characters.Add(new CharacterModel() { Tid = 201001, NameCode = 3001, RareType = OriginalRareType.SR });
+            user.Characters.Add(new CharacterModel() { Tid = 330501, NameCode = 1018, RareType = OriginalRareType.R });
+            user.Characters.Add(new CharacterModel() { Tid = 130201, NameCode = 1015, RareType = OriginalRareType.R });
+            user.Characters.Add(new CharacterModel() { Tid = 230101, NameCode = 1014, RareType = OriginalRareType.R });
+            user.Characters.Add(new CharacterModel() { Tid = 301201, NameCode = 3005, RareType = OriginalRareType.SR });
 
             user.AddTrigger(Trigger.ObtainCharacter, 1, 3001);
             user.AddTrigger(Trigger.ObtainCharacter, 1, 1018);

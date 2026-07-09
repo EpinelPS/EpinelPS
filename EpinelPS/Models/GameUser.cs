@@ -17,8 +17,9 @@ public class User
 
     public int BanId { get; set; } = 0;
     public DateTime BanEnd { get; set; }
-    public DateTime LastAction { get; set; }
     public ICollection<TriggerModelNew> Triggers { get; set; } = new List<TriggerModelNew>();
+    public DateTime LastLogin { get; set; } = DateTime.UtcNow;
+    public DateTime BattleTime { get; set; } = DateTime.UtcNow;
     
     public Dictionary<int, ClearedTutorialData> ClearedTutorialData = [];
 
@@ -31,6 +32,8 @@ public class User
     public int LastStoryStageCleared { get; set; }
     public int LastHardStageCleared { get; set; }
     public int LastClearedDifficulty { get; set; }
+    public List<FieldInfoNew> FieldInfo { get; set; } = [];
+    public List<string> CompletedScenarios { get; set; } = [];
 
     // Profile appearance
     public int ProfileIconId { get; set; } = 39900;
@@ -63,16 +66,23 @@ public class User
     public int DispatchFavoriteLv { get; set; } = 0;
     public int DispatchResetCount { get; set; } = 0;
 
+    // Characters
+    public List<CharacterModel> Characters { get; set; } = [];
+    // Teams
+    public long[] RepresentationTeamDataNew { get; set; } = [];
+
+    // Items
+    public List<DbItemData> Items { get; set; } = [];
 
 
+    public List<DbMessage> MessengerData { get; set; } = [];
+
+    public List<int> CompletedAchievements { get; set; } = [];
 
     // TODO ORGANIZE
 
 
 
-     public List<string> CompletedScenarios { get; set; } = [];
-    public Dictionary<string, FieldInfoNew> FieldInfoNew = [];
-    public Dictionary<string, string> MapJson = [];
     public Dictionary<CurrencyType, long> Currency  = new() {
             { CurrencyType.ContentStamina, 2 }
         };
@@ -81,30 +91,25 @@ public class User
 
     public ResetableDataNew ResetableData { get; set; } = new();
     public WeeklyResetableData WeeklyResetableData { get; set; } = new();
-    public List<DbItemData> Items { get; set; } = [];
-    public List<CharacterModel> Characters { get; set; } = [];
     public List<EquipmentAwakeningData> EquipmentAwakenings { get; set; } = [];
-    public long[] RepresentationTeamDataNew { get; set; } = [];
     // Outpost buildings data
-    public List<NetUserOutpostData> OutpostBuildings { get; set; } = [];
+    public List<NetUserOutpostData> OutpostBuildings = [];// { get; set; } = [];
 
     public NetWallpaperData[] WallpaperList { get; set; } = [];
-    public NetWallpaperBackground[] WallpaperBackground { get; set; } = [];
-    public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList { get; set; } = [];
-    public NetWallpaperPlaylist[] WallpaperPlaylistList { get; set; } = [];
-    public NetWallpaperJukebox[] WallpaperJukeboxList { get; set; } = [];
+    public NetWallpaperBackground[] WallpaperBackground = []; // { get; set; } = [];
+    public NetWallpaperJukeboxFavorite[] WallpaperFavoriteList = [];// { get; set; } = [];
+    public NetWallpaperPlaylist[] WallpaperPlaylistList = [];// { get; set; } = [];
+    public NetWallpaperJukebox[] WallpaperJukeboxList = [];// { get; set; } = [];
     public List<int> LobbyDecoBackgroundList { get; set; } = [];
     public List<int> LiveWallpaperList { get; set; } = [];
 
-    //角色时装
     public List<int> CostumeList { get; set; } = [];
 
     public List<int> JukeboxThemeList { get; set; } = [];
 
-    //个人面板
     public List<int> StickerList { get; set; } = [];
     public List<int> BackgroundList { get; set; } = [];
-    public ProfileCardDecorationLayout DecorationLayout { get; set; } = new();
+    public ProfileCardDecorationLayout DecorationLayout = new(); // { get; set; } = new();
     public List<int> IconList { get; set; } = [];
     public List<int> FrameList { get; set; } = [];
     public List<int> TitleList { get; set; } = [];
@@ -114,10 +119,9 @@ public class User
     public Dictionary<int, bool> MainQuestData  = [];
     public Dictionary<int, bool> SubQuestData  = [];
     public Dictionary<int, bool> InfraCoreRewardReceived  = [];
-    public DateTime LastLogin { get; set; } = DateTime.UtcNow;
-    public DateTime BattleTime { get; set; } = DateTime.UtcNow;
 
-    public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
+    public int OutpostBattleLevel { get; set; } = 1;
+    public int OutpostBattleLevelExp { get; set; } = 0;
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
     public List<int> ViewedSideStoryStages { get; set; } = [];
@@ -125,24 +129,24 @@ public class User
 
     public List<int> Memorial { get; set; } = [];
     public List<int> JukeboxBgm { get; set; } = [];
-    public List<NetUserFavoriteItemData> FavoriteItems { get; set; } = [];
+    public List<NetUserFavoriteItemData> FavoriteItems = []; // TODO
 
-    public List<NetUserFavoriteItemQuestData> FavoriteItemQuests { get; set; } = [];
+    public List<NetUserFavoriteItemQuestData> FavoriteItemQuests = []; // TODO
     public Dictionary<int, int> TowerProgress  = [];    
 
-    public JukeBoxSetting LobbyMusic { get; set; } = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
-    public JukeBoxSetting CommanderMusic { get; set; } = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
-    public OutpostBuffs OutpostBuffs { get; set; } = new();
-    public Dictionary<int, UnlockData> ContentsOpenUnlocked = [];
+    public JukeBoxSetting LobbyMusic = new();// { get; set; } = new() { Location = NetJukeboxLocation.Lobby, TableId = 2, Type = NetJukeboxBgmType.JukeboxTableId };
+    public JukeBoxSetting CommanderMusic = new();// { get; set; } = new() { Location = NetJukeboxLocation.CommanderRoom, TableId = 5, Type = NetJukeboxBgmType.JukeboxTableId };
+    public List<int> CreditPercentages { get; set; } = [];
+    public List<int> CoreDustPercentages { get; set; } = [];
+    public List<int> BattleDataPercentages { get; set; } = [];
+    public List<int> UserExpPercentages { get; set; } = [];
 
-    public List<NetStageClearInfo> StageClearHistorys { get; set; } = [];
+    public Dictionary<int, UnlockData> ContentsOpenUnlocked = [];
 
     public List<BadgeModel> Badges { get; set; } = [];
 
-    public List<NetUserAttractiveData> BondInfo { get; set; } = [];
-    public List<int> CompletedAchievements { get; set; } = [];
-    public List<NetMessage> MessengerData { get; set; } = [];
-    public ulong LastMessageId { get; set; } = 1;
+
+
     public Dictionary<int, LostSectorData> LostSectorData  = [];
 
     // Event data
@@ -150,11 +154,10 @@ public class User
     public Dictionary<int, LoginEventData> LoginEventInfo= [];
     public Dictionary<int, EventMissionData> EventMissionInfo = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo  = []; // key: eventId
-    public MogMinigameInfo MogInfo { get; set; } = new();
 
 
-    public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
-    public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
+    public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList = [];
+   // public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
 
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
@@ -164,35 +167,50 @@ public class User
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
 
-    //OutpostConditionTable
-    public List<int> OutpostConditionList { get; set; } = [];
-
     // Outpost dispatch
     public List<int> DispatchClearList { get; set; } = [];
-    public List<NetSelectableDispatchData> SelectableDispatchData { get; set; } = [];
-    public DispatchData UserDispatchData { get; set; } = new();
+    public List<DispatchDataSelectable> SelectableDispatchData { get; set; } = [];
 
-    public GuildData Guild { get; set; } = new();
+    public int? guildId { get; set; }
+    public long? LeaveAt { get; set; }
+
 
     // Minigame data
     public Dictionary<int,MiniGameScenarios> MiniGameScenarios = new();
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo  = [];
     public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice  = [];
-    public NetArcadeBBQData BBQInfoData { get; set; } = new();
-    public List<NetPlaySodaEachGameInfo> PlaySodaInfoData { get; set; } = [];
-    public List<NetRebuildEdenData> RebuildedenData { get; set; } = [];
+    public ArcadeBBQData BBQInfoData  = new();//{ get; set; } = new();
 
     public Dictionary<int, TtsDatas> TTSGameData  = new();
     public Dictionary<int, StellarBladeDatas> StellarBladeDatas  = new();
     public Dictionary<int, TowerDefenseData> TowerDefenseDatas  = new();
 
-    // Jukebox
-    public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
-    public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
+    public List<int> GetPercentages(CurrencyType currency)
+    {
+        if (currency == CurrencyType.Gold)
+            return CreditPercentages;
+        else if (currency == CurrencyType.UserExp)
+            return UserExpPercentages;
+        else if (currency == CurrencyType.CharacterExp)
+            return BattleDataPercentages;
+        else if (currency == CurrencyType.CharacterExp2)
+            return CoreDustPercentages;
+
+        throw new InvalidOperationException();
+    }
+    public int GetTotalPercentages(CurrencyType currency)
+    {
+        int result = 0;
+        var numbs = GetPercentages(currency);
+        foreach (var item in numbs)
+        {
+            result += item;
+        }
+
+        return result;
+    }
 
 
-
-    
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
     {
         TriggerModelNew t = new()
@@ -272,9 +290,9 @@ public class User
     }
     public bool IsStageCompleted(int Id)
     {
-        foreach (var item in FieldInfoNew)
+        foreach (var item in FieldInfo)
         {
-            if (item.Value.CompletedStages.Contains(Id))
+            if (item.CompletedStages.Contains(Id))
             {
                 return true;
             }
@@ -456,31 +474,22 @@ public class User
         return removed;
     }
 
-    public NetMessage CreateMessage(MessengerDialogRecord r, int state = 0)
+    public DbMessage CreateMessage(MessengerDialogRecord r, int state = 0)
     {
-        var msg = new NetMessage()
-        {
-            ConversationId = r.ConversationId,
-            CreatedAt = DateTime.UtcNow.Ticks,
-            MessageId = r.Id,
-            Seq = (long)LastMessageId++,
-            State = state
-        };
-        MessengerData.Add(msg);
-        return msg;
+        return CreateMessage(r.ConversationId, r.Id, state);
     }
 
-    public NetMessage CreateMessage(string conversationId, string messageId, int state = 0)
+    public DbMessage CreateMessage(string conversationId, string messageId, int state = 0)
     {
-        var msg = new NetMessage()
+        var msg = new DbMessage()
         {
             ConversationId = conversationId,
-            CreatedAt = DateTime.UtcNow.Ticks,
+            CreatedAt = DateTime.UtcNow,
             MessageId = messageId,
-            Seq = (long)LastMessageId++,
             State = state
         };
         MessengerData.Add(msg);
+        GameContext.Instance.SaveChanges(); // populate ID
         return msg;
     }
 

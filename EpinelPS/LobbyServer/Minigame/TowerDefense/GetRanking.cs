@@ -11,15 +11,15 @@ public class GetRanking : LobbyMessage
         User user = GetUser();
         ResGetArcadeTowerDefenseRanking response = new() { UserGuildRanking = new() };
 
-        if (user.Guild.guildId > 0)
+        if (user.guildId > 0)
         {
 
-            var allBoard = MiniGameHelper.GetFullLeaderboard((long)user.Guild.guildId, req.ArcadeManagerId);
+            var allBoard = MiniGameHelper.GetFullLeaderboard((long)user.guildId, req.ArcadeManagerId);
             if (allBoard.Count() > 0)
             {
                 foreach (var item in allBoard)
                 {
-                    User user0 = GetUser(item.Record.UserId);
+                    User? user0 = GetUser(item.Record.UserId);
                     NetArcadeTowerDefenseRankingData? guild = new NetArcadeTowerDefenseRankingData()
                     {
                         Rank = item.Rank,

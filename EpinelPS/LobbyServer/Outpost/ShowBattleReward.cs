@@ -20,7 +20,11 @@ public class ShowBattleReward : LobbyMessage
 
         ResShowOutpostBattleReward response = new()
         {
-            OutpostBattleLevel = user.OutpostBattleLevel,
+            OutpostBattleLevel = new()
+            {
+                Level = user.OutpostBattleLevel,
+                Exp = user.OutpostBattleLevelExp
+            },
             OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs, OverBattleTime = 0 },
 
             BattleTime = 0,

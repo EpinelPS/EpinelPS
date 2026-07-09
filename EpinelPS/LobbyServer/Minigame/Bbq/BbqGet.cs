@@ -18,7 +18,7 @@ public class BbqGet : LobbyMessage
             
         }
 
-        response.Data = user.BBQInfoData;
+        response.Data = user.BBQInfoData.ToNet();
 
         JsonDb.Save();
         // TODO

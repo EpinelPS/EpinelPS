@@ -32,7 +32,7 @@ public class EnterMessenger : LobbyMessage
             }
         }
 
-        response.Message = user.CreateMessage(conversation.Value);
+        response.Message = user.CreateMessage(conversation.Value).ToNet();
 
         user.AddTrigger(Trigger.MessageClear, 1, req.Tid); // TODO check if this is correct
 

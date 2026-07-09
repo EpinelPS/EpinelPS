@@ -9,8 +9,7 @@ public class GetStageClearInfo : LobbyMessage
         ResGetStageClearInfo response = new();
         User user = GetUser();
 
-        response.Historys.AddRange(user.StageClearHistorys);
-
+        // TODO
         await WriteDataAsync(response);
     }
 }

@@ -10,14 +10,20 @@ public class SaveField : LobbyMessage
 
         ResSaveCampaignField response = new();
 
-        if (!user.MapJson.ContainsKey(req.MapId))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            user.MapJson.Add(req.MapId, req.Json);
+            field = new FieldInfoNew
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
-        else
-        {
-            user.MapJson[req.MapId] = req.Json;
-        }
+
+        field.PositionJson = req.Json;
+
+        await GameContext.SaveChangesAsync();
 
         await WriteDataAsync(response);
     }

@@ -14,14 +14,18 @@ public class ObtainItem : LobbyMessage
 
         ResObtainCampaignItem response = new();
 
-        if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            field = new FieldInfoNew();
-            user.FieldInfoNew.Add(req.MapId, field);
+            field = new FieldInfoNew
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
 
-
-        foreach (NetFieldObject item in field.CompletedObjects)
+        foreach (var item in field.CompletedObjects)
         {
             if (item.PositionId == req.FieldObject.PositionId)
             {
@@ -31,7 +35,6 @@ public class ObtainItem : LobbyMessage
         }
 
         // Register and return reward
-
         var map = GameData.Instance.MapData[req.MapId];
 
         var position = map.ItemSpawner.Where(x => x.PositionId == req.FieldObject.PositionId).FirstOrDefault() ?? throw new Exception("bad position Id");
@@ -41,9 +44,10 @@ public class ObtainItem : LobbyMessage
         response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
 
         // HIde it from the field
-        field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type });
+        field.CompletedObjects.Add(new CompletedFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type, ActionAt = DateTime.UtcNow,
+        Json = req.FieldObject.Json, UserId = user.ID });
 
-        JsonDb.Save();
+        await GameContext.SaveChangesAsync();
 
         await WriteDataAsync(response);
     }

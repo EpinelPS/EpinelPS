@@ -187,7 +187,7 @@ public class GetSimRoomData : LobbyMessage
             // CurrentSeasonHighScore
             CurrentSeasonHighScore = new NetSimRoomOverclockHighScoreData
             {
-                CreatedAt = currentSeasonData.CurrentSeasonHighScore.CreatedAt ?? DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
+                CreatedAt = currentSeasonData.CurrentSeasonHighScore.CreatedAt.HasValue ? currentSeasonData.CurrentSeasonHighScore.CreatedAt.Value.ToTimestamp() : DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
                 Season = currentSeasonData.CurrentSeasonHighScore.Season,
                 SubSeason = currentSeasonData.CurrentSeasonHighScore.SubSeason,
                 OptionList = { currentSeasonData.CurrentSeasonHighScore.OptionList },
@@ -196,7 +196,7 @@ public class GetSimRoomData : LobbyMessage
             // CurrentSubSeasonHighScore
             CurrentSubSeasonHighScore = new NetSimRoomOverclockHighScoreData
             {
-                CreatedAt = currentSeasonData.CurrentSubSeasonHighScore.CreatedAt ?? DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
+                CreatedAt = currentSeasonData.CurrentSeasonHighScore.CreatedAt.HasValue ? currentSeasonData.CurrentSeasonHighScore.CreatedAt.Value.ToTimestamp() : DateTime.UtcNow.Date.AddDays(-2).ToTimestamp(),
                 Season = currentSeasonData.CurrentSubSeasonHighScore.Season,
                 SubSeason = currentSeasonData.CurrentSubSeasonHighScore.SubSeason,
                 OptionList = { currentSeasonData.CurrentSubSeasonHighScore.OptionList },

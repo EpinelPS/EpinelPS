@@ -9,7 +9,7 @@ public class GetMvgData : LobbyMessage
 
         var user = GetUser();
 
-        await WriteDataAsync(new ResGetArcadeMvgData() { Data = user.ArcadeInTheMirrorData });
+        await WriteDataAsync(new ResGetArcadeMvgData() {  });//Data = user.ArcadeInTheMirrorData
 
     }
 }

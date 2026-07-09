@@ -20,7 +20,11 @@ public class GetUser : LobbyMessage
         response.User = LobbyHandler.CreateNetUserDataFromUser(user);
         response.ResetHour = JsonDb.Instance.ResetHourUtcTime;
         response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
-        response.OutpostBattleLevel = user.OutpostBattleLevel;
+        response.OutpostBattleLevel = new()
+        {
+            Level = user.OutpostBattleLevel,
+            Exp = user.OutpostBattleLevelExp
+        };
         response.IsSimple = req.IsSimple;
 
         foreach (KeyValuePair<CurrencyType, long> item in user.Currency)

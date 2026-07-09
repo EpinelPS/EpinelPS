@@ -20,24 +20,22 @@ public class RunDispatchList : LobbyMessage
             DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values
             .Where(x => x.Id == item.Tid).FirstOrDefault();
 
-            var dispatchData = user.UserDispatchData.dispatchDatas.FirstOrDefault(x => x.Tid == item.Tid);
+            var dispatchData = user.ResetableData.Dispatches.FirstOrDefault(x => x.TableId == item.Tid);
             if (dispatchData != null)
             {
-                dispatchData.IsRun = 1;
-                dispatchData.StartAt = startTime.Ticks;
-                dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks;
-                //dispatchData.EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks;
+                dispatchData.Running = true;
+                dispatchData.StartAt = startTime;
+                dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin);
             }
 
-            user.SelectableDispatchData.Add(new NetSelectableDispatchData()
+            user.SelectableDispatchData.Add(new DispatchDataSelectable()
             {
                 DispatchGroupId = dispatch.DispatchGradeId,
-                IsRun = true,
-                EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks,
-                //EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks,
+                Running = true,
+                EndAt = startTime.AddMinutes(dispatch.TimeMin),
                 SelectSlotId = item.SelectSlotId,
                 SelectTid = item.Tid,
-                StartAt = startTime.Ticks
+                StartAt = startTime
             });
 
             response.SuccessTidList.Add(item.Tid);

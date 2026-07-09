@@ -59,15 +59,15 @@ public class ChangeOption : LobbyMessage
                     Isn = confirmedAwakening.Isn,
                     Option = new NetEquipmentAwakeningOption()
                     {
-                        Option1Id = confirmedAwakening.Option.Option1Id,
-                        Option1Lock = confirmedAwakening.Option.Option1Lock,
-                        IsOption1DisposableLock = confirmedAwakening.Option.IsOption1DisposableLock,
-                        Option2Id = confirmedAwakening.Option.Option2Id,
-                        Option2Lock = confirmedAwakening.Option.Option2Lock,
-                        IsOption2DisposableLock = confirmedAwakening.Option.IsOption2DisposableLock,
-                        Option3Id = confirmedAwakening.Option.Option3Id,
-                        Option3Lock = confirmedAwakening.Option.Option3Lock,
-                        IsOption3DisposableLock = confirmedAwakening.Option.IsOption3DisposableLock
+                        Option1Id = confirmedAwakening.Option1Id,
+                        Option1Lock = confirmedAwakening.Option1Lock,
+                        IsOption1DisposableLock = confirmedAwakening.IsOption1DisposableLock,
+                        Option2Id = confirmedAwakening.Option2Id,
+                        Option2Lock = confirmedAwakening.Option2Lock,
+                        IsOption2DisposableLock = confirmedAwakening.IsOption2DisposableLock,
+                        Option3Id = confirmedAwakening.Option3Id,
+                        Option3Lock = confirmedAwakening.Option3Lock,
+                        IsOption3DisposableLock = confirmedAwakening.IsOption3DisposableLock
                     }
                 };
             }
@@ -91,15 +91,15 @@ public class ChangeOption : LobbyMessage
                     Isn = originalAwakening.Isn,
                     Option = new NetEquipmentAwakeningOption()
                     {
-                        Option1Id = originalAwakening.Option.Option1Id,
-                        Option1Lock = originalAwakening.Option.Option1Lock,
-                        IsOption1DisposableLock = originalAwakening.Option.IsOption1DisposableLock,
-                        Option2Id = originalAwakening.Option.Option2Id,
-                        Option2Lock = originalAwakening.Option.Option2Lock,
-                        IsOption2DisposableLock = originalAwakening.Option.IsOption2DisposableLock,
-                        Option3Id = originalAwakening.Option.Option3Id,
-                        Option3Lock = originalAwakening.Option.Option3Lock,
-                        IsOption3DisposableLock = originalAwakening.Option.IsOption3DisposableLock
+                        Option1Id = originalAwakening.Option1Id,
+                        Option1Lock = originalAwakening.Option1Lock,
+                        IsOption1DisposableLock = originalAwakening.IsOption1DisposableLock,
+                        Option2Id = originalAwakening.Option2Id,
+                        Option2Lock = originalAwakening.Option2Lock,
+                        IsOption2DisposableLock = originalAwakening.IsOption2DisposableLock,
+                        Option3Id = originalAwakening.Option3Id,
+                        Option3Lock = originalAwakening.Option3Lock,
+                        IsOption3DisposableLock = originalAwakening.IsOption3DisposableLock
                     }
                 };
             }

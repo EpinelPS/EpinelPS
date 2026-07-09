@@ -16,7 +16,7 @@ public static class DbInitializer
         bool changed = false;
 
         // migrate sdk users to sqlite DB
-        foreach(var user in JsonDb.Instance.Users)
+        /*foreach(var user in JsonDb.Instance.Users)
         {
             if (!context.SdkUsers.Where(x => x.ID == user.ID).Any())
             {
@@ -57,7 +57,7 @@ public static class DbInitializer
             //    user.Triggers.Clear();
                 context.Users.Add(gameUser);
             }
-        }
+        }*/
 
         if (changed) context.SaveChanges();
     }

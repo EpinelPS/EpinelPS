@@ -27,29 +27,33 @@ public class GetStage : LobbyMessage
         NetFieldObjectData f = new();
         bool found = false;
         BossEntered = false;
-        foreach (KeyValuePair<string, FieldInfoNew> item in user.FieldInfoNew)
+
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == mapId);
+
+        if (field == null)
         {
-            if (item.Key == mapId)
+            field = new FieldInfoNew
             {
-                found = true;
-                foreach (int stage in item.Value.CompletedStages)
-                {
-                    f.Stages.Add(new NetFieldStageData() { StageId = stage });
-                }
-                foreach (NetFieldObject obj in item.Value.CompletedObjects)
-                {
-                    f.Objects.Add(obj);
-                }
-                BossEntered = item.Value.BossEntered;
-                break;
-            }
+                MapName = mapId
+            };
+            user.FieldInfo.Add(field);
         }
 
-        if (!found)
+        foreach (int stage in field.CompletedStages)
         {
-            user.FieldInfoNew.Add(mapId, new FieldInfoNew());
-            return CreateFieldInfo(user, mapId, out BossEntered);
+            f.Stages.Add(new NetFieldStageData() { StageId = stage });
         }
+        foreach (var obj in field.CompletedObjects)
+        {
+            f.Objects.Add(new NetFieldObject()
+            {
+                PositionId = obj.PositionId,
+                ActionAt = obj.ActionAt.Ticks,
+                Json = obj.Json,
+                Type = obj.Type
+            });
+        }
+        BossEntered = field.BossEntered;
 
         return f;
     }

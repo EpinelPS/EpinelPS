@@ -11,7 +11,7 @@ public class CompleteScenario : LobbyMessage
         User user = GetUser();
 
         ResCompleteNKSV2Scenario response = new();
-        user.MogInfo.CompletedScenarios.Add(req.ScenarioId);
+        //user.MogInfo.CompletedScenarios.Add(req.ScenarioId);
         JsonDb.Save();
 
         await WriteDataAsync(response);

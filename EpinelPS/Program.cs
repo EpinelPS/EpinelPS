@@ -30,13 +30,13 @@ internal class Program
 
             await GameData.CreateAsync();
 
-            Console.WriteLine("Initializing database");
-            JsonDb.Save();
+            Console.WriteLine("Reading configuration");
+            JsonDb.Instance.ToString();
 
-            Logging.WriteLine("Register handlers");
+            Logging.WriteLine("Register legacy handlers");
             LobbyHandler.Init();
 
-            Logging.WriteLine("Starting ASP.NET core on port 443");
+            Logging.WriteLine("Starting ASP.NET core on ports 443/80");
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Configure HTTPS
@@ -116,12 +116,7 @@ internal class Program
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMiddleware<EncryptionMiddleware>();
-
-
-            // app.UseHttpsRedirection();
-
             app.UseAuthorization();
-            //app.UseHttpsRedirection();
             app.UseRouting();
             app.MapControllerRoute(
        name: "default",
@@ -236,6 +231,7 @@ internal class Program
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred creating the DB.");
+                Environment.Exit(-1);
             }
         }
     }

@@ -61,8 +61,6 @@ internal class JsonDb
                 Instance.EncryptionTokenKey = pasetoKey.Key.ToArray();
             }
 
-            Save();
-
             Logging.SetOutputLevel(Instance.LogLevel);
 
             Console.WriteLine("JsonDb: Loaded");
@@ -103,7 +101,6 @@ internal class JsonDb
             //File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
 
-        if (GameContext.Instance != null)
-            GameContext.Instance.SaveChanges();
+        GameContext.Instance.SaveChanges();
     }
 }

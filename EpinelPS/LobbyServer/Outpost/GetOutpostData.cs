@@ -20,7 +20,11 @@ public class GetOutpostData : LobbyMessage
 
         ResGetOutpostData response = new()
         {
-            OutpostBattleLevel = user.OutpostBattleLevel,
+            OutpostBattleLevel = new()
+            {
+                Level = user.OutpostBattleLevel,
+                Exp = user.OutpostBattleLevelExp
+            },
             Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } }
         };
 
@@ -35,7 +39,11 @@ public class GetOutpostData : LobbyMessage
         // Update response lists with the IDs
         response.Jukeboxv2.JukeboxTableIds.AddRange(jukeboxIds);
 
-        response.OutpostBattleLevel = user.OutpostBattleLevel;
+        response.OutpostBattleLevel = new()
+            {
+                Level = user.OutpostBattleLevel,
+                Exp = user.OutpostBattleLevelExp
+            };
         response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs, OverBattleTime = overBattleTime };
 
         //  defult building

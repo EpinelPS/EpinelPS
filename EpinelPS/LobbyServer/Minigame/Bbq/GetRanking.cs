@@ -14,10 +14,10 @@ public class GetRanking : LobbyMessage
         User user = GetUser();
         ResGetArcadeBBQRanking response = new ResGetArcadeBBQRanking() { UserGuildRanking = new() };
 
-        if (user.Guild.guildId > 0)
+        if (user.guildId > 0)
         {
 
-           IEnumerable<(ArcadeScoreRecord Record, int Rank)>? allBoard = MiniGameHelper.GetFullLeaderboard((long)user.Guild.guildId, req.ArcadeId);
+           IEnumerable<(ArcadeScoreRecord Record, int Rank)>? allBoard = MiniGameHelper.GetFullLeaderboard((long)user.guildId, req.ArcadeId);
 
             if (allBoard.Count() > 0)
             {

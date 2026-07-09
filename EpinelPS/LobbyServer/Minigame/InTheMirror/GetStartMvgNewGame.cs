@@ -11,11 +11,11 @@ public class GetStartMvgNewGame : LobbyMessage
 
         var user = GetUser();
 
-        user.ArcadeInTheMirrorData.Gold = 0;
+        /*user.ArcadeInTheMirrorData.Gold = 0;
         user.ArcadeInTheMirrorData.Core = 0;
         user.ArcadeInTheMirrorData.Quests.Clear();
         user.ArcadeInTheMirrorData.Collectables.Clear();
-        user.ArcadeInTheMirrorData.ProgressJson = "";
+        user.ArcadeInTheMirrorData.ProgressJson = "";*/
 
         await WriteDataAsync(new ResStartArcadeMvgNewGame());
 

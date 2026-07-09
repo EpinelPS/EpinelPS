@@ -18,18 +18,18 @@ public class BbqClear : LobbyMessage
         {
             user.BBQInfoData.HighScore = newscore;
 
-            if (user.Guild.guildId > 0)
+            if (user.guildId > 0)
             {
-                MiniGameHelper.InsertOrUpdate(req.ArcadeId, user.ID, user.Guild.guildId.Value, newscore, 0);
+                MiniGameHelper.InsertOrUpdate(req.ArcadeId, user.ID, user.guildId.Value, newscore, 0);
             }
 
             user.AddTrigger(Trigger.EventBBQTycoonHighScore, newscore, 0);
         }
 
         user.BBQInfoData.PlayCount += 1;
-        user.BBQInfoData.TotalAccumulatedScore += newscore;
+        user.BBQInfoData.TotalScore += newscore;
 
-        response.Data = user.BBQInfoData;
+        response.Data = user.BBQInfoData.ToNet();
 
         JsonDb.Save();    
         // TODO

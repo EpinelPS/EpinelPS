@@ -8,8 +8,6 @@ namespace EpinelPS.Models;
 public class CoreInfo
 {
     // TODO: Move to GameContext
-    [Obsolete]
-    public List<LegacyUser> Users { get; set; } = [];
     public RankData RankDatas { get; set; } = new();
 
     // General configuration will stay here

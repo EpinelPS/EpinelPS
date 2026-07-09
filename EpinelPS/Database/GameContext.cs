@@ -20,6 +20,10 @@ public class GameContext : DbContext
     /// </summary>
     public DbSet<TriggerModelNew> Triggers { get; set; }
 
+    public DbSet<JukeBoxSetting> JukeBoxSetting { get; set; }
+    public DbSet<ResetableDataNew> ResetableDataNew { get; set; }
+    public DbSet<WeeklyResetableData> WeeklyResetableData { get; set; }
+
     /// <summary>
     /// GameContext instance. Should only be used in console thread.
     /// </summary>

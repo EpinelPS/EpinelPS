@@ -10,9 +10,9 @@ public class CheckCleared : LobbyMessage
         ResCheckStageClear response = new();
         User user = GetUser();
 
-        foreach (KeyValuePair<string, FieldInfoNew> fields in user.FieldInfoNew)
+        foreach (var fields in user.FieldInfo)
         {
-            foreach (int stages in fields.Value.CompletedStages)
+            foreach (int stages in fields.CompletedStages)
             {
                 if (req.StageIds.Contains(stages))
                     response.ClearedStageIds.Add(stages);

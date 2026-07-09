@@ -17,20 +17,18 @@ public class CancelDispatch : LobbyMessage
         DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values
             .Where(x => x.Id == req.Tid).FirstOrDefault();
         
-        
-        var dispatchData = user.UserDispatchData.dispatchDatas.FirstOrDefault(x => x.Tid == req.Tid);
+        var dispatchData = user.ResetableData.Dispatches.FirstOrDefault(x => x.TableId == req.Tid);
         if (dispatchData != null)
         {
-            dispatchData.IsRun = 0;
-            dispatchData.StartAt = startTime.Ticks;
-            dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks;
+            dispatchData.Running = false;
+            dispatchData.StartAt = startTime;
+            dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin);
         }
 
         user.SelectableDispatchData.RemoveAll(cs => cs.SelectTid == req.Tid);
 
-        JsonDb.Save();           
+        await GameContext.SaveChangesAsync();       
 
-        // TODO
         await WriteDataAsync(response);
     }
 }

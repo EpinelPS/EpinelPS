@@ -74,8 +74,16 @@ public class AwakeningEquipment : LobbyMessage
         user.EquipmentAwakenings.Add(new EquipmentAwakeningData()
         {
             Isn = equipmentToAwaken.Isn,
-            Option = awakeningOption,
-            IsNewData = false
+            IsNewData = false,
+            IsOption1DisposableLock = awakeningOption.IsOption1DisposableLock,
+            IsOption2DisposableLock = awakeningOption.IsOption2DisposableLock,
+            IsOption3DisposableLock = awakeningOption.IsOption3DisposableLock,
+            Option1Id = awakeningOption.Option1Id,
+            Option2Id = awakeningOption.Option2Id,
+            Option3Id = awakeningOption.Option3Id,
+            Option1Lock = awakeningOption.Option1Lock,
+            Option2Lock = awakeningOption.Option2Lock,
+            Option3Lock = awakeningOption.Option3Lock,
         });
 
         response.Awakening = new NetEquipmentAwakening()

@@ -19,11 +19,18 @@ public class EnterStage : LobbyMessage
         if (clearedStage.StageCategory == StageCategory.Boss)
         {
             // When entering a boss stage, unlock boss information in campaign
-            if (!user.FieldInfoNew.ContainsKey(map))
-                user.FieldInfoNew.Add(map, new FieldInfoNew());
+            var field = user.FieldInfo.FirstOrDefault(f => f.MapName == map);
 
-            if (user.FieldInfoNew.TryGetValue(map, out FieldInfoNew? info))
-                info.BossEntered = true;
+            if (field == null)
+            {
+                field = new FieldInfoNew
+                {
+                    MapName = map
+                };
+                user.FieldInfo.Add(field);
+            }
+
+            field.BossEntered = true;
         }
 
         user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);

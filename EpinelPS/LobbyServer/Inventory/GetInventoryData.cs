@@ -36,7 +36,7 @@ public class GetInventoryData : LobbyMessage
             response.Awakenings.Add(new NetEquipmentAwakening()
             {
                 Isn = awakening.Isn,
-                Option = awakening.Option
+                Option = awakening.ToNet()
             });
         }
         // TODO:  UserRedeems

@@ -218,12 +218,12 @@ public class NetUtils
 
     public static double CalculateBoostValueForOutpost(User user, CurrencyType type)
     {
-        return user.OutpostBuffs.GetTotalPercentages(type) / 100.0;
+        return user.GetTotalPercentages(type) / 100.0;
     }
 
     public static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost)
     {
-        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel];
 
         int value = 0;
         double ratio = 0;
@@ -255,7 +255,7 @@ public class NetUtils
 
     private static long GetOutpostRewardAmount(User user, CurrencyType type, double mins, bool includeBoost, double ratio)
     {
-        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel.Level];
+        OutpostBattleRecord battleData = GameData.Instance.OutpostBattle[user.OutpostBattleLevel];
         double boost = 1.0;
         if (includeBoost)
             boost += CalculateBoostValueForOutpost(user, type);
@@ -321,7 +321,7 @@ public class NetUtils
             ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, true) * 10000,
             ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.Gold, 1, false) * 10000
         };
-        foreach (int item in user.OutpostBuffs.CreditPercentages)
+        foreach (int item in user.CreditPercentages)
         {
             goldBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
         }
@@ -333,7 +333,7 @@ public class NetUtils
             ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, true) * 10000,
             ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp, 1, false) * 10000
         };
-        foreach (int item in user.OutpostBuffs.BattleDataPercentages)
+        foreach (int item in user.BattleDataPercentages)
         {
             battleDataBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
         }
@@ -344,7 +344,7 @@ public class NetUtils
             ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, true) * 10000,
             ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.UserExp, 1, false) * 10000
         };
-        foreach (int item in user.OutpostBuffs.UserExpPercentages)
+        foreach (int item in user.UserExpPercentages)
         {
             xpBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
         }
@@ -355,7 +355,7 @@ public class NetUtils
             ValuePerMinAfterBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, true) * 100,
             ValuePerMinBeforeBuff = GetOutpostRewardAmount(user, CurrencyType.CharacterExp2, 60, false) * 100
         };
-        foreach (int item in user.OutpostBuffs.CoreDustPercentages)
+        foreach (int item in user.CoreDustPercentages)
         {
             coredustBuff.Buffs.Add(new NetTimeRewardBuff() { Tid = 22401, FunctionType = 2, SourceType = OutpostBuffSourceType.TacticAcademy, Value = item });
         }

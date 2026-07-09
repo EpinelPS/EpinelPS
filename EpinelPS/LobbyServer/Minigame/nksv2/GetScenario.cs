@@ -9,7 +9,7 @@ public class GetScenario : LobbyMessage
         User user = GetUser();
 
         ResGetNKSV2Scenario response = new();
-        response.ScenarioIdList.Add(user.MogInfo.CompletedScenarios);
+    //    response.ScenarioIdList.Add(user.MogInfo.CompletedScenarios);
 
         await WriteDataAsync(response);
     }

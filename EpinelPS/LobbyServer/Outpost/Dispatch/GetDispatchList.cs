@@ -28,16 +28,42 @@ public class GetDispatchList : LobbyMessage
         DateTime startTime = DateTime.UtcNow;
         int dateDay = user.GetDateDay();
 
-        if (user.UserDispatchData.Today != dateDay)
+        if (user.ResetableData.Dispatches.Count == 0)
         {
-            user.UserDispatchData.Today = dateDay;
-            user.UserDispatchData.dispatchDatas = new();
             user.DispatchClearList = new();
             user.SelectableDispatchData = new();
             user.DispatchResetCount = 0;
 
             //记录已选中的任务
             List<DispatchRecord> availableDispatchTable = new List<DispatchRecord>();
+
+
+            void GetAvailableDispatches(DispatchBoardRecord records)
+            {
+                for (int i = 0; i < records.DispatchMax; i++)
+                {
+                    var list = records.DispatchList;
+
+                    DispatchBoardData groudid = DispatchHelper.SelectItemByProbability(list, x => x.DispatchProb);
+                    List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
+                        .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
+
+                    dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                        .ToList();
+
+                    int randomNumber = random.Next(0, dispatchtable.Count);
+                    availableDispatchTable.Add(dispatchtable[randomNumber]);
+                    DispatchData netUserDispatch = new DispatchData
+                    {
+                        TableId = dispatchtable[randomNumber].Id,
+                        Running = false,
+                        StartAt = startTime,
+                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin)
+                    };
+                    user.ResetableData.Dispatches.Add(netUserDispatch);
+                    response.DispatchList.Add(netUserDispatch.ToNet());
+                }
+            }
 
             for (int i = 0; i < user.ResetableData.DispatchCount; i++)
             {
@@ -53,83 +79,28 @@ public class GetDispatchList : LobbyMessage
                 int randomNumber = random.Next(0, dispatchtable.Count);
 
                 availableDispatchTable.Add(dispatchtable[randomNumber]);
-                NetUserDispatchData netUserDispatch = new NetUserDispatchData
+                DispatchData netUserDispatch = new DispatchData
                 {
-                    Tid = dispatchtable[randomNumber].Id,
-                    IsRun = 0,
-                    StartAt = startTime.Ticks,
-                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                    //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
+                    TableId = dispatchtable[randomNumber].Id,
+                    Running = false,
+                    StartAt = startTime,
+                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin)
                 };
 
-                user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
-                response.DispatchList.Add(netUserDispatch);
+                user.ResetableData.Dispatches.Add(netUserDispatch);
+                response.DispatchList.Add(netUserDispatch.ToNet());
             }
 
-            if (dispatchcol != null)
-            {
-                for (int i = 0; i < dispatchcol.DispatchMax; i++)
-                {
-                    var list = dispatchcol.DispatchList;
-
-                    DispatchBoardData groudid = DispatchHelper.SelectItemByProbability(list, x => x.DispatchProb);
-                    List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
-                        .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
-
-                    // 从dispatchtable中移除已选择的Tid
-                    dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
-                        .ToList();
-
-                    int randomNumber = random.Next(0, dispatchtable.Count);
-                    availableDispatchTable.Add(dispatchtable[randomNumber]);
-                    NetUserDispatchData netUserDispatch = new NetUserDispatchData
-                    {
-                        Tid = dispatchtable[randomNumber].Id,
-                        IsRun = 0,
-                        StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                        //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
-                    };
-                    user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
-                    response.DispatchList.Add(netUserDispatch);
-                }
-            }
-
-            if (dispatchfav != null)
-            {
-                for (int i = 0; i < dispatchfav.DispatchMax; i++)
-                {
-                    var list = dispatchfav.DispatchList;
-
-                    DispatchBoardData groudid = DispatchHelper.SelectItemByProbability(list, x => x.DispatchProb);
-                    List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
-                        .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
-
-                    // 从dispatchtable中移除已选择的Tid
-                    dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
-                        .ToList();
-
-                    int randomNumber = random.Next(0, dispatchtable.Count);
-                    availableDispatchTable.Add(dispatchtable[randomNumber]);
-                    NetUserDispatchData netUserDispatch = new NetUserDispatchData
-                    {
-                        Tid = dispatchtable[randomNumber].Id,
-                        IsRun = 0,
-                        StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                        //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
-                    };
-                    user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
-                    response.DispatchList.Add(netUserDispatch);
-                }
-            }
+            GetAvailableDispatches(dispatchcol);
+            GetAvailableDispatches(dispatchfav);
         }
         else
         {
-            response.DispatchList.AddRange(user.UserDispatchData.dispatchDatas);
+            foreach (var item in user.ResetableData.Dispatches)
+                response.DispatchList.Add(item.ToNet());
         }
 
-        List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
+        //List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
 
         response.DispatchResetCount = user.DispatchResetCount;
         //response.SelectableDispatchList.AddRange(dontdispatcht);

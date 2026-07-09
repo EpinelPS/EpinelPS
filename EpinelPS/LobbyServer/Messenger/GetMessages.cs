@@ -14,11 +14,9 @@ public class GetMessages : LobbyMessage
 
         ResGetMessages response = new();
 
-        IEnumerable<NetMessage> newMessages = user.MessengerData.Where(x => x.Seq >= req.Seq);
-
-        foreach (NetMessage? item in newMessages)
+        foreach (var item in user.MessengerData.Where(x => x.Id >= req.Seq))
         {
-            response.Messages.Add(item);
+            response.Messages.Add(item.ToNet());
         }
 
         await WriteDataAsync(response);

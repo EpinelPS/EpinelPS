@@ -95,7 +95,7 @@ public class ExecGacha : LobbyMessage
                     UltiSkillLv = character.UltimateLevel,
                     Skill1Lv = character.Skill1Lvl,
                     Skill2Lv = character.Skill2Lvl,
-                    Tid = characterData.Id,
+                    Tid = characterData.Id
                 });
 
                 bool increase_item = false;
@@ -208,19 +208,17 @@ public class ExecGacha : LobbyMessage
                     Skill1Lvl = 1,
                     Skill2Lvl = 1,
                     Tid = characterData.Id,
-                    UltimateLevel = 1
+                    UltimateLevel = 1,
+                    NameCode = characterData.NameCode,
+                    User = user,
+                    BondLevel = 1,
+                    RareType = characterData.OriginalRare
                 });
 
                 // Add "New Character" Badge
                 user.AddBadge(BadgeContents.NikkeNew, characterData.NameCode.ToString());
                 user.AddTrigger(Trigger.ObtainCharacter, 1, characterData.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1);
-
-                if (characterData.OriginalRare == OriginalRareType.SSR || characterData.OriginalRare == OriginalRareType.SR)
-                {
-                    user.BondInfo.Add(new() { NameCode = characterData.NameCode, Lv = 1 });
-
-                }
             }
 
             response.Gacha.Add(gacha);

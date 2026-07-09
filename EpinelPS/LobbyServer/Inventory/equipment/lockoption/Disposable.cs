@@ -22,15 +22,15 @@ public class Disposable : LobbyMessage
         }
 
         int slot = 0;
-        if (awakening.Option.Option1Id == req.OptionId)
+        if (awakening.Option1Id == req.OptionId)
             slot = 1;
-        else if (awakening.Option.Option2Id == req.OptionId)
+        else if (awakening.Option2Id == req.OptionId)
             slot = 2;
-        else if (awakening.Option.Option3Id == req.OptionId)
+        else if (awakening.Option3Id == req.OptionId)
             slot = 3;
 
 
-        (int materialId, int materialCost) = GetMaterialInfoForAwakening(awakening.Option);
+        (int materialId, int materialCost) = GetMaterialInfoForAwakening(awakening);
 
         DbItemData? material = user.Items.FirstOrDefault(x => x.ItemType == materialId);
         if (material == null || material.Count < materialCost)
@@ -44,37 +44,37 @@ public class Disposable : LobbyMessage
             case 1:
                 if (req.IsLocked)
                 {
-                    awakening.Option.Option1Lock = true;
-                    awakening.Option.IsOption1DisposableLock = true;
+                    awakening.Option1Lock = true;
+                    awakening.IsOption1DisposableLock = true;
                 }
                 else
                 {
-                    awakening.Option.Option1Lock = false;
-                    awakening.Option.IsOption1DisposableLock = false;
+                    awakening.Option1Lock = false;
+                    awakening.IsOption1DisposableLock = false;
                 }
                 break;
             case 2:
                 if (req.IsLocked)
                 {
-                    awakening.Option.Option2Lock = true;
-                    awakening.Option.IsOption2DisposableLock = true;
+                    awakening.Option2Lock = true;
+                    awakening.IsOption2DisposableLock = true;
                 }
                 else
                 {
-                    awakening.Option.Option2Lock = false;
-                    awakening.Option.IsOption2DisposableLock = false;
+                    awakening.Option2Lock = false;
+                    awakening.IsOption2DisposableLock = false;
                 }
                 break;
             case 3:
                 if (req.IsLocked)
                 {
-                    awakening.Option.Option3Lock = true;
-                    awakening.Option.IsOption3DisposableLock = true;
+                    awakening.Option3Lock = true;
+                    awakening.IsOption3DisposableLock = true;
                 }
                 else
                 {
-                    awakening.Option.Option3Lock = false;
-                    awakening.Option.IsOption3DisposableLock = false;
+                    awakening.Option3Lock = false;
+                    awakening.IsOption3DisposableLock = false;
                 }
                 break;
         }
@@ -91,7 +91,7 @@ public class Disposable : LobbyMessage
         JsonDb.Save();
         await WriteDataAsync(response);
     }
-    private static int CalculateMaterialCost(NetEquipmentAwakeningOption option)
+    private static int CalculateMaterialCost(EquipmentAwakeningData option)
     {
         int lockedOptionCount = 0;
         int disposableLockOptionCount = 0;
@@ -121,7 +121,7 @@ public class Disposable : LobbyMessage
         return costRecord?.DisposableFixCostId ?? 101004;
     }
 
-    private static (int materialId, int materialCost) GetMaterialInfoForAwakening(NetEquipmentAwakeningOption option)
+    private static (int materialId, int materialCost) GetMaterialInfoForAwakening(EquipmentAwakeningData option)
     {
         int costId = CalculateMaterialCost(option);
         return GetMaterialInfo(costId);

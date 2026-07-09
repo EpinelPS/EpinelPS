@@ -169,10 +169,11 @@ public class AdminCommands
                     Skill1Lvl = 1,
                     Skill2Lvl = 1,
                     Tid = character.Id,  // Tid is the character ID
-                    UltimateLevel = 1
+                    UltimateLevel = 1,
+                    NameCode = character.NameCode,
+                    RareType = character.OriginalRare
                 });
 
-                user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1, 0);
             }
@@ -450,6 +451,9 @@ public class AdminCommands
     {
         if (!user.HasCharacter(characterId))
         {
+            var c = GameData.Instance.CharacterTable.FirstOrDefault(x => x.Key == characterId);
+            if (c.Value == null) return new RunCmdResponse() { error = $"ID {characterId} does not exist" };
+
             user.Characters.Add(new CharacterModel()
             {
                 CostumeId = 0,

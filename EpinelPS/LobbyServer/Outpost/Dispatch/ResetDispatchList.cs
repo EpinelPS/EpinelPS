@@ -26,17 +26,16 @@ public class ResetDispatchList : LobbyMessage
             response.Currencies.Add(new NetUserCurrencyData() { Type = (int)CurrencyType.FreeCash, Value = 50 });
         }
 
-        List<NetUserDispatchData> list = user.UserDispatchData.dispatchDatas.Where(x => x.IsRun == 0).ToList();
-        List<NetUserDispatchData> olist = user.UserDispatchData.dispatchDatas.Where(x => x.IsRun == 1).ToList();
+        var notRunning = user.ResetableData.Dispatches.Where(x => !x.Running).ToList();
+        var running = user.ResetableData.Dispatches.Where(x => x.Running).ToList();
 
-        List<int> runlist = user.UserDispatchData.dispatchDatas.Select(x => x.Tid).ToList();
+        List<int> runlist = user.ResetableData.Dispatches.Select(x => x.TableId).ToList();
 
-
-        if (list.Count > 0)
+        if (notRunning.Count > 0)
         {
-            foreach (NetUserDispatchData data in list)
+            foreach (var data in notRunning)
             {
-                DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values.Where(c => c.Id == data.Tid).FirstOrDefault();
+                DispatchRecord? dispatch = GameData.Instance.DispatchTable.Values.Where(c => c.Id == data.TableId).FirstOrDefault();
                 List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
                     .Where(x => x.DispatchGroup == dispatch.DispatchGroup).ToList();
                 dispatchtable = dispatchtable.Where(x => !runlist.Contains(x.Id)).ToList();
@@ -44,25 +43,26 @@ public class ResetDispatchList : LobbyMessage
                 int randomNumber = random.Next(0, dispatchtable.Count);
 
                 runlist.Add(dispatchtable[randomNumber].Id);
-                NetUserDispatchData netUserDispatch = new NetUserDispatchData
+                DispatchData netUserDispatch = new DispatchData
                 {
-                    Tid = dispatchtable[randomNumber].Id,
-                    IsRun = 0,
-                    StartAt = startTime.Ticks,
-                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
+                    TableId = dispatchtable[randomNumber].Id,
+                    Running = false,
+                    StartAt = startTime,
+                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin)
                 };
 
-                user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
-                user.UserDispatchData.dispatchDatas.RemoveAll(x => x.Tid == data.Tid);
-                runlist.Remove(data.Tid);
-                response.DispatchList.Add(netUserDispatch);
+                user.ResetableData.Dispatches.Add(netUserDispatch);
+                user.ResetableData.Dispatches.RemoveAll(x => x.TableId == data.TableId);
+                runlist.Remove(data.TableId);
+                response.DispatchList.Add(netUserDispatch.ToNet());
 
             }
         }
 
-        List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
+        //List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
 
-        response.DispatchList.AddRange(olist);
+        foreach (var item in running)
+            response.DispatchList.Add(item.ToNet());
         response.DispatchResetCount = user.DispatchResetCount;
         await GameContext.SaveChangesAsync();
         //response.SelectableDispatchList.AddRange(dontdispatcht);

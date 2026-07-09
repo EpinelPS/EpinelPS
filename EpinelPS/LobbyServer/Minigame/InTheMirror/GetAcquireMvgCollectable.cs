@@ -11,7 +11,7 @@ public class GetAcquireMvgCollectable : LobbyMessage
 
         var user = GetUser();
 
-        user.ArcadeInTheMirrorData.Collectables.Add(request.CollectableId);
+       // user.ArcadeInTheMirrorData.Collectables.Add(request.CollectableId);
 
         await WriteDataAsync(new ResAcquireArcadeMvgCollectable());
 

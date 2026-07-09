@@ -12,15 +12,10 @@ public class RecordCutscene : LobbyMessage
         User user = GetUser();
         ResRecordArcadeBBQCutScene response = new();
 
-        NetArcadeBBQData? bBQData = user.BBQInfoData;
-        List<int>? list = bBQData.RecordedCutSceneList.ToList();
+        if (user.BBQInfoData.RecordedCutScenes.Contains(req.CutSceneTid))
+            user.BBQInfoData.RecordedCutScenes.Add(req.CutSceneTid);
 
-        user.AddUnique(list, req.CutSceneTid);
-
-        bBQData.RecordedCutSceneList.Clear();    
-        bBQData.RecordedCutSceneList.AddRange(list);
-
-        response.Data = bBQData;
+        response.Data = user.BBQInfoData.ToNet();
 
         JsonDb.Save();
         // TODO

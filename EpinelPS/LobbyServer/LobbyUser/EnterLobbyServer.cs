@@ -29,7 +29,11 @@ public class EnterLobbyServer : LobbyMessage
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
             Nickname = userDB.Nickname,
             SynchroLv = 1,
-            OutpostBattleLevel = user.OutpostBattleLevel,
+            OutpostBattleLevel = new()
+            {
+                Level = user.OutpostBattleLevel,
+                Exp = user.OutpostBattleLevelExp
+            },
             OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs },
 
             Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom } }

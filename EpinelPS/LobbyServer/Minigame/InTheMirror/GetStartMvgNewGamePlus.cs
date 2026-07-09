@@ -12,7 +12,7 @@ public class GetStartMvgNewGamePlus : LobbyMessage
 
         var user = GetUser();
 
-        foreach (var questData in user.ArcadeInTheMirrorData.Quests.Where(q => q.IsReceived == false))
+      /*  foreach (var questData in user.ArcadeInTheMirrorData.Quests.Where(q => q.IsReceived == false))
         {
             var quest = GameData.Instance.EventMvgQuestTable[questData.QuestId];
             if (quest.RewardId != 0)
@@ -43,7 +43,7 @@ public class GetStartMvgNewGamePlus : LobbyMessage
             quest.IsReceived = default;
         }
 
-        user.ArcadeInTheMirrorData.ProgressJson = request.ProgressJson;
+        user.ArcadeInTheMirrorData.ProgressJson = request.ProgressJson;*/
 
         await WriteDataAsync(new ResStartArcadeMvgNewGamePlus());
 

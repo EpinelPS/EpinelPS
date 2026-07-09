@@ -13,14 +13,28 @@ public class GetCharacterAttractiveList : LobbyMessage
             CounselAvailableCount = 3 // TODO
         };
 
-        foreach (NetUserAttractiveData item in user.BondInfo)
+        foreach (var item in user.Characters)
         {
-            response.Attractives.Add(item);
-            item.CanCounselToday = true;
-
+            if (item.RareType != Data.OriginalRareType.R && item.RareType != Data.OriginalRareType.None)
+            {
+                var data = new NetUserAttractiveData()
+                {
+                   NameCode = item.NameCode,
+                   CanCounselToday = true, // TODO
+                   CompleteRewardStatus = item.RewardStatus,
+                   CounseledCount = item.TotalCounseledCount,
+                   Lv = item.BondLevel,
+                   Exp = item.BondLevelExp,
+                   IsFavorites = item.Favorite,
+                   
+                };
+                data.CounselDialogCompleteIds.AddRange(item.CompletedDialogs);
+                data.FlushableWatchedDialogIds.AddRange(item.FlushableWatchedDialogIds);
+                data.ObtainedRewardLevels.AddRange(item.ObtainedRewardLevels);
+                response.Attractives.Add(data);
+            }
         }
 
-        // TODO: Validate response from real server and pull info from user info
         await WriteDataAsync(response);
     }
 }

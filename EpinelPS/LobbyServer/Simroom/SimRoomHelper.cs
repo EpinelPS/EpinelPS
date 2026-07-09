@@ -824,7 +824,7 @@ public static class SimRoomHelper
                 }
 
                 // Update User CurrentSeasonData
-                highScoreData.CreatedAt = DateTime.UtcNow.Date.ToTimestamp();
+                highScoreData.CreatedAt = DateTime.UtcNow.Date;
                 currentSeasonData.CurrentSeasonHighScore = highScoreData;
                 currentSeasonData.CurrentSubSeasonHighScore = highScoreData;
                 user.ResetableData.SimRoomData.CurrentSeasonData = currentSeasonData;

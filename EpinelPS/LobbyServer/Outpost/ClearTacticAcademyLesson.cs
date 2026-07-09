@@ -53,7 +53,7 @@ public class ClearTacticAcademyLesson : LobbyMessage
             {
                 if (item.LessonRewardId != 0 && item.LessonRewardValue != 0)
                 {
-                    user.OutpostBuffs.GetPercentages((CurrencyType)item.LessonRewardId).Add(item.LessonRewardValue);
+                    user.GetPercentages((CurrencyType)item.LessonRewardId).Add(item.LessonRewardValue);
                 }
             }
         }

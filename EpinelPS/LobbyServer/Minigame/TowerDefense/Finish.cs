@@ -23,9 +23,9 @@ public class Finish : LobbyMessage
             {
                 data.ChallengeMaxScore = req.Score;
 
-                if (user.Guild.guildId > 0)
+                if (user.guildId > 0)
                 {
-                    MiniGameHelper.InsertOrUpdate(req.ArcadeManagerId, user.ID, user.Guild.guildId.Value, req.Score, 0);
+                    MiniGameHelper.InsertOrUpdate(req.ArcadeManagerId, user.ID, user.guildId.Value, req.Score, 0);
                 }               
             }
 

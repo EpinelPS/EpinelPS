@@ -10,12 +10,12 @@ public class GetFieldObjectsCount : LobbyMessage
 
         ResGetCampaignFieldObjectItemsNum response = new();
 
-        foreach (KeyValuePair<string, FieldInfoNew> map in user.FieldInfoNew)
+        foreach (var map in user.FieldInfo)
         {
             response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
             {
-                MapId = map.Key,
-                Count = map.Value.CompletedObjects.Where(x => x.Type == 1).Count()
+                MapId = map.MapName,
+                Count = map.CompletedObjects.Where(x => x.Type == 1).Count()
             });
         }
 

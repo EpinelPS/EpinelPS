@@ -22,7 +22,7 @@ public class ResetOption : LobbyMessage
             return;
         }
 
-        NetEquipmentAwakeningOption resetOption = new();
+        EquipmentAwakeningData resetOption = new();
         Random random = new();
 
         (int optionId, bool isLocked, bool isDisposableLocked)[] slotLockInfo = new (int optionId, bool isLocked, bool isDisposableLocked)[3];
@@ -31,9 +31,9 @@ public class ResetOption : LobbyMessage
         int lockedOptionCount = 0;
         for (int i = 1; i <= 3; i++)
         {
-            int currentOptionId = GetOptionIdForSlot(awakening.Option, i);
-            bool isLocked = IsOptionLocked(awakening.Option, i);
-            bool isDisposableLocked = IsOptionDisposableLocked(awakening.Option, i);
+            int currentOptionId = GetOptionIdForSlot(awakening, i);
+            bool isLocked = IsOptionLocked(awakening, i);
+            bool isDisposableLocked = IsOptionDisposableLocked(awakening, i);
 
             slotLockInfo[i - 1] = (currentOptionId, isLocked, isDisposableLocked);
 
@@ -76,18 +76,15 @@ public class ResetOption : LobbyMessage
         EquipmentAwakeningData newAwakening = new()
         {
             Isn = awakening.Isn,
-            Option = new NetEquipmentAwakeningOption()
-            {
-                Option1Id = resetOption.Option1Id,
-                Option1Lock = resetOption.Option1Lock,
-                IsOption1DisposableLock = resetOption.IsOption1DisposableLock,
-                Option2Id = resetOption.Option2Id,
-                Option2Lock = resetOption.Option2Lock,
-                IsOption2DisposableLock = resetOption.IsOption2DisposableLock,
-                Option3Id = resetOption.Option3Id,
-                Option3Lock = resetOption.Option3Lock,
-                IsOption3DisposableLock = resetOption.IsOption3DisposableLock
-            },
+            IsOption1DisposableLock = resetOption.IsOption1DisposableLock,
+            IsOption2DisposableLock = resetOption.IsOption2DisposableLock,
+            IsOption3DisposableLock = resetOption.IsOption3DisposableLock,
+            Option1Id = resetOption.Option1Id,
+            Option2Id = resetOption.Option2Id,
+            Option3Id = resetOption.Option3Id,
+            Option1Lock = resetOption.Option1Lock,
+            Option2Lock = resetOption.Option2Lock,
+            Option3Lock = resetOption.Option3Lock,
             IsNewData = true
         };
 
@@ -113,7 +110,7 @@ public class ResetOption : LobbyMessage
     }
 
 
-    private void ProcessOptionSlots(EquipmentAwakeningData awakening, NetEquipmentAwakeningOption resetOption, (int optionId, bool isLocked, bool isDisposableLocked)[] slotLockInfo, List<int> lockedOptionStateEffectIds)
+    private void ProcessOptionSlots(EquipmentAwakeningData awakening, EquipmentAwakeningData resetOption, (int optionId, bool isLocked, bool isDisposableLocked)[] slotLockInfo, List<int> lockedOptionStateEffectIds)
     {
         Random random = new();
         // 1.0 = 100% chance for slot 1, 0.5 = 50% chance for slot 2, 0.3 = 30% chance for slot 3
@@ -131,7 +128,7 @@ public class ResetOption : LobbyMessage
             {
                 SetOptionForSlot(resetOption, i, currentOptionId, false, false);
 
-                UnlockDisposableOption(awakening.Option, i);
+                UnlockDisposableOption(awakening, i);
             }
             else
             {
@@ -157,7 +154,7 @@ public class ResetOption : LobbyMessage
         }
     }
 
-    private void UnlockDisposableOption(NetEquipmentAwakeningOption option, int slot)
+    private void UnlockDisposableOption(EquipmentAwakeningData option, int slot)
     {
         SetOptionForSlot(option, slot, GetOptionIdForSlot(option, slot), false, false);
     }
@@ -176,7 +173,7 @@ public class ResetOption : LobbyMessage
     }
 
 
-    private int GetOptionIdForSlot(NetEquipmentAwakeningOption option, int slot)
+    private int GetOptionIdForSlot(EquipmentAwakeningData option, int slot)
     {
         return slot switch
         {
@@ -188,7 +185,7 @@ public class ResetOption : LobbyMessage
     }
 
 
-    private bool IsOptionLocked(NetEquipmentAwakeningOption option, int slot)
+    private bool IsOptionLocked(EquipmentAwakeningData option, int slot)
     {
         return slot switch
         {
@@ -199,7 +196,7 @@ public class ResetOption : LobbyMessage
         };
     }
 
-    private bool IsOptionDisposableLocked(NetEquipmentAwakeningOption option, int slot)
+    private bool IsOptionDisposableLocked(EquipmentAwakeningData option, int slot)
     {
         return slot switch
         {
@@ -210,7 +207,7 @@ public class ResetOption : LobbyMessage
         };
     }
 
-    private void SetOptionForSlot(NetEquipmentAwakeningOption option, int slot, int optionId, bool locked, bool disposableLocked)
+    private void SetOptionForSlot(EquipmentAwakeningData option, int slot, int optionId, bool locked, bool disposableLocked)
     {
         switch (slot)
         {

@@ -33,16 +33,21 @@ public class ClearFavoriteItemQuestStage : LobbyMessage
         }
 
         string stageMapId = GameData.Instance.GetMapIdFromChapter(stageData.ChapterId, stageData.ChapterMod);
-        if (!user.FieldInfoNew.ContainsKey(stageMapId))
+
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == stageMapId);
+
+        if (field == null)
         {
-            user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
-        }
-        if (!user.FieldInfoNew[stageMapId].CompletedStages.Contains(req.StageId))
-        {
-            user.FieldInfoNew[stageMapId].CompletedStages.Add(req.StageId);
+            field = new FieldInfoNew
+            {
+                MapName = stageMapId
+            };
+            user.FieldInfo.Add(field);
         }
 
-        JsonDb.Save();
+        field.CompletedStages.Add(req.StageId);
+
+        await GameContext.SaveChangesAsync();
 
         await WriteDataAsync(response);
     }

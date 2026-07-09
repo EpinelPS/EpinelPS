@@ -35,7 +35,7 @@ public class SongGet : LobbyMessage
                 response.MyFriendSongRankDataList.Add(rankData);
             }
 
-            if (urank.Count > 0 && user.Guild.guildId > 0)
+            if (urank.Count > 0 && user.guildId > 0)
             {
                 var (Entity, Rank) = urank.OrderBy(x => x.Rank).First();
                 response.MyUnionSongRankDataList.Add(new NetMyMiniGameTtsSongRankData() { Difficulty = Entity.Difficulty, Position = Rank, Score = Entity.Score });

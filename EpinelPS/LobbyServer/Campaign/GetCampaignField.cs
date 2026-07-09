@@ -32,18 +32,18 @@ public class GetCampaignField : LobbyMessage
             response.TeamPositions.Add(new NetCampaignTeamPosition() { TeamNumber = 1, Type = 1, Position = new NetVector3() { } });
         }
 
-        string resultingJson;
-        if (!user.MapJson.TryGetValue(req.MapId, out string? value))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            resultingJson = "";
-            user.MapJson.Add(req.MapId, resultingJson);
-        }
-        else
-        {
-            resultingJson = value;
+            field = new FieldInfoNew
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
 
-        response.Json = resultingJson;
+        response.Json = field.PositionJson;
 
         await WriteDataAsync(response);
     }

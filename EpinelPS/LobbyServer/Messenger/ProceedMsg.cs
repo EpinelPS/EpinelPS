@@ -16,7 +16,7 @@ public class ProceedMsg : LobbyMessage
 
         KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
 
-        response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId);
+        response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId).ToNet();
 
         if (msgToSave.Value.RewardId != 0)
         {

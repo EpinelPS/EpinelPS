@@ -11,7 +11,7 @@ public class GetMvgSave : LobbyMessage
 
         var user = GetUser();
 
-        user.ArcadeInTheMirrorData = request.Data;
+        //user.ArcadeInTheMirrorData = request.Data;
 
         await WriteDataAsync(new ResSaveArcadeMvgData());
 

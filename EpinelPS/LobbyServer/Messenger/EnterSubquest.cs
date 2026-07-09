@@ -16,7 +16,7 @@ public class EnterSubquest : LobbyMessage
         KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
         KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.ConversationId && x.Value.IsOpener).First();
 
-        response.Message = user.CreateMessage(conversation.Value);
+        response.Message = user.CreateMessage(conversation.Value).ToNet();
         JsonDb.Save();
 
         await WriteDataAsync(response);

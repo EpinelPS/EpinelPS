@@ -13,20 +13,39 @@ public class AccessToken
     public long ExpirationTime { get; set; }
     public ulong UserID { get; set; }
 }
-public class FieldInfo
+public class ClearedTutorialData
 {
-    public List<NetFieldStageData> CompletedStages { get; set; } = [];
-    public List<NetFieldObject> CompletedObjects { get; set; } = [];
+    public int GroupId { get; set; }
+
+    public int Id { get; set; }
+    public int VersionGroup { get; set; }
 }
 
+public class CompletedFieldObject
+{
+    public int Id { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
+    public ulong UserId { get; set; }
+    public DateTime ActionAt { get; set; }
+    public int Type { get; set; }
+    public string PositionId { get; set; }
+    public string Json { get; set; }
+}
 public class FieldInfoNew
 {
+    public ulong Id { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public User User { get; set; }
+    public ulong UserId { get; set; }
     public List<int> CompletedStages { get; set; } = [];
-    public List<NetFieldObject> CompletedObjects { get; set; } = [];
+    public List<CompletedFieldObject> CompletedObjects { get; set; } = [];
     public List<int> FieldItemTableIdList { get; set; } = [];
     public List<int> AcquiredPasswordList { get; set; } = [];
     public List<int> UnlockedDoorList { get; set; } = [];
     public bool BossEntered { get; set; } = false;
+    public string PositionJson { get; set; } = "";
+    public string MapName { get; set; } = "";
 }
 
 public class CharacterModel
@@ -41,6 +60,17 @@ public class CharacterModel
     public int Skill2Lvl { get; set; } = 1;
     public int Grade { get; set; } = 0;
     public bool IsMainForce { get; set; } = false;
+    public int NameCode { get; set; }
+    public int BondLevel { get; set; } = 1;
+    public int BondLevelExp { get; set; }
+    public bool Favorite { get; set; }
+    public int TotalCounseledCount { get; set; }
+    public List<int> CompletedDialogs { get; set; }
+    public List<int> FlushableWatchedDialogIds { get; set; }
+    public List<int> ObtainedRewardLevels { get; set; }
+    public OriginalRareType RareType { get; set; }
+    public CounselDialogCompleteRewardStatus RewardStatus { get; set; }
+
     [ForeignKey(nameof(UserId))]
     public User User { get; set; }
     public ulong UserId { get; set; }
@@ -80,14 +110,38 @@ public class DbItemData
 
 public class EquipmentAwakeningData
 {
+    [Key]
     public long Isn { get; set; }
-    public NetEquipmentAwakeningOption Option { get; set; }
     public bool IsNewData { get; set; }
+
+    public int Option1Id { get; set; }
+    public bool Option1Lock { get; set; }
+    public bool IsOption1DisposableLock { get; set; }
+    public int Option2Id { get; set; }
+    public bool Option2Lock { get; set; }
+    public bool IsOption2DisposableLock { get; set; }
+    public int Option3Id { get; set; }
+    public bool Option3Lock { get; set; }
+    public bool IsOption3DisposableLock { get; set; }
 
     public EquipmentAwakeningData()
     {
-        Option = new NetEquipmentAwakeningOption();
         IsNewData = false;
+    }
+    public NetEquipmentAwakeningOption ToNet()
+    {
+        return new()
+        {
+            IsOption1DisposableLock = IsOption1DisposableLock,
+            IsOption2DisposableLock = IsOption2DisposableLock,
+            IsOption3DisposableLock = IsOption3DisposableLock,
+            Option1Id = Option1Id,
+            Option2Id = Option2Id,
+            Option3Id = Option3Id,
+            Option1Lock = Option1Lock,
+            Option2Lock = Option2Lock,
+            Option3Lock = Option3Lock
+        };
     }
 }
 public class EventData
@@ -129,6 +183,7 @@ public class EventShopBuyCountData
 
 public class SynchroSlot
 {
+    public int Id { get; set; }
     /// <summary>
     /// Index of slot, 1 based
     /// </summary>
@@ -154,6 +209,8 @@ public class RecycleRoomResearchProgress
 // Simroom Data
 public class SimRoomData
 {
+    [Key]
+    public int Id { get; set; }
     public int CurrentDifficulty { get; set; }
     public int CurrentChapter { get; set; }
     public List<int> Buffs { get; set; } = [];
@@ -167,6 +224,7 @@ public class SimRoomData
 }
 public class OverclockData
 {
+    [Key] public ulong Id { get; set; }
     public int CurrentSeason { get; set; }
     public int CurrentSubSeason { get; set; }
     public List<int> CurrentOptionList { get; set; } = [];
@@ -181,14 +239,17 @@ public class OverclockData
 }
 public class OverclockHighScoreData
 {
+    [Key] public ulong Id { get; set; }
     public int Season { get; set; }
     public int SubSeason { get; set; }
     public List<int> OptionList { get; set; } = [];
     public int OptionLevel { get; set; }
-    public Google.Protobuf.WellKnownTypes.Timestamp? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 }
 public class SimRoomEvent
 {
+    [Key]
+    public int Id { get; set; }
     public SimRoomEventLocationInfo Location { get; set; } = new();
     public bool Selected { get; set; }
     public SimRoomBattleEvent Battle { get; set; } = new();
@@ -197,12 +258,15 @@ public class SimRoomEvent
 }
 public class SimRoomEventLocationInfo
 {
+    [Key]
+    public int Id { get; set; }
     public int Chapter { get; set; }
     public int Stage { get; set; }
     public int Order { get; set; }
 }
 public class SimRoomChapterInfo
 {
+    [Key] public ulong Id { get; set; }
     public int Difficulty { get; set; }
     public int Chapter { get; set; }
 }
@@ -229,12 +293,15 @@ public class SimRoomSelectionGroupElement
 }
 public class SimRoomCharacterHp
 {
+    [Key]
     public long Csn { get; set; }
     public int Hp { get; set; }
 }
 
 public class ResetableData
 {
+    [Key]
+    public int Id;
     public int WipeoutCount { get; set; } = 0;
     public bool ClearedSimulationRoom { get; set; } = false;
     public int InterceptionTickets { get; set; } = 3;
@@ -248,6 +315,7 @@ public class ResetableData
 
 public class ResetableDataNew
 {
+    public int Id { get; set; }
     public int WipeoutCount { get; set; } = 0;
     public bool ClearedSimulationRoom { get; set; } = false;
     public int InterceptionTickets { get; set; } = 3;
@@ -257,47 +325,19 @@ public class ResetableDataNew
     public int[] TowerCount { get; set; } = [0, 0, 0, 0];
     //public Dictionary<int, int> DailyCounselCount { get; set; } = [];
     public int DispatchCount { get; set; } = 0;
+    public List<DispatchData> Dispatches = new();
 }
 public class WeeklyResetableData
 {
+    public int Id { get; set; }
     public List<int> CompletedWeeklyMissions { get; set; } = [];
     public int WeeklyMissionPoints { get; set; }
-}
-public class OutpostBuffs
-{
-    public List<int> CreditPercentages { get; set; } = [];
-    public List<int> CoreDustPercentages { get; set; } = [];
-    public List<int> BattleDataPercentages { get; set; } = [];
-    public List<int> UserExpPercentages { get; set; } = [];
-
-    public List<int> GetPercentages(CurrencyType currency)
-    {
-        if (currency == CurrencyType.Gold)
-            return CreditPercentages;
-        else if (currency == CurrencyType.UserExp)
-            return UserExpPercentages;
-        else if (currency == CurrencyType.CharacterExp)
-            return BattleDataPercentages;
-        else if (currency == CurrencyType.CharacterExp2)
-            return CoreDustPercentages;
-
-        throw new InvalidOperationException();
-    }
-    public int GetTotalPercentages(CurrencyType currency)
-    {
-        int result = 0;
-        var numbs = GetPercentages(currency);
-        foreach (var item in numbs)
-        {
-            result += item;
-        }
-
-        return result;
-    }
 }
 
 public class JukeBoxSetting
 {
+    [Key]
+    public long Id { get; set; }
     public NetJukeboxLocation Location { get; set; }
     public NetJukeboxBgmType Type { get; set; }
     public int TableId { get; set; }
@@ -316,10 +356,6 @@ public class UnlockData
     }
 }
 
-public class MogMinigameInfo
-{
-    public List<string> CompletedScenarios { get; set; } = [];
-}
 public class BadgeModel
 {
     public string Location { get; set; } = "";
@@ -547,17 +583,46 @@ public class MiniGameScenarios
 
 public class DispatchData
 {
-    public int Today { get; set; }
-    public List<NetUserDispatchData> dispatchDatas { get; set; }
+    public ulong Id { get; set; }
+    public int TableId { get; set; }
+    public bool Running { get; set; }
+    public DateTime StartAt { get; set; }
+    public DateTime EndAt { get; set; }
+
+    public NetUserDispatchData ToNet()
+    {
+        return new()
+        {
+            StartAt = StartAt.Ticks,
+            EndAt = EndAt.Ticks,
+            IsRun = Running == true ? 1 : 0,
+            Tid = TableId
+        };
+    }
 }
 
-
-
-public class GuildData
+public class DispatchDataSelectable
 {
-    public int? guildId { get; set; }
-    public long? LeaveAt { get; set; }
+    public ulong Id { get; set; }
+    public int DispatchGroupId { get; set; }
+    public int SelectSlotId { get; set; }
+    public int SelectTid { get; set; }
+    public bool Running { get; set; }
+    public DateTime StartAt { get; set; }
+    public DateTime EndAt { get; set; }
 
+    public NetSelectableDispatchData ToNet()
+    {
+        return new()
+        {
+            StartAt = StartAt.Ticks,
+            EndAt = EndAt.Ticks,
+            IsRun = Running,
+            DispatchGroupId = DispatchGroupId,
+            SelectSlotId = SelectSlotId,
+            SelectTid = SelectTid
+        };
+    }
 }
 
 public class StellarBladeDatas
@@ -690,4 +755,52 @@ public class ArcadeScoreRecord
     public long Score { get; set; }
     public int ArcadeId { get; set; }
     public int ModeId { get; set; }
+}
+
+public class ArcadeBBQData
+{
+    public int Id { get; set; }
+    public int ArcadeId { get; set; }
+    public int HighScore { get; set; }
+    public long TotalScore { get; set; }
+    public List<int> StepUpRewarded { get; set; }
+    public List<int> RecordedCutScenes { get; set; }
+    public int PlayCount { get; set; }
+
+    public NetArcadeBBQData ToNet()
+    {
+        NetArcadeBBQData result = new()
+        {
+            ArcadeId = ArcadeId,
+            HighScore = HighScore,
+            PlayCount = PlayCount,
+            TotalAccumulatedScore = TotalScore
+        };
+
+        result.StepUpRewardedList.AddRange(StepUpRewarded);
+        result.RecordedCutSceneList.AddRange(RecordedCutScenes);
+
+        return result;
+    }
+}
+
+public class DbMessage
+{
+    public long Id { get; set; }
+    public string ConversationId { get; set; }
+    public string MessageId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public int State { get; set; }
+
+    public NetMessage ToNet()
+    {
+        return new()
+        {
+            ConversationId = ConversationId,
+            CreatedAt = CreatedAt.Ticks,
+            MessageId = MessageId,
+            State = State,
+            Seq = Id
+        };
+    }
 }

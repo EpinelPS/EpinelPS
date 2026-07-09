@@ -15,7 +15,7 @@ public class ObtainDispatchReward : LobbyMessage
         ResObtainDispatchReward response = new();
         User user = GetUser();
         NetRewardData rewardData = new();
-        List<NetUserDispatchData> dispatchDatas = user.UserDispatchData.dispatchDatas;
+        var dispatchDatas = user.ResetableData.Dispatches;
 
         foreach (var item in req.TidList)
         {
@@ -23,21 +23,20 @@ public class ObtainDispatchReward : LobbyMessage
             int rewardid = dispatch.RewardId;
             PassHelper.RewardsForUser(user, ref rewardData, rewardid);
             user.AddUnique(user.DispatchClearList, item);
-            user.UserDispatchData.dispatchDatas.RemoveAll(x => x.Tid == item);
-            dispatchDatas.RemoveAll(x => x.Tid == item);
+            user.ResetableData.Dispatches.RemoveAll(x => x.TableId == item);
 
             user.AddTrigger(Trigger.SendDispatch, 1, 0);
             user.AddTrigger(Trigger.SendDispatchGrade, 1, dispatch.DispatchGradeId);
         }
 
 
-        List<NetSelectableDispatchData> dispatchtable = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
+        //List<NetSelectableDispatchData> dispatchtable = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
 
         response.Reward = rewardData;
-        response.DispatchList.AddRange(dispatchDatas);
-        response.SelectableDispatchList.AddRange(dispatchtable);
+        foreach (var item in user.ResetableData.Dispatches)
+            response.DispatchList.Add(item.ToNet());
 
-        JsonDb.Save();
+        await GameContext.SaveChangesAsync();
         await WriteDataAsync(response);
     }
 
