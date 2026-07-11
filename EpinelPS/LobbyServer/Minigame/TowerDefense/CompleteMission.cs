@@ -23,7 +23,7 @@ public class CompleteMission : LobbyMessage
             List<int> rewardlist = [];
             foreach (var item in req.MissionUidList)
             {
-                NetArcadeTowerDefenseMissionProgress? commiss = data.MissionProgressList.FirstOrDefault(x => x.MissionUid == item);
+                ArcadeTowerDefenseMissionProgress? commiss = data.MissionProgressList.FirstOrDefault(x => x.MissionUid == item);
                 if (commiss!=null)
                 {
                     commiss.ReceivedAt = DateTime.UtcNow.Date.ToTimestamp();
@@ -37,10 +37,7 @@ public class CompleteMission : LobbyMessage
                             foreach (var citem in dailylist)
                             {
                                 var pro = data.MissionProgressList.FirstOrDefault(x => x.MissionUid == citem.Id);
-                                if (pro != null)
-                                {
-                                    pro.Progress += mission.RewardValue;
-                                }
+                                if (pro?.ReceivedAt == null) pro.Progress += mission.RewardValue;                                
                             }
                             break;
                         case EventTowerDefenseMissionRewardType.Item:
@@ -53,7 +50,9 @@ public class CompleteMission : LobbyMessage
             }
 
             ret = RewardUtils.RegisterRewardsForUserDou(user, rewardlist);
-            response.MissionProgressList.AddRange(data.MissionProgressList);
+            var missprolist = MiniGameHelper
+                .ToProtoList<NetArcadeTowerDefenseMissionProgress, ArcadeTowerDefenseMissionProgress>(data.MissionProgressList);
+            response.MissionProgressList.AddRange(missprolist);
             response.Reward = ret;
         }
         // TODO

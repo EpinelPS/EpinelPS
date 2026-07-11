@@ -22,7 +22,7 @@ public class Buy : LobbyMessage
                 .Where(x => x.Id == req.ShopId).FirstOrDefault();
             if (shop!=null)
             {
-                NetStellarBladeCurrency? gold = stellar.Currency.First(x => x.CurrencyType == (int)SBCurrencyType.Gold);
+                StellarBladeCurrency? gold = stellar.Currency.First(x => x.CurrencyType == (int)SBCurrencyType.Gold);
                 gold.Amount -= shop.ItemPrice;
 
                 stellar.SbItemIdList.AddUnique(shop.ItemId);

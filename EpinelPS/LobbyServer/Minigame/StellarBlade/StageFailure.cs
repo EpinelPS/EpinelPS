@@ -38,7 +38,7 @@ public class StageFailure : LobbyMessage
             }
             else
             {
-                stellar.StatisticsData.TryAdd(req.StageId, new ResArcadeGetStellarBladeStatistics.Types.NetStatisticsData()
+                stellar.StatisticsData.TryAdd(req.StageId, new StatisticsData()
                 {
                     StageId = req.StageId,
                     MinDuration = req.Duration,

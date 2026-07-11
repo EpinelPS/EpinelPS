@@ -29,7 +29,7 @@ public class BbqClear : LobbyMessage
         user.BBQInfoData.PlayCount += 1;
         user.BBQInfoData.TotalAccumulatedScore += newscore;
 
-        response.Data = user.BBQInfoData;
+        response.Data = MiniGameHelper.BBQToNet(user.BBQInfoData);
 
         JsonDb.Save();    
         // TODO

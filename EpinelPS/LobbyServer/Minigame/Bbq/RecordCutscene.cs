@@ -11,16 +11,9 @@ public class RecordCutscene : LobbyMessage
         ReqRecordArcadeBBQCutScene req = await ReadData<ReqRecordArcadeBBQCutScene>();
         User user = GetUser();
         ResRecordArcadeBBQCutScene response = new();
-
-        NetArcadeBBQData? bBQData = user.BBQInfoData;
-        List<int>? list = bBQData.RecordedCutSceneList.ToList();
-
-        user.AddUnique(list, req.CutSceneTid);
-
-        bBQData.RecordedCutSceneList.Clear();    
-        bBQData.RecordedCutSceneList.AddRange(list);
-
-        response.Data = bBQData;
+        
+        user.BBQInfoData.RecordedCutSceneList.AddUnique(req.CutSceneTid);
+        response.Data = MiniGameHelper.BBQToNet(user.BBQInfoData);
 
         JsonDb.Save();
         // TODO

@@ -9,7 +9,7 @@ public class GetMinigameData : LobbyMessage
 
         ResGetArchiveMiniGameData response = new()
         {
-            Json = "{}"
+            Json = ""
         };
         // TODO
 

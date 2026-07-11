@@ -16,13 +16,12 @@ public class UpdateMissionProgress : LobbyMessage
             foreach (var item in req.ProgressUpdateList)
             {
                 var pro = data.MissionProgressList.FirstOrDefault(x => x.MissionUid == item.MissionUid);
-                if (pro!=null)
-                {
-                    pro.Progress += item.ProgressCount;
-                }
+                if (pro?.ReceivedAt == null) pro.Progress += item.ProgressCount;
+                
             }
-
-            response.MissionProgressList.AddRange(data.MissionProgressList);
+            var missprolist = MiniGameHelper
+                .ToProtoList<NetArcadeTowerDefenseMissionProgress, ArcadeTowerDefenseMissionProgress>(data.MissionProgressList);
+            response.MissionProgressList.AddRange(missprolist);
         }
 
         JsonDb.Save();

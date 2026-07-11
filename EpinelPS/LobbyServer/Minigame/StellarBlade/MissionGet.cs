@@ -18,7 +18,8 @@ public class MissionGet : LobbyMessage
 
         if (user.StellarBladeDatas.TryGetValue(req.ArcadeManagerId, out var stellar))
         {
-            response.AchievementMissionDataList.AddRange(stellar.MissionData);
+            var misslist = MiniGameHelper.ToProtoList<NetStellarBladeMissionData, StellarBladeMissionData>(stellar.MissionData);
+            response.AchievementMissionDataList.AddRange(misslist);
         }
 
         JsonDb.Save();

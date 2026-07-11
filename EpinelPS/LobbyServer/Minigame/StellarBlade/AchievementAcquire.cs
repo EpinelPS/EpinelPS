@@ -30,7 +30,7 @@ public class AchievementAcquire : LobbyMessage
                     slist = MiniGameHelper.GetMissionReward(ref ret, ref stellar, user, mission);
                     list.AddRange(slist);
 
-                    NetStellarBladeMissionData? missdate = stellar.MissionData.FirstOrDefault(x => x.MissionId == mission.Id);
+                    StellarBladeMissionData? missdate = stellar.MissionData.FirstOrDefault(x => x.MissionId == mission.Id);
                     missdate.IsReceived = true;
                 }
 
@@ -39,7 +39,8 @@ public class AchievementAcquire : LobbyMessage
             ret.Reward = RewardUtils.RegisterRewardsForUserDou(user, list);
 
             response.RewardData = ret;
-            response.UpdatedAchievementMissionDataList.AddRange(stellar.MissionData);
+            var misslist = MiniGameHelper.ToProtoList<NetStellarBladeMissionData, StellarBladeMissionData>(stellar.MissionData);
+            response.UpdatedAchievementMissionDataList.AddRange(misslist);
         }      
 
         JsonDb.Save();

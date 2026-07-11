@@ -14,7 +14,7 @@ public class SkinSet : LobbyMessage
 
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
-            ttsData.SkinData = req.UserSkinData;            
+            ttsData.SkinData = MiniGameHelper.FromProto<UserMiniGameTtsSkinData, NetUserMiniGameTtsSkinData>(req.UserSkinData);
         }
         // TODO
         JsonDb.Save();

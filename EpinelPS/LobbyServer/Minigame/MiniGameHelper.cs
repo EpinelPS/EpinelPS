@@ -1,7 +1,8 @@
-﻿using EpinelPS.Database;
-using EpinelPS.Data;
-using Google.Protobuf.WellKnownTypes;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
+using Google.Protobuf.WellKnownTypes;
+using System.Reflection;
 
 namespace EpinelPS.LobbyServer.Minigame;
 
@@ -15,7 +16,7 @@ public class MiniGameHelper
     /// <param name="guildId">工会id</param>
     /// <param name="arcadeId">游戏id</param>
     /// <returns></returns>
-    public static IEnumerable<(ArcadeScoreRecord Record, int Rank)> GetFullLeaderboard(long guildId, int arcadeId)
+    public static IEnumerable<(ArcadeScoreRecord Record, int Rank)> GetFullLeaderboard(long guildId, int arcadeId, int modeId = 0)
     {
         RankData rank = JsonDb.GetRank();
         var result = new List<(ArcadeScoreRecord Record, int Rank)>();
@@ -32,7 +33,7 @@ public class MiniGameHelper
             {
                 UserId = g.Key,
                 TotalScore = g.Sum(x => x.Score),
-                ModeId = g.First().ModeId  // 如果 ModeId 可能不同，需要根据业务决定
+                ModeId = modeId  // 如果 ModeId 可能不同，需要根据业务决定
             })
             .OrderByDescending(x => x.TotalScore)
             .ToList();
@@ -196,7 +197,7 @@ public class MiniGameHelper
                 .ToList();
             foreach (var item in alist)
             {
-                NetStellarBladeMissionData missionData = new()
+                StellarBladeMissionData missionData = new()
                 {
                     IsReceived = false,
                     MissionId = item.Id,
@@ -212,7 +213,7 @@ public class MiniGameHelper
             {
                 foreach (var item in dlist)
                 {
-                    NetStellarBladeMissionData missionData = new()
+                    StellarBladeMissionData missionData = new()
                     {
                         IsReceived = false,
                         MissionId = item.Id,
@@ -229,7 +230,7 @@ public class MiniGameHelper
             {
                 foreach (var item in plist)
                 {
-                    NetStellarBladeMissionData missionData = new()
+                    StellarBladeMissionData missionData = new()
                     {
                         IsReceived = false,
                         MissionId = item.Id,
@@ -264,7 +265,7 @@ public class MiniGameHelper
             stellar.CharacterData.LearnedSkillIdList.AddRange(learnskilllist);
             foreach (SBCharacterEnhanceType type in System.Enum.GetValues<SBCharacterEnhanceType>())
             {               
-                stellar.CharacterData.EnhanceDataList.Add(new NetStellarBladeCharacterData.Types.NetEnhanceData() { EnhanceLevel = 1, EnhanceType =  (int)type});
+                stellar.CharacterData.EnhanceDataList.Add(new StellarBladeCharacterData.NetEnhanceData() { EnhanceLevel = 1, EnhanceType =  (int)type});
             }
 
 
@@ -292,14 +293,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += 1;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += 1;                                                        
                             break;
                         case SBMissionCategory.DailyPoint:                            
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += 1;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += 1;
                             break;
                         default:
                             break;
@@ -311,8 +312,8 @@ public class MiniGameHelper
                     .Where(x => x.GroupId == missionGroupId && x.MissionType == missionType && x.MissionTargetId == stage).FirstOrDefault();
                 if (spstage != null)
                 {
-                    NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == spstage.Id);
-                    miss.Progress += 1;
+                    StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == spstage.Id);
+                    if (miss?.IsReceived == false) miss.Progress += 1;
                 }
                 break;
             case SBMissionType.PerfectGuard:
@@ -323,14 +324,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += PerfectGuard;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += PerfectGuard;
                             break;
                         case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += PerfectGuard;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += PerfectGuard;
                             break;
                         default:
                             break;
@@ -345,14 +346,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += PerfectDodge;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += PerfectDodge;
                             break;
                         case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += PerfectDodge;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += PerfectDodge;
                             break;
                         default:
                             break;
@@ -368,14 +369,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += damage;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += damage;
                             break;
                         case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += damage;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += damage;
                             break;
                         default:
                             break;
@@ -389,8 +390,8 @@ public class MiniGameHelper
                     .Where(x => x.GroupId == missionGroupId && x.MissionType == missionType).ToList();
                 foreach (var item in blist)
                 {
-                    NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                    miss.Progress += buyCount;
+                    StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                    if (miss?.IsReceived == false) miss.Progress += buyCount;
                 }
                 break;
             case SBMissionType.PlayTime:
@@ -401,14 +402,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += playTime;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += playTime;
                             break;
                         case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += playTime;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += playTime;
                             break;
                         default:
                             break;
@@ -424,14 +425,14 @@ public class MiniGameHelper
                     switch (item.MissionCategory)
                     {
                         case SBMissionCategory.DailyMission:
-                            NetStellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            dmiss.Progress += usePotion;
+                            StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (dmiss?.IsReceived == false) dmiss.Progress += usePotion;
                             break;
                         case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
-                            NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            miss.Progress += usePotion;
+                            StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                            if (miss?.IsReceived == false) miss.Progress += usePotion;
                             break;
                         default:
                             break;
@@ -444,8 +445,8 @@ public class MiniGameHelper
                     .Where(x => x.GroupId == missionGroupId && x.MissionType == missionType).ToList();
                 foreach (var item in dailist)
                 {
-                    NetStellarBladeMissionData? miss = stellar.DailyPointMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                    miss.Progress += dailyPoint;
+                    StellarBladeMissionData? miss = stellar.DailyPointMissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                    if (miss?.IsReceived == false) miss.Progress += dailyPoint;
                 }
                 break;
             default:
@@ -494,7 +495,7 @@ public class MiniGameHelper
                     });
                 }
                 
-                NetStellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
+                StellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
                 if (currency != null)
                 {
                     currency.Amount += reward.RewardAmount;
@@ -521,7 +522,7 @@ public class MiniGameHelper
                     .Where(x => x.GroupId == mission.GroupId && x.MissionType == SBMissionType.DailyPointReward).ToList();
                 foreach (var item in glist)
                 {
-                    NetStellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                   StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
                     if (stellar.Today == dateDay)
                     {
                         miss.Progress += mission.RewardValue;
@@ -571,7 +572,7 @@ public class MiniGameHelper
 
                 foreach (var item in misslist)
                 {
-                    defenseData.MissionProgressList.Add(new NetArcadeTowerDefenseMissionProgress()
+                    defenseData.MissionProgressList.Add(new ArcadeTowerDefenseMissionProgress()
                     {
                         CreatedAt = DateTime.UtcNow.Date.ToTimestamp(),
                         MissionTid = item.Id,
@@ -591,4 +592,247 @@ public class MiniGameHelper
 
 
 
+    public static NetArcadeBBQData BBQToNet(ArcadeBBQData bBQData)
+    {
+        NetArcadeBBQData data = new()
+        {
+            ArcadeId = bBQData.ArcadeId,
+            HighScore = bBQData.HighScore,
+            PlayCount = bBQData.PlayCount,
+            TotalAccumulatedScore = bBQData.TotalAccumulatedScore
+        };
+        data.RecordedCutSceneList.AddRange(bBQData.RecordedCutSceneList);
+        data.StepUpRewardedList.AddRange(bBQData.StepUpRewardedList);
+
+        return data;
+    }
+    /// <summary>
+    /// 将自定义数据转换为 Protobuf 类型
+    /// </summary>
+    public static TProto ToProto<TProto, TData>(TData data) where TProto : class, new()
+    {
+        if (data == null) return null;
+
+        var proto = new TProto();
+        var dataProps = typeof(TData).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var protoProps = typeof(TProto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var dataProp in dataProps)
+        {
+            var protoProp = protoProps.FirstOrDefault(p => p.Name == dataProp.Name);
+            if (protoProp == null) continue;
+
+            // List<T> → RepeatedField<T>
+            if (IsListType(dataProp.PropertyType) && IsRepeatedFieldType(protoProp.PropertyType))
+            {
+                var dataList = dataProp.GetValue(data) as System.Collections.IEnumerable;
+                if (dataList == null) continue;
+
+                var repeatedField = protoProp.GetValue(proto);
+                if (repeatedField == null) continue;
+
+                var addRange = repeatedField.GetType().GetMethod("AddRange");
+                if (addRange != null)
+                {
+                    addRange.Invoke(repeatedField, [dataList]);
+                }
+                continue;
+            }
+
+            // 检查类型兼容性（跳过不兼容的）
+            if (!protoProp.PropertyType.IsAssignableFrom(dataProp.PropertyType))
+                continue;
+
+            var value = dataProp.GetValue(data);
+            protoProp.SetValue(proto, value);
+        }
+
+        return proto;
+    }
+
+    private static bool IsRepeatedFieldType(System.Type type)
+    {
+        return type.IsGenericType &&
+               type.GetGenericTypeDefinition() == typeof(Google.Protobuf.Collections.RepeatedField<>);
+    }
+
+    private static bool IsListType(System.Type type)
+    {
+        return type.IsGenericType &&
+               type.GetGenericTypeDefinition() == typeof(System.Collections.Generic.List<>);
+    }
+    /// <summary>
+    /// 将 Protobuf 类型转换为自定义数据
+    /// </summary>
+    public static TData FromProto<TData, TProto>(TProto proto) where TData : class, new()
+    {
+        if (proto == null) return null;
+
+        var data = new TData();
+        var protoProps = typeof(TProto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var dataProps = typeof(TData).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var protoProp in protoProps)
+        {
+            var dataProp = dataProps.FirstOrDefault(p => p.Name == protoProp.Name);
+            if (dataProp == null) continue;
+
+            // RepeatedField<T> → List<T>
+            if (IsRepeatedFieldType(protoProp.PropertyType))
+            {
+                var protoList = protoProp.GetValue(proto) as System.Collections.IEnumerable;
+                if (protoList == null) continue;
+
+                var elementType = protoProp.PropertyType.GetGenericArguments()[0];
+                var listType = typeof(List<>).MakeGenericType(elementType);
+                var list = Activator.CreateInstance(listType) as System.Collections.IList;
+
+                foreach (var item in protoList)
+                {
+                    list.Add(item);
+                }
+
+                dataProp.SetValue(data, list);
+                continue;
+            }
+
+            // 普通类型
+            if (!dataProp.PropertyType.IsAssignableFrom(protoProp.PropertyType))
+                continue;
+
+            var value = protoProp.GetValue(proto);
+            dataProp.SetValue(data, value);
+        }
+
+        return data;
+    }   
+
+    // ============ 列表转换 ============
+
+    /// <summary>
+    /// 转换 List<TData> → List<TProto>
+    /// </summary>
+    public static List<TProto> ToProtoList<TProto, TData>(List<TData> dataList) where TProto : class, new()
+    {
+        if (dataList == null) return null;
+
+        var result = new List<TProto>();
+        foreach (var item in dataList)
+        {
+            result.Add(ToProto<TProto, TData>(item));
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 转换 List<TProto> → List<TData>
+    /// </summary>
+    public static List<TData> FromProtoList<TData, TProto>(List<TProto> protoList) where TData : class, new()
+    {
+        if (protoList == null) return null;
+
+        var result = new List<TData>();
+        foreach (var item in protoList)
+        {
+            result.Add(FromProto<TData, TProto>(item));
+        }
+        return result;
+    }
+
+    // ============ Dictionary 转换 ============
+
+    /// <summary>
+    /// 转换 Dictionary<TKey, TData> → Dictionary<TKey, TProto>
+    /// </summary>
+    public static Dictionary<TKey, TProto> ToProtoDict<TKey, TProto, TData>(Dictionary<TKey, TData> dict)
+        where TProto : class, new() where TKey : notnull
+    {
+        if (dict == null) return null;
+
+        var result = new Dictionary<TKey, TProto>();
+        foreach (var kvp in dict)
+        {
+            result[kvp.Key] = ToProto<TProto, TData>(kvp.Value);
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 转换 Dictionary<TKey, TProto> → Dictionary<TKey, TData>
+    /// </summary>
+    public static Dictionary<TKey, TData> FromProtoDict<TKey, TData, TProto>(Dictionary<TKey, TProto> dict)
+        where TData : class, new() where TKey : notnull
+    {
+        if (dict == null) return null;
+
+        var result = new Dictionary<TKey, TData>();
+        foreach (var kvp in dict)
+        {
+            result[kvp.Key] = FromProto<TData, TProto>(kvp.Value);
+        }
+        return result;
+    }
+
+
+
+}
+
+public static class StellarBladeExtensions
+{
+    public static NetStellarBladeCharacterData ToProto(this StellarBladeCharacterData data)
+    {
+        if (data == null) return null;
+
+        var proto = new NetStellarBladeCharacterData
+        {
+            DefaultAttackSkillId = data.DefaultAttackSkillId,
+            Gear1SbItemId = data.Gear1SbItemId,
+            Gear2SbItemId = data.Gear2SbItemId,
+            ExoSpineSbItemId = data.ExoSpineSbItemId
+        };
+
+        // 添加列表
+        foreach (var id in data.LearnedSkillIdList)
+        {
+            proto.LearnedSkillIdList.Add(id);
+        }
+
+        // 添加增强数据（嵌套类型需要单独处理）
+        foreach (var enhance in data.EnhanceDataList)
+        {
+            proto.EnhanceDataList.Add(new NetStellarBladeCharacterData.Types.NetEnhanceData
+            {
+                EnhanceType = enhance.EnhanceType,
+                EnhanceLevel = enhance.EnhanceLevel
+            });
+        }
+
+        return proto;
+    }
+
+    public static StellarBladeCharacterData FromProto(this NetStellarBladeCharacterData proto)
+    {
+        if (proto == null) return null;
+
+        var data = new StellarBladeCharacterData
+        {
+            DefaultAttackSkillId = proto.DefaultAttackSkillId,
+            Gear1SbItemId = proto.Gear1SbItemId,
+            Gear2SbItemId = proto.Gear2SbItemId,
+            ExoSpineSbItemId = proto.ExoSpineSbItemId
+        };
+
+        data.LearnedSkillIdList.AddRange(proto.LearnedSkillIdList);
+
+        foreach (var enhance in proto.EnhanceDataList)
+        {
+            data.EnhanceDataList.Add(new StellarBladeCharacterData.NetEnhanceData
+            {
+                EnhanceType = enhance.EnhanceType,
+                EnhanceLevel = enhance.EnhanceLevel
+            });
+        }
+
+        return data;
+    }
 }

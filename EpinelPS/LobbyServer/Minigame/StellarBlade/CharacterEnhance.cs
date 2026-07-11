@@ -18,7 +18,7 @@ public class CharacterEnhance : LobbyMessage
 
         if (user.StellarBladeDatas.TryGetValue(req.ArcadeManagerId, out var stellar))
         {
-            NetStellarBladeCharacterData.Types.NetEnhanceData? enhanceData = stellar.CharacterData.EnhanceDataList
+            StellarBladeCharacterData.NetEnhanceData? enhanceData = stellar.CharacterData.EnhanceDataList
                 .FirstOrDefault(c => c.EnhanceType == req.EnhanceType);
 
             if (enhanceData != null)

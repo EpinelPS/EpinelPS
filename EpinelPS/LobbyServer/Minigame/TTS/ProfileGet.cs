@@ -23,7 +23,11 @@ public class ProfileGet : LobbyMessage
         }
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {            
-            response.PlayCountList.AddRange(ttsData.SongPlayCount);            
+            var songPlayList = ttsData.SongPlayCount
+                .Select(m => MiniGameHelper.ToProto<NetMiniGameTtsSongPlayCount, MiniGameTtsSongPlayCount>(m))
+                .ToList();
+
+            response.PlayCountList.AddRange(songPlayList);            
         }
 
         response.MyServerRankData = mytotal;
