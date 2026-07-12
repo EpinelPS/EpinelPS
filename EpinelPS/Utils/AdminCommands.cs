@@ -59,6 +59,20 @@ public class AdminCommands
         }
         client.DefaultRequestHeaders.Add("Accept", "application/octet-stream+protobuf");
     }
+    public static RunCmdResponse CompleteAllStages(ulong userId)
+    {
+        // Find max chapter number
+        var chapters = GameData.Instance.ChapterCampaignData.Values;
+        int maxChapter = chapters.Max(c => c.Chapter);
+
+        // Find max stage count for that chapter (main stages)
+        int maxStage = GameData.Instance.GetStageIdsForChapter(maxChapter, true).Count();
+
+        if (maxStage == 0) maxStage = 1;
+
+        return CompleteStage(userId, $"{maxChapter}-{maxStage}");
+    }
+
     public static RunCmdResponse CompleteStage(ulong userId, string input2)
     {
         User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
@@ -180,6 +194,16 @@ public class AdminCommands
 
         JsonDb.Save();
 
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse AddAllCostumes(User user)
+    {
+        foreach (var kv in GameData.Instance.CharacterCostumeTable)
+        {
+            user.AddUnique(user.CostumeList, kv.Key);
+        }
+        JsonDb.Save();
         return RunCmdResponse.OK;
     }
 

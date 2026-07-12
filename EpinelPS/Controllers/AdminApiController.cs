@@ -131,11 +131,19 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 return RunCmdResponse.OK;
             case "completestage":
                 return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
+            case "completeallstages":
+                return AdminCommands.CompleteAllStages(ulong.Parse(req.p1));
             case "addallcharacters":
                 {
                     User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddAllCharacters(user);
+                }
+            case "addallcostumes":
+                {
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                    return AdminCommands.AddAllCostumes(user);
                 }
             case "addallmaterials":
                 {
@@ -341,6 +349,32 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 SearchDict(GameData.Instance.albumResourceRecords, r => r.ScenarioNameLocalkey, query, results);
                 break;
         }
+
+        // Disambiguate duplicate names by appending ID
+        var seen = new Dictionary<string, int>();
+        for (int i = 0; i < results.Count; i++)
+        {
+            var obj = (dynamic)results[i];
+            string name = obj.name;
+            int id = obj.id;
+            if (seen.TryGetValue(name, out int firstIdx))
+            {
+                // Add ID to the first occurrence
+                if (firstIdx >= 0)
+                {
+                    var first = (dynamic)results[firstIdx];
+                    results[firstIdx] = new { id = (int)first.id, name = (string)first.name + " (" + (int)first.id + ")" };
+                    seen[name] = -1; // mark as processed
+                }
+                // Add ID to this occurrence
+                results[i] = new { id, name = name + " (" + id + ")" };
+            }
+            else
+            {
+                seen[name] = i;
+            }
+        }
+
         return Ok(results.Take(5000));
     }
 
