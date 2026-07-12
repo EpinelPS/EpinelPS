@@ -1,16 +1,347 @@
+@using EpinelPS.Data
+@model List<int>
 @{
     ViewData["Title"] = "Event configuration";
+    var allBanners = GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Reverse().ToList();
+    var activeIds = Model;
 }
 
-<div class="text-center">
-    <h1 class="display-4" data-i18n="events.config.title">活动配置</h1>
+<div class="adminui-dashboard">
+    <form method="post" action="/admin/Events" id="eventForm">
+        @* Top bar *@
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <a asp-action="Dashboard" asp-controller="Admin" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> 返回
+                </a>
+            </div>
+            <h1 class="display-4 mb-0" style="font-size: 1.8rem;">活动配置</h1>
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i>保存配置
+            </button>
+        </div>
 
-    <h2>Active events (for all users)</h2>
-    <p>@(GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).LastOrDefault().Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "") [ID=@GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Last().Key]</p>
+        @* Success message *@
+        <div id="saveAlert" class="alert alert-success py-2" style="display: none;"></div>
 
-    <h2>All events</h2>
+        @* Active event tags *@
+        <div class="card mb-4">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <strong class="me-2" style="min-width: 100px;">当前已激活 (@activeIds.Count)</strong>
 
-    @foreach (var item in GameData.Instance.LobbyPrivateBannerTable.OrderBy(x => x.Value.EventId).Reverse()) {
-        <p>@(item.Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "") [ID=@item.Key]</p>
-    }
+                    @if (activeIds.Count > 0)
+                    {
+                        foreach (var id in activeIds)
+                        {
+                            var banner = allBanners.FirstOrDefault(b => b.Key == id);
+                            if (banner.Value == null) continue;
+                            var name = (banner.Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "");
+                            <span class="badge d-inline-flex align-items-center gap-1 active-tag" data-id="@id"
+                                  style="background-color: var(--adminui-success); font-size: 0.85rem; padding: 0.3rem 0.6rem;">
+                                @name
+                                <i class="fas fa-times remove-tag" style="cursor: pointer; opacity: 0.7;" data-id="@id"></i>
+                            </span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted small">暂未选择，默认显示最新活动</span>
+                    }
+
+                    @* Add dropdown *@
+                    <div class="dropdown d-inline-block ms-2">
+                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                id="addEventDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-plus me-1"></i>添加
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="addEventDropdown"
+                            style="max-height: 300px; overflow-y: auto; font-size: 0.85rem;">
+                            @foreach (var item in allBanners)
+                            {
+                                var name = (item.Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "");
+                                <li>
+                                    <a class="dropdown-item add-event-item @(activeIds.Contains(item.Key) ? "disabled" : "")"
+                                       href="#" data-id="@item.Key" data-name="@name">
+                                        @name <small class="text-muted">(@item.Key)</small>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* Events table with pagination *@
+        <div class="card" style="margin-bottom: 80px;">
+            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i>所有活动</h5>
+                <div class="d-flex gap-2 align-items-center">
+                    <span style="color: #aaa; font-size: 0.85rem;">
+                        每页
+                        <select id="pageSizeSelect" style="background: #2d2d2f; color: #ccc; border: 1px solid #444; border-radius: 3px; padding: 2px 4px;">
+                            <option value="10">10</option>
+                            <option value="20" selected>20</option>
+                            <option value="50">50</option>
+                            <option value="0">全部</option>
+                        </select>
+                        条
+                    </span>
+                    <input type="text" id="searchBox" class="form-control form-control-sm"
+                           placeholder="搜索活动名称..." style="width: 200px;" />
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table mb-0" id="eventTable" style="border-radius: 0;">
+                        <thead style="background-color: #3d3d3f; color: #e0e0e0;">
+                            <tr>
+                                <th style="width: 50px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">激活</th>
+                                <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">活动名称</th>
+                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">Banner ID</th>
+                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">Event ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventTbody">
+                            @foreach (var item in allBanners)
+                            {
+                                var isChecked = activeIds.Contains(item.Key);
+                                var name = (item.Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "");
+                                <tr class="event-row @(isChecked ? "row-active" : "")"
+                                    data-id="@item.Key" data-name="@name" style="display: none;">
+                                    <td class="text-center">
+                                        <input type="checkbox" name="activeBannerIds" value="@item.Key"
+                                               class="form-check-input event-checkbox"
+                                               @(isChecked ? "checked" : "")
+                                               style="transform: scale(1.2); cursor: pointer;" />
+                                    </td>
+                                    <td class="event-name">@name</td>
+                                    <td>@item.Key</td>
+                                    <td>@item.Value.EventId</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @* Pagination footer *@
+            <div class="card-footer d-flex justify-content-between align-items-center py-2"
+                 style="background: #2d2d2f; border-top: 1px solid #444;">
+                <span id="pageInfo" style="color: #aaa; font-size: 0.85rem;"></span>
+                <div class="d-flex gap-1" id="paginationControls"></div>
+            </div>
+        </div>
+    </form>
 </div>
+
+<style>
+    .row-active {
+        background-color: rgba(56, 178, 121, 0.2) !important;
+    }
+    .row-active td {
+        color: #e0e0e0 !important;
+    }
+    body {
+        padding-bottom: 60px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // ---- Pagination state ----
+        var allRows = [];
+        var currentPage = 1;
+        var pageSize = 20;
+        var filteredRows = [];
+
+        // ---- Collect all rows into JS array ----
+        (function () {
+            var tbody = document.getElementById('eventTbody');
+            var rows = document.querySelectorAll('.event-row');
+            rows.forEach(function (r) { tbody.appendChild(r); });
+            allRows = Array.from(rows);
+            filteredRows = allRows.slice();
+            renderPage();
+        })();
+
+        // ---- Render current page ----
+        function renderPage() {
+            var tbody = document.getElementById('eventTbody');
+            var total = filteredRows.length;
+            var size = pageSize === 0 ? total : pageSize;
+            var pages = size === 0 ? 1 : Math.max(1, Math.ceil(total / size));
+            if (currentPage > pages) currentPage = pages;
+            if (currentPage < 1) currentPage = 1;
+
+            // Hide all, show only current page
+            var start = (currentPage - 1) * size;
+            var end = Math.min(start + size, total);
+            filteredRows.forEach(function (row, i) {
+                row.style.display = (pageSize === 0 || (i >= start && i < end)) ? '' : 'none';
+                // Make sure the row is in the tbody
+                if (row.parentNode !== tbody) tbody.appendChild(row);
+            });
+
+            // Update page info
+            document.getElementById('pageInfo').textContent =
+                total + ' 条，共 ' + pages + ' 页' +
+                (pageSize > 0 ? '（当前第 ' + currentPage + '/' + pages + ' 页）' : '');
+
+            // Render pagination buttons
+            renderPagination(pages);
+        }
+
+        // ---- Render pagination controls ----
+        function renderPagination(pages) {
+            var container = document.getElementById('paginationControls');
+            container.innerHTML = '';
+
+            if (pages <= 1 && pageSize !== 0) return;
+
+            var prevBtn = document.createElement('button');
+            prevBtn.className = 'btn btn-sm ' + (currentPage > 1 ? 'btn-outline-primary' : 'btn-outline-secondary disabled');
+            prevBtn.textContent = '‹';
+            prevBtn.onclick = function () { if (currentPage > 1) { currentPage--; renderPage(); } };
+            container.appendChild(prevBtn);
+
+            var maxButtons = 7;
+            var half = Math.floor(maxButtons / 2);
+            var startP = Math.max(1, currentPage - half);
+            var endP = Math.min(pages, startP + maxButtons - 1);
+            if (endP - startP < maxButtons - 1) startP = Math.max(1, endP - maxButtons + 1);
+
+            for (var i = startP; i <= endP; i++) {
+                var btn = document.createElement('button');
+                btn.className = 'btn btn-sm ' + (i === currentPage ? 'btn-primary' : 'btn-outline-primary');
+                btn.textContent = i;
+                btn.onclick = (function (p) { return function () { currentPage = p; renderPage(); }; })(i);
+                container.appendChild(btn);
+            }
+
+            var nextBtn = document.createElement('button');
+            nextBtn.className = 'btn btn-sm ' + (currentPage < pages ? 'btn-outline-primary' : 'btn-outline-secondary disabled');
+            nextBtn.textContent = '›';
+            nextBtn.onclick = function () { if (currentPage < pages) { currentPage++; renderPage(); } };
+            container.appendChild(nextBtn);
+        }
+
+        // ---- Page size change ----
+        document.getElementById('pageSizeSelect').addEventListener('change', function () {
+            pageSize = parseInt(this.value);
+            currentPage = 1;
+            applyFilter();
+        });
+
+        // ---- Search filter ----
+        document.getElementById('searchBox').addEventListener('input', function () {
+            currentPage = 1;
+            applyFilter();
+        });
+
+        function applyFilter() {
+            var q = document.getElementById('searchBox').value.toLowerCase().trim();
+            filteredRows = allRows.filter(function (row) {
+                var name = (row.dataset.name || '').toLowerCase();
+                return !q || name.indexOf(q) !== -1;
+            });
+            renderPage();
+        }
+
+        // ---- Remove tag handler ----
+        function removeTagHandler() {
+            var id = this.dataset.id;
+            var cb = document.querySelector('.event-checkbox[value="' + id + '"]');
+            if (cb) cb.checked = false;
+            this.closest('.active-tag').remove();
+            var row = document.querySelector('.event-row[data-id="' + id + '"]');
+            if (row) row.classList.remove('row-active');
+            var mi = document.querySelector('.add-event-item[data-id="' + id + '"]');
+            if (mi) mi.classList.remove('disabled');
+        }
+        document.querySelectorAll('.remove-tag').forEach(function (el) {
+            el.addEventListener('click', removeTagHandler);
+        });
+
+        // ---- Add from dropdown ----
+        document.querySelectorAll('.add-event-item').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (this.classList.contains('disabled')) return;
+                var id = this.dataset.id;
+                var name = this.dataset.name;
+                var checkbox = document.querySelector('.event-checkbox[value="' + id + '"]');
+                if (checkbox) checkbox.checked = true;
+                var row = document.querySelector('.event-row[data-id="' + id + '"]');
+                if (row) row.classList.add('row-active');
+                this.classList.add('disabled');
+
+                var placeholder = document.querySelector('.text-muted.small');
+                if (placeholder) placeholder.remove();
+
+                var addBtn = document.querySelector('.dropdown');
+                if (!addBtn) return;
+
+                var tagHtml = '<span class="badge d-inline-flex align-items-center gap-1 active-tag" data-id="' + id + '" style="background-color: var(--adminui-success); font-size: 0.85rem; padding: 0.3rem 0.6rem;">' + name + ' <i class="fas fa-times remove-tag" style="cursor: pointer; opacity: 0.7;" data-id="' + id + '"></i></span>';
+                addBtn.insertAdjacentHTML('beforebegin', tagHtml);
+                var newRm = document.querySelector('.active-tag[data-id="' + id + '"] .remove-tag');
+                if (newRm) newRm.addEventListener('click', removeTagHandler);
+            });
+        });
+
+        // ---- Click row to toggle checkbox ----
+        document.querySelectorAll('.event-row td:not(:first-child)').forEach(function (td) {
+            td.addEventListener('click', function () {
+                var row = this.closest('.event-row');
+                var cb = row.querySelector('.event-checkbox');
+                if (cb) {
+                    cb.checked = !cb.checked;
+                    cb.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        // ---- Checkbox change sync ----
+        document.querySelectorAll('.event-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                var id = this.value;
+                var row = this.closest('.event-row');
+                var name = row ? row.dataset.name : '';
+                if (this.checked) {
+                    if (row) row.classList.add('row-active');
+                    var mi = document.querySelector('.add-event-item[data-id="' + id + '"]');
+                    if (mi) mi.classList.add('disabled');
+                    if (!document.querySelector('.active-tag[data-id="' + id + '"]')) {
+                        var placeholder = document.querySelector('.text-muted.small');
+                        if (placeholder) placeholder.remove();
+                        var addBtn = document.querySelector('.dropdown');
+                        if (!addBtn) return;
+                        var tagHtml = '<span class="badge d-inline-flex align-items-center gap-1 active-tag" data-id="' + id + '" style="background-color: var(--adminui-success); font-size: 0.85rem; padding: 0.3rem 0.6rem;">' + name + ' <i class="fas fa-times remove-tag" style="cursor: pointer; opacity: 0.7;" data-id="' + id + '"></i></span>';
+                        addBtn.insertAdjacentHTML('beforebegin', tagHtml);
+                        var newRm = document.querySelector('.remove-tag[data-id="' + id + '"]:last-of-type');
+                        if (newRm) newRm.addEventListener('click', removeTagHandler);
+                    }
+                } else {
+                    if (row) row.classList.remove('row-active');
+                    var mi = document.querySelector('.add-event-item[data-id="' + id + '"]');
+                    if (mi) mi.classList.remove('disabled');
+                    var tag = document.querySelector('.active-tag[data-id="' + id + '"]');
+                    if (tag) tag.remove();
+                }
+            });
+        });
+
+        // ---- Success alert ----
+        @if (TempData["MessageKey"] != null)
+        {
+        <text>
+        document.addEventListener('DOMContentLoaded', function () {
+            var alert = document.getElementById('saveAlert');
+            alert.textContent = '活动配置已保存';
+            alert.style.display = 'block';
+            setTimeout(function () { alert.style.display = 'none'; }, 4000);
+        });
+        </text>
+        }
+    </script>
+}
