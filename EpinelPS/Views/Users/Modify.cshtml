@@ -82,7 +82,7 @@
                     <div class="cheats-section mb-4">
                         <h4 class="section-title" data-i18n="users.modify.campaign">战役</h4>
                         <div class="button-group">
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('completestage', '@Model.ID', 'Enter chapter number and stage number seperated by -')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('complete-stage', '@Model.ID', 'Enter chapter number and stage number (e.g. 1 2)')">
                                 <i class="fas fa-forward me-2"></i> <span data-i18n="users.modify.skipStages">跳过关卡</span>
                             </button>
                             <button class="btn btn-accent" onclick="runSimpleCmd('completeallstages', '@Model.ID')">
@@ -94,22 +94,22 @@
                     <div class="cheats-section mb-4">
                         <h4 class="section-title" data-i18n="users.modify.characters">Characters:</h4>
                         <div class="button-group">
-                            <button class="btn btn-accent" onclick="runSimpleCmd('addallcharacters', '@Model.ID')">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('add-all-characters', '@Model.ID')">
                                 <i class="fas fa-users me-2"></i> <span data-i18n="users.modify.addAllChars">添加所有角色</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmd('addallcostumes', '@Model.ID')">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('add-all-costumes', '@Model.ID')">
                                 <i class="fas fa-tshirt me-2"></i> 添加所有服装
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('add-character', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">
                                 <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.modify.addChar">添加角色</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetLevel', '@Model.ID', 'Enter level (1-999) to apply to all characters')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('set-level', '@Model.ID', 'Enter level (1-999) to apply to all characters')">
                                 <i class="fas fa-level-up-alt me-2"></i> <span data-i18n="users.modify.setCharLevels">设置角色等级</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetSkillLevel', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('set-skill-level', '@Model.ID', 'Enter skill level (1-10) to apply to all characters')">
                                 <i class="fas fa-bolt me-2"></i> <span data-i18n="users.modify.setSkillLevels">设置技能等级</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('set-core-level', '@Model.ID', 'core level / 0-3 sets stars')">
                                 <i class="fas fa-star me-2"></i> <span data-i18n="users.modify.setCoreLevel">设置核心等级</span>
                             </button>
                         </div>
@@ -118,10 +118,10 @@
                     <div class="cheats-section mb-4">
                         <h4 class="section-title" data-i18n="users.modify.inventory">Inventory</h4>
                         <div class="button-group">
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('addallmaterials', '@Model.ID', 'Enter material amount:')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('add-all-materials', '@Model.ID', 'Enter material amount:')">
                                 <i class="fas fa-tools me-2"></i> <span data-i18n="users.modify.addAllEquip">添加所有装备</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddItem', '@Model.ID', 'Enter item ID and amount seperated by -')">
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('add-item', '@Model.ID', 'Enter item ID and amount (e.g. 100 5)')">
                                 <i class="fas fa-box-open me-2"></i> <span data-i18n="users.modify.addItem">添加物品</span>
                             </button>
                             <a asp-action="Currency" asp-route-id="@Model.ID">
@@ -135,7 +135,7 @@
                     <div class="cheats-section">
                         <h4 class="section-title" data-i18n="users.modify.misc">其他</h4>
                         <div class="button-group">
-                            <button class="btn btn-accent" onclick="runSimpleCmd('finishalltutorials', '@Model.ID')">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('finish-all-tutorials', '@Model.ID')">
                                 <i class="fas fa-graduation-cap me-2"></i> <span data-i18n="users.modify.finishTutorials">完成所有教程</span>
                             </button>
                         </div>

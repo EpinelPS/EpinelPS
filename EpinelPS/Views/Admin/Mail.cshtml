@@ -666,17 +666,17 @@
         const attachments = getAttachments();
         let attachmentParam = attachments.map(a => `${a.Type}-${a.Id}-${a.Count}`).join(',');
 
-        // 构建参数
-        const param = `${recipientId}|${senderId}|${title}|${content}|${validDays}|${attachmentParam}`;
+        // p1 = userId, p2 = pipe-delimited: senderId|title|content|validDays|attachments
+        const param = `${senderId}|${title}|${content}|${validDays}|${attachmentParam}`;
 
         // 调用 runCmd 发送邮件
-        runCmd('SendMail', function(json) {
+        runCmd('send-mail', function(json) {
             if (json && json.ok) {
                 showAdminuiAlert(i18n.t('mail.sendSuccess') || 'Mail sent successfully!', 'success');
             } else {
                 showAdminuiAlert((i18n.t('mail.sendFailed') || 'Send failed') + ': ' + (json?.error || i18n.t('mail.unknownError') || 'Unknown error'), 'error');
             }
-        }, param);
+        }, recipientId, param);
     }
 
     // ============================================================

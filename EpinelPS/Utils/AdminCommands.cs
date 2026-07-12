@@ -301,19 +301,10 @@ public class AdminCommands
         }
         if (amount3 > 0)
         {
-            int[] sequence = { 0, 1, 2, 3, 4, 7 };
-            int[] T9Equment = {3110901,
-        3210901,
-        3310901,
-        3410901,
-        3120901,
-        3220901,
-        3320901,
-        3420901,
-        3130901,
-        3230901,
-        3330901,
-        3430901};
+            int[] sequence = [0, 1, 2, 3, 4, 7];
+            var T9Equment = GameData.Instance.ItemEquipTable.Values
+                .Where(item => item.ResourceId.EndsWith("_t9_1"))
+                .Select(item => item.Id);
             foreach (int corp in sequence)
             {
                 foreach (int tableItem in T9Equment)
