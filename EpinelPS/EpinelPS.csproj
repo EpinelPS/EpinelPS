@@ -73,7 +73,7 @@
 	  <None Update="site.pfx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="name_map.json">
+	  <None Update="nikke_chars.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="wwwroot\**\*">
