@@ -271,6 +271,7 @@ internal class Program
                 Console.WriteLine("  user (user id) - select user by id");
                 Console.WriteLine("  rmuser - delete selected user");
                 Console.WriteLine("  r - load changes to database from disk. Discards data in memory.");
+                Console.WriteLine("  lsmpk [filter] - list static data entries, e.g. 'lsmpk Locale' or 'lsmpk Character'");
                 Console.WriteLine("  exit - exit server application");
                 Console.WriteLine("  completestage (chapter num)-(stage number) - complete selected stage and get rewards (and all previous ones). Example completestage 15-1. Note that the exact stage number cleared may not be exact.");
                 Console.WriteLine("  sickpulls (requires selecting user first) allows for all characters to have equal chances of getting pulled");
@@ -713,6 +714,21 @@ internal class Program
             else if (input == "r")
             {
                 JsonDb.Reload();
+            }
+            else if (input == "lsmpk" || input.TrimStart().StartsWith("lsmpk "))
+            {
+                string filter = input.Length > 6 ? input.Substring(5).Trim() : "";
+                Console.WriteLine("=== MPK entries" + (filter.Length > 0 ? " matching '" + filter + "'" : "") + " ===");
+                int count = 0;
+                foreach (var name in GameData.Instance.GetMpkEntryNames())
+                {
+                    if (filter.Length == 0 || name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.WriteLine("  " + name);
+                        count++;
+                    }
+                }
+                Console.WriteLine("=== " + count + " of " + GameData.Instance.GetMpkEntryNames().Count + " total ===");
             }
             else
             {

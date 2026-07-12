@@ -95,6 +95,13 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         return View();
     }
+    [Route("Search")]
+    public IActionResult Search()
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        return View();
+    }
     [Route("Database")]
     public IActionResult Database()
     {

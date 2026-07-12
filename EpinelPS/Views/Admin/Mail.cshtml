@@ -462,13 +462,18 @@
     }
 
     // ============================================================
-    // 3. 生成行 HTML
+    // 3. 生成行 HTML (with autocomplete datalist)
     // ============================================================
+    var rowCounter = 0;
     function generateRowHtml(typeValue) {
         typeValue = typeValue || 0;
+        var idx = rowCounter++;
         return `
             <td>${generateRewardTypeSelect(typeValue)}</td>
-            <td><input type="text" class="form-control form-control-sm" placeholder="物品ID" /></td>
+            <td>
+                <input type="text" class="form-control form-control-sm item-id-input" placeholder="搜索或输入ID" list="itemList_${idx}" data-row="${idx}" />
+                <datalist id="itemList_${idx}"></datalist>
+            </td>
             <td><input type="text" class="form-control form-control-sm" placeholder="数量" /></td>
             <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)"><i class="fas fa-times"></i></button></td>
         `;
@@ -478,6 +483,7 @@
     // 4. 表格操作
     // ============================================================
     function initTable() {
+        rowCounter = 0;
         const tbody = document.getElementById('attachmentBody');
         tbody.innerHTML = '';
         for (let i = 0; i < 5; i++) {
@@ -485,6 +491,7 @@
             row.innerHTML = generateRowHtml();
             tbody.appendChild(row);
         }
+        bindTypeChange();
     }
 
     function addRow() {
@@ -492,6 +499,61 @@
         const row = document.createElement('tr');
         row.innerHTML = generateRowHtml();
         tbody.appendChild(row);
+        bindTypeChangeForRow(row);
+    }
+
+    // ---- Autocomplete: when reward type changes, load matching items ----
+    function bindTypeChange() {
+        document.querySelectorAll('.reward-type-select').forEach(function (sel) {
+            sel.removeEventListener('change', onTypeChange);
+            sel.addEventListener('change', onTypeChange);
+        });
+    }
+
+    function bindTypeChangeForRow(row) {
+        var sel = row.querySelector('.reward-type-select');
+        if (sel) {
+            sel.removeEventListener('change', onTypeChange);
+            sel.addEventListener('change', onTypeChange);
+        }
+    }
+
+    function onTypeChange() {
+        var row = this.closest('tr');
+        var idInput = row.querySelector('.item-id-input');
+        var type = parseInt(this.value);
+        if (!type || type === 0) {
+            idInput.placeholder = '无需ID';
+            idInput.value = '';
+            return;
+        }
+        idInput.placeholder = '搜索中...';
+        idInput.value = '';
+        loadItems(type, row);
+    }
+
+    function loadItems(type, row) {
+        var idInput = row.querySelector('.item-id-input');
+        var listId = idInput.getAttribute('list');
+        var datalist = document.getElementById(listId);
+        if (!datalist) return;
+
+        // Fetch items from API
+        fetch('/adminapi/searchGameData?type=' + type + '&q=')
+            .then(function (r) { return r.json(); })
+            .then(function (items) {
+                datalist.innerHTML = '';
+                idInput.placeholder = '搜索或输入ID (' + (items.length > 0 ? items[0].name : '') + '...)';
+                items.forEach(function (item) {
+                    var opt = document.createElement('option');
+                    opt.value = item.id.toString();
+                    opt.textContent = item.id + ' - ' + (item.name || '');
+                    datalist.appendChild(opt);
+                });
+            })
+            .catch(function () {
+                idInput.placeholder = '加载失败';
+            });
     }
 
         // removeRow 中的提示

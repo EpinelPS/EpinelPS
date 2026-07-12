@@ -1,8 +1,10 @@
 ﻿using EpinelPS.Controllers.AdminPanel;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Paseto;
 using Paseto.Builder;
 using System.Security.Cryptography;
@@ -228,4 +230,188 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         }
         return new RunCmdResponse() { error = "Not implemented" };
     }
+
+    private static Dictionary<string, Dictionary<string, string>>? _nameMap;
+    private static Dictionary<string, Dictionary<string, string>> GetNameMap()
+    {
+        if (_nameMap != null) return _nameMap;
+        var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "name_map.json");
+        if (System.IO.File.Exists(path))
+        {
+            try
+            {
+                var json = System.IO.File.ReadAllText(path);
+                _nameMap = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(json);
+            }
+            catch { }
+        }
+        _nameMap ??= [];
+        return _nameMap;
+    }
+
+    [HttpGet]
+    [Route("mpkEntries")]
+    public IActionResult MpkEntries([FromQuery] string? filter)
+    {
+        var all = GameData.Instance.GetMpkEntryNames();
+        var results = string.IsNullOrEmpty(filter)
+            ? all
+            : all.Where(n => n.Contains(filter, StringComparison.OrdinalIgnoreCase)).ToList();
+        return Ok(new { total = results.Count, entries = results });
+    }
+
+    [HttpGet]
+    [Route("searchGameData")]
+    public IActionResult SearchGameData([FromQuery] int type, [FromQuery] string? q)
+    {
+        var results = new List<object>();
+        var query = q?.Trim().ToLowerInvariant() ?? "";
+
+        switch (type)
+        {
+            case 4: // Character (has NameCode)
+                SearchDictWithNameCode(GameData.Instance.CharacterTable, r => r.NameLocalkey, r => r.NameCode, query, results);
+                break;
+            case 5: // Item (material + equip + consume + piece + harmony cube)
+                SearchDict(GameData.Instance.itemMaterialTable, r => r.NameLocalkey, query, results);
+                SearchDict(GameData.Instance.ItemEquipTable, r => r.NameLocalkey, query, results);
+                SearchDict(GameData.Instance.ConsumableItems, r => r.NameLocalkey, query, results);
+                SearchDict(GameData.Instance.PieceItems, r => r.NameLocalkey, query, results);
+                SearchDict(GameData.Instance.ItemHarmonyCubeTable, r => r.NameLocalkey, query, results);
+                break;
+            case 6: // Frame
+                SearchDict(GameData.Instance.userFrameTable, r => r.NameLocalkey, query, results);
+                break;
+            case 10: // LiveWallpaper
+                SearchDict(GameData.Instance.LiveWallpaperTable, r => r.NameLocalkey, query, results);
+                break;
+            case 12: // Costume
+                foreach (var kv in GameData.Instance.CharacterCostumeTable)
+                {
+                    var raw = kv.Value.CostumeNameLocale ?? "";
+                    var cleaned = RealNameOrCleaned(raw);
+                    if (string.IsNullOrEmpty(query) ||
+                        raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        cleaned.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        kv.Key.ToString().Contains(query))
+                    {
+                        results.Add(new { id = kv.Key, name = string.IsNullOrEmpty(cleaned) ? kv.Key.ToString() : cleaned });
+                    }
+                }
+                break;
+            case 43: // FavoriteItem (has NameCode)
+                SearchDictWithNameCode(GameData.Instance.FavoriteItemTable, r => r.NameLocalkey, r => r.NameCode, query, results);
+                break;
+            case 44: // ProfileCardObject
+                SearchDict(GameData.Instance.ProfileCardObjectTable, r => r.NameLocalkey, query, results);
+                break;
+            case 46: // UserTitle
+                SearchDict(GameData.Instance.userTitleRecords, r => r.NameLocaleKey, query, results);
+                break;
+            case 48: // Album
+                SearchDict(GameData.Instance.albumResourceRecords, r => r.ScenarioNameLocalkey, query, results);
+                break;
+        }
+
+        return Ok(results.Take(100));
+    }
+
+    private static void SearchDict<T>(Dictionary<int, T> dict, Func<T, string?> nameSelector, string query, List<object> results) where T : class
+    {
+        if (string.IsNullOrEmpty(query))
+        {
+            foreach (var kv in dict)
+                results.Add(new { id = kv.Key, name = RealNameOrCleaned(nameSelector(kv.Value) ?? kv.Key.ToString()) });
+        }
+        else
+        {
+            foreach (var kv in dict)
+            {
+                var raw = nameSelector(kv.Value) ?? "";
+                var display = RealNameOrCleaned(raw);
+                if (raw.Contains(query, StringComparison.OrdinalIgnoreCase) || display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                    results.Add(new { id = kv.Key, name = display });
+            }
+        }
+    }
+
+    private static void SearchDictWithNameCode<T>(Dictionary<int, T> dict, Func<T, string?> nameSelector, Func<T, int> nameCodeSelector, string query, List<object> results) where T : class
+    {
+        if (string.IsNullOrEmpty(query))
+        {
+            foreach (var kv in dict)
+                results.Add(new { id = kv.Key, name = LookupRealName(kv.Value, nameSelector, nameCodeSelector) });
+        }
+        else
+        {
+            foreach (var kv in dict)
+            {
+                var raw = nameSelector(kv.Value) ?? "";
+                var display = LookupRealName(kv.Value, nameSelector, nameCodeSelector);
+                if (raw.Contains(query, StringComparison.OrdinalIgnoreCase) || display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                    results.Add(new { id = kv.Key, name = display });
+            }
+        }
+    }
+
+    private static string LookupRealName<T>(T record, Func<T, string?> nameSelector, Func<T, int> nameCodeSelector) where T : class
+    {
+        var code = nameCodeSelector(record);
+        var codeStr = code.ToString();
+        var map = GetNameMap();
+        if (code > 0 && map.TryGetValue(codeStr, out var entry))
+        {
+            var realName = entry.GetValueOrDefault("zh") ?? entry.GetValueOrDefault("en") ?? "";
+            if (!string.IsNullOrEmpty(realName)) return realName;
+        }
+        return RealNameOrCleaned(nameSelector(record) ?? "");
+    }
+
+    private static string RealNameOrCleaned(string raw)
+    {
+        if (string.IsNullOrEmpty(raw)) return "";
+
+        // Handle "Locale_XXX:###_name" or "Locale XXX:###" formats
+        if (raw.StartsWith("Locale_", StringComparison.OrdinalIgnoreCase) || raw.StartsWith("Locale ", StringComparison.OrdinalIgnoreCase))
+        {
+            var result = raw.StartsWith("Locale_") ? raw.Substring(7) : raw.Substring(7);
+            foreach (var suf in new[] { "_Name", "_Desc", "_Locale", "_NameLocale", "_name", "_desc", "_locale" })
+            {
+                if (result.EndsWith(suf, StringComparison.OrdinalIgnoreCase))
+                {
+                    result = result.Substring(0, result.Length - suf.Length);
+                    break;
+                }
+            }
+            return result;
+        }
+
+        // Clean up raw localization key
+        var s = raw;
+        if (s.StartsWith("Local_", StringComparison.OrdinalIgnoreCase))
+            s = s.Substring(6);
+        var prefixes = new[] { "Character_", "Item_", "Equip_", "Costume_", "Material_",
+            "Consume_", "Piece_", "HarmonyCube_", "Frame_", "Wallpaper_", "Title_",
+            "FavoriteItem_", "ProfileCard_", "Album_", "Bgm_", "Jukebox_" };
+        foreach (var prefix in prefixes)
+        {
+            if (s.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                s = s.Substring(prefix.Length);
+                break;
+            }
+        }
+        var suffixes = new[] { "_Name", "_Desc", "_Description", "_Locale", "_Localkey", "_Localekey", "_Text" };
+        foreach (var suf in suffixes)
+        {
+            if (s.EndsWith(suf, StringComparison.OrdinalIgnoreCase))
+            {
+                s = s.Substring(0, s.Length - suf.Length);
+                break;
+            }
+        }
+        s = s.Replace("_", " ");
+        return s.Trim();
+    }
+
 }

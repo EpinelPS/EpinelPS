@@ -73,6 +73,9 @@
 	  <None Update="site.pfx">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="name_map.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="wwwroot\**\*">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
