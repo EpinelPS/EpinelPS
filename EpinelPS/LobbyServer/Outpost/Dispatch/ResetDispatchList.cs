@@ -12,6 +12,7 @@ public class ResetDispatchList : LobbyMessage
 
         ResResetDispatchList response = new();
         User user = GetUser();
+        DispatchHelper.SyncDispatchLevel(user);
         DateTime startTime = DateTime.UtcNow;
         Random random = new();
         user.DispatchResetCount++;

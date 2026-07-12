@@ -14,6 +14,7 @@ public class GetDispatchList : LobbyMessage
         ResGetDispatchList response = new();
 
         User user = GetUser();
+        DispatchHelper.SyncDispatchLevel(user);
 
         List<DispatchBoardData> dispatch = GameData.Instance.DispatchBoardTable.Values
             .Where(x => x.DispatchType == DispatchType.Dispatch && x.DispatchBoardLv == user.DispatchLv)

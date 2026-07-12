@@ -18,7 +18,7 @@ public class SynchroLevelUp : LobbyMessage
         int requiredCredit = 0;
         int requiredBattleData = 0;
         int requiredCoreDust = 0;
-        CharacterLevelRecord levelUpData = data[user.SynchroDeviceLevel + 1];
+        if (!data.TryGetValue(user.SynchroDeviceLevel + 1, out var levelUpData)) return;
         requiredCredit += levelUpData.Gold;
         requiredBattleData += levelUpData.CharacterExp;
         requiredCoreDust += levelUpData.CharacterExp2;

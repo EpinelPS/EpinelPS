@@ -31,7 +31,6 @@ public class RunResearch : LobbyMessage
         {
             Tid = req.Tid,
             Lv = progress.Level,
-            Exp = progress.Exp,
         };
 
         JsonDb.Save();

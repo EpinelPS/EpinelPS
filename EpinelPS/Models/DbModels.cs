@@ -132,7 +132,6 @@ public class SynchroSlot
 public class RecycleRoomResearchProgress
 {
     public int Level { get; set; } = 1;
-    public int Exp { get; set; }
     public int Attack { get; set; }
     public int Defense { get; set; }
     public int Hp { get; set; }
