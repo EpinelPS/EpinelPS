@@ -49,26 +49,7 @@
                         <span class="text-muted small">暂未选择，默认显示最新活动</span>
                     }
 
-                    @* Add dropdown *@
-                    <div class="dropdown d-inline-block ms-2">
-                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
-                                id="addEventDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-plus me-1"></i>添加
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="addEventDropdown"
-                            style="max-height: 300px; overflow-y: auto; font-size: 0.85rem;">
-                            @foreach (var item in allBanners)
-                            {
-                                var name = (item.Value.PrivateBannerResource ?? "(Unknown)").Replace("btn_event_enter_", "");
-                                <li>
-                                    <a class="dropdown-item add-event-item @(activeIds.Contains(item.Key) ? "disabled" : "")"
-                                       href="#" data-id="@item.Key" data-name="@name">
-                                        @name <small class="text-muted">(@item.Key)</small>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+
                 </div>
             </div>
         </div>
