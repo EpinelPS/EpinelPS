@@ -341,7 +341,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 SearchDict(GameData.Instance.albumResourceRecords, r => r.ScenarioNameLocalkey, query, results);
                 break;
         }
-        return Ok(results.Take(100));
+        return Ok(results.Take(5000));
     }
 
     private static void SearchDict<T>(Dictionary<int, T> dict, Func<T, string?> nameSelector, string query, List<object> results) where T : class

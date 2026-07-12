@@ -152,18 +152,14 @@
         var endP = Math.min(pages, startP + 6);
         if (endP - startP < 6) startP = Math.max(1, endP - 6);
         for (var i = startP; i <= endP; i++) addPageBtn(i, i, false);
-        addPageBtn('›', page + 1, page >= pages);
+                addPageBtn('›', page + 1, page >= pages);
 
-                // Highlight rows on hover (match mail page style)
+                // Highlight rows on hover
                 document.querySelectorAll('.result-row').forEach(function (row) {
                     row.addEventListener('mouseenter', function () { this.style.backgroundColor = 'rgba(56,178,121,0.1)'; });
                     row.addEventListener('mouseleave', function () { this.style.backgroundColor = ''; });
                 });
-            })
-            .catch(function () {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #d63a6e; padding: 2rem;">搜索失败，请检查服务器连接</td></tr>';
-            });
-    }
+            }
 
     function copyId(id) {
         // Use a temporary input to copy to clipboard
