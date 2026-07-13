@@ -25,10 +25,13 @@ public class QuickCounsel : LobbyMessage
             int beforeLv = bondInfo.Lv;
             int beforeExp = bondInfo.Exp;
 
-            bondInfo.Exp += 100;
             bondInfo.CounseledCount++;
             bondInfo.CanCounselToday = true; // Always allow counseling
-            UpdateAttractiveLevel(bondInfo);
+            if (bondInfo.Lv < user.GetMaxAttractiveLevel(req.NameCode))
+            {
+                bondInfo.Exp += 100;
+                UpdateAttractiveLevel(bondInfo);
+            }
 
             response.Attractive = bondInfo;
             response.Exp = new NetIncreaseExpData
