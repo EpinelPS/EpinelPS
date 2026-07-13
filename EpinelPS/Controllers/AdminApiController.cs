@@ -240,19 +240,40 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     }
 
     private static List<CharactersJsonEntry>? _characters;
+    private static readonly object _charLock = new();
     private static List<CharactersJsonEntry> GetCharacters()
     {
         if (_characters != null) return _characters;
-        try
+        lock (_charLock)
         {
-            var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "nikke_chars.json");
-            if (System.IO.File.Exists(path))
+            if (_characters != null) return _characters;
+            try
             {
-                var json = System.IO.File.ReadAllText(path);
-                _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(json);
+                var cachePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "nikke_chars.json");
+                if (System.IO.File.Exists(cachePath))
+                {
+                    var json = System.IO.File.ReadAllText(cachePath);
+                    _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(json);
+                    if (_characters != null) return _characters;
+                }
+                // Download from GitHub
+                using var http = new HttpClient();
+                http.Timeout = TimeSpan.FromSeconds(10);
+                var url = "https://raw.githubusercontent.com/Nikke-db/Nikke-db.github.io/main/js/json/Characters.json";
+                var response = http.GetStringAsync(url).GetAwaiter().GetResult();
+                _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(response);
+                if (_characters != null)
+                {
+                    var dir = System.IO.Path.GetDirectoryName(cachePath);
+                    if (!string.IsNullOrEmpty(dir)) System.IO.Directory.CreateDirectory(dir);
+                    System.IO.File.WriteAllText(cachePath, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine("Failed to load nikke_chars.json: " + ex.Message);
             }
         }
-        catch { }
         _characters ??= [];
         return _characters;
     }
@@ -284,17 +305,6 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     private static string LookupRealName<T>(T record, Func<T, string?> nameSelector, Func<T, int> nameCodeSelector) where T : class
     {
         return LookupRealName(nameSelector(record) ?? "", nameCodeSelector(record));
-    }
-
-    [HttpGet]
-    [Route("mpkEntries")]
-    public IActionResult MpkEntries([FromQuery] string? filter)
-    {
-        var all = GameData.Instance.GetMpkEntryNames();
-        var results = string.IsNullOrEmpty(filter)
-            ? all
-            : all.Where(n => n.Contains(filter, StringComparison.OrdinalIgnoreCase)).ToList();
-        return Ok(new { total = results.Count, entries = results });
     }
 
     [HttpGet]

@@ -638,14 +638,6 @@ public class GameData
         }
     }
 
-    public List<string> GetMpkEntryNames()
-    {
-        var names = new List<string>();
-        foreach (ZipEntry entry in MainZip)
-            names.Add(entry.Name);
-        return names;
-    }
-
     public static async Task Load()
     {
         string? targetFile2 = await AssetDownloadUtil.DownloadOrGetFileAsync(GameConfig.Root.StaticDataMpk.Url, CancellationToken.None) ?? throw new Exception("static data download fail");
