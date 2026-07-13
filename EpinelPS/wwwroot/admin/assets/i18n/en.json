@@ -42,6 +42,7 @@
     "events": "Events",
     "users": "Users",
     "mail": "Mail",
+    "search": "ID Search",
     "config": "Configuration",
     "database": "Database",
     "profile": "Profile",
@@ -99,6 +100,10 @@
       "mail": {
         "title": "Mail System",
         "desc": "Send system mails and rewards to players"
+      },
+      "search": {
+        "title": "ID Search",
+        "desc": "Search IDs for characters, items, costumes, etc."
       },
       "database": {
         "title": "Database",
@@ -193,10 +198,23 @@
     }
   },
   "events": {
-    "config": {
-      "title": "Event Configuration",
-      "comingSoon": "Coming Soon!"
-    }
+    "title": "Event Configuration",
+    "backToList": "Back",
+    "save": "Save Configuration",
+    "activeCount": "Currently active",
+    "noSelection": "None selected, will show latest event by default",
+    "allEvents": "All Events",
+    "perPage": "Per page",
+    "perPageAll": "All",
+    "items": "items",
+    "searchPlaceholder": "Search event name...",
+    "colActive": "Active",
+    "colName": "Event Name",
+    "colBannerId": "Banner ID",
+    "colEventId": "Event ID",
+    "pageInfo": "{{total}} items, {{pages}} pages",
+    "pageInfoCurrent": " (Page {{page}}/{{pages}})",
+    "saved": "Configuration saved"
   },
   "mail": {
     "title": "Send Mail",

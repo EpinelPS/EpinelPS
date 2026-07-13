@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "仪表盘";
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="adminui-dashboard">
@@ -198,9 +198,9 @@
             <div class="card h-100">
                 <div class="card-body text-center">
                     <i class="fas fa-search fa-3x mb-3" style="color: var(--adminui-info);"></i>
-                    <h5>ID 查询</h5>
-                    <p>搜索角色、物品、服装等游戏数据的 ID</p>
-                    <a href="/admin/Search" class="btn btn-primary mt-2">进入</a>
+                    <h5 data-i18n="dashboard.quickAccess.search.title">ID Search</h5>
+                    <p data-i18n="dashboard.quickAccess.search.desc">Search IDs for characters, items, costumes, etc.</p>
+                    <a href="/admin/Search" class="btn btn-primary mt-2" data-i18n="dashboard.quickAccess.enter">Enter</a>
                 </div>
             </div>
         </div>

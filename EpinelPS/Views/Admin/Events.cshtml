@@ -11,14 +11,14 @@
         @* Top bar *@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <a asp-action="Dashboard" asp-controller="Admin" class="btn btn-outline-primary btn-sm">
-                    <i class="fas fa-arrow-left me-1"></i> 返回
-                </a>
-            </div>
-            <h1 class="display-4 mb-0" style="font-size: 1.8rem;">活动配置</h1>
-            <button type="submit" class="btn btn-primary px-4">
-                <i class="fas fa-save me-2"></i>保存配置
-            </button>
+                    <a asp-action="Dashboard" asp-controller="Admin" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i> <span data-i18n="events.backToList">Back</span>
+                    </a>
+                </div>
+                <h1 class="display-4 mb-0" style="font-size: 1.8rem;" data-i18n="events.title">Event Configuration</h1>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-save me-2"></i><span data-i18n="events.save">Save Configuration</span>
+                </button>
         </div>
 
         @* Success message *@
@@ -28,7 +28,7 @@
         <div class="card mb-4">
             <div class="card-body py-3">
                 <div class="d-flex align-items-center flex-wrap gap-2">
-                    <strong class="me-2" style="min-width: 100px;">当前已激活 (@activeIds.Count)</strong>
+                    <strong class="me-2" style="min-width: 100px;"><span data-i18n="events.activeCount">Currently active</span> (@activeIds.Count)</strong>
 
                     @if (activeIds.Count > 0)
                     {
@@ -46,7 +46,7 @@
                     }
                     else
                     {
-                        <span class="text-muted small">暂未选择，默认显示最新活动</span>
+                        <span class="text-muted small" data-i18n="events.noSelection">None selected, will show latest event by default</span>
                     }
 
 
@@ -57,20 +57,20 @@
         @* Events table with pagination *@
         <div class="card" style="margin-bottom: 80px;">
             <div class="card-header d-flex justify-content-between align-items-center py-2">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>所有活动</h5>
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i><span data-i18n="events.allEvents">All Events</span></h5>
                 <div class="d-flex gap-2 align-items-center">
                     <span style="color: #aaa; font-size: 0.85rem;">
-                        每页
+                        <span data-i18n="events.perPage">Per page</span>
                         <select id="pageSizeSelect" style="background: #2d2d2f; color: #ccc; border: 1px solid #444; border-radius: 3px; padding: 2px 4px;">
                             <option value="10">10</option>
                             <option value="20" selected>20</option>
                             <option value="50">50</option>
-                            <option value="0">全部</option>
+                            <option value="0" data-i18n="events.perPageAll">All</option>
                         </select>
-                        条
+                        <span data-i18n="events.items">items</span>
                     </span>
                     <input type="text" id="searchBox" class="form-control form-control-sm"
-                           placeholder="搜索活动名称..." style="width: 200px;" />
+                           placeholder="Search event name..." data-i18n-placeholder="events.searchPlaceholder" style="width: 200px;" />
                 </div>
             </div>
             <div class="card-body p-0">
@@ -78,10 +78,10 @@
                     <table class="table mb-0" id="eventTable" style="border-radius: 0;">
                         <thead style="background-color: #3d3d3f; color: #e0e0e0;">
                             <tr>
-                                <th style="width: 50px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">激活</th>
-                                <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">活动名称</th>
-                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">Banner ID</th>
-                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;">Event ID</th>
+                                <th style="width: 50px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;" data-i18n="events.colActive">Active</th>
+                                <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;" data-i18n="events.colName">Event Name</th>
+                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;" data-i18n="events.colBannerId">Banner ID</th>
+                                <th style="width: 120px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f; color: #e0e0e0;" data-i18n="events.colEventId">Event ID</th>
                             </tr>
                         </thead>
                         <tbody id="eventTbody">
@@ -165,9 +165,11 @@
             });
 
             // Update page info
-            document.getElementById('pageInfo').textContent =
-                total + ' 条，共 ' + pages + ' 页' +
-                (pageSize > 0 ? '（当前第 ' + currentPage + '/' + pages + ' 页）' : '');
+            var info = i18n.t('events.pageInfo', { total: total, pages: pages });
+            if (pageSize > 0) {
+                info += i18n.t('events.pageInfoCurrent', { page: currentPage, pages: pages });
+            }
+            document.getElementById('pageInfo').textContent = info;
 
             // Render pagination buttons
             renderPagination(pages);
@@ -318,7 +320,7 @@
         <text>
         document.addEventListener('DOMContentLoaded', function () {
             var alert = document.getElementById('saveAlert');
-            alert.textContent = '活动配置已保存';
+            alert.textContent = i18n.t('events.saved');
             alert.style.display = 'block';
             setTimeout(function () { alert.style.display = 'none'; }, 4000);
         });
