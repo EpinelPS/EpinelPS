@@ -421,6 +421,29 @@ public class User
         }
     }
 
+    internal int GetMaxAttractiveLevel(int nameCode)
+    {
+        int maxStars = 0;
+        foreach (var c in Characters)
+        {
+            if (GameData.Instance.CharacterTable.TryGetValue(c.Tid, out var cr) && cr.NameCode == nameCode)
+            {
+                int stars = Math.Min(c.Grade, 3);
+                if (stars > maxStars) maxStars = stars;
+            }
+        }
+        int cap = 30;
+        foreach (var kvp in GameData.Instance.CharacterTable.Values)
+        {
+            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM)
+            {
+                cap = 40;
+                break;
+            }
+        }
+        return Math.Min(10 + maxStars * 10, cap);
+    }
+
     /// <summary>
     /// Removes the specified amount of items by their ID. Returns the amount of items removed.
     /// </summary>

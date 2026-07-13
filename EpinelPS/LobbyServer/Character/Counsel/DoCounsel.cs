@@ -25,10 +25,15 @@ public class DoCounsel : LobbyMessage
             int beforeLv = currentBondInfo.Lv;
             int beforeExp = currentBondInfo.Exp;
 
-            currentBondInfo.Exp += 100;
             currentBondInfo.CounseledCount++;
+            if (!currentBondInfo.CounselDialogCompleteIds.Contains(req.CounselTid))
+                currentBondInfo.CounselDialogCompleteIds.Add(req.CounselTid);
             currentBondInfo.CanCounselToday = true; // Always allow counseling
-            UpdateAttractiveLevel(currentBondInfo);
+            if (currentBondInfo.Lv < user.GetMaxAttractiveLevel(req.NameCode))
+            {
+                currentBondInfo.Exp += 100;
+                UpdateAttractiveLevel(currentBondInfo);
+            }
 
             response.Attractive = currentBondInfo;
             response.Exp = new NetIncreaseExpData
@@ -52,6 +57,7 @@ public class DoCounsel : LobbyMessage
                 CanCounselToday = true,
                 Lv = 1
             };
+            data.CounselDialogCompleteIds.Add(req.CounselTid);
             UpdateAttractiveLevel(data);
             user.BondInfo.Add(data);
             response.Attractive = data;

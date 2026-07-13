@@ -67,8 +67,11 @@ public class Present : LobbyMessage
         int beforeLv = bondInfo.Lv;
         int beforeExp = bondInfo.Exp;
 
-        bondInfo.Exp += totalExpGained;
-        UpdateAttractiveLevel(bondInfo);
+        if (bondInfo.Lv < user.GetMaxAttractiveLevel(req.NameCode))
+        {
+            bondInfo.Exp += totalExpGained;
+            UpdateAttractiveLevel(bondInfo);
+        }
 
         response.Attractive = bondInfo;
         response.Exp = new NetIncreaseExpData

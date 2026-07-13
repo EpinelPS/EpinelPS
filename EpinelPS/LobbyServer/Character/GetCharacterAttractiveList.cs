@@ -10,7 +10,7 @@ public class GetCharacterAttractiveList : LobbyMessage
 
         ResGetAttractiveList response = new()
         {
-            CounselAvailableCount = 3 // TODO
+            CounselAvailableCount = user.ResetableData.DailyCounselCount.GetValueOrDefault(1, 3)
         };
 
         foreach (NetUserAttractiveData item in user.BondInfo)
