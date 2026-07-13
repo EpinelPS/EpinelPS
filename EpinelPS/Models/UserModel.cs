@@ -136,6 +136,7 @@ public class User
     public Dictionary<int, LoginEventData> LoginEventInfo { get; set; } = [];
     public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
+    public NormalShopBuyCountData NormalShopBuyCountInfo { get; set; } = new();
     public MogMinigameInfo MogInfo { get; set; } = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
     public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();

@@ -1,21 +1,19 @@
-﻿namespace EpinelPS.LobbyServer.Shop;
+﻿using EpinelPS.Utils;
+
+namespace EpinelPS.LobbyServer.Shop;
 
 [GameRequest("/shop/get")]
 public class GetShop : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqGetShop x = await ReadData<ReqGetShop>();
+        ReqGetShop req = await ReadData<ReqGetShop>();
+        User user = GetUser();
 
         ResGetShop response = new()
         {
-            Shop = new NetShopProductData
-            {
-                ShopCategory = x.ShopCategory
-            }
+            Shop = NormalShopHelper.GetShopData(user, req.ShopCategory)
         };
-
-        // TODO
 
         await WriteDataAsync(response);
     }

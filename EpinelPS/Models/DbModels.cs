@@ -114,6 +114,13 @@ public class EventShopBuyCountData
     public List<EventShopProductData> datas { get; set; } = [];
 }
 
+public class NormalShopBuyCountData
+{
+    public int RenewCount { get; set; } = 0;
+    public long RenewAt { get; set; } = 0;
+    public List<EventShopProductData> ProductBuyCounts { get; set; } = [];
+}
+
 public class SynchroSlot
 {
     /// <summary>
