@@ -1,12 +1,12 @@
 @{
-    ViewData["Title"] = "ID 查询";
+    ViewData["Title"] = "ID Search";
 }
 
 <div class="adminui-dashboard">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="display-4 mb-0" style="font-size: 1.8rem;">ID 查询</h1>
+        <h1 class="display-4 mb-0" style="font-size: 1.8rem;" data-i18n="search.title">ID Search</h1>
         <a asp-action="Dashboard" asp-controller="Admin" class="btn btn-outline-primary btn-sm">
-            <i class="fas fa-arrow-left me-1"></i> 返回
+            <i class="fas fa-arrow-left me-1"></i> <span data-i18n="search.backToList">Back</span>
         </a>
     </div>
 
@@ -14,26 +14,26 @@
         <div class="card-body">
             <div class="row g-2 align-items-end">
                 <div class="col-md-4">
-                    <label class="form-label">类型</label>
+                    <label class="form-label" data-i18n="search.type">Type</label>
                     <select id="searchType" class="form-select">
-                        <option value="4">角色 (Character)</option>
-                        <option value="5">物品 (Item)</option>
-                        <option value="6">边框 (Frame)</option>
-                        <option value="8">BGM</option>
-                        <option value="10">壁纸 (LiveWallpaper)</option>
-                        <option value="12">服装 (Costume)</option>
-                        <option value="43">收藏品 (FavoriteItem)</option>
-                        <option value="44">资料卡 (ProfileCard)</option>
-                        <option value="46">称号 (Title)</option>
-                        <option value="48">专辑 (Album)</option>
+                        <option value="4" data-i18n="search.typeCharacter">Character</option>
+                        <option value="5" data-i18n="search.typeItem">Item</option>
+                        <option value="6" data-i18n="search.typeFrame">Frame</option>
+                        <option value="8" data-i18n="search.typeBgm">BGM</option>
+                        <option value="10" data-i18n="search.typeLiveWallpaper">Live Wallpaper</option>
+                        <option value="12" data-i18n="search.typeCostume">Costume</option>
+                        <option value="43" data-i18n="search.typeFavoriteItem">Favorite Item</option>
+                        <option value="44" data-i18n="search.typeProfileCard">Profile Card</option>
+                        <option value="46" data-i18n="search.typeTitle">Title</option>
+                        <option value="48" data-i18n="search.typeAlbum">Album</option>
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">搜索名称或 ID</label>
-                    <input type="text" id="searchQuery" class="form-control" placeholder="输入名称或 ID 搜索..." autofocus />
+                    <label class="form-label" data-i18n="search.queryLabel">Search Name or ID</label>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Enter name or ID to search..." data-i18n-placeholder="search.queryPlaceholder" autofocus />
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-primary w-100" onclick="doSearch()">搜索</button>
+                    <button class="btn btn-primary w-100" onclick="doSearch()" data-i18n="search.button">Search</button>
                 </div>
             </div>
         </div>
@@ -41,14 +41,14 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center py-2">
-            <h5 class="mb-0"><i class="fas fa-list me-2"></i>搜索结果</h5>
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i><span data-i18n="search.results">Search Results</span></h5>
             <div class="d-flex gap-2 align-items-center">
                 <span id="resultCount" style="color: #aaa; font-size: 0.85rem;"></span>
                 <select id="pageSizeSelect" style="background: #2d2d2f; color: #ccc; border: 1px solid #444; border-radius: 3px; padding: 2px 6px; font-size: 0.85rem;">
-                    <option value="20">20条/页</option>
-                    <option value="50">50条/页</option>
-                    <option value="100">100条/页</option>
-                    <option value="0">全部</option>
+                    <option value="20" data-i18n="search.perPage20">20 / page</option>
+                    <option value="50" data-i18n="search.perPage50">50 / page</option>
+                    <option value="100" data-i18n="search.perPage100">100 / page</option>
+                    <option value="0" data-i18n="search.perPageAll">All</option>
                 </select>
             </div>
         </div>
@@ -57,13 +57,13 @@
                 <table class="table mb-0" id="resultTable" style="border-radius: 0;">
                     <thead style="background-color: #3d3d3f; color: #e0e0e0;">
                         <tr>
-                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;">ID</th>
-                            <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;">名称</th>
-                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;">操作</th>
+                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colId">ID</th>
+                            <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colName">Name</th>
+                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colAction">Action</th>
                         </tr>
                     </thead>
                     <tbody id="resultBody">
-                        <tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">选择类型并输入关键词搜索</td></tr>
+                        <tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;" data-i18n="search.initialHint">Select a type and enter keywords to search</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -79,14 +79,14 @@
 
         // Always search - empty query returns all items
 
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">搜索中...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.searching') + '</td></tr>';
 
         fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q))
             .then(function (r) { return r.json(); })
             .then(function (items) {
-                document.getElementById('resultCount').textContent = '共 ' + items.length + ' 条';
+                document.getElementById('resultCount').textContent = i18n.t('search.resultsCount', { count: items.length });
                 if (items.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">未找到匹配结果</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.noResults') + '</td></tr>';
                     return;
                 }
                 window._searchItems = items;
@@ -94,7 +94,7 @@
                 renderSearchPage();
             })
             .catch(function () {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #d63a6e; padding: 2rem;">搜索失败，请检查服务器连接</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #d63a6e; padding: 2rem;">' + i18n.t('search.searchFailed') + '</td></tr>';
             });
     }
 
@@ -114,7 +114,7 @@
         var pageItems = items.slice(start, end);
 
         var tbody = document.getElementById('resultBody');
-        document.getElementById('resultCount').textContent = '共 ' + total + ' 条 第 ' + page + '/' + pages + ' 页';
+        document.getElementById('resultCount').textContent = i18n.t('search.pageInfo', { total: total, page: page, pages: pages });
         tbody.innerHTML = '';
 
         pageItems.forEach(function (item) {
@@ -123,7 +123,7 @@
             tr.innerHTML =
                 '<td style="padding: 0.4rem 0.75rem;"><code style="background: #3d3d3f; color: #e0e0e0; padding: 2px 8px; border-radius: 3px; font-size: 0.9rem;">' + item.id + '</code></td>' +
                 '<td style="padding: 0.4rem 0.75rem; color: #ccc;">' + (item.name || '') + '</td>' +
-                '<td style="padding: 0.4rem 0.75rem;"><button class="btn btn-sm btn-outline-primary" onclick="copyId(' + item.id + ')">复制 ID</button></td>';
+                '<td style="padding: 0.4rem 0.75rem;"><button class="btn btn-sm btn-outline-primary" onclick="copyId(' + item.id + ')">' + i18n.t('search.copyId') + '</button></td>';
             tbody.appendChild(tr);
         });
 
@@ -172,7 +172,7 @@
         // Visual feedback
         var btn = event.target;
         var orig = btn.textContent;
-        btn.textContent = '已复制';
+        btn.textContent = i18n.t('search.copied');
         btn.className = 'btn btn-sm btn-success';
         setTimeout(function () {
             btn.textContent = orig;
