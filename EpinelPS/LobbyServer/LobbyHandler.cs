@@ -72,7 +72,7 @@ public static class LobbyHandler
 
         if (handler == null)
         {
-            Logging.WriteLine($"Error: Implementation for {path} not found", LogType.Error);
+            Logging.WriteLine($"[LobbyHandler] No handler for: {path}", LogType.Error);
             //ctx.Response.StatusCode = 404;
 
             // to prevent "reloading" of the game for now, return empty response
