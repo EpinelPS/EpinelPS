@@ -19,4 +19,9 @@ public class CoreInfo
 
     public int MaxInterceptionCount { get; set; } = 3;
     public int ResetHourUtcTime { get; set; } = 20;
+
+    /// <summary>
+    /// Globally active event banner IDs. If empty, falls back to user-specific banners or latest event.
+    /// </summary>
+    public List<int> ActiveEventBannerIds { get; set; } = [];
 }

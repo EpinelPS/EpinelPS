@@ -42,6 +42,7 @@
     "events": "Events",
     "users": "Users",
     "mail": "Mail",
+    "search": "ID Search",
     "config": "Configuration",
     "database": "Database",
     "profile": "Profile",
@@ -99,6 +100,10 @@
       "mail": {
         "title": "Mail System",
         "desc": "Send system mails and rewards to players"
+      },
+      "search": {
+        "title": "ID Search",
+        "desc": "Search IDs for characters, items, costumes, etc."
       },
       "database": {
         "title": "Database",
@@ -193,10 +198,23 @@
     }
   },
   "events": {
-    "config": {
-      "title": "Event Configuration",
-      "comingSoon": "Coming Soon!"
-    }
+    "title": "Event Configuration",
+    "backToList": "Back",
+    "save": "Save Configuration",
+    "activeCount": "Currently active",
+    "noSelection": "None selected, will show latest event by default",
+    "allEvents": "All Events",
+    "perPage": "Per page",
+    "perPageAll": "All",
+    "items": "items",
+    "searchPlaceholder": "Search event name...",
+    "colActive": "Active",
+    "colName": "Event Name",
+    "colBannerId": "Banner ID",
+    "colEventId": "Event ID",
+    "pageInfo": "{{total}} items, {{pages}} pages",
+    "pageInfoCurrent": " (Page {{page}}/{{pages}})",
+    "saved": "Configuration saved"
   },
   "mail": {
     "title": "Send Mail",
@@ -236,7 +254,67 @@
     "invalidRecipient": "Recipient ID must be numeric",
     "needTitle": "Please enter mail title",
     "needContent": "Please enter mail content",
-    "needOneRow": "At least one row is required"
+    "needOneRow": "At least one row is required",
+    "searchOrEnterId": "Search or enter ID",
+    "noIdNeeded": "No ID needed",
+    "searching": "Searching...",
+    "loadFailed": "Load failed",
+    "noNickname": "No nickname set",
+    "alertTitle": "Result",
+    "rewardType": {
+      "none": "None",
+      "userExp": "UserExp",
+      "charExp": "CharExp",
+      "currency": "Currency",
+      "character": "Character",
+      "item": "Item",
+      "frame": "Frame",
+      "bgm": "Bgm",
+      "liveWallpaper": "LiveWallpaper",
+      "characterCostume": "CharacterCostume",
+      "itemRandom": "ItemRandom",
+      "infraCoreExp": "InfraCoreExp",
+      "itemRandomBox": "ItemRandomBox",
+      "favoriteItem": "FavoriteItem",
+      "profileCardObject": "ProfileCardObject",
+      "userTitle": "UserTitle",
+      "lobbyDecoBackground": "LobbyDecoBackground",
+      "album": "Album"
+    }
+  },
+  "search": {
+    "title": "ID Search",
+    "backToList": "Back",
+    "type": "Type",
+    "typeCharacter": "Character",
+    "typeItem": "Item",
+    "typeFrame": "Frame",
+    "typeBgm": "BGM",
+    "typeLiveWallpaper": "Live Wallpaper",
+    "typeCostume": "Costume",
+    "typeFavoriteItem": "Favorite Item",
+    "typeProfileCard": "Profile Card",
+    "typeTitle": "Title",
+    "typeAlbum": "Album",
+    "queryLabel": "Search Name or ID",
+    "queryPlaceholder": "Enter name or ID to search...",
+    "button": "Search",
+    "results": "Search Results",
+    "perPage20": "20 / page",
+    "perPage50": "50 / page",
+    "perPage100": "100 / page",
+    "perPageAll": "All",
+    "searching": "Searching...",
+    "resultsCount": "{{count}} results",
+    "noResults": "No matching results found",
+    "searchFailed": "Search failed, check server connection",
+    "pageInfo": "{{total}} results - Page {{page}}/{{pages}}",
+    "copyId": "Copy ID",
+    "copied": "Copied!",
+    "initialHint": "Select a type and enter keywords to search",
+    "colId": "ID",
+    "colName": "Name",
+    "colAction": "Action"
   },
   "currency": {
     "title": "Modify User Currency",

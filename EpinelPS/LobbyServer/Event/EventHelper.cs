@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 using log4net;
 using Newtonsoft.Json;
@@ -198,11 +199,19 @@ public class EventHelper
         var lobbyPrivateBannerIds = user.LobbyPrivateBannerIds;
         var lobbyPrivateBannerRecords = GameData.Instance.LobbyPrivateBannerTable.Values;
         List<LobbyPrivateBannerRecord> lobbyPrivateBanners = [];
+
+        // Priority 1: user-specific banner IDs
         if (lobbyPrivateBannerIds is not null && lobbyPrivateBannerIds.Count > 0)
         {
             lobbyPrivateBanners = [.. lobbyPrivateBannerRecords.Where(b => lobbyPrivateBannerIds.Contains(b.Id))];
         }
-        else
+        // Priority 2: server-wide active event banners (configured via admin panel)
+        else if (JsonDb.Instance.ActiveEventBannerIds.Count > 0)
+        {
+            lobbyPrivateBanners = [.. lobbyPrivateBannerRecords.Where(b => JsonDb.Instance.ActiveEventBannerIds.Contains(b.Id))];
+        }
+        // Priority 3: fallback to the latest event
+        if (lobbyPrivateBanners.Count == 0)
         {
             lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.OrderBy(b => b.EventId).Last());
         }

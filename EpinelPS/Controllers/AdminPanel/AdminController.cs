@@ -44,7 +44,20 @@ public class AdminController(ILogger<AdminController> logger) : Controller
     {
         if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        return View();
+        return View(JsonDb.Instance.ActiveEventBannerIds);
+    }
+
+    [Route("Events"), ActionName("Events")]
+    [HttpPost]
+    public IActionResult EventsSave([FromForm] List<int>? activeBannerIds)
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        JsonDb.Instance.ActiveEventBannerIds = activeBannerIds ?? [];
+        JsonDb.Save();
+
+        TempData["MessageKey"] = "events.config.saved";
+        return View(JsonDb.Instance.ActiveEventBannerIds);
     }
 
     [Route("Configuration")]
@@ -77,6 +90,13 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
     [Route("Mail")]
     public IActionResult Mail()
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        return View();
+    }
+    [Route("Search")]
+    public IActionResult Search()
     {
         if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
