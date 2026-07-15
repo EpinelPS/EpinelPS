@@ -4,6 +4,7 @@ using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Paseto;
 using Paseto.Builder;
 using System.Security.Cryptography;
