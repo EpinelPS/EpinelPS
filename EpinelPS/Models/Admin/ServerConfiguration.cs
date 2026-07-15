@@ -7,4 +7,7 @@ public class ServerConfiguration
 {
     [BindProperty]
     public LogType LogType { get; set; }
+
+    [BindProperty]
+    public string GamePath { get; set; } = "";
 }

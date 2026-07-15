@@ -331,6 +331,8 @@
     "server": {
       "title": "Server Configuration",
       "logLevel": "Log Level:",
+      "gamePath": "Game installation directory (for localized character/costume names)",
+      "gamePathHint": "The server will read localization files from the game's Unity/.../lss directory.",
       "updateResources": "Update Resources",
       "updateResourcesHint": "Downloads asset and static data info from official server."
     },

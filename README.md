@@ -36,6 +36,16 @@ You should be able to register an new account in the launcher (you can enter any
 
 To access the admin panel, go to https://127.0.0.1/admin/ and sign in. Note that IsAdmin needs to be true for the user account. You can skip stages and add all characters using that link for example.
 
+### Localized character and item names
+
+The admin Search and Mail autocomplete can resolve character, costume, item, and BGM names from the game's local localization databases. Set the game installation directory in Admin → Configuration → set `GamePath` in `gameconfig.json`:
+
+```json
+"GamePath": "D:\\NIKKE\\NIKKE\\game"
+```
+
+The server automatically searches the corresponding `Unity/.../saus/saus/lss` directory. Without this path, IDs still work, but localized names cannot be resolved.
+
 
 > [!Note]
 > Before updating the game, make sure to switch back to the official server to ensure that the game is properly patched.

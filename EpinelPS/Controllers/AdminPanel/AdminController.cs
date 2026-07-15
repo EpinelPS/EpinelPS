@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Models.Admin;
+using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Paseto;
 using Paseto.Builder;
@@ -67,7 +68,8 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         ServerConfiguration model = new()
         {
-            LogType = JsonDb.Instance.LogLevel
+            LogType = JsonDb.Instance.LogLevel,
+            GamePath = GameConfig.Root.GamePath
         };
 
         return View(model);
@@ -84,8 +86,10 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         JsonDb.Instance.LogLevel = cfg.LogType;
         JsonDb.Save();
+        GameConfig.Root.GamePath = cfg.GamePath?.Trim() ?? "";
+        GameConfig.Save();
 
-        return View(new ServerConfiguration() { LogType = cfg.LogType });
+        return View(new ServerConfiguration() { LogType = cfg.LogType, GamePath = GameConfig.Root.GamePath });
     }
 
     [Route("Mail")]

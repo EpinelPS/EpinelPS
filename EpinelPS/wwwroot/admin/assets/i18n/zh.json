@@ -333,6 +333,8 @@
     "server": {
       "title": "服务器配置",
       "logLevel": "日志级别:",
+      "gamePath": "游戏安装目录（用于角色/装扮名称本地化）",
+      "gamePathHint": "设置后服务器会自动读取游戏 Unity/.../lss 下的本地化文件。",
       "updateResources": "Update Resources",
       "updateResourcesHint": "Downloads asset and static data info from official server."
     },
