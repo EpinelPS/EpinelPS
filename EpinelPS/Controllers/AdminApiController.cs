@@ -257,7 +257,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         switch (type)
         {
             case 4: // Character
-                SearchDict(GameData.Instance.CharacterTable, r => r.NameLocalkey, query, results);
+                SearchCharacters(query, results);
                 break;
             case 5: // Item
                 SearchDict(GameData.Instance.itemMaterialTable, r => r.NameLocalkey, query, results);
@@ -269,6 +269,15 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             case 6: // Frame
                 SearchDict(GameData.Instance.userFrameTable, r => r.NameLocalkey, query, results);
                 break;
+            case 8: // BGM / Jukebox theme
+                foreach (var kv in GameData.Instance.jukeboxListDataRecords)
+                {
+                    var name = kv.Value.Name ?? kv.Value.Bgm ?? kv.Key.ToString();
+                    if (string.IsNullOrEmpty(query) || name.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                        results.Add(new { id = kv.Key, name });
+                }
+                SearchDict(GameData.Instance.jukeboxThemeDataRecords, r => r.NameLocalkey, query, results);
+                break;
             case 10: // LiveWallpaper
                 SearchDict(GameData.Instance.LiveWallpaperTable, r => r.NameLocalkey, query, results);
                 break;
@@ -277,12 +286,19 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 {
                     var raw = kv.Value.CostumeNameLocale ?? "";
                     var cleaned = LookupRealName(raw);
+                    var character = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.ResourceId == kv.Value.ResourceId);
+                    var characterName = character == null ? "" : LookupRealName(character.NameLocalkey ?? "");
+                    var displayName = string.IsNullOrWhiteSpace(characterName) || string.IsNullOrWhiteSpace(cleaned)
+                        ? (string.IsNullOrWhiteSpace(cleaned) ? kv.Key.ToString() : cleaned)
+                        : $"{characterName} - {cleaned}";
                     if (string.IsNullOrEmpty(query) ||
                         raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                         cleaned.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        characterName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        displayName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                         kv.Key.ToString().Contains(query))
                     {
-                        results.Add(new { id = kv.Key, name = string.IsNullOrEmpty(cleaned) ? kv.Key.ToString() : cleaned });
+                        results.Add(new { id = kv.Key, name = displayName });
                     }
                 }
                 break;
@@ -319,6 +335,29 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 if (raw.Contains(query, StringComparison.OrdinalIgnoreCase) || display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
                     results.Add(new { id = kv.Key, name = display });
             }
+        }
+    }
+
+    private static void SearchCharacters(string query, List<object> results)
+    {
+        var records = GameData.Instance.CharacterTable;
+        var predecessor = records.Values.Where(r => r.GrowGrade > 0)
+            .ToDictionary(r => r.GrowGrade, r => r.Id);
+        foreach (var kv in records)
+        {
+            var stage = 1;
+            var current = kv.Key;
+            var visited = new HashSet<int>();
+            while (predecessor.TryGetValue(current, out var previous) && visited.Add(current))
+            {
+                stage++;
+                current = previous;
+            }
+            var display = $"{LookupRealName(kv.Value.NameLocalkey ?? kv.Key.ToString())}（stage {stage}）";
+            var raw = kv.Value.NameLocalkey ?? "";
+            if (string.IsNullOrEmpty(query) || raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                results.Add(new { id = kv.Key, name = display });
         }
     }
 
