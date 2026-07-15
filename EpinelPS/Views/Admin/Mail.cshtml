@@ -553,7 +553,7 @@
         if (!datalist) return;
 
         // Fetch items from API
-        fetch('/adminapi/searchGameData?type=' + type + '&q=')
+        fetch('/adminapi/searchGameData?type=' + type + '&q=&lang=' + encodeURIComponent(localStorage.getItem('adminui_lang') || 'zh'))
             .then(function (r) { return r.json(); })
             .then(function (items) {
                 datalist.innerHTML = '';
