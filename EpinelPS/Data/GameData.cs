@@ -150,6 +150,35 @@ public class GameData
     [LoadRecord("MidasProductTable.json", "MidasProductIdProximabeta")]
     public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
 
+    // CashShop / InAppShop data. These tables are consumed by ViewCashShop's
+    // InAppShopManager and its package/costume page components.
+    [LoadRecord("InAppShopManagerTable.json", "Id")]
+    public readonly Dictionary<int, InAppShopManagerRecord> InAppShopManagerTable = [];
+
+    [LoadRecord("InAppShopInfoTable.json", "Id")]
+    public readonly Dictionary<int, InAppShopInfoRecord> InAppShopInfoTable = [];
+
+    [LoadRecord("CostumeShopTable.json", "Id")]
+    public readonly Dictionary<int, CostumeShopRecord> CostumeShopTable = [];
+
+    [LoadRecord("PackageShopTable.json", "Id")]
+    public readonly Dictionary<int, PackageShopRecord> PackageShopTable = [];
+
+    [LoadRecord("PackageListTable.json", "Id")]
+    public readonly Dictionary<int, PackageListRecord> PackageListTable = [];
+
+    [LoadRecord("CampaignPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, CampaignPackageShopRecord> CampaignPackageShopTable = [];
+
+    [LoadRecord("CustomPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, CustomPackageShopRecord> CustomPackageShopTable = [];
+
+    [LoadRecord("StepUpPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, StepUpPackageShopRecord> StepUpPackageShopTable = [];
+
+    [LoadRecord("PassCostumeShopTable.json", "Id")]
+    public readonly Dictionary<int, PassCostumeShopRecord_Raw> PassCostumeShopTable = [];
+
     [LoadRecord("TowerTable.json", "Id")]
     public readonly Dictionary<int, TowerRecord> towerTable = [];
 
