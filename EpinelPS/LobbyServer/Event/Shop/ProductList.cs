@@ -1,3 +1,4 @@
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Event.Shop;
@@ -15,6 +16,16 @@ public class ProductList : LobbyMessage
         try
         {
             response.Shops.Add(EventShopHelper.InitShopData(user, req.EventId));
+
+            // 初始化 ShopNormal 的 ShopCategoryData，防止客户端找不到而崩溃
+            if (!GameData.Instance.ShopTable.Values.Any(s => (int)s.ShopCategory == 1))
+            {
+                response.Shops.Add(new NetEventShopProductData
+                {
+                    ShopTid = 1,
+                    ShopCategory = 1,
+                });
+            }
         }
         catch (Exception ex)
         {

@@ -12,7 +12,10 @@ public class RenewShop : LobbyMessage
 
         Logging.WriteLine($"[Shop] /shop/renew called by user {user.Nickname}: ShopCategory={req.ShopCategory}", LogType.Debug);
 
-        ResShopRenew response = new();
+        ResShopRenew response = new()
+        {
+            Shop = NormalShopHelper.GetShopData(req.ShopCategory),
+        };
 
         await WriteDataAsync(response);
     }

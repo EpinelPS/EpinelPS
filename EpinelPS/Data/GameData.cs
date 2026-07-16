@@ -392,6 +392,12 @@ public class GameData
     public readonly Dictionary<int, UserFrameRecord> userFrameTable = [];
 
 
+    // Normal Shop Data Tables
+    [LoadRecord("ShopTable.json", "Id")]
+    public readonly Dictionary<int, ShopRecord> ShopTable = [];
+    [LoadRecord("ShopProductTable.json", "Id")]
+    public readonly Dictionary<int, ShopProductRecord> ShopProductTable = [];
+
     // Contents Shop Data Tables
     [LoadRecord("ContentsShopTable.json", "Id")]
     public readonly Dictionary<int, ContentsShopRecord> ContentsShopTable = [];

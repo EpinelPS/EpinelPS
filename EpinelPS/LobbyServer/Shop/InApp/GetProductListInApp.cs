@@ -9,7 +9,16 @@ public class GetProductList : LobbyMessage
 
         ResGetInAppShopData response = new();
 
-        response.InAppShopDataList.Add(new NetInAppShopData() { Id = 10001, StartDate = DateTime.Now.Ticks, EndDate = DateTime.Now.AddDays(2).Ticks });
+        // Keep the advertised period stable across repeated polling. Using
+        // DateTime.Now here changes the payload on every request and makes the
+        // client re-enter its shop refresh path continuously.
+        var start = DateTime.UtcNow.Date;
+        response.InAppShopDataList.Add(new NetInAppShopData
+        {
+            Id = 10001,
+            StartDate = start.Ticks,
+            EndDate = start.AddDays(2).Ticks,
+        });
 
         await WriteDataAsync(response);
     }
