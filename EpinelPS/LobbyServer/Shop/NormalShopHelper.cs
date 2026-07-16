@@ -38,13 +38,13 @@ public static class NormalShopHelper
 
     private static NetShopProductData BuildContentsShopData(ContentsShopRecord shop)
     {
-        var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var now = DateTime.UtcNow;
         var result = new NetShopProductData
         {
             ShopTid = shop.Id,
             ShopCategory = (int)shop.ShopCategory,
             RenewCount = 0,
-            RenewAt = 0,
+            RenewAt = GetRenewAt(shop, now),
             NextRenewAt = GetNextRenewAt(shop, now),
             FreeRenewCount = 1,
         };
@@ -72,20 +72,29 @@ public static class NormalShopHelper
         return result;
     }
 
-    private static long GetNextRenewAt(ContentsShopRecord shop, long now)
+    private static long GetRenewAt(ContentsShopRecord shop, DateTime now)
+    {
+        if (shop.RenewType == RenewType.None)
+            return 0;
+
+        return now.Date.Ticks;
+    }
+
+    private static long GetNextRenewAt(ContentsShopRecord shop, DateTime now)
     {
         // Renewal timestamps are part of the shop state. Returning `now +
         // period` makes every product-list response different and causes the
         // client to immediately request /shop/productlist again in a loop.
         // Use a stable UTC boundary instead.
-        var day = now / 86400L;
-        return shop.RenewType switch
+        var days = shop.RenewType switch
         {
-            RenewType.AutoDay => (day + Math.Max(1, shop.RenewValue)) * 86400L,
-            RenewType.AutoWeek => (day + Math.Max(1, shop.RenewValue) * 7) * 86400L,
-            RenewType.AutoMonth => (day + Math.Max(1, shop.RenewValue) * 30) * 86400L,
-            _ => 0,
+            RenewType.AutoDay => Math.Max(1, shop.RenewValue),
+            RenewType.AutoWeek => Math.Max(1, shop.RenewValue) * 7,
+            RenewType.AutoMonth => Math.Max(1, shop.RenewValue) * 30,
+            _ => 0
         };
+
+        return days == 0 ? 0 : now.Date.AddDays(days).Ticks;
     }
 
     public static ShopProductRecord? GetProductById(int productId)
