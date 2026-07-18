@@ -167,6 +167,9 @@ public class GameData
     [LoadRecord("PackageListTable.json", "Id")]
     public readonly Dictionary<int, PackageListRecord> PackageListTable = [];
 
+    [LoadRecord("PackageGroupTable.json", "Id")]
+    public readonly Dictionary<int, PackageGroupRecord> PackageGroupTable = [];
+
     [LoadRecord("CampaignPackageShopTable.json", "Id")]
     public readonly Dictionary<int, CampaignPackageShopRecord> CampaignPackageShopTable = [];
 

@@ -10,6 +10,10 @@ public class GameConfigRoot
     public string GameMinVer { get; set; } = "";
     public string GameMaxVer { get; set; } = "";
     /// <summary>
+    /// Development-only switch that grants in-app products without contacting a payment provider.
+    /// </summary>
+    public bool EnableFreeInAppPurchases { get; set; }
+    /// <summary>
     /// this is only for displaying the target version in admin console or cli
     /// </summary>
     public string TargetVersion { get; set; } = "";
