@@ -14,7 +14,7 @@ public class GetShop : LobbyMessage
 
         ResGetShop response = new()
         {
-            Shop = NormalShopHelper.GetShopData(req.ShopCategory)
+            Shop = NormalShopHelper.GetShopData(user, req.ShopCategory)
         };
 
         await WriteDataAsync(response);

@@ -1,3 +1,4 @@
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Shop;
@@ -14,9 +15,10 @@ public class RenewShop : LobbyMessage
 
         ResShopRenew response = new()
         {
-            Shop = NormalShopHelper.GetShopData(req.ShopCategory),
+            Shop = NormalShopHelper.GetShopData(user, req.ShopCategory, reroll: true),
         };
 
+        JsonDb.Save();
         await WriteDataAsync(response);
     }
 }

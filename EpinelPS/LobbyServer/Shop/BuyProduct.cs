@@ -19,64 +19,45 @@ public class BuyProduct : LobbyMessage
             Product = new NetShopBuyProductData(),
         };
 
-        var product = NormalShopHelper.GetProductById(req.ShopProductTid);
-        if (product == null)
+        // The client omits quantity for a normal single purchase, which is
+        // decoded by protobuf as 0. A single-buy request still means one item.
+        int quantity = req.Quantity > 0 ? req.Quantity : 1;
+        var request = new NormalShopHelper.PurchaseRequest(req.ShopProductTid, req.Order, quantity);
+        if (!NormalShopHelper.TryPurchase(user, req.ShopCategory, [request], out var purchased,
+                out var currencies, out var costItems))
         {
+            response.Result = ShopBuyProductResult.Expired;
             await WriteDataAsync(response);
             return;
         }
 
-        int quantity = req.Quantity;
-        int totalPrice = product.PriceValue * quantity;
-
-        if (product.PriceType == ShopProductType.Currency)
-        {
-            if (!user.CanSubtractCurrency((CurrencyType)product.PriceId, totalPrice))
-            {
-                await WriteDataAsync(response);
-                return;
-            }
-            user.SubtractCurrency(product.PriceId, totalPrice);
-            response.Currencies.Add(new NetUserCurrencyData
-            {
-                Type = (int)product.PriceId,
-                Value = user.GetCurrencyVal((CurrencyType)product.PriceId),
-            });
-        }
-        else if (product.PriceType == ShopProductType.Item)
-        {
-            var costItem = user.Items.FirstOrDefault(i => i.ItemType == (int)product.PriceId);
-            if (costItem == null || costItem.Count < totalPrice)
-            {
-                await WriteDataAsync(response);
-                return;
-            }
-            user.RemoveItemBySerialNumber(costItem.Isn, totalPrice);
-        }
-
-        GrantProduct(user, ref response, product, quantity);
+        response.Currencies.AddRange(currencies);
+        response.Item = costItems.FirstOrDefault();
+        var purchase = purchased[0];
+        response.Product.BuyCount = purchase.BuyCount;
+        GrantProduct(user, ref response, purchase.Product, purchase.Quantity);
 
         JsonDb.Save();
         await WriteDataAsync(response);
     }
 
-    private void GrantProduct(User user, ref ResShopBuyProduct response, ShopProductRecord product, int quantity)
+    private void GrantProduct(User user, ref ResShopBuyProduct response, ContentsShopProductRecord product, int quantity)
     {
-        int totalValue = product.ProductValue * quantity;
+        int totalValue = product.GoodsValue * quantity;
 
-        if (product.ProductType == ShopProductType.Currency)
+        if (product.GoodsType == RewardType.Currency)
         {
-            user.AddCurrency((CurrencyType)product.ProductId, totalValue);
+            user.AddCurrency((CurrencyType)product.GoodsId, totalValue);
             response.Product.Currency.Add(new NetCurrencyData
             {
-                Type = product.ProductId,
+                Type = product.GoodsId,
                 Value = totalValue,
-                FinalValue = user.GetCurrencyVal((CurrencyType)product.ProductId),
+                FinalValue = user.GetCurrencyVal((CurrencyType)product.GoodsId),
             });
         }
-        else if (product.ProductType == ShopProductType.Item)
+        else if (product.GoodsType == RewardType.Item || product.GoodsType.ToString().StartsWith("Equipment"))
         {
-            var existing = user.Items.FirstOrDefault(i => i.ItemType == product.ProductId);
+            var existing = user.Items.FirstOrDefault(i => i.ItemType == product.GoodsId);
             if (existing != null)
             {
                 existing.Count += totalValue;
@@ -87,7 +68,7 @@ public class BuyProduct : LobbyMessage
             {
                 var newItem = new DbItemData
                 {
-                    ItemType = product.ProductId,
+                    ItemType = product.GoodsId,
                     Count = totalValue,
                     Isn = user.GenerateUniqueItemId(),
                 };
@@ -96,11 +77,11 @@ public class BuyProduct : LobbyMessage
                 response.Product.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
             }
         }
-        else if (product.ProductType == ShopProductType.Character)
+        else if (product.GoodsType == RewardType.Character)
         {
-            if (GameData.Instance.CharacterTable.TryGetValue(product.ProductId, out var charRecord))
+            if (GameData.Instance.CharacterTable.TryGetValue(product.GoodsId, out var charRecord))
             {
-                var userChar = user.GetCharacter(product.ProductId);
+                var userChar = user.GetCharacter(product.GoodsId);
                 if (userChar == null)
                 {
                     userChar = new CharacterModel
@@ -118,6 +99,22 @@ public class BuyProduct : LobbyMessage
                     PieceCount = totalValue,
                 });
             }
+        }
+        else if (product.GoodsType == RewardType.LiveWallpaper)
+        {
+            if (!user.LiveWallpaperList.Contains(product.GoodsId))
+                user.LiveWallpaperList = [.. user.LiveWallpaperList, product.GoodsId];
+            response.Product.LiveWallPapers.Add(product.GoodsId);
+        }
+        else if (product.GoodsType == RewardType.UserTitle)
+        {
+            if (!user.TitleList.Contains(product.GoodsId))
+                user.TitleList.Add(product.GoodsId);
+            response.Product.UserTitleList.Add(product.GoodsId);
+        }
+        else
+        {
+            Logging.WriteLine($"[Shop] Unsupported reward type {product.GoodsType} for product {product.Id}", LogType.Warning);
         }
     }
 }
