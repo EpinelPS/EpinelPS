@@ -1,8 +1,10 @@
-﻿using EpinelPS.Controllers.AdminPanel;
+using EpinelPS.Controllers.AdminPanel;
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
+using EpinelPS.Commands.Core;
+using EpinelPS.Commands.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Paseto;
@@ -17,6 +19,7 @@ namespace EpinelPS.Controllers;
 public class AdminApiController(GameContext DbContext) : ControllerBase
 {
     private readonly GameContext dbContext = DbContext;
+    private readonly CommandRegistry registry = new();
     private static readonly MD5 md5 = MD5.Create();
 
     [HttpPost]
@@ -124,334 +127,59 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     {
         if (!AdminController.CheckAuth(HttpContext)) return new RunCmdResponse() { error = "bad token" };
 
-        switch (req.cmdName)
+        // --- SendMail uses pipe-delimited format (title/content may contain spaces) ---
+        if (req.cmdName.Equals("send-mail", StringComparison.OrdinalIgnoreCase))
         {
-            case "reloadDb":
-                JsonDb.Reload();
-                return RunCmdResponse.OK;
-            case "completestage":
-                return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
-            case "completeallstages":
-                return AdminCommands.CompleteAllStages(ulong.Parse(req.p1));
-            case "addallcharacters":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllCharacters(user);
-                }
-            case "addallcostumes":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllCostumes(user);
-                }
-            case "addallmaterials":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllMaterials(user, int.Parse(req.p2));
-                }
-            case "SetLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetCharacterLevel(user, int.Parse(req.p2));
-                }
-            case "SetSkillLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetSkillLevel(user, int.Parse(req.p2));
-                }
-            case "SetCoreLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetCoreLevel(user, int.Parse(req.p2));
-                }
-            case "finishalltutorials":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.FinishAllTutorials(user);
-                }
-            case "AddCharacter":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddCharacter(user, int.Parse(req.p2));
-                }
-            case "AddItem":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+            if (!ulong.TryParse(req.p1, out ulong mailUserId))
+                return new RunCmdResponse() { error = "Invalid user ID" };
+            User? mailUser = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == mailUserId);
+            if (mailUser == null)
+                return new RunCmdResponse() { error = "User not found" };
 
-                    string[] s = req.p2.Split("-");
-                    return AdminCommands.AddItem(user, int.Parse(s[0]), int.Parse(s[1]));
-                }
-            case "SendMail":
-                {
-                    string[] parts = req.p1.Split('|');
-                    if (parts.Length < 6)
-                        return new RunCmdResponse() { error = "Insufficient parameters" };
-                    if (!ulong.TryParse(parts[0], out ulong userId))
-                        return new RunCmdResponse() { error = "Invalid user ID" };
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-                    if (user == null)
-                        return new RunCmdResponse() { error = "User not found" };
-                    if (!int.TryParse(parts[1], out int senderId))
-                        return new RunCmdResponse() { error = "Invalid sender ID" };
-                    string title = parts[2];
-                    string content = parts[3];
-                    if (!int.TryParse(parts[4], out int validDays))
-                        return new RunCmdResponse() { error = "Invalid validity days" };
-                    var attachments = new List<MailAttachment>();
-                    string attachmentsParam = parts.Length > 5 ? parts[5] : "";
+            // p2 is pipe-delimited: senderId|title|content|validDays|attachments
+            string[] parts = (req.p2 ?? "").Split('|');
 
-                    if (!string.IsNullOrEmpty(attachmentsParam))
-                    {
-                        foreach (var item in attachmentsParam.Split(','))
-                        {
-                            string[] attParts = item.Split('-');
-                            if (attParts.Length != 3) continue;
+            var mailArgs = new[] { parts[0], parts[1], parts[2], parts[3] };
+            if (parts.Length > 4 && !string.IsNullOrEmpty(parts[4]))
+                mailArgs = [.. mailArgs, parts[4]];
 
-                            if (int.TryParse(attParts[0], out int type) &&
-                                int.TryParse(attParts[1], out int id) &&
-                                int.TryParse(attParts[2], out int count))
-                            {
-                                attachments.Add(new MailAttachment
-                                {
-                                    Type = type,
-                                    Id = id,
-                                    Count = count
-                                });
-                            }
-                        }
-                    }
+            var mailCtx = new CliContext { SelectedUser = mailUser };
+            var mailHandler = registry.CreateHandler("send-mail", mailCtx);
+            if (mailHandler == null)
+                return new RunCmdResponse() { error = "send-mail command not available via API" };
 
-                    return AdminCommands.SendMail(user, senderId, title, content, validDays, attachments);
-                }
-            case "updateServer":
-                {
-                    return await AdminCommands.UpdateResources();
-                }
+            var mailResult = await mailHandler.ExecuteAsync(mailArgs);
+            mailCtx.Save();
+            return mailResult.ToRunCmdResponse();
         }
-        return new RunCmdResponse() { error = "Not implemented" };
+
+        // --- Generic dispatch ---
+        // Try to resolve user context from p1 (non-fatal for user-less commands like reload-db, update-server)
+        User? user = null;
+        if (ulong.TryParse(req.p1, out ulong userId))
+        {
+            user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        }
+
+        var ctx = new CliContext { SelectedUser = user };
+
+        // Look up handler
+        var handler = registry.CreateHandler(req.cmdName, ctx);
+        if (handler == null)
+        {
+            // Check if the command exists at all (to give a better error message)
+            var existing = registry.FindHandler(req.cmdName);
+            if (existing != null)
+                return new RunCmdResponse() { error = $"Command '{req.cmdName}' is not available via API" };
+
+            return new RunCmdResponse() { error = $"Unknown command: {req.cmdName}" };
+        }
+
+        var args = req.ToArgs();
+        var result = await handler.ExecuteAsync(args);
+
+        ctx.Save();
+
+        return result.ToRunCmdResponse();
     }
-
-    private static List<CharactersJsonEntry>? _characters;
-    private static readonly object _charLock = new();
-    private static List<CharactersJsonEntry> GetCharacters()
-    {
-        if (_characters != null) return _characters;
-        lock (_charLock)
-        {
-            if (_characters != null) return _characters;
-            try
-            {
-                var cachePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "nikke_chars.json");
-                if (System.IO.File.Exists(cachePath))
-                {
-                    var json = System.IO.File.ReadAllText(cachePath);
-                    _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(json);
-                    if (_characters != null) return _characters;
-                }
-                // Download from GitHub
-                using var http = new HttpClient();
-                http.Timeout = TimeSpan.FromSeconds(10);
-                var url = "https://raw.githubusercontent.com/Nikke-db/Nikke-db.github.io/main/js/json/Characters.json";
-                var response = http.GetStringAsync(url).GetAwaiter().GetResult();
-                _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(response);
-                if (_characters != null)
-                {
-                    var dir = System.IO.Path.GetDirectoryName(cachePath);
-                    if (!string.IsNullOrEmpty(dir)) System.IO.Directory.CreateDirectory(dir);
-                    System.IO.File.WriteAllText(cachePath, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine("Failed to load nikke_chars.json: " + ex.Message);
-            }
-        }
-        _characters ??= [];
-        return _characters;
-    }
-
-    private class CharactersJsonEntry
-    {
-        public string? id { get; set; }
-        public string? name { get; set; }
-    }
-
-    private static string LookupRealName(string nameLocalkey, int nameCode = 0)
-    {
-        // Extract character number from "Locale_Character:XXX_name" or "Locale_Character:XXX_Name"
-        if (!string.IsNullOrEmpty(nameLocalkey))
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(nameLocalkey, @"Locale_Character:(\d+)_", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (match.Success)
-            {
-                var num = match.Groups[1].Value;
-                var charId = "c" + num.PadLeft(3, '0'); // "102" → "c102", "90" → "c090"
-                var chars = GetCharacters();
-                var found = chars.FirstOrDefault(c => string.Equals(c.id, charId, StringComparison.OrdinalIgnoreCase));
-                if (found?.name != null) return found.name;
-            }
-        }
-        return RealNameOrCleaned(nameLocalkey ?? "");
-    }
-
-    private static string LookupRealName<T>(T record, Func<T, string?> nameSelector, Func<T, int> nameCodeSelector) where T : class
-    {
-        return LookupRealName(nameSelector(record) ?? "", nameCodeSelector(record));
-    }
-
-    [HttpGet]
-    [Route("searchGameData")]
-    public IActionResult SearchGameData([FromQuery] int type, [FromQuery] string? q)
-    {
-        var results = new List<object>();
-        var query = q?.Trim().ToLowerInvariant() ?? "";
-
-        switch (type)
-        {
-            case 4: // Character
-                SearchDict(GameData.Instance.CharacterTable, r => r.NameLocalkey, query, results);
-                break;
-            case 5: // Item
-                SearchDict(GameData.Instance.itemMaterialTable, r => r.NameLocalkey, query, results);
-                SearchDict(GameData.Instance.ItemEquipTable, r => r.NameLocalkey, query, results);
-                SearchDict(GameData.Instance.ConsumableItems, r => r.NameLocalkey, query, results);
-                SearchDict(GameData.Instance.PieceItems, r => r.NameLocalkey, query, results);
-                SearchDict(GameData.Instance.ItemHarmonyCubeTable, r => r.NameLocalkey, query, results);
-                break;
-            case 6: // Frame
-                SearchDict(GameData.Instance.userFrameTable, r => r.NameLocalkey, query, results);
-                break;
-            case 10: // LiveWallpaper
-                SearchDict(GameData.Instance.LiveWallpaperTable, r => r.NameLocalkey, query, results);
-                break;
-            case 12: // Costume
-                foreach (var kv in GameData.Instance.CharacterCostumeTable)
-                {
-                    var raw = kv.Value.CostumeNameLocale ?? "";
-                    var cleaned = RealNameOrCleaned(raw);
-                    if (string.IsNullOrEmpty(query) ||
-                        raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                        cleaned.Contains(query, StringComparison.OrdinalIgnoreCase) ||
-                        kv.Key.ToString().Contains(query))
-                    {
-                        results.Add(new { id = kv.Key, name = string.IsNullOrEmpty(cleaned) ? kv.Key.ToString() : cleaned });
-                    }
-                }
-                break;
-            case 43: // FavoriteItem
-                SearchDict(GameData.Instance.FavoriteItemTable, r => r.NameLocalkey, query, results);
-                break;
-            case 44: // ProfileCardObject
-                SearchDict(GameData.Instance.ProfileCardObjectTable, r => r.NameLocalkey, query, results);
-                break;
-            case 46: // UserTitle
-                SearchDict(GameData.Instance.userTitleRecords, r => r.NameLocaleKey, query, results);
-                break;
-            case 48: // Album
-                SearchDict(GameData.Instance.albumResourceRecords, r => r.ScenarioNameLocalkey, query, results);
-                break;
-        }
-
-        // Disambiguate duplicate names by appending ID
-        var seen = new Dictionary<string, int>();
-        for (int i = 0; i < results.Count; i++)
-        {
-            var obj = (dynamic)results[i];
-            string name = obj.name;
-            int id = obj.id;
-            if (seen.TryGetValue(name, out int firstIdx))
-            {
-                // Add ID to the first occurrence
-                if (firstIdx >= 0)
-                {
-                    var first = (dynamic)results[firstIdx];
-                    results[firstIdx] = new { id = (int)first.id, name = (string)first.name + " (" + (int)first.id + ")" };
-                    seen[name] = -1; // mark as processed
-                }
-                // Add ID to this occurrence
-                results[i] = new { id, name = name + " (" + id + ")" };
-            }
-            else
-            {
-                seen[name] = i;
-            }
-        }
-
-        return Ok(results.Take(5000));
-    }
-
-    private static void SearchDict<T>(Dictionary<int, T> dict, Func<T, string?> nameSelector, string query, List<object> results) where T : class
-    {
-        if (string.IsNullOrEmpty(query))
-        {
-            foreach (var kv in dict)
-                results.Add(new { id = kv.Key, name = LookupRealName(nameSelector(kv.Value) ?? kv.Key.ToString()) });
-        }
-        else
-        {
-            foreach (var kv in dict)
-            {
-                var raw = nameSelector(kv.Value) ?? "";
-                var display = LookupRealName(raw);
-                if (raw.Contains(query, StringComparison.OrdinalIgnoreCase) || display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
-                    results.Add(new { id = kv.Key, name = display });
-            }
-        }
-    }
-
-    private static string RealNameOrCleaned(string raw)
-    {
-        if (string.IsNullOrEmpty(raw)) return "";
-
-        // Handle "Locale_XXX:###_name" or "Locale XXX:###" formats
-        if (raw.StartsWith("Locale_", StringComparison.OrdinalIgnoreCase) || raw.StartsWith("Locale ", StringComparison.OrdinalIgnoreCase))
-        {
-            var result = raw.StartsWith("Locale_") ? raw.Substring(7) : raw.Substring(7);
-            foreach (var suf in new[] { "_Name", "_Desc", "_Locale", "_NameLocale", "_name", "_desc", "_locale" })
-            {
-                if (result.EndsWith(suf, StringComparison.OrdinalIgnoreCase))
-                {
-                    result = result.Substring(0, result.Length - suf.Length);
-                    break;
-                }
-            }
-            return result;
-        }
-
-        // Clean up raw localization key
-        var s = raw;
-        if (s.StartsWith("Local_", StringComparison.OrdinalIgnoreCase))
-            s = s.Substring(6);
-        var prefixes = new[] { "Character_", "Item_", "Equip_", "Costume_", "Material_",
-            "Consume_", "Piece_", "HarmonyCube_", "Frame_", "Wallpaper_", "Title_",
-            "FavoriteItem_", "ProfileCard_", "Album_", "Bgm_", "Jukebox_" };
-        foreach (var prefix in prefixes)
-        {
-            if (s.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-            {
-                s = s.Substring(prefix.Length);
-                break;
-            }
-        }
-        var suffixes = new[] { "_Name", "_Desc", "_Description", "_Locale", "_Localkey", "_Localekey", "_Text" };
-        foreach (var suf in suffixes)
-        {
-            if (s.EndsWith(suf, StringComparison.OrdinalIgnoreCase))
-            {
-                s = s.Substring(0, s.Length - suf.Length);
-                break;
-            }
-        }
-        s = s.Replace("_", " ");
-        return s.Trim();
-    }
-
 }
