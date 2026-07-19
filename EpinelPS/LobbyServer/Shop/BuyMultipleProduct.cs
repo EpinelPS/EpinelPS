@@ -64,7 +64,7 @@ public class BuyMultipleProduct : LobbyMessage
             if (existing != null)
             {
                 existing.Count += totalValue;
-                response.Product.Item.Add(NetUtils.ItemDataToNet(existing));
+                response.Product.Item.Add(NetUtils.ItemDataToNet(existing, totalValue));
                 response.Product.UserItems.Add(NetUtils.UserItemDataToNet(existing));
             }
             else
@@ -76,7 +76,7 @@ public class BuyMultipleProduct : LobbyMessage
                     Isn = user.GenerateUniqueItemId(),
                 };
                 user.Items.Add(newItem);
-                response.Product.Item.Add(NetUtils.ItemDataToNet(newItem));
+                response.Product.Item.Add(NetUtils.ItemDataToNet(newItem, totalValue));
                 response.Product.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
             }
         }

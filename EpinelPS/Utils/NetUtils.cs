@@ -64,11 +64,11 @@ public class NetUtils
         };
     }
 
-    internal static NetItemData ItemDataToNet(DbItemData item)
+    internal static NetItemData ItemDataToNet(DbItemData item, int? count = null)
     {
         return new NetItemData()
         {
-            Count = item.Count,
+            Count = count ?? item.Count,
             Tid = item.ItemType,
             Corporation = item.Corp,
             Isn = item.Isn,
