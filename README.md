@@ -23,9 +23,6 @@ For running the game on Linux with EpinelPS, please use https://github.com/Epine
 > Please note this GitHub repository (https://github.com/EpinelPS/EpinelPS/) is the only official source for EpinelPS. **If you bought it from someone, you got scammed. Do not download EpinelPS from other sources.** Download link: https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/Server%20and%20Server%20selector.zip 
 [Download link (Linux)](https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/EpinelPS_linux_x64.zip)
 
-> [!WARNING]
-> This project is in an early state so many functions in the game do not work. It is recommended to download the latest build from GitHub actions.
-
 ## Usage
 Download the [GitHub actions build](https://nightly.link/EpinelPS/EpinelPS/workflows/dotnet-desktop/main/Server%20and%20Server%20selector.zip), and run ServerSelector.Desktop.exe as administrator (to modify DNS hosts file and install a CA cert). Make sure to close the game and launcher first. Select Local server, and then click save. After that, start EpinelPS.exe to start the actual server.
 <br>
@@ -34,7 +31,7 @@ Download the [GitHub actions build](https://nightly.link/EpinelPS/EpinelPS/workf
 You should be able to register an new account in the launcher (you can enter any email verification code).
 
 
-To access the admin panel, go to https://127.0.0.1/admin/ and sign in. Note that IsAdmin needs to be true for the user account. You can skip stages and add all characters using that link for example.
+To access the admin panel, go to https://127.0.0.1/admin/ and sign in. You can skip stages and add all characters using that link for example. The first created user account is an admin account.
 
 
 > [!Note]
