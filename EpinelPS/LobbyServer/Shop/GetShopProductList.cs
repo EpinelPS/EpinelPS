@@ -1,6 +1,4 @@
-﻿using EpinelPS.Utils;
-
-namespace EpinelPS.LobbyServer.Shop;
+﻿namespace EpinelPS.LobbyServer.Shop;
 
 [GameRequest("/shop/productlist")]
 public class GetShopProductList : LobbyMessage
@@ -13,8 +11,6 @@ public class GetShopProductList : LobbyMessage
 
         var shops = NormalShopHelper.GetAllShopData(user);
         response.Shops.AddRange(shops);
-
-        Logging.WriteLine($"[Shop] /shop/productlist returning {shops.Count} shops, category={shops.FirstOrDefault()?.ShopCategory}", LogType.Debug);
 
         await WriteDataAsync(response);
     }

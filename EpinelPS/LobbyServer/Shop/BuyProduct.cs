@@ -12,8 +12,6 @@ public class BuyProduct : LobbyMessage
         ReqShopBuyProduct req = await ReadData<ReqShopBuyProduct>();
         User user = GetUser();
 
-        Logging.WriteLine($"[Shop] /shop/buy called by user {user.Nickname}: ShopCategory={req.ShopCategory}, Order={req.Order}, ProductTid={req.ShopProductTid}, Qty={req.Quantity}", LogType.Debug);
-
         ResShopBuyProduct response = new()
         {
             Product = new NetShopBuyProductData(),
@@ -111,10 +109,6 @@ public class BuyProduct : LobbyMessage
             if (!user.TitleList.Contains(product.GoodsId))
                 user.TitleList.Add(product.GoodsId);
             response.Product.UserTitleList.Add(product.GoodsId);
-        }
-        else
-        {
-            Logging.WriteLine($"[Shop] Unsupported reward type {product.GoodsType} for product {product.Id}", LogType.Warning);
         }
     }
 }

@@ -13,11 +13,8 @@ internal static class InAppPurchaseHelper
         out NetRewardData reward)
     {
         reward = new NetRewardData { PassPoint = new NetPassPointData() };
-        if (!GameConfig.Root.EnableFreeInAppPurchases)
-        {
-            Logging.WriteLine("[InAppShop] Simulated purchase rejected because EnableFreeInAppPurchases is disabled", LogType.Warning);
+        if (!GameConfig.Root.EnablePurchaseSimulation)
             return false;
-        }
 
         var midas = FindMidasProduct(productId);
         if (midas == null || !midas.IsActive)
@@ -33,14 +30,10 @@ internal static class InAppPurchaseHelper
         };
 
         if (!granted)
-        {
-            Logging.WriteLine($"[InAppShop] Unsupported simulated product {productId}: type={midas.ProductType}, tid={midas.ProductId}", LogType.Warning);
             return false;
-        }
 
         PendingRewards[(user.ID, productId)] = reward.Clone();
         JsonDb.Save();
-        Logging.WriteLine($"[InAppShop] Simulated free purchase for user {user.ID}: product={productId}, type={midas.ProductType}, tid={midas.ProductId}", LogType.Info);
         return true;
     }
 

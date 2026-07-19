@@ -17,7 +17,7 @@ public class ProductList : LobbyMessage
         {
             response.Shops.Add(EventShopHelper.InitShopData(user, req.EventId));
 
-            // 初始化 ShopNormal 的 ShopCategoryData，防止客户端找不到而崩溃
+            // Initialize ShopNormal's ShopCategoryData to prevent client errors.
             if (!GameData.Instance.ShopTable.Values.Any(s => (int)s.ShopCategory == 1))
             {
                 response.Shops.Add(new NetEventShopProductData

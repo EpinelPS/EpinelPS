@@ -12,9 +12,6 @@ public class BuyMultipleProduct : LobbyMessage
         ReqShopBuyMultipleProduct req = await ReadData<ReqShopBuyMultipleProduct>();
         User user = GetUser();
 
-        string details = string.Join(", ", req.Products.Select(p => $"Tid={p.ShopProductTid},Order={p.Order},Qty={p.Quantity}"));
-        Logging.WriteLine($"[Shop] /shop/multiple-buy called by user {user.Nickname}: ShopCategory={req.ShopCategory}, Products=[{details}]", LogType.Debug);
-
         ResShopBuyMultipleProduct response = new()
         {
             Product = new NetShopBuyMultipleProductData(),
@@ -117,10 +114,6 @@ public class BuyMultipleProduct : LobbyMessage
             if (!user.TitleList.Contains(product.GoodsId))
                 user.TitleList.Add(product.GoodsId);
             response.Product.UserTitleList.Add(product.GoodsId);
-        }
-        else
-        {
-            Logging.WriteLine($"[Shop] Unsupported reward type {product.GoodsType} for product {product.Id}", LogType.Warning);
         }
     }
 }

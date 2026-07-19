@@ -1,5 +1,3 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Shop.InApp;
 
 [GameRequest("/inappshop/startpurchase")]
@@ -16,7 +14,6 @@ public class StartPurchase : LobbyMessage
             Result = success ? StartPurchaseResult.Ok : StartPurchaseResult.PayChannelNotAvailable,
             TransactionId = success ? $"dev-{Guid.NewGuid():N}" : string.Empty,
         };
-        Logging.WriteLine($"[InAppShop] /inappshop/startpurchase product={req.ProductId}, simulated={success}", LogType.Info);
         await WriteDataAsync(response);
     }
 }

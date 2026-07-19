@@ -1,5 +1,3 @@
-using EpinelPS.Utils;
-
 namespace EpinelPS.LobbyServer.Shop.InApp;
 
 [GameRequest("/inappshop/jupiter/buyproduct")]
@@ -12,7 +10,6 @@ public class BuyJupiterProduct : LobbyMessage
         bool success = InAppPurchaseHelper.TrySimulatePurchase(user, req.ProductId, req.ExtraData, out _);
         string referenceId = success ? $"dev-{Guid.NewGuid():N}" : string.Empty;
 
-        Logging.WriteLine($"[InAppShop] /inappshop/jupiter/buyproduct product={req.ProductId}, simulated={success}", LogType.Info);
         await WriteDataAsync(new ResBuyJupiterProduct
         {
             ReferenceId = referenceId,
