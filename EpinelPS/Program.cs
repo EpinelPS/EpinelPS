@@ -30,6 +30,15 @@ internal class Program
 
             await GameData.CreateAsync();
 
+            try
+            {
+                await LocaleDataDownloader.DownloadAsync(CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                Logging.WriteLine($"Failed to update locale data: {ex.Message}", LogType.Error);
+            }
+
             Console.WriteLine("Initializing database");
             JsonDb.Save();
 

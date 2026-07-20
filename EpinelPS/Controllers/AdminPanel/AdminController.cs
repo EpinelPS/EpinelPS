@@ -68,8 +68,7 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         ServerConfiguration model = new()
         {
-            LogType = JsonDb.Instance.LogLevel,
-            GamePath = GameConfig.Root.GamePath
+            LogType = JsonDb.Instance.LogLevel
         };
 
         return View(model);
@@ -86,10 +85,7 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         JsonDb.Instance.LogLevel = cfg.LogType;
         JsonDb.Save();
-        GameConfig.Root.GamePath = cfg.GamePath?.Trim() ?? "";
-        GameConfig.Save();
-
-        return View(new ServerConfiguration() { LogType = cfg.LogType, GamePath = GameConfig.Root.GamePath });
+        return View(new ServerConfiguration() { LogType = cfg.LogType });
     }
 
     [Route("Mail")]

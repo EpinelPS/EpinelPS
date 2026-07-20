@@ -7,6 +7,8 @@ public class GameConfigRoot
 {
     public StaticData StaticDataMpk { get; set; } = new();
     public string ResourceBaseURL { get; set; } = "";
+    /// <summary>Resource data-pack number used to locate the CDN latest file.</summary>
+    public string ResourceDataPackVersion { get; set; } = "";
     public string GameMinVer { get; set; } = "";
     public string GameMaxVer { get; set; } = "";
     /// <summary>
@@ -17,8 +19,6 @@ public class GameConfigRoot
     /// this is only for displaying the target version in admin console or cli
     /// </summary>
     public string TargetVersion { get; set; } = "";
-    /// <summary>本地游戏安装目录，用于读取本地 NKDB locale 资源。</summary>
-    public string GamePath { get; set; } = "";
 }
 
 public class StaticData

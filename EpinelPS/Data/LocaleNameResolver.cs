@@ -28,14 +28,7 @@ public static class LocaleNameResolver
         lock (Gate)
         {
             if (loaded) return;
-            var gameRoot = GameConfig.Root.GamePath;
-            var candidates = new List<string>();
-            if (!string.IsNullOrWhiteSpace(gameRoot)) {
-                for (var current = new DirectoryInfo(gameRoot); current != null; current = current.Parent)
-                    candidates.Add(Path.Combine(current.FullName, "Unity", "com_proximabeta_NIKKE", "saus", "saus", "lss"));
-            }
-            candidates.Add(Path.Combine(AppContext.BaseDirectory, "cache", "local-locale"));
-            var roots = candidates.Where(Directory.Exists).Distinct(StringComparer.OrdinalIgnoreCase);
+            var roots = new[] { Path.Combine(AppContext.BaseDirectory, "cache", "local-locale") }.Where(Directory.Exists);
             foreach (var root in roots)
             foreach (var file in Directory.EnumerateFiles(root, "Locale_*.lsc", SearchOption.TopDirectoryOnly))
             {

@@ -590,7 +590,8 @@ public class AdminCommands
         }
 
 
-        ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl);
+        ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl,
+            new ReqGetResourceHosts2 { Version = GameConfig.Root.TargetVersion });
         if (resources == null)
         {
             Logging.WriteLine("failed to fetch resource data", LogType.Error);
@@ -598,6 +599,9 @@ public class AdminCommands
         }
 
         GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
+        if (resources.DataPackVersionMap.TryGetValue(GameConfig.Root.TargetVersion, out var dataPackVersion)
+            || resources.DataPackVersionMap.TryGetValue(resources.Version, out dataPackVersion))
+            GameConfig.Root.ResourceDataPackVersion = dataPackVersion;
         GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
         GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
         GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
@@ -605,6 +609,7 @@ public class AdminCommands
         GameConfig.Save();
 
         await GameData.CreateAsync();
+        await LocaleDataDownloader.DownloadAsync(CancellationToken.None);
 
         return RunCmdResponse.OK;
     }

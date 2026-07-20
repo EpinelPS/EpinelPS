@@ -14,12 +14,6 @@
                 @Html.DropDownListFor(model => model.LogType, Html.GetEnumSelectList<LogType>(), "", new { @class = "form-control" })
             </dd>
         </dl>
-        <div class="form-group mb-3 text-start">
-            <label asp-for="GamePath" class="form-label" data-i18n="config.server.gamePath">游戏安装目录（用于角色/装扮名称本地化）</label>
-            <input asp-for="GamePath" class="form-control" placeholder="D:\\NIKKE\\NIKKE\\game" />
-            <small class="form-text text-muted" data-i18n="config.server.gamePathHint">设置后服务器会自动读取游戏 Unity/.../lss 下的本地化文件。</small>
-        </div>
-
         <div class="form-group">
         <button id="reloadDB" type="button" class="btn btn-danger" data-i18n-title="config.server.updateResourcesHint" onclick="runSimpleCmd('updateServer')" data-i18n="config.server.updateResources">Update resources</button>
             <button type="submit" class="btn btn-primary" data-i18n="common.save"></button>
