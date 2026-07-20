@@ -146,6 +146,18 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddAllCostumes(user);
                 }
+            case "addallcollections":
+                {
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                    return AdminCommands.AddAllCollections(user);
+                }
+            case "setallbondlevel":
+                {
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                    return AdminCommands.SetAllBondLevel(user, int.Parse(req.p2));
+                }
             case "addallmaterials":
                 {
                     User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));

@@ -86,7 +86,7 @@
                                 <i class="fas fa-forward me-2"></i> <span data-i18n="users.modify.skipStages">跳过关卡</span>
                             </button>
                             <button class="btn btn-accent" onclick="runSimpleCmd('completeallstages', '@Model.ID')">
-                                <i class="fas fa-flag-checkered me-2"></i> 完成所有主线关卡
+                                <i class="fas fa-flag-checkered me-2"></i> <span data-i18n="users.modify.completeAllStages">完成所有主线关卡</span>
                             </button>
                         </div>
                     </div>
@@ -98,7 +98,10 @@
                                 <i class="fas fa-users me-2"></i> <span data-i18n="users.modify.addAllChars">添加所有角色</span>
                             </button>
                             <button class="btn btn-accent" onclick="runSimpleCmd('addallcostumes', '@Model.ID')">
-                                <i class="fas fa-tshirt me-2"></i> 添加所有服装
+                                <i class="fas fa-tshirt me-2"></i> <span data-i18n="users.modify.addAllCostumes">添加所有服装</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmd('addallcollections', '@Model.ID')">
+                                <i class="fas fa-gem me-2"></i> <span data-i18n="users.modify.addAllCollections">添加所有收藏品</span>
                             </button>
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('AddCharacter', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">
                                 <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.modify.addChar">添加角色</span>
@@ -111,6 +114,9 @@
                             </button>
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('SetCoreLevel', '@Model.ID', 'core level / 0-3 sets stars')">
                                 <i class="fas fa-star me-2"></i> <span data-i18n="users.modify.setCoreLevel">设置核心等级</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmdWithPr('setallbondlevel', '@Model.ID', 'Enter bond level (1-30)')">
+                                <i class="fas fa-heart me-2"></i> <span data-i18n="users.modify.setBondLevel">设置角色好感度</span>
                             </button>
                         </div>
                     </div>
