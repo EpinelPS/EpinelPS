@@ -36,7 +36,7 @@ internal class Program
             }
             catch (Exception ex)
             {
-                Logging.WriteLine($"Failed to update locale data: {ex.Message}", LogType.Error);
+                Logging.WriteLine($"Failed to update locale data: {ex.Message}", LogType.Warning);
             }
 
             Console.WriteLine("Initializing database");

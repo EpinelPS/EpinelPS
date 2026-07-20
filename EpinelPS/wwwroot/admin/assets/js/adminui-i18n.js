@@ -59,7 +59,7 @@ class adminuiI18n {
       try {
         // 使用同步XMLHttpRequest加载语言文件
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/admin/assets/i18n/${lang}.json?v=${Date.now()}`, false); // false表示同步请求，避免缓存旧翻译
+        xhr.open('GET', `/admin/assets/i18n/${lang}.json?v=${Date.now()}`, false); // synchronous request to bust cache with timestamp
         xhr.send();
 
         if (xhr.status === 200) {
