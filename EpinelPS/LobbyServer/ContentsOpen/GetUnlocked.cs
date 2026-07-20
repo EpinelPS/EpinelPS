@@ -27,6 +27,7 @@ public class GetUnlocked : LobbyMessage
             user.ContentsOpenUnlocked.Add(16, new(true, true));
             user.ContentsOpenUnlocked.Add(18, new(true, true));
             user.ContentsOpenUnlocked.Add(19, new(true, true));
+            user.ContentsOpenUnlocked.Add(2, new(true, true)); // Shop
             JsonDb.Save();
         }
 

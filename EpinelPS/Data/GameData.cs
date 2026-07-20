@@ -150,6 +150,38 @@ public class GameData
     [LoadRecord("MidasProductTable.json", "MidasProductIdProximabeta")]
     public readonly Dictionary<string, MidasProductRecord> mediasProductTable = [];
 
+    // CashShop / InAppShop data. These tables are consumed by ViewCashShop's
+    // InAppShopManager and its package/costume page components.
+    [LoadRecord("InAppShopManagerTable.json", "Id")]
+    public readonly Dictionary<int, InAppShopManagerRecord> InAppShopManagerTable = [];
+
+    [LoadRecord("InAppShopInfoTable.json", "Id")]
+    public readonly Dictionary<int, InAppShopInfoRecord> InAppShopInfoTable = [];
+
+    [LoadRecord("CostumeShopTable.json", "Id")]
+    public readonly Dictionary<int, CostumeShopRecord> CostumeShopTable = [];
+
+    [LoadRecord("PackageShopTable.json", "Id")]
+    public readonly Dictionary<int, PackageShopRecord> PackageShopTable = [];
+
+    [LoadRecord("PackageListTable.json", "Id")]
+    public readonly Dictionary<int, PackageListRecord> PackageListTable = [];
+
+    [LoadRecord("PackageGroupTable.json", "Id")]
+    public readonly Dictionary<int, PackageGroupRecord> PackageGroupTable = [];
+
+    [LoadRecord("CampaignPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, CampaignPackageShopRecord> CampaignPackageShopTable = [];
+
+    [LoadRecord("CustomPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, CustomPackageShopRecord> CustomPackageShopTable = [];
+
+    [LoadRecord("StepUpPackageShopTable.json", "Id")]
+    public readonly Dictionary<int, StepUpPackageShopRecord> StepUpPackageShopTable = [];
+
+    [LoadRecord("PassCostumeShopTable.json", "Id")]
+    public readonly Dictionary<int, PassCostumeShopRecord_Raw> PassCostumeShopTable = [];
+
     [LoadRecord("TowerTable.json", "Id")]
     public readonly Dictionary<int, TowerRecord> towerTable = [];
 
@@ -391,6 +423,12 @@ public class GameData
     [LoadRecord("UserFrameTable.json", "Id")]
     public readonly Dictionary<int, UserFrameRecord> userFrameTable = [];
 
+
+    // Normal Shop Data Tables
+    [LoadRecord("ShopTable.json", "Id")]
+    public readonly Dictionary<int, ShopRecord> ShopTable = [];
+    [LoadRecord("ShopProductTable.json", "Id")]
+    public readonly Dictionary<int, ShopProductRecord> ShopProductTable = [];
 
     // Contents Shop Data Tables
     [LoadRecord("ContentsShopTable.json", "Id")]
