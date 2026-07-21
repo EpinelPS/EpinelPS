@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
+using Google.Protobuf.Collections;
 using Paseto;
 using Paseto.Builder;
 
@@ -444,5 +445,64 @@ public class NetUtils
         JsonDb.Save();
 
         return ret;
+    }
+
+    public static NetRewardData UseSelectBox(User user, int boxId, RepeatedField<NetItemSelectOption> selectedBoxContent, int amount = 0)
+    {
+        ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems
+            .Where(x => x.Value.Id == boxId).FirstOrDefault().Value
+            ?? throw new Exception("cannot find SelectBox Id " + boxId);
+        switch (cItem.UseType)
+        {
+            case ItemUseType.SelectBox:
+                {
+                    SelectOptionData[] selectBoxContent = [.. GameData.Instance.SelectItem.GetValueOrDefault(cItem.UseId)?.SelectOption
+            .Where(x=> x.SelectType != RewardType.None)];
+
+                    var filtered = selectedBoxContent.Where((item, index) => index == 0
+                    || item.Id != 0 && item.Count > 0).ToList();
+
+                    var selectedItems = filtered.Select((item, index) =>
+                    (selectedBox: selectBoxContent[item.Id], count: item.Count)).ToList();
+
+                    NetRewardData reward = new();
+                    foreach (var (selectedBox, count) in selectedItems)
+                    {
+                        RewardUtils.AddSingleObject(user, ref reward, selectedBox.SelectId,
+                            selectedBox.SelectType, selectedBox.SelectValue * count);
+                    }
+
+                    JsonDb.Save();
+                    return reward;
+                }
+
+            case ItemUseType.SelectBoxRowCharacter:
+                {
+                    var selectedCharacter = GameData.Instance.SelectRowItem.GetValueOrDefault(selectedBoxContent.FirstOrDefault().Id);
+                    NetRewardData reward = new();
+                    RewardUtils.AddSingleObject(user, ref reward, selectedCharacter.SelectId, selectedCharacter.SelectType, selectedBoxContent.FirstOrDefault().Count);
+                    JsonDb.Save();
+                    return reward;
+                }
+        }
+        throw new Exception("expected select box");
+    }
+
+    public static NetRewardData UseBundleBox(User user, int boxId, int count)
+    {
+        ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems
+            .Where(x => x.Value.Id == boxId).FirstOrDefault().Value
+            ?? throw new Exception("cannot find BundleBox Id " + boxId);
+        if (cItem.UseType != ItemUseType.BundleBox) throw new Exception("expected bundle box");
+
+        var bundleBoxContent = GameData.Instance.BundleBox.GetValueOrDefault(cItem.UseId);
+        NetRewardData rewardData = new();
+        foreach (var reward in bundleBoxContent.Rewards)
+        {
+            RewardUtils.AddSingleObject(user, ref rewardData, reward.RewardId,
+                reward.RewardType, reward.RewardValue * count);
+        }
+        JsonDb.Save();
+        return rewardData;
     }
 }

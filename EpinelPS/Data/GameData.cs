@@ -50,6 +50,9 @@ public class GameData
 
     [LoadRecord("ItemSelectOptionRowTable.json", "Id")]
     public readonly Dictionary<int, ItemSelectOptionRowRecord> SelectRowItem = [];
+
+    [LoadRecord("BundleBoxTable.json", "Id")]
+    public readonly Dictionary<int, BundleBoxRecord> BundleBox = [];
     [LoadRecord("MainQuestTable.json", "Id")]
     public readonly Dictionary<int, MainQuestRecord> QuestDataRecords = [];
 
