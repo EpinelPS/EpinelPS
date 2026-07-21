@@ -487,4 +487,22 @@ public class NetUtils
         }
         throw new Exception("expected select box");
     }
+
+    public static NetRewardData UseBundleBox(User user, int boxId, int count)
+    {
+        ItemConsumeRecord? cItem = GameData.Instance.ConsumableItems
+            .Where(x => x.Value.Id == boxId).FirstOrDefault().Value
+            ?? throw new Exception("cannot find BundleBox Id " + boxId);
+        if (cItem.UseType != ItemUseType.BundleBox) throw new Exception("expected bundle box");
+
+        var bundleBoxContent = GameData.Instance.BundleBox.GetValueOrDefault(cItem.UseId);
+        NetRewardData rewardData = new();
+        foreach (var reward in bundleBoxContent.Rewards)
+        {
+            RewardUtils.AddSingleObject(user, ref rewardData, reward.RewardId,
+                reward.RewardType, reward.RewardValue * count);
+        }
+        JsonDb.Save();
+        return rewardData;
+    }
 }
