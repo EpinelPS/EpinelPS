@@ -26,6 +26,7 @@
                                            placeholder="输入收件人ID或选择用户"
                                            data-i18n-placeholder="mail.placeholderRecipient"
                                            list="userList" autocomplete="off" />
+                                    <datalist id="userList"></datalist>
                                     <small class="text-muted" data-i18n="mail.hintRecipient">输入纯数字，或从下拉列表中选择用户</small>
                                 </div>
                             </div>
@@ -119,7 +120,7 @@
 <div id="adminuiAlert" class="adminui-modal" style="display: none;">
     <div class="adminui-modal-content" style="max-width: 500px;">
         <div class="adminui-modal-header">
-            <h3 id="alertTitle">操作结果</h3>
+            <h3 id="alertTitle" data-i18n="mail.alertTitle">Result</h3>
             <button class="adminui-modal-close" onclick="closeAdminuiAlert()">&times;</button>
         </div>
         <div class="adminui-modal-body">
@@ -129,7 +130,7 @@
             </div>
         </div>
         <div class="adminui-modal-footer">
-            <button class="btn btn-primary" onclick="closeAdminuiAlert()" style="margin: 0 auto;">确定</button>
+            <button class="btn btn-primary" onclick="closeAdminuiAlert()" style="margin: 0 auto;" data-i18n="mail.confirm">Confirm</button>
         </div>
     </div>
 </div>
@@ -413,39 +414,53 @@
     // 1. 奖励类型选项数据
     // ============================================================
     const rewardTypeOptions = [
-        { value: 0, label: '无 (None)' },
-        { value: 1, label: '用户经验 (UserExp)' },
-        { value: 2, label: '角色经验 (CharExp)' },
-        { value: 3, label: '货币 (Currency)' },
-        { value: 4, label: '角色 (Character)' },
-        { value: 5, label: '物品 (Item)' },
-        { value: 6, label: '边框 (Frame)' },
-        { value: 8, label: 'BGM (Bgm)' },
-        { value: 10, label: '动态壁纸 (LiveWallpaper)' },
-        { value: 12, label: '服装 (CharacterCostume)' },
-        { value: 13, label: '随机物品 (ItemRandom)' },
-        { value: 14, label: '基础设施经验 (InfraCoreExp)' },
-        { value: 15, label: '随机箱 (ItemRandomBox)' },
-        { value: 43, label: '收藏品 (FavoriteItem)' },
-        { value: 44, label: '个人资料卡 (ProfileCardObject)' },
-        { value: 46, label: '称号 (UserTitle)' },
-        { value: 47, label: '装饰背景 (LobbyDecoBackground)' },
-        { value: 48, label: '专辑 (Album)' }
-        //{ value: 7, label: '好感度点数 (AttractivePoint)' },
-        //{ value: 9, label: '点数 (Point)' },
-        //{ value: 11, label: '纪念品 (Memorial)' },
-        //{ value: 16, label: '装备(无) (EquipmentNone)' },
-        //{ value: 17, label: '装备(MISSILIS) (EquipmentMISSILIS)' },
-        //{ value: 18, label: '装备(ELYSION) (EquipmentELYSION)' },
-        //{ value: 19, label: '装备(TETRA) (EquipmentTETRA)' },
-        //{ value: 20, label: '装备(PILGRIM) (EquipmentPILGRIM)' },
-        //{ value: 21, label: '装备(随机01) (EquipmentRandom01)' },
-        //{ value: 22, label: '装备(随机02) (EquipmentRandom02)' },
-        //{ value: 23, label: '装备(随机03) (EquipmentRandom03)' },
-        //{ value: 41, label: '通行证点数 (PassPoint)' },
-        //{ value: 42, label: '装备(ABNORMAL) (EquipmentABNORMAL)' },
-        //{ value: 45, label: '个人资料随机箱 (ProfileRandomBox)' },
+        { value: 0, labelKey: 'mail.rewardType.none', fallback: 'None' },
+        { value: 1, labelKey: 'mail.rewardType.userExp', fallback: 'UserExp' },
+        { value: 2, labelKey: 'mail.rewardType.charExp', fallback: 'CharExp' },
+        { value: 3, labelKey: 'mail.rewardType.currency', fallback: 'Currency' },
+        { value: 4, labelKey: 'mail.rewardType.character', fallback: 'Character' },
+        { value: 5, labelKey: 'mail.rewardType.item', fallback: 'Item' },
+        { value: 6, labelKey: 'mail.rewardType.frame', fallback: 'Frame' },
+        { value: 8, labelKey: 'mail.rewardType.bgm', fallback: 'Bgm' },
+        { value: 10, labelKey: 'mail.rewardType.liveWallpaper', fallback: 'LiveWallpaper' },
+        { value: 12, labelKey: 'mail.rewardType.characterCostume', fallback: 'CharacterCostume' },
+        { value: 13, labelKey: 'mail.rewardType.itemRandom', fallback: 'ItemRandom' },
+        { value: 14, labelKey: 'mail.rewardType.infraCoreExp', fallback: 'InfraCoreExp' },
+        { value: 15, labelKey: 'mail.rewardType.itemRandomBox', fallback: 'ItemRandomBox' },
+        { value: 43, labelKey: 'mail.rewardType.favoriteItem', fallback: 'FavoriteItem' },
+        { value: 44, labelKey: 'mail.rewardType.profileCardObject', fallback: 'ProfileCardObject' },
+        { value: 46, labelKey: 'mail.rewardType.userTitle', fallback: 'UserTitle' },
+        { value: 47, labelKey: 'mail.rewardType.lobbyDecoBackground', fallback: 'LobbyDecoBackground' },
+        { value: 48, labelKey: 'mail.rewardType.album', fallback: 'Album' }
+        //{ value: 7, labelKey: 'mail.rewardType.attractivePoint', fallback: 'AttractivePoint' },
+        //{ value: 9, labelKey: 'mail.rewardType.point', fallback: 'Point' },
+        //{ value: 11, labelKey: 'mail.rewardType.memorial', fallback: 'Memorial' },
+        //{ value: 16, labelKey: 'mail.rewardType.equipmentNone', fallback: 'EquipmentNone' },
+        //{ value: 17, labelKey: 'mail.rewardType.equipmentMISSILIS', fallback: 'EquipmentMISSILIS' },
+        //{ value: 18, labelKey: 'mail.rewardType.equipmentELYSION', fallback: 'EquipmentELYSION' },
+        //{ value: 19, labelKey: 'mail.rewardType.equipmentTETRA', fallback: 'EquipmentTETRA' },
+        //{ value: 20, labelKey: 'mail.rewardType.equipmentPILGRIM', fallback: 'EquipmentPILGRIM' },
+        //{ value: 21, labelKey: 'mail.rewardType.equipmentRandom01', fallback: 'EquipmentRandom01' },
+        //{ value: 22, labelKey: 'mail.rewardType.equipmentRandom02', fallback: 'EquipmentRandom02' },
+        //{ value: 23, labelKey: 'mail.rewardType.equipmentRandom03', fallback: 'EquipmentRandom03' },
+        //{ value: 41, labelKey: 'mail.rewardType.passPoint', fallback: 'PassPoint' },
+        //{ value: 42, labelKey: 'mail.rewardType.equipmentABNORMAL', fallback: 'EquipmentABNORMAL' },
+        //{ value: 45, labelKey: 'mail.rewardType.profileRandomBox', fallback: 'ProfileRandomBox' },
     ];
+
+    // ============================================================
+    // 2a. 翻译选项标签
+    // ============================================================
+    function translateRewardLabels() {
+        if (typeof i18n === 'undefined' || !i18n.t) {
+            rewardTypeOptions.forEach(opt => { opt.label = opt.fallback; });
+            return;
+        }
+        rewardTypeOptions.forEach(opt => {
+            var translated = i18n.t(opt.labelKey);
+            opt.label = (translated && translated !== opt.labelKey) ? translated : opt.fallback;
+        });
+    }
 
     // ============================================================
     // 2. 生成下拉选择框
@@ -461,14 +476,19 @@
     }
 
     // ============================================================
-    // 3. 生成行 HTML
+    // 3. 生成行 HTML (with autocomplete datalist)
     // ============================================================
+    var rowCounter = 0;
     function generateRowHtml(typeValue) {
         typeValue = typeValue || 0;
+        var idx = rowCounter++;
         return `
             <td>${generateRewardTypeSelect(typeValue)}</td>
-            <td><input type="text" class="form-control form-control-sm" placeholder="物品ID" /></td>
-            <td><input type="text" class="form-control form-control-sm" placeholder="数量" /></td>
+            <td>
+                <input type="text" class="form-control form-control-sm item-id-input" placeholder="${i18n.t('mail.searchOrEnterId')}" list="itemList_${idx}" data-row="${idx}" />
+                <datalist id="itemList_${idx}"></datalist>
+            </td>
+            <td><input type="text" class="form-control form-control-sm" placeholder="${i18n.t('mail.quantity')}" /></td>
             <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)"><i class="fas fa-times"></i></button></td>
         `;
     }
@@ -477,6 +497,7 @@
     // 4. 表格操作
     // ============================================================
     function initTable() {
+        rowCounter = 0;
         const tbody = document.getElementById('attachmentBody');
         tbody.innerHTML = '';
         for (let i = 0; i < 5; i++) {
@@ -484,6 +505,7 @@
             row.innerHTML = generateRowHtml();
             tbody.appendChild(row);
         }
+        bindTypeChange();
     }
 
     function addRow() {
@@ -491,6 +513,61 @@
         const row = document.createElement('tr');
         row.innerHTML = generateRowHtml();
         tbody.appendChild(row);
+        bindTypeChangeForRow(row);
+    }
+
+    // ---- Autocomplete: when reward type changes, load matching items ----
+    function bindTypeChange() {
+        document.querySelectorAll('.reward-type-select').forEach(function (sel) {
+            sel.removeEventListener('change', onTypeChange);
+            sel.addEventListener('change', onTypeChange);
+        });
+    }
+
+    function bindTypeChangeForRow(row) {
+        var sel = row.querySelector('.reward-type-select');
+        if (sel) {
+            sel.removeEventListener('change', onTypeChange);
+            sel.addEventListener('change', onTypeChange);
+        }
+    }
+
+    function onTypeChange() {
+        var row = this.closest('tr');
+        var idInput = row.querySelector('.item-id-input');
+        var type = parseInt(this.value);
+        if (!type || type === 0) {
+            idInput.placeholder = i18n.t('mail.noIdNeeded');
+            idInput.value = '';
+            return;
+        }
+        idInput.placeholder = i18n.t('mail.searching');
+        idInput.value = '';
+        loadItems(type, row);
+    }
+
+    function loadItems(type, row) {
+        var idInput = row.querySelector('.item-id-input');
+        var listId = idInput.getAttribute('list');
+        var datalist = document.getElementById(listId);
+        if (!datalist) return;
+
+        // Fetch items from API
+        fetch('/adminapi/searchGameData?type=' + type + '&q=')
+            .then(function (r) { return r.json(); })
+            .then(function (items) {
+                datalist.innerHTML = '';
+                idInput.placeholder = i18n.t('mail.searchOrEnterId') + ' (' + (items.length > 0 ? items[0].name : '') + '...)';
+                items.forEach(function (item) {
+                    var opt = document.createElement('option');
+                    opt.value = item.id.toString();
+                    opt.textContent = item.id + ' - ' + (item.name || '');
+                    datalist.appendChild(opt);
+                });
+            })
+            .catch(function () {
+                idInput.placeholder = i18n.t('mail.loadFailed');
+            });
     }
 
         // removeRow 中的提示
@@ -500,7 +577,7 @@
         if (tbody.children.length > 1) {
             row.remove();
         } else {
-            showAdminuiAlert(i18n.t('mail.needOneRow') || '至少保留一行', 'error');
+            showAdminuiAlert(i18n.t('mail.needOneRow') || 'At least one row is required', 'error');
         }
     }
 
@@ -542,11 +619,11 @@
         if (type === 'success') {
             icon.className = 'fas fa-check-circle';
             icon.style.color = 'var(--adminui-success)';
-            title.textContent = i18n.t('mail.alertSuccess') || '操作成功';
+            title.textContent = i18n.t('mail.alertSuccess') || 'Success';
         } else {
             icon.className = 'fas fa-exclamation-circle';
             icon.style.color = 'var(--adminui-danger)';
-            title.textContent = i18n.t('mail.alertError') || '错误';
+            title.textContent = i18n.t('mail.alertError') || 'Error';
         }
 
         msg.textContent = message;
@@ -566,22 +643,22 @@
 
         // 验证 - 使用 i18n
         if (!recipientId) {
-            showAdminuiAlert(i18n.t('mail.needRecipient') || '请输入收件人ID', 'error');
+            showAdminuiAlert(i18n.t('mail.needRecipient') || 'Please enter recipient ID', 'error');
             return;
         }
 
         if (!/^\d+$/.test(recipientId)) {
-            showAdminuiAlert(i18n.t('mail.invalidRecipient') || '收件人ID必须为纯数字', 'error');
+            showAdminuiAlert(i18n.t('mail.invalidRecipient') || 'Recipient ID must be numeric', 'error');
             return;
         }
 
         if (!title) {
-            showAdminuiAlert(i18n.t('mail.needTitle') || '请输入邮件标题', 'error');
+            showAdminuiAlert(i18n.t('mail.needTitle') || 'Please enter mail title', 'error');
             return;
         }
 
         if (!content) {
-            showAdminuiAlert(i18n.t('mail.needContent') || '请输入邮件内容', 'error');
+            showAdminuiAlert(i18n.t('mail.needContent') || 'Please enter mail content', 'error');
             return;
         }
 
@@ -595,9 +672,9 @@
         // 调用 runCmd 发送邮件
         runCmd('SendMail', function(json) {
             if (json && json.ok) {
-                showAdminuiAlert(i18n.t('mail.sendSuccess') || '邮件发送成功！', 'success');
+                showAdminuiAlert(i18n.t('mail.sendSuccess') || 'Mail sent successfully!', 'success');
             } else {
-                showAdminuiAlert((i18n.t('mail.sendFailed') || '发送失败') + ': ' + (json?.error || i18n.t('mail.unknownError') || '未知错误'), 'error');
+                showAdminuiAlert((i18n.t('mail.sendFailed') || 'Send failed') + ': ' + (json?.error || i18n.t('mail.unknownError') || 'Unknown error'), 'error');
             }
         }, param);
     }
@@ -605,14 +682,10 @@
     // ============================================================
     // 7. 页面加载初始化
     // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        initTable();
-    });
-
     async function loadUserList() {
         try {
             const response = await fetch('/admin/Users/GetUsersList');
-            if (!response.ok) throw new Error('加载失败');
+            if (!response.ok) throw new Error('Load failed');
 
             const users = await response.json();
             const datalist = document.getElementById('userList');
@@ -620,18 +693,30 @@
             users.forEach(user => {
                 const option = document.createElement('option');
                 option.value = user.id;
-                option.textContent = `${user.id} - ${user.nickname || '未设置昵称'}`;
+                option.textContent = `${user.id} - ${user.nickname || i18n.t('mail.noNickname')}`;
                 datalist.appendChild(option);
             });
         } catch (error) {
-            console.error('加载用户列表失败:', error);
+            console.error('Failed to load user list:', error);
         }
     }
 
         // 页面加载时调用
     document.addEventListener('DOMContentLoaded', function() {
+        translateRewardLabels();
         loadUserList();
         initTable();
+
+        // 语言切换时重新翻译选项
+        window.addEventListener('adminui:languageChanged', function() {
+            translateRewardLabels();
+            document.querySelectorAll('.reward-type-select').forEach(function(sel) {
+                Array.from(sel.options).forEach(function(opt, i) {
+                    var typeObj = rewardTypeOptions.find(function(r) { return r.value == opt.value; });
+                    if (typeObj) opt.textContent = typeObj.label;
+                });
+            });
+        });
     });
 
     // 用户选择后自动填充（可选）

@@ -41,6 +41,7 @@
     "events": "活动",
     "users": "用户",
     "mail": "邮件",
+    "search": "ID 查询",
     "config": "配置",
     "database": "数据库",
     "profile": "个人信息",
@@ -98,6 +99,10 @@
       "mail": {
         "title": "邮件系统",
         "desc": "发送系统邮件和奖励给玩家"
+      },
+      "search": {
+        "title": "ID 查询",
+        "desc": "搜索角色、物品、服装等游戏数据的 ID"
       },
       "database": {
         "title": "数据库",
@@ -195,10 +200,23 @@
     }
   },
   "events": {
-    "config": {
-      "title": "活动配置",
-      "comingSoon": "即将上线！"
-    }
+    "title": "活动配置",
+    "backToList": "返回",
+    "save": "保存配置",
+    "activeCount": "当前已激活",
+    "noSelection": "暂未选择，默认显示最新活动",
+    "allEvents": "所有活动",
+    "perPage": "每页",
+    "perPageAll": "全部",
+    "items": "条",
+    "searchPlaceholder": "搜索活动名称...",
+    "colActive": "激活",
+    "colName": "活动名称",
+    "colBannerId": "Banner ID",
+    "colEventId": "Event ID",
+    "pageInfo": "共 {{total}} 条，共 {{pages}} 页",
+    "pageInfoCurrent": "（当前第 {{page}}/{{pages}} 页）",
+    "saved": "活动配置已保存"
   },
   "mail": {
     "title": "发送邮件",
@@ -238,7 +256,67 @@
     "invalidRecipient": "收件人ID必须为纯数字",
     "needTitle": "请输入邮件标题",
     "needContent": "请输入邮件内容",
-    "needOneRow": "至少保留一行"
+    "needOneRow": "至少保留一行",
+    "searchOrEnterId": "搜索或输入ID",
+    "noIdNeeded": "无需ID",
+    "searching": "搜索中...",
+    "loadFailed": "加载失败",
+    "noNickname": "未设置昵称",
+    "alertTitle": "操作结果",
+    "rewardType": {
+      "none": "无",
+      "userExp": "用户经验",
+      "charExp": "角色经验",
+      "currency": "货币",
+      "character": "角色",
+      "item": "物品",
+      "frame": "边框",
+      "bgm": "BGM",
+      "liveWallpaper": "动态壁纸",
+      "characterCostume": "服装",
+      "itemRandom": "随机物品",
+      "infraCoreExp": "基础设施经验",
+      "itemRandomBox": "随机箱",
+      "favoriteItem": "收藏品",
+      "profileCardObject": "个人资料卡",
+      "userTitle": "称号",
+      "lobbyDecoBackground": "装饰背景",
+      "album": "专辑"
+    }
+  },
+  "search": {
+    "title": "ID 查询",
+    "backToList": "返回",
+    "type": "类型",
+    "typeCharacter": "角色",
+    "typeItem": "物品",
+    "typeFrame": "边框",
+    "typeBgm": "BGM",
+    "typeLiveWallpaper": "壁纸",
+    "typeCostume": "服装",
+    "typeFavoriteItem": "收藏品",
+    "typeProfileCard": "资料卡",
+    "typeTitle": "称号",
+    "typeAlbum": "专辑",
+    "queryLabel": "搜索名称或 ID",
+    "queryPlaceholder": "输入名称或 ID 搜索...",
+    "button": "搜索",
+    "results": "搜索结果",
+    "perPage20": "20条/页",
+    "perPage50": "50条/页",
+    "perPage100": "100条/页",
+    "perPageAll": "全部",
+    "searching": "搜索中...",
+    "resultsCount": "共 {{count}} 条",
+    "noResults": "未找到匹配结果",
+    "searchFailed": "搜索失败，请检查服务器连接",
+    "pageInfo": "共 {{total}} 条 第 {{page}}/{{pages}} 页",
+    "copyId": "复制 ID",
+    "copied": "已复制",
+    "initialHint": "选择类型并输入关键词搜索",
+    "colId": "ID",
+    "colName": "名称",
+    "colAction": "操作"
   },
   "currency": {
     "title": "修改用户货币",

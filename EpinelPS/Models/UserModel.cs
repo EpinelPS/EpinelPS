@@ -137,6 +137,8 @@ public class User
     public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
 
+    public Dictionary<int, NormalShopState> NormalShopStates { get; set; } = []; // key: shop category
+    public MogMinigameInfo MogInfo { get; set; } = new();
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
     public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
 
@@ -425,6 +427,29 @@ public class User
         {
             return 1;
         }
+    }
+
+    internal int GetMaxAttractiveLevel(int nameCode)
+    {
+        int maxStars = 0;
+        foreach (var c in Characters)
+        {
+            if (GameData.Instance.CharacterTable.TryGetValue(c.Tid, out var cr) && cr.NameCode == nameCode)
+            {
+                int stars = Math.Min(c.Grade, 3);
+                if (stars > maxStars) maxStars = stars;
+            }
+        }
+        int cap = 30;
+        foreach (var kvp in GameData.Instance.CharacterTable.Values)
+        {
+            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM)
+            {
+                cap = 40;
+                break;
+            }
+        }
+        return Math.Min(10 + maxStars * 10, cap);
     }
 
     /// <summary>

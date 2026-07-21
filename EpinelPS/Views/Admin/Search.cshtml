@@ -1,0 +1,201 @@
+@{
+    ViewData["Title"] = "ID Search";
+}
+
+<div class="adminui-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" style="font-size: 1.8rem;" data-i18n="search.title">ID Search</h1>
+        <a asp-action="Dashboard" asp-controller="Admin" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> <span data-i18n="search.backToList">Back</span>
+        </a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label" data-i18n="search.type">Type</label>
+                    <select id="searchType" class="form-select">
+                        <option value="4" data-i18n="search.typeCharacter">Character</option>
+                        <option value="5" data-i18n="search.typeItem">Item</option>
+                        <option value="6" data-i18n="search.typeFrame">Frame</option>
+                        <option value="8" data-i18n="search.typeBgm">BGM</option>
+                        <option value="10" data-i18n="search.typeLiveWallpaper">Live Wallpaper</option>
+                        <option value="12" data-i18n="search.typeCostume">Costume</option>
+                        <option value="43" data-i18n="search.typeFavoriteItem">Favorite Item</option>
+                        <option value="44" data-i18n="search.typeProfileCard">Profile Card</option>
+                        <option value="46" data-i18n="search.typeTitle">Title</option>
+                        <option value="48" data-i18n="search.typeAlbum">Album</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" data-i18n="search.queryLabel">Search Name or ID</label>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Enter name or ID to search..." data-i18n-placeholder="search.queryPlaceholder" autofocus />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" onclick="doSearch()" data-i18n="search.button">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center py-2">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i><span data-i18n="search.results">Search Results</span></h5>
+            <div class="d-flex gap-2 align-items-center">
+                <span id="resultCount" style="color: #aaa; font-size: 0.85rem;"></span>
+                <select id="pageSizeSelect" style="background: #2d2d2f; color: #ccc; border: 1px solid #444; border-radius: 3px; padding: 2px 6px; font-size: 0.85rem;">
+                    <option value="20" data-i18n="search.perPage20">20 / page</option>
+                    <option value="50" data-i18n="search.perPage50">50 / page</option>
+                    <option value="100" data-i18n="search.perPage100">100 / page</option>
+                    <option value="0" data-i18n="search.perPageAll">All</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0" id="resultTable" style="border-radius: 0;">
+                    <thead style="background-color: #3d3d3f; color: #e0e0e0;">
+                        <tr>
+                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colId">ID</th>
+                            <th style="border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colName">Name</th>
+                            <th style="width: 100px; border-bottom: 1px solid #555; font-weight: 600; padding: 0.5rem 0.75rem; background-color: #3d3d3f;" data-i18n="search.colAction">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultBody">
+                        <tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;" data-i18n="search.initialHint">Select a type and enter keywords to search</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function doSearch() {
+        var type = document.getElementById('searchType').value;
+        var q = document.getElementById('searchQuery').value.trim();
+        var tbody = document.getElementById('resultBody');
+
+        // Always search - empty query returns all items
+
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.searching') + '</td></tr>';
+
+        fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q))
+            .then(function (r) { return r.json(); })
+            .then(function (items) {
+                document.getElementById('resultCount').textContent = i18n.t('search.resultsCount', { count: items.length });
+                if (items.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.noResults') + '</td></tr>';
+                    return;
+                }
+                window._searchItems = items;
+                window._searchPage = 1;
+                renderSearchPage();
+            })
+            .catch(function () {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #d63a6e; padding: 2rem;">' + i18n.t('search.searchFailed') + '</td></tr>';
+            });
+    }
+
+    function renderSearchPage() {
+        var items = window._searchItems || [];
+        var pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+        var page = window._searchPage || 1;
+        var total = items.length;
+        var size = pageSize === 0 ? total : pageSize;
+        var pages = size === 0 ? 1 : Math.max(1, Math.ceil(total / size));
+        if (page > pages) page = pages;
+        if (page < 1) page = 1;
+        window._searchPage = page;
+
+        var start = (page - 1) * size;
+        var end = Math.min(start + size, total);
+        var pageItems = items.slice(start, end);
+
+        var tbody = document.getElementById('resultBody');
+        document.getElementById('resultCount').textContent = i18n.t('search.pageInfo', { total: total, page: page, pages: pages });
+        tbody.innerHTML = '';
+
+        pageItems.forEach(function (item) {
+            var tr = document.createElement('tr');
+            tr.className = 'result-row';
+            tr.innerHTML =
+                '<td style="padding: 0.4rem 0.75rem;"><code style="background: #3d3d3f; color: #e0e0e0; padding: 2px 8px; border-radius: 3px; font-size: 0.9rem;">' + item.id + '</code></td>' +
+                '<td style="padding: 0.4rem 0.75rem; color: #ccc;">' + (item.name || '') + '</td>' +
+                '<td style="padding: 0.4rem 0.75rem;"><button class="btn btn-sm btn-outline-primary" onclick="copyId(' + item.id + ')">' + i18n.t('search.copyId') + '</button></td>';
+            tbody.appendChild(tr);
+        });
+
+        // Pagination buttons
+        var paginationDiv = document.getElementById('searchPagination');
+        if (!paginationDiv) {
+            paginationDiv = document.createElement('div');
+            paginationDiv.id = 'searchPagination';
+            paginationDiv.className = 'd-flex justify-content-center gap-1 py-2';
+            document.querySelector('.card-body').after(paginationDiv);
+        }
+        paginationDiv.innerHTML = '';
+        if (pages <= 1) { paginationDiv.style.display = 'none'; return; }
+        paginationDiv.style.display = 'flex';
+
+        function addPageBtn(text, p, disabled) {
+            var btn = document.createElement('button');
+            btn.className = 'btn btn-sm ' + (p === page ? 'btn-primary' : 'btn-outline-primary') + (disabled ? ' disabled' : '');
+            btn.textContent = text;
+            btn.onclick = function () { window._searchPage = p; renderSearchPage(); };
+            paginationDiv.appendChild(btn);
+        }
+
+        addPageBtn('‹', page - 1, page <= 1);
+        var startP = Math.max(1, page - 3);
+        var endP = Math.min(pages, startP + 6);
+        if (endP - startP < 6) startP = Math.max(1, endP - 6);
+        for (var i = startP; i <= endP; i++) addPageBtn(i, i, false);
+                addPageBtn('›', page + 1, page >= pages);
+
+                // Highlight rows on hover
+                document.querySelectorAll('.result-row').forEach(function (row) {
+                    row.addEventListener('mouseenter', function () { this.style.backgroundColor = 'rgba(56,178,121,0.1)'; });
+                    row.addEventListener('mouseleave', function () { this.style.backgroundColor = ''; });
+                });
+            }
+
+    function copyId(id) {
+        // Use a temporary input to copy to clipboard
+        var input = document.createElement('input');
+        input.value = id;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        // Visual feedback
+        var btn = event.target;
+        var orig = btn.textContent;
+        btn.textContent = i18n.t('search.copied');
+        btn.className = 'btn btn-sm btn-success';
+        setTimeout(function () {
+            btn.textContent = orig;
+            btn.className = 'btn btn-sm btn-outline-primary';
+        }, 1500);
+    }
+
+    // Enter key triggers search
+    document.getElementById('searchQuery').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') doSearch();
+    });
+
+    // Search on type change too
+    document.getElementById('searchType').addEventListener('change', function () {
+        doSearch();
+    });
+
+    // Page size change
+    document.getElementById('pageSizeSelect').addEventListener('change', function () {
+        window._searchPage = 1;
+        renderSearchPage();
+    });
+
+    // Auto-search on page load (shows all characters by default)
+    document.addEventListener('DOMContentLoaded', doSearch);
+</script>
