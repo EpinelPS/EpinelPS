@@ -486,7 +486,7 @@ public class RewardUtils
 
                     ret.Item.Add(new NetItemData()
                     {
-                        Count = spareItem.Count,
+                        Count = rewardCount,
                         Tid = spareItem.ItemType,
                         Corporation = spareItem.Corp
                     });
