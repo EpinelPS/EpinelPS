@@ -21,7 +21,7 @@ public class SkillLearn : LobbyMessage
         {
             EventSBCharacterSkillRecord_Raw? skilltable = GameData.Instance.EventSBCharacterSkillTable.Values
                 .Where(x=>x.Id == req.SkillId).FirstOrDefault();
-            NetStellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)SBCurrencyType.SkillPoint);
+            StellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)SBCurrencyType.SkillPoint);
             if (currency != null)
             {
                 currency.Amount -= skilltable.NeedLearnSkillpoint;

@@ -86,6 +86,32 @@ public class EventData
     public int LastDay { get; set; } = 0;
     public int FreeTicket { get; set; } = 0;
 }
+public class EventCollectData
+{
+    public int EventCollectManagerId { get; set; }
+    public List<int> EventCollectIdList { get; set; } = [];
+
+    public NetEventCollectData ToNet()
+    {
+        var net = new NetEventCollectData
+        {
+            EventCollectManagerId = EventCollectManagerId
+        };
+        net.EventCollectIdList.AddRange(EventCollectIdList);
+        return net;
+    }
+
+    public static EventCollectData FromNet(NetEventCollectData net)
+    {
+        if (net == null) return null;
+
+        return new EventCollectData
+        {
+            EventCollectManagerId = net.EventCollectManagerId,
+            EventCollectIdList = net.EventCollectIdList?.ToList() ?? []
+        };
+    }
+}
 public class LoginEventData
 {
     public List<int> Days { get; set; } = [];
@@ -300,9 +326,20 @@ public class UnlockData
     }
 }
 
-public class MogMinigameInfo
+public class Nksv2Data
 {
     public List<string> CompletedScenarios { get; set; } = [];
+    public long Score { get; set; } = 0;
+    public Dictionary<int, MiniGameNKSV2MissionProgress> MissionProgressData { get; set; } = [];
+    public string ProgressJson { get; set; } = "";
+}
+public class MiniGameNKSV2MissionProgress
+{
+    public long Seq { get; set; }
+    public int NKsMissionId { get; set; }
+    public int Progress { get; set; }
+    public Timestamp CreatedAt { get; set; }   // 保留 Google.Protobuf.WellKnownTypes.Timestamp
+    public Timestamp ReceivedAt { get; set; }
 }
 public class BadgeModel
 {
@@ -542,12 +579,12 @@ public class GuildData
 
 public class StellarBladeDatas
 {
-    public List< NetStellarBladeCurrency> Currency { get; set; } = [] ;
-    public NetStellarBladeCharacterData CharacterData { get; set; } = new();
-    public List< NetStellarBladeMissionData> MissionData { get; set; } =[];
-    public List<NetStellarBladeMissionData> DailyMissionData { get; set; } =[];
-    public List<NetStellarBladeMissionData> DailyPointMissionData { get; set; } = [];    
-    public Dictionary<int, ResArcadeGetStellarBladeStatistics.Types.NetStatisticsData> StatisticsData { get; set; } = [];
+    public List< StellarBladeCurrency> Currency { get; set; } = [] ;
+    public StellarBladeCharacterData CharacterData { get; set; } = new();
+    public List<StellarBladeMissionData> MissionData { get; set; } =[];
+    public List<StellarBladeMissionData> DailyMissionData { get; set; } =[];
+    public List<StellarBladeMissionData> DailyPointMissionData { get; set; } = [];    
+    public Dictionary<int, StatisticsData> StatisticsData { get; set; } = [];
     public Dictionary<int, SBStageDatas> BestStageDatas { get; set; } = [];
     public List<int> TutorialList { get; set; } = [];
     public int LastEnteredStageId { get; set; }
@@ -556,6 +593,41 @@ public class StellarBladeDatas
     public int Today { get; set; }
 }
 
+public class StellarBladeCurrency
+{
+    public int CurrencyType { get; set; }
+    public int Amount { get; set; }
+}
+public class StellarBladeCharacterData
+{
+    public int DefaultAttackSkillId { get; set; }
+    public List<int> LearnedSkillIdList { get; set; } = [];
+    public int Gear1SbItemId { get; set; }
+    public int Gear2SbItemId { get; set; }
+    public int ExoSpineSbItemId { get; set; }
+    public List<NetEnhanceData> EnhanceDataList { get; set; } = [];
+    public class NetEnhanceData
+    {
+        public int EnhanceType { get; set; }
+        public int EnhanceLevel { get; set; }
+    }
+}
+public class StellarBladeMissionData
+{
+    public int MissionId { get; set; }
+    public int Progress { get; set; }
+    public bool IsReceived { get; set; }
+}
+public class StatisticsData
+{
+    public int StageId { get; set; }
+    public Duration MinDuration { get; set; }  // Google.Protobuf.WellKnownTypes.Duration
+    public int TotalKillCount { get; set; }
+    public long TotalDamageTaken { get; set; }
+    public int TotalPerfectGuardCount { get; set; }
+    public int TotalPerfectDodgeCount { get; set; }
+    public int TotalPotionUsedCount { get; set; }
+}
 public class SBStageDatas
 {
     public int BestDealtDamage { get; set; }
@@ -567,12 +639,12 @@ public class SBStageDatas
 
 public class TtsDatas
 {
-    public Dictionary<MiniGameTtsDifficulty,Dictionary<int, NetMiniGameTtsBadgeData>> BadgeData { get; set; } = [];
-    public Dictionary<int,NetMiniGameTtsMissionData> MissionData { get; set; } =[];
-    public List<NetMiniGameTtsScoreData> ScoreData { get; set; } = [];
-    public List<NetMiniGameTtsSongPlayCount> SongPlayCount { get; set; } = [];
-    public List<NetMiniGameTtsSongPlayData> SongPlayData { get; set; } = [];
-    public NetUserMiniGameTtsSkinData SkinData { get; set; } = new();
+    public Dictionary<MiniGameTtsDifficulty,Dictionary<int, MiniGameTtsBadgeData>> BadgeData { get; set; } = [];
+    public Dictionary<int, MiniGameTtsMissionData> MissionData { get; set; } = [];
+    public List<MiniGameTtsScoreData> ScoreData { get; set; } = [];
+    public List<MiniGameTtsSongPlayCount> SongPlayCount { get; set; } = [];
+    public List<MiniGameTtsSongPlayData> SongPlayData { get; set; } = [];
+    public UserMiniGameTtsSkinData SkinData { get; set; } = new();
     public List<int> BuySkinObject { get; set; } = [];
 
     public List<int> MissionCompleteList { get; set; } = [];
@@ -607,7 +679,55 @@ public class TtsDatas
     public Timestamp DateFromShop { get; set; } = new();
 }
 
+public class MiniGameTtsBadgeData
+{
+    public bool HasEntered { get; set; }
+    public bool HasReceivableReward { get; set; }
+    public bool HasNewSongBadge { get; set; }
+}
 
+public class MiniGameTtsMissionData
+{
+    public int MissionId { get; set; }
+    public int Progress { get; set; }
+    public bool IsReceived { get; set; }
+}
+public class MiniGameTtsScoreData
+{
+    public int EventTtsSongManagerTableId { get; set; }
+    public MiniGameTtsDifficulty Difficulty { get; set; }
+    public int Score { get; set; }
+}
+public class MiniGameTtsSongPlayCount
+{
+    public int EventTtsSongManagerTableId { get; set; }
+    public MiniGameTtsDifficulty Difficulty { get; set; }
+    public int PlayCount { get; set; }
+}
+public class MiniGameTtsSongPlayData
+{
+    public int EventTtsSongManagerTableId { get; set; }
+    public MiniGameTtsDifficulty Difficulty { get; set; }
+    public MiniGameTtsRank Rank { get; set; }
+    public int Score { get; set; }
+    public int MissCount { get; set; }
+    public int GoodCount { get; set; }
+    public int GreatCount { get; set; }
+    public int PerfectCount { get; set; }
+    public int PerfectPlusCount { get; set; }
+    public int ComboCount { get; set; }
+    public bool IsCleared { get; set; }
+    public bool IsFullCombo { get; set; }
+    public bool IsAllPerfect { get; set; }
+}
+public class UserMiniGameTtsSkinData
+{
+    public int BackgroundSkinObjectId { get; set; }
+    public int FirstCharacterSkinObjectId { get; set; }
+    public int SecondCharacterSkinObjectId { get; set; }
+    public int ThirdCharacterSkinObjectId { get; set; }
+    public int NoteSkinObjectId { get; set; }
+}
 
 public class SongRankKey
 {
@@ -622,12 +742,142 @@ public class TowerDefenseData
     public int ChallengeMaxScore { get; set; } = 0;
     public List<int> ClearedStageIdList { get; set; } = [];
     public List<int> ClearedTutorialIdList { get; set; } = [];
-    public List<NetArcadeTowerDefenseMissionProgress> MissionProgressList { get; set; } = [];
+    public List<ArcadeTowerDefenseMissionProgress> MissionProgressList { get; set; } = [];
     public int UpgradeCurrency { get; set; } = 0;
     public List<int> UpgradeIdList { get; set; } = [];
     public int LastEnteredStageId { get; set; } = 0;
 }
 
+public class ArcadeTowerDefenseMissionProgress
+{
+    public long MissionUid { get; set; }
+    public int MissionTid { get; set; }
+    public int Progress { get; set; }
+    public Timestamp CreatedAt { get; set; }
+    public Timestamp ReceivedAt { get; set; }
+}
+public class ArcadeBBQData
+{
+    public int ArcadeId { get; set; }
+    public int HighScore { get; set; }
+    public long TotalAccumulatedScore { get; set; }
+    public List<int> StepUpRewardedList { get; set; } = [];
+    public List<int> RecordedCutSceneList { get; set; } = [];
+    public int PlayCount { get; set; }
+}
+public class ArcadeDessertRushData
+{
+    public int ArcadeId { get; set; }
+    public int HighScore { get; set; }
+    public long TotalAccumulatedScore { get; set; }
+    public List<int> StepUpRewardedList { get; set; } = [];
+}
+public class ArcadePirateCafeData
+{
+    public int ArcadeId { get; set; }
+    public int HighScore { get; set; }
+    public long TotalAccumulatedScore { get; set; }
+    public List<int> MissionRewardedList { get; set; } = [];
+    public int SkillLevel { get; set; }
+}
+public class ArcadeSortOutData
+{
+    public List<BoxSortOutCount> AccumulatedBoxSortOutCounts { get; set; } = [];
+    public int HighScore { get; set; } = 0;
+    public List<int> MissionRewarded { get; set;  } = [];
+    public int TotalAccumulatedScore { get; set; } = 0;    
+}
+
+public class BoxSortOutCount
+{
+    public int BoxId { get; set; }
+    public int Count { get; set; }
+}
+public class ArcadeBtgData
+{
+    public BtgData Data { get; set; } = new();
+    public Dictionary<int, MiniGameBtgMissionData> MissionDatas { get; set; } = [];
+    public int Score { get; set; } = 0;
+
+}
+
+public class BtgData
+{
+    public int BtgId { get; set; }
+    public int TutorialState { get; set; }
+    public int TotalAccumulatedScore { get; set; }
+    public List<int> CutSceneList { get; set; } = [];
+    public List<int> WallpaperList { get; set; } = [];
+}
+
+public class MiniGameBtgMissionData
+{
+    public int MissionId { get; set; }
+    public int Progress { get; set; }
+    public bool IsReceived { get; set; }
+}
+
+public class DragonDungeonRunData
+{
+    public bool HasUnconfirmedAlbum { get; set; } = false;
+    public bool HasWatchedTutorial { get; set; } = false;
+    public bool NewScenarioAvailable { get; set; } = false;
+    public int TotalDistance { get; set; } = 0;
+    public int TotalGold { get; set; } = 0;
+    public int Point { get; set; } = 0;
+    public int TotalSkillCount { get; set; } = 0;
+    public int Distance { get; set; } = 0;    
+    public List<int> Characters { get; set; } = [];
+    public int LastPlayCharacter { get; set; } = 0;
+    public List<int> NewCharacters { get; set; } = [];
+    public bool IsPhase1Unlocked { get; set; } = false;
+    public bool IsPhase2Unlocked { get; set; } = false;
+    public Dictionary<int, DragonDungeonRunMissionProgress> MissionDatas { get; set; } = [];
+    public List<int> RewardedMissionIdList { get; set; } = [];
+    public SkipEarlyPhase Phase { get; set; } = SkipEarlyPhase.Phase0;
+    public Dictionary<int, bool> CutSceneList { get; set; } = [];
+    public Dictionary<int, DDRStatisticsData> StatisticsDatas { get; set; } = [];
+
+}
+
+public class DragonDungeonRunMissionProgress
+{
+    public int MissionType { get; set; }
+    public int MissionTargetId { get; set; }
+    public int Progress { get; set; }
+}
+public class DDRStatisticsData
+{    
+    public int Score { get; set; } = 0;
+    public int PlayCount { get; set; } = 0;
+    public int CumulativeDistance { get; set; } = 0;
+    public int CumulativeGold { get; set; } = 0;
+    public int CumulativeSkillCount { get; set; } = 0;
+    public Dictionary<int, int> DeadCountList { get; set; } = [];
+}
+
+public class RebuildEdenData
+{
+    public Dictionary<int, RebuildEdenMissionData> MissionDatas { get; set; } = [];
+    public Dictionary<int, int> DailyMissions { get; set; } = [];
+    public EdenData Data { get; set; } = new();
+    public Google.Protobuf.WellKnownTypes.Timestamp? FirstEnteredAt { get; set; }
+}
+
+public class EdenData
+{
+    public long ClientSeq { get; set; }
+    public string ProgressJson { get; set; } = "";
+    public Dictionary<int, int> Items { get; set; } = [];
+    public List<int> UnitIds { get; set; } = [];
+}
+
+public class RebuildEdenMissionData
+{
+    public int MissionId { get; set; }
+    public int Progress { get; set; }
+    public bool IsReceived { get; set; }
+}
 public class SongRankData
 {
     

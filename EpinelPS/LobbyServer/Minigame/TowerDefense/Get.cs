@@ -23,7 +23,9 @@ public class Get : LobbyMessage
         response.ChallengeMaxScore = data.ChallengeMaxScore;
         response.ClearedStageIdList.AddRange(data.ClearedStageIdList);
         response.ClearedTutorialIdList.AddRange(data.ClearedTutorialIdList);
-        response.MissionProgressList.AddRange(data.MissionProgressList);
+        var missprolist = MiniGameHelper
+                .ToProtoList<NetArcadeTowerDefenseMissionProgress, ArcadeTowerDefenseMissionProgress>(data.MissionProgressList);
+        response.MissionProgressList.AddRange(missprolist);
         response.UpgradeCurrency = data.UpgradeCurrency;
         response.UpgradeIdList.AddRange(data.UpgradeIdList);
 

@@ -12,15 +12,9 @@ public class ObtainStepUpReward : LobbyMessage
         ReqObtainArcadeBBQStepUpReward req = await ReadData<ReqObtainArcadeBBQStepUpReward>();
         User user = GetUser();
         ResObtainArcadeBBQStepUpReward response = new();
-        List<int>? list = user.BBQInfoData.StepUpRewardedList.ToList();
 
-        user.AddUnique(list, req.StepUpRewardId);
-
-        user.BBQInfoData.StepUpRewardedList.Clear();
-        user.BBQInfoData.StepUpRewardedList.AddRange(list);
-        
-        response.Data = user.BBQInfoData;
-
+        user.BBQInfoData.StepUpRewardedList.AddUnique(req.StepUpRewardId);        
+        response.Data = MiniGameHelper.BBQToNet(user.BBQInfoData);
         NetRewardData ret = new NetRewardData();
 
         EventBBQTycoonStepUpRewardRecord? rewardid = GameData.Instance.EventBBQTycoonStepUpRewardTable.Values

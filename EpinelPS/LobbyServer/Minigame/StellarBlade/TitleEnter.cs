@@ -30,9 +30,11 @@ public class TitleEnter : LobbyMessage
             response.TutorialListTableIds.AddRange(stellar.TutorialList);
             response.SbItemIdList.AddRange(stellar.SbItemIdList);
             response.LastEnteredStageId = stellar.LastEnteredStageId;
-            response.CharacterData = stellar.CharacterData;
-            response.CurrencyList.AddRange(stellar.Currency);
-            response.AchievementMissionDataList.AddRange(stellar.MissionData);
+            response.CharacterData = stellar.CharacterData.ToProto();
+            var currlist = MiniGameHelper.ToProtoList<NetStellarBladeCurrency, StellarBladeCurrency>(stellar.Currency);
+            response.CurrencyList.AddRange(currlist);
+            var misslist = MiniGameHelper.ToProtoList<NetStellarBladeMissionData, StellarBladeMissionData>(stellar.MissionData);
+            response.AchievementMissionDataList.AddRange(misslist);             
             
         }
 

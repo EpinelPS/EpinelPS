@@ -408,6 +408,38 @@ public class GameData
     [LoadRecord("EventBBQTycoonStepUpRewardTable.json", "Id")]
     public readonly Dictionary<int, EventBBQTycoonStepUpRewardRecord> EventBBQTycoonStepUpRewardTable = [];
 
+    //Dessert Rush
+    [LoadRecord("EventDessertRushManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventDessertRushManagerRecord> EventDessertRushManagerTable = [];
+    [LoadRecord("EventDessertRushStepUpRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventDessertRushStepUpRewardRecord> EventDessertRushStepUpRewardTable = [];
+
+    //Sort Out
+    [LoadRecord("EventSortOutMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventSortOutMissionRecord_Raw> EventSortOutMissionTable = [];
+    [LoadRecord("EventSortOutTable.json", "Id")]
+    public readonly Dictionary<int, EventSortOutRecord> EventSortOutTable = [];
+
+    //Pirate Cafe
+    [LoadRecord("EventPirateCafeManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventPirateCafeManagerRecord_Raw> EventPirateCafeManagerTable = [];
+    [LoadRecord("EventPirateCafeMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventPirateCafeMissionRecord_Raw> EventPirateCafeMissionTable = [];
+    [LoadRecord("EventPirateCafeSkillTable.json", "Id")]
+    public readonly Dictionary<int, EventPirateCafeSkillRecord_Raw> EventPirateCafeSkillTable = [];
+    [LoadRecord("EventPirateCafeStageTable.json", "Id")]
+    public readonly Dictionary<int, EventPirateCafeStageRecord_Raw> EventPirateCafeStageTable = [];
+
+    //NKS MOG E.X.
+    [LoadRecord("EventNKSCommonSettingsTable.json", "Id")]
+    public readonly Dictionary<int, EventNKSCommonSettingsRecord> EventNKSCommonSettingsTable = [];
+    [LoadRecord("EventNKSMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventNKSMissionRecord> EventNKSMissionTable = [];   
+
+
+
+
+
     [LoadRecord("ProfileCardObjectTable.json", "Id")]
     public readonly Dictionary<int, ProfileCardObjectRecord> ProfileCardObjectTable = [];
     [LoadRecord("UserIconTable.json", "Id")]

@@ -16,11 +16,12 @@ public class TTSFinish : LobbyMessage
 
         if (user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
         {
-           NetMiniGameTtsSongPlayData? predata  = ttsData.SongPlayData
+            MiniGameTtsSongPlayData? predata = ttsData.SongPlayData
                 .Where(x => x.EventTtsSongManagerTableId == req.EventTtsSongManagerTableId && x.Difficulty == req.Difficulty).FirstOrDefault();
             if (predata!=null)
             {
-                response.PreviousSongPlayData = predata;
+                var netpredata = MiniGameHelper.ToProto<NetMiniGameTtsSongPlayData, MiniGameTtsSongPlayData>(predata);
+                response.PreviousSongPlayData = netpredata;
             }
             ttsData.AllPlayCount += 1;
             ttsData.TotalScore += req.Score;
@@ -70,7 +71,7 @@ public class TTSFinish : LobbyMessage
                 user.AddUnique(ttsData.BadgeSongId, req.EventTtsSongManagerTableId);
 
                 
-                Dictionary<int, NetMiniGameTtsBadgeData> badge = new();
+                Dictionary<int, MiniGameTtsBadgeData> badge = new();
                 badge.TryAdd(req.EventTtsSongManagerTableId, new() { HasEntered = true, HasNewSongBadge = true, HasReceivableReward = false });
                 ttsData.BadgeData.TryAdd(req.Difficulty, badge);
             }
@@ -98,7 +99,7 @@ public class TTSFinish : LobbyMessage
 
     private static bool Chkhigh(int songId, MiniGameTtsDifficulty difficulty,int score, ref TtsDatas ttsData)
     {
-        NetMiniGameTtsScoreData? existing = ttsData.ScoreData.FirstOrDefault(x =>
+        MiniGameTtsScoreData? existing = ttsData.ScoreData.FirstOrDefault(x =>
         x.EventTtsSongManagerTableId == songId &&
         x.Difficulty == difficulty);
         if (existing != null)
@@ -183,7 +184,7 @@ public class TTSFinish : LobbyMessage
 
                     foreach (var miss in cra)
                     {
-                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                         {
                             vale.Progress += 1;
                         }
@@ -206,7 +207,7 @@ public class TTSFinish : LobbyMessage
 
                     foreach (var miss in nrg)
                     {
-                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                         {
                             vale.Progress += (req.GreatCount + req.PerfectCount + req.PerfectPlusCount);
                         }
@@ -225,7 +226,7 @@ public class TTSFinish : LobbyMessage
 
                     foreach (var miss in sam)
                     {
-                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                         {
                             vale.Progress = (int)ttsData.TotalScore;
                         }
@@ -238,7 +239,7 @@ public class TTSFinish : LobbyMessage
 
                     foreach (var miss in pc)
                     {
-                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                         {
                             vale.Progress += 1;
                         }
@@ -253,7 +254,7 @@ public class TTSFinish : LobbyMessage
 
                     foreach (var miss in missions)
                     {
-                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                        if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                         {
                             vale.Progress += 1;
                         }
@@ -270,7 +271,7 @@ public class TTSFinish : LobbyMessage
 
                         foreach (var miss in amissions)
                         {
-                            if (ttsData.MissionData.TryGetValue(miss.Id, out var vale))
+                            if (ttsData.MissionData.TryGetValue(miss.Id, out var vale) && !vale.IsReceived)
                             {
                                 vale.Progress += 1;
                             }
@@ -287,7 +288,7 @@ public class TTSFinish : LobbyMessage
 
     private static void AddScoreData(ReqFinishMiniGameTtsPlay req,ref TtsDatas ttsData)
     {
-        NetMiniGameTtsScoreData? existing = ttsData.ScoreData.FirstOrDefault(x =>
+        MiniGameTtsScoreData? existing = ttsData.ScoreData.FirstOrDefault(x =>
         x.EventTtsSongManagerTableId == req.EventTtsSongManagerTableId &&
         x.Difficulty == req.Difficulty);
         if (existing != null)
@@ -296,7 +297,7 @@ public class TTSFinish : LobbyMessage
         }
         else
         {
-            ttsData.ScoreData.Add(new NetMiniGameTtsScoreData
+            ttsData.ScoreData.Add(new MiniGameTtsScoreData
             {
                 Difficulty = req.Difficulty,
                 EventTtsSongManagerTableId = req.EventTtsSongManagerTableId,
@@ -304,7 +305,7 @@ public class TTSFinish : LobbyMessage
             });
         }
 
-        NetMiniGameTtsSongPlayCount? playrecord = ttsData.SongPlayCount.FirstOrDefault(p => 
+        MiniGameTtsSongPlayCount? playrecord = ttsData.SongPlayCount.FirstOrDefault(p => 
         p.EventTtsSongManagerTableId == req.EventTtsSongManagerTableId &&
         p.Difficulty == req.Difficulty);
 
@@ -314,7 +315,7 @@ public class TTSFinish : LobbyMessage
         }
         else
         {
-            ttsData.SongPlayCount.Add(new NetMiniGameTtsSongPlayCount ()
+            ttsData.SongPlayCount.Add(new MiniGameTtsSongPlayCount ()
             {
                 Difficulty = req.Difficulty,
                 EventTtsSongManagerTableId = req.EventTtsSongManagerTableId,
@@ -322,7 +323,7 @@ public class TTSFinish : LobbyMessage
             });
         }
 
-        NetMiniGameTtsSongPlayData? playdata = ttsData.SongPlayData.FirstOrDefault(d =>
+        MiniGameTtsSongPlayData? playdata = ttsData.SongPlayData.FirstOrDefault(d =>
         d.EventTtsSongManagerTableId == req.EventTtsSongManagerTableId &&
         d.Difficulty == req.Difficulty);
 
@@ -354,7 +355,7 @@ public class TTSFinish : LobbyMessage
         }
         else
         {
-            NetMiniGameTtsSongPlayData newplay = new()
+            MiniGameTtsSongPlayData newplay = new()
             {
                 EventTtsSongManagerTableId = req.EventTtsSongManagerTableId,
                 Difficulty = req.Difficulty,

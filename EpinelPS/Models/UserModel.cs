@@ -136,8 +136,8 @@ public class User
     public Dictionary<int, LoginEventData> LoginEventInfo { get; set; } = [];
     public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
-    public Dictionary<int, NormalShopState> NormalShopStates { get; set; } = []; // key: shop category
-    public MogMinigameInfo MogInfo { get; set; } = new();
+
+    public Dictionary<int, NormalShopState> NormalShopStates { get; set; } = []; // key: shop category    
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
     public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
 
@@ -167,13 +167,19 @@ public class User
     public Dictionary<int,MiniGameScenarios> MiniGameScenarios { get;set;  } = new();
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo { get; set; } = [];
     public Dictionary<int, MiniGameStoryChoice> MiniGameStoryChoice { get; set; } = [];
-    public NetArcadeBBQData BBQInfoData { get; set; } = new();
+    public ArcadeBBQData BBQInfoData { get; set; } = new();
     public List<NetPlaySodaEachGameInfo> PlaySodaInfoData { get; set; } = [];
-    public List<NetRebuildEdenData> RebuildedenData { get; set; } = [];
 
     public Dictionary<int, TtsDatas> TTSGameData { get; set; } = new();
     public Dictionary<int, StellarBladeDatas> StellarBladeDatas { get; set; } = new();
     public Dictionary<int, TowerDefenseData> TowerDefenseDatas { get; set; } = new();
+    public ArcadeDessertRushData DessertRushData { get; set; } = new();
+    public ArcadeSortOutData SortOutData { get; set; } = new();
+    public ArcadePirateCafeData PirateCafeData { get; set; } = new();
+    public Dictionary<int, ArcadeBtgData> BtgData { get; set; } = new();
+    public DragonDungeonRunData DDRDatas { get; set; } = new();
+    public Dictionary<int, RebuildEdenData> RebuildEdenDatas { get; set; } = new();
+    public Dictionary<int, Nksv2Data> Nksv2Datas { get; set; } = new();
 
     // Jukebox
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];

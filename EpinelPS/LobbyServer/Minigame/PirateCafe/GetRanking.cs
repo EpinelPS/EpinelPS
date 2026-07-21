@@ -1,26 +1,33 @@
 ﻿using EpinelPS.Utils;
 
-namespace EpinelPS.LobbyServer.Minigame.TowerDefense;
+namespace EpinelPS.LobbyServer.Minigame.PirateCafe;
 
-[GameRequest("/arcade/towerdefense/getranking")]
+[GameRequest("/arcade/PirateCafe/getranking")]
 public class GetRanking : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqGetArcadeTowerDefenseRanking req = await ReadData<ReqGetArcadeTowerDefenseRanking>();
+        ReqGetArcadePirateCafeRanking req = await ReadData<ReqGetArcadePirateCafeRanking>();
         User user = GetUser();
-        ResGetArcadeTowerDefenseRanking response = new() { UserGuildRanking = new() };
-
+        ResGetArcadePirateCafeRanking response = new()
+        {
+            UserGuildRanking = new()
+            {
+                Rank = 0,
+                Score = 0,
+                User = LobbyHandler.CreateWholeUserDataFromDbUser(user)
+            }
+        };
         if (user.Guild.guildId > 0)
         {
+            IEnumerable<(ArcadeScoreRecord Record, int Rank)>? allBoard = MiniGameHelper.GetFullLeaderboard((long)user.Guild.guildId, req.ArcadeId);
 
-            var allBoard = MiniGameHelper.GetFullLeaderboard((long)user.Guild.guildId, req.ArcadeManagerId);
             if (allBoard.Count() > 0)
             {
                 foreach (var item in allBoard)
                 {
                     User? user0 = GetUser(item.Record.UserId);
-                    NetArcadeTowerDefenseRankingData? guild = new NetArcadeTowerDefenseRankingData()
+                    var guild = new NetMiniGamePirateCafeRankingData()
                     {
                         Rank = item.Rank,
                         Score = item.Record.Score,
@@ -32,12 +39,10 @@ public class GetRanking : LobbyMessage
                     {
                         response.UserGuildRanking = guild;
                     }
-
                 }
             }
-        }
+        }        
 
-       
         // TODO
         await WriteDataAsync(response);
     }
