@@ -593,6 +593,11 @@ public class User
                     CurrentSeasonData = currentSeasonData,
                 }
             };
+
+            // Weekly stamina reset: base 2 + InfraCore bonus (FL[4] = StaminaMaxCount)
+            if (infracore != null)
+                Currency[CurrencyType.ContentStamina] = 2 + infracore.FunctionList[4].Function;
+
             needsSave = true;
         }
 

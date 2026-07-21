@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.Outpost.Dispatch;
+﻿using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.Outpost.Dispatch;
 
 public class DispatchHelper
 {
@@ -28,5 +30,25 @@ public class DispatchHelper
         }
 
         return items.Last();
+    }
+
+    public static void SyncDispatchLevel(User user)
+    {
+        var completed = user.CompletedTacticAcademyLessons;
+        int count = 0;
+        foreach (var lid in completed)
+        {
+            var lesson = GameData.Instance.GetTacticAcademyLesson(lid);
+            if (lesson != null && lesson.LessonType == LessonType.Dispatch)
+                count++;
+        }
+        int newLv = Math.Max(1, count);
+        if (newLv != user.DispatchLv)
+        {
+            user.DispatchLv = newLv;
+            user.DispatchCollectionLv = newLv;
+            user.DispatchFavoriteLv = newLv;
+            user.UserDispatchData.Today = 0;
+        }
     }
 }

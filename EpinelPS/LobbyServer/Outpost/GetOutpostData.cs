@@ -12,6 +12,15 @@ public class GetOutpostData : LobbyMessage
         User user = GetUser();
         user.ResetDataIfNeeded();
 
+        // Enter reset: restore stamina on each outpost entry (private server convenience)
+        var infracore = GameData.Instance.InfracoreTable.Values
+            .Where(x => x.Grade == user.InfraCoreLvl).FirstOrDefault();
+        if (infracore != null)
+        {
+            int staminaVal = 2 + (infracore.FunctionList.Count > 4 ? infracore.FunctionList[4].Function : 0);
+            user.Currency[CurrencyType.ContentStamina] = staminaVal;
+        }
+
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 

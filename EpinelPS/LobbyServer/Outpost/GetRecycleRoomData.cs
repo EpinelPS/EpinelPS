@@ -14,8 +14,7 @@ public class GetRecycleRoomData : LobbyMessage
             return new NetUserRecycleRoomData()
             {
                 Tid = progress.Key,
-                Lv = progress.Value.Level,
-                Exp = progress.Value.Exp
+                Lv = progress.Value.Level
             };
         }));
 
