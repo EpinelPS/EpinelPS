@@ -19,7 +19,7 @@ public class GetRanking : LobbyMessage
             {
                 foreach (var item in allBoard)
                 {
-                    User user0 = GetUser(item.Record.UserId);
+                    User? user0 = GetUser(item.Record.UserId);
                     NetArcadeTowerDefenseRankingData? guild = new NetArcadeTowerDefenseRankingData()
                     {
                         Rank = item.Rank,

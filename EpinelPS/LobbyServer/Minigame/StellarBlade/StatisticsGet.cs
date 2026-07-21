@@ -17,7 +17,9 @@ public class StatisticsGet : LobbyMessage
         {
             if (stellar.StatisticsData.Count > 0)
             {
-                response.StatisticsList.AddRange(stellar.StatisticsData.Values); 
+                var statistdata = MiniGameHelper
+                    .ToProtoDict<int, ResArcadeGetStellarBladeStatistics.Types.NetStatisticsData, StatisticsData>(stellar.StatisticsData);
+                response.StatisticsList.AddRange(statistdata.Values); 
             }
         }
         // TODO

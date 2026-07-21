@@ -16,7 +16,7 @@ public class AllObtain : LobbyMessage
         NetRewardData ret = new();
 
         long timenow = DateTime.Now.Ticks;
-        List<long>? keysToObtain = user.MailDatas.Where(x => x.Value.State == 0).Select(x => x.Key).ToList();
+        List<long>? keysToObtain = user.MailDatas.Where(x => x.Value.State == 1).Select(x => x.Key).ToList();
 
         foreach (var key in keysToObtain)
         {

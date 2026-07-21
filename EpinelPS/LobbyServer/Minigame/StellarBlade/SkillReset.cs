@@ -36,7 +36,7 @@ public class SkillReset : LobbyMessage
             stellar.CharacterData.LearnedSkillIdList.Clear();
             stellar.CharacterData.LearnedSkillIdList.AddRange(learnskilllist);
 
-            NetStellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)SBCurrencyType.SkillPoint);
+            StellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)SBCurrencyType.SkillPoint);
             if (currency != null)
             {
                 currency.Amount += totalSkillPoints;

@@ -48,7 +48,11 @@ public class SongGet : LobbyMessage
 
             if (ttsData.ScoreData.Count > 0)
             {
-                response.ScoreData.AddRange(ttsData.ScoreData);
+                var scoreDataList = ttsData.ScoreData
+                .Select(m => MiniGameHelper.ToProto<NetMiniGameTtsScoreData, MiniGameTtsScoreData>(m))
+                .ToList();
+
+                response.ScoreData.AddRange(scoreDataList);
             }
             else
             {

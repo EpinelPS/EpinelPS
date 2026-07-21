@@ -36,7 +36,11 @@ public class MissionComplete : LobbyMessage
             ret = RewardUtils.RegisterRewardsForUserDou(user, rewardIds);
             response.RewardData = ret;
             response.Result = MiniGameTtsMissionCompleteResult.Success;
-            response.UpdatedMissionDataList.AddRange(ttsData.MissionData.Values.ToList());
+            var missionList = ttsData.MissionData.Values
+                .Select(m => MiniGameHelper.ToProto<NetMiniGameTtsMissionData, MiniGameTtsMissionData>(m))
+                .ToList();
+
+            response.UpdatedMissionDataList.AddRange(missionList);
             
         }
 
