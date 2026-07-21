@@ -207,6 +207,80 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    public static RunCmdResponse AddAllCollections(User user)
+    {
+        // 1. Set all characters' bond level to 30
+        foreach (CharacterModel character in user.Characters)
+        {
+            if (!GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var charRecord)) continue;
+
+            NetUserAttractiveData? bondInfo = user.BondInfo.FirstOrDefault(b => b.NameCode == charRecord.NameCode);
+            if (bondInfo == null)
+            {
+                bondInfo = new NetUserAttractiveData { NameCode = charRecord.NameCode };
+                user.BondInfo.Add(bondInfo);
+            }
+            bondInfo.Lv = 30;
+            bondInfo.Exp = 0;
+        }
+
+        // 2. Add all collections, equipping to matching character if found
+        foreach (FavoriteItemRecord record in GameData.Instance.FavoriteItemTable.Values)
+        {
+            NetUserFavoriteItemData? item = user.FavoriteItems.FirstOrDefault(f => f.Tid == record.Id);
+            if (item == null)
+            {
+                item = new NetUserFavoriteItemData
+                {
+                    FavoriteItemId = user.GenerateUniqueItemId(),
+                    Tid = record.Id,
+                    Csn = 0,
+                    Lv = record.MaxLevel,
+                    Exp = 0
+                };
+                user.FavoriteItems.Add(item);
+            }
+
+            // Try to equip to a character matching this collection's NameCode
+            CharacterModel? match = user.Characters.FirstOrDefault(c =>
+                GameData.Instance.CharacterTable.TryGetValue(c.Tid, out var cr) &&
+                cr.NameCode == record.NameCode);
+
+            if (match != null)
+            {
+                NetUserFavoriteItemData? other = user.FavoriteItems.FirstOrDefault(f => f.Csn == match.Csn && f.Tid != record.Id);
+                if (other != null) other.Csn = 0;
+
+                item.Csn = match.Csn;
+                item.Lv = record.MaxLevel;
+            }
+        }
+
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    public static RunCmdResponse SetAllBondLevel(User user, int level)
+    {
+        level = Math.Clamp(level, 1, 30);
+
+        foreach (CharacterModel character in user.Characters)
+        {
+            if (!GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var charRecord)) continue;
+
+            NetUserAttractiveData? bondInfo = user.BondInfo.FirstOrDefault(b => b.NameCode == charRecord.NameCode);
+            if (bondInfo == null)
+            {
+                bondInfo = new NetUserAttractiveData { NameCode = charRecord.NameCode };
+                user.BondInfo.Add(bondInfo);
+            }
+            bondInfo.Lv = level;
+            bondInfo.Exp = 0;
+        }
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
     public static RunCmdResponse AddAllMaterials(User user, int amount)
     {
         foreach (ItemMaterialRecord tableItem in GameData.Instance.itemMaterialTable.Values)
@@ -590,7 +664,8 @@ public class AdminCommands
         }
 
 
-        ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl);
+        ResGetResourceHosts2? resources = await FetchProtobuf<ResGetResourceHosts2, ReqGetResourceHosts2>(resourcesUrl,
+            new ReqGetResourceHosts2 { Version = GameConfig.Root.TargetVersion });
         if (resources == null)
         {
             Logging.WriteLine("failed to fetch resource data", LogType.Error);
@@ -598,6 +673,9 @@ public class AdminCommands
         }
 
         GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
+        if (resources.DataPackVersionMap.TryGetValue(GameConfig.Root.TargetVersion, out var dataPackVersion)
+            || resources.DataPackVersionMap.TryGetValue(resources.Version, out dataPackVersion))
+            GameConfig.Root.ResourceDataPackVersion = dataPackVersion;
         GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
         GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
         GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
@@ -605,6 +683,7 @@ public class AdminCommands
         GameConfig.Save();
 
         await GameData.CreateAsync();
+        await LocaleDataDownloader.DownloadAsync(CancellationToken.None);
 
         return RunCmdResponse.OK;
     }

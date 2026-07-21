@@ -71,6 +71,11 @@
     </div>
 </div>
 
+<style>
+    /* _Layout footer is fixed; reserve space so the results card is not covered. */
+    .adminui-dashboard { padding-bottom: 80px; }
+</style>
+
 <script>
     function doSearch() {
         var type = document.getElementById('searchType').value;
@@ -81,7 +86,7 @@
 
         tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.searching') + '</td></tr>';
 
-        fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q))
+        fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q) + '&lang=' + encodeURIComponent(localStorage.getItem('adminui_lang') || 'zh'))
             .then(function (r) { return r.json(); })
             .then(function (items) {
                 document.getElementById('resultCount').textContent = i18n.t('search.resultsCount', { count: items.length });

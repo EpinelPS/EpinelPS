@@ -34,6 +34,10 @@ You should be able to register an new account in the launcher (you can enter any
 To access the admin panel, go to https://127.0.0.1/admin/ and sign in. You can skip stages and add all characters using that link for example. The first created user account is an admin account.
 
 
+
+The server automatically searches the corresponding `Unity/.../saus/saus/lss` directory. Without this path, IDs still work, but localized names cannot be resolved.
+
+
 > [!Note]
 > Before updating the game, make sure to switch back to the official server to ensure that the game is properly patched.
 

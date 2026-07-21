@@ -16,6 +16,7 @@ namespace EpinelPS.Controllers;
 [ApiController]
 public class AdminApiController(GameContext DbContext) : ControllerBase
 {
+    private static readonly AsyncLocal<string?> RequestLanguage = new();
     private readonly GameContext dbContext = DbContext;
     private static readonly MD5 md5 = MD5.Create();
 
@@ -145,6 +146,18 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                     if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
                     return AdminCommands.AddAllCostumes(user);
                 }
+            case "addallcollections":
+                {
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                    return AdminCommands.AddAllCollections(user);
+                }
+            case "setallbondlevel":
+                {
+                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
+                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+                    return AdminCommands.SetAllBondLevel(user, int.Parse(req.p2));
+                }
             case "addallmaterials":
                 {
                     User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
@@ -239,85 +252,25 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         return new RunCmdResponse() { error = "Not implemented" };
     }
 
-    private static List<CharactersJsonEntry>? _characters;
-    private static readonly object _charLock = new();
-    private static List<CharactersJsonEntry> GetCharacters()
+    private static string LookupRealName(string nameLocalkey)
     {
-        if (_characters != null) return _characters;
-        lock (_charLock)
-        {
-            if (_characters != null) return _characters;
-            try
-            {
-                var cachePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "nikke_chars.json");
-                if (System.IO.File.Exists(cachePath))
-                {
-                    var json = System.IO.File.ReadAllText(cachePath);
-                    _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(json);
-                    if (_characters != null) return _characters;
-                }
-                // Download from GitHub
-                using var http = new HttpClient();
-                http.Timeout = TimeSpan.FromSeconds(10);
-                var url = "https://raw.githubusercontent.com/Nikke-db/Nikke-db.github.io/main/js/json/Characters.json";
-                var response = http.GetStringAsync(url).GetAwaiter().GetResult();
-                _characters = JsonConvert.DeserializeObject<List<CharactersJsonEntry>>(response);
-                if (_characters != null)
-                {
-                    var dir = System.IO.Path.GetDirectoryName(cachePath);
-                    if (!string.IsNullOrEmpty(dir)) System.IO.Directory.CreateDirectory(dir);
-                    System.IO.File.WriteAllText(cachePath, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine("Failed to load nikke_chars.json: " + ex.Message);
-            }
-        }
-        _characters ??= [];
-        return _characters;
-    }
-
-    private class CharactersJsonEntry
-    {
-        public string? id { get; set; }
-        public string? name { get; set; }
-    }
-
-    private static string LookupRealName(string nameLocalkey, int nameCode = 0)
-    {
-        // Extract character number from "Locale_Character:XXX_name" or "Locale_Character:XXX_Name"
-        if (!string.IsNullOrEmpty(nameLocalkey))
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(nameLocalkey, @"Locale_Character:(\d+)_", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            if (match.Success)
-            {
-                var num = match.Groups[1].Value;
-                var charId = "c" + num.PadLeft(3, '0'); // "102" → "c102", "90" → "c090"
-                var chars = GetCharacters();
-                var found = chars.FirstOrDefault(c => string.Equals(c.id, charId, StringComparison.OrdinalIgnoreCase));
-                if (found?.name != null) return found.name;
-            }
-        }
+        var localized = LocaleNameResolver.Resolve(nameLocalkey, RequestLanguage.Value);
+        if (!string.Equals(localized, nameLocalkey, StringComparison.Ordinal)) return localized;
         return RealNameOrCleaned(nameLocalkey ?? "");
-    }
-
-    private static string LookupRealName<T>(T record, Func<T, string?> nameSelector, Func<T, int> nameCodeSelector) where T : class
-    {
-        return LookupRealName(nameSelector(record) ?? "", nameCodeSelector(record));
     }
 
     [HttpGet]
     [Route("searchGameData")]
-    public IActionResult SearchGameData([FromQuery] int type, [FromQuery] string? q)
+    public IActionResult SearchGameData([FromQuery] int type, [FromQuery] string? q, [FromQuery] string? lang)
     {
+        RequestLanguage.Value = lang;
         var results = new List<object>();
         var query = q?.Trim().ToLowerInvariant() ?? "";
 
         switch (type)
         {
             case 4: // Character
-                SearchDict(GameData.Instance.CharacterTable, r => r.NameLocalkey, query, results);
+                SearchCharacters(query, results);
                 break;
             case 5: // Item
                 SearchDict(GameData.Instance.itemMaterialTable, r => r.NameLocalkey, query, results);
@@ -329,6 +282,15 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             case 6: // Frame
                 SearchDict(GameData.Instance.userFrameTable, r => r.NameLocalkey, query, results);
                 break;
+            case 8: // BGM / Jukebox theme
+                foreach (var kv in GameData.Instance.jukeboxListDataRecords)
+                {
+                    var name = kv.Value.Name ?? kv.Value.Bgm ?? kv.Key.ToString();
+                    if (string.IsNullOrEmpty(query) || name.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                        results.Add(new { id = kv.Key, name });
+                }
+                SearchDict(GameData.Instance.jukeboxThemeDataRecords, r => r.NameLocalkey, query, results);
+                break;
             case 10: // LiveWallpaper
                 SearchDict(GameData.Instance.LiveWallpaperTable, r => r.NameLocalkey, query, results);
                 break;
@@ -336,13 +298,20 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 foreach (var kv in GameData.Instance.CharacterCostumeTable)
                 {
                     var raw = kv.Value.CostumeNameLocale ?? "";
-                    var cleaned = RealNameOrCleaned(raw);
+                    var cleaned = LookupRealName(raw);
+                    var character = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.ResourceId == kv.Value.ResourceId);
+                    var characterName = character == null ? "" : LookupRealName(character.NameLocalkey ?? "");
+                    var displayName = string.IsNullOrWhiteSpace(characterName) || string.IsNullOrWhiteSpace(cleaned)
+                        ? (string.IsNullOrWhiteSpace(cleaned) ? kv.Key.ToString() : cleaned)
+                        : $"{characterName} - {cleaned}";
                     if (string.IsNullOrEmpty(query) ||
                         raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                         cleaned.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        characterName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                        displayName.Contains(query, StringComparison.OrdinalIgnoreCase) ||
                         kv.Key.ToString().Contains(query))
                     {
-                        results.Add(new { id = kv.Key, name = string.IsNullOrEmpty(cleaned) ? kv.Key.ToString() : cleaned });
+                        results.Add(new { id = kv.Key, name = displayName });
                     }
                 }
                 break;
@@ -358,31 +327,6 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             case 48: // Album
                 SearchDict(GameData.Instance.albumResourceRecords, r => r.ScenarioNameLocalkey, query, results);
                 break;
-        }
-
-        // Disambiguate duplicate names by appending ID
-        var seen = new Dictionary<string, int>();
-        for (int i = 0; i < results.Count; i++)
-        {
-            var obj = (dynamic)results[i];
-            string name = obj.name;
-            int id = obj.id;
-            if (seen.TryGetValue(name, out int firstIdx))
-            {
-                // Add ID to the first occurrence
-                if (firstIdx >= 0)
-                {
-                    var first = (dynamic)results[firstIdx];
-                    results[firstIdx] = new { id = (int)first.id, name = (string)first.name + " (" + (int)first.id + ")" };
-                    seen[name] = -1; // mark as processed
-                }
-                // Add ID to this occurrence
-                results[i] = new { id, name = name + " (" + id + ")" };
-            }
-            else
-            {
-                seen[name] = i;
-            }
         }
 
         return Ok(results.Take(5000));
@@ -404,6 +348,29 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
                 if (raw.Contains(query, StringComparison.OrdinalIgnoreCase) || display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
                     results.Add(new { id = kv.Key, name = display });
             }
+        }
+    }
+
+    private static void SearchCharacters(string query, List<object> results)
+    {
+        var records = GameData.Instance.CharacterTable;
+        var predecessor = records.Values.Where(r => r.GrowGrade > 0)
+            .ToDictionary(r => r.GrowGrade, r => r.Id);
+        foreach (var kv in records)
+        {
+            var stage = 1;
+            var current = kv.Key;
+            var visited = new HashSet<int>();
+            while (predecessor.TryGetValue(current, out var previous) && visited.Add(current))
+            {
+                stage++;
+                current = previous;
+            }
+            var display = $"{LookupRealName(kv.Value.NameLocalkey ?? kv.Key.ToString())}（stage {stage}）";
+            var raw = kv.Value.NameLocalkey ?? "";
+            if (string.IsNullOrEmpty(query) || raw.Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                display.Contains(query, StringComparison.OrdinalIgnoreCase) || kv.Key.ToString().Contains(query))
+                results.Add(new { id = kv.Key, name = display });
         }
     }
 

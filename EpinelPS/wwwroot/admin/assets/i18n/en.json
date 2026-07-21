@@ -171,11 +171,15 @@
       "setCharLevels": "Set Character Levels",
       "setSkillLevels": "Set Skill Levels",
       "setCoreLevel": "Set Core Level",
+      "setBondLevel": "Set Bond Level",
       "inventory": "Inventory:",
       "addAllEquip": "Add All Equipment",
       "addCurrency": "Add Currency",
       "addItem": "Add Item",
       "misc": "Miscellaneous:",
+      "completeAllStages": "Complete All Stages",
+      "addAllCostumes": "Add All Costumes",
+      "addAllCollections": "Add All Collections",
       "finishTutorials": "Finish All Tutorials",
       "backToList": "Back to List"
     },
@@ -331,6 +335,8 @@
     "server": {
       "title": "Server Configuration",
       "logLevel": "Log Level:",
+      "gamePath": "Game installation directory (for localized character/costume names)",
+      "gamePathHint": "The server will read localization files from the game's Unity/.../lss directory.",
       "updateResources": "Update Resources",
       "updateResourcesHint": "Downloads asset and static data info from official server."
     },

@@ -1,5 +1,6 @@
 ﻿using EpinelPS.Database;
 using EpinelPS.Models.Admin;
+using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Paseto;
 using Paseto.Builder;
@@ -84,7 +85,6 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         JsonDb.Instance.LogLevel = cfg.LogType;
         JsonDb.Save();
-
         return View(new ServerConfiguration() { LogType = cfg.LogType });
     }
 

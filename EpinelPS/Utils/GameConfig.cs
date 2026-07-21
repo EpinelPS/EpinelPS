@@ -7,6 +7,8 @@ public class GameConfigRoot
 {
     public StaticData StaticDataMpk { get; set; } = new();
     public string ResourceBaseURL { get; set; } = "";
+    /// <summary>Resource data-pack number used to locate the CDN latest file.</summary>
+    public string ResourceDataPackVersion { get; set; } = "";
     public string GameMinVer { get; set; } = "";
     public string GameMaxVer { get; set; } = "";
     /// <summary>
