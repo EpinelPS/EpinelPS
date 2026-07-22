@@ -155,6 +155,8 @@ public static class LobbyHandler
             });
         }
 
+        ret.CounselCount = user.ResetableData.DailyCounselCount[1];
+        ret.OutpostFastBattleCount = user.ResetableData.WipeoutCount;        
         return ret;
     }
     public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)

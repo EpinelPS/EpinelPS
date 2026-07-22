@@ -396,12 +396,6 @@ public class GameData
     public readonly Dictionary<int, EventTowerDefenseMissionRecord> EventTowerDefenseMissionTable = [];
     [LoadRecord("EventTowerDefenseStageTable.json", "Id")]
     public readonly Dictionary<int, EventTowerDefenseStageRecord> EventTowerDefenseStageTable = [];
-    [LoadRecord("EventTowerDefenseTutorialListTable.json", "Id")]
-    public readonly Dictionary<int, EventTowerDefenseTutorialListRecord> EventTowerDefenseTutorialListTable = [];
-    [LoadRecord("EventTowerDefenseTutorialPageTable.json", "Id")]
-    public readonly Dictionary<int, EventTowerDefenseTutorialPageRecord> EventTowerDefenseTutorialPageTable = [];
-    [LoadRecord("EventTowerDefenseTutorialTable.json", "Id")]
-    public readonly Dictionary<int, EventTowerDefenseTutorialRecord> EventTowerDefenseTutorialTable = [];
     [LoadRecord("EventTowerDefenseUpgradeGroupTable.json", "Id")]
     public readonly Dictionary<int, EventTowerDefenseUpgradeGroupRecord> EventTowerDefenseUpgradeGroupTable = [];
     [LoadRecord("EventTowerDefenseUpgradeListTable.json", "Id")]
@@ -433,12 +427,57 @@ public class GameData
     [LoadRecord("EventPirateCafeStageTable.json", "Id")]
     public readonly Dictionary<int, EventPirateCafeStageRecord_Raw> EventPirateCafeStageTable = [];
 
+    //BTG
+    [LoadRecord("EventBTGBgTable.json", "Id")]
+    public readonly Dictionary<int, EventBTGBgRecord_Raw> EventBTGBgTable = [];
+    [LoadRecord("EventBTGManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventBTGManagerRecord_Raw> EventBTGManagerTable = [];
+    [LoadRecord("EventBTGMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventBTGMissionRecord_Raw> EventBTGMissionTable = [];
+
+    //DragonDungeonRun
+    [LoadRecord("EventDragonDungeonRunCharacterTable.json", "Id")]
+    public readonly Dictionary<int, EventDragonDungeonRunCharacterRecord_Raw> EventDragonDungeonRunCharacterTable = [];
+    [LoadRecord("EventDragonDungeonRunCutSceneTable.json", "Id")]
+    public readonly Dictionary<int, EventDragonDungeonRunCutSceneRecord_Raw> EventDragonDungeonRunCutSceneTable = [];
+    [LoadRecord("EventDragonDungeonRunManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventDragonDungeonRunManagerRecord_Raw> EventDragonDungeonRunManagerTable = [];
+    [LoadRecord("EventDragonDungeonRunMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventDragonDungeonRunMissionRecord_Raw> EventDragonDungeonRunMissionTable = [];
+    [LoadRecord("EventDragonDungeonRunScenarioTable.json", "Id")]
+    public readonly Dictionary<int, EventDragonDungeonRunScenarioRecord_Raw> EventDragonDungeonRunScenarioTable = [];
+
+
+    //Rebuild Eden
+    [LoadRecord("EventRebuildEdenManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventRebuildEdenManagerRecord_Raw> EventRebuildEdenManagerTable = [];
+    [LoadRecord("EventRebuildEdenMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventRebuildEdenMissionRecord_Raw> EventRebuildEdenMissionTable = [];
+    [LoadRecord("EventRebuildEdenRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventRebuildEdenRewardRecord_Raw> EventRebuildEdenRewardTable = [];
+
     //NKS MOG E.X.
     [LoadRecord("EventNKSCommonSettingsTable.json", "Id")]
     public readonly Dictionary<int, EventNKSCommonSettingsRecord> EventNKSCommonSettingsTable = [];
     [LoadRecord("EventNKSMissionTable.json", "Id")]
     public readonly Dictionary<int, EventNKSMissionRecord> EventNKSMissionTable = [];   
 
+
+    //Bubble March
+    [LoadRecord("EventBubbleMarchBuffTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchBuffRecord_Raw> EventBubbleMarchBuffTable = [];
+    [LoadRecord("EventBubbleMarchCharacterTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchCharacterRecord_Raw> EventBubbleMarchCharacterTable = [];
+    [LoadRecord("EventBubbleMarchCharacterUnlockTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchCharacterUnlockRecord_Raw> EventBubbleMarchCharacterUnlockTable = [];
+    [LoadRecord("EventBubbleMarchManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchManagerRecord_Raw> EventBubbleMarchManagerTable = [];
+    [LoadRecord("EventBubbleMarchMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchMissionRecord_Raw> EventBubbleMarchMissionTable = [];
+    [LoadRecord("EventBubbleMarchStageManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchStageManagerRecord_Raw> EventBubbleMarchStageManagerTable = [];
+    [LoadRecord("EventBubbleMarchStageTable.json", "Id")]
+    public readonly Dictionary<int, EventBubbleMarchStageRecord_Raw> EventBubbleMarchStageTable = [];
 
 
 
@@ -486,6 +525,8 @@ public class GameData
     public readonly Dictionary<int, EventStoryRecord> EventStoryTable = [];
     [LoadRecord("AutoChargeTable.json", "Id")]
     public readonly Dictionary<int, AutoChargeRecord> AutoChargeTable = [];
+    [LoadRecord("EventFieldTable.json", "Id")]
+    public readonly Dictionary<int, EventFieldRecord> EventFieldTable = [];
 
     // Pass Data Tables
     [LoadRecord("PassManagerTable.json", "Id")]
@@ -549,6 +590,21 @@ public class GameData
     [LoadRecord("EventAZXAppleGameCutSceneTable.json", "Id")]
     public readonly Dictionary<int, EventAZXAppleGameCutSceneRecord_Raw> EventAZXAppleGameCutSceneTable = [];
 
+    //Is Land Breaker
+    [LoadRecord("EventIslandBreakerBuffTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerBuffRecord_Raw> EventIslandBreakerBuffTable = [];
+    [LoadRecord("EventIslandBreakerCharacterTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerCharacterRecord_Raw> EventIslandBreakerCharacterTable = [];
+    [LoadRecord("EventIslandBreakerCurrencyTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerCurrencyRecord_Raw> EventIslandBreakerCurrencyTable = [];
+    [LoadRecord("EventIslandBreakerImageTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerImageRecord_Raw> EventIslandBreakerImageTable = [];
+    [LoadRecord("EventIslandBreakerManagerTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerManagerRecord_Raw> EventIslandBreakerManagerTable = [];
+    [LoadRecord("EventIslandBreakerMissionTable.json", "Id")]
+    public readonly Dictionary<int, EventIslandBreakerMissionRecord_Raw> EventIslandBreakerMissionTable = [];
+
+
     // solo raid data Table
     [LoadRecord("SoloRaidManagerTable.json", "Id")]
     public readonly Dictionary<int, SoloRaidManagerRecord> SoloRaidManagerTable = [];
@@ -564,6 +620,13 @@ public class GameData
     public readonly Dictionary<int, MonsterStatEnhanceRecord> MonsterStatEnhanceTable = [];
     [LoadRecord("WaveDataTable.wave_Intercept_001.json", "StageId")]
     public readonly Dictionary<int, WaveDataRecord> WaveIntercept001Table = [];
+
+
+    //Field
+    [LoadRecord("FieldPasswordTable.json", "Id")]
+    public readonly Dictionary<int, FieldPasswordRecord_Raw> FieldPasswordTable = [];
+    [LoadRecord("FieldPasswordDoorTable.json", "Id")]
+    public readonly Dictionary<int, FieldPasswordDoorRecord_Raw> FieldPasswordDoorTable = []; 
 
 
     static async Task<GameData> BuildAsync()
