@@ -48,17 +48,24 @@ public static class LobbyHandler
         // handle authentication
         if (ctx.Request.Headers.ContainsKey("Authorization"))
         {
-            PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+            try
+            {
+                PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
                            .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
                            .Decode(ctx.Request.Headers.Authorization.ToString().Replace("Bearer ", ""), new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
-            if (encryptionToken.IsValid)
+                if (encryptionToken.IsValid)
+                {
+                    var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
+
+                    if (id == 0) throw new Exception("403");
+
+                    ctx.Items["UserID"] = id;
+                }
+            }
+            catch
             {
-                var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
 
-                if (id == 0) throw new Exception("403");
-
-                ctx.Items["UserID"] = id;
             }
         }
 

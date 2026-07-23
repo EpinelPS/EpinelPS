@@ -1,14 +1,14 @@
 {
   "StaticDataMpk": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/148-cd0d99fa0f/staticdata/data/qa-260702-07b/538758/mpk/StaticData.pack",
-    "Version": "data/qa-260702-07b/538758",
-    "Salt1": "TaB9rvrIdhewv3CtjDHN3Y5xiLrvag2vqeGV4oLE37c=",
-    "Salt2": "QfV9v1xqlMPiYaJP0+R1oxR/lwBx3EoHpAlgNj54hdg="
+    "Url": "https://cloud.nikke-kr.com/prdenv/149-c86b1bf6f6/staticdata/data/qa-260723-07c/546257/mpk/StaticData.pack",
+    "Version": "data/qa-260723-07c/546257",
+    "Salt1": "+BgZRty/UQU7JiwqhceKeXdXOnw+IJ8qYeo34VyHb1o=",
+    "Salt2": "HQ85JuUdA90NfjHGNKLDTCOCu7MPphy9TR/dgvsoTtI="
   },
-  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/148-b2b9f2ed34/{Platform}",
-  "ResourceDataPackVersion": "647",
+  "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/149-b8154a6d93/{Platform}",
+  "ResourceDataPackVersion": "649",
   "GameMinVer": "100.0.1",
-  "GameMaxVer": "150.0.2",
+  "GameMaxVer": "160.0.2",
   "EnablePurchaseSimulation": true,
-  "TargetVersion": "148.10.5"
+  "TargetVersion": "149.8.3"
 }

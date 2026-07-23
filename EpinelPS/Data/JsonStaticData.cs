@@ -1396,6 +1396,7 @@ public partial class CooperationEventRecord
 	public int CooperationDailyGroup;
 	public List<int> CurrencyId;
 	public string? UiPrefab;
+	public string? LobbyButtonResourceName;
 }
 
 [MemoryPackable]
@@ -10543,6 +10544,7 @@ public partial class ItemConsumeRecord
 	public OriginalRareType ItemRare;
 	public ItemUseType UseType;
 	public int UseId;
+	public QuickUseType QuickUseType;
 	public PercentDisplayType PercentDisplayType;
 	public int UseValue;
 	public int UseFragCost;
@@ -15616,7 +15618,8 @@ public enum ContentsOpen : int
 	CampaignQuickBattle = 82,
 	SoloRaidMuseum = 83,
 	CampaignStory = 84,
-	SimulationRoomSimpleRewardOnly = 85
+	SimulationRoomSimpleRewardOnly = 85,
+	SubMenuFolder = 86
 }
 
 public enum ContentsOpenCondition : int
@@ -19353,7 +19356,8 @@ public enum TimingTriggerType : int
 	OnBrokenBarrier = 91,
 	OnProjectileBrokenNum = 92,
 	OnReturnDefaultWeapon = 93,
-	OnSpawnMonsterIncludeNoneType = 94
+	OnSpawnMonsterIncludeNoneType = 94,
+	OnCoverResurrection = 95
 }
 
 public enum StatusTriggerType : int
@@ -19872,6 +19876,13 @@ public enum ItemUseType : int
 	MVGGold = 13,
 	MVGCore = 14,
 	MVGCollectable = 15
+}
+
+public enum QuickUseType : int
+{
+	Disabled = 0,
+	AutoSelected = 1,
+	Selectable = 2
 }
 
 public enum PercentDisplayType : int
