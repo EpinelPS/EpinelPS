@@ -15,14 +15,39 @@ public class SaveObject : LobbyMessage
 
         EventFieldRecord? field = GameData.Instance.EventFieldTable.Values
             .Where(x => x.EventId == req.EventId).FirstOrDefault();
-        if (field!= null)
+        if (field != null)
         {
             FieldInfoNew? fieldInfo = user.FieldInfoNew[field.FieldDesignMap];
-            if (fieldInfo!=null)
+            if (fieldInfo != null)
             {
                 foreach (var item in req.FieldObjects)
                 {
-                    fieldInfo.CompletedObjects.AddUnique(new NetFieldObject() { PositionId = item.PositionId, Json = item.Json, Type = item.Type });
+                    if (item.Type == 11)
+                    {
+                        var index = user.FieldInfoNew[field.FieldDesignMap].CompletedObjects
+                            .FindIndex(x => x.PositionId == item.PositionId && x.Type == item.Type);
+
+                        if (index != -1)
+                        {
+                            user.FieldInfoNew[field.FieldDesignMap].CompletedObjects[index].Json = item.Json;
+                        }
+                        else
+                        {
+
+                            user.FieldInfoNew[field.FieldDesignMap].CompletedObjects.Add(new NetFieldObject
+                            {
+                                PositionId = item.PositionId,
+                                Type = item.Type,
+                                Json = item.Json
+                            });
+                        }
+                    }
+                    else
+                    {
+                        user.FieldInfoNew[field.FieldDesignMap].CompletedObjects
+                            .AddUnique(new NetFieldObject() { PositionId = item.PositionId, Json = item.Json, Type = item.Type });
+                    }
+
                 }
             }
             else
@@ -34,8 +59,8 @@ public class SaveObject : LobbyMessage
                         .AddUnique(new NetFieldObject() { PositionId = item.PositionId, Json = item.Json, Type = item.Type });
                 }
             }
-            
-        }       
+
+        }
 
         JsonDb.Save();
         // TODO
