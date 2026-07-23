@@ -46,6 +46,7 @@ public class User
     public Dictionary<string, FieldInfo> FieldInfo { get; set; } = []; // here for backwards compatibility
 
     public Dictionary<string, FieldInfoNew> FieldInfoNew { get; set; } = [];
+    public Dictionary<int, List<int>> ViewedNoticePopupTableIds { get; set; } = [];
     public Dictionary<string, string> MapJson { get; set; } = [];
     public Dictionary<CurrencyType, long> Currency { get; set; } = new() {
             { CurrencyType.ContentStamina, 2 }
@@ -180,6 +181,8 @@ public class User
     public DragonDungeonRunData DDRDatas { get; set; } = new();
     public Dictionary<int, RebuildEdenData> RebuildEdenDatas { get; set; } = new();
     public Dictionary<int, Nksv2Data> Nksv2Datas { get; set; } = new();
+    public Dictionary<int, BubbleMarchData> BubbleMarchDatas { get; set; } = new();
+    public Dictionary<int, IsLandBreakerData> IsLandBreakerDatas { get; set; } = new();
 
     // Jukebox
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
