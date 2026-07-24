@@ -33,6 +33,7 @@ public class User
     [Obsolete]
     public bool IsAdmin { get; set; } = false;
     public bool sickpulls { get; set; } = false;
+    public bool noDowngradeOnReroll { get; set; } = false; // When set to true, the rerolls of equipments attributes can only be the same level or greater.
     public bool IsBanned { get; set; } = false;
     public int TitleId { get; set; } = 1;
     public DateTime BanStart { get; set; }
@@ -185,7 +186,8 @@ public class User
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
-
+    // Character Wishlist
+    public List<int> CharacterWishlist { get; set; } = [];
 
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
@@ -655,5 +657,14 @@ public class User
         int seed = (int)(timestamp & 0x7FFFFFFF) ^ (int)(timestamp >> 32);
         var random = new Random(seed);
         return random.Next(100000000, 1000000000);
+    }
+
+    /// <summary>
+    /// Returns the list of characters from the user's wishlist.
+    /// </summary>
+    /// <returns></returns>
+    public List<CharacterRecord> GetWishlistCharacters()
+    {
+        return CharacterWishlist.Select(id => GameData.Instance.CharacterTable[id]).ToList();
     }
 }

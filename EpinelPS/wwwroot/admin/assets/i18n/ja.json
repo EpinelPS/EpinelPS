@@ -156,6 +156,8 @@
       "isAdmin": "管理者権限: ",
       "disableGacha": "ガチャシステムを無効化: ",
       "disableGachaHint": "すべてのキャラクターが同じ確率で排出されるようになります",
+      "noDowngradeOnReroll": "装備の再ロールでダウングレードなし",
+      "noDowngradeOnRerollHint": "装備値を再抽選すると、必ず同等以上の値が得られます",
       "isBanned": "禁止:",
       "cheats": "チート機能",
       "campaign": "キャンペーン:",

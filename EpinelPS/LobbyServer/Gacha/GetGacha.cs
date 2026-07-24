@@ -19,8 +19,8 @@ public class GetGacha : LobbyMessage
         }
 
         response.Gacha.Add(new NetUserGachaData() { GachaType = 9, PlayCount = 0 }); //type 9 = pickup gacha
-        response.GachaEventData.Add(new NetGachaEvent() { FreeCount = 1, GachaTypeId = 9 });
-        response.MultipleCustom.Add(new NetGachaCustomData() { Type = 9, Tid = 451101 });
+        response.GachaEventData.Add(new NetGachaEvent() { FreeCount = 1, GachaTypeId = 9 });    
+        response.MultipleCustom.AddRange(user.CharacterWishlist.Select(id => new NetGachaCustomData() { Type = 9, Tid = id })); // Fill the user wishlist
         // Write the response back
         await WriteDataAsync(response);
     }

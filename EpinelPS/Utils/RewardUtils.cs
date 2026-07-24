@@ -419,29 +419,31 @@ public class RewardUtils
         }
         else if (rewardType == RewardType.FavoriteItem)
         {
+            for(int i =0; i< rewardCount; i++){
 
-            NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
-            {
-                FavoriteItemId = user.GenerateUniqueItemId(),
-                Tid = rewardId,
-                Csn = 0,
-                Lv = 0,
-                Exp = 0
-            };
-            user.FavoriteItems.Add(newFavoriteItem);
+                NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+                {
+                    FavoriteItemId = user.GenerateUniqueItemId(),
+                    Tid = rewardId,
+                    Csn = 0,
+                    Lv = 0,
+                    Exp = 0
+                };
+                user.FavoriteItems.Add(newFavoriteItem);
 
-            ret.UserFavoriteItems.Add(newFavoriteItem);
+                ret.UserFavoriteItems.Add(newFavoriteItem);
 
-            NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
-            {
-                FavoriteItemId = newFavoriteItem.FavoriteItemId,
-                Tid = newFavoriteItem.Tid,
-                Csn = newFavoriteItem.Csn,
-                Lv = newFavoriteItem.Lv,
-                Exp = newFavoriteItem.Exp
-            };
-            ret.FavoriteItems.Add(favoriteItemData);
-
+                NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
+                {
+                    FavoriteItemId = newFavoriteItem.FavoriteItemId,
+                    Tid = newFavoriteItem.Tid,
+                    Csn = newFavoriteItem.Csn,
+                    Lv = newFavoriteItem.Lv,
+                    Exp = newFavoriteItem.Exp
+                };
+                ret.FavoriteItems.Add(favoriteItemData);
+                
+            }
         }
         else if (rewardType == RewardType.Character)
         {
@@ -456,7 +458,7 @@ public class RewardUtils
             {
                 DbItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.PieceId);
                 int maxLimitBroken = GetValueByRarity(character.OriginalRare, 0, 2, 11) - 1;
-                Logging.WriteLine($"[UseRandomBox] ��ɫ�����Ƭ: {maxLimitBroken}��������Ƭ���� {spareItem.Count}");
+                Logging.WriteLine($"[UseRandomBox] ��ɫ�����Ƭ: {maxLimitBroken}��������Ƭ���� {spareItem?.Count}");
 
                 bool canIncreaseItem = character.OriginalRare != OriginalRareType.R && ownedCharacter.Grade + (spareItem?.Count ?? 0) < maxLimitBroken;
                 (int newSpareItemCount, int dissoluteCharacterCount) = canIncreaseItem ? (1, 0) : (0, 1);

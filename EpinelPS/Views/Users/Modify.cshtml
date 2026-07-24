@@ -54,6 +54,12 @@
                                         <span asp-validation-for="sickpulls" class="text-danger"></span>
                                     </div>
 
+                                    <div class="adminui-checkbox mb-2">
+                                        <input asp-for="noDowngradeOnReroll" class="adminui-checkbox-input" data-i18n-title="users.modify.noDowngradeOnRerollHint" />
+                                        <label asp-for="noDowngradeOnReroll" class="adminui-checkbox-label" data-i18n="users.modify.noDowngradeOnReroll" data-i18n-title="users.modify.noDowngradeOnRerollHint">禁用降级</label>
+                                        <span asp-validation-for="noDowngradeOnReroll" class="text-danger"></span>
+                                    </div>
+
                                     <div class="adminui-checkbox">
                                         <input asp-for="IsBanned" class="adminui-checkbox-input" />
                                         <label asp-for="IsBanned" class="adminui-checkbox-label" data-i18n="users.modify.isBanned">禁止登录</label>

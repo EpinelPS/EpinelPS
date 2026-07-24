@@ -11,7 +11,7 @@ public class IncreaseEquipmentExp : LobbyMessage
     {
         { 7010001, 100 },
         { 7010002, 1000 },
-        { 7010003, 8000 }
+        { 7010003, 10000 } // Changed from 8000 to 10000 as per in game display
     };
 
     protected override async Task HandleAsync()

@@ -15686,17 +15686,17 @@ public enum RenewType : int
 public enum CurrencyType : int
 {
 	None = 0,
-	UserExp = 1,
-	ChargeCash = 98,
-	FreeCash = 99,
+	UserExp = 1,				
+	ChargeCash = 98,				// Paid Gems
+	FreeCash = 99,					// Free Gems
 	CharacterExp = 1000,
 	Gold = 2000,
 	CharacterExp2 = 3000,
 	FriendshipPoint = 4000,
 	ArenaChip = 5000,
-	CharPremiumTicket = 5100,
-	CharCustomizeTicket = 5200,
-	CharCorporationTicket = 5300,
+	CharPremiumTicket = 5100,       // Standard Recruit Voucher
+    CharCustomizeTicket = 5200,     // Advanced Recruit Voucher
+    CharCorporationTicket = 5300,
 	CharCE002RETicket = 5401,
 	CharCE007Ticket = 5402,
 	CharSelect01Ticket = 5501,

@@ -156,6 +156,8 @@
       "isAdmin": "관리자 권한: ",
       "disableGacha": "가챠 시스템 비활성화: ",
       "disableGachaHint": "모든 캐릭터가 동일한 확률로 출현하도록 합니다",
+      "noDowngradeOnReroll": "장비 재뽑기 시 등급 하락 없음",
+      "noDowngradeOnRerollHint": "장비 수치를 다시 굴리면 항상 동일하거나 더 높은 수치가 나옵니다",
       "isBanned": "차단됨:",
       "cheats": "치트 기능",
       "campaign": "캠페인:",

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -21,8 +21,8 @@
 	  <DebugType>none</DebugType>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ASodium" Version="0.6.7" />
+  <ItemGroup>
+    <PackageReference Include="ASodium" Version="0.6.7" />
 		<PackageReference Include="DnsClient" Version="1.8.0" />
 		<PackageReference Include="Google.Api.CommonProtos" Version="2.17.0" />
 		<PackageReference Include="Google.Protobuf.Tools" Version="3.35.1" />

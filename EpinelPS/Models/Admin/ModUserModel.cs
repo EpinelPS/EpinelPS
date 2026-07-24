@@ -8,6 +8,7 @@ public class ModUserModel
     public string Nickname { get; set; } = "";
     public bool IsAdmin { get; set; }
     public bool sickpulls { get; set; }
+    public bool noDowngradeOnReroll { get; set; }
     public bool IsBanned { get; set; }
     public ulong ID { get; set; }
 }

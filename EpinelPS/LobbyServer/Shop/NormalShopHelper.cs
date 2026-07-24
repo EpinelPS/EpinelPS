@@ -216,7 +216,7 @@ public static class NormalShopHelper
         foreach (var group in GameData.Instance.ContentsShopProductTable.Values
                      .Where(p => p.BundleId == shop.BundleId)
                      .GroupBy(p => p.ProductOrder))
-        {
+        {       
             var candidates = group.ToList();
             if (avoidPrevious && candidates.Count > 1 && previous.TryGetValue(group.Key, out int previousId))
                 candidates.RemoveAll(x => x.Id == previousId);
