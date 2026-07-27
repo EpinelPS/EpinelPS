@@ -151,7 +151,7 @@ public class UsePiece : LobbyMessage
     private CharacterRecord SelectRandomCharacter(IEnumerable<GachaListProbRecord> charProbs, int pieceId)
     {
         // Changed this to use the Gacha list probability table instead since it contains the probabilities without the need for splitting the groups.
-        // This should work no matter how many character are added and not matter what their probabilities are.
+        // This should work no matter how many character are added and no matter what their probabilities are.
 
         int maxCharProb = 0;
 
