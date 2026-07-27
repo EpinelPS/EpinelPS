@@ -62,7 +62,7 @@ public class MiniGameHelper
         if (allBoard.Count() > 0)
         {
             foreach (var item in allBoard)
-            {                
+            {
                 if (item.Record.UserId == userid)
                 {
 
@@ -72,7 +72,7 @@ public class MiniGameHelper
                         Score = item.Record.Score,
                         User = LobbyHandler.CreateWholeUserDataFromDbUser(item.Record.UserId)
                     };
-                    
+
                     return rankdata;
                 }
 
@@ -82,7 +82,17 @@ public class MiniGameHelper
         return null;
     }
 
+    public static (ArcadeScoreRecord Record, int Rank)? GetUserRank(ulong userId, int arcadeId)
+    {
+        var allBoard = GetArcadeBoard(arcadeId);
+        return allBoard.FirstOrDefault(x => x.Record.UserId == userId);
+    }
 
+    public static (ArcadeScoreRecord Record, int Rank)? GetGuildUserRank(long guildId, ulong userId, int arcadeId)
+    {
+        var allBoard = GetArcadeBoard(arcadeId);
+        return allBoard.FirstOrDefault(x => x.Record.UserId == userId && x.Record.GuildId == guildId);
+    }
     /// <summary>
     /// 获取游戏排行榜
     /// </summary>    
@@ -172,7 +182,7 @@ public class MiniGameHelper
     }
 
 
-    public static void InitStellarBladeData(User user,int arcadeId)
+    public static void InitStellarBladeData(User user, int arcadeId)
     {
         if (!user.StellarBladeDatas.TryGetValue(arcadeId, out var stellar))
         {
@@ -264,13 +274,13 @@ public class MiniGameHelper
 
             stellar.CharacterData.LearnedSkillIdList.AddRange(learnskilllist);
             foreach (SBCharacterEnhanceType type in System.Enum.GetValues<SBCharacterEnhanceType>())
-            {               
-                stellar.CharacterData.EnhanceDataList.Add(new StellarBladeCharacterData.NetEnhanceData() { EnhanceLevel = 1, EnhanceType =  (int)type});
+            {
+                stellar.CharacterData.EnhanceDataList.Add(new StellarBladeCharacterData.NetEnhanceData() { EnhanceLevel = 1, EnhanceType = (int)type });
             }
 
 
             var first = GameData.Instance.EventSBStageTable.Values
-                .Where(s=>s.GroupId == sbm.StageGroupId).FirstOrDefault();
+                .Where(s => s.GroupId == sbm.StageGroupId).FirstOrDefault();
 
             stellar.LastEnteredStageId = first.Id;
 
@@ -294,9 +304,9 @@ public class MiniGameHelper
                     {
                         case SBMissionCategory.DailyMission:
                             StellarBladeMissionData? dmiss = stellar.DailyMissionData.FirstOrDefault(m => m.MissionId == item.Id);
-                            if (dmiss?.IsReceived == false) dmiss.Progress += 1;                                                        
+                            if (dmiss?.IsReceived == false) dmiss.Progress += 1;
                             break;
-                        case SBMissionCategory.DailyPoint:                            
+                        case SBMissionCategory.DailyPoint:
                             break;
                         case SBMissionCategory.Achievement:
                             StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
@@ -306,7 +316,7 @@ public class MiniGameHelper
                             break;
                     }
 
-                    
+
                 }
                 EventSBMissionRecord_Raw? spstage = GameData.Instance.EventSBMissionTable.Values
                     .Where(x => x.GroupId == missionGroupId && x.MissionType == missionType && x.MissionTargetId == stage).FirstOrDefault();
@@ -358,7 +368,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                   
+
                 }
                 break;
             case SBMissionType.Damage:
@@ -414,7 +424,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                    
+
                 }
                 break;
             case SBMissionType.UsePotion:
@@ -437,7 +447,7 @@ public class MiniGameHelper
                         default:
                             break;
                     }
-                   
+
                 }
                 break;
             case SBMissionType.DailyPointReward:
@@ -478,7 +488,7 @@ public class MiniGameHelper
             case SBRewardType.SBCurrency:
 
                 EventSBCurrencyRecord_Raw? ctype = GameData.Instance.EventSBCurrencyTable.Values
-                    .Where(x=>x.Id == reward.RewardId).FirstOrDefault();
+                    .Where(x => x.Id == reward.RewardId).FirstOrDefault();
 
 
                 NetStellarBladeCurrency? existing = ret.CurrencyList.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
@@ -494,7 +504,7 @@ public class MiniGameHelper
                         Amount = reward.RewardAmount
                     });
                 }
-                
+
                 StellarBladeCurrency? currency = stellar.Currency.FirstOrDefault(c => c.CurrencyType == (int)ctype.CurrencyType);
                 if (currency != null)
                 {
@@ -510,11 +520,11 @@ public class MiniGameHelper
     }
 
 
-    public static List<int> GetMissionReward(ref NetStellarBladeRewardData ret, ref StellarBladeDatas stellar,User user, EventSBMissionRecord_Raw mission)
+    public static List<int> GetMissionReward(ref NetStellarBladeRewardData ret, ref StellarBladeDatas stellar, User user, EventSBMissionRecord_Raw mission)
     {
         List<int> result = new List<int>();
 
-        int dateDay =user.GetDateDay();
+        int dateDay = user.GetDateDay();
         switch (mission.RewardType)
         {
             case SBMissionRewardType.DailyPoint:
@@ -522,7 +532,7 @@ public class MiniGameHelper
                     .Where(x => x.GroupId == mission.GroupId && x.MissionType == SBMissionType.DailyPointReward).ToList();
                 foreach (var item in glist)
                 {
-                   StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
+                    StellarBladeMissionData? miss = stellar.MissionData.FirstOrDefault(m => m.MissionId == item.Id);
                     if (stellar.Today == dateDay)
                     {
                         miss.Progress += mission.RewardValue;
@@ -531,7 +541,7 @@ public class MiniGameHelper
                     {
                         miss.Progress = mission.RewardValue;
                     }
-                }                
+                }
                 break;
             case SBMissionRewardType.RewardId:
                 result.Add(mission.RewardValue);
@@ -590,6 +600,54 @@ public class MiniGameHelper
         return defenseData;
     }
 
+    public static void GetDungeonRankByScore(DragonDungeonRunData data, int score)
+    {
+        var manager = GameData.Instance.EventDragonDungeonRunManagerTable.Values
+            .FirstOrDefault(x => x.MinigameType == MiniGameSystemType.Arcade);
+        if (manager == null) return;
+
+        List<EventDragonDungeonRunCutSceneRecord_Raw>? scenetable = GameData.Instance.EventDragonDungeonRunCutSceneTable.Values
+            .Where(x => x.CutscenePrintTiming == EventDragonDungeonRunCutScenePrintTiming.Result).ToList();
+
+        // 排名配置
+        var rankMap = new (string Rank, int TargetPoint)[]
+        {
+        ("S", manager.SRankTargetPoint),
+        ("A", manager.ARankTargetPoint),
+        ("B", manager.BRankTargetPoint),
+        ("C", manager.CRankTargetPoint),
+        ("D", manager.DRankTargetPoint),
+        ("F", 0)
+        };
+
+        string rank = rankMap.FirstOrDefault(r => score >= r.TargetPoint).Rank;
+
+        // 直接根据 rank 查找对应的 CutScene
+        EventDragonDungeonRunCutSceneRecord_Raw? cutscene = rank switch
+        {
+            "S" => scenetable.FirstOrDefault(x => x.IsAppearInSRank),
+            "A" => scenetable.FirstOrDefault(x => x.IsAppearInARank),
+            "B" => scenetable.FirstOrDefault(x => x.IsAppearInBRank),
+            "C" => scenetable.FirstOrDefault(x => x.IsAppearInCRank),
+            "D" => scenetable.FirstOrDefault(x => x.IsAppearInDRank),
+            "F" => scenetable.FirstOrDefault(x => x.IsAppearInFRank),
+            _ => null
+        };
+
+        if (cutscene != null)
+        {
+            if (!data.CutSceneList.TryAdd(cutscene.Id, true))
+            {
+                data.CutSceneList[cutscene.Id] = false;
+            }
+            else
+            {
+                data.HasUnconfirmedAlbum = true;
+            }
+        }
+
+        JsonDb.Save();
+    }
 
 
     public static NetArcadeBBQData BBQToNet(ArcadeBBQData bBQData)
@@ -705,7 +763,7 @@ public class MiniGameHelper
         }
 
         return data;
-    }   
+    }
 
     // ============ 列表转换 ============
 
@@ -774,7 +832,25 @@ public class MiniGameHelper
     }
 
 
-
+    public static bool IsLandGetComplete(Dictionary<int, MiniGameIslandBreakerMission> Missions)
+    {
+        if (Missions.Count > 0)
+        {
+            foreach (var item in Missions)
+            {
+                var mission = GameData.Instance.EventIslandBreakerMissionTable.Values
+                    .Where(x => x.Id == item.Key).FirstOrDefault();
+                if (mission != null)
+                {
+                    if (item.Value.Progress >= mission.ConditionValue && item.Value.Rewarded == false)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }
 
 public static class StellarBladeExtensions

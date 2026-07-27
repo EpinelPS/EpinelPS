@@ -228,8 +228,8 @@ public class EventHelper
             // Avoid adding duplicate events
             if (!response.EventList.Any(e => e.Id == eventData.Id))
             {
-                if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-1).Ticks;
-                if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-21).Ticks;
+                if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-21).Ticks;
                 if (eventData.EventDisableDate == 0) eventData.EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks;
                 if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
 
@@ -251,8 +251,8 @@ public class EventHelper
             // Avoid adding duplicate events
             if (!response.EventWithJoinData.Any(e => e.EventData.Id == eventData.Id))
             {
-                if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-1).Ticks;
-                if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-1).Ticks;
+                if (eventData.EventStartDate == 0) eventData.EventStartDate = DateTime.UtcNow.AddDays(-21).Ticks;
+                if (eventData.EventVisibleDate == 0) eventData.EventVisibleDate = DateTime.UtcNow.AddDays(-21).Ticks;
                 if (eventData.EventDisableDate == 0) eventData.EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks;
                 if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
                 response.EventWithJoinData.Add(new NetEventWithJoinData()

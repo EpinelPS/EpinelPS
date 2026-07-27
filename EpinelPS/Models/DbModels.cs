@@ -920,3 +920,231 @@ public class ArcadeScoreRecord
     public int ArcadeId { get; set; }
     public int ModeId { get; set; }
 }
+
+public class BubbleMarchData
+{
+    public Dictionary<int, MiniGameBubbleMarchMissionData> AchievementMissionDataList { get; set; } = [];
+    public List<int> BuffUpgradeIdList { get; set; } = [];
+    public List<int> CharacterUpgradeIdList { get; set; } = [];
+    public List<int> ClearedStageIdList { get; set; } = [];
+    public List<int> ClearedTutorialIdList { get; set; } = [];
+    public bool LevelHideOptionActive { get; set; } = false;
+    public Dictionary<int,int> UpgradeCurrency { get; set; } = [];
+    public Dictionary<int, float> WaveProgress { get; set; } = [];
+
+}
+
+
+public class MiniGameBubbleMarchMissionData
+{
+    public int MissionId { get; set; }
+    public int Progress { get; set; }
+    public bool IsReceived { get; set; }
+}
+
+public class IsLandBreakerData
+{
+    public int IslandBreakerId { get; set; } = 0;
+    public MiniGameIslandBreakerDailyScore DailyScore { get; set; } = new();
+    public MiniGameIslandBreakerHighScore HighScore { get; set; } = new();
+    public long CumulativePlayScore { get; set; } = 0;
+    public long CumulativeSummonBallCount { get; set; } = 0;
+    public Dictionary<int, MiniGameIslandBreakerCharacterStatistics> CharacterStatistics { get; set; } = [];
+    public Dictionary<int, MiniGameIslandBreakerCurrency> Currencies { get; set; } = [];
+    public List<int> Buffs { get; set; } = [];
+    public Dictionary<int,MiniGameIslandBreakerMission> Missions { get; set; } = [];
+    public Dictionary<int, MiniGameIslandBreakerAlbum> Album { get; set; } = [];
+    public List<int> SeenImageIds { get; set; } = [];
+    public List<int> SeenCharacterIds { get; set; } = [];
+    public int LastSelectedCharacterId { get; set; }
+
+    public int ActiveDate { get; set; } = 0;
+
+    public ResGetMiniGameIslandBreaker ToNet()
+    {
+        var net = new ResGetMiniGameIslandBreaker
+        {
+            IslandBreakerId = this.IslandBreakerId,
+            CumulativePlayScore = this.CumulativePlayScore,
+            CumulativeSummonBallCount = this.CumulativeSummonBallCount,
+            LastSelectedCharacterId = this.LastSelectedCharacterId
+        };
+
+        if (this.DailyScore != null)
+        {
+            net.DailyScore = new NetMiniGameIslandBreakerDailyScore
+            {
+                Score = this.DailyScore.Score,
+                IsDailyRewarded = this.DailyScore.IsDailyRewarded
+            };
+        }
+
+        if (this.HighScore != null)
+        {
+            net.HighScore = new NetMiniGameIslandBreakerHighScore
+            {
+                HighScore = this.HighScore.HighScore,
+                HighWave = this.HighScore.HighWave
+            };
+        }
+
+        if (this.CharacterStatistics != null)
+        {
+            net.CharacterStatistics.AddRange(this.CharacterStatistics.Values.Select(cs => new NetMiniGameIslandBreakerCharacterStatistics
+            {
+                CharacterId = cs.CharacterId,
+                CumulativeScore = cs.CumulativeScore,
+                PlayCount = cs.PlayCount
+            }).ToList());
+        }
+
+        if (this.Currencies != null)
+        {
+            net.Currencies.AddRange( this.Currencies.Values.Select(c => new NetMiniGameIslandBreakerCurrency
+            {
+                CurrencyId = c.CurrencyId,
+                CurrentAmount = c.CurrentAmount,
+                Granted = c.Granted,
+                CumulativeAcquired = c.CumulativeAcquired,
+                MaxLimit = c.MaxLimit
+            }).ToList());
+        }
+
+        if (this.Buffs != null)
+        {
+            net.Buffs.AddRange( this.Buffs.ToList());
+        }
+
+        if (this.Missions != null)
+        {
+            net.Missions.AddRange( this.Missions.Select(m => new NetMiniGameIslandBreakerMission
+            {
+                MissionId = m.Key,
+                Progress = m.Value.Progress,
+                Rewarded = m.Value.Rewarded
+            }).ToList());
+        }
+
+        if (this.Album != null)
+        {
+            net.Album.AddRange( this.Album.Values.Select(a => new NetMiniGameIslandBreakerAlbum
+            {
+                ImageId = a.ImageId,
+                Unlocked = a.Unlocked
+            }).ToList());
+        }
+
+        if (this.SeenImageIds != null)
+        {
+            net.SeenImageIds.AddRange( this.SeenImageIds.ToList());
+        }
+
+        if (this.SeenCharacterIds != null)
+        {
+            net.SeenCharacterIds.AddRange( this.SeenCharacterIds.ToList());
+        }
+
+        return net;
+    }
+
+}
+
+public class MiniGameIslandBreakerDailyScore
+{
+    public long Score { get; set; } = 0;
+    public bool IsDailyRewarded { get; set; } = false;
+
+    public NetMiniGameIslandBreakerDailyScore ToNet()
+    {
+        return new NetMiniGameIslandBreakerDailyScore
+        {
+            Score = this.Score,
+            IsDailyRewarded = this.IsDailyRewarded
+        };
+    }
+}
+
+public class MiniGameIslandBreakerHighScore
+{
+    public long HighScore { get; set; } = 0;
+    public int HighWave { get; set; } = 0;
+
+    public NetMiniGameIslandBreakerHighScore ToNet()
+    {
+        return new NetMiniGameIslandBreakerHighScore
+        {
+            HighScore = this.HighScore,
+            HighWave = this.HighWave
+        };
+    }
+}
+
+public class MiniGameIslandBreakerCharacterStatistics
+{
+    public int CharacterId { get; set; } 
+    public long CumulativeScore { get; set; } 
+    public int PlayCount { get; set; }
+
+    public NetMiniGameIslandBreakerCharacterStatistics ToNet()
+    {
+        return new NetMiniGameIslandBreakerCharacterStatistics
+        {
+            CharacterId = this.CharacterId,
+            CumulativeScore = this.CumulativeScore,
+            PlayCount = this.PlayCount
+        };
+    }
+}
+
+public class MiniGameIslandBreakerCurrency
+{
+    public int CurrencyId { get; set; } 
+    public long CurrentAmount { get; set; }
+    public long Granted { get; set; } 
+    public long CumulativeAcquired { get; set; }
+    public long MaxLimit { get; set; }
+
+    public NetMiniGameIslandBreakerCurrency ToNet()
+    {
+        return new NetMiniGameIslandBreakerCurrency
+        {
+            CurrencyId = this.CurrencyId,
+            CurrentAmount = this.CurrentAmount,
+            Granted = this.Granted,
+            CumulativeAcquired = this.CumulativeAcquired,
+            MaxLimit = this.MaxLimit
+        };
+    }
+}
+
+public class MiniGameIslandBreakerMission
+{
+    public int MissionId { get; set; }
+    public long Progress { get; set; }
+    public bool Rewarded { get; set; }
+
+    public  NetMiniGameIslandBreakerMission ToNet()
+    {
+        return new NetMiniGameIslandBreakerMission
+        {
+            MissionId = this.MissionId,
+            Progress = this.Progress,
+            Rewarded = this.Rewarded
+        };
+    }
+}
+
+public class MiniGameIslandBreakerAlbum
+{
+    public int ImageId { get; set; } 
+    public bool Unlocked { get; set; }
+
+    public  NetMiniGameIslandBreakerAlbum ToNet()
+    {
+        return new NetMiniGameIslandBreakerAlbum
+        {
+            ImageId = this.ImageId,
+            Unlocked = this.Unlocked
+        };
+    }
+}
