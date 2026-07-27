@@ -67,7 +67,7 @@ public class UpgradeOption : LobbyMessage
         }
 
         // Process each option slot (1, 2, 3)
-        ProcessOptionSlots(awakening, newOption, slotLockInfo, user.noDowngradeOnReroll);
+        ProcessOptionSlots(awakening, newOption, slotLockInfo);
 
         // Create a new awakening entry with the same ISN to preserve the old data
         EquipmentAwakeningData newAwakening = new()
@@ -108,7 +108,7 @@ public class UpgradeOption : LobbyMessage
     }
 
 
-    private void ProcessOptionSlots(EquipmentAwakeningData awakening, NetEquipmentAwakeningOption newOption, (int optionId, bool isLocked, bool isDisposableLocked)[] slotLockInfo, bool noDowngradeOnReroll)
+    private void ProcessOptionSlots(EquipmentAwakeningData awakening, NetEquipmentAwakeningOption newOption, (int optionId, bool isLocked, bool isDisposableLocked)[] slotLockInfo)
     {
         for (int i = 1; i <= 3; i++)
         {
@@ -134,7 +134,7 @@ public class UpgradeOption : LobbyMessage
                 continue;
             }
 
-            int newOptionId = GenerateNewOptionId(currentOptionId, noDowngradeOnReroll);
+            int newOptionId = GenerateNewOptionId(currentOptionId);
             SetOptionForSlot(newOption, i, newOptionId, false, false);
         }
     }
@@ -199,7 +199,7 @@ public class UpgradeOption : LobbyMessage
         }
     }
 
-    private int GenerateNewOptionId(int currentStateEffectId, bool noDowngradeOnReroll)
+    private int GenerateNewOptionId(int currentStateEffectId)
     {
         EquipmentOptionRecord? currentOption = GameData.Instance.EquipmentOptionTable.Values
             .FirstOrDefault(option => option.StateEffectList != null && option.StateEffectList.Any(se => se.StateEffectId == currentStateEffectId));
@@ -221,36 +221,7 @@ public class UpgradeOption : LobbyMessage
             throw new InvalidOperationException($"No awakening options found with state_effect_group_id {stateEffectGroupId}");
         }
 
-        foreach(var option in optionsInGroup)
-        {
-            foreach(var effect in option.StateEffectList){
-                System.Diagnostics.Debug.WriteLine($"Option ID: {option.Id}, StateEffectGroupId: {option.StateEffectGroupId}, OptionRatio: {option.OptionRatio}, Effet: {effect.StateEffectId}, EffectLevel: {effect.StateEffectLevel}, IsCurrent: {effect.StateEffectId == currentStateEffectId}" );
-            }
-        }
-         System.Diagnostics.Debug.WriteLine("");
-
-        // FEATURE TEST: Upgrade or Equals Only
-        if (noDowngradeOnReroll)
-        {            
-           int currentLevel = optionsInGroup.SelectMany(o => o.StateEffectList).Where(e=> e.StateEffectId == currentStateEffectId).Select(e=> e.StateEffectLevel).First();
-           int newLevel = 1;
-           int newID = currentStateEffectId;
-            
-           System.Diagnostics.Debug.WriteLine($"Current Level: {currentLevel}");
-
-            do{
-                newID = SelectOptionFromGroup(optionsInGroup);
-                newLevel = optionsInGroup.SelectMany(o => o.StateEffectList).Where(e=> e.StateEffectId == newID).Select(e=> e.StateEffectLevel).First();
-            } while (newLevel < currentLevel);
-          
-           return newID;
-
-        }
-        else
-        {
-            return SelectOptionFromGroup(optionsInGroup);
-        }
-
+        return SelectOptionFromGroup(optionsInGroup);
     }
 
 

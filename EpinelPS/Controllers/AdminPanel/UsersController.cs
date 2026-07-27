@@ -44,7 +44,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
                 IsBanned = user.IsBanned,
                 Nickname = gameUser.Nickname ?? "Unknown nickname",
                 sickpulls = user.sickpulls,
-                noDowngradeOnReroll = user.noDowngradeOnReroll,
                 Username = sdkUser.Email ?? "Unknown username",
                 ID = user.ID
             }
@@ -79,7 +78,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         _db.SaveChanges();
 
         user.sickpulls = toSet.sickpulls;
-        user.noDowngradeOnReroll = toSet.noDowngradeOnReroll;
         user.IsBanned = toSet.IsBanned;
         JsonDb.Save();
 
@@ -89,7 +87,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
             IsBanned = user.IsBanned,
             Nickname = gameUser.Nickname,
             sickpulls = user.sickpulls,
-            noDowngradeOnReroll = user.noDowngradeOnReroll,
             Username = sdkUser.Email,
             ID = user.ID
         });

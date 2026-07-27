@@ -33,7 +33,6 @@ public class User
     [Obsolete]
     public bool IsAdmin { get; set; } = false;
     public bool sickpulls { get; set; } = false;
-    public bool noDowngradeOnReroll { get; set; } = false; // When set to true, the rerolls of equipments attributes can only be the same level or greater.
     public bool IsBanned { get; set; } = false;
     public int TitleId { get; set; } = 1;
     public DateTime BanStart { get; set; }
