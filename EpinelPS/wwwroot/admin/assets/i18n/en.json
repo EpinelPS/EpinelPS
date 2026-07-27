@@ -161,8 +161,6 @@
       "isAdmin": "Admin Privileges",
       "disableGacha": "Disable Gacha System",
       "disableGachaHint": "Allows all characters to have equal chances of getting pulled",
-      "noDowngradeOnReroll": "No Downgrade on Equipment Reroll",
-      "noDowngradeOnRerollHint": "Rerolling equipment values will always give a value of equal or greater level",
       "isBanned": "Banned",
       "cheats": "Cheat Functions",
       "campaign": "Campaign:",

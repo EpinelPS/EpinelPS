@@ -161,8 +161,6 @@
       "isAdmin": "管理员权限: ",
       "disableGacha": "禁用抽卡系统: ",
       "disableGachaHint": "允许所有角色有相同概率被抽到",
-      "noDowngradeOnReroll": "装备重铸不会降级",
-      "noDowngradeOnRerollHint": "重新随机生成装备数值，结果总是等于或高于当前等级的数值",
       "isBanned": "禁止登录:",
       "cheats": "作弊功能",
       "campaign": "战役:",
