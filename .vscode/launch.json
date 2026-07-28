@@ -19,21 +19,6 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
-        },{
-            "name": ".NET Core Launch (web_winx64)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/EpinelPS/bin/Debug/net10.0/win-x64/EpinelPS.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/EpinelPS",
-            "stopAtEntry": false,
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
         },
         {
             "name": ".NET Core Attach",

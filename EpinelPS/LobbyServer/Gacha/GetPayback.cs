@@ -7,7 +7,7 @@ using EpinelPS.Utils;
 namespace EpinelPS.LobbyServer.Gacha;
 
 /// <summary>
-/// This returns the status of the pity banner for the current user
+/// This returns the status of the payback banners for the current user
 /// </summary>
 [GameRequest("/gacha/getpayback")]
 public class GetPayback : LobbyMessage

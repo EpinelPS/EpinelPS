@@ -419,7 +419,8 @@ public class RewardUtils
         }
         else if (rewardType == RewardType.FavoriteItem)
         {
-            for(int i =0; i< rewardCount; i++){
+            for (int i = 0; i < rewardCount; i++)
+            {
 
                 NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
                 {
@@ -442,7 +443,7 @@ public class RewardUtils
                     Exp = newFavoriteItem.Exp
                 };
                 ret.FavoriteItems.Add(favoriteItemData);
-                
+
             }
         }
         else if (rewardType == RewardType.Character)
