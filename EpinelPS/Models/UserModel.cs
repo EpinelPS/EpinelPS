@@ -145,6 +145,8 @@ public class User
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
     public List<int> LobbyPrivateBannerIds = [];
+
+    public Dictionary<int, NetGachaPaybackData> GachaPaybackData {get;set;} = new();
     
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId

@@ -357,6 +357,36 @@ public class ExecGacha : LobbyMessage
 
         user.GachaTutorialPlayCount++;
 
+        // ==========================
+        // BANNER PAYBACK RECORDS
+        // ==========================
+        
+        // Does the banner have a payback list?
+        var  prs = GameData.Instance.GachaPaybackRecords.Where( p => p.Value.GachaId == bannerID).ToDictionary();
+
+        if (prs.Count > 0){
+            
+            var pr = prs.First();
+
+            Dictionary<int, GachaPaybackStepRecord_Raw> steps = GameData.Instance.GachaPaybackStepRecords.Where( s => s.Value.PaybackId == pr.Value.Id).ToDictionary();
+
+            //Process the banner pity
+            NetGachaPaybackData paybackState = null;
+
+            if (User.GachaPaybackData.ContainsKey(pr.Value.GachaId)){
+                paybackState = User.GachaPaybackData[pr.Value.GachaId];
+            }
+            else{
+                paybackState = new NetGachaPaybackData(){
+                    GachaId =  pr.Value.GachaId,    //payback GachaId
+                    GachaCount = 0                 // Pull amount
+                };
+                User.GachaPaybackData.Add(pr.Value.GachaId, paybackState);
+            }
+
+            paybackState.GachaCount += req.Count;
+        }
+
         JsonDb.Save();
 
         await WriteDataAsync(response);

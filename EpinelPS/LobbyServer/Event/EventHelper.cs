@@ -151,11 +151,37 @@ public class EventHelper
             {
                 Id = gachaEvent.Id,
                 EventSystemType = (int)gachaEvent.EventSystemType,
-                // EventStartDate = banner.StartDate.Ticks,
-                // EventVisibleDate = banner.StartDate.Ticks,
-                // EventDisableDate = banner.EndDate.Ticks,
-                // EventEndDate = banner.EndDate.Ticks
+                //EventStartDate = DateTime.UtcNow.AddDays(-21).Ticks,// banner.StartDate.Ticks,
+                //EventVisibleDate = DateTime.UtcNow.AddDays(-21).Ticks, //banner.StartDate.Ticks,
+                //EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks, // banner.EndDate.Ticks,
+                //EventEndDate = DateTime.UtcNow.AddDays(30).Ticks //banner.EndDate.Ticks
             });
+
+            // We also need to check if there is a step payback event attached to the gacha
+           foreach(var gachaBanner in GameData.Instance.gachaTypes.Where(g => g.Value.EventId == gachaEvent.Id))
+           {
+                // We have the gacha, now check for a payback table
+                foreach(var payback in GameData.Instance.GachaPaybackRecords.Where( p => p.Value.GachaId == gachaBanner.Value.Id)){
+
+                    // Get the type from the evevent manager table
+                    if (GameData.Instance.eventManagers.ContainsKey(payback.Value.EventId)){
+
+                        var ev = GameData.Instance.eventManagers[payback.Value.EventId];
+
+                        events.Add(new NetEventData()       
+                        {
+                            Id = ev.Id,
+                            EventSystemType = (int) ev.EventSystemType
+                            //EventStartDate = DateTime.UtcNow.AddDays(-21).Ticks,// banner.StartDate.Ticks,
+                            //EventVisibleDate = DateTime.UtcNow.AddDays(-21).Ticks, //banner.StartDate.Ticks,
+                            //EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks, // banner.EndDate.Ticks,
+                            //EventEndDate = DateTime.UtcNow.AddDays(30).Ticks //banner.EndDate.Ticks
+                        });
+                    }
+                }
+           }
+
+
         }
         return events;
     }
