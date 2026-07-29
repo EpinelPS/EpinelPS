@@ -151,10 +151,10 @@ public class EventHelper
             {
                 Id = gachaEvent.Id,
                 EventSystemType = (int)gachaEvent.EventSystemType,
-                //EventStartDate = banner.StartDate.Ticks,
-                //EventVisibleDate = banner.StartDate.Ticks,
-                //EventDisableDate = banner.EndDate.Ticks,
-                //EventEndDate = banner.EndDate.Ticks
+                // EventStartDate = banner.StartDate.Ticks,
+                // EventVisibleDate = banner.StartDate.Ticks,
+                // EventDisableDate = banner.EndDate.Ticks,
+                // EventEndDate = banner.EndDate.Ticks
             });
 
             // We also need to check if there is a step payback event attached to the gacha

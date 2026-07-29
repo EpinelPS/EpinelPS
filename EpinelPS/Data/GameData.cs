@@ -129,20 +129,15 @@ public class GameData
     [LoadRecord("GachaListProbTable.json", "Id")]
     public readonly Dictionary<int, GachaListProbRecord> GachaListProb = [];
 
-
-
     [LoadRecord("GachaPaybackTable.json", "Id")]
     public readonly Dictionary<int, GachaPaybackRecord_Raw> GachaPaybackRecords = [];
-
-    
+        
     [LoadRecord("GachaPaybackStepTable.json", "Id")]
     public readonly Dictionary<int, GachaPaybackStepRecord_Raw> GachaPaybackStepRecords = [];
-
-    
+        
     [LoadRecord("GachaPityCharacterTable.json", "Id")]
     public readonly Dictionary<int, GachaPityCharacterRecord_Raw> GachaPityCharacterRecords = [];
-
-    
+        
     [LoadRecord("GachaPityTable.json", "Id")]
     public readonly Dictionary<int, GachaPityRecord_Raw> GachaPityRecords = [];
 
@@ -810,8 +805,7 @@ public class GameData
         {
             entry = entry.Replace(".json", ".mpk");
 
-            ZipEntry fileEntry = MainZip.GetEntry(entry);
-        
+            ZipEntry fileEntry = MainZip.GetEntry(entry);        
             if (fileEntry == null)
             {
                 Logging.WriteLine(entry + " does not exist in static data", LogType.Error);
@@ -844,7 +838,6 @@ public class GameData
 
         foreach (ZipEntry item in MainZip)
         {
-
             if (item.Name.StartsWith("FieldMapData_") && item.Name != "FieldMapData_EventMap.mpk")
             {
                 FieldMapRecord[] x = await LoadZip<FieldMapRecord>(item.Name, progress);

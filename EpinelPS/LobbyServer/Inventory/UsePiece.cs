@@ -31,11 +31,11 @@ public class UsePiece : LobbyMessage
             .FirstOrDefault(x => x.Value.Id == piece.ItemType).Value
             ?? throw new Exception("cannot find piece Id " + piece.ItemType);
 
+        // Load the character probability list for the mold
         IEnumerable<GachaListProbRecord> probList = GameData.Instance.GachaGradeProb
             .Where(x => x.Key == pItem.UseId)
             .SelectMany(grade => GameData.Instance.GachaListProb.Where(list => list.Value.GroupId == grade.Value.GachaListId))
             .Select(i => i.Value);
-        //IEnumerable<CharacterRecord> allCharacters = probList.SelectMany(e => GameData.Instance.CharacterTable.Values.Where(c => c.Id == e.GachaId));
 
         NetRewardData reward = new();
         IEnumerable<CharacterRecord> selectedCharacters = Enumerable.Range(1, req.Count)
@@ -153,6 +153,7 @@ public class UsePiece : LobbyMessage
         // Changed this to use the Gacha list probability table instead since it contains the probabilities without the need for splitting the groups.
         // This should work no matter how many character are added and no matter what their probabilities are.
 
+        // Create the probability table
         int maxCharProb = 0;
 
         Dictionary<int, (int minProbInc, int maxProbEx)> charProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();

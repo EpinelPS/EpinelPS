@@ -28,8 +28,6 @@ public class AquireGachaPaybackAllRewards : LobbyMessage
 
             if (steps.Count > 0)
             {
-
-
                 // Process the reward on the server
                 // Send the reward back to the game client
                 response.Reward = RewardUtils.RegisterRewardsForUserDou(GetUser(), steps.Select(step => step.RewardId).ToList());

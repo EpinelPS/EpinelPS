@@ -421,7 +421,6 @@ public class RewardUtils
         {
             for (int i = 0; i < rewardCount; i++)
             {
-
                 NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
                 {
                     FavoriteItemId = user.GenerateUniqueItemId(),
@@ -443,7 +442,6 @@ public class RewardUtils
                     Exp = newFavoriteItem.Exp
                 };
                 ret.FavoriteItems.Add(favoriteItemData);
-
             }
         }
         else if (rewardType == RewardType.Character)
