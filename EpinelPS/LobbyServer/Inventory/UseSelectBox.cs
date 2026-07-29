@@ -14,7 +14,7 @@ public class UseSelectBox : LobbyMessage
         User user = GetUser();
 
         ResUseSelectBox response = new();
-        
+
         DbItemData selectBox = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() 
             ?? throw new InvalidDataException("cannot find selectBox with isn " + req.Isn);
 
