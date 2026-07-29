@@ -32,7 +32,7 @@ public class AquireGachaPaybackReward : LobbyMessage
             // Process the reward on the server
             // Send the reward back to the game client
             response.Reward = RewardUtils.RegisterRewardsForUser(GetUser(), reward);
-            
+           
             // Save
             JsonDb.Save();
         }
