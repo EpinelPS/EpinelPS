@@ -18,8 +18,17 @@ public class GetPayback : LobbyMessage
 
         ResGetGachaPaybackData response = new();
 
-        foreach(NetGachaPaybackData gpd in User.GachaPaybackData.Values){
-             response.PaybackDataList.Add(gpd);            
+        foreach(GachaPaybackData gpd in User.GachaPaybackData.Values){
+
+            var ngpd = new NetGachaPaybackData()
+            {
+                GachaId = gpd.GachaId,
+                GachaCount = gpd.GachaCount
+            };
+            if (gpd.RewardedStepList.Count > 0)
+                ngpd.RewardedStepList.AddRange(gpd.RewardedStepList);
+
+             response.PaybackDataList.Add(ngpd);            
         }
      
         await WriteDataAsync(response);

@@ -371,13 +371,13 @@ public class ExecGacha : LobbyMessage
             Dictionary<int, GachaPaybackStepRecord_Raw> steps = GameData.Instance.GachaPaybackStepRecords.Where( s => s.Value.PaybackId == pr.Value.Id).ToDictionary();
 
             //Process the banner pity
-            NetGachaPaybackData paybackState = null;
+            GachaPaybackData paybackState = null;
 
             if (User.GachaPaybackData.ContainsKey(pr.Value.GachaId)){
                 paybackState = User.GachaPaybackData[pr.Value.GachaId];
             }
             else{
-                paybackState = new NetGachaPaybackData(){
+                paybackState = new GachaPaybackData(){
                     GachaId =  pr.Value.GachaId,    //payback GachaId
                     GachaCount = 0                 // Pull amount
                 };

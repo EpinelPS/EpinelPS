@@ -146,7 +146,7 @@ public class User
 
     public List<int> LobbyPrivateBannerIds = [];
 
-    public Dictionary<int, NetGachaPaybackData> GachaPaybackData {get;set;} = new();
+    public Dictionary<int, GachaPaybackData> GachaPaybackData {get;set;} = new();
     
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
