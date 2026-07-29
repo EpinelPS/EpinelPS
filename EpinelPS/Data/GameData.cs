@@ -132,11 +132,14 @@ public class GameData
     [LoadRecord("GachaPaybackTable.json", "Id")]
     public readonly Dictionary<int, GachaPaybackRecord_Raw> GachaPaybackRecords = [];
         
+        
     [LoadRecord("GachaPaybackStepTable.json", "Id")]
     public readonly Dictionary<int, GachaPaybackStepRecord_Raw> GachaPaybackStepRecords = [];
         
+        
     [LoadRecord("GachaPityCharacterTable.json", "Id")]
     public readonly Dictionary<int, GachaPityCharacterRecord_Raw> GachaPityCharacterRecords = [];
+        
         
     [LoadRecord("GachaPityTable.json", "Id")]
     public readonly Dictionary<int, GachaPityRecord_Raw> GachaPityRecords = [];
