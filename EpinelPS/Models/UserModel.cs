@@ -191,7 +191,7 @@ public class User
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
     // Character Wishlist
-    public List<int> CharacterWishlist { get; set; } = [];
+    public List<CharacterWishlistData> CharacterWishlist { get; set; } = []; 
 
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
@@ -666,9 +666,10 @@ public class User
     /// <summary>
     /// Returns the list of characters from the user's wishlist.
     /// </summary>
+    /// <param name="bannerId">Optional banner ID. This will generally always be 1</param>
     /// <returns></returns>
-    public List<CharacterRecord> GetWishlistCharacters()
+    public List<CharacterRecord> GetWishlistCharacters(int bannerId = 1)
     {
-        return CharacterWishlist.Select(id => GameData.Instance.CharacterTable[id]).ToList();
+        return CharacterWishlist.Where(character => character.BannerId == bannerId).Select(character => GameData.Instance.CharacterTable[character.CharacterId]).ToList();
     }
 }

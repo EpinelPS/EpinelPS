@@ -14,42 +14,20 @@ public class SetCustomWishlistSlot : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        var req = await ReadData<ReqSetCustomPackageSlot>();
+        var req = await ReadData<ReqSetGachaCustom>();
 
         // Add the characters to the user wishlist. For now, I will assume that the game sent the right data.
-        // TODO: Check that all ids are correct and only from the allowed pull list
         User user = GetUser();
+        List<NetGachaCustomData> wishlist = req.Custom.ToList();
 
-        List<int> wishlist = req.DataList.Select(d => d.SlotList.FirstOrDefault(-1)).Where(id => id != -1).ToList();
+        // Even though wishlisting is currently supported only on banner 1, since the game supports more than one banner,
+        // let's delete the characters related to the wishlist banner ids specified in the request exclusively,
+        // just in case the game later makes use of the other banner ids
+        //
+        // We also now save the list regardless of the amount of character selected. The amount of characters wislisted is checked when pulling
 
-        // If the list is empty, try to parse the body directly.
-        if (wishlist.Count == 0)
-        {
-            ctx.Request.Body.Position = 0;
-            try
-            {
-                var reqContent = StreamUtils.ParseNetCustomPackageSetupData(ctx.Request.Body);
-                wishlist = reqContent.Select(l => l.SlotList[0]).ToList();
-            }
-            catch (Exception ex)
-            {
-                // Can't read the request, fail gracefully
-                Logging.WriteLine("Could not read [ReqSetCustomPackageSlot]");
-            }
-        }
-
-        // Parse the request directly if the request is empty
-
-        // The wishlist must have 20 characters to be valid, otherwise clear it.
-        if (wishlist.Count == 20)
-        {
-            user.CharacterWishlist = wishlist;
-        }
-        else
-        {
-            user.CharacterWishlist.Clear();
-        }
-
+        user.CharacterWishlist.RemoveAll(c => wishlist.Select(w => w.Type).Distinct().Contains(c.BannerId));
+        user.CharacterWishlist = wishlist.Select(w => new CharacterWishlistData() { BannerId = w.Type, CharacterId = w.Tid }).ToList();
 
         Logging.WriteLine($"[SetCustomWishlistSlot] Updated wishlist for user {user.ID}: [{string.Join(", ", user.CharacterWishlist)}]");
 

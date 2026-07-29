@@ -32,7 +32,7 @@ public class ExecGacha : LobbyMessage
 
     // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
     private static readonly List<int> sickPullsExclusionList = [2500601]; // Add more IDs as needed
-    private static readonly List<int> normalPullsExclusionList = [2500601, 422401, 306201, 399901, 399902, 399903, 399904, 201401, 301501, 112101, 313201, 319301, 319401, 320301, 422601, 426101, 328301, 328401, 235101, 235301, 136101, 339201, 140001, 140101, 140201, 580001, 580101, 580201, 581001, 581101, 581201, 582001, 582101, 582201, 583001, 583101, 583201, 583301, 190101, 290701]; // Add more IDs as needed
+    //private static readonly List<int> normalPullsExclusionList = [2500601, 422401, 306201, 399901, 399902, 399903, 399904, 201401, 301501, 112101, 313201, 319301, 319401, 320301, 422601, 426101, 328301, 328401, 235101, 235301, 136101, 339201, 140001, 140101, 140201, 580001, 580101, 580201, 581001, 581101, 581201, 582001, 582101, 582201, 583001, 583101, 583201, 583301, 190101, 290701]; // Add more IDs as needed
 
     protected override async Task HandleAsync()
     {
@@ -43,10 +43,10 @@ public class ExecGacha : LobbyMessage
         int numberOfPulls = req.Count == 1 ? 1 : 10;
 
         //Get the banner ID and load the banner data from GachaTypeTable
-        int bannerID =  req.Tid; 
-        Logging.WriteLine($"Banner ID: {bannerID}");  
-        GachaTypeRecord gachaType = GameData.Instance.gachaTypes[bannerID];      
-          
+        int bannerID = req.Tid;
+        Logging.WriteLine($"Banner ID: {bannerID}");
+        GachaTypeRecord gachaType = GameData.Instance.gachaTypes[bannerID];
+
         // Get the user so that we can check for wishlisted characters (if needed)
         User user = GetUser();
 
@@ -56,10 +56,10 @@ public class ExecGacha : LobbyMessage
         Logging.WriteLine($"Currency type: {(CurrencyType)req.CurrencyType}");
 
         // Fill the wishlist anyway. It won't be used of not compatible with the banner.
-        List<CharacterRecord> wishlistCharacters = [.. entireallCharacterData.Where(c => user.CharacterWishlist.Contains(c.Id))];
-               
+        List<CharacterRecord> wishlistCharacters = user.GetWishlistCharacters(bannerID);
+
         List<CharacterRecord> selectedCharacters = [];
-            
+
         if (user.sickpulls) // Left this in for backward compatibility with previous code.
         {
             // Remove the .Values part since it's already a list.
@@ -278,14 +278,16 @@ public class ExecGacha : LobbyMessage
         // ==========================
         switch (ticketType)
         {
-            case CurrencyType.ChargeCash:{
+            case CurrencyType.ChargeCash:
+                {
                     var cashPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 98 /*CurrencyType.ChargeCash*/ || g.GachaPriceType == 99 /*CurrencyType.FreeCash*/).First();
-                    useChargeCash = pullsLeft * (discount ?  cashPrice.DailyGachaDiscountPriceValue1 : cashPrice.GachaPriceValueCount1);
+                    useChargeCash = pullsLeft * (discount ? cashPrice.DailyGachaDiscountPriceValue1 : cashPrice.GachaPriceValueCount1);
                     pullsLeft = 0;
                 }
                 break;
 
-            case CurrencyType.FriendshipPoint:{
+            case CurrencyType.FriendshipPoint:
+                {
                     var fpPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 4000 /*CurrencyType.FriendshipPoint*/).First();
                     useFriendshipPoint = pullsLeft * fpPrice.GachaPriceValueCount1;
                     pullsLeft = 0;
@@ -349,7 +351,7 @@ public class ExecGacha : LobbyMessage
         // ==========================
         // MILEAGE REWARDS
         // ==========================
-        if (bannerID == STANDARD_BANNER_ID)            
+        if (bannerID == STANDARD_BANNER_ID)
             ApplyCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
         if (bannerID != STANDARD_BANNER_ID && bannerID != SOCIAL_BANNER_ID && bannerID != NEW_PLAYER_SPECIAL_BANNER_ID) // TODO: Handle daily free pulls. They should not give Gold Mileage.
@@ -360,25 +362,29 @@ public class ExecGacha : LobbyMessage
         // ==========================
         // BANNER PAYBACK RECORDS
         // ==========================
-        
-        // Does the banner have a payback list?
-        var  prs = GameData.Instance.GachaPaybackRecords.Where( p => p.Value.GachaId == bannerID).ToDictionary();
 
-        if (prs.Count > 0){
-            
+        // Does the banner have a payback list?
+        var prs = GameData.Instance.GachaPaybackRecords.Where(p => p.Value.GachaId == bannerID).ToDictionary();
+
+        if (prs.Count > 0)
+        {
+
             var pr = prs.First();
 
-            Dictionary<int, GachaPaybackStepRecord_Raw> steps = GameData.Instance.GachaPaybackStepRecords.Where( s => s.Value.PaybackId == pr.Value.Id).ToDictionary();
+            Dictionary<int, GachaPaybackStepRecord_Raw> steps = GameData.Instance.GachaPaybackStepRecords.Where(s => s.Value.PaybackId == pr.Value.Id).ToDictionary();
 
             //Process the banner pity
             GachaPaybackData paybackState = null;
 
-            if (User.GachaPaybackData.ContainsKey(pr.Value.GachaId)){
+            if (User.GachaPaybackData.ContainsKey(pr.Value.GachaId))
+            {
                 paybackState = User.GachaPaybackData[pr.Value.GachaId];
             }
-            else{
-                paybackState = new GachaPaybackData(){
-                    GachaId =  pr.Value.GachaId,    //payback GachaId
+            else
+            {
+                paybackState = new GachaPaybackData()
+                {
+                    GachaId = pr.Value.GachaId,    //payback GachaId
                     GachaCount = 0                 // Pull amount
                 };
                 User.GachaPaybackData.Add(pr.Value.GachaId, paybackState);
@@ -394,11 +400,11 @@ public class ExecGacha : LobbyMessage
 
     private static CharacterRecord SelectRandomCharacter(GachaTypeRecord gachaType, List<CharacterRecord> wishlistCharacters)
     {
-       
+
         // Load the categories and they probabilities
         // This table holds a link to premade lists for each grade and banner. No need to check each character type individually
-        Dictionary<int, GachaGradeProbRecord> gradeProbs = GameData.Instance.GachaGradeProb.Where(p => p.Value.GroupId == gachaType.GradeProbId).OrderBy(p => p.Value.Prob).ToDictionary(); 
-       
+        Dictionary<int, GachaGradeProbRecord> gradeProbs = GameData.Instance.GachaGradeProb.Where(p => p.Value.GroupId == gachaType.GradeProbId).OrderBy(p => p.Value.Prob).ToDictionary();
+
         // Build a probability table for the grades
         int maxProb = gradeProbs.Sum(p => p.Value.Prob);
 
@@ -406,33 +412,38 @@ public class ExecGacha : LobbyMessage
 
         int curVal = 0;
 
-        foreach(GachaGradeProbRecord gradeProb in gradeProbs.Values){
-            gradeProbsTable.Add(gradeProb.Id, new (curVal, curVal + gradeProb.Prob));
+        foreach (GachaGradeProbRecord gradeProb in gradeProbs.Values)
+        {
+            gradeProbsTable.Add(gradeProb.Id, new(curVal, curVal + gradeProb.Prob));
             curVal += gradeProb.Prob;
         }
-        
+
         // Now do the roll for the grades
         int gradeRoll = (int)random.NextInt64(maxProb);
 
-        GachaGradeProbRecord selectedGrade = gradeProbs[gradeProbsTable.Where( p => gradeRoll >= p.Value.minProbInc && gradeRoll < p.Value.maxProbEx).Select( p=> p.Key).First()];
+        GachaGradeProbRecord selectedGrade = gradeProbs[gradeProbsTable.Where(p => gradeRoll >= p.Value.minProbInc && gradeRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
 
         // We have the grade, we need to pull the list of characters from GachaListProbTable and create a similar probability table
         // Prefered characters from special banner should be handled automatically by these lists
         // The maximum random value will change depending on how many characters are in the list so we need to keep track of it
-        // selectedGrade.GachaListId != selectedGrade.CustomizeListId seem to indicate that wishlisting is supported by the banner. CustomizeListId 19995 and 19996 are most likely SSR and Pilgrims wishlists 
+        // selectedGrade.GachaListId != selectedGrade.CustomizeListId seem to indicate that wishlisting is supported by the banner/grade. CustomizeListId 19995 and 19996 are most likely SSR and Pilgrims wishlists 
 
         Dictionary<int, GachaListProbRecord> charProbs = null;
-        
+
         // Process the wishlist here
         // We filter the character from the category by the ones in the wishlist.
         // CustomizeListId seem to indicate that a wishlist can be specified. It seem to be only different for the two SSR groups in standard banners.
         // Wishlist must not be empty and must have all slots filled in.
-        if (wishlistCharacters != null && wishlistCharacters.Count == 20 && selectedGrade.GachaListId != selectedGrade.CustomizeListId && selectedGrade.CustomizeListId != 0){
-            int[] ids = wishlistCharacters.Select(c=> c.Id).ToArray();
-            charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).Where(g => ids.Contains(g.Value.GachaId) ).ToDictionary();
+        if (wishlistCharacters != null && wishlistCharacters.Count == 20 && selectedGrade.GachaListId != selectedGrade.CustomizeListId && selectedGrade.CustomizeListId != 0)
+        {
+            Logging.WriteLine($"Using wishlisted characters.");
+            int[] ids = wishlistCharacters.Select(c => c.Id).ToArray();
+            charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).Where(g => ids.Contains(g.Value.GachaId)).ToDictionary();
         }
         // Otherwise, proceed with regular gacha list
-        else{                    
+        else
+        {
+            Logging.WriteLine($"Not using wishlisted characters.{(wishlistCharacters == null || wishlistCharacters.Count != 20 ? " Invalid wishlist." : "")}{(selectedGrade.GachaListId == selectedGrade.CustomizeListId || selectedGrade.CustomizeListId == 0 ? " Invalid Banner or Grade." : "")}");
             charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).ToDictionary();
         }
 
@@ -440,15 +451,16 @@ public class ExecGacha : LobbyMessage
 
         Dictionary<int, (int minProbInc, int maxProbEx)> charProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();
 
-        foreach(GachaListProbRecord charProb in charProbs.Values){
-            charProbsTable.Add(charProb.Id, new (maxCharProb, maxCharProb + charProb.Prob));
+        foreach (GachaListProbRecord charProb in charProbs.Values)
+        {
+            charProbsTable.Add(charProb.Id, new(maxCharProb, maxCharProb + charProb.Prob));
             maxCharProb += charProb.Prob;
         }
 
         // Now, do the pull
         int charRoll = (int)random.NextInt64(maxCharProb);
 
-        GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where( p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select( p=> p.Key).First()];
+        GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where(p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
 
         // Return
         return GameData.Instance.CharacterTable[selectedCharacter.GachaId]; // GachaId is the character ID
