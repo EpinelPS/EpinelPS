@@ -33,13 +33,13 @@ public class UsePiece : LobbyMessage
 
         // Load the character probability list for the mold
         IEnumerable<GachaListProbRecord> probList = GameData.Instance.GachaGradeProb
-            .Where(x => x.Key == pItem.UseId)
+            .Where(gradeProb => gradeProb.Key == pItem.UseId)
             .SelectMany(grade => GameData.Instance.GachaListProb.Where(list => list.Value.GroupId == grade.Value.GachaListId))
             .Select(i => i.Value);
 
         NetRewardData reward = new();
         IEnumerable<CharacterRecord> selectedCharacters = Enumerable.Range(1, req.Count)
-            .Select(_ => SelectRandomCharacter(probList, pItem.Id));
+            .Select(_ => SelectRandomCharacter(probList));
 
         int totalBodyLabels = 0;
         foreach (CharacterRecord? character in selectedCharacters)
@@ -148,7 +148,7 @@ public class UsePiece : LobbyMessage
         await WriteDataAsync(response);
     }
 
-    private CharacterRecord SelectRandomCharacter(IEnumerable<GachaListProbRecord> charProbs, int pieceId)
+    private CharacterRecord SelectRandomCharacter(IEnumerable<GachaListProbRecord> charProbs)
     {
         // Changed this to use the Gacha list probability table instead since it contains the probabilities without the need for splitting the groups.
         // This should work no matter how many character are added and no matter what their probabilities are.
