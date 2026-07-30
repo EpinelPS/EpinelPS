@@ -144,6 +144,9 @@ public class GameData
     [LoadRecord("GachaPityTable.json", "Id")]
     public readonly Dictionary<int, GachaPityRecord_Raw> GachaPityRecords = [];
 
+    [LoadRecord("GachaSelectupListTable.json", "Id")]
+    public readonly Dictionary<int, GachaSelectupListRecord_Raw> GachaSelectupListTable = [];
+
     // End Gacha Banners
 
     [LoadRecord("EventManagerTable.json", "Id")]

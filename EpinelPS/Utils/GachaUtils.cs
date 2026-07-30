@@ -44,7 +44,7 @@ public class GachaUtils
             for (int i = 0; i < numberOfPulls; i++)
             {
                 // Added bannerID to the SelectRandomCharacter method to allow for specific logic such as wishlist handling
-                CharacterRecord character = SelectRandomCharacter(gachaType, wishlistCharacters);
+                CharacterRecord character = SelectRandomCharacter(gachaType, wishlistCharacters, user);
                 selectedCharacters.Add(character);
             }
         }
@@ -53,7 +53,7 @@ public class GachaUtils
     }
 
 
-    private static CharacterRecord SelectRandomCharacter(GachaTypeRecord gachaType, List<CharacterRecord> wishlistCharacters)
+    private static CharacterRecord SelectRandomCharacter(GachaTypeRecord gachaType, List<CharacterRecord> wishlistCharacters, User user)
     {
 
         // Load the categories and they probabilities
@@ -117,8 +117,29 @@ public class GachaUtils
 
         GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where(p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
 
+
+        // We need to check if this is a selectup gacha. The Gacha ID will be empty in this case and must be obtained from the user object.
+        int characterID = -1;
+
+        switch (selectedCharacter.GachaType)
+        {
+            case GachaCategory.GachaSelectup:
+                try
+                {
+                    characterID = GameData.Instance.GachaSelectupListTable[user.GachaSelectupChoices[gachaType.Id]].CharacterId;
+                }
+                catch (Exception ex){
+                    Logging.WriteLine("[SelectRandomCharacter] Could not get the character from the selectup choice");
+                }
+                break;
+
+            default:
+                characterID = selectedCharacter.GachaId;
+                break;
+        }
+
         // Return
-        return GameData.Instance.CharacterTable[selectedCharacter.GachaId]; // GachaId is the character ID
+        return GameData.Instance.CharacterTable[characterID]; // GachaId is the character ID
 
     }
 

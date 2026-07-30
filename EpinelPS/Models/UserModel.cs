@@ -148,7 +148,8 @@ public class User
 
     public Dictionary<int, GachaPaybackData> GachaPaybackData {get;set;} = new();
     public List<int> GachaDailyFreePulls { get; set; } = new();
-    
+    public Dictionary<int, int> GachaSelectupChoices { get; set; } = [];
+
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 

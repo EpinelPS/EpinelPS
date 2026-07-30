@@ -159,7 +159,7 @@ public class EventHelper
 
             // We also need to check if there is a step payback event attached to the gacha
            foreach(var gachaBanner in GameData.Instance.gachaTypes.Where(g => g.Value.EventId == gachaEvent.Id))
-           {
+            {
                 // We have the gacha, now check for a payback table
                 foreach(var payback in GameData.Instance.GachaPaybackRecords.Where( p => p.Value.GachaId == gachaBanner.Value.Id)){
 
@@ -168,14 +168,14 @@ public class EventHelper
 
                         var ev = GameData.Instance.eventManagers[payback.Value.EventId];
 
-                        events.Add(new NetEventData()       
+                        events.Add(new NetEventData()
                         {
                             Id = ev.Id,
                             EventSystemType = (int) ev.EventSystemType
                         });
                     }
                 }
-           }
+            }
         }
         return events;
     }
