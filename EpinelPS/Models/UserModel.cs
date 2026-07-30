@@ -147,6 +147,7 @@ public class User
     public List<int> LobbyPrivateBannerIds = [];
 
     public Dictionary<int, GachaPaybackData> GachaPaybackData {get;set;} = new();
+    public List<int> GachaDailyFreePulls { get; set; } = new();
     
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
@@ -626,7 +627,8 @@ public class User
 
             DispatchResetCount = 0;
             ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
-            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;           
+            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;
+            GachaDailyFreePulls.Clear();
 
             needsSave = true;
         }

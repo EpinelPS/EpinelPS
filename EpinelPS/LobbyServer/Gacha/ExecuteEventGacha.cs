@@ -1,8 +1,10 @@
 //yes i am lazy and its preety much same as exec gacha 
 //but only does 1x pull
 //its here only so there is no system error on 1x free gacha event
+
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Gacha;
 
@@ -22,41 +24,20 @@ public class ExecuteEventGacha : LobbyMessage
         // Count determines whether we select 1 or 10 characters
         int numberOfPulls = 1;
 
+        int bannerID = req.GachaId;
+        Logging.WriteLine($"Event ID: {req.EventId}" );
+        Logging.WriteLine($"Banner ID: {bannerID}");
+        GachaTypeRecord gachaType = GameData.Instance.gachaTypes[bannerID];
+
+        //Get the banner ID and load the banner data from GachaTypeTable
         User user = GetUser();
+
         ResExecuteDailyFreeGacha response = new();
 
-        List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
-        // Remove the .Values part since it's already a list.
-        // Group by NameCode to treat same NameCode as one character 
-        // Always add characters with GradeCoreId == 1 and 101
-        List<CharacterRecord> allCharacterData = [.. entireallCharacterData.GroupBy(c => c.NameCode).SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
+        Logging.WriteLine($"Currency type: Daily free pull");
 
-        // Separate characters by rarity categories
-        List<CharacterRecord> rCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.R)];
-        List<CharacterRecord> srCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SR)];
-
-        // Separate Pilgrim SSRs and non-Pilgrim SSRs
-        List<CharacterRecord> pilgrimCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SSR && c.Corporation == CorporationType.PILGRIM)];
-        List<CharacterRecord> ssrCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SSR && c.Corporation != CorporationType.PILGRIM)];
-
-        List<CharacterRecord> selectedCharacters = [];
-
-        // Check if user has 'sickpulls' set to true to use old method
-        if (user.sickpulls)
-        {
-            // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
-            selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.Id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
-        }
-        else
-        {
-            // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
-            for (int i = 0; i < numberOfPulls; i++)
-            {
-                CharacterRecord character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList);
-                selectedCharacters.Add(character);
-            }
-        }
-
+        List<CharacterRecord> selectedCharacters = GachaUtils.ExecuteGachaPull(gachaType, numberOfPulls, user);
+        
         List<Tuple<int, int>> pieceIds = []; // 2D array to store characterId and pieceId as Tuple
                                              // Add each character's item to user.Items if the character exists in user.Characters
         foreach (CharacterRecord characterData in selectedCharacters)
@@ -158,58 +139,12 @@ public class ExecuteEventGacha : LobbyMessage
                 });
             }
         }
-
-
+        user.GachaDailyFreePulls.Add(req.EventId);
 
         user.GachaTutorialPlayCount++;
         JsonDb.Save();
 
         await WriteDataAsync(response);
     }
-
-    private CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList)
-    {
-        // Remove excluded characters from each category
-        List<CharacterRecord> availableRCharacters = [.. rCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availableSRCharacters = [.. srCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availableSSRCharacters = [.. ssrCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availablePilgrimCharacters = [.. pilgrimCharacters.Where(c => !exclusionList.Contains(c.Id))];
-
-        // Each time we call this method, a new category will be selected for a single character
-        double roll = random.NextDouble() * 100; // Roll from 0 to 100
-
-        if (roll < 53 && availableRCharacters.Count != 0)
-        {
-            // R category
-            return availableRCharacters[random.Next(availableRCharacters.Count)];
-        }
-        else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
-        {
-            // SR category
-            return availableSRCharacters[random.Next(availableSRCharacters.Count)];
-        }
-        else
-        {
-            // SSR category
-            double ssrRoll = random.NextDouble() * 100;
-
-            if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
-            {
-                // PILGRIM SSR
-                return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
-            }
-            else if (availableSSRCharacters.Count != 0)
-            {
-                // Non-PILGRIM SSR
-                return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
-            }
-        }
-
-        // Fallback to a random R character if somehow no SSR characters are left after exclusion
-        if (availableRCharacters.Count == 0)
-        {
-            throw new InvalidOperationException("No available characters found for gacha pull");
-        }
-        return availableRCharacters[random.Next(availableRCharacters.Count)];
-    }
+   
 }
