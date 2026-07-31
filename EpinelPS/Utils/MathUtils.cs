@@ -71,3 +71,12 @@ public static class ListExtensions
     }
 
 }
+public static class DateTimeExtensions
+{
+    public static bool IsOlderThan24Hours(this long createdAtTicks)
+    {
+        long nowTicks = DateTime.UtcNow.Ticks;
+        long twentyFourHoursInTicks = TimeSpan.FromHours(24).Ticks;
+        return nowTicks - createdAtTicks > twentyFourHoursInTicks;
+    }
+}

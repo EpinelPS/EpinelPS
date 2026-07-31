@@ -456,7 +456,6 @@ public class RewardUtils
             {
                 DbItemData? spareItem = user.Items.FirstOrDefault(i => i.ItemType == character.PieceId);
                 int maxLimitBroken = GetValueByRarity(character.OriginalRare, 0, 2, 11) - 1;
-                Logging.WriteLine($"[UseRandomBox] ��ɫ�����Ƭ: {maxLimitBroken}��������Ƭ���� {spareItem.Count}");
 
                 bool canIncreaseItem = character.OriginalRare != OriginalRareType.R && ownedCharacter.Grade + (spareItem?.Count ?? 0) < maxLimitBroken;
                 (int newSpareItemCount, int dissoluteCharacterCount) = canIncreaseItem ? (1, 0) : (0, 1);
