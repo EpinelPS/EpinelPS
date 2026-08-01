@@ -39,12 +39,6 @@ public class GetSynchrodevice : LobbyMessage
             response.Synchro.Slots.Add(new NetSynchroSlot() { Slot = item.Slot, AvailableRegisterAt = 1, Csn = item.CharacterSerialNumber });
         }
 
-        // Official formula for Maximum Synchro Level:
-        //   Highest Nikke level + (Nikkes owned) + (Total Limit Breaks × 1.334)
-        // In EpinelPS a character's Grade encodes: 0-3 = star rank (these ARE
-        // the limit breaks), 4-10 = core/overload tiers (do NOT count). So a
-        // character's limit breaks = min(Grade, 3): R stays 0★ (0), SR caps at
-        // 2★ (2), SSR caps at 3★ (3); core breaks beyond 3★ are excluded.
         int highestLevel = user.Characters.Count > 0 ? user.Characters.Max(c => c.Level) : 0;
         int ownedCount = user.Characters.Count;
         int totalLimitBreaks = user.Characters.Sum(c => Math.Min(c.Grade, 3));
