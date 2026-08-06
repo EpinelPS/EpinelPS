@@ -419,29 +419,30 @@ public class RewardUtils
         }
         else if (rewardType == RewardType.FavoriteItem)
         {
-
-            NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+            for (int i = 0; i < rewardCount; i++)
             {
-                FavoriteItemId = user.GenerateUniqueItemId(),
-                Tid = rewardId,
-                Csn = 0,
-                Lv = 0,
-                Exp = 0
-            };
-            user.FavoriteItems.Add(newFavoriteItem);
+                NetUserFavoriteItemData newFavoriteItem = new NetUserFavoriteItemData
+                {
+                    FavoriteItemId = user.GenerateUniqueItemId(),
+                    Tid = rewardId,
+                    Csn = 0,
+                    Lv = 0,
+                    Exp = 0
+                };
+                user.FavoriteItems.Add(newFavoriteItem);
 
-            ret.UserFavoriteItems.Add(newFavoriteItem);
+                ret.UserFavoriteItems.Add(newFavoriteItem);
 
-            NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
-            {
-                FavoriteItemId = newFavoriteItem.FavoriteItemId,
-                Tid = newFavoriteItem.Tid,
-                Csn = newFavoriteItem.Csn,
-                Lv = newFavoriteItem.Lv,
-                Exp = newFavoriteItem.Exp
-            };
-            ret.FavoriteItems.Add(favoriteItemData);
-
+                NetFavoriteItemData favoriteItemData = new NetFavoriteItemData
+                {
+                    FavoriteItemId = newFavoriteItem.FavoriteItemId,
+                    Tid = newFavoriteItem.Tid,
+                    Csn = newFavoriteItem.Csn,
+                    Lv = newFavoriteItem.Lv,
+                    Exp = newFavoriteItem.Exp
+                };
+                ret.FavoriteItems.Add(favoriteItemData);
+            }
         }
         else if (rewardType == RewardType.Character)
         {

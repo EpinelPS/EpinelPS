@@ -145,7 +145,11 @@ public class User
     public Dictionary<int, PassData> UserPassInfo = []; // user pass data, key is PassId
 
     public List<int> LobbyPrivateBannerIds = [];
-    
+
+    public Dictionary<int, GachaPaybackData> GachaPaybackData {get;set;} = new();
+    public List<int> GachaDailyFreePulls { get; set; } = new();
+    public Dictionary<int, int> GachaSelectupChoices { get; set; } = [];
+
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
@@ -193,7 +197,8 @@ public class User
     public List<NetJukeboxPlaylist> PlayLists { get; set; } = [];
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
-
+    // Character Wishlist
+    public List<CharacterWishlistData> CharacterWishlist { get; set; } = []; 
 
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
@@ -628,7 +633,8 @@ public class User
 
             DispatchResetCount = 0;
             ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
-            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;           
+            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;
+            GachaDailyFreePulls.Clear();
 
             needsSave = true;
         }
@@ -663,5 +669,15 @@ public class User
         int seed = (int)(timestamp & 0x7FFFFFFF) ^ (int)(timestamp >> 32);
         var random = new Random(seed);
         return random.Next(100000000, 1000000000);
+    }
+
+    /// <summary>
+    /// Returns the list of characters from the user's wishlist.
+    /// </summary>
+    /// <param name="bannerId">Optional banner ID. This will generally always be 1</param>
+    /// <returns></returns>
+    public List<CharacterRecord> GetWishlistCharacters(int bannerId = 1)
+    {
+        return CharacterWishlist.Where(character => character.BannerId == bannerId).Select(character => GameData.Instance.CharacterTable[character.CharacterId]).ToList();
     }
 }

@@ -38,7 +38,7 @@ public class UseTimeReward : LobbyMessage
         };
 
         NetRewardData reward = new();
-        RewardUtils.AddSingleCurrencyObject(user, ref reward, itemType, amount);
+        RewardUtils.AddSingleCurrencyObject(user, ref reward, itemType, amount * req.Count);
 
         response.Reward = reward;
         // update client sIde item count

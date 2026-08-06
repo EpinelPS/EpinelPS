@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.Gacha;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
+namespace EpinelPS.LobbyServer.Gacha;
 
 [GameRequest("/Gacha/Get")]
 public class GetGacha : LobbyMessage
@@ -20,7 +22,30 @@ public class GetGacha : LobbyMessage
 
         response.Gacha.Add(new NetUserGachaData() { GachaType = 9, PlayCount = 0 }); //type 9 = pickup gacha
         response.GachaEventData.Add(new NetGachaEvent() { FreeCount = 1, GachaTypeId = 9 });
-        response.MultipleCustom.Add(new NetGachaCustomData() { Type = 9, Tid = 451101 });
+        response.MultipleCustom.AddRange(user.CharacterWishlist.Select(id => new NetGachaCustomData() { Type = 9, Tid = id.CharacterId })); // Fill the user wishlist
+
+        // TODO: response.GachaDiscountData  
+        // TODO: response.GachaGuaranteedData
+
+        // Selectup Lists
+        var selectupList = GameData.Instance.GachaSelectupListTable.GroupBy(s => s.Value.GachaTypeId);
+
+        // Add first entry or player selected entry if available
+        foreach (var selectup in selectupList)
+        {
+            if (!user.GachaSelectupChoices.ContainsKey(selectup.Key))
+            {
+                user.GachaSelectupChoices.Add(selectup.Key, selectup.First().Value.Id);
+                JsonDb.Save();
+            }
+
+            response.GachaSelectupData.Add(new NetUserGachaSelectupData()
+            {
+                GachaSelectupId = user.GachaSelectupChoices[selectup.Key], //e.g. 10303,
+                GachaTypeId = selectup.Key // e.g. 10078
+            });
+        }
+
         // Write the response back
         await WriteDataAsync(response);
     }

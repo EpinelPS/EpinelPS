@@ -3,8 +3,20 @@
 // and response.Currencies
 //NetUserCurrencyData fields Type 9000 and Value 150
 //NetRewardData field Currency = new NetUserCurrencyData copy type and value from response.Currencies new NetUserCurrencyData
+
+
+// Gacha backend data structure:
+//
+//  GachaTypeTable (Id = tid passed when called ExecGacha) - Identifies the banner calling the gacha process (standard, social, specific character, etc.)
+//      GachaGradeProbTable (GroupId = GachaTypeTable.GradeProbId) - Lists 4 groups with probabilities (R, SR, SSR, Pilgrim/Overspecs)
+//          GachaListProbTable (GroupId = GachaGradeProbTable.GachaListId) - Lists individual character per group
+//
+
+
+
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Gacha;
 
@@ -13,54 +25,37 @@ public class ExecGacha : LobbyMessage
 {
     private static readonly Random random = new();
 
+    // Some magic numbers for convenience
+    private const int STANDARD_BANNER_ID = 1;
+    private const int SOCIAL_BANNER_ID = 2;
+    private const int NEW_PLAYER_SPECIAL_BANNER_ID = 4;
+
     // Exclusion lists for sick pulls mode and normal mode 2500601 is the broken R rarity dorothy
     private static readonly List<int> sickPullsExclusionList = [2500601]; // Add more IDs as needed
-    private static readonly List<int> normalPullsExclusionList = [2500601, 422401, 306201, 399901, 399902, 399903, 399904, 201401, 301501, 112101, 313201, 319301, 319401, 320301, 422601, 426101, 328301, 328401, 235101, 235301, 136101, 339201, 140001, 140101, 140201, 580001, 580101, 580201, 581001, 581101, 581201, 582001, 582101, 582201, 583001, 583101, 583201, 583301, 190101, 290701]; // Add more IDs as needed
+    //private static readonly List<int> normalPullsExclusionList = [2500601, 422401, 306201, 399901, 399902, 399903, 399904, 201401, 301501, 112101, 313201, 319301, 319401, 320301, 422601, 426101, 328301, 328401, 235101, 235301, 136101, 339201, 140001, 140101, 140201, 580001, 580101, 580201, 581001, 581101, 581201, 582001, 582101, 582201, 583001, 583101, 583201, 583301, 190101, 290701]; // Add more IDs as needed
 
     protected override async Task HandleAsync()
     {
+        // Get the request data
         ReqExecuteGacha req = await ReadData<ReqExecuteGacha>();
-        int IncreasedChanceCharacterID = req.Tid;
-
 
         // Count determines whether we select 1 or 10 characters
         int numberOfPulls = req.Count == 1 ? 1 : 10;
 
+        //Get the banner ID and load the banner data from GachaTypeTable
+        int bannerID = req.Tid;
+        Logging.WriteLine($"Banner ID: {bannerID}");
+        GachaTypeRecord gachaType = GameData.Instance.gachaTypes[bannerID];
+
+        // Get the user so that we can check for wishlisted characters (if needed)
         User user = GetUser();
+
         ResExecuteGacha response = new() { Reward = new NetRewardData() { PassPoint = new() } };
 
-        List<CharacterRecord> entireallCharacterData = [.. GameData.Instance.CharacterTable.Values];
-        // Remove the .Values part since it's already a list.
-        // Group by NameCode to treat same NameCode as one character 
-        // Always add characters with GradeCoreId == 1 and 101
-        List<CharacterRecord> allCharacterData = [.. entireallCharacterData.GroupBy(c => c.NameCode).SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
 
-        // Separate characters by rarity categories
-        List<CharacterRecord> rCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.R)];
-        List<CharacterRecord> srCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SR)];
-
-        // Separate Pilgrim SSRs and non-Pilgrim SSRs
-        // treat overspec as pilgrim 
-        List<CharacterRecord> pilgrimCharacters = [.. allCharacterData.Where(c => (c.OriginalRare == OriginalRareType.SSR && c.Corporation == CorporationType.PILGRIM) || (c.OriginalRare == OriginalRareType.SSR && c.CorporationSubType == CorporationSubType.OVERSPEC))];
-        List<CharacterRecord> ssrCharacters = [.. allCharacterData.Where(c => c.OriginalRare == OriginalRareType.SSR && c.Corporation != CorporationType.PILGRIM)];
-
-        List<CharacterRecord> selectedCharacters = [];
-
-        // Check if user has 'sickpulls' set to true to use old method
-        if (user.sickpulls)
-        {
-            // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
-            selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.Id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
-        }
-        else
-        {
-            // New method: Select characters based on req.Count value, with each character having its category determined independently, excluding characters in the normalPullsExclusionList
-            for (int i = 0; i < numberOfPulls; i++)
-            {
-                CharacterRecord character = SelectRandomCharacter(rCharacters, srCharacters, ssrCharacters, pilgrimCharacters, normalPullsExclusionList, IncreasedChanceCharacterID, allCharacterData);
-                selectedCharacters.Add(character);
-            }
-        }
+        Logging.WriteLine($"Currency type: {(CurrencyType)req.CurrencyType}");
+        
+        List<CharacterRecord> selectedCharacters = GachaUtils.ExecuteGachaPull(gachaType, numberOfPulls, user);
 
         int totalBodyLabels = 0;
 
@@ -255,21 +250,25 @@ public class ExecGacha : LobbyMessage
         long userPremiumTickets = user.GetCurrencyVal(CurrencyType.CharPremiumTicket);
         long userCharCustomizeTickets = user.GetCurrencyVal(CurrencyType.CharCustomizeTicket);
         long userFreeCash = user.GetCurrencyVal(CurrencyType.FreeCash);
-
         // ==========================
         // EXCLUSIVE CURRENCIES
         // ==========================
         switch (ticketType)
         {
             case CurrencyType.ChargeCash:
-
-                useChargeCash = pullsLeft * (discount ? 200 : 300);
-                pullsLeft = 0;
+                {
+                    var cashPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 98 /*CurrencyType.ChargeCash*/ || g.GachaPriceType == 99 /*CurrencyType.FreeCash*/).First();
+                    useChargeCash = pullsLeft * (discount ? cashPrice.DailyGachaDiscountPriceValue1 : cashPrice.GachaPriceValueCount1);
+                    pullsLeft = 0;
+                }
                 break;
 
             case CurrencyType.FriendshipPoint:
-                useFriendshipPoint = pullsLeft * 10;
-                pullsLeft = 0;
+                {
+                    var fpPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 4000 /*CurrencyType.FriendshipPoint*/).First();
+                    useFriendshipPoint = pullsLeft * fpPrice.GachaPriceValueCount1;
+                    pullsLeft = 0;
+                }
                 break;
         }
 
@@ -290,7 +289,8 @@ public class ExecGacha : LobbyMessage
 
         if (canUseFreeCash)
         {
-            long costPerPull = discount ? 150 : 300;
+            var cashPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 98 /*CurrencyType.ChargeCash*/ || g.GachaPriceType == 99 /*CurrencyType.FreeCash*/).First();
+            long costPerPull = discount ? cashPrice.DailyGachaDiscountPriceValue1 : cashPrice.GachaPriceValueCount1;
             long totalCostNeeded = pullsLeft * costPerPull;
 
             useFreeCash = Math.Min(userFreeCash, totalCostNeeded);
@@ -328,75 +328,51 @@ public class ExecGacha : LobbyMessage
         // ==========================
         // MILEAGE REWARDS
         // ==========================
-        if (ticketType == CurrencyType.CharPremiumTicket ||
-            ticketType == CurrencyType.CharCustomizeTicket ||
-            ticketType == CurrencyType.FreeCash ||
-            ticketType == CurrencyType.FriendshipPoint)
+        if (bannerID == STANDARD_BANNER_ID)
             ApplyCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
-        if (ticketType == CurrencyType.ChargeCash)
+        if (bannerID != STANDARD_BANNER_ID && bannerID != SOCIAL_BANNER_ID && bannerID != NEW_PLAYER_SPECIAL_BANNER_ID) // TODO: Handle daily free pulls. They should not give Gold Mileage.
             ApplyCurrency(CurrencyType.GoldMileageTicket, numberOfPulls);
 
         user.GachaTutorialPlayCount++;
 
+        // ==========================
+        // BANNER PAYBACK RECORDS
+        // ==========================
+
+        // Does the banner have a payback list?
+        var prs = GameData.Instance.GachaPaybackRecords.Where(p => p.Value.GachaId == bannerID).ToDictionary();
+
+        if (prs.Count > 0)
+        {
+
+            var pr = prs.First();
+
+            Dictionary<int, GachaPaybackStepRecord_Raw> steps = GameData.Instance.GachaPaybackStepRecords.Where(s => s.Value.PaybackId == pr.Value.Id).ToDictionary();
+
+            //Process the banner pity
+            GachaPaybackData paybackState = null;
+
+            if (User.GachaPaybackData.ContainsKey(pr.Value.GachaId))
+            {
+                paybackState = User.GachaPaybackData[pr.Value.GachaId];
+            }
+            else
+            {
+                paybackState = new GachaPaybackData()
+                {
+                    GachaId = pr.Value.GachaId,    //payback GachaId
+                    GachaCount = 0                 // Pull amount
+                };
+                User.GachaPaybackData.Add(pr.Value.GachaId, paybackState);
+            }
+
+            paybackState.GachaCount += req.Count;
+        }
+
         JsonDb.Save();
 
         await WriteDataAsync(response);
-    }
-
-    private static CharacterRecord SelectRandomCharacter(List<CharacterRecord> rCharacters, List<CharacterRecord> srCharacters, List<CharacterRecord> ssrCharacters, List<CharacterRecord> pilgrimCharacters, List<int> exclusionList, int increasedChanceCharacterID, List<CharacterRecord> allCharacterData)
-    {
-        // Remove excluded characters from each category
-        List<CharacterRecord> availableRCharacters = [.. rCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availableSRCharacters = [.. srCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availableSSRCharacters = [.. ssrCharacters.Where(c => !exclusionList.Contains(c.Id))];
-        List<CharacterRecord> availablePilgrimCharacters = [.. pilgrimCharacters.Where(c => !exclusionList.Contains(c.Id))];
-
-        // Find the IncreasedChanceCharacterID in the SSR list
-        CharacterRecord? increasedChanceCharacter = availableSSRCharacters.FirstOrDefault(c => c.Id == increasedChanceCharacterID);
-        bool isPilgrimOrOverspec = increasedChanceCharacter != null && (increasedChanceCharacter.Corporation == CorporationType.PILGRIM || increasedChanceCharacter.CorporationSubType == CorporationSubType.OVERSPEC);
-
-        double increasedChance = increasedChanceCharacterID != 1 ? (isPilgrimOrOverspec ? 1.0 : 2.0) : 0.0;
-
-        double roll = random.NextDouble() * 100; // Roll from 0 to 100
-
-        if (roll < 53 && availableRCharacters.Count != 0)
-        {
-            // R category
-            return availableRCharacters[random.Next(availableRCharacters.Count)];
-        }
-        else if (roll < 53 + 43 && availableSRCharacters.Count != 0)
-        {
-            // SR category
-            return availableSRCharacters[random.Next(availableSRCharacters.Count)];
-        }
-        else
-        {
-            // SSR category
-            double ssrRoll = random.NextDouble() * 100;
-
-            if (increasedChanceCharacter != null && ssrRoll < increasedChance)
-            {
-                // Increased Chance SSR
-                return increasedChanceCharacter;
-            }
-
-            ssrRoll -= increasedChance;
-
-            if (ssrRoll < 4.55 && availablePilgrimCharacters.Count != 0)
-            {
-                // PILGRIM SSR
-                return availablePilgrimCharacters[random.Next(availablePilgrimCharacters.Count)];
-            }
-            else if (availableSSRCharacters.Count != 0)
-            {
-                // Non-PILGRIM SSR
-                return availableSSRCharacters[random.Next(availableSSRCharacters.Count)];
-            }
-        }
-
-        // Fallback to a random R character if somehow no SSR characters are left after exclusion
-        return availableRCharacters.Count != 0 ? availableRCharacters[random.Next(availableRCharacters.Count)] : throw new Exception("cannot find any characters");
     }
 
 }

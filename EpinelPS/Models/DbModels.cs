@@ -112,6 +112,20 @@ public class EventCollectData
         };
     }
 }
+
+public class GachaPaybackData
+{
+    public int GachaId { get; set; } = 0;
+    public int GachaCount { get; set; } = 0;
+    public List<int> RewardedStepList { get; set; } = [];
+}
+
+public class CharacterWishlistData
+{
+    public int BannerId { get; set; } = 0;
+    public int CharacterId { get; set; } = 0;
+}
+
 public class LoginEventData
 {
     public List<int> Days { get; set; } = [];

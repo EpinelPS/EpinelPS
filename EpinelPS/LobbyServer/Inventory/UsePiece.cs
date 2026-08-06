@@ -31,15 +31,15 @@ public class UsePiece : LobbyMessage
             .FirstOrDefault(x => x.Value.Id == piece.ItemType).Value
             ?? throw new Exception("cannot find piece Id " + piece.ItemType);
 
+        // Load the character probability list for the mold
         IEnumerable<GachaListProbRecord> probList = GameData.Instance.GachaGradeProb
-            .Where(x => x.Key == pItem.UseId)
+            .Where(gradeProb => gradeProb.Key == pItem.UseId)
             .SelectMany(grade => GameData.Instance.GachaListProb.Where(list => list.Value.GroupId == grade.Value.GachaListId))
             .Select(i => i.Value);
-        IEnumerable<CharacterRecord> allCharacters = probList.SelectMany(e => GameData.Instance.CharacterTable.Values.Where(c => c.Id == e.GachaId));
 
         NetRewardData reward = new();
         IEnumerable<CharacterRecord> selectedCharacters = Enumerable.Range(1, req.Count)
-            .Select(_ => SelectRandomCharacter(allCharacters, pItem.Id));
+            .Select(_ => SelectRandomCharacter(probList));
 
         int totalBodyLabels = 0;
         foreach (CharacterRecord? character in selectedCharacters)
@@ -148,43 +148,28 @@ public class UsePiece : LobbyMessage
         await WriteDataAsync(response);
     }
 
-    private CharacterRecord SelectRandomCharacter(IEnumerable<CharacterRecord> characters, int pieceId)
+    private CharacterRecord SelectRandomCharacter(IEnumerable<GachaListProbRecord> charProbs)
     {
-        PieceGradeProb gradeProb = GetPieceGradeProb(pieceId);
-        IEnumerable<CharacterRecord> rCharacters = characters.Where(c => c.OriginalRare == OriginalRareType.R);
-        IEnumerable<CharacterRecord> srCharacters = characters.Where(c => c.OriginalRare == OriginalRareType.SR);
-        IEnumerable<CharacterRecord> ssrCharacters = characters.Where(c => c.OriginalRare == OriginalRareType.SSR);
+        // Changed this to use the Gacha list probability table instead since it contains the probabilities without the need for splitting the groups.
+        // This should work no matter how many character are added and no matter what their probabilities are.
 
-        double roll = random.NextDouble() * 100;
+        // Create the probability table
+        int maxCharProb = 0;
 
-        if (0.0 < gradeProb.RProb && roll < gradeProb.RProb && rCharacters.Any())
-        {
-            return rCharacters.ElementAt(random.Next(rCharacters.Count()));
+        Dictionary<int, (int minProbInc, int maxProbEx)> charProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();
+
+        foreach(GachaListProbRecord charProb in charProbs){
+            charProbsTable.Add(charProb.Id, new (maxCharProb, maxCharProb + charProb.Prob));
+            maxCharProb += charProb.Prob;
         }
-        else if (0.0 < gradeProb.SRProb && roll < gradeProb.RProb + gradeProb.SRProb && srCharacters.Any())
-        {
-            return srCharacters.ElementAt(random.Next(srCharacters.Count()));
-        }
-        else if (0.0 < gradeProb.SSRProb && roll < gradeProb.RProb + gradeProb.SRProb + gradeProb.SSRProb && ssrCharacters.Any())
-        {
-            return ssrCharacters.ElementAt(random.Next(ssrCharacters.Count()));
-        }
-        else
-        {
-            throw new Exception("No characters available for the given value.");
-        }
+
+        // Now, do the pull
+        int charRoll = (int)random.NextInt64(maxCharProb);
+
+        GachaListProbRecord selectedCharacter = charProbs.Where(charP => charP.Id == charProbsTable.Where( p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select( p=> p.Key).First()).First();
+
+        return GameData.Instance.CharacterTable[selectedCharacter.GachaId];
     }
-
-    // TODO: find the file where the grade probability is stored.
-    // TODO: Add Helm Mold and Laplace Mold
-    private PieceGradeProb GetPieceGradeProb(int pieceId) => pieceId switch
-    {
-        5310301 => new PieceGradeProb(0.0, 38.9997, 61.0003), // High quality Mold
-        5310302 or 5310303 or 5310304 or 5310305 => new PieceGradeProb(19.9998, 29.9997, 50.0005), // Manufacturer Mold
-        5310306 or 5310307 or 5310308 or 5310309 => new PieceGradeProb(0.0, 0.0, 100.0), // New Commander Mold or Perfect Mold
-        5330201 or 5359001 => new PieceGradeProb(0.0, 78.9993, 21.0007), // MId quality Mold
-        _ => throw new Exception("unknown piece Id")
-    };
 
     private int GetValueByRarity(OriginalRareType rarity, int rValue, int srValue, int ssrValue) => rarity switch
     {
