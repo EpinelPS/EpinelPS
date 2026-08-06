@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.Character;
+﻿using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.Character;
 
 [GameRequest("/character/synchrodevice/get")]
 public class GetSynchrodevice : LobbyMessage
@@ -37,7 +39,10 @@ public class GetSynchrodevice : LobbyMessage
             response.Synchro.Slots.Add(new NetSynchroSlot() { Slot = item.Slot, AvailableRegisterAt = 1, Csn = item.CharacterSerialNumber });
         }
 
-        response.Synchro.SynchroMaxLv = 1000;
+        int highestLevel = user.Characters.Count > 0 ? user.Characters.Max(c => c.Level) : 0;
+        int ownedCount = user.Characters.Count;
+        int totalLimitBreaks = user.Characters.Sum(c => Math.Min(c.Grade, 3));
+        response.Synchro.SynchroMaxLv = (int)(highestLevel + ownedCount + totalLimitBreaks * 1.334);
         response.Synchro.SynchroLv = user.GetSynchroLevel();
         response.Synchro.IsChanged = user.SynchroDeviceUpgraded;
 

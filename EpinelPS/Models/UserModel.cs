@@ -168,6 +168,11 @@ public class User
 
     public GuildData Guild { get; set; } = new();
 
+    //解放
+    public Dictionary<int, NetLiberateData> LiberateDatas { get; set; } = [];
+    public List<int> OpenLiberateTypeIdList { get; set; } = [];
+    public int CurCharacterIdId { get; set; } = 0;
+
     // Minigame data
     public Dictionary<int,MiniGameScenarios> MiniGameScenarios { get;set;  } = new();
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo { get; set; } = [];
@@ -447,16 +452,16 @@ public class User
                 if (stars > maxStars) maxStars = stars;
             }
         }
-        int cap = 30;
+        int cap = 10 + Math.Min(maxStars, 2) * 10;
         foreach (var kvp in GameData.Instance.CharacterTable.Values)
         {
-            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM)
+            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM && maxStars >= 3)
             {
                 cap = 40;
                 break;
             }
         }
-        return Math.Min(10 + maxStars * 10, cap);
+        return cap;
     }
 
     /// <summary>

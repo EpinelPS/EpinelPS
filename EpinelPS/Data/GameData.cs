@@ -45,6 +45,19 @@ public class GameData
     public readonly Dictionary<int, CashShopRecord> CashShopRecords = [];
     [LoadRecord("FunctionTable.json", "Id")]
     public readonly Dictionary<int, FunctionRecord> FunctionRecords = [];
+
+    //解放
+    [LoadRecord("LiberateTypeTable.json", "Id")]
+    public readonly Dictionary<int, LiberateTypeRecord> LiberateTypeTable = [];
+    [LoadRecord("LiberateMissionTable.json", "Id")]
+    public readonly Dictionary<int, LiberateMissionRecord> LiberateMissionTable = [];
+    [LoadRecord("LiberateMissionGroupTable.json", "Id")]
+    public readonly Dictionary<int, LiberateMissionGroupRecord> LiberateMissionGroupTable = [];
+    [LoadRecord("LiberateCharacterTable.json", "Id")]
+    public readonly Dictionary<int, LiberateCharacterRecord> LiberateCharacterTable = [];
+    [LoadRecord("LiberateAttractiveEpisodeTable.json", "Id")]
+    public readonly Dictionary<int, LiberateAttractiveEpisode> LiberateAttractiveEpisodeTable = [];
+
     [LoadRecord("ItemSelectOptionTable.json", "Id")]
     public readonly Dictionary<int, ItemSelectOptionRecord> SelectItem = [];
 
