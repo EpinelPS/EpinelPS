@@ -9,8 +9,18 @@ public class GetProgressList : LobbyMessage
         User user = GetUser();
 
         ResGetLiberateProgressList response = new();
-
-        // TODO
+        foreach (var item in user.LiberateDatas)
+        {
+            NetLiberateProgressData netLiberate = new NetLiberateProgressData
+            {
+                CharacterId = item.Value.CharacterId,
+                IsCompleted = item.Value.IsCompleted,
+                ProgressPoint = item.Value.ProgressPoint,
+                RewardedCount = item.Value.RewardedCount,
+                Step = item.Value.Step
+            };
+            response.LiberateProgressData.Add(netLiberate);
+        }
 
         await WriteDataAsync(response);
     }

@@ -164,6 +164,11 @@ public class User
 
     public GuildData Guild { get; set; } = new();
 
+    //解放
+    public Dictionary<int, NetLiberateData> LiberateDatas { get; set; } = [];
+    public List<int> OpenLiberateTypeIdList { get; set; } = [];
+    public int CurCharacterIdId { get; set; } = 0;
+
     // Minigame data
     public Dictionary<int,MiniGameScenarios> MiniGameScenarios { get;set;  } = new();
     public Dictionary<int, MiniGameAzxData> MiniGameAzxInfo { get; set; } = [];
