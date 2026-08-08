@@ -40,7 +40,16 @@ public class GetContentsData : LobbyMessage
         response.MaxGachaCount = user.GachaMaxPlayCount;
         response.MaxGachaPremiumCount = user.GachaMaxPremiumPlayCount;
         // todo tutorial playcount of gacha
-        response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
+        response.TutorialGachaPlayCount = user.GachaTutorialPlayCount > 1 ? 1 : 0;
+
+        if (user.GachaMaxPremiumPlayCount >= 40)
+        {
+            user.AddTrigger(Trigger.GachaPremium, 41);
+        }
+
+        Logging.WriteLine($"MaxGachaCount: {user.GachaMaxPlayCount}");
+        Logging.WriteLine($"MaxGachaCount: {user.GachaMaxPremiumPlayCount}");
+        Logging.WriteLine($"MaxGachaPremiumCount: {(user.GachaTutorialPlayCount > 1 ? 1 : 0)}");
 
         // ClearSimRoomChapterList: 已通关的章节列表，用于显示超频选项 SimRoomOC
         response.ClearSimRoomChapterList.AddRange(GetClearSimRoomChapterList(user));

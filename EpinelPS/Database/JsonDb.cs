@@ -93,10 +93,10 @@ internal class JsonDb
     }
 
     private static void ValidateDb()
-    {
-        // check if character level is valid
+    {        
         foreach (var user in Instance.Users)
         {
+            // check if character level is valid
             foreach (var c in user.Characters)
             {
                 if (c.Level > 1000)
@@ -105,6 +105,11 @@ internal class JsonDb
                     c.Level = 1000;
                 }
             }
+
+            // upgrade the gacha pull counters if using older system
+            user.GachaMaxPlayCount = user.GachaTutorialPlayCount > user.GachaMaxPlayCount ? user.GachaTutorialPlayCount : user.GachaMaxPlayCount;
+            user.GachaMaxPremiumPlayCount = user.GachaTutorialPlayCount > user.GachaMaxPremiumPlayCount ? user.GachaTutorialPlayCount : user.GachaMaxPlayCount;
+
         }
     }
 
