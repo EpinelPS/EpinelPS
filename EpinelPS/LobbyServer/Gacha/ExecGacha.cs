@@ -17,7 +17,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace EpinelPS.LobbyServer.Gacha;
 

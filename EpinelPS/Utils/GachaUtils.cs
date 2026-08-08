@@ -148,6 +148,7 @@ public class GachaUtils
 
         GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where(p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
 
+
         // We need to check if this is a selectup gacha. The Gacha ID will be empty in this case and must be obtained from the user object.
         int characterID = -1;
 
@@ -193,7 +194,7 @@ public class GachaUtils
             Logging.WriteLine($"Using wishlisted characters.");
             int[] ids = wishlistCharacters.Select(c => c.Id).ToArray();
             charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).Where(g => ids.Contains(g.Value.GachaId)).ToDictionary();
-        }
+    }
         // Otherwise, proceed with regular gacha list
         else
         {
