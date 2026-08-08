@@ -38,6 +38,37 @@ public class GachaUtils
             // Old selection method: Randomly select characters based on req.Count value, excluding characters in the sickPullsExclusionList
             selectedCharacters = [.. allCharacterData.Where(c => !sickPullsExclusionList.Contains(c.Id)).OrderBy(x => random.Next()).Take(numberOfPulls)]; // Exclude characters based on the exclusion list for sick pulls
         }
+        else if (gachaType.Type == GachaPremiumType.GachaTutorial)
+        {
+            if (numberOfPulls != 10)
+            {
+                Logging.WriteLine("[SelectRandomCharacter] Tutorial Gacha Banners must have 10 pulls",LogType.Error);
+                throw new ArgumentException("Tutorial Gacha Banners must have 10 pulls");
+            }
+
+            // This is the tutorial banner. It gives only one SSR, no more, no less.
+            // To make it interesting for the user, select a random spot for the SSR pull
+            // We handle it manually because the GachaProbRecord for SSR has a zero probability. It is most likely used by the game for display rather than any processing.
+            // Everything else can be handled by the grade probabilities provided by the game files.
+            long ssrSpot = random.NextInt64(0, 10);
+
+            for (int i = 0; i < numberOfPulls; i++)
+            {
+                if (i == ssrSpot)
+                {
+                    GachaGradeProbRecord gradeProbs = GameData.Instance.GachaGradeProb.Where(p => p.Value.GroupId == gachaType.GradeProbId)
+                                                                                                        .Where(p => p.Value.Rare == OriginalRareType.SSR).Select(p => p.Value).First();
+                    CharacterRecord character = SelectRandomCharacterFromProbList(gradeProbs, wishlistCharacters, user);
+                    selectedCharacters.Add(character);
+                }
+                else
+                {
+                    // The gacha type record has a zero probability for SSR, so SSRs won't 
+                    CharacterRecord character = SelectRandomCharacter(gachaType, wishlistCharacters, user);
+                    selectedCharacters.Add(character);
+                }
+            }
+        }
         else
         {
             // Now using the game probability tables to do the pulls
@@ -117,7 +148,6 @@ public class GachaUtils
 
         GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where(p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
 
-
         // We need to check if this is a selectup gacha. The Gacha ID will be empty in this case and must be obtained from the user object.
         int characterID = -1;
 
@@ -143,5 +173,51 @@ public class GachaUtils
 
     }
 
+    /// <summary>
+    /// This functions is mostly used for the tutorial pull and will not handle the selectup banners (already handled by the main gacha pull function)
+    /// </summary>
+    /// <param name="selectedGrade"></param>
+    /// <param name="wishlistCharacters">Wishlist is handled just in cas but will most likely always be empty</param>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    private static CharacterRecord SelectRandomCharacterFromProbList(GachaGradeProbRecord selectedGrade, List<CharacterRecord> wishlistCharacters, User user)
+    {
+        Dictionary<int, GachaListProbRecord> charProbs = null;
+
+        // Process the wishlist here
+        // We filter the character from the category by the ones in the wishlist.
+        // CustomizeListId seem to indicate that a wishlist can be specified. It seem to be only different for the two SSR groups in standard banners.
+        // Wishlist must not be empty and must have all slots filled in.
+        if (wishlistCharacters != null && wishlistCharacters.Count == 20 && selectedGrade.GachaListId != selectedGrade.CustomizeListId && selectedGrade.CustomizeListId != 0)
+        {
+            Logging.WriteLine($"Using wishlisted characters.");
+            int[] ids = wishlistCharacters.Select(c => c.Id).ToArray();
+            charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).Where(g => ids.Contains(g.Value.GachaId)).ToDictionary();
+        }
+        // Otherwise, proceed with regular gacha list
+        else
+        {
+            Logging.WriteLine($"Not using wishlisted characters.{(wishlistCharacters == null || wishlistCharacters.Count != 20 ? " Invalid wishlist." : "")}{(selectedGrade.GachaListId == selectedGrade.CustomizeListId || selectedGrade.CustomizeListId == 0 ? " Invalid Banner or Grade." : "")}");
+            charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).ToDictionary();
+        }
+
+        int maxCharProb = 0;
+
+        Dictionary<int, (int minProbInc, int maxProbEx)> charProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();
+
+        foreach (GachaListProbRecord charProb in charProbs.Values)
+        {
+            charProbsTable.Add(charProb.Id, new(maxCharProb, maxCharProb + charProb.Prob));
+            maxCharProb += charProb.Prob;
+        }
+
+        // Now, do the pull
+        int charRoll = (int)random.NextInt64(maxCharProb);
+
+        GachaListProbRecord selectedCharacter = charProbs[charProbsTable.Where(p => charRoll >= p.Value.minProbInc && charRoll < p.Value.maxProbEx).Select(p => p.Key).First()];
+
+        // Return
+        return GameData.Instance.CharacterTable[selectedCharacter.GachaId];
+    }
 
 }
