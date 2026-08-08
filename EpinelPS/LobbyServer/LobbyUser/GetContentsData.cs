@@ -37,8 +37,8 @@ public class GetContentsData : LobbyMessage
         }
 
         response.ClearStageList.AddRange(stages);
-        response.MaxGachaCount = user.GachaTutorialPlayCount;
-        response.MaxGachaPremiumCount = user.GachaTutorialPlayCount;
+        response.MaxGachaCount = user.GachaMaxPlayCount;
+        response.MaxGachaPremiumCount = user.GachaMaxPremiumPlayCount;
         // todo tutorial playcount of gacha
         response.TutorialGachaPlayCount = user.GachaTutorialPlayCount;
 

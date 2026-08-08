@@ -101,6 +101,8 @@ public class User
 
     public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
     public int GachaTutorialPlayCount { get; set; } = 0;
+    public int GachaMaxPlayCount { get; set; } = 0;
+    public int GachaMaxPremiumPlayCount { get; set; } = 0;
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
     public List<int> ViewedSideStoryStages { get; set; } = [];

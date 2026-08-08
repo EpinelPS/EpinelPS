@@ -140,8 +140,9 @@ public class ExecuteEventGacha : LobbyMessage
             }
         }
         user.GachaDailyFreePulls.Add(req.EventId);
-
-        user.GachaTutorialPlayCount++;
+        
+        user.GachaMaxPlayCount += numberOfPulls;
+        
         JsonDb.Save();
 
         await WriteDataAsync(response);
