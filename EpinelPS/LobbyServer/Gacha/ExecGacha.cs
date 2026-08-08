@@ -17,6 +17,7 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace EpinelPS.LobbyServer.Gacha;
 
@@ -325,6 +326,14 @@ public class ExecGacha : LobbyMessage
         ApplyCurrency(CurrencyType.ChargeCash, -useChargeCash);
         ApplyCurrency(CurrencyType.FriendshipPoint, -useFriendshipPoint);
         ApplyCurrency(CurrencyType.DissolutionPoint, totalBodyLabels);
+
+        // ==========================
+        // RECORD DISCOUNT USAGE
+        // ==========================
+        if (discount)
+        {
+            user.DailyDiscountUsed = true;
+        }
 
         // ==========================
         // MILEAGE REWARDS

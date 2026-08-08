@@ -150,6 +150,8 @@ public class User
     public List<int> GachaDailyFreePulls { get; set; } = new();
     public Dictionary<int, int> GachaSelectupChoices { get; set; } = [];
 
+    public bool DailyDiscountUsed { get; set; } = false;
+
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
 
@@ -635,6 +637,7 @@ public class User
             ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
             ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;
             GachaDailyFreePulls.Clear();
+            DailyDiscountUsed = false;
 
             needsSave = true;
         }
