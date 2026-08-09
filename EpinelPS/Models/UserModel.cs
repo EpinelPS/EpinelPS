@@ -104,6 +104,7 @@ public class User
     [Obsolete("This is left for compatibility purpose. Use AddTutorialPullCount(int pullCount) and GetGachaCountForType(GachaPremiumType.GachaTutorial)")]
     public int GachaTutorialPlayCount { get; set; } = 0;
     public Dictionary<int, int> GachaBannerMaxPulls { get; set; } = new();
+    public Dictionary<int,int> GachaPityBannerExecuteCount { get; set; } = new();
 
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
@@ -698,7 +699,9 @@ public class User
         var premiumbanner = GameData.Instance.gachaTypes.Where(gt => gt.Value.Type == GachaPremiumType.GachaPremium).Select(gt => gt.Key).First();
 
         if (bannerID == premiumbanner)
+        {
             AddTrigger(Trigger.GachaPremium, pullCount);
+        }
 
         if (GachaBannerMaxPulls.ContainsKey(bannerID))
             GachaBannerMaxPulls[bannerID] = GachaBannerMaxPulls[bannerID] + pullCount;
@@ -732,5 +735,24 @@ public class User
     public int GetGachaTotalCount()
     {
         return GachaBannerMaxPulls.Sum(p => p.Value);
+    }
+
+    /// <summary>
+    /// Adds to the pity counter for the specified banner.
+    /// </summary>
+    /// <param name="pityBannerID">Default to 101. Bonus Recruit</param>
+    /// <param name="pullCount">Should always be one but just in case, this is customizable</param>
+    public void AddPityExecuteCount(int pityBannerID = 101, int pullCount = 1)
+    {
+        var pityBanner = GameData.Instance.GachaPityRecords[pityBannerID];
+
+        if (GachaPityBannerExecuteCount.ContainsKey(pityBannerID))
+        {
+            GachaPityBannerExecuteCount[pityBannerID] = GachaPityBannerExecuteCount[pityBannerID] + pullCount;
+        }
+        else
+        {
+            GachaPityBannerExecuteCount.Add(pityBannerID, pullCount);
+        }
     }
 }
