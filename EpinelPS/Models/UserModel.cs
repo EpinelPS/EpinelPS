@@ -100,9 +100,11 @@ public class User
     public DateTime BattleTime { get; set; } = DateTime.UtcNow;
 
     public NetOutpostBattleLevel OutpostBattleLevel { get; set; } = new() { Level = 1 };
+    
+    [Obsolete("This is left for compatibility purpose. Use AddTutorialPullCount(int pullCount) and GetGachaCountForType(GachaPremiumType.GachaTutorial)")]
     public int GachaTutorialPlayCount { get; set; } = 0;
-    public int GachaMaxPlayCount { get; set; } = 0;
-    public int GachaMaxPremiumPlayCount { get; set; } = 0;
+    public Dictionary<int, int> GachaBannerMaxPulls { get; set; } = new();
+
     public List<int> CompletedTacticAcademyLessons { get; set; } = [];
     public List<int> CompletedSideStoryStages { get; set; } = [];
     public List<int> ViewedSideStoryStages { get; set; } = [];
@@ -684,5 +686,51 @@ public class User
     public List<CharacterRecord> GetWishlistCharacters(int bannerId = 1)
     {
         return CharacterWishlist.Where(character => character.BannerId == bannerId).Select(character => GameData.Instance.CharacterTable[character.CharacterId]).ToList();
+    }
+
+    /// <summary>
+    /// Used to add to the pull count. Can be used for stats, trigerring wishlist unlock, etc.
+    /// </summary>
+    /// <param name="bannerID"></param>
+    /// <param name="pullCount"></param>
+    public void AddGachaPullCount(int bannerID, int pullCount)
+    {
+        var premiumbanner = GameData.Instance.gachaTypes.Where(gt => gt.Value.Type == GachaPremiumType.GachaPremium).Select(gt => gt.Key).First();
+
+        if (bannerID == premiumbanner)
+            AddTrigger(Trigger.GachaPremium, pullCount);
+
+        if (GachaBannerMaxPulls.ContainsKey(bannerID))
+            GachaBannerMaxPulls[bannerID] = GachaBannerMaxPulls[bannerID] + pullCount;
+        else
+            GachaBannerMaxPulls.Add(bannerID, pullCount);
+    }
+
+    public void AddTutorialPullCount(int pullCount)
+    {
+        var bannerID = GameData.Instance.gachaTypes.Where(gt => gt.Value.Type == GachaPremiumType.GachaTutorial).Select(gt => gt.Key).First();
+        AddGachaPullCount(bannerID, pullCount);
+    }
+
+    /// <summary>
+    /// Adds pulls to the standard banner counter. Same as using  AddGachaPullCount(1, int pullCount)
+    /// </summary>
+    /// <param name="pullCount"></param>
+    public void AddPremiumPullCount(int pullCount)
+    {
+        var bannerID = GameData.Instance.gachaTypes.Where(gt => gt.Value.Type == GachaPremiumType.GachaPremium).Select(gt => gt.Key).First();
+        AddGachaPullCount(bannerID, pullCount);
+    }
+
+    public int GetGachaCountForType(GachaPremiumType gachaType)
+    {
+        var bannerIDs = GameData.Instance.gachaTypes.Where(gt => gt.Value.Type == gachaType).Select(gt => gt.Key).ToList();
+
+        return GachaBannerMaxPulls.Where(p => bannerIDs.Contains(p.Key)).Sum(p => p.Value);
+    }
+
+    public int GetGachaTotalCount()
+    {
+        return GachaBannerMaxPulls.Sum(p => p.Value);
     }
 }

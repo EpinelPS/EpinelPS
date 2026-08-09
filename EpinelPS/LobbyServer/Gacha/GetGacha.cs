@@ -15,7 +15,7 @@ public class GetGacha : LobbyMessage
         // TODO: should not return anything when not completed chatper 2
 
         // Adding a default GachaType if the tutorial is done
-        if (user.GachaTutorialPlayCount > 0)
+        if (user.GetGachaCountForType( GachaPremiumType.GachaTutorial) > 0)
         {
             response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
         }

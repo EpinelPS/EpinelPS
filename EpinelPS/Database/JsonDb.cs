@@ -20,8 +20,8 @@ internal class JsonDb
             Console.WriteLine("users: warning: configuration not found, writing default data");
             Instance = new CoreInfo();
             Save();
-        }       
-       
+        }
+
 
         var text = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json");
         if (text.Contains("Char_Premium_Ticket"))
@@ -93,7 +93,7 @@ internal class JsonDb
     }
 
     private static void ValidateDb()
-    {        
+    {
         foreach (var user in Instance.Users)
         {
             // check if character level is valid
@@ -107,8 +107,17 @@ internal class JsonDb
             }
 
             // upgrade the gacha pull counters if using older system
-            user.GachaMaxPlayCount = user.GachaTutorialPlayCount > user.GachaMaxPlayCount ? user.GachaTutorialPlayCount : user.GachaMaxPlayCount;
-            user.GachaMaxPremiumPlayCount = user.GachaTutorialPlayCount > user.GachaMaxPremiumPlayCount ? user.GachaTutorialPlayCount : user.GachaMaxPlayCount;
+            // Since we can't know what banners they pulled, we'll assume standard.
+            // If user.GachaTutorialPlayCount is still 0, the user has not gone through the tutorial yet.
+            if (user.GachaBannerMaxPulls.Count == 0 && user.GachaTutorialPlayCount > 0)
+            {
+                // The old counting system would have recorded only 1 pull for the tutorial banner. The new system records 10.
+                int tutoPulls = 10; 
+                int premiumPulls = Math.Max(user.GachaTutorialPlayCount - 1, 0);
+
+                user.AddTutorialPullCount(10);
+                user.AddPremiumPullCount(premiumPulls);
+            }
 
         }
     }

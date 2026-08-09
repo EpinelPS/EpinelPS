@@ -343,23 +343,8 @@ public class ExecGacha : LobbyMessage
         if (bannerID != STANDARD_BANNER_ID && bannerID != SOCIAL_BANNER_ID && bannerID != NEW_PLAYER_SPECIAL_BANNER_ID && gachaType.Type != GachaPremiumType.GachaTutorial) // TODO: Handle daily free pulls. They should not give Gold Mileage.
             ApplyCurrency(CurrencyType.GoldMileageTicket, numberOfPulls);
 
-
-        // TODO: Find the difference between MaxPremiumPlayCount and MaxPlayCount.
-
-        if (gachaType.Type == GachaPremiumType.GachaTutorial)
-        {
-            user.GachaTutorialPlayCount += numberOfPulls;
-        }
-        // TODO: This is just a guess for now. Needs more research.
-        else if (gachaType.Type == GachaPremiumType.GachaPickup ||
-                 gachaType.Type == GachaPremiumType.GachaPremium ||
-                 gachaType.Type == GachaPremiumType.GachaSelectup ||
-                 gachaType.Type == GachaPremiumType.GachaStepup)
-        {
-            user.GachaMaxPremiumPlayCount += numberOfPulls;
-        }
-
-        user.GachaMaxPlayCount += numberOfPulls;
+         
+        user.AddGachaPullCount(bannerID, numberOfPulls);
 
         // ==========================
         // BANNER PAYBACK RECORDS

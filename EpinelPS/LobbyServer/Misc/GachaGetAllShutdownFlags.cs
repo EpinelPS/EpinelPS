@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.Misc;
+﻿using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.Misc;
 
 [GameRequest("/shutdownflags/gacha/getall")]
 public class GachaGetAllShutdownFlags : LobbyMessage
@@ -9,7 +11,7 @@ public class GachaGetAllShutdownFlags : LobbyMessage
         User user = GetUser();
 
         ResGachaGetAllShutdownFlags response = new();
-        if (user.GachaTutorialPlayCount > 0)
+        if (user.GetGachaCountForType(GachaPremiumType.GachaTutorial) > 0)
             response.Unavailables.Add(3);
               
         // TODO: Validate response from real server and pull info from user info
