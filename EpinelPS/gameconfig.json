@@ -10,5 +10,6 @@
   "GameMinVer": "100.0.1",
   "GameMaxVer": "160.0.2",
   "EnablePurchaseSimulation": true,
+  "ArchiveUnlockAll": false,
   "TargetVersion": "149.8.3"
 }

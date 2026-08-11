@@ -138,6 +138,10 @@ public class User
     public Dictionary<int, EventMissionData> EventMissionInfo { get; set; } = []; // key: eventId
     public Dictionary<int, EventShopBuyCountData> EventShopBuyCountInfo { get; set; } = []; // key: eventId
 
+    // Archive unlock state. These are persisted in db.json with the rest of the user.
+    public List<int> UnlockedArchiveRecordIds { get; set; } = [];
+    public List<int> UnlockedArchiveEventQuestIds { get; set; } = [];
+
     public Dictionary<int, NormalShopState> NormalShopStates { get; set; } = []; // key: shop category    
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
     public NetArcadeMvgData ArcadeInTheMirrorData { get; set; } = new();
