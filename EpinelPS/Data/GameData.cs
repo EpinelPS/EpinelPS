@@ -648,6 +648,20 @@ public class GameData
     [LoadRecord("SoloRaidPresetTable.json", "Id")]
     public readonly Dictionary<int, SoloRaidPresetRecord> SoloRaidPresetTable = [];
 
+    // Solo raid museum
+    [LoadRecord("MuseumGroupTable.json", "Id")]
+    public readonly Dictionary<int, MuseumGroupRecord_Raw> MuseumGroupTable = [];
+    [LoadRecord("MuseumStageTable.json", "Id")]
+    public readonly Dictionary<int, MuseumStageRecord_Raw> MuseumStageTable = [];
+    [LoadRecord("MuseumStageModeTable.json", "Id")]
+    public readonly Dictionary<int, MuseumStageModeRecord_Raw> MuseumStageModeTable = [];
+    [LoadRecord("MuseumMissionTable.json", "Id")]
+    public readonly Dictionary<int, MuseumMissionRecord_Raw> MuseumMissionTable = [];
+    [LoadRecord("MuseumWeeklyBuffGroupTable.json", "Id")]
+    public readonly Dictionary<int, MuseumWeeklyBuffGroupRecord_Raw> MuseumWeeklyBuffGroupTable = [];
+    [LoadRecord("MuseumWeeklyBuffTable.json", "Id")]
+    public readonly Dictionary<int, MuseumWeeklyBuffRecord_Raw> MuseumWeeklyBuffTable = [];
+
     // Monster data Table
     [LoadRecord("MonsterTable.json", "Id")]
     public readonly Dictionary<long, MonsterRecord> MonsterTable = [];

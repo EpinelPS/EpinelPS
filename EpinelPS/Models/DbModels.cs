@@ -1162,3 +1162,31 @@ public class MiniGameIslandBreakerAlbum
         };
     }
 }
+
+public class SoloRaidMuseumStageData
+{
+    public int StageId { get; set; }
+    public SoloRaidMuseumStageMode StageMode { get; set; }
+    public bool IsNoLimitUnlocked { get; set; }
+    public SoloRaidMuseumModeData Challenge { get; set; } = new();
+    public SoloRaidMuseumModeData NoLimit { get; set; } = new();
+    public List<int> ReceivedChallengeMissions { get; set; } = [];
+    public List<int> ReceivedNoLimitMissions { get; set; } = [];
+    public List<NetTeamData> Teams { get; set; } = [];
+}
+
+public class SoloRaidMuseumModeData
+{
+    public int StageJoinCount { get; set; }
+    public long TotalDamage { get; set; }
+    public int TotalStep { get; set; }
+    public bool IsInProgress { get; set; }
+    public List<int> OpenTeams { get; set; } = [];
+    public List<SoloRaidMuseumLogData> Logs { get; set; } = [];
+}
+
+public class SoloRaidMuseumLogData
+{
+    public long Damage { get; set; }
+    public int TeamNumber { get; set; }
+}

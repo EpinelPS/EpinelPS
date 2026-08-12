@@ -152,6 +152,7 @@ public class User
 
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
+    public Dictionary<int, SoloRaidMuseumStageData> SoloRaidMuseumData { get; set; } = []; // key: stageId
 
 
     //OutpostConditionTable

@@ -1,5 +1,7 @@
 ﻿using EpinelPS.Database;
 
+using EpinelPS.Data;
+
 namespace EpinelPS.LobbyServer.Team;
 
 [GameRequest("/team/setteam")]
@@ -16,6 +18,30 @@ public class SetTeam : LobbyMessage
             Type = req.Type
         };
         response.Teams.AddRange([.. req.Teams]);
+
+        // Museum teams are scoped by stage. The client uses TeamType 31 and
+        // sends MuseumStageTable.Id as ContentsId.
+        if (req.Type == (int)TeamType.SoloRaidMuseum && req.ContentsId > 0)
+        {
+            if (!user.SoloRaidMuseumData.TryGetValue(req.ContentsId, out var museumStage))
+            {
+                museumStage = new SoloRaidMuseumStageData { StageId = req.ContentsId };
+                user.SoloRaidMuseumData[req.ContentsId] = museumStage;
+            }
+
+            foreach (var newTeam in req.Teams)
+            {
+                var index = museumStage.Teams.FindIndex(x => x.TeamNumber == newTeam.TeamNumber);
+                if (index >= 0)
+                    museumStage.Teams[index] = newTeam.Clone();
+                else
+                    museumStage.Teams.Add(newTeam.Clone());
+            }
+
+            JsonDb.Save();
+            await WriteDataAsync(response);
+            return;
+        }
 
         // Add team data to user data
         int contentsId = req.ContentsId + 1; // Default to 1 if not provided

@@ -43,6 +43,7 @@ public class GetAllFeatureFlags : LobbyMessage
                 new NetFeatureFlag() { FeatureKind = NetFeatureKind.Bbqtycoon, IsOpen = true },
                 new NetFeatureFlag() { FeatureKind = NetFeatureKind.Ce002MiniGame, IsOpen = true },
                 new NetFeatureFlag() { FeatureKind = NetFeatureKind.SoloRaid, IsOpen = true },
+                new NetFeatureFlag() { FeatureKind = NetFeatureKind.SoloRaidMuseum, IsOpen = true },
             ]);
         await WriteDataAsync(response);
     }
