@@ -109,7 +109,7 @@ public static class EventMissionHelper
             }
             user.AddTrigger(Trigger.MissionClearEvent, 1, mission.Group);
             var rewardRecord = GameData.Instance.GetRewardTableEntry(mission.RewardId);
-            if (rewardRecord is null || rewardRecord.Rewards.Count == 0) continue;
+            if (rewardRecord is null || rewardRecord.Rewards.Length == 0) continue;
             foreach (var item in rewardRecord.Rewards)
             {
                 var itemIndex = rewards.FindIndex(x => x.RewardId == item.RewardId);

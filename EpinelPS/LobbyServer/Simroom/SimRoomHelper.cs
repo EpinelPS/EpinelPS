@@ -765,7 +765,7 @@ public static class SimRoomHelper
     private static void CalculateIncrementalReward(ref List<Reward_Data> IncrementalRewards, int rewardId)
     {
         var rewardRecord = GameData.Instance.GetRewardTableEntry(rewardId);
-        if (rewardRecord is not null && rewardRecord.Rewards.Count > 0)
+        if (rewardRecord is not null && rewardRecord.Rewards.Length > 0)
         {
             foreach (var rewardItem in rewardRecord.Rewards.Where(x => x is not null && x.RewardValue > 0))
             {

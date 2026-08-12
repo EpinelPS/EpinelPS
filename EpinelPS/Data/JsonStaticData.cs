@@ -105,7 +105,7 @@ public partial class ArchiveEventDungeonRecord
 public partial class ArchiveEventDungeonSpotBattleRecord
 {
 	public int Id;
-	public List<EventDungeonOpenConditionObject> OpenConditionList;
+	public EventDungeonOpenConditionObject[] OpenConditionList;
 	public string? ShortName;
 	public RewardType TicketItemType;
 	public int TicketItemId;
@@ -194,7 +194,7 @@ public partial class ArchiveEventFieldNPCRecord
 	public int ResourceId;
 	public int CostumeIndex;
 	public string? ForcedNameTagResource;
-	public List<ArchiveEventFieldNPCEventData> EventFieldNpcEventDataList;
+	public ArchiveEventFieldNPCEventData[] EventFieldNpcEventDataList;
 	public EventFieldNPCInteractionType InteractionType;
 	public int InteractionDistance;
 	public string? ForcedInteractionMarker;
@@ -382,8 +382,8 @@ public partial class ArchiveRecordManagerRecord
 	public int UnlockTicketId;
 	public int UnlockTicketCount;
 	public int RewardInfoListId;
-	public int UnlockRewardId;
 	public int EventQuestClearRewardId;
+	public int UnlockRewardId;
 	public int RecommendedStoryListId;
 	public int MessengerGroupId;
 	public int IncludedContentsGroupId;
@@ -511,7 +511,7 @@ public partial class AttractiveCounselDialogRecord
 	public string? GroupId;
 	public string? TitleLocalkey;
 	public SpeechWindowType SpeechWindow;
-	public int AttractivePoint;
+	public AttractiveCounselDialogRecordAttractive_point AttractivePoint;
 	public string? Highlight;
 	public string? Speaker;
 	public string? ScenarioLocalkey;
@@ -984,7 +984,7 @@ public partial class CharacterRecord
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
 	public int ResourceId;
-	public List<string?> AdditionalSkins;
+	public string?[] AdditionalSkins;
 	public int NameCode;
 	public int Order;
 	public OriginalRareType OriginalRare;
@@ -994,7 +994,7 @@ public partial class CharacterRecord
 	public CorporationType Corporation;
 	public CorporationSubType CorporationSubType;
 	public CharacterClassType Class;
-	public List<int> ElementId;
+	public int[] ElementId;
 	public int CriticalRatio;
 	public int CriticalDamage;
 	public int ShotId;
@@ -1110,13 +1110,13 @@ public partial class CharacterSkillRecord
 	public PreferTargetconditionType PreferTargetCondition;
 	public int SkillCooltime;
 	public CharacterSkillType SkillType;
-	public List<SkillValueData> SkillValueData;
+	public SkillValueData[] SkillValueData;
 	public DurationType DurationType;
 	public int DurationValue;
-	public List<int> BeforeUseFunctionIdList;
-	public List<int> BeforeHurtFunctionIdList;
-	public List<int> AfterUseFunctionIdList;
-	public List<int> AfterHurtFunctionIdList;
+	public int[] BeforeUseFunctionIdList;
+	public int[] BeforeHurtFunctionIdList;
+	public int[] AfterUseFunctionIdList;
+	public int[] AfterHurtFunctionIdList;
 	public string? ResourceName;
 	public int ShakeId;
 	public string? Icon;
@@ -1360,12 +1360,12 @@ public partial class ContentsTutorialRecord
 	public string? TextLocale;
 	public ContentsTutorialTextLocation TextLocation;
 	public int Background;
-	public List<string?> AddonResource;
+	public string?[] AddonResource;
 	public bool FieldMovingRouteControl;
-	public List<string?> MarkHiddenItemId;
+	public string?[] MarkHiddenItemId;
 	public string? HiddenItemMarkResource;
 	public bool UnmaskControl;
-	public List<string?> UnmaskKeyList;
+	public string?[] UnmaskKeyList;
 	public string? UnmaskTextLocale;
 	public bool UnmaskInputControl;
 	public int NextId;
@@ -1583,6 +1583,14 @@ public partial class DialogConditionData
 }
 
 [MemoryPackable]
+public partial class DialogThemeRecord_Raw
+{
+	public int Id;
+	public string? ScenarioGroupId;
+	public DialogPrefabType DialogPrefab;
+}
+
+[MemoryPackable]
 public partial class DiceClearRewardData
 {
 	public int ClearRewardId;
@@ -1742,7 +1750,6 @@ public partial class ElementRecord
 	public string? ElementCodeNameLocalekey;
 	public string? ElementDescLocalekey;
 	public string? ElementIcon;
-	public string? ElementDescSurfaceLocalekey;
 }
 
 [MemoryPackable]
@@ -3436,6 +3443,211 @@ public partial class EventCE004MiniGameStageTimeRecord_Raw
 }
 
 [MemoryPackable]
+public partial class EventCE009MiniGameBonusRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int BonusLevel;
+	public int BonusCount;
+	public int BonusScore;
+	public int BonusTimer;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameBuffRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventCE009MiniGameBuffConditionType ConditionType;
+	public int ConditionValue;
+	public int Level;
+	public int Order;
+	public int CurrencyCount;
+	public int OpenDate;
+	public string? ResourceId;
+	public string? NameLocaleKey;
+	public string? DescriptionLocaleKey;
+	public string? NextDescriptionLocaleKey;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameCharacterRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int SkillId;
+	public int OpenDate;
+	public string? NameLocaleKey;
+	public string? ResourceId;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameCurrencyRecord_Raw
+{
+	public int Id;
+	public string? ResourceId;
+	public string? NameLocaleKey;
+	public string? DescriptionLocaleKey;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameDifficultyRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Level;
+	public int StartDistance;
+	public bool IsStart;
+	public int HpDecreaseAmount;
+	public int CollapseSpeed;
+	public List<int> PresetGroupId;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameEnemyRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventCE009MiniGameEnemyConditionType ConditionType;
+	public int ConditionValue;
+	public int MoveSpeed;
+	public int ContactDamage;
+	public int ContactDiameter;
+	public string? ResourceId;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameItemRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventCE009MiniGameItemContditionType ConditionType;
+	public int ConditionValue;
+	public bool IsInstant;
+	public int Duration;
+	public int ExtendDuration;
+	public int GetScore;
+	public int ContactDiameter;
+	public string? NameLocaleKey;
+	public string? ResourceId;
+	public int ResourceRatio;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? EnterScenario;
+	public int DailyRewardScore;
+	public int DailyRewardId;
+	public int TutorialId;
+	public int MissionGroupId;
+	public int BuffGroupId;
+	public int PresetGroupId;
+	public int PresetPreMakeCount;
+	public int TileGroupId;
+	public int CurrencyId;
+	public int ItemGroupId;
+	public int EnemyGroupId;
+	public int CharacterGroupId;
+	public int DifficultyGroupId;
+	public int BonusGroupId;
+	public int PlayerHp;
+	public int PlayerSpeed;
+	public int PlayerContactDiameter;
+	public int InvincibleDuration;
+	public int SwipeMinDistance;
+	public int SwipeMaxDuration;
+	public int SwipeSaveDuration;
+	public int CameraDistance;
+	public int CollapseStartDelay;
+	public int CollapseCatchDistance;
+	public int CollapseCatchTargetDistance;
+	public string? DeltaWaitingResource;
+	public int DeltaTransformTime;
+	public int DeltaChaseTime;
+	public int PoliBufferDuration;
+	public string? BackgroundResourceId;
+	public int EnemyKillScore;
+	public int DistanceScore;
+	public int CameraLimitMin;
+	public int CameraLimitMax;
+	public int BridgeSummonEnemy;
+	public int BRankTargetScore;
+	public int ARankTargetScore;
+	public int SRankTargetScore;
+	public int TurnDelayTime;
+	public int Skill01ContactWidth;
+	public int Skill01ContactLength;
+	public int ScorePerTimeLimit;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameMissionRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Order;
+	public EventCE009MiniGameMissionConditionType ConditionType;
+	public int ConditionId;
+	public int ConditionValue;
+	public EventCE009MiniGameMissionRewardType RewardType;
+	public int Reward;
+	public string? NameLocaleKey;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGamePlaceableRecord_Raw
+{
+	public int Id;
+	public EventCE009MiniGamePlaceableTileType TileType;
+	public int EnemyType;
+	public List<ItemGroupData_Raw> ItemGroupData;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGamePresetRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int PresetGroupId;
+	public int Order;
+	public List<EventCE009MiniGameTileUsePlaceableId_Raw> TileUsePlaceableId;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameSkillRecord_Raw
+{
+	public int Id;
+	public EventCE009MiniGameSkillConditionType ConditionType;
+	public int ConditionValue;
+	public bool IsInstant;
+	public int Duration;
+	public int SkillGaugeMax;
+	public int SkillStartTime;
+	public int SkillEndTime;
+	public string? NameLocaleKey;
+	public string? DescriptionLocaleKey;
+	public string? IconResourceId;
+	public string? ResourceId;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameTileRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventCE009MiniGameTileConditionType ConditionType;
+}
+
+[MemoryPackable]
+public partial class EventCE009MiniGameTileUsePlaceableId_Raw
+{
+	public int TileUsePlaceableId;
+}
+
+[MemoryPackable]
 public partial class EventCanCollectListRecord_Raw
 {
 	public int Id;
@@ -3862,10 +4074,10 @@ public partial class EventDatingSimSelectionEventRecord
 	public string? SelectionDialogId;
 	public bool IsConsumeStamina;
 	public bool IsUseSelectCondition;
-	public List<SelectConditionListData> SelectConditionList;
-	public List<SelectDialogConditionListData> SelectDialogConditionList;
+	public SelectConditionListData[] SelectConditionList;
+	public SelectDialogConditionListData[] SelectDialogConditionList;
 	public EventDatingSimSelectionEventType SelectionEventType;
-	public List<SelectionEventValueListData> SelectionEventValueList;
+	public SelectionEventValueListData[] SelectionEventValueList;
 }
 
 [MemoryPackable]
@@ -4208,7 +4420,7 @@ public partial class EventDragonDungeonRunPresetRecord_Raw
 	public int Id;
 	public int GroupId;
 	public int RawOrder;
-	public List<string?> TileResource;
+	public string?[] TileResource;
 	public bool FallableTile;
 	public int TileO1UseSpawnerGroupId;
 	public int Tile01UseObjectId;
@@ -4290,7 +4502,7 @@ public partial class EventDungeonRecord
 public partial class EventDungeonSpotBattleRecord
 {
 	public int Id;
-	public List<EventDungeonOpenConditionObject> OpenConditionList;
+	public EventDungeonOpenConditionObject[] OpenConditionList;
 	public string? ShortName;
 	public RewardType TicketItemType;
 	public int TicketItemId;
@@ -4919,7 +5131,7 @@ public partial class EventFieldNPCRecord
 	public int ResourceId;
 	public int CostumeIndex;
 	public string? ForcedNameTagResource;
-	public List<EventFieldNPCEventData> EventFieldNpcEventDataList;
+	public EventFieldNPCEventData[] EventFieldNpcEventDataList;
 	public EventFieldNPCInteractionType InteractionType;
 	public int InteractionDistance;
 	public string? ForcedInteractionMarker;
@@ -4929,6 +5141,19 @@ public partial class EventFieldNPCRecord
 	public string? BalloonAlwaysId;
 	public BalloonPlayType BalloonAlwaysPlayType;
 	public int BalloonAlwaysCycle;
+}
+
+[MemoryPackable]
+public partial class EventFieldNPCTalkRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public SpeechWindowType SpeechWindowType;
+	public int TalkOrder;
+	public string? Speaker;
+	public string? NpcTalkLocalekey;
+	public string? TalkSceneUiPrefab;
+	public string? TalkSceneLogUiPrefab;
 }
 
 [MemoryPackable]
@@ -5250,9 +5475,9 @@ public partial class EventIslandBreakerManagerRecord_Raw
 	public int AccelerationSec;
 	public int AccelerationValue;
 	public int AccelerationMax;
+	public int DailyMissionPoint;
 	public int DailyRewardId;
 	public int BuffCurrencyId;
-	public int BuffCurrencyRewardValue;
 	public int RepeatWave;
 	public int WaveGroup;
 	public int SummonGroup;
@@ -6239,13 +6464,13 @@ public partial class EventNKSDialogRecord
 	public int SetBackgroundCordX;
 	public int SetBackgroundCordY;
 	public double SetBackgroundScale;
-	public List<SpineResourceData> SpineData;
+	public SpineResourceData[] SpineData;
 	public EventNKSDialogEffectTypeData ScenarioEffectType;
 	public string? ScenarioEffectValue;
 	public int ExecuteDelayTime;
 	public int ExecuteRate;
 	public bool FirstShowCheck;
-	public List<DialogConditionData> ConditionData;
+	public DialogConditionData[] ConditionData;
 }
 
 [MemoryPackable]
@@ -6306,7 +6531,7 @@ public partial class EventNKSItemsActionRecord
 	public string? ProjResourceId;
 	public string? ProjResourceHitId;
 	public string? ProjType;
-	public List<EventNKSProjectileTypeValueData> ProjTypeValue;
+	public EventNKSProjectileTypeValueData[] ProjTypeValue;
 	public string? ProjValueStack;
 	public int ProjAmount;
 	public int ProjDuration;
@@ -6318,7 +6543,7 @@ public partial class EventNKSItemsActionRecord
 	public int ProjPierce;
 	public double ProjSize;
 	public double ProjSpd;
-	public List<EventNKSProjectileAtkRangeData> ProjAtkRange;
+	public EventNKSProjectileAtkRangeData[] ProjAtkRange;
 	public int ProjKnockbackValue;
 }
 
@@ -6328,10 +6553,10 @@ public partial class EventNKSItemsRecord
 	public int Id;
 	public int GroupId;
 	public bool IsCombine;
-	public List<ItemConditionIdData> ItemConditionId;
+	public ItemConditionIdData[] ItemConditionId;
 	public int Lv;
-	public List<int> LockCharacterId;
-	public List<int> DisableCharacterId;
+	public int[] LockCharacterId;
+	public int[] DisableCharacterId;
 	public int LvMax;
 	public string? IconResourceId;
 	public EventNKSItemCategoryType ItemCategory;
@@ -6350,7 +6575,7 @@ public partial class EventNKSItemsRecord
 	public int ItemConditionTime;
 	public bool IsBonus;
 	public int ItemUnlockConditionMissionID;
-	public List<DescriptionValueData> DescriptionValue;
+	public DescriptionValueData[] DescriptionValue;
 }
 
 [MemoryPackable]
@@ -6389,10 +6614,10 @@ public partial class EventNKSMonsterActionRecord
 	public int TimelineValue;
 	public EventNKSMonsterActionType ActionType;
 	public bool ActionKnockback;
-	public List<ActionValueData> ActionValue;
+	public ActionValueData[] ActionValue;
 	public string? ProjResourceId;
 	public string? ProjType;
-	public List<EventNKSProjectileTypeValueData> ProjTypeValue;
+	public EventNKSProjectileTypeValueData[] ProjTypeValue;
 	public int ProjAmount;
 	public int ProjDuration;
 	public int ProjAfterDuration;
@@ -6402,7 +6627,7 @@ public partial class EventNKSMonsterActionRecord
 	public int ProjDmgDelay;
 	public double ProjSize;
 	public double ProjSpd;
-	public List<EventNKSProjectileAtkRangeData> ProjAtkRange;
+	public EventNKSProjectileAtkRangeData[] ProjAtkRange;
 }
 
 [MemoryPackable]
@@ -9303,6 +9528,8 @@ public partial class FieldItemRecord
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
 	public string? FielditemPrefab;
+	public string? FielditemLootFx;
+	public string? FielditemCelebrateFx;
 	public ObtainContentsType ObtainContents;
 	public int ObtainLocation;
 	public FieldItemObtainDifficulty Difficulty;
@@ -9719,7 +9946,7 @@ public partial class FunctionRecord
 	public string? FxPrefab03Arena;
 	public FxTarget FxTarget03Arena;
 	public SocketPoint FxSocketPoint03Arena;
-	public List<int> ConnectedFunction;
+	public int[] ConnectedFunction;
 }
 
 [MemoryPackable]
@@ -10657,6 +10884,13 @@ public partial class ItemExchangeRecord
 }
 
 [MemoryPackable]
+public partial class ItemGroupData_Raw
+{
+	public int ItemType;
+	public int ItemRate;
+}
+
+[MemoryPackable]
 public partial class ItemHarmonyCubeLevelRecord
 {
 	public int Id;
@@ -11022,6 +11256,33 @@ public partial class LoginEventResourceRecord
 }
 
 [MemoryPackable]
+public partial class LoginPackageListRecord_Raw
+{
+	public int Id;
+	public int LoginGroupId;
+	public int Day;
+	public string? ProductResourceId;
+	public int PackageGroupId;
+}
+
+[MemoryPackable]
+public partial class LoginPackageShopRecord_Raw
+{
+	public int Id;
+	public int LoginGroupId;
+	public int ExtraPeriod;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? BannerLocalkey;
+	public string? PopupNameLocalkey;
+	public string? PopupDescLocalkey;
+	public ShopBuyLimitType BuyLimitType;
+	public bool IsLimit;
+	public int BuyLimitCount;
+	public int MidasProductId;
+}
+
+[MemoryPackable]
 public partial class LostSectorNPCRecord_Raw
 {
 	public int Id;
@@ -11354,10 +11615,10 @@ public partial class MonsterPartsRecord
 	public int PassiveSkillId;
 	public bool VisibleHp;
 	public int LinkedPartsId;
-	public List<string?> WeaponObject;
-	public List<WeaponObjectEnum> WeaponObjectEnum;
+	public string?[] WeaponObject;
+	public WeaponObjectEnum[] WeaponObjectEnum;
 	public PartsType PartsType;
-	public List<string?> PartsObject;
+	public string?[] PartsObject;
 	public int EnergyResistRatio;
 	public int MetalResistRatio;
 	public int BioResistRatio;
@@ -11382,6 +11643,7 @@ public partial class MonsterRecord
 	public int HpRatio;
 	public int DefenceRatio;
 	public int AttackRatio;
+	public int DefenceRatioRatio;
 	public int EnergyResistRatio;
 	public int MetalResistRatio;
 	public int BioResistRatio;
@@ -11681,6 +11943,16 @@ public partial class NarrativeSignRecord
 }
 
 [MemoryPackable]
+public partial class NewbiePackageShopRecord_Raw
+{
+	public int Id;
+	public int PackageShopId;
+	public NewbiePackageType NewbiePackageType;
+	public int NewbiePackageId;
+	public int PurchasePeriod;
+}
+
+[MemoryPackable]
 public partial class NikkeEpMissionRecord
 {
 	public int Id;
@@ -11740,6 +12012,20 @@ public partial class ObjectStatEnhanceRecord
 	public int Lv;
 	public long LevelHp;
 	public int LevelDefence;
+}
+
+[MemoryPackable]
+public partial class OnepagePackageShopRecord_Raw
+{
+	public int Id;
+	public int PackageGroupId;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ProductResourceId;
+	public ShopBuyLimitType BuyLimitType;
+	public bool IsLimit;
+	public int BuyLimitCount;
+	public int MidasProductId;
 }
 
 [MemoryPackable]
@@ -12418,7 +12704,7 @@ public partial class RewardRecord
 	public int Id;
 	public int UserExp;
 	public int CharacterExp;
-	public List<Reward_Data> Rewards;
+	public Reward_Data[] Rewards;
 }
 
 [MemoryPackable]
@@ -13080,16 +13366,16 @@ public partial class SimulationRoomBuffRecord
 	public int Id;
 	public int GroupId;
 	public SimulationRoomBuffMainTarget MainTarget;
-	public List<SimulationRoomBuffSubTarget> SubTarget;
+	public SimulationRoomBuffSubTarget[] SubTarget;
 	public SimulationRoomBuffGrade Grade;
 	public int Weight;
 	public SimulationRoomBubbleType BubbleType;
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
-	public List<string?> ParameterLocalkey;
+	public string?[] ParameterLocalkey;
 	public string? ResourceId;
 	public SimulationRoomBuffFunctionType FunctionType;
-	public List<SimulationRoomBuffValueData> BuffValue;
+	public SimulationRoomBuffValueData[] BuffValue;
 }
 
 [MemoryPackable]
@@ -13338,7 +13624,7 @@ public partial class SkillInfoRecord
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
 	public string? InfoDescriptionLocalkey;
-	public List<ValueData> DescriptionValueList;
+	public ValueData[] DescriptionValueList;
 }
 
 [MemoryPackable]
@@ -13568,9 +13854,9 @@ public partial class StateEffectList
 public partial class StateEffectRecord
 {
 	public int Id;
-	public List<int> UseFunctionIdList;
-	public List<int> HurtFunctionIdList;
-	public List<FunctionData> Functions;
+	public int[] UseFunctionIdList;
+	public int[] HurtFunctionIdList;
+	public FunctionData[] Functions;
 	public string? Icon;
 }
 
@@ -13784,6 +14070,17 @@ public partial class TowerSkillListData
 }
 
 [MemoryPackable]
+public partial class TrailMarkerEventRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? ResourceId;
+	public string? EventDescription;
+	public int MainQuestId;
+	public int RewardId;
+}
+
+[MemoryPackable]
 public partial class TransformationRecord
 {
 	public int Id;
@@ -13883,6 +14180,7 @@ public partial class UnionRaidPresetRecord
 	public int Id;
 	public int PresetGroupId;
 	public UnionRaidDifficultyType DifficultyType;
+	public bool IsTrial;
 	public int WaveOrder;
 	public int Wave;
 	public int WaveChangeStep;
@@ -14349,7 +14647,8 @@ public enum EventFieldChildEventType : int
 	Cooperation = 1,
 	ToastMessage = 2,
 	Arcade = 3,
-	TTSMinigame = 4
+	TTSMinigame = 4,
+	NPCTalk = 5
 }
 
 public enum EventFieldNPCType : int
@@ -14446,7 +14745,10 @@ public enum EventSystemType : int
 	ItabagEvent = 58,
 	InAppShopPurchasePointEvent = 59,
 	FARMiniGame = 60,
-	IslandBreakerMiniGame = 61
+	IslandBreakerMiniGame = 61,
+	CE009MiniGame = 62,
+	TrailMarkerEvent = 63,
+	EventPunchMiniGame = 64
 }
 
 public enum Category : int
@@ -14671,6 +14973,13 @@ public enum SpeechWindowType : int
 	Input = 6
 }
 
+public enum AttractiveCounselDialogRecordAttractive_point : int
+{
+	_0 = 0,
+	_100 = 100,
+	_120 = 120
+}
+
 public enum FilterType : int
 {
 	None = 0,
@@ -14777,7 +15086,8 @@ public enum BalloonType : int
 	Thinking = 2,
 	Shouting = 3,
 	Frame = 4,
-	Talk = 5
+	Talk = 5,
+	CE009 = 6
 }
 
 public enum BannerSystemType : int
@@ -15047,7 +15357,8 @@ public enum Trigger : int
 	EventMiniGameCE008RewardCheck = 162,
 	EventMiniGameTTSPlayCheck = 163,
 	EventMiniGameFARRewardCheck = 164,
-	EventIslandBreakerRewardCheck = 165
+	EventIslandBreakerRewardCheck = 165,
+	EventMiniGameCE009RewardCheck = 166
 }
 
 public enum ChapterMod : int
@@ -15275,7 +15586,10 @@ public enum Squad : int
 	CE008 = 68,
 	VeiledOrder = 69,
 	TTSTAR = 70,
-	ArkRanger = 71
+	ArkRanger = 71,
+	CE00901 = 72,
+	CE00902 = 73,
+	CE00903 = 74
 }
 
 public enum WeaponType : int
@@ -15619,7 +15933,8 @@ public enum ContentsOpen : int
 	SoloRaidMuseum = 83,
 	CampaignStory = 84,
 	SimulationRoomSimpleRewardOnly = 85,
-	SubMenuFolder = 86
+	SubMenuFolder = 86,
+	CashShopNewbiePackage = 87
 }
 
 public enum ContentsOpenCondition : int
@@ -15972,6 +16287,12 @@ public enum EventTargetType : int
 	Alluser = 1,
 	Newuser = 2,
 	Comebackuser = 3
+}
+
+public enum DialogPrefabType : int
+{
+	None = 0,
+	CE009 = 1
 }
 
 public enum DispatchType : int
@@ -16515,6 +16836,67 @@ public enum CE004StageSeedRepeatType : int
 	None = 0,
 	Repeat = 1,
 	Next = 2
+}
+
+public enum EventCE009MiniGameBuffConditionType : int
+{
+	IncreaseHp = 0,
+	DecreaseDamage = 1,
+	IncreaseBonusTime = 2,
+	IncreaseItemtime = 3
+}
+
+public enum EventCE009MiniGameEnemyConditionType : int
+{
+	Delta = 0,
+	Miranda = 1,
+	Quency = 2,
+	Phantom = 3,
+	Ade = 4,
+	Poli = 5
+}
+
+public enum EventCE009MiniGameItemContditionType : int
+{
+	Coin = 0,
+	Coinbox = 1,
+	Healkit = 2,
+	Specialcard = 3,
+	Bomb = 4
+}
+
+public enum EventCE009MiniGameMissionConditionType : int
+{
+	GetScoreAccount = 0,
+	AchieveDistanceAccount = 1,
+	UseCharacterSkillAccount = 2
+}
+
+public enum EventCE009MiniGameMissionRewardType : int
+{
+	CommonReward = 0,
+	BuffCurrency = 1
+}
+
+public enum EventCE009MiniGamePlaceableTileType : int
+{
+	Path = 0,
+	Wall = 1,
+	Start = 2
+}
+
+public enum EventCE009MiniGameSkillConditionType : int
+{
+	Barrier = 0,
+	Shockwave = 1,
+	Ride = 2
+}
+
+public enum EventCE009MiniGameTileConditionType : int
+{
+	Wall = 0,
+	Path = 1,
+	Start = 2
 }
 
 public enum EventCatchCoinObjectType : int
@@ -19237,7 +19619,8 @@ public enum FunctionType : int
 	ChangeWeaponEnd = 215,
 	ChangeWeaponMaxAmmo = 216,
 	CoreDamage = 217,
-	AddFunctionTimer = 218
+	AddFunctionTimer = 218,
+	DefenceRatio = 219
 }
 
 public enum FunctionStandardType : int
@@ -19609,7 +19992,8 @@ public enum CashshopMainCategoryType : int
 	CampaignPackageTab = 4,
 	MonthlyAmountTab = 5,
 	JewelTab = 6,
-	PassCostumeTab = 7
+	PassCostumeTab = 7,
+	NewbiePackageTab = 8
 }
 
 public enum InAppShopType : int
@@ -19629,7 +20013,8 @@ public enum InAppShopCategory : int
 	CampaignPackageShop = 7,
 	StepUpPackageShop = 8,
 	CustomPackageShop = 10,
-	PassCostumeShop = 11
+	PassCostumeShop = 11,
+	NewbiePackageShop = 12
 }
 
 public enum ProductType : int
@@ -19647,7 +20032,9 @@ public enum ProductType : int
 	EventInAppShop = 11,
 	CustomPackageShop = 12,
 	PassCostumeShop = 13,
-	TTSAlbumShop = 14
+	TTSAlbumShop = 14,
+	LoginPackageShop = 15,
+	OnepagePackageShop = 16
 }
 
 public enum InAppShopPurchasePointRewardType : int
@@ -20134,7 +20521,8 @@ public enum MonsterSpawnType : int
 	Drop = 4,
 	Random = 5,
 	Teleport = 6,
-	Animation = 7
+	Animation = 7,
+	AppearanceSkip = 8
 }
 
 public enum AttributeType : int
@@ -20440,6 +20828,12 @@ public enum FieldNarrativeSignType : int
 	Popup = 1,
 	Balloon = 2,
 	Quiz = 3
+}
+
+public enum NewbiePackageType : int
+{
+	LoginPackage = 0,
+	OnePagePackage = 1
 }
 
 public enum ScenarioPlayType : int
@@ -21467,7 +21861,8 @@ public enum WaveDataUIThemeType : int
 	CE002 = 1,
 	CE004 = 2,
 	CE006 = 3,
-	CE007 = 4
+	CE007 = 4,
+	CE009 = 5
 }
 
 public enum ResourceType : int
