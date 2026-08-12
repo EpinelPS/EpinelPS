@@ -9,6 +9,7 @@ public class GetInterceptData : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqGetInterceptData req = await ReadData<ReqGetInterceptData>();
+        var user = GetUser();
 
         int specialId = GetCurrentInterceptionIds();
 
@@ -16,7 +17,7 @@ public class GetInterceptData : LobbyMessage
         {
             NormalInterceptGroup = 1,
             SpecialInterceptId = specialId,
-            TicketCount = User.ResetableData.InterceptionTickets,
+            TicketCount = user.ResetableData.InterceptionTickets,
             MaxTicketCount = JsonDb.Instance.MaxInterceptionCount
         };
 

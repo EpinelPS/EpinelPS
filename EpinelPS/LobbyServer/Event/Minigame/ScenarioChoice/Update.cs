@@ -9,7 +9,7 @@ public class Update : LobbyMessage
         User user = GetUser();
 
         ResUpdateScenarioChoice response = new();
-        response.Data = ScenarioChoiceMain.Update(User, req.ScenarioChoiceManagerTableId, req.ScenarioScene, req.ChosenChoices);
+        response.Data = ScenarioChoiceMain.Update(user, req.ScenarioChoiceManagerTableId, req.ScenarioScene, req.ChosenChoices);
 
         await WriteDataAsync(response);
     }
