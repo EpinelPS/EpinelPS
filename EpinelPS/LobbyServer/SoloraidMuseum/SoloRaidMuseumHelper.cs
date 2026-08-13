@@ -339,49 +339,39 @@ internal static class SoloRaidMuseumHelper
     private static IEnumerable<NetSoloRaidMuseumRankerRankingData> GetPastRankings(
         User currentUser, MuseumStageRecord_Raw stage)
     {
-        // TODO: replace this local snapshot with the persistent server ranking.
-        var realUsers = JsonDb.Instance.Users
-            .Select(x => (user: x, damage: x.SoloRaidMuseumData.TryGetValue(stage.Id, out var data)
-                ? data.Challenge.BestDamage : 0L))
-            .Where(x => x.damage > 0)
-            .OrderByDescending(x => x.damage)
+        // Rank missions do not use the raw leaderboard damage as their target.
+        // The client converts ranker damage through the common-stage HP group;
+        // provide the same deterministic CommonHP + Trial target values used by
+        // the official client model so mission display and claim validation agree.
+        var rankMissions = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == stage.Id &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamageRanker)
+            .OrderBy(x => x.Order)
             .ToList();
-        var requiredRanks = new[] { 50, 30, 15, 5, 1 };
-        var fallbackDamage = realUsers.Count > 0
-            ? Math.Max(1L, realUsers[^1].damage / 2)
-            : 1L;
-        Logging.WriteLine($"[SoloRaidMuseum] ranking stage={stage.Id}, realUsers={realUsers.Count}, fallbackDamage={fallbackDamage}", LogType.Debug);
+        var trialTargets = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == stage.Id &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamage)
+            .OrderBy(x => x.ConditionValue)
+            .TakeLast(rankMissions.Count)
+            .Select(x => x.ConditionValue)
+            .ToList();
+        var commonHp = GameData.Instance.MuseumCommonStageHpGroupTable.Values
+            .Where(x => x.Group == stage.SoloRaidStageHpGroup)
+            .Sum(x => x.HpValue);
+        Logging.WriteLine($"[SoloRaidMuseum] ranking stage={stage.Id}, rankers={rankMissions.Count}, commonHp={commonHp}", LogType.Debug);
+        var currentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(currentUser);
 
-        foreach (var rank in requiredRanks)
+        for (var i = 0; i < rankMissions.Count; i++)
         {
-            var index = rank - 1;
-            if (index < realUsers.Count)
+            yield return new NetSoloRaidMuseumRankerRankingData
             {
-                var entry = realUsers[index];
-                var currentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(entry.user);
-                yield return new NetSoloRaidMuseumRankerRankingData
-                {
-                    Ranking = rank,
-                    Damage = entry.damage,
-                    PastUserData = CreatePastUserData(currentUserData),
-                    CurrentUserData = currentUserData,
-                };
-            }
-            else
-            {
-                // Keep the protocol sequence complete when the simulator has
-                // fewer users than a real server. The client requires both the
-                // past snapshot and a current profile before it binds the open
-                // button, so compatibility entries populate both messages.
-                var currentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(currentUser);
-                yield return new NetSoloRaidMuseumRankerRankingData
-                {
-                    Ranking = rank,
-                    Damage = fallbackDamage,
-                    PastUserData = CreatePastUserData(currentUserData),
-                    CurrentUserData = currentUserData,
-                };
-            }
+                Ranking = rankMissions[i].ConditionValue,
+                Damage = commonHp + trialTargets.ElementAtOrDefault(i),
+                PastUserData = CreatePastUserData(currentUserData),
+                CurrentUserData = currentUserData,
+            };
         }
     }
 

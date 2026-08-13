@@ -252,23 +252,47 @@ public class AcquireChallengeMission : LobbyMessage
     internal static void Acquire(User user, IEnumerable<int> missionIds, bool noLimit,
         Google.Protobuf.Collections.RepeatedField<NetSoloRaidMuseumMissionData> result, ref NetRewardData reward)
     {
-        List<NetRewardData> rewards = [];
-        foreach (var missionId in missionIds.Distinct())
+        // Claim requests can arrive concurrently when the client retries or the
+        // button is tapped repeatedly. Keep validation, marking and reward
+        // mutation atomic for this user so a mission can only pay out once.
+        lock (user)
         {
-            if (!GameData.Instance.MuseumMissionTable.TryGetValue(missionId, out var mission)) continue;
-            var expectedMode = noLimit ? MuseumStageModeType.NoLimit : MuseumStageModeType.Challenge;
-            if (mission.ModeType != expectedMode) continue;
-            var stage = SoloRaidMuseumHelper.GetStage(user, mission.StageId);
-            var received = noLimit ? stage.ReceivedNoLimitMissions : stage.ReceivedChallengeMissions;
-            var mode = noLimit ? stage.NoLimit : stage.Challenge;
-            var progress = SoloRaidMuseumHelper.MissionProgress(mode, mission.ConditionType);
-            if (received.Contains(missionId) || progress < SoloRaidMuseumHelper.MissionTargetValue(mission)) continue;
-            received.Add(missionId);
-            result.Add(new NetSoloRaidMuseumMissionData { MissionId = missionId, Progress = progress, IsReceived = true });
-            if (mission.RewardId > 0) rewards.Add(RewardUtils.RegisterRewardsForUser(user, mission.RewardId));
+            List<NetRewardData> rewards = [];
+            foreach (var missionId in missionIds.Distinct())
+            {
+                if (!GameData.Instance.MuseumMissionTable.TryGetValue(missionId, out var mission))
+                {
+                    Logging.WriteLine($"[SoloRaidMuseum] mission claim ignored unknown id={missionId}", LogType.Warning);
+                    continue;
+                }
+
+                var expectedMode = noLimit ? MuseumStageModeType.NoLimit : MuseumStageModeType.Challenge;
+                if (mission.ModeType != expectedMode) continue;
+                var stage = SoloRaidMuseumHelper.GetStage(user, mission.StageId);
+                var received = noLimit ? stage.ReceivedNoLimitMissions : stage.ReceivedChallengeMissions;
+                var mode = noLimit ? stage.NoLimit : stage.Challenge;
+                var progress = SoloRaidMuseumHelper.MissionProgress(mode, mission.ConditionType);
+                var target = SoloRaidMuseumHelper.MissionTargetValue(mission);
+                if (received.Contains(missionId))
+                {
+                    Logging.WriteLine($"[SoloRaidMuseum] mission claim skipped already-received id={missionId}, noLimit={noLimit}", LogType.Info);
+                    continue;
+                }
+                if (progress < target)
+                {
+                    Logging.WriteLine($"[SoloRaidMuseum] mission claim skipped incomplete id={missionId}, progress={progress}, target={target}", LogType.Info);
+                    continue;
+                }
+
+                received.Add(missionId);
+                result.Add(new NetSoloRaidMuseumMissionData { MissionId = missionId, Progress = progress, IsReceived = true });
+                if (mission.RewardId > 0)
+                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, mission.RewardId));
+                Logging.WriteLine($"[SoloRaidMuseum] mission claimed id={missionId}, noLimit={noLimit}, reward={mission.RewardId}", LogType.Info);
+            }
+            if (rewards.Count > 0) reward = NetUtils.MergeRewards(rewards, user);
+            JsonDb.Save();
         }
-        if (rewards.Count > 0) reward = NetUtils.MergeRewards(rewards, user);
-        JsonDb.Save();
     }
 }
 
