@@ -207,6 +207,7 @@
     "title": "活动配置",
     "backToList": "返回",
     "save": "保存配置",
+    "activateLatest": "激活最新",
     "activeCount": "当前已激活",
     "noSelection": "暂未选择，默认显示最新活动",
     "allEvents": "所有活动",

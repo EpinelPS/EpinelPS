@@ -205,6 +205,7 @@
     "title": "Event Configuration",
     "backToList": "Back",
     "save": "Save Configuration",
+    "activateLatest": "Activate Latest",
     "activeCount": "Currently active",
     "noSelection": "None selected, will show latest event by default",
     "allEvents": "All Events",

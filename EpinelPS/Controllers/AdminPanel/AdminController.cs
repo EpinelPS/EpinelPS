@@ -1,4 +1,5 @@
 ﻿using EpinelPS.Database;
+using EpinelPS.Data;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,22 @@ public class AdminController(ILogger<AdminController> logger) : Controller
 
         TempData["MessageKey"] = "events.config.saved";
         return View(JsonDb.Instance.ActiveEventBannerIds);
+    }
+
+    [Route("Events/ActivateLatest")]
+    [HttpPost]
+    public IActionResult ActivateLatestEvent()
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        var latest = GameData.Instance.LobbyPrivateBannerTable.Values.OrderBy(b => b.EventId).LastOrDefault();
+        if (latest != null)
+        {
+            JsonDb.Instance.ActiveEventBannerIds = [latest.Id];
+            JsonDb.Save();
+        }
+
+        return Redirect("/admin/Events");
     }
 
     [Route("Configuration")]
