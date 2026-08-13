@@ -233,7 +233,7 @@ public class EventHelper
         // Priority 3: fallback to the latest event
         if (lobbyPrivateBanners.Count == 0)
         {
-            lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.OrderBy(b => b.EventId).Last());
+            lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.Last());
         }
         Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
         log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");

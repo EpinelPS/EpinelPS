@@ -68,7 +68,7 @@ public class AdminController(ILogger<AdminController> logger) : Controller
     {
         if (!CheckAuth(HttpContext)) return Redirect("/admin/");
 
-        var latest = GameData.Instance.LobbyPrivateBannerTable.Values.OrderBy(b => b.EventId).LastOrDefault();
+        var latest = GameData.Instance.LobbyPrivateBannerTable.Values.LastOrDefault();
         if (latest != null)
         {
             JsonDb.Instance.ActiveEventBannerIds = [latest.Id];
