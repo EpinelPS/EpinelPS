@@ -88,9 +88,21 @@ internal static class SoloRaidMuseumHelper
     {
         var stage = GetStage(user, stageId);
         ResGetSoloRaidMuseumMission response = new();
-        foreach (var mission in GameData.Instance.MuseumMissionTable.Values
-                     .Where(x => x.StageId == stageId).OrderBy(x => x.Order))
+        var missions = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == stageId).OrderBy(x => x.Order).ToList();
+        var challengeMissions = missions
+            .Where(x => x.ModeType == MuseumStageModeType.Challenge)
+            .Where(x => !stage.ReceivedChallengeMissions.Contains(x.Id))
+            .Take(1)
+            .ToHashSet();
+
+        foreach (var mission in missions)
         {
+            // The client challenge tab expects a single sequential mission.
+            // NoLimit is a normal list and keeps all missions visible.
+            if (mission.ModeType == MuseumStageModeType.Challenge &&
+                !challengeMissions.Contains(mission))
+                continue;
             var mode = mission.ModeType == MuseumStageModeType.NoLimit ? stage.NoLimit : stage.Challenge;
             var received = mission.ModeType == MuseumStageModeType.NoLimit
                 ? stage.ReceivedNoLimitMissions.Contains(mission.Id)
