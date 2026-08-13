@@ -1,6 +1,5 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
-using EpinelPS.Utils;
 using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.SoloraidMuseum;
@@ -45,10 +44,6 @@ internal static class SoloRaidMuseumHelper
             WeeklyBuffEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddDays(7), DateTimeKind.Utc)),
             WeeklyBuffSeasonEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddDays(7), DateTimeKind.Utc)),
         };
-        Logging.WriteLine($"[SoloRaidMuseum] data weeklyBuffGroup=" +
-                          $"{response.WeeklyBuff.CurrentMuseumWeeklyBuffGroupTableId}, " +
-                          $"start={response.WeeklyBuff.WeeklyBuffStartDate.ToDateTime():O}, " +
-                          $"end={response.WeeklyBuff.WeeklyBuffEndDate.ToDateTime():O}, now={now:O}");
         return response;
     }
 
@@ -57,17 +52,11 @@ internal static class SoloRaidMuseumHelper
         ResGetSoloRaidMuseumGroupData response = new();
         var stages = GameData.Instance.MuseumStageTable.Values
             .Where(x => x.GroupId == groupId).OrderBy(x => x.Order).ToList();
-        Logging.WriteLine($"[SoloRaidMuseum] groupdata group={groupId}, stages={stages.Count}, " +
-                          $"characters={user.Characters.Count}, storedMuseumStages={user.SoloRaidMuseumData.Count}");
-
         foreach (var stage in stages)
         {
             var data = GetStage(user, stage.Id);
             var active = data.StageMode == SoloRaidMuseumStageMode.NoLimit ? data.NoLimit : data.Challenge;
             var teams = GetTeams(user, data).ToList();
-            Logging.WriteLine($"[SoloRaidMuseum] groupdata stage={stage.Id}, mode={data.StageMode}, " +
-                              $"storedTeams={data.Teams.Count}, responseTeams={DescribeTeams(user, teams)}, " +
-                              $"inProgress={active.IsInProgress}, openTeams=[{string.Join(',', active.OpenTeams)}]");
             response.StageBattleDataList.Add(new NetSoloRaidMuseumStageBattleData
             {
                 StageId = stage.Id,
@@ -158,12 +147,6 @@ internal static class SoloRaidMuseumHelper
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
         var requestedTeams = teams.Distinct().ToList();
-        var availableTeams = GetTeams(user, stage).ToList();
-        var missingTeams = requestedTeams
-            .Where(number => availableTeams.All(team => team.TeamNumber != number)).ToList();
-        Logging.WriteLine($"[SoloRaidMuseum] open stage={stageId}, noLimit={noLimit}, " +
-                          $"requestedTeams=[{string.Join(',', requestedTeams)}], " +
-                          $"availableTeams={DescribeTeams(user, availableTeams)}, missing=[{string.Join(',', missingTeams)}]");
         mode.IsInProgress = true;
         mode.OpenTeams = requestedTeams;
         JsonDb.Save();
@@ -174,12 +157,6 @@ internal static class SoloRaidMuseumHelper
     {
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
-        var availableTeams = GetTeams(user, stage).ToList();
-        var selectedTeam = availableTeams.FirstOrDefault(x => x.TeamNumber == teamNumber);
-        Logging.WriteLine($"[SoloRaidMuseum] enter stage={stageId}, noLimit={noLimit}, team={teamNumber}, " +
-                          $"isInProgress={mode.IsInProgress}, openTeams=[{string.Join(',', mode.OpenTeams)}], " +
-                          $"selectedTeam={(selectedTeam is null ? "missing" : DescribeTeam(user, selectedTeam))}, " +
-                          $"availableTeams={DescribeTeams(user, availableTeams)}");
     }
 
     public static void Close(User user, int stageId, bool noLimit)
@@ -257,31 +234,6 @@ internal static class SoloRaidMuseumHelper
             // Account-owned character serial numbers must use the default value 0.
             fallback.Slots.Add(new NetTeamSlot { Slot = i + 1, Value = characters[i].Csn, ValueType = 0 });
         return fallback.Slots.Count > 0 ? [fallback] : [];
-    }
-
-    internal static string DescribeTeams(IEnumerable<NetTeamData> teams)
-    {
-        var descriptions = teams.Select(DescribeTeam).ToList();
-        return descriptions.Count == 0 ? "none" : string.Join(";", descriptions);
-    }
-
-    private static string DescribeTeams(User user, IEnumerable<NetTeamData> teams)
-    {
-        var descriptions = teams.Select(x => DescribeTeam(user, x)).ToList();
-        return descriptions.Count == 0 ? "none" : string.Join(";", descriptions);
-    }
-
-    private static string DescribeTeam(NetTeamData team)
-    {
-        var csns = team.Slots.Where(x => x.Value > 0).Select(x => x.Value).ToList();
-        return $"team#{team.TeamNumber}(members={csns.Count},csn=[{string.Join(',', csns)}])";
-    }
-
-    private static string DescribeTeam(User user, NetTeamData team)
-    {
-        var slots = team.Slots.Where(x => x.Value > 0)
-            .Select(x => $"{x.Value}:owned={user.GetCharacterBySerialNumber(x.Value) is not null}:type={x.ValueType}");
-        return $"team#{team.TeamNumber}(members={team.Slots.Count(x => x.Value > 0)},slots=[{string.Join(',', slots)}])";
     }
 
     private static NetUserSoloRaidMuseumStageMode ToMode(SoloRaidMuseumStageData stage) => new()

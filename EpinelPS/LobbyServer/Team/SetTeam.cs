@@ -1,7 +1,6 @@
 ﻿using EpinelPS.Database;
 
 using EpinelPS.Data;
-using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Team;
 
@@ -24,8 +23,6 @@ public class SetTeam : LobbyMessage
         // sends MuseumStageTable.Id as ContentsId.
         if (req.Type == (int)TeamType.SoloRaidMuseum && req.ContentsId > 0)
         {
-            Logging.WriteLine($"[SoloRaidMuseum] team/setteam type={req.Type}, stage={req.ContentsId}, " +
-                              $"teams={EpinelPS.LobbyServer.SoloraidMuseum.SoloRaidMuseumHelper.DescribeTeams(req.Teams)}");
             if (!user.SoloRaidMuseumData.TryGetValue(req.ContentsId, out var museumStage))
             {
                 museumStage = new SoloRaidMuseumStageData { StageId = req.ContentsId };
@@ -42,8 +39,6 @@ public class SetTeam : LobbyMessage
             }
 
             JsonDb.Save();
-            Logging.WriteLine($"[SoloRaidMuseum] team/setteam saved stage={req.ContentsId}, " +
-                              $"storedTeams={EpinelPS.LobbyServer.SoloraidMuseum.SoloRaidMuseumHelper.DescribeTeams(museumStage.Teams)}");
             await WriteDataAsync(response);
             return;
         }

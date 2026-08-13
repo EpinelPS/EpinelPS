@@ -121,8 +121,6 @@ public class OpenChallenge : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqOpenSoloRaidMuseumChallenge>();
-        Logging.WriteLine($"[SoloRaidMuseum] challenge/open request stage={req.StageId}, " +
-                          $"teams=[{string.Join(',', req.TeamList)}]");
         var mode = SoloRaidMuseumHelper.Open(GetUser(), req.StageId, false, req.TeamList);
         await WriteDataAsync(new ResOpenSoloRaidMuseumChallenge
         {
@@ -139,8 +137,6 @@ public class OpenNoLimit : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqOpenSoloRaidMuseumNoLimit>();
-        Logging.WriteLine($"[SoloRaidMuseum] nolimit/open request stage={req.StageId}, " +
-                          $"teams=[{string.Join(',', req.TeamList)}]");
         var mode = SoloRaidMuseumHelper.Open(GetUser(), req.StageId, true, req.TeamList);
         await WriteDataAsync(new ResOpenSoloRaidMuseumNoLimit
         {
