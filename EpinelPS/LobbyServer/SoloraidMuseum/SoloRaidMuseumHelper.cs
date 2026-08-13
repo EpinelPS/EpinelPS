@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 using Google.Protobuf.WellKnownTypes;
 
 namespace EpinelPS.LobbyServer.SoloraidMuseum;
@@ -70,23 +71,35 @@ internal static class SoloRaidMuseumHelper
                 JoinData = active.IsInProgress ? JoinData(active) : new NetSoloRaidMuseumJoinData(),
                 Teams = { teams },
             });
-            // StageReadyPage.UpdateUI only wires the open button after it finds a
-            // non-null UserRanking. An omitted message leaves the page visible but
-            // makes the challenge button inert (no best-log/open request is sent).
+            // StageReadyPage.UpdateUI requires UserRanking for the open button.
+            // Ranking missions also require exact 50/30/15/5/1 entries below.
+            var challenge = data.Challenge;
+            var rankerRankings = GetPastRankings(user, stage).ToList();
+            Logging.WriteLine(
+                $"[SoloRaidMuseum] groupdata stage={stage.Id}, selectedMode={data.StageMode}, " +
+                $"challenge(inProgress={data.Challenge.IsInProgress},join={data.Challenge.StageJoinCount},damage={data.Challenge.TotalDamage},teams={data.Challenge.OpenTeams.Count}), " +
+                $"nolimit(inProgress={data.NoLimit.IsInProgress},join={data.NoLimit.StageJoinCount},damage={data.NoLimit.TotalDamage},teams={data.NoLimit.OpenTeams.Count}), " +
+                $"activeTeams={teams.Count}, userRanking(rank={pastRankingRank(challenge.BestDamage, rankerRankings)},damage={challenge.BestDamage}), " +
+                $"rankers=[{string.Join(',', rankerRankings.Select(x => $"{x.Ranking}:{x.Damage}:past={(x.PastUserData != null)}:current={(x.CurrentUserData != null)}"))}]",
+                LogType.Info);
             NetSoloRaidMuseumStagePastRanking pastRanking = new()
             {
                 StageId = stage.Id,
                 UserRanking = new NetSoloRaidMuseumUserRankingData
                 {
                     Ranking = 0,
-                    Damage = active.TotalDamage,
+                    Damage = challenge.BestDamage,
                     CurrentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(user),
                 },
-                TotalUserCount = 1,
+                TotalUserCount = Math.Max(50, rankerRankings.Count),
             };
+            pastRanking.RankerRankingList.AddRange(rankerRankings);
             response.PastRankingList.Add(pastRanking);
         }
         return response;
+
+        static long pastRankingRank(long damage, IReadOnlyCollection<NetSoloRaidMuseumRankerRankingData> rankers) =>
+            rankers.FirstOrDefault(x => x.Damage == damage)?.Ranking ?? 0;
     }
 
     public static ResGetSoloRaidMuseumMission GetMissions(User user, int stageId)
@@ -112,6 +125,7 @@ internal static class SoloRaidMuseumHelper
             else
                 response.ChallengeMissionDataList.Add(net);
         }
+        Logging.WriteLine($"[SoloRaidMuseum] mission stage={stageId}, challenge={response.ChallengeMissionDataList.Count}, noLimit={response.NoLimitMissionDataList.Count}", LogType.Debug);
         var points = GetRankingPoints(user, stageId);
         response.MuseumTotalRankingPoint = points.total;
         response.MuseumGroupRankingPoint = points.group;
@@ -183,21 +197,27 @@ internal static class SoloRaidMuseumHelper
     {
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
+        Logging.WriteLine($"[SoloRaidMuseum] close stage={stageId}, noLimit={noLimit}, joinCount={mode.StageJoinCount}, currentLogs={mode.CurrentLogs.Count}, totalDamage={mode.TotalDamage}", LogType.Info);
         mode.IsInProgress = false;
-        mode.OpenTeams.Clear();
-        mode.CurrentLogs.Clear();
-        mode.StageJoinCount = 0;
-        mode.TotalDamage = 0;
-        mode.TotalStep = 0;
         JsonDb.Save();
     }
 
     public static (SoloRaidMuseumStageData stage, SoloRaidMuseumModeData mode) SetDamage(
-        User user, int stageId, bool noLimit, NetSoloRaidMuseumBattleData? battle)
+        User user, int stageId, bool noLimit, NetSoloRaidMuseumBattleData? battle, int battleResult = 0)
     {
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
         var damage = Math.Max(0, battle?.Damage ?? 0);
+        Logging.WriteLine($"[SoloRaidMuseum] set damage stage={stageId}, noLimit={noLimit}, team={battle?.Team ?? 0}, damage={damage}, battleResult={battleResult}, beforeJoin={mode.StageJoinCount}, inProgress={mode.IsInProgress}", LogType.Info);
+
+        // NK.BattleResult: Return (3) is an in-battle retreat and consumes the
+        // attempt. Retry (4) and Maintenance (6) are replay/service failures
+        // and must not create a museum record.
+        if (battleResult is 4 or 6)
+        {
+            Logging.WriteLine($"[SoloRaidMuseum] ignored non-consuming result={battleResult}", LogType.Info);
+            return (stage, mode);
+        }
         if (!mode.IsInProgress)
         {
             mode.IsInProgress = true;
@@ -314,6 +334,68 @@ internal static class SoloRaidMuseumHelper
             // Account-owned character serial numbers must use the default value 0.
             fallback.Slots.Add(new NetTeamSlot { Slot = i + 1, Value = characters[i].Csn, ValueType = 0 });
         return fallback.Slots.Count > 0 ? [fallback] : [];
+    }
+
+    private static IEnumerable<NetSoloRaidMuseumRankerRankingData> GetPastRankings(
+        User currentUser, MuseumStageRecord_Raw stage)
+    {
+        // TODO: replace this local snapshot with the persistent server ranking.
+        var realUsers = JsonDb.Instance.Users
+            .Select(x => (user: x, damage: x.SoloRaidMuseumData.TryGetValue(stage.Id, out var data)
+                ? data.Challenge.BestDamage : 0L))
+            .Where(x => x.damage > 0)
+            .OrderByDescending(x => x.damage)
+            .ToList();
+        var requiredRanks = new[] { 50, 30, 15, 5, 1 };
+        var fallbackDamage = realUsers.Count > 0
+            ? Math.Max(1L, realUsers[^1].damage / 2)
+            : 1L;
+        Logging.WriteLine($"[SoloRaidMuseum] ranking stage={stage.Id}, realUsers={realUsers.Count}, fallbackDamage={fallbackDamage}", LogType.Debug);
+
+        foreach (var rank in requiredRanks)
+        {
+            var index = rank - 1;
+            if (index < realUsers.Count)
+            {
+                var entry = realUsers[index];
+                var currentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(entry.user);
+                yield return new NetSoloRaidMuseumRankerRankingData
+                {
+                    Ranking = rank,
+                    Damage = entry.damage,
+                    PastUserData = CreatePastUserData(currentUserData),
+                    CurrentUserData = currentUserData,
+                };
+            }
+            else
+            {
+                // Keep the protocol sequence complete when the simulator has
+                // fewer users than a real server. The client requires both the
+                // past snapshot and a current profile before it binds the open
+                // button, so compatibility entries populate both messages.
+                var currentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(currentUser);
+                yield return new NetSoloRaidMuseumRankerRankingData
+                {
+                    Ranking = rank,
+                    Damage = fallbackDamage,
+                    PastUserData = CreatePastUserData(currentUserData),
+                    CurrentUserData = currentUserData,
+                };
+            }
+        }
+    }
+
+    private static NetPastWholeUserData CreatePastUserData(NetWholeUserData current)
+    {
+        return new NetPastWholeUserData
+        {
+            Usn = current.Usn,
+            Nickname = current.Nickname,
+            Icon = current.Icon,
+            IconPrism = current.IconPrism,
+            Frame = current.Frame,
+            UserTitleId = current.UserTitleId,
+        };
     }
 
     private static bool HasClearedChallenge(int stageId, long bestDamage)

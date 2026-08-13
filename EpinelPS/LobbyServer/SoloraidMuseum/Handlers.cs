@@ -20,6 +20,7 @@ public class GetGroupData : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqGetSoloRaidMuseumGroupData>();
+        Logging.WriteLine($"[SoloRaidMuseum] request groupdata group={req.GroupId}", LogType.Debug);
         await WriteDataAsync(SoloRaidMuseumHelper.GetGroupData(GetUser(), req.GroupId));
     }
 }
@@ -121,6 +122,7 @@ public class OpenChallenge : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqOpenSoloRaidMuseumChallenge>();
+        Logging.WriteLine($"[SoloRaidMuseum] request challenge/open stage={req.StageId}, teams=[{string.Join(',', req.TeamList)}]", LogType.Info);
         var mode = SoloRaidMuseumHelper.Open(GetUser(), req.StageId, false, req.TeamList);
         await WriteDataAsync(new ResOpenSoloRaidMuseumChallenge
         {
@@ -137,6 +139,7 @@ public class OpenNoLimit : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqOpenSoloRaidMuseumNoLimit>();
+        Logging.WriteLine($"[SoloRaidMuseum] request nolimit/open stage={req.StageId}, teams=[{string.Join(',', req.TeamList)}]", LogType.Info);
         var mode = SoloRaidMuseumHelper.Open(GetUser(), req.StageId, true, req.TeamList);
         await WriteDataAsync(new ResOpenSoloRaidMuseumNoLimit
         {
@@ -176,6 +179,7 @@ public class CloseChallenge : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqCloseSoloRaidMuseumChallenge>();
+        Logging.WriteLine($"[SoloRaidMuseum] request challenge/close stage={req.StageId}", LogType.Debug);
         SoloRaidMuseumHelper.Close(GetUser(), req.StageId, false);
         await WriteDataAsync(new ResCloseSoloRaidMuseumChallenge());
     }
@@ -187,6 +191,7 @@ public class CloseNoLimit : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqCloseSoloRaidMuseumNoLimit>();
+        Logging.WriteLine($"[SoloRaidMuseum] request nolimit/close stage={req.StageId}", LogType.Debug);
         SoloRaidMuseumHelper.Close(GetUser(), req.StageId, true);
         await WriteDataAsync(new ResCloseSoloRaidMuseumNoLimit());
     }
@@ -198,7 +203,7 @@ public class SetChallengeDamage : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqSetSoloRaidMuseumChallengeDamage>();
-        var (stage, mode) = SoloRaidMuseumHelper.SetDamage(GetUser(), req.StageId, false, req.BattleData);
+        var (stage, mode) = SoloRaidMuseumHelper.SetDamage(GetUser(), req.StageId, false, req.BattleData, req.BattleResult);
         await WriteDataAsync(new ResSetSoloRaidMuseumChallengeDamage
         {
             StageJoinCount = mode.StageJoinCount,
@@ -217,7 +222,7 @@ public class SetNoLimitDamage : LobbyMessage
     protected override async Task HandleAsync()
     {
         var req = await ReadData<ReqSetSoloRaidMuseumNoLimitDamage>();
-        var (stage, mode) = SoloRaidMuseumHelper.SetDamage(GetUser(), req.StageId, true, req.BattleData);
+        var (stage, mode) = SoloRaidMuseumHelper.SetDamage(GetUser(), req.StageId, true, req.BattleData, req.BattleResult);
         await WriteDataAsync(new ResSetSoloRaidMuseumNoLimitDamage
         {
             StageJoinCount = mode.StageJoinCount,
