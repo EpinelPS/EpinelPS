@@ -127,6 +127,13 @@ public class AdminController(ILogger<AdminController> logger) : Controller
         return View();
     }
 
+    [Route("SoloRaidMuseum")]
+    public IActionResult SoloRaidMuseum()
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

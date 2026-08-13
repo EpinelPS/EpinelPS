@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Solo Raid Museum";
+}
+
+<div class="adminui-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" style="font-size:1.8rem;">Solo Raid Museum records</h1>
+        <a href="/admin/dashboard" class="btn btn-outline-primary btn-sm">Back</a>
+    </div>
+    <div class="card mb-4"><div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4"><label class="form-label">User</label><input id="userPicker" class="form-control" list="userOptions" placeholder="Search nickname or ID" autocomplete="off" /><datalist id="userOptions"></datalist><input id="userId" type="hidden" /></div>
+            <div class="col-md-4"><label class="form-label">Museum stage</label><select id="stageId" class="form-select"></select></div>
+            <div class="col-md-2"><label class="form-label">Mode</label><select id="noLimit" class="form-select"><option value="false">Challenge</option><option value="true">No Limit</option></select></div>
+            <div class="col-md-2"><button class="btn btn-primary w-100" onclick="loadRecord()">Load</button></div>
+        </div>
+    </div></div>
+    <div id="editor" class="card" style="display:none"><div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-2"><label class="form-label">Join count</label><input id="joinCount" class="form-control" type="number" min="0" max="5" /></div>
+            <div class="col-md-2"><label class="form-label">Total damage</label><input id="totalDamage" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label">Total step</label><input id="totalStep" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label">Best damage</label><input id="bestDamage" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label">Best step</label><input id="bestStep" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2 d-flex align-items-end"><label><input id="inProgress" type="checkbox" /> In progress</label></div>
+        </div>
+        <h5 class="mt-4">Completed records</h5><div id="logs"></div>
+        <h5 class="mt-4">Current records</h5><div id="currentLogs"></div>
+        <button class="btn btn-success mt-3" onclick="saveRecord()">Save record</button>
+        <span id="message" class="ms-3"></span>
+    </div></div>
+</div>
+<script>
+let record;
+function value(id){ return document.getElementById(id).value; }
+function renderLogs(id, logs){
+  const root=document.getElementById(id); root.innerHTML='';
+  for(let i=0;i<5;i++){ const x=logs[i]||{teamNumber:i+1,damage:0,step:0}; root.insertAdjacentHTML('beforeend',`<div class="row g-2 mb-2"><div class="col-md-2"><input class="form-control team" type="number" min="1" max="5" value="${x.teamNumber}"></div><div class="col-md-5"><input class="form-control damage" type="number" min="0" value="${x.damage}"></div><div class="col-md-5"><input class="form-control step" type="number" min="0" value="${x.step}"></div></div>`); }
+}
+function readLogs(id){ return [...document.getElementById(id).querySelectorAll('.row')].map(r=>({teamNumber:+r.querySelector('.team').value,damage:+r.querySelector('.damage').value,step:+r.querySelector('.step').value})).filter(x=>x.damage||x.step); }
+async function loadRecord(){ const u=encodeURIComponent(value('userId')),s=value('stageId'),n=value('noLimit'); if(!u||!s){document.getElementById('message').textContent='Select a user and stage';return;} const r=await fetch(`/adminapi/soloRaidMuseum?userId=${u}&stageId=${s}&noLimit=${n}`); if(!r.ok){document.getElementById('message').textContent='Load failed';return;} record=await r.json(); ['joinCount','totalDamage','totalStep','bestDamage','bestStep'].forEach((x,i)=>document.getElementById(x).value=[record.stageJoinCount,record.totalDamage,record.totalStep,record.bestDamage,record.bestStep][i]); document.getElementById('inProgress').checked=record.isInProgress; renderLogs('logs',record.logs);renderLogs('currentLogs',record.currentLogs);document.getElementById('editor').style.display='block'; }
+async function saveRecord(){ record.stageJoinCount=+value('joinCount');record.totalDamage=+value('totalDamage');record.totalStep=+value('totalStep');record.bestDamage=+value('bestDamage');record.bestStep=+value('bestStep');record.isInProgress=document.getElementById('inProgress').checked;record.logs=readLogs('logs');record.currentLogs=readLogs('currentLogs');const r=await fetch('/adminapi/soloRaidMuseum',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(record)});document.getElementById('message').textContent=r.ok?'Saved':'Save failed';}
+async function init(){
+  const users=await fetch('/admin/Users/GetUsersList').then(r=>r.ok?r.json():[]); const datalist=document.getElementById('userOptions');
+  users.forEach(u=>{const o=document.createElement('option');o.value=`${u.nickname||'(no nickname)'} (${u.id})`;o.dataset.id=u.id;datalist.appendChild(o);});
+  document.getElementById('userPicker').addEventListener('input',function(){const text=this.value;const match=users.find(u=>`${u.nickname||'(no nickname)'} (${u.id})`===text)||users.find(u=>String(u.id)===text);document.getElementById('userId').value=match?match.id:'';});
+  const stages=await fetch('/adminapi/soloRaidMuseum/stages').then(r=>r.ok?r.json():[]); const select=document.getElementById('stageId');
+  stages.forEach((s,i)=>{const o=document.createElement('option');o.value=s.id;o.textContent=`Group ${s.groupId} · Stage ${s.order} · ${s.name} (#${s.id})`;if(i===0)o.selected=true;select.appendChild(o);});
+}
+init();
+</script>
