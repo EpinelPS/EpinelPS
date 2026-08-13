@@ -348,7 +348,7 @@ public static class PassHelper
                 continue;
             }
             var rewardEntry = GameData.Instance.GetRewardTableEntry(mission.RewardId);
-            if (rewardEntry == null || rewardEntry.Rewards.Count == 0)
+            if (rewardEntry == null || rewardEntry.Rewards.Length == 0)
             {
                 log.Warn($"Unable to find reward entry {mission.RewardId} for pass mission {mission.Id}");
                 continue;

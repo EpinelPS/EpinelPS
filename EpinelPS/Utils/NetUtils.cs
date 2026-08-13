@@ -1,6 +1,7 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using Google.Protobuf.Collections;
+using Microsoft.AspNetCore.Mvc;
 using Paseto;
 using Paseto.Builder;
 
@@ -8,6 +9,7 @@ namespace EpinelPS.Utils;
 
 public class NetUtils
 {
+    public const string InvalidSessionErrorType = "urn:shiftup:nikke:kicked-session";
     public static (SdkUser?, AccessToken?) GetUser(string tokToCheck, HttpContext context)
     {
         if (string.IsNullOrEmpty(tokToCheck))

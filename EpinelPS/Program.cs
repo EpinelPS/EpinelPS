@@ -45,7 +45,7 @@ internal class Program
             Logging.WriteLine("Register handlers");
             LobbyHandler.Init();
 
-            Logging.WriteLine("Starting ASP.NET core on port 443");
+            Logging.WriteLine("Starting ASP.NET core on ports 80 and 443");
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Configure HTTPS

@@ -40,7 +40,7 @@ public class ObtainFavoriteItemQuestReward : LobbyMessage
         }
 
         RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questData.RewardId);
-        if (reward?.Rewards == null || reward.Rewards.Count == 0 || reward.Rewards[0].RewardType != RewardType.FavoriteItem)
+        if (reward?.Rewards == null || reward.Rewards.Length == 0 || reward.Rewards[0].RewardType != RewardType.FavoriteItem)
         {
             if (questData.RewardId > 0 && reward != null)
             {

@@ -1,5 +1,7 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Services;
+using EpinelPS.Interfaces;
 using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -11,7 +13,7 @@ namespace EpinelPS.LobbyServer.Controllers;
 /// Controller for game startup and asset information retrival
 /// </summary>
 [ApiController]
-public class SystemController : Controller
+public class SystemController(IUserService db) : Controller
 {
     /// <summary>
     /// Returns latest resource base URL for version number
@@ -82,6 +84,9 @@ public class SystemController : Controller
     [HttpPost]
     public ActionResult<ResGetNow> GetTime([FromBodyProtobuf] ReqGetNow req)
     {
+        User? user = db.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
         return new ResGetNow()
         {
             Tick = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
