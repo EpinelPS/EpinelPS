@@ -1,6 +1,7 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Services;
+using EpinelPS.Interfaces;
 using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -12,7 +13,7 @@ namespace EpinelPS.LobbyServer.Controllers;
 /// Controller for game startup and asset information retrival
 /// </summary>
 [ApiController]
-public class SystemController(UserService db) : Controller
+public class SystemController(IUserService db) : Controller
 {
     /// <summary>
     /// Returns latest resource base URL for version number
