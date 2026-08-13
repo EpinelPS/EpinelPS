@@ -1178,15 +1178,22 @@ public class SoloRaidMuseumStageData
 public class SoloRaidMuseumModeData
 {
     public int StageJoinCount { get; set; }
+    // TotalDamage/TotalStep describe the currently open run. Best values and
+    // Logs are only replaced after a complete five-team run finishes.
     public long TotalDamage { get; set; }
     public int TotalStep { get; set; }
+    public long BestDamage { get; set; }
+    public int BestStep { get; set; }
     public bool IsInProgress { get; set; }
     public List<int> OpenTeams { get; set; } = [];
+    public List<SoloRaidMuseumLogData> CurrentLogs { get; set; } = [];
     public List<SoloRaidMuseumLogData> Logs { get; set; } = [];
 }
 
 public class SoloRaidMuseumLogData
 {
     public long Damage { get; set; }
+    public int Step { get; set; }
     public int TeamNumber { get; set; }
+    public List<TeamCharacterData> Team { get; set; } = [];
 }

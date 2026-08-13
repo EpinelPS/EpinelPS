@@ -60,8 +60,10 @@ public class GetMyPastSquad : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        await ReadData<ReqGetSoloRaidMuseumMyPastSquad>();
-        await WriteDataAsync(new ResGetSoloRaidMuseumMyPastSquad());
+        var req = await ReadData<ReqGetSoloRaidMuseumMyPastSquad>();
+        ResGetSoloRaidMuseumMyPastSquad response = new();
+        response.SquadList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, false));
+        await WriteDataAsync(response);
     }
 }
 
@@ -72,7 +74,7 @@ public class GetChallengeLog : LobbyMessage
     {
         var req = await ReadData<ReqGetSoloRaidMuseumChallengeLog>();
         ResGetSoloRaidMuseumChallengeLog response = new();
-        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, false));
+        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, false, true));
         await WriteDataAsync(response);
     }
 }
@@ -84,8 +86,7 @@ public class GetChallengeBestLog : LobbyMessage
     {
         var req = await ReadData<ReqGetSoloRaidMuseumChallengeBestLog>();
         ResGetSoloRaidMuseumChallengeBestLog response = new();
-        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, false)
-            .OrderByDescending(x => x.Damage).Take(5));
+        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, false));
         await WriteDataAsync(response);
     }
 }
@@ -97,7 +98,7 @@ public class GetNoLimitLog : LobbyMessage
     {
         var req = await ReadData<ReqGetSoloRaidMuseumNoLimitLog>();
         ResGetSoloRaidMuseumNoLimitLog response = new();
-        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, true));
+        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, true, true));
         await WriteDataAsync(response);
     }
 }
@@ -109,8 +110,7 @@ public class GetNoLimitBestLog : LobbyMessage
     {
         var req = await ReadData<ReqGetSoloRaidMuseumNoLimitBestLog>();
         ResGetSoloRaidMuseumNoLimitBestLog response = new();
-        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, true)
-            .OrderByDescending(x => x.Damage).Take(5));
+        response.LogList.AddRange(SoloRaidMuseumHelper.GetLogs(GetUser(), req.StageId, true));
         await WriteDataAsync(response);
     }
 }
@@ -206,7 +206,7 @@ public class SetChallengeDamage : LobbyMessage
             JoinData = SoloRaidMuseumHelper.JoinData(mode),
             UpdatedStageInfo = SoloRaidMuseumHelper.ToInfo(stage, mode, false),
             IsNoLimitUnlocked = stage.IsNoLimitUnlocked,
-            UnreceivedMission = true,
+            UnreceivedMission = SoloRaidMuseumHelper.HasUnreceivedMission(stage, false),
         });
     }
 }
@@ -225,7 +225,7 @@ public class SetNoLimitDamage : LobbyMessage
             TotalStep = mode.TotalStep,
             JoinData = SoloRaidMuseumHelper.JoinData(mode),
             UpdatedStageInfo = SoloRaidMuseumHelper.ToInfo(stage, mode, true),
-            UnreceivedMission = true,
+            UnreceivedMission = SoloRaidMuseumHelper.HasUnreceivedMission(stage, true),
         });
     }
 }
@@ -251,12 +251,13 @@ public class AcquireChallengeMission : LobbyMessage
         foreach (var missionId in missionIds.Distinct())
         {
             if (!GameData.Instance.MuseumMissionTable.TryGetValue(missionId, out var mission)) continue;
+            var expectedMode = noLimit ? MuseumStageModeType.NoLimit : MuseumStageModeType.Challenge;
+            if (mission.ModeType != expectedMode) continue;
             var stage = SoloRaidMuseumHelper.GetStage(user, mission.StageId);
             var received = noLimit ? stage.ReceivedNoLimitMissions : stage.ReceivedChallengeMissions;
             var mode = noLimit ? stage.NoLimit : stage.Challenge;
-            var progress = mission.ConditionType == MuseumMissionConditionType.GetTotalStageStep
-                ? mode.TotalStep : mode.TotalDamage;
-            if (received.Contains(missionId) || progress < mission.ConditionValue) continue;
+            var progress = SoloRaidMuseumHelper.MissionProgress(mode, mission.ConditionType);
+            if (received.Contains(missionId) || progress < SoloRaidMuseumHelper.MissionTargetValue(mission)) continue;
             received.Add(missionId);
             result.Add(new NetSoloRaidMuseumMissionData { MissionId = missionId, Progress = progress, IsReceived = true });
             if (mission.RewardId > 0) rewards.Add(RewardUtils.RegisterRewardsForUser(user, mission.RewardId));

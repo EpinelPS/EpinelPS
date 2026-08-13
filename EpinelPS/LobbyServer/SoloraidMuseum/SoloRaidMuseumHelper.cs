@@ -6,6 +6,8 @@ namespace EpinelPS.LobbyServer.SoloraidMuseum;
 
 internal static class SoloRaidMuseumHelper
 {
+    private const int MaxTeamCount = 5;
+
     public static SoloRaidMuseumStageData GetStage(User user, int stageId)
     {
         if (!user.SoloRaidMuseumData.TryGetValue(stageId, out var data))
@@ -14,7 +16,31 @@ internal static class SoloRaidMuseumHelper
             user.SoloRaidMuseumData[stageId] = data;
         }
 
+        // Older builds stored each submitted team directly in Logs and left the
+        // old round counters populated even though the round was already over.
+        // Do a one-time migration so the client never receives a half-open round
+        // (StageJoinCount > 0 with an empty CurrentLogs/JoinData).
+        NormalizeLegacyMode(data.Challenge);
+        NormalizeLegacyMode(data.NoLimit);
+
         return data;
+    }
+
+    private static void NormalizeLegacyMode(SoloRaidMuseumModeData mode)
+    {
+        if (mode.IsInProgress || mode.StageJoinCount == 0 || mode.CurrentLogs.Count > 0)
+            return;
+
+        if (mode.Logs.Count > 0)
+        {
+            mode.BestDamage = Math.Max(mode.BestDamage, mode.TotalDamage);
+            mode.BestStep = Math.Max(mode.BestStep, mode.TotalStep);
+        }
+
+        mode.StageJoinCount = 0;
+        mode.TotalDamage = 0;
+        mode.TotalStep = 0;
+        mode.OpenTeams.Clear();
     }
 
     public static ResGetSoloRaidMuseumData GetData(User user)
@@ -60,26 +86,31 @@ internal static class SoloRaidMuseumHelper
             response.StageBattleDataList.Add(new NetSoloRaidMuseumStageBattleData
             {
                 StageId = stage.Id,
-                StageJoinCount = active.StageJoinCount,
-                TotalDamage = active.TotalDamage,
-                TotalStep = active.TotalStep,
-                JoinData = new NetSoloRaidMuseumJoinData(),
+                StageJoinCount = active.IsInProgress ? active.StageJoinCount : 0,
+                TotalDamage = active.IsInProgress ? active.TotalDamage : 0,
+                TotalStep = active.IsInProgress ? active.TotalStep : 0,
+                JoinData = active.IsInProgress ? JoinData(active) : new NetSoloRaidMuseumJoinData(),
                 Teams = { teams },
             });
             // StageReadyPage.UpdateUI only wires the open button after it finds a
             // non-null UserRanking. An omitted message leaves the page visible but
             // makes the challenge button inert (no best-log/open request is sent).
-            response.PastRankingList.Add(new NetSoloRaidMuseumStagePastRanking
+            var rankerRankings = GetPastRankings(user, stage).ToList();
+            NetSoloRaidMuseumStagePastRanking pastRanking = new()
             {
                 StageId = stage.Id,
                 UserRanking = new NetSoloRaidMuseumUserRankingData
                 {
                     Ranking = 0,
-                    Damage = active.TotalDamage,
+                    // Past rankings belong to the fixed-level Challenge mode even
+                    // when the user currently has this stage set to NoLimit.
+                    Damage = data.Challenge.BestDamage,
                     CurrentUserData = LobbyHandler.CreateWholeUserDataFromDbUser(user),
                 },
-                TotalUserCount = 1,
-            });
+                TotalUserCount = rankerRankings.Select(x => x.Ranking).DefaultIfEmpty(1).Max(),
+            };
+            pastRanking.RankerRankingList.AddRange(rankerRankings);
+            response.PastRankingList.Add(pastRanking);
         }
         return response;
     }
@@ -90,19 +121,8 @@ internal static class SoloRaidMuseumHelper
         ResGetSoloRaidMuseumMission response = new();
         var missions = GameData.Instance.MuseumMissionTable.Values
             .Where(x => x.StageId == stageId).OrderBy(x => x.Order).ToList();
-        var challengeMissions = missions
-            .Where(x => x.ModeType == MuseumStageModeType.Challenge)
-            .Where(x => !stage.ReceivedChallengeMissions.Contains(x.Id))
-            .Take(1)
-            .ToHashSet();
-
         foreach (var mission in missions)
         {
-            // The client challenge tab expects a single sequential mission.
-            // NoLimit is a normal list and keeps all missions visible.
-            if (mission.ModeType == MuseumStageModeType.Challenge &&
-                !challengeMissions.Contains(mission))
-                continue;
             var mode = mission.ModeType == MuseumStageModeType.NoLimit ? stage.NoLimit : stage.Challenge;
             var received = mission.ModeType == MuseumStageModeType.NoLimit
                 ? stage.ReceivedNoLimitMissions.Contains(mission.Id)
@@ -158,7 +178,21 @@ internal static class SoloRaidMuseumHelper
     {
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
-        var requestedTeams = teams.Distinct().ToList();
+        var requestedTeams = teams.Distinct().Take(MaxTeamCount - 1).ToList();
+        mode.CurrentLogs = mode.Logs
+            .Where(x => requestedTeams.Contains(x.TeamNumber))
+            .Select(x =>
+            {
+                var log = CloneLog(x);
+                if (log.Team.Count == 0)
+                    log.Team = CreateTeamSnapshot(user, stage, log.TeamNumber);
+                log.Step = noLimit ? GetNoLimitStep(stageId, log.Damage) : 0;
+                return log;
+            })
+            .ToList();
+        mode.StageJoinCount = mode.CurrentLogs.Count;
+        mode.TotalDamage = mode.CurrentLogs.Sum(x => x.Damage);
+        mode.TotalStep = mode.CurrentLogs.Sum(x => x.Step);
         mode.IsInProgress = true;
         mode.OpenTeams = requestedTeams;
         JsonDb.Save();
@@ -174,7 +208,13 @@ internal static class SoloRaidMuseumHelper
     public static void Close(User user, int stageId, bool noLimit)
     {
         var stage = GetStage(user, stageId);
-        (noLimit ? stage.NoLimit : stage.Challenge).IsInProgress = false;
+        var mode = noLimit ? stage.NoLimit : stage.Challenge;
+        mode.IsInProgress = false;
+        mode.OpenTeams.Clear();
+        mode.CurrentLogs.Clear();
+        mode.StageJoinCount = 0;
+        mode.TotalDamage = 0;
+        mode.TotalStep = 0;
         JsonDb.Save();
     }
 
@@ -184,23 +224,72 @@ internal static class SoloRaidMuseumHelper
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
         var damage = Math.Max(0, battle?.Damage ?? 0);
-        mode.TotalDamage += damage;
-        mode.StageJoinCount++;
-        if (noLimit) mode.TotalStep++;
-        mode.IsInProgress = false;
-        mode.Logs.Add(new SoloRaidMuseumLogData { Damage = damage, TeamNumber = battle?.Team ?? 0 });
-        if (!noLimit && damage > 0) stage.IsNoLimitUnlocked = true;
+        if (!mode.IsInProgress)
+        {
+            mode.IsInProgress = true;
+            mode.CurrentLogs.Clear();
+            mode.OpenTeams.Clear();
+        }
+
+        var teamNumber = battle?.Team ?? 0;
+        mode.CurrentLogs.RemoveAll(x => x.TeamNumber == teamNumber);
+        mode.CurrentLogs.Add(new SoloRaidMuseumLogData
+        {
+            Damage = damage,
+            Step = noLimit ? GetNoLimitStep(stageId, damage) : 0,
+            TeamNumber = teamNumber,
+            Team = CreateTeamSnapshot(user, stage, teamNumber),
+        });
+        mode.StageJoinCount = mode.CurrentLogs.Count;
+        mode.TotalDamage = mode.CurrentLogs.Sum(x => x.Damage);
+        mode.TotalStep = mode.CurrentLogs.Sum(x => x.Step);
+
+        if (mode.StageJoinCount >= MaxTeamCount)
+        {
+            mode.IsInProgress = false;
+            // NoLimit records are ordered by total step first. Damage only breaks
+            // ties, matching the result screen's best-step/best-damage comparison.
+            var isNewRecord = noLimit
+                ? mode.TotalStep > mode.BestStep ||
+                  mode.TotalStep == mode.BestStep && mode.TotalDamage > mode.BestDamage
+                : mode.TotalDamage > mode.BestDamage;
+            if (isNewRecord)
+            {
+                if (noLimit)
+                {
+                    mode.BestStep = mode.TotalStep;
+                    mode.BestDamage = mode.TotalDamage;
+                }
+                else
+                {
+                    mode.BestDamage = mode.TotalDamage;
+                }
+                mode.Logs = mode.CurrentLogs.Select(CloneLog).ToList();
+            }
+
+            if (!noLimit)
+                stage.IsNoLimitUnlocked = HasClearedChallenge(stage.StageId, mode.BestDamage);
+        }
         JsonDb.Save();
         return (stage, mode);
     }
 
-    public static IEnumerable<NetSoloRaidMuseumLog> GetLogs(User user, int stageId, bool noLimit)
+    public static IEnumerable<NetSoloRaidMuseumLog> GetLogs(User user, int stageId, bool noLimit, bool current = false)
     {
         var stage = GetStage(user, stageId);
-        return (noLimit ? stage.NoLimit : stage.Challenge).Logs.Select(x => new NetSoloRaidMuseumLog
+        var mode = noLimit ? stage.NoLimit : stage.Challenge;
+        // The normal log endpoint represents the current/most recently completed
+        // run. Keep it available for the result screen after the fifth team.
+        var logs = current && mode.CurrentLogs.Count > 0 ? mode.CurrentLogs : mode.Logs;
+        return logs.Select(x =>
         {
-            Damage = x.Damage,
-            TeamNumber = x.TeamNumber,
+            var snapshot = x.Team.Count > 0 ? x.Team : CreateTeamSnapshot(user, stage, x.TeamNumber);
+            return new NetSoloRaidMuseumLog
+            {
+                Damage = x.Damage,
+                TeamNumber = x.TeamNumber,
+                Team = { snapshot.Select(ToMuseumTeamCharacter) },
+            };
         });
     }
 
@@ -215,16 +304,21 @@ internal static class SoloRaidMuseumHelper
         return new NetUserSoloRaidMuseumStageInfo
         {
             StageId = stage.StageId,
-            BestDamage = mode.TotalDamage,
-            BestStep = mode.TotalStep,
+            BestDamage = mode.BestDamage,
+            BestStep = mode.BestStep,
             TargetMissionId = nextMission?.Id ?? 0,
             TargetMissionProgress = nextMission is null ? 0 : MissionProgress(mode, nextMission.ConditionType),
-            TargetMissionConditionValue = nextMission?.ConditionValue ?? 0,
+            TargetMissionConditionValue = nextMission is null ? 0 : MissionTargetValue(nextMission),
             IsInProgress = mode.IsInProgress,
         };
     }
 
-    public static NetSoloRaidMuseumJoinData JoinData(SoloRaidMuseumModeData mode) => new();
+    public static NetSoloRaidMuseumJoinData JoinData(SoloRaidMuseumModeData mode)
+    {
+        NetSoloRaidMuseumJoinData result = new();
+        result.CsnList.AddRange(mode.CurrentLogs.SelectMany(x => x.Team).Select(x => x.Csn).Where(x => x > 0));
+        return result;
+    }
 
     private static IEnumerable<NetTeamData> GetTeams(User user, SoloRaidMuseumStageData stage)
     {
@@ -248,6 +342,144 @@ internal static class SoloRaidMuseumHelper
         return fallback.Slots.Count > 0 ? [fallback] : [];
     }
 
+    private static IEnumerable<NetSoloRaidMuseumRankerRankingData> GetPastRankings(
+        User user, MuseumStageRecord_Raw stage)
+    {
+        var rankMissions = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == stage.Id &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamageRanker)
+            .OrderBy(x => x.Order)
+            .ToList();
+        var trialTargets = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == stage.Id &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamage)
+            .OrderBy(x => x.ConditionValue)
+            .TakeLast(rankMissions.Count)
+            .Select(x => x.ConditionValue)
+            .ToList();
+        var commonHp = GameData.Instance.MuseumCommonStageHpGroupTable.Values
+            .Where(x => x.Group == stage.SoloRaidStageHpGroup)
+            .Sum(x => x.HpValue);
+        var wholeUserData = LobbyHandler.CreateWholeUserDataFromDbUser(user);
+
+        for (var i = 0; i < rankMissions.Count; i++)
+        {
+            // Rank missions store a previous rank as their condition. The client
+            // looks up that exact rank and subtracts the common-stage HP from its
+            // damage to obtain the Trial target shown by the mission.
+            yield return new NetSoloRaidMuseumRankerRankingData
+            {
+                Ranking = rankMissions[i].ConditionValue,
+                Damage = commonHp + trialTargets.ElementAtOrDefault(i),
+                CurrentUserData = wholeUserData.Clone(),
+            };
+        }
+    }
+
+    private static bool HasClearedChallenge(int stageId, long bestDamage)
+    {
+        var noLimitMode = GameData.Instance.MuseumStageModeTable.Values.FirstOrDefault(x =>
+            x.StageId == stageId && x.ModeType == MuseumStageModeType.NoLimit);
+        var finalMission = noLimitMode is null
+            ? null
+            : GameData.Instance.MuseumMissionTable.GetValueOrDefault(noLimitMode.ModeOpenCondition);
+        return finalMission is not null && bestDamage >= MissionTargetValue(finalMission);
+    }
+
+    private static int GetNoLimitStep(int stageId, long damage)
+    {
+        var mode = GameData.Instance.MuseumStageModeTable.Values.FirstOrDefault(x =>
+            x.StageId == stageId && x.ModeType == MuseumStageModeType.NoLimit);
+        if (mode is null) return 1;
+
+        // MonsterStageLvChangeTable.GetStep on the client returns step 1 for zero
+        // damage, otherwise the row whose damage interval contains this team's
+        // damage. The final row has max=0 and is an open-ended interval.
+        return GameData.Instance.MonsterStageLvChangeTable.Values
+            .Where(x => x.Group == mode.MonsterStageLvChangeGroup)
+            .OrderBy(x => x.ConditionValueMin)
+            .LastOrDefault(x => damage >= x.ConditionValueMin)?.Step ?? 1;
+    }
+
+    public static bool HasUnreceivedMission(SoloRaidMuseumStageData stage, bool noLimit)
+    {
+        var mode = noLimit ? stage.NoLimit : stage.Challenge;
+        var received = noLimit ? stage.ReceivedNoLimitMissions : stage.ReceivedChallengeMissions;
+        var modeType = noLimit ? MuseumStageModeType.NoLimit : MuseumStageModeType.Challenge;
+        return GameData.Instance.MuseumMissionTable.Values.Any(x =>
+            x.StageId == stage.StageId && x.ModeType == modeType && !received.Contains(x.Id) &&
+            MissionProgress(mode, x.ConditionType) >= MissionTargetValue(x));
+    }
+
+    public static long MissionTargetValue(MuseumMissionRecord_Raw mission)
+    {
+        if (mission.ConditionType != MuseumMissionConditionType.GetTotalDamageRanker)
+            return mission.ConditionValue;
+
+        var rankMissions = GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == mission.StageId &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamageRanker)
+            .OrderBy(x => x.Order)
+            .ToList();
+        var index = rankMissions.FindIndex(x => x.Id == mission.Id);
+        if (index < 0) return long.MaxValue;
+        return GameData.Instance.MuseumMissionTable.Values
+            .Where(x => x.StageId == mission.StageId &&
+                        x.ModeType == MuseumStageModeType.Challenge &&
+                        x.ConditionType == MuseumMissionConditionType.GetTotalDamage)
+            .OrderBy(x => x.ConditionValue)
+            .TakeLast(rankMissions.Count)
+            .Select(x => x.ConditionValue)
+            .ElementAtOrDefault(index);
+    }
+
+    private static List<TeamCharacterData> CreateTeamSnapshot(User user, SoloRaidMuseumStageData stage, int teamNumber)
+    {
+        var team = GetTeams(user, stage).FirstOrDefault(x => x.TeamNumber == teamNumber);
+        if (team is null) return [];
+        return team.Slots.Where(x => x.Value > 0).Select(slot =>
+        {
+            var character = user.Characters.FirstOrDefault(x => x.Csn == slot.Value);
+            return new TeamCharacterData
+            {
+                Slot = slot.Slot,
+                Csn = slot.Value,
+                Tid = character?.Tid ?? (int)slot.Value,
+                Lv = character?.Level ?? 1,
+                Combat = 0,
+                CostumeId = character?.CostumeId ?? 0,
+            };
+        }).ToList();
+    }
+
+    private static NetSoloRaidMuseumTeamCharacter ToMuseumTeamCharacter(TeamCharacterData character) => new()
+    {
+        Slot = character.Slot,
+        Tid = character.Tid,
+        Lv = character.Lv,
+        Combat = character.Combat,
+        CostumeId = character.CostumeId,
+    };
+
+    private static SoloRaidMuseumLogData CloneLog(SoloRaidMuseumLogData log) => new()
+    {
+        Damage = log.Damage,
+        Step = log.Step,
+        TeamNumber = log.TeamNumber,
+        Team = log.Team.Select(x => new TeamCharacterData
+        {
+            Slot = x.Slot,
+            Csn = x.Csn,
+            Tid = x.Tid,
+            Lv = x.Lv,
+            Combat = x.Combat,
+            CostumeId = x.CostumeId,
+        }).ToList(),
+    };
+
     private static NetUserSoloRaidMuseumStageMode ToMode(SoloRaidMuseumStageData stage) => new()
     {
         StageId = stage.StageId,
@@ -255,6 +487,6 @@ internal static class SoloRaidMuseumHelper
         IsNoLimitUnlocked = stage.IsNoLimitUnlocked,
     };
 
-    private static long MissionProgress(SoloRaidMuseumModeData mode, MuseumMissionConditionType type) =>
-        type == MuseumMissionConditionType.GetTotalStageStep ? mode.TotalStep : mode.TotalDamage;
+    public static long MissionProgress(SoloRaidMuseumModeData mode, MuseumMissionConditionType type) =>
+        type == MuseumMissionConditionType.GetTotalStageStep ? mode.BestStep : mode.BestDamage;
 }
