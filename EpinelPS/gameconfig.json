@@ -10,5 +10,5 @@
   "GameMinVer": "100.0.1",
   "GameMaxVer": "160.0.2",
   "EnablePurchaseSimulation": true,
-  "TargetVersion": "159.6.9"
+  "TargetVersion": "150.6.9"
 }
