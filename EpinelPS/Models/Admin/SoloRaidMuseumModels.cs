@@ -22,3 +22,9 @@ public sealed class SoloRaidMuseumLogModel
     public long Damage { get; set; }
     public int Step { get; set; }
 }
+
+public sealed class SoloRaidMuseumResetModel
+{
+    public ulong UserId { get; set; }
+    public int StageId { get; set; }
+}

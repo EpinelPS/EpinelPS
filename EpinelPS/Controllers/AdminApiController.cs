@@ -322,6 +322,31 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         return RunCmdResponse.OK;
     }
 
+    [HttpPost("soloRaidMuseum/reset")]
+    public ActionResult<RunCmdResponse> ResetSoloRaidMuseumSeason([FromBody] SoloRaidMuseumResetModel request)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == request.UserId);
+        if (user is null) return NotFound(new { error = "user not found" });
+        if (!GameData.Instance.MuseumStageTable.ContainsKey(request.StageId))
+            return BadRequest(new { error = "unknown museum stage" });
+
+        var stage = SoloRaidMuseumHelper.GetStage(user, request.StageId);
+        var multiplier = stage.DebugDamageMultiplier;
+        var teams = stage.Teams;
+        stage.Challenge = new();
+        stage.NoLimit = new();
+        stage.ReceivedChallengeMissions.Clear();
+        stage.ReceivedNoLimitMissions.Clear();
+        stage.IsNoLimitUnlocked = false;
+        stage.StageMode = SoloRaidMuseumStageMode.Challenge;
+        stage.DebugDamageMultiplier = multiplier;
+        stage.Teams = teams;
+        JsonDb.Save();
+        Logging.WriteLine($"[Admin] solo raid museum season reset user={request.UserId}, stage={request.StageId}", LogType.Info);
+        return RunCmdResponse.OK;
+    }
+
     private static SoloRaidMuseumLogModel ToMuseumLogModel(SoloRaidMuseumLogData log) => new()
     {
         TeamNumber = log.TeamNumber,
