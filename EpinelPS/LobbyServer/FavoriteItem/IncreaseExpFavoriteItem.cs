@@ -44,8 +44,8 @@ public class IncreaseExpFavoriteItem : LobbyMessage
         {
             throw new BadHttpRequestException($"Insufficient material. Required: {useCount}, Available: {userItem.Count}", 400);
         }
-
-        FavoriteItemProbabilityRecord? probabilityData = GetProbabilityData(favoriteItem.Lv, req.ItemData.Tid);
+        GameData.Instance.FavoriteItemTable.TryGetValue(favoriteItem.Tid, out FavoriteItemRecord? favoriteRecord);
+        FavoriteItemProbabilityRecord? probabilityData = GetProbabilityData(favoriteItem.Lv, req.ItemData.Tid, favoriteRecord);
         if (probabilityData == null)
         {
             throw new BadHttpRequestException($"Cannot upgrade at current level with this material", 400);
@@ -99,13 +99,14 @@ public class IncreaseExpFavoriteItem : LobbyMessage
         await WriteDataAsync(response);
     }
 
-    private FavoriteItemProbabilityRecord? GetProbabilityData(int currentLevel, int materialId)
+    private FavoriteItemProbabilityRecord? GetProbabilityData(int currentLevel, int materialId, FavoriteItemRecord? favoriteRecord)
     {
         foreach (var record in GameData.Instance.FavoriteItemProbabilityTable.Values)
         {
             if (record.NeedItemId == materialId &&
                 currentLevel >= record.LevelMin &&
-                currentLevel <= record.LevelMax)
+                currentLevel <= record.LevelMax &&
+                favoriteRecord.ProbabilityGroup == record.ProbabilityGroup)
             {
                 return record;
             }
