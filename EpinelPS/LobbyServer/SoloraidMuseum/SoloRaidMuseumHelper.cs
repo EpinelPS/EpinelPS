@@ -31,6 +31,7 @@ internal static class SoloRaidMuseumHelper
                          .Where(x => x.GroupId == group.Id).OrderBy(x => x.Order))
             {
                 var data = GetStage(user, stage.Id);
+                RefreshNoLimitUnlock(data);
                 info.StageModeList.Add(ToMode(data));
                 info.ChallengeStageInfoList.Add(ToInfo(data, data.Challenge, false));
                 info.NoLimitStageInfoList.Add(ToInfo(data, data.NoLimit, true));
@@ -58,6 +59,7 @@ internal static class SoloRaidMuseumHelper
         foreach (var stage in stages)
         {
             var data = GetStage(user, stage.Id);
+            RefreshNoLimitUnlock(data);
             var active = data.StageMode == SoloRaidMuseumStageMode.NoLimit ? data.NoLimit : data.Challenge;
             var teams = GetTeams(user, data).ToList();
             response.StageBattleDataList.Add(new NetSoloRaidMuseumStageBattleData
@@ -207,8 +209,12 @@ internal static class SoloRaidMuseumHelper
     {
         var stage = GetStage(user, stageId);
         var mode = noLimit ? stage.NoLimit : stage.Challenge;
-        var damage = Math.Max(0, battle?.Damage ?? 0);
-        Logging.WriteLine($"[SoloRaidMuseum] set damage stage={stageId}, noLimit={noLimit}, team={battle?.Team ?? 0}, damage={damage}, battleResult={battleResult}, beforeJoin={mode.StageJoinCount}, inProgress={mode.IsInProgress}", LogType.Info);
+        var clientDamage = Math.Max(0, battle?.Damage ?? 0);
+        var multiplier = double.IsFinite(stage.DebugDamageMultiplier) && stage.DebugDamageMultiplier >= 1
+            ? Math.Min(stage.DebugDamageMultiplier, 1000)
+            : 1;
+        var damage = (long)Math.Min(long.MaxValue, Math.Round(clientDamage * multiplier, MidpointRounding.AwayFromZero));
+        Logging.WriteLine($"[SoloRaidMuseum] set damage stage={stageId}, noLimit={noLimit}, team={battle?.Team ?? 0}, clientDamage={clientDamage}, multiplier={multiplier:0.###}, damage={damage}, battleResult={battleResult}, beforeJoin={mode.StageJoinCount}, inProgress={mode.IsInProgress}", LogType.Info);
 
         // NK.BattleResult: Return (3) is an in-battle retreat and consumes the
         // attempt. Retry (4) and Maintenance (6) are replay/service failures
@@ -294,7 +300,7 @@ internal static class SoloRaidMuseumHelper
             .Where(x => x.StageId == stage.StageId &&
                         x.ModeType == (noLimit ? MuseumStageModeType.NoLimit : MuseumStageModeType.Challenge))
             .OrderBy(x => x.Order)
-            .FirstOrDefault(x => !(noLimit ? stage.ReceivedNoLimitMissions : stage.ReceivedChallengeMissions).Contains(x.Id));
+            .FirstOrDefault(x => MissionProgress(mode, x.ConditionType) < MissionTargetValue(x));
         return new NetUserSoloRaidMuseumStageInfo
         {
             StageId = stage.StageId,
@@ -386,6 +392,12 @@ internal static class SoloRaidMuseumHelper
             Frame = current.Frame,
             UserTitleId = current.UserTitleId,
         };
+    }
+
+    public static bool RefreshNoLimitUnlock(SoloRaidMuseumStageData stage)
+    {
+        stage.IsNoLimitUnlocked = HasClearedChallenge(stage.StageId, stage.Challenge.BestDamage);
+        return stage.IsNoLimitUnlocked;
     }
 
     private static bool HasClearedChallenge(int stageId, long bestDamage)

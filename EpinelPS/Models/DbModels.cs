@@ -1173,6 +1173,8 @@ public class SoloRaidMuseumStageData
     public List<int> ReceivedChallengeMissions { get; set; } = [];
     public List<int> ReceivedNoLimitMissions { get; set; } = [];
     public List<NetTeamData> Teams { get; set; } = [];
+    // Local-server testing only. A value of 1 leaves client-reported damage unchanged.
+    public double DebugDamageMultiplier { get; set; } = 1;
 }
 
 public class SoloRaidMuseumModeData

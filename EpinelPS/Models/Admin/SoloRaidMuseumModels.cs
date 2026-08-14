@@ -11,6 +11,7 @@ public sealed class SoloRaidMuseumRecordModel
     public long BestDamage { get; set; }
     public int BestStep { get; set; }
     public bool IsInProgress { get; set; }
+    public double DebugDamageMultiplier { get; set; } = 1;
     public List<SoloRaidMuseumLogModel> Logs { get; set; } = [];
     public List<SoloRaidMuseumLogModel> CurrentLogs { get; set; } = [];
 }

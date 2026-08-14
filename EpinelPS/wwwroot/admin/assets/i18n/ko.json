@@ -254,6 +254,10 @@
     "current": "Current Currency",
     "noCurrency": "No currency data"
   },
+  "soloRaidMuseum": {
+    "debugTitle": "테스트 피해량 배율", "debugHelp": "1은 일반 피해량이며 100은 이 플레이어의 박물관 전투 결과를 100배로 만듭니다.", "debugMultiplier": "피해량 배율", "saved": "저장됨", "saveError": "저장 실패",
+    "title": "솔로 레이드 박물관 기록", "back": "뒤로", "user": "플레이어 (닉네임 또는 ID)", "userPlaceholder": "닉네임 검색", "stage": "스테이지", "mode": "모드", "challenge": "챌린지", "noLimit": "노 리미트", "load": "기록 불러오기", "selectHint": "플레이어와 스테이지를 선택한 후 기록을 불러오세요.", "quickHelpTitle": "5개 팀을 완료하기 어렵나요?", "quickHelp": "먼저 최고 피해량을 입력하고 최고 점수로 완료를 누른 뒤 저장하세요.", "completeWithBest": "최고 점수로 완료", "clearCurrent": "미완료 라운드 지우기", "joinCount": "진행한 팀 수 (0-5)", "totalDamage": "현재 총 피해량", "totalStep": "현재 총 단계", "bestDamage": "최고 피해량", "bestStep": "최고 단계", "inProgress": "진행 중", "completedTitle": "완료된 5개 팀 기록", "completedHint": "기록과 팀 아이콘에 사용", "currentTitle": "현재 미완료 기록", "currentHint": "진행 중인 라운드의 임시 기록", "save": "변경 저장", "team": "팀", "damage": "피해량", "step": "단계", "stageOption": "그룹 {{group}} · 스테이지 {{stage}} · {{name}} (#{{id}})", "completeMessage": "완료 상태로 설정했습니다. 저장하세요.", "bestDamageRequired": "0보다 큰 최고 피해량을 먼저 입력하세요.", "clearMessage": "미완료 라운드를 지웠습니다. 저장하세요.", "selectError": "플레이어와 스테이지를 선택하세요", "loadError": "불러오기 실패"
+  },
   "config": {
     "server": {
       "title": "서버 구성",

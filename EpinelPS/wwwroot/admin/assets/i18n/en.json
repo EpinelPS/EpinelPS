@@ -332,6 +332,10 @@
     "current": "Current Currency",
     "noCurrency": "No currency data"
   },
+  "soloRaidMuseum": {
+    "debugTitle": "Test damage multiplier", "debugHelp": "1 keeps normal damage. 100 multiplies battle result damage by 100 for this player's museum only.", "debugMultiplier": "Damage multiplier", "saved": "Saved", "saveError": "Save failed",
+    "title": "Solo Raid Museum Records", "back": "Back", "user": "Player (nickname or ID)", "userPlaceholder": "Search nickname", "stage": "Stage", "mode": "Mode", "challenge": "Challenge", "noLimit": "No Limit", "load": "Load record", "selectHint": "Select a player and stage, then load the record. For example, Group 1 · Stage 1 is displayed by the client as Stage 101.", "quickHelpTitle": "Cannot complete all five teams?", "quickHelp": "Enter Best damage first, then click Complete five teams. It will generate five completed team records; save afterward. Check In progress only for an unfinished run.", "completeWithBest": "Complete five teams", "clearCurrent": "Clear unfinished run", "joinCount": "Teams played (0-5)", "totalDamage": "Current total damage", "totalStep": "Current total step", "bestDamage": "Best damage", "bestStep": "Best step", "inProgress": "In progress", "completedTitle": "Completed five-team records", "completedHint": "Used for history and team icons", "currentTitle": "Current unfinished records", "currentHint": "Temporary records for an active run", "save": "Save changes", "team": "Team", "damage": "Damage", "step": "Step", "stageOption": "Group {{group}} · Stage {{stage}} · {{name}} (#{{id}})", "completeMessage": "Generated five completed team records. Click Save changes.", "bestDamageRequired": "Enter a Best damage value greater than 0 first.", "clearMessage": "Cleared the unfinished run. Click Save changes.", "selectError": "Select a player and stage", "loadError": "Load failed"
+  },
   "config": {
     "server": {
       "title": "Server Configuration",

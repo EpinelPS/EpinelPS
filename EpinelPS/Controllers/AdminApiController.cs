@@ -272,6 +272,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             BestDamage = mode.BestDamage,
             BestStep = mode.BestStep,
             IsInProgress = mode.IsInProgress,
+            DebugDamageMultiplier = stage.DebugDamageMultiplier,
             Logs = mode.Logs.Select(ToMuseumLogModel).ToList(),
             CurrentLogs = mode.CurrentLogs.Select(ToMuseumLogModel).ToList(),
         };
@@ -297,6 +298,9 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         if (request.StageId <= 0 || request.StageJoinCount is < 0 or > 5 ||
             request.TotalDamage < 0 || request.TotalStep < 0 || request.BestDamage < 0 || request.BestStep < 0)
             return BadRequest(new { error = "invalid museum values" });
+        if (double.IsNaN(request.DebugDamageMultiplier) || double.IsInfinity(request.DebugDamageMultiplier) ||
+            request.DebugDamageMultiplier < 1 || request.DebugDamageMultiplier > 1000)
+            return BadRequest(new { error = "debug damage multiplier must be between 1 and 1000" });
         if (!GameData.Instance.MuseumStageTable.ContainsKey(request.StageId))
             return BadRequest(new { error = "unknown museum stage" });
 
@@ -308,11 +312,13 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         mode.BestDamage = request.BestDamage;
         mode.BestStep = request.BestStep;
         mode.IsInProgress = request.IsInProgress;
+        stage.DebugDamageMultiplier = request.DebugDamageMultiplier;
         mode.Logs = ToMuseumLogs(request.Logs, mode.Logs);
         mode.CurrentLogs = ToMuseumLogs(request.CurrentLogs, mode.CurrentLogs);
         mode.OpenTeams = mode.CurrentLogs.Select(x => x.TeamNumber).Distinct().ToList();
+        var noLimitUnlocked = SoloRaidMuseumHelper.RefreshNoLimitUnlock(stage);
         JsonDb.Save();
-        Logging.WriteLine($"[Admin] solo raid museum updated user={request.UserId}, stage={request.StageId}, noLimit={request.NoLimit}, logs={mode.Logs.Count}, currentLogs={mode.CurrentLogs.Count}", LogType.Info);
+        Logging.WriteLine($"[Admin] solo raid museum updated user={request.UserId}, stage={request.StageId}, noLimit={request.NoLimit}, logs={mode.Logs.Count}, currentLogs={mode.CurrentLogs.Count}, noLimitUnlocked={noLimitUnlocked}", LogType.Info);
         return RunCmdResponse.OK;
     }
 

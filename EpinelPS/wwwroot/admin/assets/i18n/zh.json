@@ -334,6 +334,10 @@
     "current": "当前货币",
     "noCurrency": "暂无货币数据"
   },
+  "soloRaidMuseum": {
+    "debugTitle": "测试伤害倍率", "debugHelp": "设置为 1 表示正常伤害；设置为 100 后，实际战斗结算伤害会放大 100 倍。只对该玩家的单人突击博物馆生效。", "debugMultiplier": "伤害倍率", "saved": "已保存", "saveError": "保存失败",
+    "title": "单人突击博物馆记录", "back": "返回", "user": "玩家（昵称或 ID）", "userPlaceholder": "输入昵称搜索", "stage": "关卡", "mode": "模式", "challenge": "挑战模式", "noLimit": "无限模式", "load": "读取记录", "selectHint": "先选择玩家和关卡，再点击“读取记录”。例如“第 1 组 · 第 1 关”就是客户端显示的 Stage 101。", "quickHelpTitle": "不会打满五队？", "quickHelp": "先填写“历史最佳伤害”，点击“按最佳成绩完成本轮”后会自动生成五队记录，最后保存修改。只有正在打到一半时才需要勾选“进行中”。", "completeWithBest": "生成五队并完成本轮", "clearCurrent": "清空未完成轮次", "joinCount": "已进行队数 (0-5)", "totalDamage": "本轮总伤害", "totalStep": "本轮总阶段", "bestDamage": "历史最佳伤害", "bestStep": "历史最佳阶段", "inProgress": "进行中", "completedTitle": "已完成的五队记录", "completedHint": "用于历史记录和队伍图标", "currentTitle": "当前未完成记录", "currentHint": "进行中的临时记录", "save": "保存修改", "team": "队伍编号", "damage": "伤害", "step": "阶段 / Step", "stageOption": "第 {{group}} 组 · 第 {{stage}} 关 · {{name}}（#{{id}}）", "completeMessage": "已生成五队完成记录，请点击保存修改", "bestDamageRequired": "请先填写大于 0 的历史最佳伤害", "clearMessage": "已清空当前未完成轮次，请点击保存修改", "selectError": "请选择玩家和关卡", "loadError": "读取失败"
+  },
   "config": {
     "server": {
       "title": "服务器配置",

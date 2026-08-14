@@ -254,6 +254,10 @@
     "current": "Current Currency",
     "noCurrency": "No currency data"
   },
+  "soloRaidMuseum": {
+    "debugTitle": "テストダメージ倍率", "debugHelp": "1は通常ダメージ、100はこのプレイヤーの博物館の戦闘結果を100倍にします。", "debugMultiplier": "ダメージ倍率", "saved": "保存しました", "saveError": "保存に失敗しました",
+    "title": "ソロレイド博物館の記録", "back": "戻る", "user": "プレイヤー（名前またはID）", "userPlaceholder": "名前で検索", "stage": "ステージ", "mode": "モード", "challenge": "チャレンジ", "noLimit": "ノーリミット", "load": "記録を読み込む", "selectHint": "プレイヤーとステージを選択して記録を読み込んでください。", "quickHelpTitle": "5チーム完了できない場合", "quickHelp": "先に最高ダメージを入力し、最高記録で完了を押して保存してください。", "completeWithBest": "最高記録で完了", "clearCurrent": "未完了ラウンドを消去", "joinCount": "参加チーム数 (0-5)", "totalDamage": "現在の総ダメージ", "totalStep": "現在の総ステップ", "bestDamage": "最高ダメージ", "bestStep": "最高ステップ", "inProgress": "進行中", "completedTitle": "完了した5チームの記録", "completedHint": "履歴とチームアイコンに使用", "currentTitle": "現在の未完了記録", "currentHint": "進行中ラウンドの一時記録", "save": "変更を保存", "team": "チーム", "damage": "ダメージ", "step": "ステップ", "stageOption": "グループ {{group}} · ステージ {{stage}} · {{name}} (#{{id}})", "completeMessage": "完了状態に設定しました。保存してください。", "bestDamageRequired": "0より大きい最高ダメージを先に入力してください。", "clearMessage": "未完了ラウンドを消去しました。保存してください。", "selectError": "プレイヤーとステージを選択してください", "loadError": "読み込みに失敗しました"
+  },
   "config": {
     "server": {
       "title": "サーバー設定",
