@@ -1,3 +1,4 @@
+using EpinelPS.Data;
 using EpinelPS.Utils;
 using Newtonsoft.Json;
 using Paseto;
@@ -109,14 +110,35 @@ internal class JsonDb
             // upgrade the gacha pull counters if using older system
             // Since we can't know what banners they pulled, we'll assume standard.
             // If user.GachaTutorialPlayCount is still 0, the user has not gone through the tutorial yet.
-            if (user.GachaBannerMaxPulls.Count == 0 && user.GachaTutorialPlayCount > 0)
+            try
             {
-                // The old counting system would have recorded only 1 pull for the tutorial banner. The new system records 10.
-                int tutoPulls = 10; 
-                int premiumPulls = Math.Max(user.GachaTutorialPlayCount - 1, 0);
+                if (user.GachaBannerMaxPulls.Count == 0 && user.GachaTutorialPlayCount > 0)
+                {
+                    // The old counting system would have recorded only 1 pull for the tutorial banner. The new system records 10.
+                    int tutoPulls = 10;
+                    int premiumPulls = Math.Max(user.GachaTutorialPlayCount - 1, 0);
 
-                user.AddTutorialPullCount(10);
-                user.AddPremiumPullCount(premiumPulls);
+                    // Fix tutorial
+                    var tutorialID = 3;
+
+                    if (user.GachaBannerMaxPulls.ContainsKey(tutorialID))
+                        user.GachaBannerMaxPulls[tutorialID] = user.GachaBannerMaxPulls[tutorialID] + tutoPulls;
+                    else
+                        user.GachaBannerMaxPulls.Add(tutorialID, tutoPulls);
+
+                    // Fix premium pulls
+                    var premiumID = 1;
+
+                    if (user.GachaBannerMaxPulls.ContainsKey(premiumID))
+                        user.GachaBannerMaxPulls[premiumID] = user.GachaBannerMaxPulls[premiumID] + premiumPulls;
+                    else
+                        user.GachaBannerMaxPulls.Add(premiumID, premiumPulls);
+
+                }
+            }
+            catch
+            {
+                Console.WriteLine($"Warning: Could not upgrade the gacha counters for user ID {user.ID}");
             }
 
         }
