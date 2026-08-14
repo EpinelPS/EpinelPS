@@ -2,14 +2,9 @@
 
 namespace EpinelPS.Networking;
 
-public class EncryptionMiddleware
+public class EncryptionMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public EncryptionMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task Invoke(HttpContext context)
     {
