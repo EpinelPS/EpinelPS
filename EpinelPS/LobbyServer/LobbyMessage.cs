@@ -34,7 +34,12 @@ public abstract class LobbyMessage
     protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
     {
         Logging.WriteLine("Writing " + data.GetType().Name, LogType.Debug);
-        PrintMessage(data);
+        if (data.GetType().Name != "ResGetJupiterProductList")
+        {
+            PrintMessage(data);
+            Logging.WriteLine("", LogType.Debug);
+        }
+
         Logging.WriteLine("", LogType.Debug);
 
         ctx.Response.ContentType = "application/octet-stream+protobuf";

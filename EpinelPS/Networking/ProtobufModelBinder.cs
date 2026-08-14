@@ -1,6 +1,8 @@
 ﻿using Google.Protobuf;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Reflection;
+using Paseto;
+using Paseto.Builder;
+using EpinelPS.Database;
 
 namespace EpinelPS.Networking;
 
@@ -30,6 +32,29 @@ public class ProtobufModelBinder : IModelBinder
                 StatusCodes.Status415UnsupportedMediaType;
 
             return;
+        }
+
+        if (request.Headers.ContainsKey("Authorization"))
+        {
+            try
+            {
+                PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+                           .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+                           .Decode(request.Headers.Authorization.ToString().Replace("Bearer ", ""), new PasetoTokenValidationParameters() { ValidateLifetime = true });
+
+                if (encryptionToken.IsValid)
+                {
+                    var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
+
+                    if (id == 0) throw new Exception("403");
+
+                    bindingContext.HttpContext.Items["UserID"] = id;
+                }
+            }
+            catch
+            {
+
+            }
         }
 
         try
