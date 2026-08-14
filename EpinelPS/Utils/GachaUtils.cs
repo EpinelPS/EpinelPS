@@ -114,7 +114,7 @@ public class GachaUtils
         // The maximum random value will change depending on how many characters are in the list so we need to keep track of it
         // selectedGrade.GachaListId != selectedGrade.CustomizeListId seem to indicate that wishlisting is supported by the banner/grade. CustomizeListId 19995 and 19996 are most likely SSR and Pilgrims wishlists 
 
-        Dictionary<int, GachaListProbRecord> charProbs = null;
+        Dictionary<int, GachaListProbRecord> charProbs = new();
 
         // Process the wishlist here
         // We filter the character from the category by the ones in the wishlist.
@@ -159,7 +159,7 @@ public class GachaUtils
                 {
                     characterID = GameData.Instance.GachaSelectupListTable[user.GachaSelectupChoices[gachaType.Id]].CharacterId;
                 }
-                catch (Exception ex){
+                catch {
                     Logging.WriteLine("[SelectRandomCharacter] Could not get the character from the selectup choice");
                 }
                 break;
@@ -183,7 +183,7 @@ public class GachaUtils
     /// <returns></returns>
     private static CharacterRecord SelectRandomCharacterFromProbList(GachaGradeProbRecord selectedGrade, List<CharacterRecord> wishlistCharacters, User user)
     {
-        Dictionary<int, GachaListProbRecord> charProbs = null;
+        Dictionary<int, GachaListProbRecord> charProbs = new();
 
         // Process the wishlist here
         // We filter the character from the category by the ones in the wishlist.
