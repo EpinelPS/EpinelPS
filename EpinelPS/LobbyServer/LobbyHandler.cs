@@ -89,7 +89,6 @@ public static class LobbyHandler
         }
         else
         {
-            handler.Reset();
             await handler.HandleAsync(ctx);
             return;
         }

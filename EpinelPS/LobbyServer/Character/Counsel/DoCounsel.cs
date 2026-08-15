@@ -35,6 +35,13 @@ public class DoCounsel : LobbyMessage
                 UpdateAttractiveLevel(currentBondInfo);
             }
 
+            // Outpost events can require a character's attractive level to be maxed
+            if (currentBondInfo.Lv >= user.GetMaxAttractiveLevel(req.NameCode) &&
+                !GameContext.Triggers.Any(t => t.UserId == user.ID && t.Type == Trigger.CharacterAttractiveLevelMax && t.ConditionId == req.NameCode))
+            {
+                user.AddTrigger(Trigger.CharacterAttractiveLevelMax, currentBondInfo.Lv, req.NameCode);
+            }
+
             response.Attractive = currentBondInfo;
             response.Exp = new NetIncreaseExpData
             {

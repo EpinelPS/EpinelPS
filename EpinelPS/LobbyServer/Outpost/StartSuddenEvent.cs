@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Outpost;
@@ -32,6 +33,7 @@ public class StartSuddenEvent : LobbyMessage
         };
 
         user.ClearedOutpostScenarioIds.Add(suddenEvent.Id);
+        JsonDb.Save();
 
         await WriteDataAsync(response);
     }

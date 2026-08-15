@@ -25,7 +25,7 @@ public static class AzxHelper
             foreach (var mission in missions)
             {
                 var rewardRecord = GameData.Instance.GetRewardTableEntry(mission.MissionRewardId);
-                if (rewardRecord is null || rewardRecord.Rewards.Count == 0) continue;
+                if (rewardRecord is null || rewardRecord.Rewards.Length == 0) continue;
                 foreach (var rewardItem in rewardRecord.Rewards)
                 {
                     if (rewardItem.RewardValue == 0) continue;

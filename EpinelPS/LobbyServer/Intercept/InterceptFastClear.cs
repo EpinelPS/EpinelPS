@@ -8,10 +8,11 @@ public class FastClearInterceptData : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqFastClearIntercept req = await ReadData<ReqFastClearIntercept>();
+        var user = GetUser();
 
         ResFastClearIntercept response = new()
         {
-            TicketCount = User.ResetableData.InterceptionTickets,
+            TicketCount = user.ResetableData.InterceptionTickets,
             MaxTicketCount = JsonDb.Instance.MaxInterceptionCount,
             Damage = 0
         };

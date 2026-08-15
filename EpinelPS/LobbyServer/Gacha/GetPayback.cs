@@ -15,10 +15,11 @@ public class GetPayback : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqGetGachaPaybackData req = await ReadData<ReqGetGachaPaybackData>();
+        var user = GetUser();
 
         ResGetGachaPaybackData response = new();
 
-        foreach(GachaPaybackData gpd in User.GachaPaybackData.Values){
+        foreach(GachaPaybackData gpd in user.GachaPaybackData.Values){
 
             var ngpd = new NetGachaPaybackData()
             {

@@ -1,18 +1,31 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Interfaces;
 using EpinelPS.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
-namespace EpinelPS.LobbyServer.LobbyUser;
+namespace EpinelPS.LobbyServer.Controllers;
 
-[GameRequest("/enterlobbyserver")]
-public class EnterLobbyServer : LobbyMessage
+/// <summary>
+/// Controller for lobby
+/// </summary>
+[ApiController]
+public class LobbyController(IUserService UserService, GameContext db) : Controller
 {
-    protected override async Task HandleAsync()
+    /// <summary>
+    /// Returns latest resource base URL for version number
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
+    [Route("/v1/enterlobbyserver")]
+    [HttpPost]
+    public ActionResult<ResEnterLobbyServer> EnterLobbyServer([FromBodyProtobuf] ReqEnterLobbyServer req)
     {
-        ReqEnterLobbyServer req = await ReadData<ReqEnterLobbyServer>();
-        User user = GetUser();
-        var userDB = GameContext.Instance.Users.Find((ulong)UserId);
+        User? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        var userDB = db.Users.Find(user.ID);
 
         TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
@@ -20,7 +33,7 @@ public class EnterLobbyServer : LobbyMessage
         // NOTE: Keep this in sync with GetUser code
         if (userDB.Nickname == null)
         {
-            GameContext.Users.Where(u => u.ID == UserId).ExecuteUpdate(setters => setters.SetProperty(u => u.Nickname, "Player"));
+            db.Users.Where(u => u.ID == user.ID).ExecuteUpdate(setters => setters.SetProperty(u => u.Nickname, "Player"));
         }
 
         ResEnterLobbyServer response = new()
@@ -120,6 +133,6 @@ public class EnterLobbyServer : LobbyMessage
 
         response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
 
-        await WriteDataAsync(response);
+        return response;
     }
 }
