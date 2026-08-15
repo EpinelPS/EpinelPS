@@ -63,16 +63,7 @@ public class ExecutePityGacha : LobbyMessage
                     Skill2Lv = character.Skill2Lvl,
                     Tid = characterData.Id,
                 });
-
-
-                response.Reward.Character.Add(new NetCharacterData()
-                {
-                    Csn = gacha.Sn,
-                    CurrencyValue = gacha.CurrencyValue,
-                    PieceCount = gacha.PieceCount,
-                    Tid = characterData.Id
-                });
-
+                
                 bool increase_item = false;
 
                 gacha.Sn = character.Csn;
@@ -104,6 +95,14 @@ public class ExecutePityGacha : LobbyMessage
 
                 if (increase_item)
                 {
+                    response.Reward.Character.Add(new NetCharacterData()
+                    {
+                        Csn = gacha.Sn,
+                        CurrencyValue = gacha.CurrencyValue,
+                        PieceCount = gacha.PieceCount,
+                        Tid = characterData.Id
+                    });
+
                     gacha.PieceCount = 1;
                     if (existingItem != null)
                     {
@@ -176,10 +175,10 @@ public class ExecutePityGacha : LobbyMessage
 
                 response.Reward.Character.Add(new NetCharacterData()
                 {
-                     Csn = gacha.Sn,
-                     CurrencyValue = gacha.CurrencyValue,
-                     PieceCount = gacha.PieceCount,
-                     Tid = characterData.Id
+                    Csn = gacha.Sn,
+                    CurrencyValue = gacha.CurrencyValue,
+                    PieceCount = gacha.PieceCount,
+                    Tid = characterData.Id
                 });
 
                 user.Characters.Add(new CharacterModel()
@@ -198,14 +197,29 @@ public class ExecutePityGacha : LobbyMessage
                 user.AddBadge(BadgeContents.NikkeNew, characterData.NameCode.ToString());
                 user.AddTrigger(Trigger.ObtainCharacter, 1, characterData.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1);
-                
+
                 if (characterData.OriginalRare == OriginalRareType.SSR || characterData.OriginalRare == OriginalRareType.SR)
                 {
                     user.BondInfo.Add(new() { NameCode = characterData.NameCode, Lv = 1 });
 
                 }
             }
-           
+
+        }
+
+        if (totalBodyLabels != 0)
+        {
+            if (totalBodyLabels < 0)
+                user.SubtractCurrency(CurrencyType.DissolutionPoint, -totalBodyLabels);
+            else
+                user.AddCurrency(CurrencyType.DissolutionPoint, totalBodyLabels);
+
+            response.Reward.Currency.Add(new NetCurrencyData
+            {
+                Type = (int)CurrencyType.DissolutionPoint,
+                Value = totalBodyLabels,
+                FinalValue = user.GetCurrencyVal(CurrencyType.DissolutionPoint)
+            });
         }
 
         var pityBanner = GameData.Instance.GachaPityRecords.First().Value;
