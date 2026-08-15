@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -151,6 +151,20 @@ public class ClearStage : LobbyMessage
             user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
 
         user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
+
+        // Subquests like Tetra Connect require clearing every stage of a stage
+        // group, the client waits for this trigger to play the ending scenario.
+        if (clearedStage.GroupId != 0 &&
+            !GameContext.Instance.Triggers.Any(t => t.UserId == user.ID && t.Type == Trigger.CampaignGroupClear && t.ConditionId == clearedStage.GroupId))
+        {
+            bool groupCleared = GameData.Instance.StageDataRecords.Values
+                .Where(s => s.GroupId == clearedStage.GroupId)
+                .All(s => user.FieldInfoNew.Values.Any(f => f.CompletedStages.Contains(s.Id)));
+
+            if (groupCleared)
+                user.AddTrigger(Trigger.CampaignGroupClear, 1, clearedStage.GroupId);
+        }
+
         JsonDb.Save();
         return response;
     }
