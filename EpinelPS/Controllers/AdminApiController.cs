@@ -1,8 +1,10 @@
-﻿using EpinelPS.Controllers.AdminPanel;
+using EpinelPS.Controllers.AdminPanel;
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
+using EpinelPS.Commands.Core;
+using EpinelPS.Commands.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Paseto;
@@ -18,6 +20,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
 {
     private static readonly AsyncLocal<string?> RequestLanguage = new();
     private readonly GameContext dbContext = DbContext;
+    private readonly CommandRegistry registry = new();
     private static readonly MD5 md5 = MD5.Create();
 
     [HttpPost]
@@ -125,131 +128,60 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     {
         if (!AdminController.CheckAuth(HttpContext)) return new RunCmdResponse() { error = "bad token" };
 
-        switch (req.cmdName)
+        // --- SendMail uses pipe-delimited format (title/content may contain spaces) ---
+        if (req.cmdName.Equals("send-mail", StringComparison.OrdinalIgnoreCase))
         {
-            case "reloadDb":
-                JsonDb.Reload();
-                return RunCmdResponse.OK;
-            case "completestage":
-                return AdminCommands.CompleteStage(ulong.Parse(req.p1), req.p2);
-            case "completeallstages":
-                return AdminCommands.CompleteAllStages(ulong.Parse(req.p1));
-            case "addallcharacters":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllCharacters(user);
-                }
-            case "addallcostumes":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllCostumes(user);
-                }
-            case "addallcollections":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllCollections(user);
-                }
-            case "setallbondlevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetAllBondLevel(user, int.Parse(req.p2));
-                }
-            case "addallmaterials":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddAllMaterials(user, int.Parse(req.p2));
-                }
-            case "SetLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetCharacterLevel(user, int.Parse(req.p2));
-                }
-            case "SetSkillLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetSkillLevel(user, int.Parse(req.p2));
-                }
-            case "SetCoreLevel":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.SetCoreLevel(user, int.Parse(req.p2));
-                }
-            case "finishalltutorials":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.FinishAllTutorials(user);
-                }
-            case "AddCharacter":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
-                    return AdminCommands.AddCharacter(user, int.Parse(req.p2));
-                }
-            case "AddItem":
-                {
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == ulong.Parse(req.p1));
-                    if (user == null) return new RunCmdResponse() { error = "invalid user ID" };
+            if (!ulong.TryParse(req.p1, out ulong mailUserId))
+                return new RunCmdResponse() { error = "Invalid user ID" };
+            User? mailUser = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == mailUserId);
+            if (mailUser == null)
+                return new RunCmdResponse() { error = "User not found" };
 
-                    string[] s = req.p2.Split("-");
-                    return AdminCommands.AddItem(user, int.Parse(s[0]), int.Parse(s[1]));
-                }
-            case "SendMail":
-                {
-                    string[] parts = req.p1.Split('|');
-                    if (parts.Length < 6)
-                        return new RunCmdResponse() { error = "Insufficient parameters" };
-                    if (!ulong.TryParse(parts[0], out ulong userId))
-                        return new RunCmdResponse() { error = "Invalid user ID" };
-                    User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
-                    if (user == null)
-                        return new RunCmdResponse() { error = "User not found" };
-                    if (!int.TryParse(parts[1], out int senderId))
-                        return new RunCmdResponse() { error = "Invalid sender ID" };
-                    string title = parts[2];
-                    string content = parts[3];
-                    if (!int.TryParse(parts[4], out int validDays))
-                        return new RunCmdResponse() { error = "Invalid validity days" };
-                    var attachments = new List<MailAttachment>();
-                    string attachmentsParam = parts.Length > 5 ? parts[5] : "";
+            // p2 is pipe-delimited: senderId|title|content|validDays|attachments
+            string[] parts = (req.p2 ?? "").Split('|');
 
-                    if (!string.IsNullOrEmpty(attachmentsParam))
-                    {
-                        foreach (var item in attachmentsParam.Split(','))
-                        {
-                            string[] attParts = item.Split('-');
-                            if (attParts.Length != 3) continue;
+            var mailArgs = new[] { parts[0], parts[1], parts[2], parts[3] };
+            if (parts.Length > 4 && !string.IsNullOrEmpty(parts[4]))
+                mailArgs = [.. mailArgs, parts[4]];
 
-                            if (int.TryParse(attParts[0], out int type) &&
-                                int.TryParse(attParts[1], out int id) &&
-                                int.TryParse(attParts[2], out int count))
-                            {
-                                attachments.Add(new MailAttachment
-                                {
-                                    Type = type,
-                                    Id = id,
-                                    Count = count
-                                });
-                            }
-                        }
-                    }
+            var mailCtx = new CliContext { SelectedUser = mailUser };
+            var mailHandler = registry.CreateHandler("send-mail", mailCtx);
+            if (mailHandler == null)
+                return new RunCmdResponse() { error = "send-mail command not available via API" };
 
-                    return AdminCommands.SendMail(user, senderId, title, content, validDays, attachments);
-                }
-            case "updateServer":
-                {
-                    return await AdminCommands.UpdateResources();
-                }
+            var mailResult = await mailHandler.ExecuteAsync(mailArgs);
+            mailCtx.Save();
+            return mailResult.ToRunCmdResponse();
         }
-        return new RunCmdResponse() { error = "Not implemented" };
+
+        // --- Generic dispatch ---
+        // Try to resolve user context from p1 (non-fatal for user-less commands like reload-db, update-server)
+        User? user = null;
+        if (ulong.TryParse(req.p1, out ulong userId))
+        {
+            user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        }
+
+        var ctx = new CliContext { SelectedUser = user };
+
+        // Look up handler
+        var handler = registry.CreateHandler(req.cmdName, ctx);
+        if (handler == null)
+        {
+            // Check if the command exists at all (to give a better error message)
+            var existing = registry.FindHandler(req.cmdName);
+            if (existing != null)
+                return new RunCmdResponse() { error = $"Command '{req.cmdName}' is not available via API" };
+
+            return new RunCmdResponse() { error = $"Unknown command: {req.cmdName}" };
+        }
+
+        var args = req.ToArgs();
+        var result = await handler.ExecuteAsync(args);
+
+        ctx.Save();
+
+        return result.ToRunCmdResponse();
     }
 
     private static string LookupRealName(string nameLocalkey)

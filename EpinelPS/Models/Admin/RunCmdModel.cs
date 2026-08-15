@@ -11,6 +11,24 @@ public class RunCmdRequest
     public string p2 { get; set; } = "";
 }
 
+public static class RunCmdRequestExtensions
+{
+    public static string[] ToArgs(this RunCmdRequest req)
+    {
+        if (string.IsNullOrEmpty(req.p2)) return [];
+
+        // New format: space-separated (e.g. "1 2", "100 5")
+        if (req.p2.Contains(' '))
+            return req.p2.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        // Legacy compatibility: dash-separated (e.g. "1-2", "100-5")
+        if (req.p2.Contains('-'))
+            return req.p2.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        return [req.p2];
+    }
+}
+
 public class RegisterAccountReg
 {
     [Required]
