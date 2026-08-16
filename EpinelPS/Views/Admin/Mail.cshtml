@@ -121,7 +121,7 @@
     <div class="adminui-modal-content" style="max-width: 500px;">
         <div class="adminui-modal-header">
             <h3 id="alertTitle" data-i18n="mail.alertTitle">Result</h3>
-            <button class="adminui-modal-close" onclick="closeAdminuiAlert()">&times;</button>
+            <button type="button" class="adminui-modal-close" onclick="closeAdminuiAlert()">&times;</button>
         </div>
         <div class="adminui-modal-body">
             <div style="text-align: center; padding: 20px 0;">
@@ -130,7 +130,7 @@
             </div>
         </div>
         <div class="adminui-modal-footer">
-            <button class="btn btn-primary" onclick="closeAdminuiAlert()" style="margin: 0 auto;" data-i18n="mail.confirm">Confirm</button>
+            <button type="button" class="btn btn-primary" onclick="closeAdminuiAlert()" style="margin: 0 auto;" data-i18n="mail.confirm">Confirm</button>
         </div>
     </div>
 </div>
@@ -629,6 +629,20 @@
         msg.textContent = message;
         modal.style.display = 'block';
         setTimeout(() => modal.classList.add('show'), 10);
+    }
+
+    function closeAdminuiAlert() {
+        const modal = document.getElementById('adminuiAlert');
+        if (!modal) return;
+
+        modal.classList.remove('show');
+        setTimeout(() => {
+            // Do not hide a newly opened alert if another request showed it
+            // during the fade-out animation.
+            if (!modal.classList.contains('show')) {
+                modal.style.display = 'none';
+            }
+        }, 300);
     }
 
     // ============================================================

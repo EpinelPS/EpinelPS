@@ -1,4 +1,5 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Archive;
 
@@ -7,26 +8,40 @@ public class GetArchives : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqGetArchiveRecord req = await ReadData<ReqGetArchiveRecord>();
+        _ = await ReadData<ReqGetArchiveRecord>();
 
         ResGetArchiveRecord response = new();
+        List<ArchiveRecordManagerRecord> records = [.. GameData.Instance.archiveRecordManagerTable.Values];
+        List<int> allIds = [.. records.Select(record => record.Id)];
 
-        // Explicitly select IDs from the records
-        List<int> allIds = [.. GameData.Instance.archiveRecordManagerTable.Values.Select(record => record.Id)];
-
-        // Add the IDs to the response lists
+        // This is the archive catalog, not the user's unlock state.
         response.ArchiveRecordManagerList.AddRange(allIds);
-        response.UnlockedArchiveRecordList.AddRange(allIds);
 
-        // Get entries with record_type "EventQuest"
-        List<ArchiveRecordManagerRecord> eventQuestRecords = [.. GameData.Instance.archiveRecordManagerTable.Values.Where(record => record.RecordType == ArchiveRecordType.EventQuest)];
+        User user = GetUser();
+        if (GameConfig.Root.ArchiveUnlockAll == true)
+        {
+            response.UnlockedArchiveRecordList.AddRange(allIds);
+        }
+        else
+        {
+            response.UnlockedArchiveRecordList.AddRange(user.UnlockedArchiveRecordIds);
+        }
+
+        List<ArchiveRecordManagerRecord> eventQuestRecords = [.. records
+            .Where(record => record.RecordType == ArchiveRecordType.EventQuest)];
 
         response.ArchiveEventQuest = new();
-        response.ArchiveEventQuest.UnlockedArchiveRecordManagerEventQuestIdList.AddRange(eventQuestRecords.Select(record => record.Id));
-        // TODO more fields
+        if (GameConfig.Root.ArchiveUnlockAll == true)
+        {
+            response.ArchiveEventQuest.UnlockedArchiveRecordManagerEventQuestIdList
+                .AddRange(eventQuestRecords.Select(record => record.Id));
+        }
+        else
+        {
+            response.ArchiveEventQuest.UnlockedArchiveRecordManagerEventQuestIdList
+                .AddRange(user.UnlockedArchiveEventQuestIds);
+        }
 
-
-        // TODO: allow unlocking
         await WriteDataAsync(response);
     }
 }
