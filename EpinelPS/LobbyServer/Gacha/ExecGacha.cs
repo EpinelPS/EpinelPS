@@ -46,6 +46,7 @@ public class ExecGacha : LobbyMessage
         int bannerID = req.Tid;
         Logging.WriteLine($"Banner ID: {bannerID}");
         GachaTypeRecord gachaType = GameData.Instance.gachaTypes[bannerID];
+        Logging.WriteLine($"Banner Type: {gachaType.Type}");
 
         // Get the user so that we can check for wishlisted characters (if needed)
         User user = GetUser();
@@ -287,7 +288,7 @@ public class ExecGacha : LobbyMessage
             pullsLeft -= useCharCustomizeTickets;
         }
 
-        if (canUseFreeCash)
+        if (canUseFreeCash && gachaType.Type != GachaPremiumType.GachaTutorial)
         {
             var cashPrice = gachaType.GachaPriceGroup.Where(g => g.GachaPriceType == 98 /*CurrencyType.ChargeCash*/ || g.GachaPriceType == 99 /*CurrencyType.FreeCash*/).First();
             long costPerPull = discount ? cashPrice.DailyGachaDiscountPriceValue1 : cashPrice.GachaPriceValueCount1;
@@ -326,15 +327,24 @@ public class ExecGacha : LobbyMessage
         ApplyCurrency(CurrencyType.DissolutionPoint, totalBodyLabels);
 
         // ==========================
+        // RECORD DISCOUNT USAGE
+        // ==========================
+        if (discount)
+        {
+            user.DailyDiscountUsed = true;
+        }
+
+        // ==========================
         // MILEAGE REWARDS
         // ==========================
         if (bannerID == STANDARD_BANNER_ID)
             ApplyCurrency(CurrencyType.SilverMileageTicket, numberOfPulls);
 
-        if (bannerID != STANDARD_BANNER_ID && bannerID != SOCIAL_BANNER_ID && bannerID != NEW_PLAYER_SPECIAL_BANNER_ID) // TODO: Handle daily free pulls. They should not give Gold Mileage.
+        if (bannerID != STANDARD_BANNER_ID && bannerID != SOCIAL_BANNER_ID && bannerID != NEW_PLAYER_SPECIAL_BANNER_ID && gachaType.Type != GachaPremiumType.GachaTutorial) // TODO: Handle daily free pulls. They should not give Gold Mileage.
             ApplyCurrency(CurrencyType.GoldMileageTicket, numberOfPulls);
 
-        user.GachaTutorialPlayCount++;
+         
+        user.AddGachaPullCount(bannerID, numberOfPulls);
 
         // ==========================
         // BANNER PAYBACK RECORDS

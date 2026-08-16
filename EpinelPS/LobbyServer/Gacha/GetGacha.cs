@@ -15,7 +15,7 @@ public class GetGacha : LobbyMessage
         // TODO: should not return anything when not completed chatper 2
 
         // Adding a default GachaType if the tutorial is done
-        if (user.GachaTutorialPlayCount > 0)
+        if (user.GetGachaCountForType( GachaPremiumType.GachaTutorial) > 0)
         {
             response.Gacha.Add(new NetUserGachaData() { GachaType = 3, PlayCount = 1 });
         }
@@ -23,8 +23,11 @@ public class GetGacha : LobbyMessage
         response.Gacha.Add(new NetUserGachaData() { GachaType = 9, PlayCount = 0 }); //type 9 = pickup gacha
         response.GachaEventData.Add(new NetGachaEvent() { FreeCount = 1, GachaTypeId = 9 });
         response.MultipleCustom.AddRange(user.CharacterWishlist.Select(id => new NetGachaCustomData() { Type = 9, Tid = id.CharacterId })); // Fill the user wishlist
+        
+        // Daily discount used
+        if (user.DailyDiscountUsed)
+            response.GachaDiscountData.Add(new NetUserGachaDiscountData() { GachaTypeId = 1, Count = 1 });  //type 1 = normal/wishlist gacha
 
-        // TODO: response.GachaDiscountData  
         // TODO: response.GachaGuaranteedData
 
         // Selectup Lists
