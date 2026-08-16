@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.LobbyUser;
+using EpinelPS.Utils;
+
+namespace EpinelPS.LobbyServer.LobbyUser;
 
 [GameRequest("/User/GetWallpaper")]
 public class GetWallpaper : LobbyMessage
@@ -17,7 +19,7 @@ public class GetWallpaper : LobbyMessage
         response.WallpaperFavoriteList.AddRange(user.WallpaperFavoriteList);
         response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
-        // TODO: JukeboxIdList
+        response.JukeboxIdList.AddRange(JukeboxUtils.GetUnlockedSongs(user));
 
         await WriteDataAsync(response);
     }

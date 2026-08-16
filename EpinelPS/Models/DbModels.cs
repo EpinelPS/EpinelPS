@@ -324,6 +324,7 @@ public class JukeBoxSetting
     public NetJukeboxLocation Location { get; set; }
     public NetJukeboxBgmType Type { get; set; }
     public int TableId { get; set; }
+    public bool IsShuffle { get; set; }
 }
 
 public class UnlockData
