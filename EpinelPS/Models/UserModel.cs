@@ -466,7 +466,7 @@ public class User
         int cap = 10 + Math.Min(maxStars, 2) * 10;
         foreach (var kvp in GameData.Instance.CharacterTable.Values)
         {
-            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM && maxStars >= 3)
+            if (kvp.NameCode == nameCode && (kvp.Corporation == CorporationType.PILGRIM || kvp.CorporationSubType == CorporationSubType.OVERSPEC) && maxStars >= 3)
             {
                 cap = 40;
                 break;
