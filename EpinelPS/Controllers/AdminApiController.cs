@@ -77,7 +77,7 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     [HttpPost("RegisterAccount")]
     public RunCmdResponse RegisterAccount([FromBody] RegisterAccountReg req)
     {
-        if (!AdminController.CheckAuth(HttpContext) && JsonDb.Instance.Users.Count != 0) return new RunCmdResponse() { error = "bad token" };
+        if (JsonDb.Instance.Users.Count != 0 && !AdminController.CheckAuth(HttpContext)) return new RunCmdResponse() { error = "Cannot register an account as an account already exists" };
 
         if (dbContext.SdkUsers.Where(x => x.Email == req.Email).Count() != 0)
         {

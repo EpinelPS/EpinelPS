@@ -18,18 +18,22 @@ public class AdminController(ILogger<AdminController> logger) : Controller
         var db = context.RequestServices.GetRequiredService<GameContext>();
         string? token = context.Request.Cookies["token"] ?? context.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
 
-        PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
-                .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true });
-
-        if (encryptionToken.IsValid)
+        try
         {
-            var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
+            PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
+        .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
+        .Decode(token, new PasetoTokenValidationParameters() { ValidateLifetime = true });
 
-            if (id == 0) return false;
+            if (encryptionToken.IsValid)
+            {
+                var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
 
-            return db.SdkUsers.Where(x => x.ID == id && x.IsAdmin).Any();
+                if (id == 0) return false;
+
+                return db.SdkUsers.Where(x => x.ID == id && x.IsAdmin).Any();
+            }
         }
+        catch { }
         return false;
     }
 
