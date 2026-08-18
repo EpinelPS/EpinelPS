@@ -210,8 +210,11 @@ public class User
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
     // Character Wishlist
-    public List<CharacterWishlistData> CharacterWishlist { get; set; } = []; 
+    public List<CharacterWishlistData> CharacterWishlist { get; set; } = [];
 
+    // Profile Cards
+    public List<int> ProfileCardsData { get; set; } = [];
+    public ProfileCardDecorationLayout ProfileCardDecoration { get; set; } = new();
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
     {

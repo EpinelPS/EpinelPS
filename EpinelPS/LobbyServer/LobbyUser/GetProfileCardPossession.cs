@@ -1,4 +1,6 @@
-﻿namespace EpinelPS.LobbyServer.LobbyUser;
+﻿using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.LobbyUser;
 
 [GameRequest("/ProfileCard/Possession/Get")]
 public class GetProfileCardPossession : LobbyMessage
@@ -6,9 +8,28 @@ public class GetProfileCardPossession : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqProfileCardObjectList req = await ReadData<ReqProfileCardObjectList>();
-
+        var user = GetUser();
         ResProfileCardObjectList response = new();
-        // TODO
+
+        var pcoTable = GameData.Instance.ProfileCardObjectTable.Values.ToList();
+        if (user.ProfileCardsData.Count > 0)
+        {
+            user.ProfileCardsData.ForEach(c =>
+            {
+                GameData.Instance.ProfileCardObjectTable.TryGetValue(c, out var card);
+                switch (card.ObjectType)
+                {
+                    case ObjectType.BackGround:
+                        response.BackgroundIds.Add(c);
+                        break;
+                    case ObjectType.Sticker:
+                        response.StickerIds.Add(c);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
         await WriteDataAsync(response);
     }
 }
