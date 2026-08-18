@@ -27,6 +27,7 @@ public class User
     public int LastClearedDifficulty { get; set; }
     [Obsolete]
     public string? Nickname { get; set; }
+    public string Description { get; set; } = "";
     public int ProfileIconId { get; set; } = 39900;
     public bool ProfileIconIsPrism { get; set; } = false;
     public int ProfileFrame { get; set; } = 25;

@@ -22,7 +22,7 @@ public class GetUserProfile : LobbyMessage
             response.Data.LastCampaignNormalStageId = user.LastNormalStageCleared;
             response.Data.LastCampaignHardStageId = user.LastHardStageCleared;
             response.Data.OutpostOpenState = user.MainQuestData.ContainsKey(25);
-
+            response.Data.Desc = GameContext.Users.Where(u => u.ID == UserId).First().Description;
             for (int i = 0; i < user.RepresentationTeamDataNew.Length; i++)
             {
                 long csn = user.RepresentationTeamDataNew[i];
