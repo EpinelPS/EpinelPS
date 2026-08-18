@@ -16,12 +16,10 @@ public class ProceedMsg : LobbyMessage
 
         KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
 
+        // NOTE: reward messages (MessageType Reward) are all subquest completion
+        // messages, their reward is granted by /messenger/finsubquest when the
+        // user presses the claim button. Do not grant anything here.
         response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId);
-
-        if (msgToSave.Value.RewardId != 0)
-        {
-            Logging.WriteLine("TODO reward for messenger. Reward ID: " + msgToSave.Value.RewardId + " Message ID: " + req.MessageId, LogType.Warning);
-        }
 
         JsonDb.Save();
 
