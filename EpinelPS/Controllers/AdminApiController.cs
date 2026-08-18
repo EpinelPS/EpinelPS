@@ -1,6 +1,7 @@
 using EpinelPS.Controllers.AdminPanel;
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.LobbyServer.SoloraidMuseum;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
 using EpinelPS.Commands.Core;
@@ -183,6 +184,125 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
 
         return result.ToRunCmdResponse();
     }
+
+    [HttpGet("soloRaidMuseum")]
+    public ActionResult<SoloRaidMuseumRecordModel> GetSoloRaidMuseum([FromQuery] ulong userId, [FromQuery] int stageId, [FromQuery] bool noLimit = false)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        if (user is null) return NotFound(new { error = "user not found" });
+        var stage = SoloRaidMuseumHelper.GetStage(user, stageId);
+        var mode = noLimit ? stage.NoLimit : stage.Challenge;
+        return new SoloRaidMuseumRecordModel
+        {
+            UserId = userId,
+            StageId = stageId,
+            NoLimit = noLimit,
+            StageJoinCount = mode.StageJoinCount,
+            TotalDamage = mode.TotalDamage,
+            TotalStep = mode.TotalStep,
+            BestDamage = mode.BestDamage,
+            BestStep = mode.BestStep,
+            IsInProgress = mode.IsInProgress,
+            DebugDamageMultiplier = stage.DebugDamageMultiplier,
+            Logs = mode.Logs.Select(ToMuseumLogModel).ToList(),
+            CurrentLogs = mode.CurrentLogs.Select(ToMuseumLogModel).ToList(),
+        };
+    }
+
+    [HttpGet("soloRaidMuseum/stages")]
+    public IActionResult GetSoloRaidMuseumStages()
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var groups = GameData.Instance.MuseumGroupTable.Values.ToDictionary(x => x.Id, x => x.Order);
+        return Ok(GameData.Instance.MuseumStageTable.Values
+            .OrderBy(x => groups.GetValueOrDefault(x.GroupId, int.MaxValue))
+            .ThenBy(x => x.Order)
+            .Select(x => new { id = x.Id, groupId = x.GroupId, order = x.Order, name = x.StageName ?? $"Stage {x.Id}" }));
+    }
+
+    [HttpPost("soloRaidMuseum")]
+    public ActionResult<RunCmdResponse> UpdateSoloRaidMuseum([FromBody] SoloRaidMuseumRecordModel request)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == request.UserId);
+        if (user is null) return NotFound(new { error = "user not found" });
+        if (request.StageId <= 0 || request.StageJoinCount is < 0 or > 5 ||
+            request.TotalDamage < 0 || request.TotalStep < 0 || request.BestDamage < 0 || request.BestStep < 0)
+            return BadRequest(new { error = "invalid museum values" });
+        if (double.IsNaN(request.DebugDamageMultiplier) || double.IsInfinity(request.DebugDamageMultiplier) ||
+            request.DebugDamageMultiplier < 1 || request.DebugDamageMultiplier > 1000)
+            return BadRequest(new { error = "debug damage multiplier must be between 1 and 1000" });
+        if (!GameData.Instance.MuseumStageTable.ContainsKey(request.StageId))
+            return BadRequest(new { error = "unknown museum stage" });
+
+        var stage = SoloRaidMuseumHelper.GetStage(user, request.StageId);
+        var mode = request.NoLimit ? stage.NoLimit : stage.Challenge;
+        mode.StageJoinCount = request.StageJoinCount;
+        mode.TotalDamage = request.TotalDamage;
+        mode.TotalStep = request.TotalStep;
+        mode.BestDamage = request.BestDamage;
+        mode.BestStep = request.BestStep;
+        mode.IsInProgress = request.IsInProgress;
+        stage.DebugDamageMultiplier = request.DebugDamageMultiplier;
+        mode.Logs = ToMuseumLogs(request.Logs, mode.Logs);
+        mode.CurrentLogs = ToMuseumLogs(request.CurrentLogs, mode.CurrentLogs);
+        mode.OpenTeams = mode.CurrentLogs.Select(x => x.TeamNumber).Distinct().ToList();
+        var noLimitUnlocked = SoloRaidMuseumHelper.RefreshNoLimitUnlock(stage);
+        JsonDb.Save();
+        Logging.WriteLine($"[Admin] solo raid museum updated user={request.UserId}, stage={request.StageId}, noLimit={request.NoLimit}, logs={mode.Logs.Count}, currentLogs={mode.CurrentLogs.Count}, noLimitUnlocked={noLimitUnlocked}", LogType.Info);
+        return RunCmdResponse.OK;
+    }
+
+    [HttpPost("soloRaidMuseum/reset")]
+    public ActionResult<RunCmdResponse> ResetSoloRaidMuseumSeason([FromBody] SoloRaidMuseumResetModel request)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == request.UserId);
+        if (user is null) return NotFound(new { error = "user not found" });
+        if (!GameData.Instance.MuseumStageTable.ContainsKey(request.StageId))
+            return BadRequest(new { error = "unknown museum stage" });
+
+        var stage = SoloRaidMuseumHelper.GetStage(user, request.StageId);
+        var multiplier = stage.DebugDamageMultiplier;
+        var teams = stage.Teams;
+        stage.Challenge = new();
+        stage.NoLimit = new();
+        stage.ReceivedChallengeMissions.Clear();
+        stage.ReceivedNoLimitMissions.Clear();
+        stage.IsNoLimitUnlocked = false;
+        stage.StageMode = SoloRaidMuseumStageMode.Challenge;
+        stage.DebugDamageMultiplier = multiplier;
+        stage.Teams = teams;
+        JsonDb.Save();
+        Logging.WriteLine($"[Admin] solo raid museum season reset user={request.UserId}, stage={request.StageId}", LogType.Info);
+        return RunCmdResponse.OK;
+    }
+
+    private static SoloRaidMuseumLogModel ToMuseumLogModel(SoloRaidMuseumLogData log) => new()
+    {
+        TeamNumber = log.TeamNumber,
+        Damage = log.Damage,
+        Step = log.Step,
+    };
+
+    private static List<SoloRaidMuseumLogData> ToMuseumLogs(IEnumerable<SoloRaidMuseumLogModel>? logs, IEnumerable<SoloRaidMuseumLogData> existing) =>
+        (logs ?? []).Where(x => x.TeamNumber is >= 1 and <= 5 && x.Damage >= 0 && x.Step >= 0)
+            .GroupBy(x => x.TeamNumber).Select(x => x.Last())
+            .OrderBy(x => x.TeamNumber)
+            .Select(x => new SoloRaidMuseumLogData
+            {
+                TeamNumber = x.TeamNumber,
+                Damage = x.Damage,
+                Step = x.Step,
+                Team = existing.FirstOrDefault(old => old.TeamNumber == x.TeamNumber)?.Team
+                    .Select(character => new TeamCharacterData
+                    {
+                        Slot = character.Slot, Csn = character.Csn, Tid = character.Tid,
+                        Lv = character.Lv, Combat = character.Combat, CostumeId = character.CostumeId,
+                    }).ToList() ?? [],
+            })
+            .ToList();
 
     private static string LookupRealName(string nameLocalkey)
     {

@@ -1162,3 +1162,40 @@ public class MiniGameIslandBreakerAlbum
         };
     }
 }
+
+public class SoloRaidMuseumStageData
+{
+    public int StageId { get; set; }
+    public SoloRaidMuseumStageMode StageMode { get; set; }
+    public bool IsNoLimitUnlocked { get; set; }
+    public SoloRaidMuseumModeData Challenge { get; set; } = new();
+    public SoloRaidMuseumModeData NoLimit { get; set; } = new();
+    public List<int> ReceivedChallengeMissions { get; set; } = [];
+    public List<int> ReceivedNoLimitMissions { get; set; } = [];
+    public List<NetTeamData> Teams { get; set; } = [];
+    // Local-server testing only. A value of 1 leaves client-reported damage unchanged.
+    public double DebugDamageMultiplier { get; set; } = 1;
+}
+
+public class SoloRaidMuseumModeData
+{
+    public int StageJoinCount { get; set; }
+    // TotalDamage/TotalStep describe the currently open run. Best values and
+    // Logs are only replaced after a complete five-team run finishes.
+    public long TotalDamage { get; set; }
+    public int TotalStep { get; set; }
+    public long BestDamage { get; set; }
+    public int BestStep { get; set; }
+    public bool IsInProgress { get; set; }
+    public List<int> OpenTeams { get; set; } = [];
+    public List<SoloRaidMuseumLogData> CurrentLogs { get; set; } = [];
+    public List<SoloRaidMuseumLogData> Logs { get; set; } = [];
+}
+
+public class SoloRaidMuseumLogData
+{
+    public long Damage { get; set; }
+    public int Step { get; set; }
+    public int TeamNumber { get; set; }
+    public List<TeamCharacterData> Team { get; set; } = [];
+}

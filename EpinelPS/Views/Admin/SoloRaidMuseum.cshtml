@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Solo Raid Museum";
+}
+
+<div class="adminui-dashboard">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4 mb-0" style="font-size:1.8rem;" data-i18n="soloRaidMuseum.title">单人突击博物馆记录</h1>
+        <a href="/admin/dashboard" class="btn btn-outline-primary btn-sm" data-i18n="soloRaidMuseum.back">返回</a>
+    </div>
+    <div class="card mb-4"><div class="card-body">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-4"><label class="form-label" data-i18n="soloRaidMuseum.user">玩家（昵称或 ID）</label><input id="userPicker" class="form-control" list="userOptions" data-i18n-placeholder="soloRaidMuseum.userPlaceholder" placeholder="输入昵称搜索" autocomplete="off" /><datalist id="userOptions"></datalist><input id="userId" type="hidden" /></div>
+            <div class="col-md-4"><label class="form-label" data-i18n="soloRaidMuseum.stage">关卡</label><select id="stageId" class="form-select"></select></div>
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.mode">模式</label><select id="noLimit" class="form-select"><option value="false" data-i18n="soloRaidMuseum.challenge">挑战模式</option><option value="true" data-i18n="soloRaidMuseum.noLimit">无限模式</option></select></div>
+            <div class="col-md-2"><button class="btn btn-primary w-100" onclick="loadRecord()" data-i18n="soloRaidMuseum.load">读取记录</button></div>
+        </div>
+        <div class="form-text mt-2" data-i18n="soloRaidMuseum.selectHint">先选择玩家和关卡，再点击“读取记录”。例如“第 1 组 · 第 1 关”就是客户端显示的 Stage 101。</div>
+    </div></div>
+    <div id="editor" class="card" style="display:none"><div class="card-body">
+        <div class="alert alert-warning"><strong data-i18n="soloRaidMuseum.debugTitle">测试伤害倍率</strong> <span data-i18n="soloRaidMuseum.debugHelp">设置为 1 表示正常伤害；设置为 100 后，实际战斗结算伤害会放大 100 倍。只对该玩家的单人突击博物馆生效。</span></div>
+        <div class="row g-2 mb-3"><div class="col-md-3"><label class="form-label" data-i18n="soloRaidMuseum.debugMultiplier">伤害倍率</label><input id="debugMultiplier" class="form-control" type="number" min="1" max="1000" step="0.1" value="1" /></div></div>
+        <div class="alert alert-info"><strong data-i18n="soloRaidMuseum.quickHelpTitle">不会打满五队？</strong> <span data-i18n="soloRaidMuseum.quickHelp">先填写“历史最佳伤害”，再点击“按最佳成绩完成本轮”，最后保存修改。只有正在打到一半时才需要勾选“进行中”。</span></div>
+        <div class="d-flex gap-2 flex-wrap mb-3">
+            <button class="btn btn-outline-success" onclick="completeWithBest()" data-i18n="soloRaidMuseum.completeWithBest">按最佳成绩完成本轮</button>
+            <button class="btn btn-outline-secondary" onclick="clearCurrentRun()" data-i18n="soloRaidMuseum.clearCurrent">清空未完成轮次</button>
+        </div>
+        <div class="row g-2">
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.joinCount">已进行队数 <small>(0-5)</small></label><input id="joinCount" class="form-control" type="number" min="0" max="5" /></div>
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.totalDamage">本轮总伤害</label><input id="totalDamage" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.totalStep">本轮总阶段</label><input id="totalStep" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.bestDamage">历史最佳伤害</label><input id="bestDamage" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2"><label class="form-label" data-i18n="soloRaidMuseum.bestStep">历史最佳阶段</label><input id="bestStep" class="form-control" type="number" min="0" /></div>
+            <div class="col-md-2 d-flex align-items-end"><label><input id="inProgress" type="checkbox" /> <span data-i18n="soloRaidMuseum.inProgress">进行中</span></label></div>
+        </div>
+        <h5 class="mt-4"><span data-i18n="soloRaidMuseum.completedTitle">已完成的五队记录</span> <small class="text-muted" data-i18n="soloRaidMuseum.completedHint">用于历史记录和队伍图标</small></h5><div id="logs"></div>
+        <h5 class="mt-4"><span data-i18n="soloRaidMuseum.currentTitle">当前未完成记录</span> <small class="text-muted" data-i18n="soloRaidMuseum.currentHint">进行中的临时记录</small></h5><div id="currentLogs"></div>
+        <button class="btn btn-success mt-3" onclick="saveRecord()" data-i18n="soloRaidMuseum.save">保存修改</button>
+        <button class="btn btn-outline-danger mt-3 ms-2" onclick="resetSeason()" data-i18n="soloRaidMuseum.resetSeason">刷新当前赛季</button>
+        <span id="message" class="ms-3"></span>
+    </div></div>
+</div>
+<script>
+let record;
+function value(id){ return document.getElementById(id).value; }
+function renderLogs(id, logs){
+  const root=document.getElementById(id); root.innerHTML=`<div class="row g-2 mb-1 text-muted small"><div class="col-md-2">${i18n.t('soloRaidMuseum.team')}</div><div class="col-md-5">${i18n.t('soloRaidMuseum.damage')}</div><div class="col-md-5">${i18n.t('soloRaidMuseum.step')}</div></div>`;
+  for(let i=0;i<5;i++){ const x=logs[i]||{teamNumber:i+1,damage:0,step:0}; root.insertAdjacentHTML('beforeend',`<div class="record-row row g-2 mb-2"><div class="col-md-2"><input class="form-control team" type="number" min="1" max="5" value="${x.teamNumber}"></div><div class="col-md-5"><input class="form-control damage" type="number" min="0" value="${x.damage}"></div><div class="col-md-5"><input class="form-control step" type="number" min="0" value="${x.step}"></div></div>`); }
+}
+function readLogs(id){ return [...document.getElementById(id).querySelectorAll('.record-row')].map(r=>({teamNumber:+r.querySelector('.team').value,damage:+r.querySelector('.damage').value,step:+r.querySelector('.step').value})).filter(x=>x.damage||x.step); }
+function completeWithBest(){ const best=+value('bestDamage'); if(best<=0){document.getElementById('message').textContent=i18n.t('soloRaidMuseum.bestDamageRequired');document.getElementById('bestDamage').focus();return;} const totalStep=+value('bestStep'); const damageBase=Math.floor(best/5),damageRemainder=best%5; const stepBase=Math.floor(totalStep/5),stepRemainder=totalStep%5; const generated=Array.from({length:5},(_,i)=>({teamNumber:i+1,damage:damageBase+(i===0?damageRemainder:0),step:stepBase+(i===0?stepRemainder:0)})); renderLogs('logs',generated); document.getElementById('joinCount').value=5; document.getElementById('totalDamage').value=best; document.getElementById('totalStep').value=totalStep; document.getElementById('inProgress').checked=false; document.getElementById('currentLogs').querySelectorAll('.damage,.step').forEach(x=>x.value=0); document.getElementById('message').textContent=i18n.t('soloRaidMuseum.completeMessage'); }
+function clearCurrentRun(){ document.getElementById('joinCount').value=0; document.getElementById('totalDamage').value=0; document.getElementById('totalStep').value=0; document.getElementById('inProgress').checked=false; document.getElementById('currentLogs').querySelectorAll('.damage,.step').forEach(x=>x.value=0); document.getElementById('message').textContent=i18n.t('soloRaidMuseum.clearMessage'); }
+async function loadRecord(){ const u=encodeURIComponent(value('userId')),s=value('stageId'),n=value('noLimit'); if(!u||!s){document.getElementById('message').textContent=i18n.t('soloRaidMuseum.selectError');return;} const r=await fetch(`/adminapi/soloRaidMuseum?userId=${u}&stageId=${s}&noLimit=${n}`); if(!r.ok){document.getElementById('message').textContent=i18n.t('soloRaidMuseum.loadError');return;} record=await r.json(); ['joinCount','totalDamage','totalStep','bestDamage','bestStep'].forEach((x,i)=>document.getElementById(x).value=[record.stageJoinCount,record.totalDamage,record.totalStep,record.bestDamage,record.bestStep][i]); document.getElementById('debugMultiplier').value=record.debugDamageMultiplier||1; document.getElementById('inProgress').checked=record.isInProgress; renderLogs('logs',record.logs);renderLogs('currentLogs',record.currentLogs);document.getElementById('editor').style.display='block'; }
+async function saveRecord(){ record.stageJoinCount=+value('joinCount');record.totalDamage=+value('totalDamage');record.totalStep=+value('totalStep');record.bestDamage=+value('bestDamage');record.bestStep=+value('bestStep');record.debugDamageMultiplier=+value('debugMultiplier')||1;record.isInProgress=document.getElementById('inProgress').checked;record.logs=readLogs('logs');record.currentLogs=readLogs('currentLogs');const r=await fetch('/adminapi/soloRaidMuseum',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(record)});document.getElementById('message').textContent=r.ok?i18n.t('soloRaidMuseum.saved'):i18n.t('soloRaidMuseum.saveError');}
+async function resetSeason(){ if(!record||!confirm(i18n.t('soloRaidMuseum.resetConfirm')))return; const r=await fetch('/adminapi/soloRaidMuseum/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:record.userId,stageId:record.stageId})}); if(!r.ok){document.getElementById('message').textContent=i18n.t('soloRaidMuseum.resetError');return;} document.getElementById('message').textContent=i18n.t('soloRaidMuseum.resetDone'); await loadRecord(); }
+async function init(){
+  const users=await fetch('/admin/Users/GetUsersList').then(r=>r.ok?r.json():[]); const datalist=document.getElementById('userOptions');
+  users.forEach(u=>{const o=document.createElement('option');o.value=`${u.nickname||'(no nickname)'} (${u.id})`;o.dataset.id=u.id;datalist.appendChild(o);});
+  document.getElementById('userPicker').addEventListener('input',function(){const text=this.value;const match=users.find(u=>`${u.nickname||'(no nickname)'} (${u.id})`===text)||users.find(u=>String(u.id)===text);document.getElementById('userId').value=match?match.id:'';});
+  const stages=await fetch('/adminapi/soloRaidMuseum/stages').then(r=>r.ok?r.json():[]); const select=document.getElementById('stageId');
+  stages.forEach((s,i)=>{const o=document.createElement('option');o.value=s.id;o.textContent=i18n.t('soloRaidMuseum.stageOption',{group:s.groupId,stage:s.order,name:s.name,id:s.id});if(i===0)o.selected=true;select.appendChild(o);});
+}
+init();
+</script>
