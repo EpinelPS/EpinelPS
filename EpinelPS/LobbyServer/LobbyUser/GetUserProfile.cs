@@ -54,7 +54,7 @@ public class GetUserProfile : LobbyMessage
 
             if(user.Memorial.Count > 0)
                 response.Data.MemorialCount.Add(new NetMemorialCount { Count = user.Memorial.Count });
-            response.Data.JukeboxCount = user.JukeboxBgm.Count;
+            response.Data.JukeboxCount = user.JukeboxBgm?.Count ?? 0;
         }
 
         await WriteDataAsync(response);

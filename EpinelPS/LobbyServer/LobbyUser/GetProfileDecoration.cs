@@ -8,7 +8,7 @@ public class GetProfileDecoration : LobbyMessage
         ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
         var user = GetUser();
         ResProfileCardDecorationLayout res = new();
-        res.Layout = user.ProfileCardDecoration is not null
+        res.Layout = user.ProfileCardDecoration is not null && user.ProfileCardDecoration.BackgroundId != 0
             ? user.ProfileCardDecoration
             : res.Layout = new ProfileCardDecorationLayout
             {
