@@ -147,6 +147,7 @@ public static class LobbyHandler
             IconPrism = user.ProfileIconIsPrism,
             InfraCoreExp = user.InfraCoreExp,
             InfraCoreLv = user.InfraCoreLvl,
+            Desc = user.Description
         };
 
 

@@ -6,15 +6,15 @@ public class GetProfileDecoration : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqProfileCardDecorationLayout req = await ReadData<ReqProfileCardDecorationLayout>();
-
-        ResProfileCardDecorationLayout r = new()
-        {
-            Layout = new ProfileCardDecorationLayout
+        var user = GetUser();
+        ResProfileCardDecorationLayout res = new();
+        res.Layout = user.ProfileCardDecoration is not null
+            ? user.ProfileCardDecoration
+            : res.Layout = new ProfileCardDecorationLayout
             {
                 BackgroundId = 101002,
                 ShowCharacterSpine = true
-            }
-        };
-        await WriteDataAsync(r);
+            };
+        await WriteDataAsync(res);
     }
 }

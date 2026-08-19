@@ -40,6 +40,7 @@ public static class DbInitializer
                 {
                     ID = user.ID,
                     Nickname = user.Nickname ?? "Guest",
+                    Description = user.Description ?? "",
                     LastAction = user.LastLogin
                 };
                 foreach(var item in user.Triggers)

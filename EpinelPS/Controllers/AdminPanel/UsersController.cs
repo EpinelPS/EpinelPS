@@ -75,6 +75,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         sdkUser.Email = toSet.Username;
         sdkUser.IsAdmin = toSet.IsAdmin;
         gameUser.Nickname = toSet.Nickname;
+        gameUser.Description = toSet.Description;
         _db.SaveChanges();
 
         user.sickpulls = toSet.sickpulls;

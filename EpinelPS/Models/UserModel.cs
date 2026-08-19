@@ -27,6 +27,7 @@ public class User
     public int LastClearedDifficulty { get; set; }
     [Obsolete]
     public string? Nickname { get; set; }
+    public string Description { get; set; } = "";
     public int ProfileIconId { get; set; } = 39900;
     public bool ProfileIconIsPrism { get; set; } = false;
     public int ProfileFrame { get; set; } = 25;
@@ -210,8 +211,11 @@ public class User
     public NetJukeboxFavorite FavoriteSongs { get; set; } = new();
 
     // Character Wishlist
-    public List<CharacterWishlistData> CharacterWishlist { get; set; } = []; 
+    public List<CharacterWishlistData> CharacterWishlist { get; set; } = [];
 
+    // Profile Cards
+    public List<int> ProfileCardsData { get; set; } = [];
+    public ProfileCardDecorationLayout ProfileCardDecoration { get; set; } = new();
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
     {
@@ -467,7 +471,7 @@ public class User
         int cap = 10 + Math.Min(maxStars, 2) * 10;
         foreach (var kvp in GameData.Instance.CharacterTable.Values)
         {
-            if (kvp.NameCode == nameCode && kvp.Corporation == CorporationType.PILGRIM && maxStars >= 3)
+            if (kvp.NameCode == nameCode && (kvp.Corporation == CorporationType.PILGRIM || kvp.CorporationSubType == CorporationSubType.OVERSPEC) && maxStars >= 3)
             {
                 cap = 40;
                 break;

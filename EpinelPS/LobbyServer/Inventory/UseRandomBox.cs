@@ -1,4 +1,5 @@
-﻿using EpinelPS.Database;
+﻿using EpinelPS.Data;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Inventory;
@@ -14,9 +15,10 @@ public class UseRandomBox : LobbyMessage
         ResUseRandomBox response = new();
 
         DbItemData box = user.Items.Where(x => x.Isn == req.Isn).FirstOrDefault() ?? throw new InvalidDataException("cannot find box with isn " + req.Isn);
-        if (req.Count > box.Count) throw new Exception("count mismatch");
+        GameData.Instance.ConsumableItems.TryGetValue(box.ItemType, out var item);
+        if (req.Count * item.UseFragCost > box.Count) throw new Exception("count mismatch");
 
-        box.Count -= req.Count;
+        box.Count -= req.Count * item.UseFragCost;
         if (box.Count == 0) user.Items.Remove(box);
 
         response.Reward = NetUtils.UseLootBox(user, box.ItemType, req.Count);
