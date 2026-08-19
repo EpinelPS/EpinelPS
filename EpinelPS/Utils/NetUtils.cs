@@ -10,7 +10,7 @@ namespace EpinelPS.Utils;
 public class NetUtils
 {
     public const string InvalidSessionErrorType = "urn:shiftup:nikke:client-alert";
-    public const string KickedSessionErrorType = "urn:shiftup:nikke:kicked-session";
+    public const string AnticheatError = "urn:shiftup:nikke:kicked-session";
     public static (SdkUser?, AccessToken?) GetUser(string tokToCheck, HttpContext context)
     {
         if (string.IsNullOrEmpty(tokToCheck))
