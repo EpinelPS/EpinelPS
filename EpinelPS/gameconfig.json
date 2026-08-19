@@ -1,9 +1,9 @@
 {
   "StaticDataMpk": {
-    "Url": "https://cloud.nikke-kr.com/prdenv/150-cebfae1ecb/staticdata/data/qa-260813-08b/552965/mpk/StaticData.pack",
-    "Version": "data/qa-260813-08b/552965",
-    "Salt1": "3pPcPPyAGG4/hYsMOC45O0376CT7s9UNtJUpNgv151o=",
-    "Salt2": "c9YFjx011FBZk9H2RynM9gihIG7upWlK8ILBWSx0cfE="
+    "Url": "https://cloud.nikke-kr.com/prdenv/150-cebfae1ecb/staticdata/data/qa-260813-08b/553116/mpk/StaticData.pack",
+    "Version": "data/qa-260813-08b/553116",
+    "Salt1": "Wwg/7qDuRR97ryGCMqXh/jc1wmOudlnBhmUoP6vhSNo=",
+    "Salt2": "Yw/HbCCvOF98thbd1BmnG4+V7+LeyHcHwCAaCSHl/98="
   },
   "ResourceBaseURL": "https://cloud.nikke-kr.com/prdenv/150-b059c3f36c/{Platform}",
   "ResourceDataPackVersion": "651",
@@ -13,4 +13,3 @@
   "ArchiveUnlockAll": false,
   "TargetVersion": "150.6.9"
 }
-
