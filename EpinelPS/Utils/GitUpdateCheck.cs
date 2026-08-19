@@ -19,6 +19,8 @@ public class GitUpdateCheck
 
     public static async Task CheckForUpdates()
     {
+        string extractPath = AppDomain.CurrentDomain.BaseDirectory + "Server_Update/";
+        if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
         if (Debugger.IsAttached) return;
 
         HttpClient client = new HttpClient();
@@ -33,15 +35,11 @@ public class GitUpdateCheck
             {
                 var run = json.workflow_runs[0];
 
-                GitCommit = "ABC";
-                Console.WriteLine("current hash: " + GitCommit);
-                Console.WriteLine("server hash: " + run.head_commit.id);
-
                 if (GitCommit != run.head_commit.id)
                 {
                     Console.WriteLine("An update is available, would you like to install it?");
-                    Console.WriteLine("Current git commit: " + GitCommit);
-                    Console.WriteLine("Latest git commit: " + run.head_commit.id);
+                    Console.WriteLine("Current Git commit: " + GitCommit);
+                    Console.WriteLine("Latest Git commit: " + run.head_commit.id);
                     Console.Write("Continue (Y/N)? ");
 
                     var line = Console.ReadLine();
@@ -76,9 +74,7 @@ public class GitUpdateCheck
                                     return;
                                 }
 
-                                // Convert absolute progress (bytes downloaded) into relative progress (0% - 100%)
                                 var relativeProgress = new Progress<long>(totalBytes => progress.Report((float)totalBytes / contentLength.Value));
-                                // Use extension method to report progress while downloading
                                 await download.CopyToAsync(file, 81920, relativeProgress);
                                 progress.Report(1);
                             }
@@ -87,7 +83,6 @@ public class GitUpdateCheck
                         progress.Dispose();
                         Console.WriteLine("Wrote file to " + filePath);
 
-                        string extractPath = AppDomain.CurrentDomain.BaseDirectory + "Server_Update/";
                         if (Directory.Exists(extractPath)) Directory.Delete(extractPath, true);
 
                         Console.WriteLine("Extracting...");
@@ -104,7 +99,7 @@ public class GitUpdateCheck
                                 CreateNoWindow = true,
                                 WindowStyle = ProcessWindowStyle.Hidden
                             });
-                            Environment.Exit(0); 
+                            Environment.Exit(0);
                         }
                         else if (OperatingSystem.IsLinux())
                         {
