@@ -52,8 +52,8 @@ public class GetUserProfile : LobbyMessage
             if (user.CompletedTacticAcademyLessons.Count > 0)
                 response.Data.LastTacticAcademyLesson = user.CompletedTacticAcademyLessons.Last();
 
-            if(user.Memorial.Count > 0)
-                response.Data.MemorialCount.Add(new NetMemorialCount { Count = user.Memorial.Count });
+            //if(user.Memorial.Count > 0)
+            //    response.Data.MemorialCount.Add(new NetMemorialCount { Count = user.Memorial.Count });
             response.Data.JukeboxCount = user.JukeboxBgm?.Count ?? 0;
         }
 
