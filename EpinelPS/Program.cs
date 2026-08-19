@@ -27,6 +27,10 @@ internal class Program
             Console.WriteLine($"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/");
             Console.WriteLine("This software is licensed under the AGPL-3.0 License");
             Console.WriteLine("Targeting game version " + GameConfig.Root.TargetVersion);
+            Console.WriteLine("Git commit " + GitUpdateCheck.GitCommit);
+            
+            if (args.Length == 0 || args[0] != "--headless")
+                await GitUpdateCheck.CheckForUpdates();
 
             await GameData.CreateAsync();
 
