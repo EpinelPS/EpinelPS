@@ -1,11 +1,29 @@
-﻿using DnsClient;
+using DnsClient;
 using System.Net;
 
 namespace EpinelPS.Utils;
 
 public class AssetDownloadUtil
 {
-    public static readonly HttpClient AssetDownloader = new(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.All });
+    // Proxy configured via HTTPS_PROXY/ALL_PROXY environment variables. When set, requests
+    // go through the proxy using the original URL - the proxy resolves the hostname remotely,
+    // which also avoids the hosts-file loopback to this server (no by-IP workaround needed).
+    private static readonly string? ProxyUrl =
+        Environment.GetEnvironmentVariable("HTTPS_PROXY") ?? Environment.GetEnvironmentVariable("https_proxy") ??
+        Environment.GetEnvironmentVariable("ALL_PROXY") ?? Environment.GetEnvironmentVariable("all_proxy");
+
+    public static readonly HttpClient AssetDownloader = new(CreateHandler());
+
+    private static HttpClientHandler CreateHandler()
+    {
+        HttpClientHandler handler = new() { AutomaticDecompression = DecompressionMethods.All };
+        if (!string.IsNullOrEmpty(ProxyUrl))
+        {
+            handler.Proxy = new WebProxy(ProxyUrl);
+            handler.UseProxy = true;
+        }
+        return handler;
+    }
 
     private static string? CloudIp;
     public static async Task<string?> DownloadOrGetFileAsync(string url, CancellationToken cancellationToken)
@@ -23,11 +41,7 @@ public class AssetDownloadUtil
         Logging.WriteLine("Game is requesting " + targetFile);
         if (!File.Exists(targetFile))
         {
-            CloudIp ??= await GetIpAsync("cloud.nikke-kr.com");
-
-            Uri requestUri = new("https://" + CloudIp + "/" + rawUrl);
-            using HttpRequestMessage request = new(HttpMethod.Get, requestUri);
-            request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
+            using HttpRequestMessage request = BuildRequest(rawUrl);
             using HttpResponseMessage response = await AssetDownloader.SendAsync(request, cancellationToken);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -63,6 +77,17 @@ public class AssetDownloadUtil
         }
         else
             context.Response.StatusCode = 404;
+    }
+
+    private static HttpRequestMessage BuildRequest(string rawUrl)
+    {
+        if (!string.IsNullOrEmpty(ProxyUrl))
+            return new HttpRequestMessage(HttpMethod.Get, "https://cloud.nikke-kr.com/" + rawUrl);
+
+        CloudIp ??= GetIpAsync("cloud.nikke-kr.com").GetAwaiter().GetResult();
+        HttpRequestMessage request = new(HttpMethod.Get, "https://" + CloudIp + "/" + rawUrl);
+        request.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
+        return request;
     }
 
     public static async Task<string> GetIpAsync(string query)
