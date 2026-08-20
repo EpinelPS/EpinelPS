@@ -12,7 +12,7 @@ public class GetProfileDecoration : LobbyMessage
             ? user.ProfileCardDecoration
             : res.Layout = new ProfileCardDecorationLayout
             {
-                BackgroundId = 101002,
+                BackgroundId = 301001,
                 ShowCharacterSpine = true
             };
         await WriteDataAsync(res);
