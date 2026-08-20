@@ -28,9 +28,9 @@ public class User
     [Obsolete]
     public string? Nickname { get; set; }
     public string Description { get; set; } = "";
-    public int ProfileIconId { get; set; } = 39900;
+    public int ProfileIconId { get; set; } = 30100;
     public bool ProfileIconIsPrism { get; set; } = false;
-    public int ProfileFrame { get; set; } = 25;
+    public int ProfileFrame { get; set; } = 1;
     [Obsolete]
     public bool IsAdmin { get; set; } = false;
     public bool sickpulls { get; set; } = false;
@@ -84,7 +84,6 @@ public class User
     //个人面板
     public List<int> StickerList { get; set; } = [];
     public List<int> BackgroundList { get; set; } = [];
-    public ProfileCardDecorationLayout DecorationLayout { get; set; } = new();
     public List<int> IconList { get; set; } = [];
     public List<int> FrameList { get; set; } = [];
     public List<int> TitleList { get; set; } = [];
