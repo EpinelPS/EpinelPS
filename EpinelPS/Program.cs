@@ -126,6 +126,12 @@ internal class Program
 
             WebApplication app = builder.Build();
             CreateDbIfNotExists(app);
+
+            // Long-lived GameContext for legacy code paths that use GameContext.Instance
+            // (e.g. User.AddTrigger). Resolved from the root provider so it is never
+            // disposed before shutdown, unlike per-request scoped instances.
+            GameContext.SetInstance(app.Services.GetRequiredService<GameContext>());
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMiddleware<EncryptionMiddleware>();
