@@ -5,25 +5,15 @@ namespace EpinelPS.Utils;
 
 public class AssetDownloadUtil
 {
-    // Proxy configured via HTTPS_PROXY/ALL_PROXY environment variables. When set, requests
-    // go through the proxy using the original URL - the proxy resolves the hostname remotely,
-    // which also avoids the hosts-file loopback to this server (no by-IP workaround needed).
+    // Proxy is picked up automatically by .NET from the HTTPS_PROXY/ALL_PROXY environment
+    // variables. We only read them here to know whether a proxy is in effect: with a proxy,
+    // requests use the original URL - the proxy resolves the hostname remotely, which also
+    // avoids the hosts-file loopback to this server (no by-IP workaround needed).
     private static readonly string? ProxyUrl =
         Environment.GetEnvironmentVariable("HTTPS_PROXY") ?? Environment.GetEnvironmentVariable("https_proxy") ??
         Environment.GetEnvironmentVariable("ALL_PROXY") ?? Environment.GetEnvironmentVariable("all_proxy");
 
-    public static readonly HttpClient AssetDownloader = new(CreateHandler());
-
-    private static HttpClientHandler CreateHandler()
-    {
-        HttpClientHandler handler = new() { AutomaticDecompression = DecompressionMethods.All };
-        if (!string.IsNullOrEmpty(ProxyUrl))
-        {
-            handler.Proxy = new WebProxy(ProxyUrl);
-            handler.UseProxy = true;
-        }
-        return handler;
-    }
+    public static readonly HttpClient AssetDownloader = new(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.All });
 
     private static string? CloudIp;
     public static async Task<string?> DownloadOrGetFileAsync(string url, CancellationToken cancellationToken)
