@@ -12,9 +12,6 @@
 [![Discord](https://img.shields.io/discord/1261717212448952450?style=flat-square)](https://discord.gg/Ztt6Y9vQjF)
 
 </div>
-
-# Note: I am currently in the process of doing a rewrite to improve code quality and to use SQLite. Some contributions may not be accepted.
-
 Private/local server for a 2d anime rpg game. The goal of this project is to replicate the functionality of the official server.
 
 Discord server: https://discord.gg/Ztt6Y9vQjF
