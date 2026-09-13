@@ -16,7 +16,7 @@ public class FastClearTower : LobbyMessage
 
         User user = GetUser();
 
-        response.Reward = ClearTower.CompleteTower(user, req.TowerId).Reward;
+        response.Reward = TowerHelper.CompleteTower(user, req.TowerId);
 
         await WriteDataAsync(response);
     }

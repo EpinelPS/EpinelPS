@@ -5,6 +5,8 @@ using EpinelPS.Models.Admin;
 using Google.Protobuf;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Text.Json;
+using EpinelPS.LobbyServer.Tower;
 
 namespace EpinelPS.Utils;
 
@@ -633,6 +635,88 @@ public class AdminCommands
             return new RunCmdResponse { error = $"发送失败: {ex.Message}" };
         }
     }
+    
+    public static RunCmdResponse SkipTowerFloor(ulong userId, string args)
+    {
+        var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+
+        try
+        {
+            var towerParsed = Enum.TryParse(args.Split('-')[0], out CorporationTowerType tower);
+            var floorParsed = int.TryParse(args.Split('-')[1], out var floor);
+
+            if (towerParsed && floorParsed)
+            {
+                Console.WriteLine($"Tower: {tower}, Floor: {floor} | ALL means Tribe Tower");
+
+                var currentFloor = 0;
+                if (user?.TowerProgress != null && user.TowerProgress.TryGetValue(tower, out var savedProgress))
+                    currentFloor = savedProgress;
+
+                if (floor <= currentFloor)
+                    return new RunCmdResponse()
+                    {
+                        error = $"Invalid floor {floor} for tower {tower}. " +
+                                $"Last Cleared {tower} Tower floor is {currentFloor}. " +
+                                $"Input must be greater than {currentFloor}."
+                    };
+
+                var maxFloor = GameData.Instance.towerTable.Values
+                    .Where(x => x.Type == tower)
+                    .Select(x => x.Floor)
+                    .DefaultIfEmpty(0)
+                    .Max();
+
+                if (maxFloor == 0)
+                    return new RunCmdResponse() { error = $"No floors found for tower {tower}" };
+
+                if (floor > maxFloor)
+                    return new RunCmdResponse()
+                    {
+                        error = $"Invalid floor {floor} for tower {tower}. " +
+                                $"Max floor is {maxFloor}. " +
+                                $"Input must be between {currentFloor + 1} and {maxFloor}."
+                    };
+
+                if (currentFloor >= maxFloor)
+                    return new RunCmdResponse()
+                    {
+                        error = $"Tower {tower} already fully cleared " +
+                                $"(progress={currentFloor}, max={maxFloor})."
+                    };
+
+                var targetTower = GameData.Instance.towerTable.Values
+                    .FirstOrDefault(x => x.Type == tower && x.Floor == floor);
+
+                if (targetTower == null) return new RunCmdResponse() { error = $"Floor {floor} not found for tower {tower}" };
+
+                var reward = TowerHelper.SkipTowerFloors(user, targetTower.Id, out var triggers);
+
+                triggers.ForEach(trigger =>
+                {
+                    try
+                    {
+                        user.AddTrigger(trigger.Type, trigger.Value, trigger.ConditionId);
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        Console.WriteLine($"Warning: could not record trigger {trigger.Type} (conditionId {trigger.ConditionId}) - GameContext unavailable");
+                    }
+                });
+
+                Console.WriteLine("Tower Clear Reward: " + JsonSerializer.Serialize(reward));
+                JsonDb.Save();
+            }
+            else
+                return new RunCmdResponse() { error = "Tower and floor number must be valid integers" };
+        }
+        catch (Exception ex)
+        {
+            return new RunCmdResponse() { error = "Exception: " + ex.ToString() };
+        }
+        return RunCmdResponse.OK;
+    }
+    
     internal static async Task<RunCmdResponse> UpdateResources()
     {
         Logging.WriteLine("updating static data and resource info...", LogType.Info);
