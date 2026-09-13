@@ -68,7 +68,7 @@ public class GitUpdateCheck
                             {
                                 // Ignore progress reporting when no progress reporter was 
                                 // passed or when the content length is unknown
-                                if (progress == null || !contentLength.HasValue)
+                                if (!contentLength.HasValue)
                                 {
                                     await download.CopyToAsync(file);
                                     return;
@@ -92,12 +92,12 @@ public class GitUpdateCheck
                         if (OperatingSystem.IsWindows())
                         {
                             Console.WriteLine("Writing... EpinelPS will be restarted automatically.");
+                            string targetDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\', '/');
                             Process.Start(new ProcessStartInfo
                             {
                                 FileName = "cmd.exe",
-                                Arguments = $"/c timeout /t 2 && xcopy \"{extractPath}\" \"{AppDomain.CurrentDomain.BaseDirectory}\" /Y /E && start \"\" \"{Environment.ProcessPath}\"",
-                                CreateNoWindow = true,
-                                WindowStyle = ProcessWindowStyle.Hidden
+                                Arguments = $"/c ping 127.0.0.1 -n 4 > nul && xcopy \"{extractPath}\" \"{targetDir}\" /Y /E /R /H && start \"\" \"{Environment.ProcessPath}\"",
+                                UseShellExecute = false
                             });
                             Environment.Exit(0);
                         }
