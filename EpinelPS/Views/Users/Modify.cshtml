@@ -150,6 +150,129 @@
             </div>
         </div>
     </div>
+    
+        <div class="container-fluid mt-3">
+        @if (!Model.OverloadedGear.Any())
+        {
+            <div class="alert alert-info">No overloaded gear found.</div>
+        }
+        else
+        {
+            <!-- Main form wrapping everything -->
+            <form asp-action="ModifyGear" asp-route-id="@Model.ID" method="post" id="mainForm">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h1 class="mb-0">Modify Overload Gear</h1>
+                    <button type="submit" name="submitType" value="saveAll" class="btn btn-info">Save All</button>
+                </div>
+            
+                @foreach (var corp in Model.OverloadedGear
+                              .GroupBy(c => c.Manufacturer)
+                              .OrderBy(x => x.Key))
+                {
+                    <div class="col-lg-12 mb-4">
+                        <div class="card">
+                            <div class="card-header p-2" id="heading-@corp.Key">
+                                <button
+                                    class="btn btn-link w-100 d-flex justify-content-between align-items-center text-decoration-none border-0 shadow-none"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#@corp.Key" aria-expanded="true"
+                                    aria-controls="@corp.Key">
+                                    <h3 class="mb-0">@(corp.Key == "OVERSPEC" ? "PILGRIM/OVERSPEC" : corp.Key)</h3>
+                                    <i class="bi bi-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div id="@corp.Key" class="collapse show" aria-labelledby="heading-@corp.Key">
+                                <div class="card-body">
+                                    @foreach (var character in corp.OrderBy(c => c.SquadName))
+                                    {
+                                        <div class="col-lg-12 mb-4">
+                                            <div class="card">
+                                                <div class="card-header bg-black">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="d-inline-flex mb-0 me-3 flex-grow-1">
+                                                            <h2 class="mb-0 me-3" data-toggle="tooltip" title="@character.SquadName"
+                                                                style="max-width:20ch;white-space: nowrap !important;
+                                                            text-overflow: ellipsis !important;
+                                                            overflow: hidden !important;">
+                                                                @character.SquadName
+                                                            </h2>
+                                                            <button type="submit" name="submitType" 
+                                                                    value="saveCharacter_@character.CharacterCsn" 
+                                                                    class="btn btn-info btn-sm" style="font-size:12pt;">Save</button>
+                                                        </div>
+                                                        <div class="d-flex align-items-stretch gap-1">
+                                                            <h3 class="mb-0">LV@(character.CharacterLevel)</h3>
+                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
+                                                            <h3 class="mb-0">Skill 1: LV@(character.Skill1)</h3>
+                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
+                                                            <h3 class="mb-0">Skill 2: LV@(character.Skill2)</h3>
+                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
+                                                            <h3 class="mb-0">Burst Skill: LV@(character.BurstSkill)</h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="row g-3">
+                                                        @foreach (var gear in character.Gears)
+                                                        {
+                                                            <div class="col-6 col-md">
+                                                                <div class="card h-100 bg-dark">
+                                                                    <div class="card-body d-flex flex-column">
+                                                                        <!-- Hidden fields for identification -->
+                                                                        <input type="hidden" name="GearUpdates[@gear.GearIsn].CharacterId" value="@character.CharacterCsn" />
+                                                                        <input type="hidden" name="GearUpdates[@gear.GearIsn].GearId" value="@gear.GearIsn" />
+                                                                    
+                                                                        <h2 class="card-title mb-3">@gear.GearType</h2>
+
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label mb-1 fw-bold fs-6">Level:</label>
+                                                                            <input type="number"
+                                                                                   class="form-control form-control-sm fw-bold fs-6"
+                                                                                   name="GearUpdates[@gear.GearIsn].Level" value="@gear.GearLevel" min="0" max="5" />
+                                                                        </div>
+
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label mb-1 fw-bold fs-6">Option 1:</label>
+                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                                                                    name="GearUpdates[@gear.GearIsn].Option1" asp-items="Model.GetOverloadSelectList(gear.Option1Id)">
+                                                                                <option value="0">No Option</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="mb-2">
+                                                                            <label class="form-label mb-1">Option 2:</label>
+                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                                                                    name="GearUpdates[@gear.GearIsn].Option2" asp-items="Model.GetOverloadSelectList(gear.Option2Id)">
+                                                                                <option value="0">No Option</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <div class="mb-3">
+                                                                            <label class="form-label mb-1">Option 3:</label>
+                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                                                                    name="GearUpdates[@gear.GearIsn].Option3" asp-items="Model.GetOverloadSelectList(gear.Option3Id)">
+                                                                                <option value="0">No Option</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                        <button type="submit" name="submitType" value="updateGear_@gear.GearIsn" class="btn btn-primary w-100 mt-auto p-2">Update Gear</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </form>
+        }
+    </div>
 </div>
 
 <style>
@@ -263,3 +386,50 @@
         opacity: 1;
     }
 </style>
+
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Restore scroll position
+            const savedScroll = localStorage.getItem('scrollPosition');
+            if (savedScroll) {
+                window.scrollTo(0, parseInt(savedScroll));
+            }
+
+            const collapsedCards = JSON.parse(localStorage.getItem('collapsedCards') || '{}');
+            document.querySelectorAll('.collapse').forEach(collapse => {
+                const collapseId = collapse.id;
+                if (collapsedCards[collapseId] === true) {
+                    collapse.classList.remove('show');
+                } else if (collapsedCards[collapseId] === false) {
+                    collapse.classList.add('show');
+                }
+            });
+
+            let scrollTimeout;
+            window.addEventListener('scroll', function() {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    localStorage.setItem('scrollPosition', window.scrollY);
+                }, 100);
+            });
+
+            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-bs-target').replace('#', '');
+                    const targetCollapse = document.getElementById(targetId);
+
+                    setTimeout(() => {
+                        const collapsedCards = JSON.parse(localStorage.getItem('collapsedCards') || '{}');
+                        collapsedCards[targetId] = !targetCollapse.classList.contains('show');
+                        localStorage.setItem('collapsedCards', JSON.stringify(collapsedCards));
+                    }, 100);
+                });
+            });
+
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
+                    localStorage.setItem('scrollPosition', window.scrollY);
+                });
+            });
+        });
+    </script>
