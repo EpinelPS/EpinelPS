@@ -30,7 +30,9 @@ internal class Program
             Console.WriteLine("Git commit " + GitUpdateCheck.GitCommit);
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gamecommon.json")))
             {
-                Console.WriteLine("gamecommon.json does not exist, please go to our discord server for assistance");
+                Console.WriteLine("gamecommon.json does not exist. Please obtain a copy of this file.");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
                 return;
             }
             
