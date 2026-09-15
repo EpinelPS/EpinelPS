@@ -178,11 +178,7 @@ public class GetMessages : LobbyMessage
                     continue;
             }
 
-            // Check trigger conditions
-            if (!IsTriggerListSatisfied(user, subQuest.TriggerList))
-                continue;
-
-            // Auto-enroll if not already enrolled
+            // Auto-enroll if not already enrolled (only checks prerequisite chain, not TriggerList)
             if (!user.SubQuestData.ContainsKey(subQuest.Id))
             {
                 Logging.WriteLine($"[Messenger] Auto-enrolling subquest {subQuest.Id} for user {user.ID}", LogType.Info);
