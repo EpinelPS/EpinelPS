@@ -9,7 +9,6 @@ public class ProceedNikkeFunction : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        // { "location": { "chapter": 3, "stage": 6, "order": 1 }, "event": 10040, "selectionNumber": 1, "selectionGroupElementId": 100401 }
         ReqProceedSimRoomNikkeFunction req = await ReadData<ReqProceedSimRoomNikkeFunction>();
         User user = GetUser();
 

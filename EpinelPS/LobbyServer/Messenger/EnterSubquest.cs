@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Messenger;
 
@@ -12,9 +13,22 @@ public class EnterSubquest : LobbyMessage
         User user = GetUser();
 
         ResEnterSubQuestMessengerDialog response = new();
+        var opener = GameData.Instance.Subquests.FirstOrDefault(x => x.Key == req.SubQuestId);
+        if (opener.Value == null)
+        {
+            Logging.Warn($"Subquest {req.SubQuestId} not found.");
+            return;
+        }
 
-        KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-        KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.ConversationId && x.Value.IsOpener).First();
+        var conversation = GameData.Instance.Messages.FirstOrDefault(x =>
+            x.Value.ConversationId == opener.Value.ConversationId &&
+            x.Value.IsOpener);
+
+        if (conversation.Value == null)
+        {
+            Logging.Warn($"Subquest {req.SubQuestId} not found.");
+            return;
+        }
 
         response.Message = user.CreateMessage(conversation.Value);
         JsonDb.Save();

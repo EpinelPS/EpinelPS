@@ -22,13 +22,20 @@ public class GameContext : DbContext
 
     /// <summary>
     /// GameContext instance. Should only be used in console thread.
+    /// Long-lived, set once at startup via <see cref="SetInstance"/> - do NOT set this from
+    /// the constructor, as DI creates short-lived scoped instances per request that get
+    /// disposed when the request ends, leaving a dangling disposed instance behind.
     /// </summary>
     public static GameContext Instance { get; private set; } = null!;
     public static DbContextOptions<GameContext> Options { get; private set; } = null!;
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
         Options = options;
-        Instance = this;
+    }
+
+    public static void SetInstance(GameContext context)
+    {
+        Instance = context;
     }
 
     public static GameContext CreateNew()

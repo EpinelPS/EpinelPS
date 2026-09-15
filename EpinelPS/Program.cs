@@ -28,20 +28,16 @@ internal class Program
             Console.WriteLine("This software is licensed under the AGPL-3.0 License");
             Console.WriteLine("Targeting game version " + GameConfig.Root.TargetVersion);
             Console.WriteLine("Git commit " + GitUpdateCheck.GitCommit);
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "gamecommon.json")))
+            {
+                Console.WriteLine("gamecommon.json does not exist, please go to our discord server for assistance");
+                return;
+            }
             
             if (args.Length == 0 || args[0] != "--headless")
                 await GitUpdateCheck.CheckForUpdates();
 
             await GameData.CreateAsync();
-
-            try
-            {
-                await LocaleDataDownloader.DownloadAsync(CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-                Logging.WriteLine($"Failed to update locale data: {ex.Message}", LogType.Warning);
-            }
 
             Console.WriteLine("Initializing database");
             JsonDb.Save();
@@ -126,6 +122,12 @@ internal class Program
 
             WebApplication app = builder.Build();
             CreateDbIfNotExists(app);
+
+            // Long-lived GameContext for legacy code paths that use GameContext.Instance
+            // (e.g. User.AddTrigger). Resolved from the root provider so it is never
+            // disposed before shutdown, unlike per-request scoped instances.
+            GameContext.SetInstance(app.Services.GetRequiredService<GameContext>());
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMiddleware<EncryptionMiddleware>();
