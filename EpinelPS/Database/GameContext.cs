@@ -27,12 +27,19 @@ public class GameContext : DbContext
     /// disposed when the request ends, leaving a dangling disposed instance behind.
     /// </summary>
     public static GameContext Instance { get; private set; } = null!;
+    public static DbContextOptions<GameContext> Options { get; private set; } = null!;
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
+        Options = options;
     }
 
     public static void SetInstance(GameContext context)
     {
         Instance = context;
+    }
+
+    public static GameContext CreateNew()
+    {
+        return new GameContext(Options);
     }
 }

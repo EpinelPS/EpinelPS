@@ -119,7 +119,7 @@ public class UsePiece : LobbyMessage
                 // Add "New Character" Badge
                 user.AddBadge(BadgeContents.NikkeNew, character.NameCode.ToString());
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
-                if (character.OriginalRare == OriginalRareType.SR)
+                if (character.OriginalRare == OriginalRareType.SSR)
                 {
                     user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
                 }

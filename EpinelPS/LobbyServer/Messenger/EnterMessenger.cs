@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Messenger;
 
@@ -34,7 +35,8 @@ public class EnterMessenger : LobbyMessage
 
         response.Message = user.CreateMessage(conversation.Value);
 
-        user.AddTrigger(Trigger.MessageClear, 1, req.Tid); // TODO check if this is correct
+        Logging.WriteLine($"[Messenger] Enter: user={user.ID}, Tid={opener.Tid}, RoomId={conversation.Value.RoomId}", LogType.Info);
+        user.AddTrigger(Trigger.MessageClear, 1, req.Tid);
 
         JsonDb.Save();
 

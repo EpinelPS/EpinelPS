@@ -154,15 +154,19 @@ public class ClearStage : LobbyMessage
 
         // Subquests like Tetra Connect require clearing every stage of a stage
         // group, the client waits for this trigger to play the ending scenario.
-        if (clearedStage.GroupId != 0 &&
-            !GameContext.Instance.Triggers.Any(t => t.UserId == user.ID && t.Type == Trigger.CampaignGroupClear && t.ConditionId == clearedStage.GroupId))
+        if (clearedStage.GroupId != 0)
         {
-            bool groupCleared = GameData.Instance.StageDataRecords.Values
-                .Where(s => s.GroupId == clearedStage.GroupId)
-                .All(s => user.FieldInfoNew.Values.Any(f => f.CompletedStages.Contains(s.Id)));
+            using var ctx = GameContext.CreateNew();
+            bool hasGroupClear = ctx.Triggers.Any(t => t.UserId == user.ID && t.Type == Trigger.CampaignGroupClear && t.ConditionId == clearedStage.GroupId);
+            if (!hasGroupClear)
+            {
+                bool groupCleared = GameData.Instance.StageDataRecords.Values
+                    .Where(s => s.GroupId == clearedStage.GroupId)
+                    .All(s => user.FieldInfoNew.Values.Any(f => f.CompletedStages.Contains(s.Id)));
 
-            if (groupCleared)
-                user.AddTrigger(Trigger.CampaignGroupClear, 1, clearedStage.GroupId);
+                if (groupCleared)
+                    user.AddTrigger(Trigger.CampaignGroupClear, 1, clearedStage.GroupId);
+            }
         }
 
         JsonDb.Save();
@@ -178,6 +182,17 @@ public class ClearStage : LobbyMessage
         {
             user.SetQuest(quest.Id, false);
             user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
+        }
+        else
+        {
+            // Some stages don't have quest records but are needed by messenger conditions.
+            // Record MainQuestClear with the stageId as a fallback.
+            bool neededByMessenger = GameData.Instance.MessageConditions.Values.Any(c =>
+                c.TriggerList?.Any(t => t.Trigger == Trigger.MainQuestClear && t.ConditionId == clearedStageId) == true);
+            if (neededByMessenger)
+            {
+                user.AddTrigger(Trigger.MainQuestClear, 1, clearedStageId);
+            }
         }
 
         // TODO: Is this the right place to add default characters?

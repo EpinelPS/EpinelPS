@@ -168,7 +168,8 @@ public static class LobbyHandler
     }
     public static NetWholeUserData CreateWholeUserDataFromDbUser(User user)
     {
-        var userDB = GameContext.Instance.Users.Find((ulong)user.ID);
+        using var ctx1 = GameContext.CreateNew();
+        var userDB = ctx1.Users.Find((ulong)user.ID);
         NetWholeUserData ret = new()
         {
             Lv = user.userPointData.UserLevel,
@@ -187,7 +188,8 @@ public static class LobbyHandler
 
     public static NetWholeUserData CreateWholeUserDataFromDbUser(ulong id)
     {
-        var userDB = GameContext.Instance.Users.Find((ulong)id);
+        using var ctx2 = GameContext.CreateNew();
+        var userDB = ctx2.Users.Find((ulong)id);
         var user = JsonDb.Instance.Users.Where(x=>x.ID == id).FirstOrDefault();
         NetWholeUserData ret = new()
         {
