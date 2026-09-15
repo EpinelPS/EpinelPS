@@ -67,28 +67,7 @@ public class GetMessages : LobbyMessage
             }
         }
 
-        // Retroactively add missing MessageClear triggers for conversations in MessengerData
-        // This ensures the client's local condition evaluation works correctly
-        foreach (NetMessage msg in user.MessengerData)
-        {
-            foreach (var condKv in GameData.Instance.MessageConditions)
-            {
-                if (condKv.Value.Tid == msg.ConversationId)
-                {
-                    bool hasTrigger = GameContext.Triggers.Any(t =>
-                        t.UserId == user.ID &&
-                        t.Type == Trigger.MessageClear &&
-                        t.ConditionId == condKv.Key);
-
-                    if (!hasTrigger)
-                    {
-                        Logging.WriteLine($"[Messenger] Retroactively adding MessageClear trigger for condition {condKv.Key}, Tid={msg.ConversationId}", LogType.Info);
-                        user.AddTrigger(Trigger.MessageClear, 1, condKv.Key);
-                    }
-                    break;
-                }
-            }
-        }
+        
 
         // Retroactively add missing MainQuestClear triggers needed by messenger conditions
         foreach (KeyValuePair<int, MessengerConditionTriggerRecord> condKv in GameData.Instance.MessageConditions)
