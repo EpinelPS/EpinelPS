@@ -115,40 +115,36 @@ public class GetMessages : LobbyMessage
 
             Logging.WriteLine($"[Messenger] Checking condition {conditionId}, Tid={msgCondition.Tid}, MessageType={msgCondition.MessageType}, TriggerCount={msgCondition.TriggerList?.Count ?? 0}", LogType.Debug);
 
-            if (IsTriggerListSatisfied(user, msgCondition.TriggerList))
+            bool isPicked = false;
+            if (msgCondition.MessageType == MessageType.RandomMessage || msgCondition.MessageType == MessageType.DailyMessage)
             {
-                bool messageExists = user.MessengerData.Any(m => m.ConversationId == msgCondition.Tid);
-                if (!messageExists)
-                {
-                    // For RandomMessage/DailyMessage, only create if already picked
-                    if (msgCondition.MessageType == MessageType.RandomMessage || msgCondition.MessageType == MessageType.DailyMessage)
-                    {
-                        bool picked = user.PickedMessages.Any(p => p.ConversationId == msgCondition.Tid);
-                        if (!picked)
-                        {
-                            Logging.WriteLine($"[Messenger] Condition {conditionId} satisfied but not picked yet, skipping", LogType.Debug);
-                            continue;
-                        }
-                    }
-
-                    KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.FirstOrDefault(x =>
-                        x.Value.ConversationId == msgCondition.Tid && x.Value.IsOpener);
-
-                    if (conversation.Value != null)
-                    {
-                        Logging.WriteLine($"[Messenger] Creating message for condition {conditionId}, Tid={msgCondition.Tid}, RoomId={conversation.Value.RoomId}, user={user.ID}", LogType.Info);
-                        user.CreateMessage(conversation.Value);
-                    }
-                    else
-                    {
-                        Logging.WriteLine($"[Messenger] No opener found for Tid={msgCondition.Tid}", LogType.Warning);
-                    }
-                }
+                isPicked = user.PickedMessages.Any(p => p.ConversationId == msgCondition.Tid);
+                // For picked messages, skip the trigger list check - the pick itself is the authorization
+                if (!isPicked)
+                    continue;
             }
-            else
+            else if (!IsTriggerListSatisfied(user, msgCondition.TriggerList))
             {
                 Logging.WriteLine($"[Messenger] Condition {conditionId} NOT satisfied for user {user.ID}", LogType.Debug);
                 LogUnsatisfiedTriggers(user, msgCondition.TriggerList);
+                continue;
+            }
+
+            bool messageExists = user.MessengerData.Any(m => m.ConversationId == msgCondition.Tid);
+            if (!messageExists)
+            {
+                KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.FirstOrDefault(x =>
+                    x.Value.ConversationId == msgCondition.Tid && x.Value.IsOpener);
+
+                if (conversation.Value != null)
+                {
+                    Logging.WriteLine($"[Messenger] Creating message for condition {conditionId}, Tid={msgCondition.Tid}, RoomId={conversation.Value.RoomId}, user={user.ID}", LogType.Info);
+                    user.CreateMessage(conversation.Value);
+                }
+                else
+                {
+                    Logging.WriteLine($"[Messenger] No opener found for Tid={msgCondition.Tid}", LogType.Warning);
+                }
             }
         }
     }
