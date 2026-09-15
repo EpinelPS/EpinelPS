@@ -1,4 +1,7 @@
-﻿namespace EpinelPS.LobbyServer.Tower;
+﻿using System.Text.Json;
+using EpinelPS.Data;
+
+namespace EpinelPS.LobbyServer.Tower;
 
 [GameRequest("/tower/gettowerdata")]
 public class GetTowerData : LobbyMessage
@@ -6,55 +9,47 @@ public class GetTowerData : LobbyMessage
     protected override async Task HandleAsync()
     {
         ReqGetTowerData req = await ReadData<ReqGetTowerData>();
-
-            
-
-            ResGetTowerData response = new();
-
+        ResGetTowerData response = new();
         User user = GetUser();
 
-        Dictionary<int, int>? count = user.ResetableData.TowerCount;
-        if (count.Count == 0 || count == null)
+        Dictionary<CorporationTowerType, int>? towers = user.ResetableData.TowerCount;
+        if (towers.Count == 0)
         {
-            count[1] = 0;
-            count[2] = 0;
-            count[3] = 0;
-            count[4] = 0;
+            towers = Enum.GetValues<CorporationTowerType>()
+            .Cast<CorporationTowerType>()
+            .ToDictionary(t => t, t => 0);
         }
 
+        // Tower Schedules
+        var towerSchedules = new Dictionary<CorporationTowerType, NetSchedule>
+        {
+            [CorporationTowerType.ELYSION] = new() { DayOfWeek = new() { DayOfWeeks = { 1, 4, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
+            [CorporationTowerType.MISSILIS] = new() { DayOfWeek = new() { DayOfWeeks = { 2, 5, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
+            [CorporationTowerType.TETRA] = new() { DayOfWeek = new() { DayOfWeeks = { 0, 3, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
+            [CorporationTowerType.OVERSPEC] = new() { DayOfWeek = new() { DayOfWeeks = { 2, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
+            [CorporationTowerType.ALL] = new() { AllTime = new() }
+        };
 
-        // TODO: Load remain count for these
-        NetTowerData t0 = new() { Type = 1, RemainCount = 3 - count[1] };
-        NetTowerData t1 = new() { Type = 2, RemainCount = 3 - count[2] };
-        NetTowerData t2 = new() { Type = 3, RemainCount = 3 - count[3] };
-        NetTowerData t3 = new() { Type = 4, RemainCount = 3 - count[4] };
-        NetTowerData t4 = new() { Type = 5 };
+        // Tower Data
+        List<NetTowerData> towerData = [];
+        foreach (var towerType in Enum.GetValues<CorporationTowerType>())
+        {
+            towers.TryGetValue(towerType, out int count);
 
-        // setup schedules
-        t0.Schedules.Add(new NetSchedule() { DayOfWeek = new() { DayOfWeeks = { 1, 4, 6 }, StartTime = 720000000000, Duration = 863990000000 } });
-        t1.Schedules.Add(new NetSchedule() { DayOfWeek = new() { DayOfWeeks = { 2, 5, 6 }, StartTime = 720000000000, Duration = 863990000000 } });
-        t2.Schedules.Add(new NetSchedule() { DayOfWeek = new() { DayOfWeeks = { 0, 3, 6 }, StartTime = 720000000000, Duration = 863990000000 } });
-        t3.Schedules.Add(new NetSchedule() { DayOfWeek = new() { DayOfWeeks = { 2, 6 }, StartTime = 720000000000, Duration = 863990000000 } });
-        t4.Schedules.Add(new NetSchedule() { AllTime = new() });
+            towerData.Add(towerType == CorporationTowerType.ALL
+                ? new NetTowerData { Type = (int)towerType }
+                : new NetTowerData { Type = (int)towerType, RemainCount = 3 - count });
 
-        if (user.TowerProgress.TryGetValue(1, out int floor1))
-            t0.Floor = floor1;
-        if (user.TowerProgress.TryGetValue(2, out int floor2))
-            t1.Floor = floor2;
-        if (user.TowerProgress.TryGetValue(3, out int floor3))
-            t2.Floor = floor3;
-        if (user.TowerProgress.TryGetValue(4, out int floor4))
-            t3.Floor = floor4;
-        if (user.TowerProgress.TryGetValue(5, out int floor5))
-            t4.Floor = floor5;
+            towerData.Last().Schedules.Add(towerSchedules[towerType]);
+        }
 
-        response.Data.Add(t0);
-        response.Data.Add(t1);
-        response.Data.Add(t2);
-        response.Data.Add(t3);
-        response.Data.Add(t4);
-
-        
+        if (user.TowerProgress.ContainsKey(0)) user.TowerProgress.Remove(0);
+        foreach (var towerProgress in user.TowerProgress)
+        {
+            towerData.FirstOrDefault(x => x.Type == ((int)towerProgress.Key))?.Floor = towerProgress.Value;
+        }
+        System.Console.WriteLine(JsonSerializer.Serialize(towerData));
+        response.Data.AddRange(towerData);
 
         await WriteDataAsync(response);
     }

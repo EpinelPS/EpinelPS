@@ -14,64 +14,10 @@ public class ClearTower : LobbyMessage
 
         ResClearTower response = new();
         User user = GetUser();
-        if (req.BattleResult == 1)
-        {
-            response = CompleteTower(user, req.TowerId);
-        }
 
-        await WriteDataAsync(response);
-    }
-
-    public static ResClearTower CompleteTower(User user, int TowerId)
-    {
-        ResClearTower response = new();
-
-        if (!GameData.Instance.towerTable.TryGetValue(TowerId, out TowerRecord? record)) throw new Exception("unable to find tower with Id " + TowerId);
-        int TowerType = (int)record.Type;
-        int FloorNumber = record.Floor;
-
-
-        // Update user's TowerProgress
-        if (!user.TowerProgress.TryGetValue(TowerType, out int value))
-        {
-            user.TowerProgress[TowerType] = record.Floor;
-        }
-        else if (value < FloorNumber)
-        {
-            user.TowerProgress[TowerType] = record.Floor;
-        }
-
-        if (record.Type == CorporationTowerType.TETRA)
-        {
-            user.ResetableData.TowerCount[3] += 1;
-            user.AddTrigger(Trigger.TowerTetraClear, 1, TowerId);
-        }
-        else if (record.Type == CorporationTowerType.ELYSION)
-        {
-            user.ResetableData.TowerCount[1] += 1;
-            user.AddTrigger(Trigger.TowerElysionClear, 1, TowerId);
-        }
-        else if (record.Type == CorporationTowerType.MISSILIS)
-        {
-            user.ResetableData.TowerCount[2] += 1;
-            user.AddTrigger(Trigger.TowerMissilisClear, 1, TowerId);
-        }
-        else if (record.Type == CorporationTowerType.OVERSPEC)
-        {
-            user.ResetableData.TowerCount[4] += 1;
-            user.AddTrigger(Trigger.TowerOverspecClear, 1, TowerId);
-        }
-        else if (record.Type == CorporationTowerType.ALL)
-        {
-            user.AddTrigger(Trigger.TowerBasicClear, 1, TowerId);
-        }
-
-        RewardRecord reward = GameData.Instance.GetRewardTableEntry(record.RewardId) ?? throw new Exception("failed to get reward");
-        response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
-
+        if (req.BattleResult == 1) response.Reward = TowerHelper.CompleteTower(user, req.TowerId);
 
         JsonDb.Save();
-
-        return response;
+        await WriteDataAsync(response);
     }
 }
