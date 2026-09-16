@@ -137,6 +137,54 @@ public class AdminCommands
                     }
                 }
 
+                // Simulate the normal /Trigger/FinMainQuest flow as well as
+                // clearing the campaign stages. FinishMainQuest records both
+                // CampaignClear(condition) and MainQuestClear(quest id), and
+                // marks the quest as completed-but-unclaimed. Completing only
+                // stages leaves Messenger conditions such as MainQuestClear(25)
+                // missing, even though the campaign appears complete.
+                HashSet<(Trigger Type, int ConditionId)> existingTriggers;
+                using (GameContext context = GameContext.CreateNew())
+                {
+                    existingTriggers = context.Triggers
+                        .Where(trigger => trigger.UserId == user.ID)
+                        .AsEnumerable()
+                        .Select(trigger => (trigger.Type, trigger.ConditionId))
+                        .ToHashSet();
+                }
+
+                int completedQuestTriggers = 0;
+                foreach (MainQuestRecord quest in GameData.Instance.QuestDataRecords.Values)
+                {
+                    // Do not mark quests from chapters beyond the scope of
+                    // this command as completed. The static table also
+                    // contains future content.
+                    if (quest.TargetChapterId > chapterNumber)
+                        continue;
+
+                    if (quest.ConditionId == null || quest.ConditionId.Count == 0)
+                        continue;
+
+                    int campaignConditionId = quest.ConditionId[0].ConditionId;
+                    user.SetQuest(quest.Id, false);
+
+                    if (existingTriggers.Add((Trigger.CampaignClear, campaignConditionId)))
+                    {
+                        user.AddTrigger(Trigger.CampaignClear, 1, campaignConditionId);
+                    }
+
+                    if (existingTriggers.Add((Trigger.MainQuestClear, quest.Id)))
+                    {
+                        user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
+                        completedQuestTriggers++;
+                    }
+                }
+
+                // The quest triggers above can unlock rooms whose opener
+                // conditions were already satisfied before this command.
+                MessengerMessageCreator.CreateAllEligibleOpeners(user);
+                Logging.WriteLine($"[Admin] CompleteAllStages recorded {completedQuestTriggers} missing MainQuestClear triggers for user {user.ID}", LogType.Info);
+
                 // get last quest data to remove any gaps
                 if (user.MainQuestData.Count >= 2)
                 {
@@ -275,6 +323,10 @@ public class AdminCommands
                     user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
             }
         }
+
+        // A character can unlock a Messenger room even when the conversation
+        // itself is gated by an already-completed campaign/event trigger.
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
         JsonDb.Save();
 
@@ -643,6 +695,8 @@ public class AdminCommands
                 if (charData.OriginalRare == OriginalRareType.SSR)
                     user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
             }
+
+            MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
             Console.WriteLine($"Added character {characterId} to user");
             JsonDb.Save();

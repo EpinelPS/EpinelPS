@@ -57,6 +57,7 @@ public class ExecGacha : LobbyMessage
         Logging.WriteLine($"Currency type: {(CurrencyType)req.CurrencyType}");
         
         List<CharacterRecord> selectedCharacters = GachaUtils.ExecuteGachaPull(gachaType, numberOfPulls, user);
+        bool obtainedNewCharacter = false;
 
         int totalBodyLabels = 0;
 
@@ -182,6 +183,7 @@ public class ExecGacha : LobbyMessage
             else
             {
                 // Add new character to user
+                obtainedNewCharacter = true;
                 gacha.Sn = user.GenerateUniqueCharacterId();
                 response.Characters.Add(new NetUserCharacterDefaultData()
                 {
@@ -225,6 +227,14 @@ public class ExecGacha : LobbyMessage
 
             user.AddTrigger(Trigger.GachaCharacter, 0, 0);
         }
+
+        // A newly obtained character may satisfy a room unlock condition while
+        // the conversation's trigger list was already satisfied. Reconcile
+        // eligible openers after the complete pull, once all character data and
+        // acquisition triggers have been written. This does not backfill
+        // triggers and does not run from /messenger/get.
+        if (obtainedNewCharacter)
+            MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
         CurrencyType ticketType = (CurrencyType)req.CurrencyType;
 

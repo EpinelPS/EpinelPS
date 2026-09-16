@@ -209,6 +209,10 @@ public class ExecutePityGacha : LobbyMessage
 
         }
 
+        // The pity request can unlock a room through the newly obtained
+        // character, so re-evaluate eligible openers after character handling.
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
+
         if (totalBodyLabels != 0)
         {
             if (totalBodyLabels < 0)

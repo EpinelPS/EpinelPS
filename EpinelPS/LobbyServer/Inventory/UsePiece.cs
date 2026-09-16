@@ -134,6 +134,11 @@ public class UsePiece : LobbyMessage
                 }
             }
 
+            // Character acquisition can satisfy a room condition independently
+            // of the current ObtainCharacter trigger. Reconcile only fully
+            // eligible openers after the new character and its triggers exist.
+            MessengerMessageCreator.CreateAllEligibleOpeners(user);
+
             user.AddTrigger(Trigger.GachaCharacter, 0, 0);
         }
 
