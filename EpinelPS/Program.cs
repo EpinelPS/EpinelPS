@@ -123,10 +123,12 @@ internal class Program
             WebApplication app = builder.Build();
             CreateDbIfNotExists(app);
 
-            // Long-lived GameContext for legacy code paths that use GameContext.Instance
-            // (e.g. User.AddTrigger). Resolved from the root provider so it is never
-            // disposed before shutdown, unlike per-request scoped instances.
-            GameContext.SetInstance(app.Services.GetRequiredService<GameContext>());
+            // Keep a startup scope alive for legacy code paths that use
+            // GameContext.Instance (e.g. User.AddTrigger). GameContext is registered
+            // as scoped, so it cannot be resolved directly from the root provider.
+            // The scope is disposed automatically after app.Run() returns.
+            using IServiceScope gameContextScope = app.Services.CreateScope();
+            GameContext.SetInstance(gameContextScope.ServiceProvider.GetRequiredService<GameContext>());
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
