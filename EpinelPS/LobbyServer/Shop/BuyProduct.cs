@@ -77,26 +77,10 @@ public class BuyProduct : LobbyMessage
         }
         else if (product.GoodsType == RewardType.Character)
         {
-            if (GameData.Instance.CharacterTable.TryGetValue(product.GoodsId, out var charRecord))
-            {
-                var userChar = user.GetCharacter(product.GoodsId);
-                if (userChar == null)
-                {
-                    userChar = new CharacterModel
-                    {
-                        Csn = user.GenerateUniqueCharacterId(),
-                        Grade = 1,
-                        Tid = charRecord.Id,
-                    };
-                    user.Characters.Add(userChar);
-                }
-                response.Product.Character.Add(new NetCharacterData
-                {
-                    Csn = userChar.Csn,
-                    Tid = userChar.Tid,
-                    PieceCount = totalValue,
-                });
-            }
+            var reward = new NetRewardData();
+            RewardUtils.AddSingleObject(user, ref reward, product.GoodsId, RewardType.Character, quantity);
+            response.Product.Character.Add(reward.Character);
+            response.Product.UserCharacters.AddRange(reward.UserCharacters);
         }
         else if (product.GoodsType == RewardType.LiveWallpaper)
         {
