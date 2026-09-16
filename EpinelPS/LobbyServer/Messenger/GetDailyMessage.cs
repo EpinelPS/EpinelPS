@@ -26,6 +26,9 @@ public class GetDailyMessage : LobbyMessage
             if (record.MessageType != MessageType.DailyMessage)
                 continue;
 
+            if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, record.TriggerList))
+                continue;
+
             // Check if user already has this conversation
             bool exists = user.MessengerData.Any(m => m.ConversationId == record.Tid);
             if (exists)

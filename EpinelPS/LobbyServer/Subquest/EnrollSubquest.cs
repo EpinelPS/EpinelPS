@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.LobbyServer.Messenger;
 
 namespace EpinelPS.LobbyServer.Subquest;
 
@@ -13,8 +14,15 @@ public class EnrollSubquest : LobbyMessage
 
         ResEnrollmentSubQuest response = new();
 
-        if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out _))
+        if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubQuestRecord? subQuest))
             throw new Exception("no such subquest: " + req.SubquestId);
+
+        if (subQuest.BeforeSubQuestId > 0 &&
+            (!user.SubQuestData.TryGetValue(subQuest.BeforeSubQuestId, out bool previousCompleted) || !previousCompleted))
+            throw new Exception("subquest prerequisite is not completed: " + subQuest.BeforeSubQuestId);
+
+        if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, subQuest.TriggerList))
+            throw new Exception("subquest conditions are not satisfied: " + req.SubquestId);
 
         if (!user.SubQuestData.ContainsKey(req.SubquestId))
             user.SetSubQuest(req.SubquestId, false);

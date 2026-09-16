@@ -26,6 +26,9 @@ public class GetRandomPick : LobbyMessage
             if (record.MessageType != MessageType.RandomMessage)
                 continue;
 
+            if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, record.TriggerList))
+                continue;
+
             // Check if user already has this conversation
             bool exists = user.MessengerData.Any(m => m.ConversationId == record.Tid);
             if (exists)

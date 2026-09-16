@@ -12,7 +12,6 @@ public class GetMessages : LobbyMessage
         User user = GetUser();
 
         CheckAndCreateAvailableMessages(user);
-        CheckAndEnrollSubQuests(user);
 
         ResGetMessages response = new();
 
@@ -77,7 +76,7 @@ public class GetMessages : LobbyMessage
         {
             if (trigger.Trigger == Data.Trigger.None) continue;
 
-            bool satisfied = CheckTriggerCondition(user, trigger);
+            bool satisfied = MessengerTriggerUtils.CheckTriggerCondition(user, trigger);
             if (!satisfied)
             {
                 Logging.WriteLine($"[Messenger]   UNSATISFIED: Trigger={trigger.Trigger}, ConditionId={trigger.ConditionId}, ConditionValue={trigger.ConditionValue}", LogType.Debug);
@@ -85,53 +84,8 @@ public class GetMessages : LobbyMessage
         }
     }
 
-    private void CheckAndEnrollSubQuests(User user)
-    {
-        foreach (KeyValuePair<int, SubQuestRecord> subQuestKv in GameData.Instance.Subquests)
-        {
-            SubQuestRecord subQuest = subQuestKv.Value;
-
-            // Check prerequisite subquest
-            if (subQuest.BeforeSubQuestId > 0)
-            {
-                if (!user.SubQuestData.TryGetValue(subQuest.BeforeSubQuestId, out bool prevCompleted) || !prevCompleted)
-                    continue;
-            }
-
-            // Auto-enroll if not already enrolled (only checks prerequisite chain, not TriggerList)
-            if (!user.SubQuestData.ContainsKey(subQuest.Id))
-            {
-                Logging.WriteLine($"[Messenger] Auto-enrolling subquest {subQuest.Id} for user {user.ID}", LogType.Info);
-                user.SetSubQuest(subQuest.Id, false);
-            }
-        }
-    }
-
     private bool IsTriggerListSatisfied(User user, List<TriggerData>? triggerList)
     {
-        if (triggerList == null)
-            return true;
-
-        foreach (TriggerData trigger in triggerList)
-        {
-            if (trigger.Trigger == Data.Trigger.None)
-                continue;
-
-            if (!CheckTriggerCondition(user, trigger))
-            {
-                return false; // All conditions must be satisfied
-            }
-        }
-
-        return true;
-    }
-
-    private bool CheckTriggerCondition(User user, TriggerData trigger)
-    {
-        return GameContext.Triggers.Any(t =>
-            t.UserId == user.ID &&
-            t.Type == trigger.Trigger &&
-            t.ConditionId == trigger.ConditionId &&
-            t.Value >= trigger.ConditionValue);
+        return MessengerTriggerUtils.IsTriggerListSatisfied(user, triggerList);
     }
 }
