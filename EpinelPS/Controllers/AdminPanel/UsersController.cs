@@ -96,6 +96,56 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         return View(_db.SdkUsers);
     }
 
+    [Route("Delete/{id}")]
+    public IActionResult Delete(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        SdkUser? sdkUser = _db.SdkUsers.Find(id);
+        GameUser? gameUser = _db.Users.Find(id);
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+        if (sdkUser == null || gameUser == null || user == null)
+            return NotFound();
+
+        return View(new DeleteUserModel
+        {
+            ID = id,
+            Email = sdkUser.Email,
+            Password = sdkUser.PasswordHash,
+            IsAdmin = sdkUser.IsAdmin,
+            PlayerName = sdkUser.PlayerName,
+            Nickname = gameUser.Nickname,
+            IsBanned = user.IsBanned
+        });
+    }
+
+    [Route("Delete/{id}"), ActionName("Delete")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        SdkUser? sdkUser = _db.SdkUsers.Find(id);
+        GameUser? gameUser = _db.Users.Find(id);
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+        if (sdkUser == null || gameUser == null || user == null)
+            return NotFound();
+
+        // Remove the trigger rows explicitly before deleting the GameUser row.
+        // This works regardless of the database provider's cascade configuration.
+        List<TriggerModelNew> triggerRows = _db.Triggers.Where(trigger => trigger.UserId == id).ToList();
+        _db.Triggers.RemoveRange(triggerRows);
+        _db.Users.Remove(gameUser);
+        _db.SdkUsers.Remove(sdkUser);
+        _db.SaveChanges();
+
+        JsonDb.Instance.Users.Remove(user);
+        JsonDb.Save();
+
+        return RedirectToAction(nameof(Index));
+    }
+
     public List<CharacterGearModel> OverloadedGear = [];
     [Route("Modify/{id}")]
     public IActionResult Modify(ulong id)

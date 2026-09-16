@@ -51,7 +51,8 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-id="@Model.ID" method="post">
+        @Html.AntiForgeryToken()
         <input type="hidden" asp-for="ID" />
         <input type="submit" value="删除" class="btn btn-danger" data-i18n="common.delete" /> |
         <a asp-action="Index" data-i18n="users.delete.backToList">返回列表</a>
