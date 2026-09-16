@@ -150,6 +150,9 @@
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('skip-tower', '@Model.ID', 'Skip tower floor for the selected user, towerid floor (Elysion=1, Misslis=2, Tetra=3, Pilgrim=4, Tribe=5) e.g 1 234')">
                                 <i class="fas fa-building me-2"></i> <span>Skip Tower Floors</span>
                             </button>
+                            <a asp-action="Messenger" asp-route-id="@Model.ID" class="btn btn-accent">
+                                <i class="fas fa-comments me-2"></i> <span data-i18n="users.modify.messenger">Inspect Messenger</span>
+                            </a>
                         </div>
                     </div>
                 </div>

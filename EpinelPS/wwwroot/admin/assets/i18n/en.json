@@ -182,7 +182,14 @@
       "addAllCostumes": "Add All Costumes",
       "addAllCollections": "Add All Collections",
       "finishTutorials": "Finish All Tutorials",
+      "messenger": "Inspect Messenger",
       "backToList": "Back to List"
+    },
+    "messenger": {
+      "title": "Messenger Inspector",
+      "backToUser": "Back to User",
+      "safetyText": "This page is read-only. It never creates messages or changes triggers, rooms, quests, or character progress.",
+      "recordsTitle": "Current Message Records"
     },
     "password": {
       "title": "Change Password",

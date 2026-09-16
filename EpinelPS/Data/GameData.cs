@@ -254,6 +254,11 @@ public class GameData
     [LoadRecord("MessengerConditionTriggerTable.json", "Id")]
     public readonly Dictionary<int, MessengerConditionTriggerRecord> MessageConditions = [];
 
+    // Used by the admin Messenger inspector only. Loading this table does not
+    // create messages or alter any player progression.
+    [LoadRecord("MessengerRoomTable.json", "Id")]
+    public readonly Dictionary<string, MessengerRoomRecord> MessengerRooms = [];
+
     [LoadRecord("ScenarioRewardsTable.json", "ConditionId")]
     public readonly Dictionary<string, ScenarioRewardsRecord> ScenarioRewards = [];
 
