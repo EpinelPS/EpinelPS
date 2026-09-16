@@ -4,16 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
 using EpinelPS.Data;
-using EpinelPS.Services;
 
 namespace EpinelPS.Controllers.AdminPanel;
 
 [Route("admin/Users")]
-public class UsersController(ILogger<UsersController> logger, GameContext dbContext, MessengerAdminService messengerAdminService) : Controller
+public class UsersController(ILogger<UsersController> logger, GameContext dbContext) : Controller
 {
     private readonly ILogger<UsersController> _logger = logger;
     private readonly GameContext _db = dbContext;
-    private readonly MessengerAdminService _messengerAdmin = messengerAdminService;
     private static readonly MD5 sha = MD5.Create();
     private readonly Dictionary<string, Dictionary<int, double>> _overloadOptions = new Dictionary<string, Dictionary<int, double>>
     {
@@ -149,18 +147,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     }
 
     public List<CharacterGearModel> OverloadedGear = [];
-
-    [Route("Messenger/{id}")]
-    public IActionResult Messenger(ulong id)
-    {
-        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
-
-        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
-        if (user == null) return NotFound();
-
-        return View(_messengerAdmin.BuildInspection(user));
-    }
-
     [Route("Modify/{id}")]
     public IActionResult Modify(ulong id)
     {

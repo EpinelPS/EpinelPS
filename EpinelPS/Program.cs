@@ -79,7 +79,6 @@ internal class Program
             string connectionType = builder.Configuration.GetConnectionString("EpinelPSConnectionType").ToLower();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<MessengerAdminService>();
             builder.Services.AddDbContext<GameContext>(options =>
             {
                 switch (connectionType?.ToLowerInvariant())

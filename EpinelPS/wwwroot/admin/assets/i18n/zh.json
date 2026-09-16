@@ -183,16 +183,9 @@
       "addAllCostumes": "添加所有服装",
       "addAllCollections": "添加所有收藏品",
       "finishTutorials": "完成所有教程",
-      "messenger": "查看 Blabla 对话",
       "backToList": "返回列表"
     },
 
-    "messenger": {
-      "title": "Blabla 对话检查",
-      "backToUser": "返回用户页面",
-      "safetyText": "此页面只读，不会创建消息，也不会修改触发器、房间、任务或角色进度。",
-      "recordsTitle": "当前消息记录"
-    },
     "password": {
       "title": "修改密码",
       "changeButton": "修改密码",
