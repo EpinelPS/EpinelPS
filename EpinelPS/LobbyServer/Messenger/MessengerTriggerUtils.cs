@@ -16,7 +16,11 @@ internal static class MessengerTriggerUtils
 
     public static bool CheckTriggerCondition(User user, TriggerData trigger)
     {
-        return GameContext.Instance.Triggers.Any(t =>
+        // AddTrigger writes through a short-lived context. Use another
+        // short-lived context here as well instead of the startup singleton,
+        // whose tracked state can be stale during the same request.
+        using GameContext context = GameContext.CreateNew();
+        return context.Triggers.Any(t =>
             t.UserId == user.ID &&
             t.Type == trigger.Trigger &&
             t.ConditionId == trigger.ConditionId &&

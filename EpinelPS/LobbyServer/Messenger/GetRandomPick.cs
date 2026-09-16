@@ -65,6 +65,7 @@ public class GetRandomPick : LobbyMessage
                 ConversationId = record.Tid,
                 CreatedAt = nowTimestamp
             });
+            MessengerMessageCreator.CreateForCondition(user, record);
 
             Logging.WriteLine($"[Messenger] Random pick: user {user.ID} picked condition {conditionId} (Tid={record.Tid})", LogType.Info);
         }

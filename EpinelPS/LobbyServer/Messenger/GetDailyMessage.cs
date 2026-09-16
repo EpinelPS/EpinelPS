@@ -65,6 +65,7 @@ public class GetDailyMessage : LobbyMessage
                 ConversationId = record.Tid,
                 CreatedAt = nowTimestamp
             });
+            MessengerMessageCreator.CreateForCondition(user, record);
 
             Logging.WriteLine($"[Messenger] Daily pick: user {user.ID} picked condition {conditionId} (Tid={record.Tid})", LogType.Info);
         }

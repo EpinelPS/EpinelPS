@@ -182,7 +182,17 @@
       "addAllCostumes": "Add All Costumes",
       "addAllCollections": "Add All Collections",
       "finishTutorials": "Finish All Tutorials",
+      "messenger": "Manage Messenger",
       "backToList": "Back to List"
+    },
+    "messenger": {
+      "title": "Messenger Management",
+      "backToUser": "Back to User",
+      "safetyTitle": "Safety rule:",
+      "safetyText": "use this page to inspect or correct MessengerData only. It does not add MessageClear, campaign, character, or subquest triggers.",
+      "createTitle": "Create Message Record",
+      "recordsTitle": "Current Message Records",
+      "historyTitle": "Repair History"
     },
     "password": {
       "title": "Change Password",

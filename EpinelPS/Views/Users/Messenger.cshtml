@@ -1,0 +1,147 @@
+@using EpinelPS.Models.Admin
+@model MessengerManagementModel
+
+@{
+    ViewData["Title"] = "Messenger Management";
+}
+
+<div class="adminui-dashboard messenger-management">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-5 mb-1" data-i18n="users.messenger.title">Messenger Management</h1>
+            <p class="text-muted mb-0">User @Model.UserId · Manual records only — this page never creates a trigger.</p>
+        </div>
+        <a asp-action="Modify" asp-route-id="@Model.UserId" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i><span data-i18n="users.messenger.backToUser">Back to User</span>
+        </a>
+    </div>
+
+    @if (TempData["MessengerSuccess"] is string success)
+    {
+        <div class="alert alert-success">@success</div>
+    }
+    @if (TempData["MessengerError"] is string error)
+    {
+        <div class="alert alert-danger">@error</div>
+    }
+
+    <div class="alert alert-warning">
+        <strong data-i18n="users.messenger.safetyTitle">Safety rule:</strong>
+        <span data-i18n="users.messenger.safetyText">use this page to inspect or correct MessengerData only. It does not add MessageClear, campaign, character, or subquest triggers.</span>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3"><div class="card text-center"><div class="card-body"><div class="text-muted">Message records</div><div class="display-6">@Model.MessageCount</div></div></div></div>
+        <div class="col-md-4 mb-3"><div class="card text-center"><div class="card-body"><div class="text-muted">Conversations</div><div class="display-6">@Model.ConversationCount</div></div></div></div>
+        <div class="col-md-4 mb-3"><div class="card text-center"><div class="card-body"><div class="text-muted">Rooms represented</div><div class="display-6">@Model.RoomCount</div></div></div></div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><h3 class="mb-0" data-i18n="users.messenger.createTitle">Create Message Record</h3></div>
+        <div class="card-body">
+            <p class="text-muted">Creates one record from an existing <code>MessengerDialogTable</code> dialog ID. It intentionally does not add a trigger or unlock a room.</p>
+            <form asp-action="CreateMessengerMessage" asp-route-id="@Model.UserId" method="post" class="row g-3">
+                @Html.AntiForgeryToken()
+                <div class="col-md-8">
+                    <label class="form-label" for="dialogId">Dialog ID</label>
+                    <input class="form-control" id="dialogId" name="DialogId" required placeholder="MessengerDialogTable.Id" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label" for="createState">State</label>
+                    <select class="form-select" id="createState" name="State"><option value="0">0</option><option value="1">1</option><option value="2">2</option></select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100" type="submit" data-i18n="common.add">Add</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="mb-0" data-i18n="users.messenger.recordsTitle">Current Message Records</h3>
+            <input id="messageFilter" class="form-control form-control-sm w-auto" placeholder="Filter ID / room" aria-label="Filter message records" />
+        </div>
+        <div class="card-body p-0 table-responsive">
+            <table class="table table-hover mb-0" id="messageTable">
+                <thead><tr><th>Seq</th><th>Conversation</th><th>Message</th><th>Room</th><th>Condition</th><th>State</th><th>Static data</th><th>Room condition</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                @foreach (MessengerMessageModel message in Model.Messages)
+                {
+                    <tr>
+                        <td>@message.Seq</td>
+                        <td><code>@message.ConversationId</code></td>
+                        <td><code>@message.MessageId</code>@if (message.IsOpener) { <span class="badge text-bg-info ms-1">opener</span> }</td>
+                        <td>@(string.IsNullOrEmpty(message.RoomId) ? "—" : message.RoomId)</td>
+                        <td class="small">
+                            @if (message.ConditionId is int conditionId)
+                            {
+                                <div>#@conditionId · @message.MessageType</div>
+                                <div class="text-muted">@message.TriggerCount trigger(s) · @(message.TriggerListSatisfied is null ? "pick-based" : message.TriggerListSatisfied.Value ? "satisfied" : "not satisfied")</div>
+                            }
+                            else { <span class="text-muted">No condition</span> }
+                        </td>
+                        <td>
+                            <form asp-action="UpdateMessengerMessage" asp-route-id="@Model.UserId" method="post" class="d-flex gap-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="Seq" value="@message.Seq" />
+                                <select class="form-select form-select-sm" name="State"><option value="0" selected="@(message.State == 0)">0</option><option value="1" selected="@(message.State == 1)">1</option><option value="2" selected="@(message.State == 2)">2</option></select>
+                                <button class="btn btn-sm btn-outline-primary" type="submit" title="Save state"><i class="fas fa-save"></i></button>
+                            </form>
+                        </td>
+                        <td>@(message.StaticDialogFound ? "Found" : "Missing")</td>
+                        <td>@(message.StaticDialogFound ? (message.RoomUnlocked ? "Satisfied" : "Locked") : "Unknown")</td>
+                        <td class="small">@message.Status</td>
+                        <td>
+                            @if (message.CanSafelyDelete)
+                            {
+                                <form asp-action="DeleteMessengerMessage" asp-route-id="@Model.UserId" method="post" onsubmit="return confirm('Remove this lone opener and keep a restore snapshot?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="seq" value="@message.Seq" />
+                                    <button class="btn btn-sm btn-danger" type="submit" data-i18n="common.delete">Delete</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-outline-secondary" type="button" disabled title="Only safe repair candidates can be removed">Protected</button>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><h3 class="mb-0" data-i18n="users.messenger.historyTitle">Repair History</h3></div>
+        <div class="card-body p-0 table-responsive">
+            @if (!Model.History.Any())
+            {
+                <p class="p-3 mb-0 text-muted">No manual Messenger changes have been recorded.</p>
+            }
+            else
+            {
+                <table class="table table-sm mb-0"><thead><tr><th>Time (UTC)</th><th>Action</th><th>Message</th><th>Note</th><th>Actions</th></tr></thead><tbody>
+                @foreach (MessengerRepairAuditEntry entry in Model.History)
+                {
+                    <tr><td>@entry.CreatedAtUtc.ToString("u")</td><td>@entry.Action</td><td><code>@entry.Message.MessageId</code> · seq @entry.Message.Seq</td><td>@entry.Note</td><td>
+                    @if (entry.Action == "Deleted")
+                    {
+                        <form asp-action="RestoreMessengerMessage" asp-route-id="@Model.UserId" method="post" onsubmit="return confirm('Restore this deleted message record?');">
+                            @Html.AntiForgeryToken()<input type="hidden" name="auditId" value="@entry.Id" />
+                            <button class="btn btn-sm btn-outline-warning" type="submit">Restore</button>
+                        </form>
+                    }
+                    </td></tr>
+                }
+                </tbody></table>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('messageFilter').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        document.querySelectorAll('#messageTable tbody tr').forEach(row => row.hidden = !row.textContent.toLowerCase().includes(filter));
+    });
+</script>

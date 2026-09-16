@@ -183,9 +183,19 @@
       "addAllCostumes": "添加所有服装",
       "addAllCollections": "添加所有收藏品",
       "finishTutorials": "完成所有教程",
+      "messenger": "管理 Blabla 对话",
       "backToList": "返回列表"
     },
 
+    "messenger": {
+      "title": "Blabla 对话管理",
+      "backToUser": "返回用户页面",
+      "safetyTitle": "安全规则：",
+      "safetyText": "此页面只检查或修正 MessengerData，不会添加 MessageClear、战役、角色或支线触发器。",
+      "createTitle": "创建消息记录",
+      "recordsTitle": "当前消息记录",
+      "historyTitle": "修复历史"
+    },
     "password": {
       "title": "修改密码",
       "changeButton": "修改密码",
