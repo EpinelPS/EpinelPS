@@ -179,6 +179,8 @@
       "misc": "Miscellaneous:",
       "completeAllStages": "Complete All Stages",
       "completeAllEventStages": "Complete All Event Stages",
+      "unlockAllSubquestMessages": "CHEAT: Unlock All Subquest Messages",
+      "unlockAllSubquestConfirm": "This bypasses all subquest prerequisites and creates all starting messages. Continue?",
       "addAllCostumes": "Add All Costumes",
       "addAllCollections": "Add All Collections",
       "finishTutorials": "Finish All Tutorials",

@@ -91,6 +91,9 @@
                             <button class="btn btn-accent" onclick="runSimpleCmd('complete-all-event-stages', '@Model.ID')">
                                 <i class="fas fa-flag me-2"></i> <span data-i18n="users.modify.completeAllEventStages">完成所有活动关卡</span>
                             </button>
+                            <button class="btn btn-danger" onclick="if (confirm(i18n.t('users.modify.unlockAllSubquestConfirm'))) runSimpleCmd('unlock-all-subquest-messages', '@Model.ID')">
+                                <i class="fas fa-unlock-alt me-2"></i> <span data-i18n="users.modify.unlockAllSubquestMessages">Cheat：解锁所有支线对话</span>
+                            </button>
                         </div>
                     </div>
 

@@ -293,6 +293,46 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    /// <summary>
+    /// Cheat: enroll every subquest and create its starting Messenger opener.
+    /// This intentionally bypasses normal prerequisites and trigger checks,
+    /// but preserves an already completed SubQuestData entry.
+    /// </summary>
+    public static RunCmdResponse UnlockAllSubquestMessages(ulong userId)
+    {
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
+
+        int enrolledCount = 0;
+        int createdCount = 0;
+        foreach (SubQuestRecord subQuest in GameData.Instance.Subquests.Values)
+        {
+            if (!user.SubQuestData.ContainsKey(subQuest.Id))
+            {
+                user.SetSubQuest(subQuest.Id, false);
+                enrolledCount++;
+            }
+
+            if (string.IsNullOrEmpty(subQuest.ConversationId))
+                continue;
+
+            MessengerDialogRecord? opener = GameData.Instance.Messages.Values.FirstOrDefault(message =>
+                message.ConversationId == subQuest.ConversationId && message.IsOpener);
+            if (opener == null)
+                continue;
+
+            if (user.MessengerData.Any(message => message.ConversationId == opener.ConversationId))
+                continue;
+
+            user.CreateMessage(opener);
+            createdCount++;
+        }
+
+        Logging.WriteLine($"[Admin] UnlockAllSubquestMessages user={user.ID}, Enrolled={enrolledCount}, Created={createdCount}", LogType.Warning);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
     public static RunCmdResponse AddAllCharacters(User user)
     {
         // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201

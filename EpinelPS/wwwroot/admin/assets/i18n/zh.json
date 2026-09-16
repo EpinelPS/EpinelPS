@@ -180,6 +180,8 @@
       "itemAmount": "数量",
       "completeAllStages": "完成所有主线关卡",
       "completeAllEventStages": "完成所有活动关卡",
+      "unlockAllSubquestMessages": "作弊：解锁所有支线对话",
+      "unlockAllSubquestConfirm": "此操作会绕过所有支线前置条件并创建所有起始对话，确定继续吗？",
       "addAllCostumes": "添加所有服装",
       "addAllCollections": "添加所有收藏品",
       "finishTutorials": "完成所有教程",
