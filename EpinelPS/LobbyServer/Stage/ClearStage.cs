@@ -297,6 +297,35 @@ public class ClearStage : LobbyMessage
 
         HashSet<int> validSet = [.. validQuests];
 
+        // Also allow sequential intermediate quests (e.g. scenarios, outpost visits) that the user completed
+        // after the last cleared stage along the chain, until an uncleared stage requirement is reached.
+        if (validQuests.Count > 0)
+        {
+            int lastQuestId = validQuests[^1];
+            if (GameData.Instance.QuestDataRecords.TryGetValue(lastQuestId, out var lastQuest))
+            {
+                int currentId = lastQuest.NextMainQuestId;
+                while (currentId != 0 && currentId != 9999)
+                {
+                    if (!GameData.Instance.QuestDataRecords.TryGetValue(currentId, out var quest))
+                        break;
+
+                    if (quest.Category == Category.CampaignClear)
+                        break;
+
+                    if (user.MainQuestData.ContainsKey(currentId))
+                    {
+                        validSet.Add(currentId);
+                        currentId = quest.NextMainQuestId;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
         // Remove any quests that are beyond the user's progress
         List<int> toRemove = user.MainQuestData.Keys.Where(k => !validSet.Contains(k)).ToList();
         foreach (int k in toRemove)
