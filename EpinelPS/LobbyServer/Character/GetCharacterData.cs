@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Character;
+namespace EpinelPS.LobbyServer.Character;
 
 [GameRequest("/character/get")]
 public class GetCharacterData : LobbyMessage
@@ -7,6 +7,11 @@ public class GetCharacterData : LobbyMessage
     {
         ReqGetCharacterData req = await ReadData<ReqGetCharacterData>();
         User user = GetUser();
+
+        if (user.Characters.Count == 0 && user.LastNormalStageCleared >= 6000002)
+        {
+            Stage.ClearStage.EnsureDefaultCharacters(user);
+        }
 
         ResGetCharacterData response = new();
         foreach (CharacterModel item in user.Characters)

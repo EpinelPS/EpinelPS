@@ -195,20 +195,19 @@ public class ClearStage : LobbyMessage
             }
         }
 
-        // TODO: Is this the right place to add default characters?
-        // Stage 1-4 BOSS
-        if (clearedStageId == 6001004)
+        if (clearedStageId == 6000002 || clearedStageId == 6001004)
         {
-            // TID: Character ID
-            // CSN: Character Serial Number
+            EnsureDefaultCharacters(user);
+        }
+    }
 
-            // create a squad with first 5 characters
-            NetUserTeamData team1 = new()
-            {
-                Type = 1,
-                LastContentsTeamNumber = 1
-            };
+    public static void EnsureDefaultCharacters(User user)
+    {
+        if (user.Characters.Count > 0 && user.UserTeams.ContainsKey(1))
+            return;
 
+        if (user.Characters.Count == 0)
+        {
             user.Characters.Add(new CharacterModel() { Csn = 47263455, Tid = 201001 });
             user.Characters.Add(new CharacterModel() { Csn = 47273456, Tid = 330501 });
             user.Characters.Add(new CharacterModel() { Csn = 47263457, Tid = 130201 });
@@ -224,28 +223,112 @@ public class ClearStage : LobbyMessage
             user.AddTrigger(Trigger.ObtainCharacter, 1, 1014);
             user.AddTrigger(Trigger.ObtainCharacter, 1, 3005);
             user.AddTrigger(Trigger.ObtainCharacterNew, 1);
+        }
+
+        if (!user.UserTeams.ContainsKey(1))
+        {
+            NetUserTeamData team1 = new()
+            {
+                Type = 1,
+                LastContentsTeamNumber = 1
+            };
 
             NetTeamData team1Sub = new()
             {
                 TeamNumber = 1
             };
 
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i <= Math.Min(5, user.Characters.Count); i++)
             {
                 CharacterModel character = user.Characters[i - 1];
                 team1Sub.Slots.Add(new NetTeamSlot() { Slot = i, Value = character.Csn });
             }
             team1.Teams.Add(team1Sub);
-            user.UserTeams.Add(1, team1);
+            user.UserTeams[1] = team1;
+        }
 
+        if (user.RepresentationTeamDataNew.Length == 0 && user.Characters.Count >= 5)
+        {
             user.RepresentationTeamDataNew =
             [
-                47263455,
-                47273456,
-                47263457,
-                47263458,
-                47263459
+                user.Characters[0].Csn,
+                user.Characters[1].Csn,
+                user.Characters[2].Csn,
+                user.Characters[3].Csn,
+                user.Characters[4].Csn
             ];
         }
     }
+
+    public static List<int> GetCompletedQuestsForStage(int targetStageId)
+    {
+        List<int> result = [];
+        int currentId = 1;
+        while (currentId != 0 && currentId != 9999)
+        {
+            if (!GameData.Instance.QuestDataRecords.TryGetValue(currentId, out var quest))
+                break;
+
+            int stageCondition = (quest.ConditionId != null && quest.ConditionId.Count > 0)
+                ? quest.ConditionId[0].ConditionId
+                : 0;
+
+            if (quest.Category == Category.CampaignClear && stageCondition > targetStageId)
+                break;
+
+            result.Add(quest.Id);
+
+            if (quest.Category == Category.CampaignClear && stageCondition == targetStageId)
+                break;
+
+            currentId = quest.NextMainQuestId;
+        }
+        return result;
+    }
+
+    public static void ReconcileMainQuests(User user)
+    {
+        if (user.LastNormalStageCleared == 0)
+            return;
+
+        List<int> validQuests = GetCompletedQuestsForStage(user.LastNormalStageCleared);
+        if (validQuests.Count == 0)
+            return;
+
+        HashSet<int> validSet = [.. validQuests];
+
+        // Remove any quests that are beyond the user's progress
+        List<int> toRemove = user.MainQuestData.Keys.Where(k => !validSet.Contains(k)).ToList();
+        foreach (int k in toRemove)
+        {
+            user.MainQuestData.Remove(k);
+        }
+
+        // Ensure all valid quests up to current progress are present
+        foreach (int questId in validQuests)
+        {
+            user.MainQuestData.TryAdd(questId, false);
+        }
+
+        // Clean up any stale MainQuestClear triggers in database
+        try
+        {
+            using (GameContext context = GameContext.CreateNew())
+            {
+                var badTriggers = context.Triggers
+                    .Where(t => t.UserId == user.ID && t.Type == Trigger.MainQuestClear && t.ConditionId <= 9999 && !validSet.Contains(t.ConditionId))
+                    .ToList();
+                if (badTriggers.Count > 0)
+                {
+                    context.Triggers.RemoveRange(badTriggers);
+                    context.SaveChanges();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logging.Warn($"Failed to clean up stale triggers for user {user.ID}: {ex.Message}");
+        }
+    }
 }
+

@@ -27,10 +27,31 @@ public class GameContext : DbContext
     /// disposed when the request ends, leaving a dangling disposed instance behind.
     /// </summary>
     public static GameContext Instance { get; private set; } = null!;
-    public static DbContextOptions<GameContext> Options { get; private set; } = null!;
+    public static DbContextOptions<GameContext>? Options { get; private set; }
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
         Options = options;
+    }
+
+    public static void InitializeOptions(string connectionString, string? connectionType)
+    {
+        var builder = new DbContextOptionsBuilder<GameContext>();
+        switch (connectionType?.ToLowerInvariant())
+        {
+            case "sql":
+                builder.UseSqlServer(connectionString);
+                break;
+            case "mysql":
+                builder.UseMySQL(connectionString);
+                break;
+            case "npgsql":
+                builder.UseNpgsql(connectionString);
+                break;
+            default:
+                builder.UseSqlite(connectionString);
+                break;
+        }
+        Options = builder.Options;
     }
 
     public static void SetInstance(GameContext context)
@@ -40,6 +61,12 @@ public class GameContext : DbContext
 
     public static GameContext CreateNew()
     {
+        if (Options == null)
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string dbPath = Path.Combine(baseDir, "epinelps.db");
+            InitializeOptions($"Data Source=\"{dbPath}\"", "sqlite");
+        }
         return new GameContext(Options);
     }
 }
