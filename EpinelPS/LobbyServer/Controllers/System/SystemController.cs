@@ -1,13 +1,12 @@
 ﻿using EpinelPS.Data;
 using EpinelPS.Database;
-using EpinelPS.Services;
 using EpinelPS.Interfaces;
 using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EpinelPS.LobbyServer.Controllers;
+namespace EpinelPS.LobbyServer.Controllers.System;
 
 /// <summary>
 /// Controller for game startup and asset information retrival
