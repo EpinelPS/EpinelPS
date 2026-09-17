@@ -5567,6 +5567,7 @@ public partial class EventItabagCollectionRewardRecord_Raw
 	public int RewardGoalValue;
 	public EventItabagCollectionRewardType RewardType;
 	public int RewardId;
+	public bool IsUseInArchive;
 }
 
 [MemoryPackable]
@@ -5583,6 +5584,7 @@ public partial class EventItabagGoodsRecord_Raw
 	public int ItabagGoodsHorizontalGridCount;
 	public int ItabagGoodsVerticalGridCount;
 	public int ItabagGoodsOrder;
+	public int ItabagGoodsStackLimit;
 }
 
 [MemoryPackable]
@@ -5612,6 +5614,7 @@ public partial class EventItabagManagerRecord_Raw
 {
 	public int Id;
 	public int EventId;
+	public int ArchiveEventId;
 	public string? UiPrefab;
 	public int SetField;
 	public int KujiTicketCurrencyId;
@@ -6994,6 +6997,211 @@ public partial class EventPlaySodaStoryModeRecord
 	public int ClearRewardId;
 	public string? EnterScenario;
 	public string? ExitScenario;
+}
+
+[MemoryPackable]
+public partial class EventPunchCharacterRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? NameLocalkey;
+	public int Order;
+	public string? ResourceId;
+	public int CharacterColliderX;
+	public int CharacterColliderY;
+	public int MaxHp;
+	public int DelayTimeAfterTurn;
+	public int MoveSpeedInfo;
+	public int MoveSpeedIngame;
+	public int AttackColliderInfo;
+	public int AttackColliderXIngame;
+	public int AttackColliderYIngame;
+	public int MaxUltimateSkill;
+	public UltimateSkillType UltimateSkillType;
+	public List<int> UltimateSkillTarget;
+	public int UltimateSkillValue;
+	public int UltimateSkillTime;
+	public string? UltimateSkillResourceId;
+	public string? UltimateSkillDescLocalkey;
+	public int UnlockTime;
+	public int UnlockPlayCharacterTarget;
+	public int UnlockPlayCharacterCount;
+}
+
+[MemoryPackable]
+public partial class EventPunchComboRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Step;
+	public int NeedCombo;
+	public int ComboScoreBonus;
+	public string? ComboResourceId;
+}
+
+[MemoryPackable]
+public partial class EventPunchCutSceneRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? CutsceneResource;
+	public string? CutsceneDescription;
+	public int ConditionCharacter;
+	public EventPunchConditionRank ConditionRank;
+}
+
+[MemoryPackable]
+public partial class EventPunchItemRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventPunchItemType ItemType;
+	public string? ResourceId;
+	public int ScoreValue;
+	public int DurationTime;
+	public int FunctionRate;
+}
+
+[MemoryPackable]
+public partial class EventPunchItemSpawnRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int ItemId;
+	public int Rate;
+}
+
+[MemoryPackable]
+public partial class EventPunchLevelRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Level;
+	public int PlayTime;
+	public int MonsterSpawnCount;
+	public int MonsterSpawnInterval;
+	public int MonsterSpawnGroup;
+	public int GroundItemSpawnGroup;
+	public int AirItemSpawnGroup;
+	public int PenaltyGroup;
+	public int PenaltyCount;
+}
+
+[MemoryPackable]
+public partial class EventPunchManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public string? EnterScenario;
+	public int DailyRewardScore;
+	public int DailyRewardId;
+	public int CharacterGroupId;
+	public int MonsterGroupId;
+	public int SkillGroupId;
+	public int MissionGroupId;
+	public int CutsceneGroupId;
+	public int ItemGroupId;
+	public int LevelGroupId;
+	public int ComboGroupId;
+	public int TutorialId;
+	public int CornerPenaltyTime;
+	public int GroundItemSpawnInterval;
+	public int ItemRetentionTime;
+	public int BeforeVanishItemFlashingTime;
+	public int AirItemDropTime;
+	public int AirMirrorballDropTime;
+	public int ThunderAttackDownTime;
+	public int ThunderAttackCastingTime;
+	public int ThunderAttackInterval;
+	public int LaserAttackUpTime;
+	public int LaserAttackCastingTime;
+	public int OilSlideDistance;
+	public int OilSlideTime;
+	public int EnemyKillScore;
+	public int SpinAttackBonusRatio;
+	public int ComboTime;
+	public int InvincibleTime;
+	public int MonsterInvincibleTime;
+	public int DRankTargetScore;
+	public int CRankTargetScore;
+	public int BRankTargetScore;
+	public int ARankTargetScore;
+	public int SRankTargetScore;
+	public int EndpointLoopLevel;
+}
+
+[MemoryPackable]
+public partial class EventPunchMissionRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public string? MissionLocalkey;
+	public EventPunchMissionType MissionType;
+	public int MissionTarget;
+	public int MissionValue;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventPunchMonsterRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventPunchMonsterType Type;
+	public string? ResourceId;
+	public string? SubResourceId;
+	public int MonsterSpeed;
+	public int MonsterColliderX;
+	public int MonsterColliderY;
+	public int CounterMoveTime;
+	public int CounterCastingTime;
+	public int CounterAttackTime;
+	public int JumpMoveDistanceX;
+	public int JumpMoveDistanceY;
+	public int JumpMoveTime;
+	public int ZigzagForwardTime;
+	public int ZigzagReverseTime;
+	public int KnockbackDistanceX;
+	public int KnockbackDistanceY;
+	public int KnockbackTime;
+	public int DropTime;
+	public int SniperMoveDistance;
+	public int SniperChargeTime;
+	public int PoleDropTime;
+}
+
+[MemoryPackable]
+public partial class EventPunchMonsterSpawnRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int MonsterId;
+	public int Rate;
+}
+
+[MemoryPackable]
+public partial class EventPunchPenaltyActiveRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventPunchPenaltyType PenaltyType;
+	public int PenaltyValue;
+	public int Rate;
+}
+
+[MemoryPackable]
+public partial class EventPunchSkillRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventPunchSkillType SkillType;
+	public int SkillValue;
+	public int Order;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ResourceId;
+	public int UnlockTime;
+	public int UnlockGetscoreItemCount;
 }
 
 [MemoryPackable]
@@ -14749,7 +14957,8 @@ public enum EventSystemType : int
 	IslandBreakerMiniGame = 61,
 	CE009MiniGame = 62,
 	TrailMarkerEvent = 63,
-	EventPunchMiniGame = 64
+	EventPunchMiniGame = 64,
+	ComeBackUserEventEmpty = 66
 }
 
 public enum Category : int
@@ -15359,7 +15568,8 @@ public enum Trigger : int
 	EventMiniGameTTSPlayCheck = 163,
 	EventMiniGameFARRewardCheck = 164,
 	EventIslandBreakerRewardCheck = 165,
-	EventMiniGameCE009RewardCheck = 166
+	EventMiniGameCE009RewardCheck = 166,
+	EventThreeCompanyRumbleRewardCheck = 167
 }
 
 public enum ChapterMod : int
@@ -18156,6 +18366,70 @@ public enum EventPlaySodaGameType : int
 	Climbing = 4
 }
 
+public enum UltimateSkillType : int
+{
+	InstantKill = 0,
+	SummonItem = 1,
+	FastMove = 2
+}
+
+public enum EventPunchConditionRank : int
+{
+	F = 0,
+	D = 1,
+	C = 2,
+	B = 3,
+	A = 4,
+	S = 5
+}
+
+public enum EventPunchItemType : int
+{
+	GetScore = 0,
+	Web = 1,
+	GoldClover = 2,
+	EnergyDrink = 3
+}
+
+public enum EventPunchMissionType : int
+{
+	UseCharacter = 0,
+	UseUltimateSkill = 1,
+	GetItem = 2,
+	KillMonster = 3,
+	GetScore = 4,
+	GetScoreOneTime = 5
+}
+
+public enum EventPunchMonsterType : int
+{
+	Normal = 0,
+	Counterattack = 1,
+	Jump = 2,
+	Zigzag = 3,
+	Knockback = 4,
+	Drop = 5,
+	Sniper = 6,
+	CouplePole = 7
+}
+
+public enum EventPunchPenaltyType : int
+{
+	None = 0,
+	Oil = 1,
+	Thunder = 2,
+	Laser = 3
+}
+
+public enum EventPunchSkillType : int
+{
+	GetUltimateSkill = 0,
+	GetComboPlusRatio = 1,
+	AppearItemPerCombo = 2,
+	ComboTimerPlus = 3,
+	ItemScorePlus = 4
+}
+
 public enum EventQuestStageModeType : int
 {
 	None = 0,
@@ -19621,7 +19895,8 @@ public enum FunctionType : int
 	ChangeWeaponMaxAmmo = 216,
 	CoreDamage = 217,
 	AddFunctionTimer = 218,
-	DefenceRatio = 219
+	DefenceRatio = 219,
+	DmgReductionDebuffDecrease = 220
 }
 
 public enum FunctionStandardType : int
