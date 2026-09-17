@@ -30,8 +30,20 @@ public class EnterSubquest : LobbyMessage
             return;
         }
 
-        response.Message = user.CreateMessage(conversation.Value);
-        JsonDb.Save();
+        NetMessage? existingMessage = user.MessengerData
+            .Where(message => message.ConversationId == opener.Value.ConversationId)
+            .OrderByDescending(message => message.Seq)
+            .FirstOrDefault();
+
+        if (existingMessage != null)
+        {
+            response.Message = existingMessage;
+        }
+        else
+        {
+            response.Message = user.CreateMessage(conversation.Value);
+            JsonDb.Save();
+        }
 
         await WriteDataAsync(response);
     }

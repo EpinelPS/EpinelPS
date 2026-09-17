@@ -14,23 +14,44 @@ public class FinishSubquest : LobbyMessage
 
         ResFinSubQuest response = new();
 
-        KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-        KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.Id == req.MessageId).First();
+        var subQuestEntry = GameData.Instance.Subquests.FirstOrDefault(x => x.Key == req.SubQuestId);
+        var conversationEntry = GameData.Instance.Messages.FirstOrDefault(x => x.Value.Id == req.MessageId);
 
-        RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(conversation.Value.RewardId) ?? throw new Exception("unable to lookup reward");
+        int rewardId = conversationEntry.Value?.RewardId ?? 0;
+        if (rewardId == 0 && subQuestEntry.Value != null)
+        {
+            // Fallback: look for the reward dialog in the subquest end conversation
+            var rewardDialog = GameData.Instance.Messages.Values.FirstOrDefault(m =>
+                m.ConversationId == subQuestEntry.Value.EndMessengerConversationId && m.RewardId != 0);
+            if (rewardDialog != null)
+                rewardId = rewardDialog.RewardId;
+        }
 
         user.SetSubQuest(req.SubQuestId, true);
 
-        NetMessage conversationRecordUser = user.MessengerData.Where(x => x.MessageId == req.MessageId).First();
-        if (conversationRecordUser.State == 2)
-        {
-            // already claimed, don't grant the reward again
-            await WriteDataAsync(response);
-            return;
-        }
-        conversationRecordUser.State = 2; // mark as claimed
+        NetMessage? conversationRecordUser = user.MessengerData.FirstOrDefault(x => x.MessageId == req.MessageId)
+            ?? (subQuestEntry.Value != null ? user.MessengerData.FirstOrDefault(x => x.ConversationId == subQuestEntry.Value.EndMessengerConversationId && x.State != 0) : null);
 
-        response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
+        if (conversationRecordUser != null)
+        {
+            if (conversationRecordUser.State == 2)
+            {
+                // already claimed, don't grant the reward again
+                await WriteDataAsync(response);
+                return;
+            }
+            conversationRecordUser.State = 2; // mark as claimed
+        }
+
+        if (rewardId != 0)
+        {
+            RewardRecord? rewardRecord = GameData.Instance.GetRewardTableEntry(rewardId);
+            if (rewardRecord != null)
+            {
+                response.Reward = RewardUtils.RegisterRewardsForUser(user, rewardRecord);
+            }
+        }
+
         JsonDb.Save();
 
         await WriteDataAsync(response);

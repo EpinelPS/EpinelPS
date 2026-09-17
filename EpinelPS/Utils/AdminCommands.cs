@@ -176,6 +176,8 @@ public class AdminCommands
                     user.MapJson.Remove(mapId);
                 }
 
+                user.LastNormalStageCleared = lastClearedStageId;
+
                 // Sync main quest progression along the quest chain up to the last cleared stage
                 List<int> validQuests = ClearStage.GetCompletedQuestsForStage(lastClearedStageId);
                 HashSet<int> validQuestSet = [.. validQuests];

@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -14,12 +14,26 @@ public class ProceedMsg : LobbyMessage
         ResProceedMessage response = new();
         User user = GetUser();
 
-        KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
+        KeyValuePair<string, MessengerDialogRecord>? msgToSave = GameData.Instance.Messages.FirstOrDefault(x => x.Key == req.MessageId);
+        if (msgToSave == null || msgToSave.Value.Value == null)
+        {
+            await WriteDataAsync(response);
+            return;
+        }
 
-        // NOTE: reward messages (MessageType Reward) are all subquest completion
-        // messages, their reward is granted by /messenger/finsubquest when the
-        // user presses the claim button. Do not grant anything here.
-        response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId);
+        int state = (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0) ? 1 : 0;
+
+        NetMessage? existingMessage = user.MessengerData.FirstOrDefault(x => x.MessageId == req.MessageId);
+        if (existingMessage != null)
+        {
+            if (state == 1 && existingMessage.State == 0)
+                existingMessage.State = 1;
+            response.Message = existingMessage;
+        }
+        else
+        {
+            response.Message = user.CreateMessage(msgToSave.Value.Value.ConversationId, req.MessageId, state);
+        }
 
         JsonDb.Save();
 

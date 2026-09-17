@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Messenger;
 
@@ -13,11 +14,39 @@ public class EnterFinishSubquest : LobbyMessage
 
         ResEnterSubQuestFinMessengerDialog response = new();
 
-        KeyValuePair<int, SubQuestRecord> opener = GameData.Instance.Subquests.Where(x => x.Key == req.SubQuestId).First();
-        KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.Where(x => x.Value.ConversationId == opener.Value.EndMessengerConversationId && x.Value.IsOpener).First();
+        var opener = GameData.Instance.Subquests.FirstOrDefault(x => x.Key == req.SubQuestId);
+        if (opener.Value == null)
+        {
+            Logging.Warn($"Subquest {req.SubQuestId} not found.");
+            await WriteDataAsync(response);
+            return;
+        }
 
-        response.Message = user.CreateMessage(conversation.Value, 1);
-        JsonDb.Save();
+        var conversation = GameData.Instance.Messages.FirstOrDefault(x =>
+            x.Value.ConversationId == opener.Value.EndMessengerConversationId && x.Value.IsOpener);
+
+        if (conversation.Value == null)
+        {
+            Logging.Warn($"End conversation for subquest {req.SubQuestId} not found.");
+            await WriteDataAsync(response);
+            return;
+        }
+
+        NetMessage? existingMessage = user.MessengerData
+            .Where(message => message.ConversationId == opener.Value.EndMessengerConversationId)
+            .OrderByDescending(message => message.Seq)
+            .FirstOrDefault();
+
+        if (existingMessage != null)
+        {
+            response.Message = existingMessage;
+        }
+        else
+        {
+            int state = conversation.Value.MessageType == MessengerMessageType.Reward ? 1 : 0;
+            response.Message = user.CreateMessage(conversation.Value, state);
+            JsonDb.Save();
+        }
 
         await WriteDataAsync(response);
     }
