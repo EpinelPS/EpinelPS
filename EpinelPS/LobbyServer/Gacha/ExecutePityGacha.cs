@@ -197,6 +197,8 @@ public class ExecutePityGacha : LobbyMessage
                 user.AddBadge(BadgeContents.NikkeNew, characterData.NameCode.ToString());
                 user.AddTrigger(Trigger.ObtainCharacter, 1, characterData.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1);
+                if (characterData.OriginalRare == OriginalRareType.SSR)
+                    user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
 
                 if (characterData.OriginalRare == OriginalRareType.SSR || characterData.OriginalRare == OriginalRareType.SR)
                 {
@@ -206,6 +208,10 @@ public class ExecutePityGacha : LobbyMessage
             }
 
         }
+
+        // The pity request can unlock a room through the newly obtained
+        // character, so re-evaluate eligible openers after character handling.
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
         if (totalBodyLabels != 0)
         {

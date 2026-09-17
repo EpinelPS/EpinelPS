@@ -85,8 +85,14 @@
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('complete-stage', '@Model.ID', 'Enter chapter number and stage number (e.g. 1 2)')">
                                 <i class="fas fa-forward me-2"></i> <span data-i18n="users.modify.skipStages">跳过关卡</span>
                             </button>
-                            <button class="btn btn-accent" onclick="runSimpleCmd('completeallstages', '@Model.ID')">
+                            <button class="btn btn-accent" onclick="runSimpleCmd('complete-all-stages', '@Model.ID')">
                                 <i class="fas fa-flag-checkered me-2"></i> <span data-i18n="users.modify.completeAllStages">完成所有主线关卡</span>
+                            </button>
+                            <button class="btn btn-accent" onclick="runSimpleCmd('complete-all-event-stages', '@Model.ID')">
+                                <i class="fas fa-flag me-2"></i> <span data-i18n="users.modify.completeAllEventStages">完成所有活动关卡</span>
+                            </button>
+                            <button class="btn btn-danger" onclick="if (confirm(i18n.t('users.modify.unlockAllSubquestConfirm'))) runSimpleCmd('unlock-all-subquest-messages', '@Model.ID')">
+                                <i class="fas fa-unlock-alt me-2"></i> <span data-i18n="users.modify.unlockAllSubquestMessages">Cheat：解锁所有支线对话</span>
                             </button>
                         </div>
                     </div>
@@ -147,6 +153,9 @@
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('skip-tower', '@Model.ID', 'Skip tower floor for the selected user, towerid floor (Elysion=1, Misslis=2, Tetra=3, Pilgrim=4, Tribe=5) e.g 1 234')">
                                 <i class="fas fa-building me-2"></i> <span>Skip Tower Floors</span>
                             </button>
+                            <a asp-action="Messenger" asp-route-id="@Model.ID" class="btn btn-accent">
+                                <i class="fas fa-comments me-2"></i> <span data-i18n="users.modify.messenger">Manage Messenger</span>
+                            </a>
                         </div>
                     </div>
                 </div>

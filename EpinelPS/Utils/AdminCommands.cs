@@ -68,7 +68,10 @@ public class AdminCommands
         int maxChapter = chapters.Max(c => c.Chapter);
 
         // Find max stage count for that chapter (main stages)
-        int maxStage = GameData.Instance.GetStageIdsForChapter(maxChapter, true).Count();
+        // GetStageIdsForChapter uses a zero-based chapter index, while the
+        // campaign table and admin command use the user-facing one-based
+        // chapter number.
+        int maxStage = GetNormalMainStages(maxChapter).Count;
 
         if (maxStage == 0) maxStage = 1;
 
@@ -87,35 +90,43 @@ public class AdminCommands
 
             if (chapterParsed && stageParsed)
             {
+                if (chapterNumber < 1 || stageNumber < 1)
+                    return new RunCmdResponse() { error = "Chapter and stage number must be positive integers" };
+
                 Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
 
                 // Complete main stages
-                for (int i = 0; i <= chapterNumber; i++)
+                // The command uses one-based campaign chapter numbers. The
+                // static-data helper uses a zero-based index, so convert only
+                // at the call site instead of allowing the target to drift by
+                // one chapter.
+                for (int campaignChapter = 1; campaignChapter <= chapterNumber; campaignChapter++)
                 {
-                    IEnumerable<int> stages = GameData.Instance.GetStageIdsForChapter(i, true);
-                    int target = 1;
-                    foreach (int item in stages)
+                    List<CampaignStageRecord> stages = GetNormalMainStages(campaignChapter);
+                    int stageLimit = campaignChapter == chapterNumber ? stageNumber : stages.Count;
+
+                    if (stageLimit > stages.Count)
                     {
-                        CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
-                        if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
+                        return new RunCmdResponse()
                         {
-                            Console.WriteLine("Completing stage " + item);
-                            ClearStage.CompleteStage(user, item, true);
-                        }
+                            error = $"Chapter {chapterNumber} has only {stages.Count} normal main stages"
+                        };
+                    }
 
-                        if (i == chapterNumber && target == stageNumber)
+                    foreach (CampaignStageRecord stageData in stages.Take(stageLimit))
+                    {
+                        if (!user.IsStageCompleted(stageData.Id))
                         {
-                            break;
+                            Console.WriteLine("Completing stage " + stageData.Id);
+                            ClearStage.CompleteStage(user, stageData.Id, true);
                         }
-
-                        target++;
                     }
                 }
 
                 // Process scenario and regular stages
                 Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
 
-                for (int chapter = 0; chapter <= chapterNumber; chapter++)
+                for (int chapter = 1; chapter <= chapterNumber; chapter++)
                 {
                     Console.WriteLine($"Processing chapter: {chapter}");
 
@@ -136,6 +147,54 @@ public class AdminCommands
                         }
                     }
                 }
+
+                // Simulate the normal /Trigger/FinMainQuest flow as well as
+                // clearing the campaign stages. FinishMainQuest records both
+                // CampaignClear(condition) and MainQuestClear(quest id), and
+                // marks the quest as completed-but-unclaimed. Completing only
+                // stages leaves Messenger conditions such as MainQuestClear(25)
+                // missing, even though the campaign appears complete.
+                HashSet<(Trigger Type, int ConditionId)> existingTriggers;
+                using (GameContext context = GameContext.CreateNew())
+                {
+                    existingTriggers = context.Triggers
+                        .Where(trigger => trigger.UserId == user.ID)
+                        .AsEnumerable()
+                        .Select(trigger => (trigger.Type, trigger.ConditionId))
+                        .ToHashSet();
+                }
+
+                int completedQuestTriggers = 0;
+                foreach (MainQuestRecord quest in GameData.Instance.QuestDataRecords.Values)
+                {
+                    // Do not mark quests from chapters beyond the scope of
+                    // this command as completed. The static table also
+                    // contains future content.
+                    if (quest.TargetChapterId > chapterNumber)
+                        continue;
+
+                    if (quest.ConditionId == null || quest.ConditionId.Count == 0)
+                        continue;
+
+                    int campaignConditionId = quest.ConditionId[0].ConditionId;
+                    user.SetQuest(quest.Id, false);
+
+                    if (existingTriggers.Add((Trigger.CampaignClear, campaignConditionId)))
+                    {
+                        user.AddTrigger(Trigger.CampaignClear, 1, campaignConditionId);
+                    }
+
+                    if (existingTriggers.Add((Trigger.MainQuestClear, quest.Id)))
+                    {
+                        user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
+                        completedQuestTriggers++;
+                    }
+                }
+
+                // The quest triggers above can unlock rooms whose opener
+                // conditions were already satisfied before this command.
+                MessengerMessageCreator.CreateAllEligibleOpeners(user);
+                Logging.WriteLine($"[Admin] CompleteAllStages recorded {completedQuestTriggers} missing MainQuestClear triggers for user {user.ID}", LogType.Info);
 
                 // get last quest data to remove any gaps
                 if (user.MainQuestData.Count >= 2)
@@ -165,6 +224,138 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    public static RunCmdResponse CompleteAllEventStages(ulong userId)
+    {
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
+
+        int completedCount = 0;
+
+        // Collect all triggers first, then batch-add to avoid DbContext threading issues
+        var triggersToAdd = new List<(Trigger type, int value, int conditionId)>();
+
+        // Build stageId -> eventId mapping via EventDungeonStageTable -> EventDungeonDifficultTable -> EventDungeonTable
+        var stageToEvent = new Dictionary<int, int>();
+        var eventStages = new Dictionary<int, List<int>>();
+
+        foreach (var stageKv in GameData.Instance.EventDungeonStageTable)
+        {
+            int stageId = stageKv.Key;
+            int stageGroup = stageKv.Value.Group;
+
+            // Find the difficult record that matches this stage's group
+            var difficult = GameData.Instance.EventDungeonDifficultTable.Values.FirstOrDefault(x => x.StageGroup == stageGroup);
+            if (difficult == null) continue;
+
+            // Find the event that matches this difficult's group
+            var dungeon = GameData.Instance.EventDungeonTable.Values.FirstOrDefault(x => x.DifficultGroup == difficult.Group);
+            if (dungeon == null) continue;
+
+            int eventId = dungeon.Id;
+            stageToEvent[stageId] = eventId;
+
+            if (!eventStages.ContainsKey(eventId))
+                eventStages[eventId] = new List<int>();
+            eventStages[eventId].Add(stageId);
+
+            triggersToAdd.Add((Trigger.EventStageClear, 1, stageId));
+            completedCount++;
+        }
+
+        // Also trigger EventDungeonStageClear for all events and populate EventInfo
+        foreach (var eventKv in GameData.Instance.EventDungeonTable)
+        {
+            int eventId = eventKv.Value.Id;
+            triggersToAdd.Add((Trigger.EventDungeonStageClear, 1, eventId));
+
+            // Populate EventInfo with all stage IDs cleared
+            if (user.EventInfo.ContainsKey(eventId))
+            {
+                var eventData = user.EventInfo[eventId];
+                if (eventStages.ContainsKey(eventId))
+                {
+                    foreach (var stageId in eventStages[eventId])
+                    {
+                        if (!eventData.ClearedStages.Contains(stageId))
+                            eventData.ClearedStages.Add(stageId);
+                    }
+                    eventData.LastStage = eventStages[eventId].Max();
+                }
+            }
+            else
+            {
+                var clearedStages = eventStages.ContainsKey(eventId) ? eventStages[eventId].ToList() : new List<int>();
+                user.EventInfo.Add(eventId, new EventData()
+                {
+                    LastStage = clearedStages.Any() ? clearedStages.Max() : 0,
+                    ClearedStages = clearedStages
+                });
+            }
+        }
+
+        // Batch-add triggers
+        foreach (var (type, value, conditionId) in triggersToAdd)
+        {
+            user.AddTrigger(type, value, conditionId);
+        }
+
+        Console.WriteLine($"Completed {completedCount} event stages for user {userId}");
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
+    private static List<CampaignStageRecord> GetNormalMainStages(int campaignChapter)
+    {
+        // GetStageIdsForChapter expects a zero-based chapter index. Keep the
+        // conversion here so callers work with the same one-based chapter
+        // numbers shown in the admin panel.
+        return [.. GameData.Instance.GetStageIdsForChapter(campaignChapter - 1, true)
+            .Select(stageId => GameData.Instance.GetStageData(stageId)
+                ?? throw new Exception("failed to find stage " + stageId))
+            .OrderBy(stage => stage.StageChild)
+            .ThenBy(stage => stage.Id)];
+    }
+
+    /// <summary>
+    /// Cheat: enroll every subquest and create its starting Messenger opener.
+    /// This intentionally bypasses normal prerequisites and trigger checks,
+    /// but preserves an already completed SubQuestData entry.
+    /// </summary>
+    public static RunCmdResponse UnlockAllSubquestMessages(ulong userId)
+    {
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == userId);
+        if (user == null) return new RunCmdResponse() { error = "invalId user ID" };
+
+        int enrolledCount = 0;
+        int createdCount = 0;
+        foreach (SubQuestRecord subQuest in GameData.Instance.Subquests.Values)
+        {
+            if (!user.SubQuestData.ContainsKey(subQuest.Id))
+            {
+                user.SetSubQuest(subQuest.Id, false);
+                enrolledCount++;
+            }
+
+            if (string.IsNullOrEmpty(subQuest.ConversationId))
+                continue;
+
+            MessengerDialogRecord? opener = GameData.Instance.Messages.Values.FirstOrDefault(message =>
+                message.ConversationId == subQuest.ConversationId && message.IsOpener);
+            if (opener == null)
+                continue;
+
+            if (user.MessengerData.Any(message => message.ConversationId == opener.ConversationId))
+                continue;
+
+            user.CreateMessage(opener);
+            createdCount++;
+        }
+
+        Logging.WriteLine($"[Admin] UnlockAllSubquestMessages user={user.ID}, Enrolled={enrolledCount}, Created={createdCount}", LogType.Warning);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
     public static RunCmdResponse AddAllCharacters(User user)
     {
         // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201
@@ -191,8 +382,14 @@ public class AdminCommands
                 user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1, 0);
+                if (character.OriginalRare == OriginalRareType.SSR)
+                    user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
             }
         }
+
+        // A character can unlock a Messenger room even when the conversation
+        // itself is gated by an already-completed campaign/event trigger.
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
         JsonDb.Save();
 
@@ -552,6 +749,17 @@ public class AdminCommands
                 Tid = characterId,
                 UltimateLevel = 1
             });
+
+            if (GameData.Instance.CharacterTable.TryGetValue(characterId, out CharacterRecord? charData))
+            {
+                user.BondInfo.Add(new() { NameCode = charData.NameCode, Lv = 1 });
+                user.AddTrigger(Trigger.ObtainCharacter, 1, charData.NameCode);
+                user.AddTrigger(Trigger.ObtainCharacterNew, 1);
+                if (charData.OriginalRare == OriginalRareType.SSR)
+                    user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
+            }
+
+            MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
             Console.WriteLine($"Added character {characterId} to user");
             JsonDb.Save();

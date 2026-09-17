@@ -17,6 +17,7 @@ public class FastClearEventStage : LobbyMessage
         NetRewardData bonusReward = new();
         ClearEventStageHelper.ClearStage(user, req.StageId, ref reward, ref bonusReward, 1, req.ClearCount); // always battleResult = 1 for fast clear
 
+        user.AddTrigger(Trigger.EventStageClear, 1, req.StageId);
         user.AddTrigger(Trigger.EventDungeonStageClear, req.ClearCount, req.EventId);
         response.RemainTicket = EventStoryHelper.SubtractTicket(user, req.EventId, req.ClearCount);
 

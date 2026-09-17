@@ -134,7 +134,10 @@ public class User
     public int LastTriggerId { get; set; } = 1;
     public List<int> CompletedAchievements { get; set; } = [];
     public List<NetMessage> MessengerData { get; set; } = [];
+    // Manual admin repairs only.  Keeping the original message makes a repair reversible.
+    public List<MessengerRepairAuditEntry> MessengerRepairHistory { get; set; } = [];
     public ulong LastMessageId { get; set; } = 1;
+    public List<NetPickedMessage> PickedMessages { get; set; } = [];
     public long LastBadgeSeq { get; set; } = 1;
     public Dictionary<int, LostSectorData> LostSectorData { get; set; } = [];
 
@@ -219,6 +222,7 @@ public class User
     
     public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
     {
+        using var ctx = GameContext.CreateNew();
         TriggerModelNew t = new()
         {
             Type = type,
@@ -227,9 +231,14 @@ public class User
             Value = value
         };
 
-        var gameUser = GameContext.Instance.Users.Find(ID) ?? throw new InvalidDataException("user not found in Users table");
+        var gameUser = ctx.Users.Find(ID) ?? throw new InvalidDataException("user not found in Users table");
         gameUser.Triggers.Add(t);
-        GameContext.Instance.SaveChanges();
+        ctx.SaveChanges();
+
+        // Messenger creation must evaluate the exact trigger that was just
+        // persisted. Passing only the trigger type can miss conditions whose
+        // ConditionId/Value are specific to this event.
+        MessengerMessageCreator.OnTriggerAdded(this, t);
 
         return t;
     }
@@ -764,4 +773,13 @@ public class User
             GachaPityBannerExecuteCount.Add(pityBannerID, pullCount);
         }
     }
+}
+
+public class MessengerRepairAuditEntry
+{
+    public string Id { get; set; } = Guid.NewGuid().ToString("N");
+    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+    public string Action { get; set; } = "";
+    public string Note { get; set; } = "";
+    public NetMessage Message { get; set; } = new();
 }

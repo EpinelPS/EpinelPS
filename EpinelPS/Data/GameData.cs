@@ -254,6 +254,9 @@ public class GameData
     [LoadRecord("MessengerConditionTriggerTable.json", "Id")]
     public readonly Dictionary<int, MessengerConditionTriggerRecord> MessageConditions = [];
 
+    [LoadRecord("MessengerRoomTable.json", "Id")]
+    public readonly Dictionary<string, MessengerRoomRecord> MessengerRooms = [];
+
     [LoadRecord("ScenarioRewardsTable.json", "ConditionId")]
     public readonly Dictionary<string, ScenarioRewardsRecord> ScenarioRewards = [];
 

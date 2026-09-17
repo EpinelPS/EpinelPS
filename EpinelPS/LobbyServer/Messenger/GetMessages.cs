@@ -10,71 +10,14 @@ public class GetMessages : LobbyMessage
         ReqGetMessages req = await ReadData<ReqGetMessages>();
         User user = GetUser();
 
-        CheckAndCreateAvailableMessages(user);
-
         ResGetMessages response = new();
 
-        IEnumerable<NetMessage> newMessages = user.MessengerData.Where(x => x.Seq >= req.Seq);
-
-        foreach (NetMessage? item in newMessages)
+        foreach (NetMessage message in user.MessengerData.Where(message => message.Seq >= req.Seq))
         {
-            response.Messages.Add(item);
+            response.Messages.Add(message);
         }
 
         await WriteDataAsync(response);
     }
 
-    private void CheckAndCreateAvailableMessages(User user)
-    {
-        foreach (KeyValuePair<int, MessengerConditionTriggerRecord> messageCondition in GameData.Instance.MessageConditions)
-        {
-            int conditionId = messageCondition.Key;
-            MessengerConditionTriggerRecord msgCondition = messageCondition.Value;
-
-            if (IsMessageConditionSatisfied(user, conditionId))
-            {
-                bool messageExists = user.MessengerData.Any(m => m.ConversationId == msgCondition.Tid);
-                if (!messageExists)
-                {
-                    KeyValuePair<string, MessengerDialogRecord> conversation = GameData.Instance.Messages.FirstOrDefault(x =>
-                        x.Value.ConversationId == msgCondition.Tid && x.Value.IsOpener);
-
-                    if (conversation.Value != null)
-                    {
-                        user.CreateMessage(conversation.Value);
-                    }
-                }
-            }
-        }
-    }
-
-    private bool IsMessageConditionSatisfied(User user, int conditionId)
-    {
-        if (!GameData.Instance.MessageConditions.TryGetValue(conditionId, out MessengerConditionTriggerRecord? msgCondition))
-        {
-            return false;
-        }
-
-        foreach (TriggerData trigger in msgCondition.TriggerList)
-        {
-            if (trigger.Trigger == Data.Trigger.None || trigger.ConditionId == 0)
-                continue;
-
-            if (!CheckTriggerCondition(user, trigger))
-            {
-                return false; // All conditions must be satisfied
-            }
-        }
-
-        return true;
-    }
-
-    private bool CheckTriggerCondition(User user, TriggerData trigger)
-    {
-        return GameContext.Triggers.Any(t =>
-            t.UserId == user.ID &&
-            t.Type == trigger.Trigger &&
-            t.ConditionId == trigger.ConditionId &&
-            t.Value >= trigger.ConditionValue);
-    }
 }

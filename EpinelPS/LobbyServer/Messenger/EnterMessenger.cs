@@ -1,5 +1,6 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Messenger;
 
@@ -32,11 +33,41 @@ public class EnterMessenger : LobbyMessage
             }
         }
 
-        response.Message = user.CreateMessage(conversation.Value);
+        if (!MessengerAccessValidator.CanEnter(user, opener, conversation.Value))
+        {
+            Logging.WriteLine($"[Messenger] Enter denied: user={user.ID}, Tid={opener.Tid}, RoomId={conversation.Value.RoomId}", LogType.Warning);
+            throw new BadHttpRequestException($"Messenger conversation {opener.Tid} is not available for this user", 403);
+        }
 
-        user.AddTrigger(Trigger.MessageClear, 1, req.Tid); // TODO check if this is correct
+        NetMessage? existingMessage = user.MessengerData
+            .Where(message => message.ConversationId == opener.Tid)
+            .OrderByDescending(message => message.Seq)
+            .FirstOrDefault();
 
-        JsonDb.Save();
+        if (existingMessage != null)
+        {
+            response.Message = existingMessage;
+        }
+        else
+        {
+            response.Message = user.CreateMessage(conversation.Value);
+            user.AddTrigger(Trigger.MessageClear, 1, req.Tid);
+            JsonDb.Save();
+        }
+
+        // Entering an already-created opener is still a real conversation
+        // entry. Record MessageClear exactly once for this condition.
+        using (GameContext triggerContext = GameContext.CreateNew())
+        {
+            if (!triggerContext.Triggers.Any(trigger => trigger.UserId == user.ID &&
+                trigger.Type == Trigger.MessageClear && trigger.ConditionId == req.Tid))
+            {
+                user.AddTrigger(Trigger.MessageClear, 1, req.Tid);
+                JsonDb.Save();
+            }
+        }
+
+        Logging.WriteLine($"[Messenger] Enter: user={user.ID}, Tid={opener.Tid}, RoomId={conversation.Value.RoomId}", LogType.Info);
 
         await WriteDataAsync(response);
     }

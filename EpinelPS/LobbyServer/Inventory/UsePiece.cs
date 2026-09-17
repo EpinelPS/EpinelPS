@@ -119,7 +119,7 @@ public class UsePiece : LobbyMessage
                 // Add "New Character" Badge
                 user.AddBadge(BadgeContents.NikkeNew, character.NameCode.ToString());
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
-                if (character.OriginalRare == OriginalRareType.SR)
+                if (character.OriginalRare == OriginalRareType.SSR)
                 {
                     user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
                 }
@@ -133,6 +133,11 @@ public class UsePiece : LobbyMessage
                     user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
                 }
             }
+
+            // Character acquisition can satisfy a room condition independently
+            // of the current ObtainCharacter trigger. Reconcile only fully
+            // eligible openers after the new character and its triggers exist.
+            MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
             user.AddTrigger(Trigger.GachaCharacter, 0, 0);
         }

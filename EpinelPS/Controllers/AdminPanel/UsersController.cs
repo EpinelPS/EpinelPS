@@ -4,14 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
 using EpinelPS.Data;
+using EpinelPS.Services;
 
 namespace EpinelPS.Controllers.AdminPanel;
 
 [Route("admin/Users")]
-public class UsersController(ILogger<UsersController> logger, GameContext dbContext) : Controller
+public class UsersController(ILogger<UsersController> logger, GameContext dbContext, MessengerAdminService messengerAdminService) : Controller
 {
     private readonly ILogger<UsersController> _logger = logger;
     private readonly GameContext _db = dbContext;
+    private readonly MessengerAdminService _messengerAdmin = messengerAdminService;
     private static readonly MD5 sha = MD5.Create();
     private readonly Dictionary<string, Dictionary<int, double>> _overloadOptions = new Dictionary<string, Dictionary<int, double>>
     {
@@ -94,6 +96,56 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
         return View(_db.SdkUsers);
+    }
+
+    [Route("Delete/{id}")]
+    public IActionResult Delete(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        SdkUser? sdkUser = _db.SdkUsers.Find(id);
+        GameUser? gameUser = _db.Users.Find(id);
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+        if (sdkUser == null || gameUser == null || user == null)
+            return NotFound();
+
+        return View(new DeleteUserModel
+        {
+            ID = id,
+            Email = sdkUser.Email,
+            Password = sdkUser.PasswordHash,
+            IsAdmin = sdkUser.IsAdmin,
+            PlayerName = sdkUser.PlayerName,
+            Nickname = gameUser.Nickname,
+            IsBanned = user.IsBanned
+        });
+    }
+
+    [Route("Delete/{id}"), ActionName("Delete")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        SdkUser? sdkUser = _db.SdkUsers.Find(id);
+        GameUser? gameUser = _db.Users.Find(id);
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+        if (sdkUser == null || gameUser == null || user == null)
+            return NotFound();
+
+        // Remove the trigger rows explicitly before deleting the GameUser row.
+        // This works regardless of the database provider's cascade configuration.
+        List<TriggerModelNew> triggerRows = _db.Triggers.Where(trigger => trigger.UserId == id).ToList();
+        _db.Triggers.RemoveRange(triggerRows);
+        _db.Users.Remove(gameUser);
+        _db.SdkUsers.Remove(sdkUser);
+        _db.SaveChanges();
+
+        JsonDb.Instance.Users.Remove(user);
+        JsonDb.Save();
+
+        return RedirectToAction(nameof(Index));
     }
 
     public List<CharacterGearModel> OverloadedGear = [];
@@ -326,6 +378,105 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
                 Current = user.Currency
             }
         );
+    }
+
+    [Route("Messenger/{id}")]
+    public IActionResult Messenger(ulong id)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
+        if (user == null) return NotFound();
+
+        return View(_messengerAdmin.BuildModel(user));
+    }
+
+    [Route("Messenger/{id}/Create")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CreateMessengerMessage(ulong id, [FromForm] CreateMessengerMessageModel model)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
+        if (user == null) return NotFound();
+
+        if (_messengerAdmin.TryCreate(user, model, out string error))
+        {
+            JsonDb.Save();
+            TempData["MessengerSuccess"] = "Message created. No trigger was added.";
+        }
+        else
+        {
+            TempData["MessengerError"] = error;
+        }
+
+        return RedirectToAction(nameof(Messenger), new { id });
+    }
+
+    [Route("Messenger/{id}/Update")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateMessengerMessage(ulong id, [FromForm] UpdateMessengerMessageModel model)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
+        if (user == null) return NotFound();
+
+        if (_messengerAdmin.TryUpdateState(user, model, out string error))
+        {
+            JsonDb.Save();
+            TempData["MessengerSuccess"] = "Message state updated. No trigger was changed.";
+        }
+        else
+        {
+            TempData["MessengerError"] = error;
+        }
+
+        return RedirectToAction(nameof(Messenger), new { id });
+    }
+
+    [Route("Messenger/{id}/Delete")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteMessengerMessage(ulong id, [FromForm] long seq)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
+        if (user == null) return NotFound();
+
+        if (_messengerAdmin.TryDelete(user, seq, out string error))
+        {
+            JsonDb.Save();
+            TempData["MessengerSuccess"] = "Erroneous opener removed. A restore snapshot was saved.";
+        }
+        else
+        {
+            TempData["MessengerError"] = error;
+        }
+
+        return RedirectToAction(nameof(Messenger), new { id });
+    }
+
+    [Route("Messenger/{id}/Restore")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult RestoreMessengerMessage(ulong id, [FromForm] string auditId)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+        User? user = JsonDb.Instance.Users.FirstOrDefault(user => user.ID == id);
+        if (user == null) return NotFound();
+
+        if (_messengerAdmin.TryRestore(user, auditId, out string error))
+        {
+            JsonDb.Save();
+            TempData["MessengerSuccess"] = "Deleted message restored.";
+        }
+        else
+        {
+            TempData["MessengerError"] = error;
+        }
+
+        return RedirectToAction(nameof(Messenger), new { id });
     }
 
     [Route("SetPassword/{id}")]
