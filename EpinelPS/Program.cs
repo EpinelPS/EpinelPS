@@ -34,8 +34,15 @@ internal class Program
                 return;
             }
             
-            if (args.Length == 0 || args[0] != "--headless")
-                await GitUpdateCheck.CheckForUpdates();
+            try
+            {
+                if (args.Length == 0 || args[0] != "--headless")
+                    await GitUpdateCheck.CheckForUpdates();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Failed to check for updates: " + ex.Message);
+            }
 
             await GameData.CreateAsync();
 
