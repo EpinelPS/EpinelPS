@@ -27,10 +27,15 @@ public class GameContext : DbContext
     /// disposed when the request ends, leaving a dangling disposed instance behind.
     /// </summary>
     public static GameContext Instance { get; private set; } = null!;
+    /// <summary>
+    /// Static options for standalone/background GameContext instances created via <see cref="CreateNew"/>.
+    /// Set once at startup via <see cref="InitializeOptions"/> - do NOT set or overwrite this from
+    /// the constructor, as DI creates short-lived scoped instances per request that get
+    /// disposed when the request ends, which would leave a dangling disposed IServiceProvider behind.
+    /// </summary>
     public static DbContextOptions<GameContext>? Options { get; private set; }
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
-        Options = options;
     }
 
     public static void InitializeOptions(string connectionString, string? connectionType)
