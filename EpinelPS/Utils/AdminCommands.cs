@@ -68,7 +68,10 @@ public class AdminCommands
         int maxChapter = chapters.Max(c => c.Chapter);
 
         // Find max stage count for that chapter (main stages)
-        int maxStage = GameData.Instance.GetStageIdsForChapter(maxChapter, true).Count();
+        // GetStageIdsForChapter uses a zero-based chapter index, while the
+        // campaign table and admin command use the user-facing one-based
+        // chapter number.
+        int maxStage = GetNormalMainStages(maxChapter).Count;
 
         if (maxStage == 0) maxStage = 1;
 
@@ -87,35 +90,43 @@ public class AdminCommands
 
             if (chapterParsed && stageParsed)
             {
+                if (chapterNumber < 1 || stageNumber < 1)
+                    return new RunCmdResponse() { error = "Chapter and stage number must be positive integers" };
+
                 Console.WriteLine($"Chapter number: {chapterNumber}, Stage number: {stageNumber}");
 
                 // Complete main stages
-                for (int i = 0; i <= chapterNumber; i++)
+                // The command uses one-based campaign chapter numbers. The
+                // static-data helper uses a zero-based index, so convert only
+                // at the call site instead of allowing the target to drift by
+                // one chapter.
+                for (int campaignChapter = 1; campaignChapter <= chapterNumber; campaignChapter++)
                 {
-                    IEnumerable<int> stages = GameData.Instance.GetStageIdsForChapter(i, true);
-                    int target = 1;
-                    foreach (int item in stages)
+                    List<CampaignStageRecord> stages = GetNormalMainStages(campaignChapter);
+                    int stageLimit = campaignChapter == chapterNumber ? stageNumber : stages.Count;
+
+                    if (stageLimit > stages.Count)
                     {
-                        CampaignStageRecord stageData = GameData.Instance.GetStageData(item) ?? throw new Exception("failed to find stage " + item);
-                        if (!user.IsStageCompleted(item) && stageData.ChapterMod == ChapterMod.Normal)
+                        return new RunCmdResponse()
                         {
-                            Console.WriteLine("Completing stage " + item);
-                            ClearStage.CompleteStage(user, item, true);
-                        }
+                            error = $"Chapter {chapterNumber} has only {stages.Count} normal main stages"
+                        };
+                    }
 
-                        if (i == chapterNumber && target == stageNumber)
+                    foreach (CampaignStageRecord stageData in stages.Take(stageLimit))
+                    {
+                        if (!user.IsStageCompleted(stageData.Id))
                         {
-                            break;
+                            Console.WriteLine("Completing stage " + stageData.Id);
+                            ClearStage.CompleteStage(user, stageData.Id, true);
                         }
-
-                        target++;
                     }
                 }
 
                 // Process scenario and regular stages
                 Console.WriteLine($"Processing stages for chapters 0 to {chapterNumber}");
 
-                for (int chapter = 0; chapter <= chapterNumber; chapter++)
+                for (int chapter = 1; chapter <= chapterNumber; chapter++)
                 {
                     Console.WriteLine($"Processing chapter: {chapter}");
 
@@ -291,6 +302,18 @@ public class AdminCommands
         Console.WriteLine($"Completed {completedCount} event stages for user {userId}");
         JsonDb.Save();
         return RunCmdResponse.OK;
+    }
+
+    private static List<CampaignStageRecord> GetNormalMainStages(int campaignChapter)
+    {
+        // GetStageIdsForChapter expects a zero-based chapter index. Keep the
+        // conversion here so callers work with the same one-based chapter
+        // numbers shown in the admin panel.
+        return [.. GameData.Instance.GetStageIdsForChapter(campaignChapter - 1, true)
+            .Select(stageId => GameData.Instance.GetStageData(stageId)
+                ?? throw new Exception("failed to find stage " + stageId))
+            .OrderBy(stage => stage.StageChild)
+            .ThenBy(stage => stage.Id)];
     }
 
     /// <summary>
