@@ -696,10 +696,28 @@ public class GameData
         Stopwatch stopWatch = new();
         stopWatch.Start();
         await Instance.Parse();
+        Instance.RepairMissingSubquestOpeners();
 
         stopWatch.Stop();
         Logging.WriteLine("Preparing took " + stopWatch.Elapsed);
         return Instance;
+    }
+
+    private void RepairMissingSubquestOpeners()
+    {
+        foreach (var subquest in Subquests.Values)
+        {
+            if (string.IsNullOrEmpty(subquest.ConversationId)) continue;
+            var conv = Messages.Values.Where(m => m.ConversationId == subquest.ConversationId).ToList();
+            if (conv.Count > 0 && !conv.Any(m => m.IsOpener))
+            {
+                var first = conv.OrderBy(m => m.Id).FirstOrDefault();
+                if (first != null)
+                {
+                    first.IsOpener = true;
+                }
+            }
+        }
     }
 
     public GameData(string mpkFilePath)

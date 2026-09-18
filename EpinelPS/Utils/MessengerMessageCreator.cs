@@ -143,6 +143,13 @@ public static class MessengerMessageCreator
             KeyValuePair<string, MessengerDialogRecord> opener = GameData.Instance.Messages.FirstOrDefault(item =>
                 item.Value.ConversationId == subQuest.ConversationId && item.Value.IsOpener);
             if (opener.Value == null)
+            {
+                opener = GameData.Instance.Messages
+                    .Where(item => item.Value.ConversationId == subQuest.ConversationId)
+                    .OrderBy(item => item.Key)
+                    .FirstOrDefault();
+            }
+            if (opener.Value == null)
                 continue;
 
             if (!MessengerAccessValidator.IsRoomUnlockSatisfied(user, opener.Value.RoomId))

@@ -46,9 +46,6 @@ internal class Program
             }
 
             await GameData.CreateAsync();
-
-
-
             foreach (var user in JsonDb.Instance.Users)
             {
                 if (user.LastNormalStageCleared >= 6000002)
