@@ -45,6 +45,12 @@ public class EnterSubquest : LobbyMessage
             JsonDb.Save();
         }
 
+        if (!user.SubQuestData.ContainsKey(req.SubQuestId))
+        {
+            user.SetSubQuest(req.SubQuestId, false);
+            JsonDb.Save();
+        }
+
         await WriteDataAsync(response);
     }
 }

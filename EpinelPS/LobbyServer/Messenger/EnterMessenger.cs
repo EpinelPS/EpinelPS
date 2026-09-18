@@ -67,6 +67,9 @@ public class EnterMessenger : LobbyMessage
             }
         }
 
+        // Reconcile eligible openers now that this conversation has been cleared
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
+
         Logging.WriteLine($"[Messenger] Enter: user={user.ID}, Tid={opener.Tid}, RoomId={conversation.Value.RoomId}", LogType.Info);
 
         await WriteDataAsync(response);
