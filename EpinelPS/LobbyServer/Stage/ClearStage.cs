@@ -358,6 +358,39 @@ public class ClearStage : LobbyMessage
         {
             Logging.Warn($"Failed to clean up stale triggers for user {user.ID}: {ex.Message}");
         }
+
+        // Reconcile ChapterClear triggers for all completed normal chapters
+        try
+        {
+            using (GameContext context = GameContext.CreateNew())
+            {
+                var existingChapterTriggers = context.Triggers
+                    .Where(t => t.UserId == user.ID && t.Type == Trigger.ChapterClear)
+                    .Select(t => t.ConditionId)
+                    .ToHashSet();
+
+                var chapters = GameData.Instance.ChapterCampaignData.Values;
+                int maxChapter = chapters.Count > 0 ? chapters.Max(c => c.Chapter) : 0;
+
+                for (int c = 1; c <= maxChapter; c++)
+                {
+                    List<CampaignStageRecord> chapterStages = AdminCommands.GetNormalMainStages(c);
+                    CampaignStageRecord? bossStage = chapterStages.LastOrDefault();
+                    if (bossStage != null && user.IsStageCompleted(bossStage.Id))
+                    {
+                        if (!existingChapterTriggers.Contains(bossStage.ChapterId))
+                        {
+                            user.AddTrigger(Trigger.ChapterClear, 1, bossStage.ChapterId);
+                            existingChapterTriggers.Add(bossStage.ChapterId);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logging.Warn($"Failed to reconcile ChapterClear triggers for user {user.ID}: {ex.Message}");
+        }
     }
 }
 

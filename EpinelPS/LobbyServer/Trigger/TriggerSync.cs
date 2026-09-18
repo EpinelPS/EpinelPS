@@ -1,4 +1,5 @@
-﻿using EpinelPS.Database;
+using EpinelPS.Database;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.TriggerController;
 
@@ -21,12 +22,29 @@ public class TriggerSync : LobbyMessage
         // is cleared, why does the official server do this?
 
         ResSyncTrigger response = new();
-        Console.WriteLine("needs " + req.Seq);
+        Logging.WriteLine($"[TriggerSync] User {user.ID} requested trigger sync from seq {req.Seq}", LogType.Debug);
 
-        // Look for triggers past that amount
-        TriggerModelNew[] newTriggers = [.. GameContext.Triggers.Where(x => x.Id > req.Seq && x.UserId == user.ID)];
+        long maxId = GameContext.Triggers
+            .Where(x => x.UserId == user.ID)
+            .Select(x => (long?)x.Id)
+            .Max() ?? 0;
 
-        // Return all triggers
+        long effectiveSeq = req.Seq;
+        if (effectiveSeq > maxId)
+        {
+            // The client's cached sequence is ahead of the database (e.g. after trigger cleanup or save restore).
+            // Request the client to restart trigger sync from 0.
+            Logging.WriteLine($"[TriggerSync] Client seq ({req.Seq}) > maxId ({maxId}) for user {user.ID}; requesting restart from 0", LogType.Info);
+            response.Restart = true;
+            effectiveSeq = 0;
+        }
+
+        // Look for triggers past that amount in ascending ID order
+        TriggerModelNew[] newTriggers = [.. GameContext.Triggers
+            .Where(x => x.Id > effectiveSeq && x.UserId == user.ID)
+            .OrderBy(x => x.Id)];
+
+        // Return triggers (paged up to 2000)
         int triggerCount = 0;
         foreach (TriggerModelNew item in newTriggers)
         {
@@ -43,3 +61,4 @@ public class TriggerSync : LobbyMessage
         await WriteDataAsync(response);
     }
 }
+

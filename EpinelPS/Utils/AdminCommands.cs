@@ -236,12 +236,29 @@ public class AdminCommands
                     }
                 }
 
+                // Reconcile ChapterClear triggers for all completed normal chapters up to target progression
+                int completedChapterTriggers = 0;
+                for (int c = 1; c <= chapterNumber; c++)
+                {
+                    List<CampaignStageRecord> chapterStages = GetNormalMainStages(c);
+                    CampaignStageRecord? bossStage = chapterStages.LastOrDefault();
+                    if (bossStage != null && user.IsStageCompleted(bossStage.Id))
+                    {
+                        if (existingTriggers.Add((Trigger.ChapterClear, bossStage.ChapterId)))
+                        {
+                            user.AddTrigger(Trigger.ChapterClear, 1, bossStage.ChapterId);
+                            completedChapterTriggers++;
+                        }
+                    }
+                }
+
                 // Reconcile eligible Messenger openers
                 MessengerMessageCreator.CreateAllEligibleOpeners(user);
-                Logging.WriteLine($"[Admin] CompleteStage recorded {completedQuestTriggers} MainQuestClear triggers for user {user.ID} up to stage {lastClearedStageId}", LogType.Info);
+                Logging.WriteLine($"[Admin] CompleteStage recorded {completedQuestTriggers} MainQuestClear and {completedChapterTriggers} ChapterClear triggers for user {user.ID} up to stage {lastClearedStageId}", LogType.Info);
 
                 // Save changes to user data
                 JsonDb.Save();
+
             }
             else
             {
@@ -336,7 +353,7 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
-    private static List<CampaignStageRecord> GetNormalMainStages(int campaignChapter)
+    public static List<CampaignStageRecord> GetNormalMainStages(int campaignChapter)
     {
         // GetStageIdsForChapter matches (data.ChapterId - 1 == campaignChapter).
         // For campaignChapter = 1, data.ChapterId = 2 (Chapter 1 stages 6001001..6001004).
@@ -346,6 +363,7 @@ public class AdminCommands
                 ?? throw new Exception("failed to find stage " + stageId))
             .OrderBy(stage => stage.Id)];
     }
+
 
     /// <summary>
     /// Cheat: enroll every subquest and create its starting Messenger opener.
