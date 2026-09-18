@@ -12,7 +12,7 @@ namespace EpinelPS.Utils;
 /// </summary>
 public static class MessengerMessageCreator
 {
-    public static void OnTriggerAdded(User user, TriggerModelNew currentTrigger)
+    public static void OnTriggerAdded(User user, TriggerModelNew currentTrigger, bool logToConsole = true)
     {
         int sameTypeCandidates = 0;
         int exactCandidates = 0;
@@ -43,24 +43,24 @@ public static class MessengerMessageCreator
             exactCandidates++;
             if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, condition.TriggerList))
             {
-                Logging.WriteLine($"[Messenger] Trigger candidate not satisfied: user={user.ID}, Trigger={currentTrigger.Type}, ConditionId={currentTrigger.ConditionId}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Debug);
+                Logging.WriteLine($"[Messenger] Trigger candidate not satisfied: user={user.ID}, Trigger={currentTrigger.Type}, ConditionId={currentTrigger.ConditionId}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Debug, logToConsole);
                 continue;
             }
 
             satisfiedCandidates++;
-            if (CreateOpener(user, condition))
+            if (CreateOpener(user, condition, logToConsole))
                 createdCount++;
         }
 
         if (sameTypeCandidates > 0)
         {
-            Logging.WriteLine($"[Messenger] Trigger evaluation: user={user.ID}, Trigger={currentTrigger.Type}, ConditionId={currentTrigger.ConditionId}, Value={currentTrigger.Value}, SameType={sameTypeCandidates}, Exact={exactCandidates}, Satisfied={satisfiedCandidates}, Created={createdCount}", LogType.Info);
+            Logging.WriteLine($"[Messenger] Trigger evaluation: user={user.ID}, Trigger={currentTrigger.Type}, ConditionId={currentTrigger.ConditionId}, Value={currentTrigger.Value}, SameType={sameTypeCandidates}, Exact={exactCandidates}, Satisfied={satisfiedCandidates}, Created={createdCount}", LogType.Info, logToConsole);
         }
 
-        CreateEligibleSubquestOpeners(user);
+        CreateEligibleSubquestOpeners(user, logToConsole);
     }
 
-    public static bool CreateForCondition(User user, MessengerConditionTriggerRecord condition)
+    public static bool CreateForCondition(User user, MessengerConditionTriggerRecord condition, bool logToConsole = true)
     {
         if (condition.MessageType is MessageType.RandomMessage or MessageType.DailyMessage)
             return false;
@@ -70,7 +70,7 @@ public static class MessengerMessageCreator
             !MessengerTriggerUtils.IsTriggerListSatisfied(user, condition.TriggerList))
             return false;
 
-        return CreateOpener(user, condition);
+        return CreateOpener(user, condition, logToConsole);
     }
 
     /// <summary>
@@ -81,24 +81,24 @@ public static class MessengerMessageCreator
     /// room requirements are already satisfied; it never writes triggers.
     /// Also reconciles eligible subquest openers and enrolls them.
     /// </summary>
-    public static int CreateAllEligibleOpeners(User user)
+    public static int CreateAllEligibleOpeners(User user, bool logToConsole = true)
     {
         int createdCount = 0;
 
         foreach (MessengerConditionTriggerRecord condition in GameData.Instance.MessageConditions.Values.OrderBy(c => c.Id))
         {
-            if (CreateForCondition(user, condition))
+            if (CreateForCondition(user, condition, logToConsole))
                 createdCount++;
         }
 
-        createdCount += CreateEligibleSubquestOpeners(user);
+        createdCount += CreateEligibleSubquestOpeners(user, logToConsole);
 
         if (createdCount > 0)
         {
             JsonDb.Save();
         }
 
-        Logging.WriteLine($"[Messenger] Eligible opener reconciliation: user={user.ID}, Created={createdCount}", LogType.Info);
+        Logging.WriteLine($"[Messenger] Eligible opener reconciliation: user={user.ID}, Created={createdCount}", LogType.Info, logToConsole);
         return createdCount;
     }
 
@@ -107,7 +107,7 @@ public static class MessengerMessageCreator
     /// for any subquest whose stage/quest triggers and prerequisite subquests are satisfied.
     /// Preserves subquests for players to activate and play in BlaBla.
     /// </summary>
-    public static int CreateEligibleSubquestOpeners(User user)
+    public static int CreateEligibleSubquestOpeners(User user, bool logToConsole = true)
     {
         int createdCount = 0;
 
@@ -156,11 +156,12 @@ public static class MessengerMessageCreator
             user.CreateMessage(opener.Value);
 
             createdCount++;
-            Logging.WriteLine($"[Messenger] Created subquest opener: user={user.ID}, SubQuestId={subQuest.Id}, Tid={subQuest.ConversationId}", LogType.Info);
+            Logging.WriteLine($"[Messenger] Created subquest opener: user={user.ID}, SubQuestId={subQuest.Id}, Tid={subQuest.ConversationId}", LogType.Info, logToConsole);
         }
 
         return createdCount;
     }
+
 
     /// <summary>
     /// Checks whether a room already has an active conversation in MessengerData that
@@ -221,10 +222,11 @@ public static class MessengerMessageCreator
         return false;
     }
 
-    private static bool CreateOpener(User user, MessengerConditionTriggerRecord condition)
+    private static bool CreateOpener(User user, MessengerConditionTriggerRecord condition, bool logToConsole = true)
     {
         if (user.MessengerData.Any(message => message.ConversationId == condition.Tid))
         {
+            Logging.WriteLine($"[Messenger] Opener already exists: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Debug, logToConsole);
             return false;
         }
 
@@ -232,13 +234,13 @@ public static class MessengerMessageCreator
             item.Value.ConversationId == condition.Tid && item.Value.IsOpener);
         if (opener.Value == null)
         {
-            Logging.WriteLine($"[Messenger] Opener is missing from static data: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Warning);
+            Logging.WriteLine($"[Messenger] Opener is missing from static data: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Warning, logToConsole);
             return false;
         }
 
         if (!MessengerAccessValidator.IsRoomUnlockSatisfied(user, opener.Value.RoomId))
         {
-            Logging.WriteLine($"[Messenger] Opener room is locked: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}, RoomId={opener.Value.RoomId}", LogType.Debug);
+            Logging.WriteLine($"[Messenger] Opener room is locked: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}, RoomId={opener.Value.RoomId}", LogType.Debug, logToConsole);
             return false;
         }
 
@@ -246,12 +248,13 @@ public static class MessengerMessageCreator
         // A room should only have one active conversation at a time to prevent UI breaks.
         if (!string.IsNullOrEmpty(opener.Value.RoomId) && HasActiveUnclearedConversationInRoom(user, opener.Value.RoomId))
         {
-            Logging.WriteLine($"[Messenger] Room {opener.Value.RoomId} already has an active unread conversation; postponing Tid={condition.Tid}", LogType.Debug);
+            Logging.WriteLine($"[Messenger] Room {opener.Value.RoomId} already has an active unread conversation; postponing Tid={condition.Tid}", LogType.Debug, logToConsole);
             return false;
         }
 
         user.CreateMessage(opener.Value);
-        Logging.WriteLine($"[Messenger] Created opener from trigger: user={user.ID}, Tid={condition.Tid}, RoomId={opener.Value.RoomId}", LogType.Info);
+        Logging.WriteLine($"[Messenger] Created opener from trigger: user={user.ID}, Tid={condition.Tid}, RoomId={opener.Value.RoomId}", LogType.Info, logToConsole);
         return true;
     }
+
 }

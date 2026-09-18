@@ -55,8 +55,8 @@ internal class Program
                 {
                     ClearStage.EnsureDefaultCharacters(user);
                 }
-                ClearStage.ReconcileMainQuests(user);
-                MessengerMessageCreator.CreateAllEligibleOpeners(user);
+                ClearStage.ReconcileMainQuests(user, logToConsole: false);
+                MessengerMessageCreator.CreateAllEligibleOpeners(user, logToConsole: false);
             }
 
             Console.WriteLine("Initializing database");

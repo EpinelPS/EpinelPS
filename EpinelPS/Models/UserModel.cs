@@ -220,7 +220,7 @@ public class User
     public List<int> ProfileCardsData { get; set; } = [];
     public ProfileCardDecorationLayout ProfileCardDecoration { get; set; } = new();
     
-    public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0)
+    public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0, bool logToConsole = true)
     {
         using var ctx = GameContext.CreateNew();
         TriggerModelNew t = new()
@@ -238,7 +238,7 @@ public class User
         // Messenger creation must evaluate the exact trigger that was just
         // persisted. Passing only the trigger type can miss conditions whose
         // ConditionId/Value are specific to this event.
-        MessengerMessageCreator.OnTriggerAdded(this, t);
+        MessengerMessageCreator.OnTriggerAdded(this, t, logToConsole);
 
         return t;
     }

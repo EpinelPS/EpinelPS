@@ -286,7 +286,7 @@ public class ClearStage : LobbyMessage
         return result;
     }
 
-    public static void ReconcileMainQuests(User user)
+    public static void ReconcileMainQuests(User user, bool logToConsole = true)
     {
         if (user.LastNormalStageCleared == 0)
             return;
@@ -380,7 +380,7 @@ public class ClearStage : LobbyMessage
                     {
                         if (!existingChapterTriggers.Contains(bossStage.ChapterId))
                         {
-                            user.AddTrigger(Trigger.ChapterClear, 1, bossStage.ChapterId);
+                            user.AddTrigger(Trigger.ChapterClear, 1, bossStage.ChapterId, logToConsole);
                             existingChapterTriggers.Add(bossStage.ChapterId);
                         }
                     }
