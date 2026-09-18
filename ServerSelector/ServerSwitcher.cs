@@ -177,6 +177,8 @@ public class ServerSwitcher
 {ip} sea-lobby.nikke-kr.com
 {ip} hmt-lobby.nikke-kr.com
 {ip} aws-na-dr.intlgame.com
+0.0.0.0 o428077.ingest.sentry.io
+0.0.0.0 pc.crashsight.wetest.net
 {ip} sg-vas.intlgame.com
 {ip} aws-na.intlgame.com
 {ip} na-community.playerinfinite.com

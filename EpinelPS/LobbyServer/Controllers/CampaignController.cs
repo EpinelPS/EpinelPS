@@ -168,4 +168,15 @@ public class CampaignController(IUserService db) : Controller
         JsonDb.Save();*/
         return response;
     }
+
+    [Route("/v1/user/getcontentsdata")]
+    [HttpPost]
+    public ActionResult<ResGetContentsOpenData> GetContentsData([FromBodyProtobuf] ReqGetContentsOpenData req)
+    {
+        GameUser? user = db.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        // TODO
+        return new ResGetContentsOpenData();
+    }
 }

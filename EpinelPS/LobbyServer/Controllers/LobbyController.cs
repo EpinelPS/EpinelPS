@@ -14,7 +14,7 @@ namespace EpinelPS.LobbyServer.Controllers;
 public class LobbyController(IUserService UserService, GameContext db) : Controller
 {
     /// <summary>
-    /// Returns latest resource base URL for version number
+    /// Returns basic user information
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
@@ -136,5 +136,64 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
         response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);*/
 
         return new ResEnterLobbyServer();
+    }
+
+    [Route("/v1/lobby/retroactive")]
+    [HttpPost]
+    public ActionResult<ResRetroactive> LobbyRetroactive([FromBodyProtobuf] ReqRetroactive req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        return new ResRetroactive();
+    }
+
+    [Route("/v1/badge/sync")]
+    [HttpPost]
+    public ActionResult<ResSyncBadge> BadgeSync([FromBodyProtobuf] ReqSyncBadge req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        return new ResSyncBadge();
+    }
+
+    [Route("/v1/trigger/sync")]
+    [HttpPost]
+    ///<summary>
+    /// This request is responsible for fetching a log for daily, weekly, challenge mission completion.
+    /// </summary>
+    public ActionResult<ResSyncTrigger> TriggerSync([FromBodyProtobuf] ReqSyncTrigger req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+        var response = new ResSyncTrigger();
+
+        // This endpoint also returns the entire "history" for the account when 
+        // Seq = 0, which the client does when it is started for the first time, or when 
+        // the "Clear Cache" option is invoked. 
+        // When Seq = 0, the server limits the responses to 2000 items,
+        // and HasRemainData is set to true.
+        // TODO: Is it necessary to store the entire account history each time a stage
+        // is cleared, why does the official server do this?
+
+        TriggerModelNew[] newTriggers = [.. db.Triggers.Where(x => x.Id > req.Seq && x.UserId == user.ID)];
+
+        // Return all triggers
+        int triggerCount = 0;
+        foreach (TriggerModelNew item in newTriggers)
+        {
+            triggerCount++;
+
+            response.Triggers.Add(item.ToNet());
+
+            if (triggerCount >= 2000)
+            {
+                response.HasRemainData = true;
+                break;
+            }
+        }
+
+        return response;
     }
 }
