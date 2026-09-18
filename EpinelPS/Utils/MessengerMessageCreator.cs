@@ -225,7 +225,6 @@ public static class MessengerMessageCreator
     {
         if (user.MessengerData.Any(message => message.ConversationId == condition.Tid))
         {
-            Logging.WriteLine($"[Messenger] Opener already exists: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Debug);
             return false;
         }
 
