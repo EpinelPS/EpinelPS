@@ -205,11 +205,7 @@ public static class MessengerMessageCreator
                 bool isCleared = clearedConditionIds.Contains(cond.Id);
                 if (!isCleared)
                 {
-                    bool hasProgressed = user.MessengerData.Any(m => m.ConversationId == convId && m.State != 0);
-                    if (!hasProgressed)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             else

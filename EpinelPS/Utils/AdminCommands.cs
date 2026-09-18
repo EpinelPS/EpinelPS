@@ -110,7 +110,7 @@ public class AdminCommands
                 {
                     if (!user.IsStageCompleted(stageData.Id))
                     {
-                        ClearStage.CompleteStage(user, stageData.Id, true);
+                        ClearStage.CompleteStage(user, stageData.Id, true, recordMainQuest: false);
                     }
                 }
 
@@ -134,7 +134,7 @@ public class AdminCommands
                         if (!user.IsStageCompleted(stageData.Id))
                         {
                             Console.WriteLine("Completing stage " + stageData.Id);
-                            ClearStage.CompleteStage(user, stageData.Id, true);
+                            ClearStage.CompleteStage(user, stageData.Id, true, recordMainQuest: false);
                         }
                         lastClearedStageId = stageData.Id;
                     }

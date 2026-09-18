@@ -26,7 +26,7 @@ public class ClearStage : LobbyMessage
     }
 
 
-    public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false)
+    public static ResClearStage CompleteStage(User user, int StageId, bool forceCompleteScenarios = false, bool recordMainQuest = true)
     {
         ResClearStage response = new()
         {
@@ -41,7 +41,7 @@ public class ClearStage : LobbyMessage
             user.FieldInfoNew.Add(stageMapId, new FieldInfoNew() { });
         }
 
-        DoQuestSpecificUserOperations(user, StageId);
+        DoQuestSpecificUserOperations(user, StageId, recordMainQuest);
         RewardRecord? rewardData = GameData.Instance.GetRewardTableEntry(clearedStage.RewardId);
 
         if (forceCompleteScenarios)
@@ -173,25 +173,28 @@ public class ClearStage : LobbyMessage
         return response;
     }
 
-    private static void DoQuestSpecificUserOperations(User user, int clearedStageId)
+    private static void DoQuestSpecificUserOperations(User user, int clearedStageId, bool recordMainQuest = true)
     {
         MainQuestRecord? quest = GameData.Instance.GetMainQuestForStageClearCondition(clearedStageId);
 
         user.AddTrigger(Trigger.CampaignClear, 1, clearedStageId);
-        if (quest != null)
+        if (recordMainQuest)
         {
-            user.SetQuest(quest.Id, false);
-            user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
-        }
-        else
-        {
-            // Some stages don't have quest records but are needed by messenger conditions.
-            // Record MainQuestClear with the stageId as a fallback.
-            bool neededByMessenger = GameData.Instance.MessageConditions.Values.Any(c =>
-                c.TriggerList?.Any(t => t.Trigger == Trigger.MainQuestClear && t.ConditionId == clearedStageId) == true);
-            if (neededByMessenger)
+            if (quest != null)
             {
-                user.AddTrigger(Trigger.MainQuestClear, 1, clearedStageId);
+                user.SetQuest(quest.Id, false);
+                user.AddTrigger(Trigger.MainQuestClear, 1, quest.Id);
+            }
+            else
+            {
+                // Some stages don't have quest records but are needed by messenger conditions.
+                // Record MainQuestClear with the stageId as a fallback.
+                bool neededByMessenger = GameData.Instance.MessageConditions.Values.Any(c =>
+                    c.TriggerList?.Any(t => t.Trigger == Trigger.MainQuestClear && t.ConditionId == clearedStageId) == true);
+                if (neededByMessenger)
+                {
+                    user.AddTrigger(Trigger.MainQuestClear, 1, clearedStageId);
+                }
             }
         }
 
