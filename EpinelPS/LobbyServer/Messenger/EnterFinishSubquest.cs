@@ -32,6 +32,15 @@ public class EnterFinishSubquest : LobbyMessage
             return;
         }
 
+        bool isCompleted = user.SubQuestData.TryGetValue(req.SubQuestId, out bool done) && done;
+        if (isCompleted && !string.IsNullOrEmpty(opener.Value.EndMessengerConversationId))
+        {
+            foreach (var msg in user.MessengerData.Where(message => message.ConversationId == opener.Value.EndMessengerConversationId))
+            {
+                msg.State = 2;
+            }
+        }
+
         NetMessage? existingMessage = user.MessengerData
             .Where(message => message.ConversationId == opener.Value.EndMessengerConversationId)
             .OrderByDescending(message => message.Seq)
@@ -39,11 +48,13 @@ public class EnterFinishSubquest : LobbyMessage
 
         if (existingMessage != null)
         {
+            if (isCompleted)
+                existingMessage.State = 2;
             response.Message = existingMessage;
         }
         else
         {
-            int state = conversation.Value.MessageType == MessengerMessageType.Reward ? 1 : 0;
+            int state = isCompleted ? 2 : (conversation.Value.MessageType == MessengerMessageType.Reward ? 1 : 0);
             response.Message = user.CreateMessage(conversation.Value, state);
             JsonDb.Save();
         }

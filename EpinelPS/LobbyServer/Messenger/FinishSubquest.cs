@@ -37,10 +37,37 @@ public class FinishSubquest : LobbyMessage
             if (conversationRecordUser.State == 2)
             {
                 // already claimed, don't grant the reward again
+                // Ensure all messages in this conversation stay marked as claimed (State = 2)
+                if (subQuestEntry.Value != null && !string.IsNullOrEmpty(subQuestEntry.Value.EndMessengerConversationId))
+                {
+                    foreach (var msg in user.MessengerData.Where(x => x.ConversationId == subQuestEntry.Value.EndMessengerConversationId))
+                    {
+                        msg.State = 2;
+                    }
+                    JsonDb.Save();
+                }
                 await WriteDataAsync(response);
                 return;
             }
             conversationRecordUser.State = 2; // mark as claimed
+        }
+
+        // Mark all messages in this end conversation as State = 2 (claimed/completed)
+        if (subQuestEntry.Value != null && !string.IsNullOrEmpty(subQuestEntry.Value.EndMessengerConversationId))
+        {
+            foreach (var msg in user.MessengerData.Where(x => x.ConversationId == subQuestEntry.Value.EndMessengerConversationId))
+            {
+                msg.State = 2;
+            }
+        }
+
+        if (subQuestEntry.Value != null)
+        {
+            if (subQuestEntry.Value.ClearTrigger != Trigger.None)
+            {
+                user.AddTrigger(subQuestEntry.Value.ClearTrigger, subQuestEntry.Value.ClearConditionValue, subQuestEntry.Value.ClearConditionId);
+            }
+            user.AddTrigger(Trigger.SubQuestClear, 1, req.SubQuestId);
         }
 
         if (rewardId != 0)

@@ -21,18 +21,43 @@ public class ProceedMsg : LobbyMessage
             return;
         }
 
-        int state = (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0) ? 1 : 0;
+        string convId = msgToSave.Value.Value.ConversationId;
+
+        // Check if this conversation belongs to an already-completed subquest's end conversation
+        var subQuest = GameData.Instance.Subquests.Values.FirstOrDefault(s =>
+            !string.IsNullOrEmpty(s.EndMessengerConversationId) && s.EndMessengerConversationId == convId);
+
+        bool isSubQuestDone = subQuest != null &&
+            user.SubQuestData.TryGetValue(subQuest.Id, out bool done) && done;
+
+        int state;
+        if (isSubQuestDone)
+        {
+            // Subquest reward has already been claimed: maintain completed state (State = 2)
+            // so the client knows this commission dialog is finished and does not re-pop the "Completed" banner.
+            state = 2;
+        }
+        else if (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0)
+        {
+            state = 1;
+        }
+        else
+        {
+            state = 0;
+        }
 
         NetMessage? existingMessage = user.MessengerData.FirstOrDefault(x => x.MessageId == req.MessageId);
         if (existingMessage != null)
         {
-            if (state == 1 && existingMessage.State == 0)
+            if (state == 2 && existingMessage.State != 2)
+                existingMessage.State = 2;
+            else if (state == 1 && existingMessage.State == 0)
                 existingMessage.State = 1;
             response.Message = existingMessage;
         }
         else
         {
-            response.Message = user.CreateMessage(msgToSave.Value.Value.ConversationId, req.MessageId, state);
+            response.Message = user.CreateMessage(convId, req.MessageId, state);
         }
 
         JsonDb.Save();
