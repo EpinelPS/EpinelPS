@@ -155,12 +155,6 @@ public static class MessengerMessageCreator
             // Create the starting opener message in BlaBla
             user.CreateMessage(opener.Value);
 
-            // Also ensure it is enrolled in user.SubQuestData with isReceived = false
-            if (!user.SubQuestData.ContainsKey(subQuest.Id))
-            {
-                user.SetSubQuest(subQuest.Id, false);
-            }
-
             createdCount++;
             Logging.WriteLine($"[Messenger] Created subquest opener: user={user.ID}, SubQuestId={subQuest.Id}, Tid={subQuest.ConversationId}", LogType.Info);
         }
