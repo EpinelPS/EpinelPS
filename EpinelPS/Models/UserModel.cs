@@ -610,7 +610,17 @@ public class User
     public void ResetDataIfNeeded()
     {
         bool needsSave = false;
-        var infracore = GameData.Instance.InfracoreTable.Values.Where(x => x.Grade == InfraCoreLvl).FirstOrDefault();
+        if (InfraCoreExp > 0)
+        {
+            int correctLvl = GameData.Instance.GetInfraCoreLev(InfraCoreExp);
+            if (InfraCoreLvl < correctLvl)
+            {
+                InfraCoreLvl = correctLvl;
+                needsSave = true;
+            }
+        }
+
+        var infracore = GameData.Instance.GetInfracoreGrade(InfraCoreLvl);
 
 
         // Check weekly reset

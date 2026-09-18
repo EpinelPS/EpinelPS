@@ -13,8 +13,7 @@ public class GetOutpostData : LobbyMessage
         user.ResetDataIfNeeded();
 
         // Enter reset: restore stamina on each outpost entry (private server convenience)
-        var infracore = GameData.Instance.InfracoreTable.Values
-            .Where(x => x.Grade == user.InfraCoreLvl).FirstOrDefault();
+        var infracore = GameData.Instance.GetInfracoreGrade(user.InfraCoreLvl);
         if (infracore != null)
         {
             int staminaVal = 2 + (infracore.FunctionList.Count > 4 ? infracore.FunctionList[4].Function : 0);

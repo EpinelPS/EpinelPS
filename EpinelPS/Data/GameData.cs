@@ -1,4 +1,4 @@
-﻿using EpinelPS.Utils;
+using EpinelPS.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 using MemoryPack;
 using Newtonsoft.Json;
@@ -967,25 +967,35 @@ public class GameData
     /// <param name="targetExp">经验</param>
     /// <returns>等级</returns>
     /// <exception cref="Exception"></exception>
+    public InfraCoreGradeRecord? GetInfracoreGrade(int grade)
+    {
+        return InfracoreTable.Values.FirstOrDefault(x => x.Grade == grade);
+    }
+
     public int GetInfraCoreLev(int targetExp)
     {
-        int prevLevel = 0;
-        int prevValue = 0;
-        for (int i = 1; i < InfracoreTable.Count + 1; i++)
-        {
-            InfraCoreGradeRecord item = InfracoreTable[i];
+        int level = 1;
+        int maxGrade = 20;
 
-            if (prevValue < targetExp)
+        foreach (var grade in InfracoreTable.Values.OrderBy(g => g.Grade))
+        {
+            if (grade.Grade > maxGrade)
+                maxGrade = grade.Grade;
+
+            if (grade.Grade <= 0 || grade.InfraCoreExp <= 0)
+                continue;
+
+            if (targetExp >= grade.InfraCoreExp)
             {
-                prevLevel = item.Grade;
-                prevValue = item.InfraCoreExp;
+                level = grade.Grade + 1;
             }
             else
             {
-                return (prevLevel);
+                break;
             }
         }
-        return (1);
+
+        return Math.Clamp(level, 1, maxGrade);
     }
     public IEnumerable<int> GetAllCostumes()
     {
