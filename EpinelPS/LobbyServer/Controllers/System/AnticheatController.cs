@@ -14,7 +14,7 @@ public class AnticheatController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResBattleReportData> ReportBattleData([FromBodyProtobuf] ReqBattleReportData req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         return new ResBattleReportData();
@@ -24,7 +24,7 @@ public class AnticheatController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResAntibotRecvData> RecieveAntibotData([FromBodyProtobuf] ReqAntibotRecvData req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         return new ResAntibotRecvData();

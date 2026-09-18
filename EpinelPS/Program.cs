@@ -36,7 +36,7 @@ internal class Program
                 return;
             }
             
-            try
+            /*try
             {
                 if (args.Length == 0 || args[0] != "--headless")
                     await GitUpdateCheck.CheckForUpdates();
@@ -44,15 +44,9 @@ internal class Program
             catch(Exception ex)
             {
                 Console.WriteLine("Failed to check for updates: " + ex.Message);
-            }
+            }*/
 
             await GameData.CreateAsync();
-
-            Console.WriteLine("Initializing database");
-            JsonDb.Save();
-
-            Logging.WriteLine("Register handlers");
-            LobbyHandler.Init();
 
             Logging.WriteLine("Starting ASP.NET core on ports 80 and 443");
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -88,7 +82,6 @@ internal class Program
             string connectionType = builder.Configuration.GetConnectionString("EpinelPSConnectionType").ToLower();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddSingleton<MessengerAdminService>();
             builder.Services.AddDbContext<GameContext>(options =>
             {
                 switch (connectionType?.ToLowerInvariant())
@@ -143,12 +136,21 @@ internal class Program
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMiddleware<EncryptionMiddleware>();
+            app.UseStatusCodePages();
 
+            app.Use(async (context, next) =>
+            {
+                await next();
+
+                if (context.Response.StatusCode == 404)
+                {
+                    Logging.WriteLine($"Not Found: {context.Request.Method} {context.Request.Path}", LogType.Error);
+                }
+            });
 
             // app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            //app.UseHttpsRedirection();
             app.UseRouting();
             app.MapControllerRoute(
        name: "default",
@@ -234,7 +236,7 @@ internal class Program
                 return $"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/";
             });
 
-            new Thread(Commands.Services.CliLoop.Start).Start();
+           // new Thread(Commands.Services.CliLoop.Start).Start();
             app.Run();
         }
         catch (Exception ex) when (ex is not HostAbortedException && ex.Source != "Microsoft.EntityFrameworkCore.Design") // see https://github.com/dotnet/efcore/issues/29923

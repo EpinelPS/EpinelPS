@@ -83,7 +83,7 @@ public class SystemController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetNow> GetTime([FromBodyProtobuf] ReqGetNow req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         return new ResGetNow()
@@ -92,5 +92,35 @@ public class SystemController(IUserService db) : Controller
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
             CheatShiftDuration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0))
         };
+    }
+
+    [Route("/v1/system/sentry/getparams")]
+    [HttpPost]
+    public ActionResult<ResGetSentryParams> GetSentryParams([FromBodyProtobuf] ReqGetSentryParams req)
+    {
+        return new ResGetSentryParams()
+        {
+            SamplingRate = 1E-06,
+            TraceSamplingRate = 1E-06
+        };
+    }
+
+    [Route("/v1/getserverinfo")]
+    [HttpPost]
+    public ActionResult<ResGetServerInfo> GetServerInfo([FromBodyProtobuf] ReqGetServerInfo req)
+    {
+        return new ResGetServerInfo()
+        {
+            MatchUrl = "http://127.0.0.1",
+            WorldId = 84
+        };
+    }
+
+    [Route("/v1/maintenancenotice")]
+    [HttpPost]
+    public ActionResult<ResMaintenanceNotice> GetMaintenanceNotice([FromBodyProtobuf] ReqMaintenanceNotice req)
+    {
+        // TODO: Retrieve from configuration JSON
+        return new ResMaintenanceNotice();
     }
 }

@@ -79,35 +79,16 @@ public class AccountController(GameContext DbContext) : ControllerBase
 
         ulong uid = (ulong)new Random().Next(1, int.MaxValue);
 
-        // Check if we havent generated a UID that exists
-        foreach (User item in JsonDb.Instance.Users)
-        {
-            if (item.ID == uid)
-            {
-                uid -= (ulong)new Random().Next(1, 1221);
-            }
-        }
-
-        bool admin = JsonDb.Instance.Users.Count == 0;
+        bool admin = dbContext.Users.Count() == 0;
         var registerTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-        JsonDb.Instance.Users.Add(new User()
-        {
-            ID = uid
-        });
 
         dbContext.SdkUsers.Add(new SdkUser()
         {
-            ID = uid,
             Email = req.account,
             PasswordHash = req.password,
             RegisterTime = registerTime,
             IsAdmin = admin,
             PlayerName = "Player_" + Rng.RandomString(8),
-        });
-        dbContext.Users.Add(new GameUser()
-        {
-            ID = uid // todo remove later
         });
         dbContext.SaveChanges();
 

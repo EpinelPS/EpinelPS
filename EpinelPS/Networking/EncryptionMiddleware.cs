@@ -10,6 +10,7 @@ public class EncryptionMiddleware(RequestDelegate next)
     {
         if (context.Request.Path.ToString().StartsWith("/v1") || context.Request.Path.ToString().StartsWith("/$batch"))
         {
+            Console.WriteLine(context.Request.Path);
             var x = await PacketDecryption.DecryptOrReturnContentAsync(context);
             
             if (x.Contents.Length > 0)

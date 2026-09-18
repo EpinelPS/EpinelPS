@@ -235,11 +235,6 @@ public class User
         gameUser.Triggers.Add(t);
         ctx.SaveChanges();
 
-        // Messenger creation must evaluate the exact trigger that was just
-        // persisted. Passing only the trigger type can miss conditions whose
-        // ConditionId/Value are specific to this event.
-        MessengerMessageCreator.OnTriggerAdded(this, t);
-
         return t;
     }
 

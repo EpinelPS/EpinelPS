@@ -22,12 +22,12 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
     [HttpPost]
     public ActionResult<ResEnterLobbyServer> EnterLobbyServer([FromBodyProtobuf] ReqEnterLobbyServer req)
     {
-        User? user = UserService.GetUser();
+        GameUser? user = UserService.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         var userDB = db.Users.Find(user.ID);
 
-        TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
+       /* TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
         // NOTE: Keep this in sync with GetUser code
@@ -133,8 +133,8 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
 
         response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
-        response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
+        response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);*/
 
-        return response;
+        return new ResEnterLobbyServer();
     }
 }

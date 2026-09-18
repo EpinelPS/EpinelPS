@@ -27,7 +27,7 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
     [HttpPost]
     public ActionResult<ResLogout> Logout([FromBodyProtobuf] ReqLogout req)
     {
-        User? user = UserService.GetUser();
+        GameUser? user = UserService.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         // TODO delete auth token
@@ -48,13 +48,13 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
         if (sdkUser == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         var UserId = sdkUser.ID;
-        User? user = JsonDb.GetUser(UserId);
+        GameUser? user = db.Users.Find(UserId);
         if (user == null)
         {
             return Problem(type: NetUtils.InvalidSessionErrorType);
         }
 
-        if (user.IsBanned && user.BanEnd < DateTime.UtcNow)
+       /* if (user.IsBanned && user.BanEnd < DateTime.UtcNow)
         {
             user.IsBanned = false;
             user.BanId = 0;
@@ -65,12 +65,12 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
 
         if (user.IsBanned)
         {
-            response.BanInfo = new NetBanInfo() { BanId = user.BanId, Description = "The server admin is sad today because the hinge on his HP laptop broke which happened to be an HP Elitebook 8470p, and the RAM controller exploded and then fixed itself, please contact him", StartAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanStart, DateTimeKind.Utc)), EndAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanEnd, DateTimeKind.Utc)) };
+            response.BanInfo = new NetBanInfo() { BanId = user.BanId, Description = "Unused", StartAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanStart, DateTimeKind.Utc)), EndAt = Timestamp.FromDateTime(DateTime.SpecifyKind(user.BanEnd, DateTimeKind.Utc)) };
         }
         else
-        {
+        {*/
             response.AuthSuccess = new NetAuthSuccess() { AuthToken = req.Token, CentauriZoneId = "84", FirstAuth = false, PurchaseRestriction = new NetUserPurchaseRestriction() { PurchaseRestriction = PurchaseRestriction.Child, UpdatedAt = 638546758794611090 } };
-        }
+        //}
 
 
         return response;
@@ -89,7 +89,7 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
         if (sdkUser == null) return Problem(type: NetUtils.InvalidSessionErrorType);
         var UserId = sdkUser.ID;
 
-        User? user = JsonDb.GetUser(UserId);
+        GameUser? user = db.Users.Find(UserId);
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
 
@@ -119,8 +119,6 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
 
             EncryptionToken = ByteString.CopyFromUtf8(encryptionToken)
         };
-
-        user.ResetDataIfNeeded();
 
         return response;
     }

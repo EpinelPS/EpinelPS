@@ -19,12 +19,12 @@ public class ContentsOpen(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetContentsOpenUnlockInfo> GetUnlocked([FromBodyProtobuf] ReqGetContentsOpenUnlockInfo req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResGetContentsOpenUnlockInfo response = new();
 
-        if (user.ContentsOpenUnlocked.Count == 0)
+      /*  if (user.ContentsOpenUnlocked.Count == 0)
         {
             // These Always returned as true by official server
             // Fixes "Recruitment unlocked" during chapter 0
@@ -48,7 +48,7 @@ public class ContentsOpen(IUserService db) : Controller
                 IsUnlockButtonPlayed = item.Value.ButtonAnimationPlayed,
                 IsUnlockPopupPlayed = item.Value.PopupAnimationPlayed,
             });
-        }
+        }*/
 
         return response;
     }
@@ -57,13 +57,13 @@ public class ContentsOpen(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResSetContentsOpenUnlockButtonPlay> SetButtonUnlocked([FromBodyProtobuf] ReqSetContentsOpenUnlockButtonPlay req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSetContentsOpenUnlockButtonPlay response = new();
 
         // Unlock button animation completed
-        foreach (int item in req.ContentsOpenTableIds)
+       /* foreach (int item in req.ContentsOpenTableIds)
         {
             if (user.ContentsOpenUnlocked.TryGetValue(item, out UnlockData? data))
             {
@@ -76,7 +76,7 @@ public class ContentsOpen(IUserService db) : Controller
                     ButtonAnimationPlayed = true
                 });
             }
-        }
+        }*/
 
         JsonDb.Save();
         return response;
@@ -86,12 +86,12 @@ public class ContentsOpen(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResSetContentsOpenUnlockPopupPlay> SetButtonUnlocked([FromBodyProtobuf] ReqSetContentsOpenUnlockPopupPlay req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSetContentsOpenUnlockPopupPlay response = new();
 
-        foreach (int item in req.ContentsOpenTableIds)
+        /*foreach (int item in req.ContentsOpenTableIds)
         {
             if (user.ContentsOpenUnlocked.TryGetValue(item, out UnlockData? data))
             {
@@ -104,7 +104,7 @@ public class ContentsOpen(IUserService db) : Controller
                     PopupAnimationPlayed = true
                 });
             }
-        }
+        }*/
 
         JsonDb.Save();
 

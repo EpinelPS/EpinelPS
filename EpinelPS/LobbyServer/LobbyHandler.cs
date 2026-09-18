@@ -10,89 +10,6 @@ namespace EpinelPS.LobbyServer;
 
 public static class LobbyHandler
 {
-    public static readonly Dictionary<string, LobbyMessage> Handlers = [];
-    static LobbyHandler()
-    {
-        foreach (System.Type type in typeof(LobbyMessage).Assembly.GetTypes())
-        {
-            if (type.GetCustomAttributes(typeof(GameRequestAttribute), true).Length > 0)
-            {
-                GameRequestAttribute? attrib = (GameRequestAttribute?)Attribute.GetCustomAttribute(type, typeof(GameRequestAttribute));
-                if (attrib == null)
-                {
-                    Logging.WriteLine("WARNING: Failed to get attribute for " + type.FullName, LogType.Warning);
-                    continue;
-                }
-
-
-                object? instance = Activator.CreateInstance(type);
-                if (instance is LobbyMessage handler)
-                {
-                    Handlers.Add(attrib.Url, handler);
-                }
-                else
-                {
-                    Logging.WriteLine($"WARNING: Type {type.FullName} has PacketPathAttribute but does not implement LobbyMsgHandler", LogType.Warning);
-                }
-            }
-        }
-    }
-    public static async Task DispatchSingle(HttpContext ctx)
-    {
-        LobbyMessage? handler = null;
-
-        string fullPath = ctx.Request.Path.Value ?? throw new Exception();
-        string path = fullPath.Replace("/v1", "");
-
-
-        // handle authentication
-        if (ctx.Request.Headers.ContainsKey("Authorization"))
-        {
-            try
-            {
-                PasetoTokenValidationResult encryptionToken = new PasetoBuilder().Use(ProtocolVersion.V4, Purpose.Local)
-                           .WithKey(JsonDb.Instance.LauncherTokenKey, Encryption.SymmetricKey)
-                           .Decode(ctx.Request.Headers.Authorization.ToString().Replace("Bearer ", ""), new PasetoTokenValidationParameters() { ValidateLifetime = true });
-
-                if (encryptionToken.IsValid)
-                {
-                    var id = ((System.Text.Json.JsonElement)encryptionToken.Paseto.Payload["userId"]).GetUInt64();
-
-                    if (id == 0) throw new Exception("403");
-
-                    ctx.Items["UserID"] = id;
-                }
-            }
-            catch
-            {
-
-            }
-        }
-
-        foreach (KeyValuePair<string, LobbyMessage> item in Handlers)
-        {
-            if (path == item.Key)
-            {
-                handler = item.Value;
-            }
-        }
-
-        if (handler == null)
-        {
-            Logging.WriteLine($"[LobbyHandler] No handler for: {path}", LogType.Error);
-            //ctx.Response.StatusCode = 404;
-
-            // to prevent "reloading" of the game for now, return empty response
-            // this may cause more problems later on
-
-            await new EmptyHandler().HandleAsync(ctx);
-        }
-        else
-        {
-            await handler.HandleAsync(ctx);
-            return;
-        }
-    }
 
     /// <summary>
     /// Private key, Token
@@ -190,7 +107,7 @@ public static class LobbyHandler
     {
         using var ctx2 = GameContext.CreateNew();
         var userDB = ctx2.Users.Find((ulong)id);
-        var user = JsonDb.Instance.Users.Where(x=>x.ID == id).FirstOrDefault();
+        /*var user = JsonDb.Instance.Users.Where(x=>x.ID == id).FirstOrDefault();
         NetWholeUserData ret = new()
         {
             Lv = user.userPointData.UserLevel,
@@ -202,9 +119,9 @@ public static class LobbyHandler
             Usn = (long)user.ID,
             LastActionAt = DateTimeOffset.UtcNow.Ticks,
             Server = 1001
-        };
+        };*/
 
-        return ret;
+        return new NetWholeUserData();
     }
 }
 

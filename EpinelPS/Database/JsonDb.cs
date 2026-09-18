@@ -95,60 +95,7 @@ internal class JsonDb
 
     private static void ValidateDb()
     {
-        foreach (var user in Instance.Users)
-        {
-            // check if character level is valid
-            foreach (var c in user.Characters)
-            {
-                if (c.Level > 1000)
-                {
-                    Console.WriteLine($"Warning: Character level for character {c.Tid} cannot be above 1000, setting to 1000");
-                    c.Level = 1000;
-                }
-            }
-
-            // upgrade the gacha pull counters if using older system
-            // Since we can't know what banners they pulled, we'll assume standard.
-            // If user.GachaTutorialPlayCount is still 0, the user has not gone through the tutorial yet.
-            try
-            {
-                if (user.GachaBannerMaxPulls.Count == 0 && user.GachaTutorialPlayCount > 0)
-                {
-                    // The old counting system would have recorded only 1 pull for the tutorial banner. The new system records 10.
-                    int tutoPulls = 10;
-                    int premiumPulls = Math.Max(user.GachaTutorialPlayCount - 1, 0);
-
-                    // Fix tutorial
-                    var tutorialID = 3;
-
-                    if (user.GachaBannerMaxPulls.ContainsKey(tutorialID))
-                        user.GachaBannerMaxPulls[tutorialID] = user.GachaBannerMaxPulls[tutorialID] + tutoPulls;
-                    else
-                        user.GachaBannerMaxPulls.Add(tutorialID, tutoPulls);
-
-                    // Fix premium pulls
-                    var premiumID = 1;
-
-                    if (user.GachaBannerMaxPulls.ContainsKey(premiumID))
-                        user.GachaBannerMaxPulls[premiumID] = user.GachaBannerMaxPulls[premiumID] + premiumPulls;
-                    else
-                        user.GachaBannerMaxPulls.Add(premiumID, premiumPulls);
-
-                }
-            }
-            catch
-            {
-                Console.WriteLine($"Warning: Could not upgrade the gacha counters for user ID {user.ID}");
-            }
-
-        }
     }
-
-    public static User? GetUser(ulong id)
-    {
-        return Instance.Users.Where(x => x.ID == id).FirstOrDefault();
-    }
-
     public static RankData GetRank()
     {
         return Instance.RankDatas;
@@ -160,32 +107,6 @@ internal class JsonDb
         {
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/db.json", JsonConvert.SerializeObject(Instance, Formatting.Indented));
         }
-    }
-    public static int CurrentJukeboxBgm(int position)
-    {
-        var activeJukeboxBgm = new List<int>();
-        //important first position holds lobby bgm id and second commanders room bgm id
-        foreach (var user in Instance.Users)
-        {
-            if (user.JukeboxBgm == null || user.JukeboxBgm.Count == 0)
-            {
-                // this if statemet only exists becaus some weird black magic copies default value over and over
-                //in the file when its set in public List<int> JukeboxBgm = new List<int>(); 
-                //delete when or if it gets fixed
-
-                user.JukeboxBgm = [2, 5];
-            }
-
-            activeJukeboxBgm.AddRange(user.JukeboxBgm);
-        }
-
-        if (activeJukeboxBgm.Count == 0)
-        {
-            return 8995001;
-        }
-
-        position = (position == 2 && activeJukeboxBgm.Count > 1) ? 2 : 1;
-        return activeJukeboxBgm[position - 1];
     }
 
     public static bool IsSickPulls(User selectedUser)

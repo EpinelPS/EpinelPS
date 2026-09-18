@@ -6,7 +6,6 @@ using EpinelPS.Utils;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Mvc;
-using EpinelPS.LobbyServer.Stage;
 
 namespace EpinelPS.LobbyServer.Controllers;
 
@@ -20,7 +19,7 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResCampaignPackageGetAllShutdownFlags> GetUnlocked([FromBodyProtobuf] ReqCampaignPackageGetAllShutdownFlags req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         // TODO
@@ -31,17 +30,17 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetCampaignFieldData> GetCampaignField([FromBodyProtobuf] ReqGetCampaignFieldData req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResGetCampaignFieldData response = new()
         {
-            Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered),
+          //  Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered),
 
             // todo save this data
             Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 }
         };
-        if (user.LastNormalStageCleared >= 6000003)
+        /*if (user.LastNormalStageCleared >= 6000003)
         {
             NetTeamData team = new() { TeamNumber = 1 };
             team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
@@ -65,7 +64,7 @@ public class CampaignController(IUserService db) : Controller
             resultingJson = value;
         }
 
-        response.Json = resultingJson;
+        response.Json = resultingJson;*/
         return response;
     }
 
@@ -73,19 +72,19 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResSaveCampaignField> SaveField([FromBodyProtobuf] ReqSaveCampaignField req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSaveCampaignField response = new();
 
-        if (!user.MapJson.ContainsKey(req.MapId))
+        /*if (!user.MapJson.ContainsKey(req.MapId))
         {
             user.MapJson.Add(req.MapId, req.Json);
         }
         else
         {
             user.MapJson[req.MapId] = req.Json;
-        }
+        }*/
         return response;
     }
 
@@ -93,17 +92,17 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResSaveCampaignFieldObject> SaveObject([FromBodyProtobuf] ReqSaveCampaignFieldObject req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSaveCampaignFieldObject response = new();
 
         Logging.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}", LogType.Debug);
 
-        FieldInfoNew field = user.FieldInfoNew[req.MapId];
+        //FieldInfoNew field = user.FieldInfoNew[req.MapId];
 
-        field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
-        JsonDb.Save();
+        //field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
+        //JsonDb.Save();
 
         return response;
     }
@@ -112,19 +111,19 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetCampaignFieldObjectItemsNum> GetFieldObjectCountTotal([FromBodyProtobuf] ReqGetCampaignFieldObjectItemsNum req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResGetCampaignFieldObjectItemsNum response = new();
 
-        foreach (KeyValuePair<string, FieldInfoNew> map in user.FieldInfoNew)
+        /*foreach (KeyValuePair<string, FieldInfoNew> map in user.FieldInfoNew)
         {
             response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
             {
                 MapId = map.Key,
                 Count = map.Value.CompletedObjects.Where(x => x.Type == 1).Count()
             });
-        }
+        }*/
 
         return response;
     }
@@ -133,12 +132,12 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResObtainCampaignItem> ObtainItem([FromBodyProtobuf] ReqObtainCampaignItem req)
     {
-        User? user = db.GetUser();
+        GameUser? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResObtainCampaignItem response = new();
 
-        if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
+        /*if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
         {
             field = new FieldInfoNew();
             user.FieldInfoNew.Add(req.MapId, field);
@@ -166,7 +165,7 @@ public class CampaignController(IUserService db) : Controller
         // HIde it from the field
         field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type });
 
-        JsonDb.Save();
+        JsonDb.Save();*/
         return response;
     }
 }
