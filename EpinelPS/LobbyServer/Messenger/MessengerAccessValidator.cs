@@ -13,9 +13,17 @@ internal static class MessengerAccessValidator
                 return false;
             }
         }
-        else if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, condition.TriggerList))
+        else
         {
-            return false;
+            // If the conversation was already created and exists in MessengerData,
+            // the user already legitimately has access. Do not deny entry.
+            if (!user.MessengerData.Any(m => m.ConversationId == condition.Tid))
+            {
+                if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, condition.TriggerList))
+                {
+                    return false;
+                }
+            }
         }
 
         return IsRoomUnlockSatisfied(user, opener.RoomId);

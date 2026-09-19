@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Team;
+namespace EpinelPS.LobbyServer.Team;
 
 [GameRequest("/team/get")]
 public class GetTeamData : LobbyMessage
@@ -7,6 +7,11 @@ public class GetTeamData : LobbyMessage
     {
         ReqGetTeamData req = await ReadData<ReqGetTeamData>();
         User user = GetUser();
+
+        if (user.Characters.Count == 0 && user.LastNormalStageCleared >= 6000002)
+        {
+            Stage.ClearStage.EnsureDefaultCharacters(user);
+        }
 
         ResGetTeamData response = new();
 

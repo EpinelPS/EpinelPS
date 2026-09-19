@@ -15,7 +15,7 @@ public static class Logging
     {
         WriteLine(msg, LogType.Warning);
     }
-    public static void WriteLine(string msg, LogType level = LogType.Info)
+    public static void WriteLine(string msg, LogType level = LogType.Info, bool toConsole = true)
     {
         ConsoleColor originalFG = Console.ForegroundColor;
         Console.ForegroundColor = GetColorForLevel(level);
@@ -43,12 +43,13 @@ public static class Logging
                 break;
         }
 
-        if (LogLevel <= level)
+        if (toConsole && LogLevel <= level)
             Console.WriteLine(msg);
 
         Console.ForegroundColor = originalFG;
 
     }
+
 
     private static ConsoleColor GetColorForLevel(LogType level)
     {

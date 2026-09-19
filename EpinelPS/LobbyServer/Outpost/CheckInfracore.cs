@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Outpost;
 
@@ -16,13 +16,10 @@ public class CheckInfracore : LobbyMessage
 
         int currentLevel = user.InfraCoreLvl;
 
-        Dictionary<int, InfraCoreGradeRecord> gradeTable = GameData.Instance.InfracoreTable;
-        if (gradeTable.TryGetValue(currentLevel, out var gradeData))
+        InfraCoreGradeRecord? gradeData = GameData.Instance.GetInfracoreGrade(currentLevel);
+        if (gradeData != null && gradeData.RewardId > 0)
         {
-            if (gradeData.RewardId > 0)
-            {
-                isReceived = user.InfraCoreRewardReceived.ContainsKey(currentLevel) && user.InfraCoreRewardReceived[currentLevel];
-            }
+            isReceived = user.InfraCoreRewardReceived.ContainsKey(currentLevel) && user.InfraCoreRewardReceived[currentLevel];
         }
 
         response.IsReceived = isReceived;

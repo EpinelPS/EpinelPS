@@ -26,12 +26,32 @@ public class EnterSubquest : LobbyMessage
 
         if (conversation.Value == null)
         {
+            conversation = GameData.Instance.Messages
+                .Where(x => x.Value.ConversationId == opener.Value.ConversationId)
+                .OrderBy(x => x.Key)
+                .FirstOrDefault();
+        }
+
+        if (conversation.Value == null)
+        {
             Logging.Warn($"Subquest {req.SubQuestId} not found.");
             return;
         }
 
-        response.Message = user.CreateMessage(conversation.Value);
-        JsonDb.Save();
+        NetMessage? existingMessage = user.MessengerData
+            .Where(message => message.ConversationId == opener.Value.ConversationId)
+            .OrderByDescending(message => message.Seq)
+            .FirstOrDefault();
+
+        if (existingMessage != null)
+        {
+            response.Message = existingMessage;
+        }
+        else
+        {
+            response.Message = user.CreateMessage(conversation.Value);
+            JsonDb.Save();
+        }
 
         await WriteDataAsync(response);
     }

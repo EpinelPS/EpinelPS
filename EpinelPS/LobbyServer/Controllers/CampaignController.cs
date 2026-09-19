@@ -34,18 +34,32 @@ public class CampaignController(IUserService db) : Controller
         User? user = db.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
+        ClearStage.EnsureDefaultCharacters(user);
+
         ResGetCampaignFieldData response = new()
         {
             Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered),
-
-            // todo save this data
             Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 }
         };
-        if (user.LastNormalStageCleared >= 6000003)
+
+        if (user.UserTeams.TryGetValue(1, out NetUserTeamData? userTeam) && userTeam.Teams.Count > 0)
+        {
+            response.Team = userTeam.Clone();
+            foreach (NetTeamData t in response.Team.Teams)
+            {
+                response.TeamPositions.Add(new NetCampaignTeamPosition()
+                {
+                    TeamNumber = t.TeamNumber,
+                    Type = response.Team.Type,
+                    Position = new NetVector3() { }
+                });
+            }
+        }
+        else
         {
             NetTeamData team = new() { TeamNumber = 1 };
             team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
-            team.Slots.Add(new NetTeamSlot() { Slot = 2, Value = 47263456 });
+            team.Slots.Add(new NetTeamSlot() { Slot = 2, Value = 47273456 });
             team.Slots.Add(new NetTeamSlot() { Slot = 3, Value = 47263457 });
             team.Slots.Add(new NetTeamSlot() { Slot = 4, Value = 47263458 });
             team.Slots.Add(new NetTeamSlot() { Slot = 5, Value = 47263459 });

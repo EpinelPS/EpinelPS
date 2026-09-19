@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.TriggerController;
+namespace EpinelPS.LobbyServer.TriggerController;
 
 [GameRequest("/Trigger/GetMainQuestData")]
 public class GetMainQuestData : LobbyMessage

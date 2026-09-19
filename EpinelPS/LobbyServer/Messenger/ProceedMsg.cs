@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -14,12 +14,51 @@ public class ProceedMsg : LobbyMessage
         ResProceedMessage response = new();
         User user = GetUser();
 
-        KeyValuePair<string, MessengerDialogRecord> msgToSave = GameData.Instance.Messages.Where(x => x.Key == req.MessageId).First();
+        KeyValuePair<string, MessengerDialogRecord>? msgToSave = GameData.Instance.Messages.FirstOrDefault(x => x.Key == req.MessageId);
+        if (msgToSave == null || msgToSave.Value.Value == null)
+        {
+            await WriteDataAsync(response);
+            return;
+        }
 
-        // NOTE: reward messages (MessageType Reward) are all subquest completion
-        // messages, their reward is granted by /messenger/finsubquest when the
-        // user presses the claim button. Do not grant anything here.
-        response.Message = user.CreateMessage(msgToSave.Value.ConversationId, req.MessageId);
+        string convId = msgToSave.Value.Value.ConversationId;
+
+        // Check if this conversation belongs to an already-completed subquest's end conversation
+        var subQuest = GameData.Instance.Subquests.Values.FirstOrDefault(s =>
+            !string.IsNullOrEmpty(s.EndMessengerConversationId) && s.EndMessengerConversationId == convId);
+
+        bool isSubQuestDone = subQuest != null &&
+            user.SubQuestData.TryGetValue(subQuest.Id, out bool done) && done;
+
+        int state;
+        if (isSubQuestDone)
+        {
+            // Subquest reward has already been claimed: maintain completed state (State = 2)
+            // so the client knows this commission dialog is finished and does not re-pop the "Completed" banner.
+            state = 2;
+        }
+        else if (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0)
+        {
+            state = 1;
+        }
+        else
+        {
+            state = 0;
+        }
+
+        NetMessage? existingMessage = user.MessengerData.FirstOrDefault(x => x.MessageId == req.MessageId);
+        if (existingMessage != null)
+        {
+            if (state == 2 && existingMessage.State != 2)
+                existingMessage.State = 2;
+            else if (state == 1 && existingMessage.State == 0)
+                existingMessage.State = 1;
+            response.Message = existingMessage;
+        }
+        else
+        {
+            response.Message = user.CreateMessage(convId, req.MessageId, state);
+        }
 
         JsonDb.Save();
 
