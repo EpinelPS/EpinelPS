@@ -11,7 +11,7 @@ namespace EpinelPS.LobbyServer.Controllers;
 /// Controller for lobby
 /// </summary>
 [ApiController]
-public class LobbyController(IUserService UserService, GameContext db) : Controller
+public class LobbyController(IUserService UserService, GameContext db, IInventoryService Inventory) : Controller
 {
     /// <summary>
     /// Returns basic user information
@@ -27,7 +27,7 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
 
         var userDB = db.Users.Find(user.ID);
 
-       /* TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
+       TimeSpan battleTime = DateTime.UtcNow - user.BattleTime;
         long battleTimeMs = (long)(battleTime.TotalNanoseconds / 100);
 
         // NOTE: Keep this in sync with GetUser code
@@ -42,27 +42,27 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
             ResetHour = JsonDb.Instance.ResetHourUtcTime,
             Nickname = userDB.Nickname,
             SynchroLv = 1,
-            OutpostBattleLevel = user.OutpostBattleLevel,
+            OutpostBattleLevel = new NetOutpostBattleLevel() {Level = user.OutpostBattleLevel, Exp = user.OutpostBattleLevelExp},
             OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs },
 
-            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom } }
+            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = 5 /*user.CommanderMusic.TableId*/, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom } }
         };
 
-        response.Jukeboxv2.JukeboxTableIds.AddRange(JukeboxUtils.GetUnlockedSongs(user));
+        //response.Jukeboxv2.JukeboxTableIds.AddRange(JukeboxUtils.GetUnlockedSongs(user));
 
 
 
-        foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
+        foreach (var item in user.Currency)
         {
-            response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Key, Value = item.Value });
+            response.Currency.Add(new NetUserCurrencyData() { Type = (int)item.Type, Value = item.Amount });
         }
 
         foreach (CharacterModel item in user.Characters)
         {
-            response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = user.GetCharacterLevel(item.Csn, item.Level), Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel }, IsSynchro = user.GetSynchro(item.Csn) });
+            response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = item.Level, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel } }); /*  IsSynchro = user.GetSynchro(item.Csn) */
         }
 
-        foreach (NetUserItemData item in NetUtils.GetUserItems(user))
+       /* foreach (NetUserItemData item in NetUtils.GetUserItems(user))
         {
             response.Items.Add(item);
         }
@@ -122,20 +122,20 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
             response.Outposts.AddRange(defaultBuildings);
             user.OutpostBuildings = defaultBuildings;
             JsonDb.Save();
-        }
+        }*/
 
         response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
         response.LastClearedStoryStageId = user.LastStoryStageCleared;
         response.LastClearedHardMainStageId = user.LastHardStageCleared;
         response.LastClearedMod = user.LastClearedDifficulty;
 
-        response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
+        /*response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
 
         response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
         response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);*/
 
-        return new ResEnterLobbyServer();
+        return response;
     }
 
     [Route("/v1/lobby/retroactive")]
@@ -193,6 +193,55 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
                 break;
             }
         }
+
+        return response;
+    }
+
+    [Route("/v1/Trigger/GetMainQuestData")]
+    [HttpPost]
+    public ActionResult<ResGetMainQuestData> GetMainQuestData([FromBodyProtobuf] ReqGetMainQuestData req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+        var response = new ResGetMainQuestData();
+
+        foreach (var item in user.MainQuestData)
+        {
+            response.MainQuestList.Add(new NetMainQuestData()
+            {
+               Tid = item.QuestId,
+               IsReceived = item.IsRewardRecieved 
+            });
+        }
+
+        return response;
+    }
+
+    [Route("/v1/trigger/obtainmainquestreward")]
+    [HttpPost]
+    public ActionResult<ResObtainMainQuestReward> ObtainMainQuestReward([FromBodyProtobuf] ReqObtainMainQuestReward req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+        var response = new ResObtainMainQuestReward();
+
+        List<NetRewardData> rewards = [];
+
+        foreach (var item in user.MainQuestData)
+        {
+            // give only rewards for things that were completed and not claimed already
+            if (!item.IsRewardRecieved && req.TidList.Contains(item.QuestId))
+            {
+                item.IsRewardRecieved = true;
+
+                MainQuestRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.QuestId) ?? throw new Exception("failed to lookup quest Id " + item.QuestId);
+                RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.RewardId) ?? throw new Exception("failed to lookup reward Id " + questInfo.RewardId);
+                rewards.Add(Inventory.AddReward(user, reward));
+            }
+        }
+
+        response.Reward = Inventory.MergeRewards(user, rewards);
+        db.SaveChanges();
 
         return response;
     }

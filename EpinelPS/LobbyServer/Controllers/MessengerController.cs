@@ -24,6 +24,17 @@ public class MessengerController(IUserService UserService, GameContext db) : Con
         return new ResGetMessages();
     }
 
+    [Route("/v1/messenger/random/pick")]
+    [HttpPost]
+    public ActionResult<ResPickTodayRandomMessage> GetPicked([FromBodyProtobuf] ReqPickTodayRandomMessage req)
+    {
+        GameUser? user = UserService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        // TODO
+        return new ResPickTodayRandomMessage();
+    }
+
     [Route("/v1/messenger/picked/get")]
     [HttpPost]
     public ActionResult<ResGetPickedMessageList> GetPicked([FromBodyProtobuf] ReqGetPickedMessageList req)

@@ -4,7 +4,7 @@ namespace EpinelPS.Utils;
 
 public class FormulaUtils
 {
-    public static int CalculateCP(User user, long csn)
+    public static int CalculateCP(GameUser user, long csn)
     {
         CharacterModel? character = user.Characters.FirstOrDefault(c => c.Csn == csn);
         if (character == null) return 0;

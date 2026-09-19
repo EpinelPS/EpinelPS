@@ -82,27 +82,10 @@ internal class Program
             string connectionType = builder.Configuration.GetConnectionString("EpinelPSConnectionType").ToLower();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddDbContext<GameContext>(options =>
-            {
-                switch (connectionType?.ToLowerInvariant())
-                {
-                    case "sql":
-                        options.UseSqlServer(connectionString);
-                        break;
-
-                    case "mysql":
-                        options.UseMySQL(connectionString);
-                        break;
-
-                    case "npgsql":
-                        options.UseNpgsql(connectionString);
-                        break;
-
-                    default:
-                        options.UseSqlite(connectionString);
-                        break;
-                }
-            });
+            GameContext.SetOptions(connectionString, connectionType);
+            builder.Services.AddDbContext<GameContext>();
+            builder.Services.AddScoped<IInventoryService, InventoryService>();
+            builder.Services.AddProblemDetails();
             builder.Services.AddControllersWithViews(options =>
             {
                 options.AllowEmptyInputInBodyModelBinding = true;
@@ -126,17 +109,10 @@ internal class Program
             WebApplication app = builder.Build();
             CreateDbIfNotExists(app);
 
-            // Keep a startup scope alive for legacy code paths that use
-            // GameContext.Instance (e.g. User.AddTrigger). GameContext is registered
-            // as scoped, so it cannot be resolved directly from the root provider.
-            // The scope is disposed automatically after app.Run() returns.
-            using IServiceScope gameContextScope = app.Services.CreateScope();
-            GameContext.SetInstance(gameContextScope.ServiceProvider.GetRequiredService<GameContext>());
-
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseExceptionHandler();
             app.UseMiddleware<EncryptionMiddleware>();
-            app.UseStatusCodePages();
 
             app.Use(async (context, next) =>
             {
@@ -236,7 +212,7 @@ internal class Program
                 return $"EpinelPS v{Assembly.GetExecutingAssembly().GetName().Version} - https://github.com/EpinelPS/EpinelPS/";
             });
 
-           // new Thread(Commands.Services.CliLoop.Start).Start();
+            new Thread(Commands.Services.CliLoop.Start).Start();
             app.Run();
         }
         catch (Exception ex) when (ex is not HostAbortedException && ex.Source != "Microsoft.EntityFrameworkCore.Design") // see https://github.com/dotnet/efcore/issues/29923

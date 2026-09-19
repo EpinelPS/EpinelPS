@@ -23,7 +23,7 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [Route("/v1/logout")]
+    [Route("/v1/auth/logout")]
     [HttpPost]
     public ActionResult<ResLogout> Logout([FromBodyProtobuf] ReqLogout req)
     {

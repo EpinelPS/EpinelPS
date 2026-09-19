@@ -14,16 +14,50 @@ namespace EpinelPS.LobbyServer.Controllers;
 /// Controller for user data
 /// </summary>
 [ApiController]
-public class ScenarioController(IUserService userService, GameContext db) : Controller
+public class ScenarioController(IUserService userService, GameContext db, IInventoryService Inventory) : Controller
 {
     [Route("/v1/user/scenario/exist")]
     [HttpPost]
-    public ActionResult<ResExistScenario> GetUserTitle([FromBodyProtobuf] ReqExistScenario req)
+    public ActionResult<ResExistScenario> ScenarioExists([FromBodyProtobuf] ReqExistScenario req)
     {
         GameUser? user = userService.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
-        // TODO
-        return new ResExistScenario();
+        var response = new ResExistScenario();
+
+        foreach (var item in req.ScenarioGroupIds)
+        {
+            if (user.ViewedScenarios.Contains(item))
+            {
+                response.ExistGroupIds.Add(item);
+            }
+        }
+
+        return response;
+    }
+
+    [Route("/v1/User/SetScenarioComplete")]
+    [HttpPost]
+    public ActionResult<ResSetScenarioComplete> SetScenarioComplete([FromBodyProtobuf] ReqSetScenarioComplete req)
+    {
+        GameUser? user = userService.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        ResSetScenarioComplete response = new()
+        {
+            Reward = new NetRewardData()
+        };
+
+        if (!user.ViewedScenarios.Contains(req.ScenarioId))
+            user.ViewedScenarios.Add(req.ScenarioId);
+
+        if (GameData.Instance.ScenarioRewards.TryGetValue(req.ScenarioId, out ScenarioRewardsRecord? record))
+        {
+            response.Reward = Inventory.AddReward(user, record.RewardId);
+        }
+
+        db.SaveChanges();
+
+        return response;
     }
 }

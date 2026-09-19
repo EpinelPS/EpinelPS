@@ -13,13 +13,13 @@ namespace EpinelPS.LobbyServer.Controllers;
 /// Controller for game startup and asset information retrival
 /// </summary>
 [ApiController]
-public class CampaignController(IUserService db) : Controller
+public class CampaignController(IUserService UserController, GameContext db, IInventoryService Inventory) : Controller
 {
     [Route("/v1/shutdownflags/campaignpackage/getall")]
     [HttpPost]
     public ActionResult<ResCampaignPackageGetAllShutdownFlags> GetUnlocked([FromBodyProtobuf] ReqCampaignPackageGetAllShutdownFlags req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         // TODO
@@ -30,17 +30,17 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetCampaignFieldData> GetCampaignField([FromBodyProtobuf] ReqGetCampaignFieldData req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResGetCampaignFieldData response = new()
         {
-          //  Field = GetStage.CreateFieldInfo(user, req.MapId, out bool bossEntered),
+            Field = StageController.CreateFieldInfo(user, req.MapId, out bool bossEntered),
 
             // todo save this data
             Team = new NetUserTeamData() { LastContentsTeamNumber = 1, Type = 1 }
         };
-        /*if (user.LastNormalStageCleared >= 6000003)
+        if (user.LastNormalStageCleared >= 6000003)
         {
             NetTeamData team = new() { TeamNumber = 1 };
             team.Slots.Add(new NetTeamSlot() { Slot = 1, Value = 47263455 });
@@ -53,38 +53,44 @@ public class CampaignController(IUserService db) : Controller
             response.TeamPositions.Add(new NetCampaignTeamPosition() { TeamNumber = 1, Type = 1, Position = new NetVector3() { } });
         }
 
-        string resultingJson;
-        if (!user.MapJson.TryGetValue(req.MapId, out string? value))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            resultingJson = "";
-            user.MapJson.Add(req.MapId, resultingJson);
-        }
-        else
-        {
-            resultingJson = value;
+            field = new FieldInfo
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
 
-        response.Json = resultingJson;*/
+        response.Json = field.PositionJson;
         return response;
     }
 
     [Route("/v1/campaign/savefield")]
     [HttpPost]
-    public ActionResult<ResSaveCampaignField> SaveField([FromBodyProtobuf] ReqSaveCampaignField req)
+    public async Task<ActionResult<ResSaveCampaignField>> SaveField([FromBodyProtobuf] ReqSaveCampaignField req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSaveCampaignField response = new();
 
-        /*if (!user.MapJson.ContainsKey(req.MapId))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            user.MapJson.Add(req.MapId, req.Json);
+            field = new FieldInfo
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
-        else
-        {
-            user.MapJson[req.MapId] = req.Json;
-        }*/
+
+        field.PositionJson = req.Json;
+
+        await db.SaveChangesAsync();
         return response;
     }
 
@@ -92,17 +98,26 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResSaveCampaignFieldObject> SaveObject([FromBodyProtobuf] ReqSaveCampaignFieldObject req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResSaveCampaignFieldObject response = new();
 
         Logging.WriteLine($"save {req.MapId} with {req.FieldObject.PositionId}", LogType.Debug);
 
-        //FieldInfoNew field = user.FieldInfoNew[req.MapId];
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
 
-        //field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type });
-        //JsonDb.Save();
+        if (field == null)
+        {
+            field = new FieldInfo
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
+        }
+
+        field.CompletedObjects.Add(new CompletedFieldObject() { PositionId = req.FieldObject.PositionId, Json = req.FieldObject.Json, Type = req.FieldObject.Type, User = user });
+        db.SaveChanges();
 
         return response;
     }
@@ -111,19 +126,19 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetCampaignFieldObjectItemsNum> GetFieldObjectCountTotal([FromBodyProtobuf] ReqGetCampaignFieldObjectItemsNum req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResGetCampaignFieldObjectItemsNum response = new();
 
-        /*foreach (KeyValuePair<string, FieldInfoNew> map in user.FieldInfoNew)
+        foreach (var map in user.FieldInfo)
         {
             response.FieldObjectItemsNum.Add(new NetCampaignFieldObjectItemsNum()
             {
-                MapId = map.Key,
-                Count = map.Value.CompletedObjects.Where(x => x.Type == 1).Count()
+                MapId = map.MapName,
+                Count = map.CompletedObjects.Where(x => x.Type == 1).Count()
             });
-        }*/
+        }
 
         return response;
     }
@@ -132,19 +147,24 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResObtainCampaignItem> ObtainItem([FromBodyProtobuf] ReqObtainCampaignItem req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         ResObtainCampaignItem response = new();
 
-        /*if (!user.FieldInfoNew.TryGetValue(req.MapId, out FieldInfoNew? field))
+        var field = user.FieldInfo.FirstOrDefault(f => f.MapName == req.MapId);
+
+        if (field == null)
         {
-            field = new FieldInfoNew();
-            user.FieldInfoNew.Add(req.MapId, field);
+            field = new FieldInfo
+            {
+                MapName = req.MapId
+            };
+            user.FieldInfo.Add(field);
         }
 
 
-        foreach (NetFieldObject item in field.CompletedObjects)
+        foreach (var item in field.CompletedObjects)
         {
             if (item.PositionId == req.FieldObject.PositionId)
             {
@@ -160,12 +180,13 @@ public class CampaignController(IUserService db) : Controller
 
         FieldItemRecord positionReward = GameData.Instance.FieldItems[position.ItemId];
         RewardRecord reward = GameData.Instance.GetRewardTableEntry(positionReward.TypeValue) ?? throw new Exception("failed to get reward");
-        response.Reward = RewardUtils.RegisterRewardsForUser(user, reward);
+        response.Reward = Inventory.AddReward(user, reward);
 
         // HIde it from the field
-        field.CompletedObjects.Add(new NetFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type });
+        field.CompletedObjects.Add(new CompletedFieldObject() { PositionId = req.FieldObject.PositionId, Type = req.FieldObject.Type, ActionAt = DateTime.UtcNow,
+        Json = req.FieldObject.Json, UserId = user.ID });
 
-        JsonDb.Save();*/
+        db.SaveChanges();
         return response;
     }
 
@@ -173,10 +194,84 @@ public class CampaignController(IUserService db) : Controller
     [HttpPost]
     public ActionResult<ResGetContentsOpenData> GetContentsData([FromBodyProtobuf] ReqGetContentsOpenData req)
     {
-        GameUser? user = db.GetUser();
+        GameUser? user = UserController.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        var response = new ResGetContentsOpenData();
+
+         List<int> stages = [];
+
+        foreach (var item in GameData.Instance.ContentsOpenTable)
+        {
+            foreach (var condition in item.Value.OpenCondition)
+            {
+                if (condition.OpenConditionType == ContentsOpenCondition.StageClear && !stages.Contains(condition.OpenConditionValue) && user.FieldInfo.Any(x => x.CompletedStages.Contains(condition.OpenConditionValue)))
+                {
+                    stages.Add(condition.OpenConditionValue);
+                }
+            }
+        }
+
+        // these stages are not present in contentsopentable but are required to show mission UI and burst sidebar UI in battle view
+        List<int> specialStages = [6000001, 6000003];
+
+        foreach (var item in specialStages)
+        {
+            if (!stages.Contains(item) && user.FieldInfo.Any(x => x.CompletedStages.Contains(item))) stages.Add(item);
+        }
+
+        response.ClearStageList.AddRange(stages);
+        //response.MaxGachaCount = user.GetGachaTotalCount();
+        //response.MaxGachaPremiumCount = user.GetGachaCountForType(GachaPremiumType.GachaPremium);
+        // todo tutorial playcount of gacha
+        //response.TutorialGachaPlayCount = user.GetGachaCountForType(GachaPremiumType.GachaTutorial);      
+
+        // ClearSimRoomChapterList: 已通关的章节列表，用于显示超频选项 SimRoomOC
+      //  response.ClearSimRoomChapterList.AddRange(GetClearSimRoomChapterList(user));
+        return response;
+    }
+
+    [Route("/v1/mission/getrewarded/jukebox")]
+    [HttpPost]
+    public ActionResult<ResGetJukeboxRewardedData> GetJukeboxRewards([FromBodyProtobuf] ReqGetJukeboxRewardedData req)
+    {
+        GameUser? user = UserController.GetUser();
         if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
 
         // TODO
-        return new ResGetContentsOpenData();
+        return new ResGetJukeboxRewardedData();
+    }
+
+    [Route("/v1/mission/getrewarded/all")]
+    [HttpPost]
+    public ActionResult<ResGetAchievementRewardedData> GetAchievementRewardedData([FromBodyProtobuf] ReqGetAchievementRewardedData req)
+    {
+        GameUser? user = UserController.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        // TODO
+        return new ResGetAchievementRewardedData();
+    }
+
+    [Route("/v1/mission/getrewarded/weekly")]
+    [HttpPost]
+    public ActionResult<ResGetWeeklyRewardedData> GetRewardedWeekly([FromBodyProtobuf] ReqGetWeeklyRewardedData req)
+    {
+        GameUser? user = UserController.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        // TODO
+        return new ResGetWeeklyRewardedData();
+    }
+
+    [Route("/v1/mission/getrewarded/daily")]
+    [HttpPost]
+    public ActionResult<ResGetDailyRewardedData> GetRewardedWeekly([FromBodyProtobuf] ReqGetDailyRewardedData req)
+    {
+        GameUser? user = UserController.GetUser();
+        if (user == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+
+        // TODO
+        return new ResGetDailyRewardedData();
     }
 }

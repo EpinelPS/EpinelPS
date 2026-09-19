@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EpinelPS.Data;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
@@ -10,12 +12,32 @@ public class AccessToken
     public long ExpirationTime { get; set; }
     public ulong UserID { get; set; }
 }
+public class CompletedFieldObject
+{
+    public int Id { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public virtual GameUser User { get; set; }
+    public ulong UserId { get; set; }
+    public DateTime ActionAt { get; set; }
+    public int Type { get; set; }
+    public string PositionId { get; set; }
+    public string Json { get; set; }
+}
 public class FieldInfo
 {
-    public List<NetFieldStageData> CompletedStages { get; set; } = [];
-    public List<NetFieldObject> CompletedObjects { get; set; } = [];
+    public ulong Id { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public virtual GameUser User { get; set; }
+    public ulong UserId { get; set; }
+    public List<int> CompletedStages { get; set; } = [];
+    public virtual List<CompletedFieldObject> CompletedObjects { get; set; } = [];
+    public List<int> FieldItemTableIdList { get; set; } = [];
+    public List<int> AcquiredPasswordList { get; set; } = [];
+    public List<int> UnlockedDoorList { get; set; } = [];
+    public bool BossEntered { get; set; } = false;
+    public string PositionJson { get; set; } = "";
+    public string MapName { get; set; } = "";
 }
-
 public class FieldInfoNew
 {
     public List<int> CompletedStages { get; set; } = [];
@@ -26,8 +48,39 @@ public class FieldInfoNew
     public bool BossEntered { get; set; } = false;
 }
 
+public class TeamModel
+{
+    [Key]
+    public int Id { get; set; }
+    [ForeignKey(nameof(UserId))]
+    public virtual GameUser User { get; set; }
+    public ulong UserId { get; set; }
+    /// <summary>
+    /// Last team number used. Must be updated for all teams with same TeamType
+    /// </summary>
+    public int LastContentsTeamNumber { get; set; } = 1;
+
+    /// <summary>
+    /// Team type
+    /// </summary>
+    public int TeamType { get; set; }
+    /// <summary>
+    /// Team number. Typically 1 - 5
+    /// </summary>
+    public int TeamNumber { get; set; }
+    /// <summary>
+    /// List of character IDs of a team
+    /// </summary>
+    public long[] SlotIds { get; set; } = new long[5];
+    /// <summary>
+    /// If SlotIdTypes is 0, user has character. If 1, temporary participation character.
+    /// </summary>
+    public int[] SlotIdTypes { get; set; } = new int[5];
+}
+
 public class CharacterModel
 {
+    [Key]
     public int Csn { get; set; } = 0;
     public int Tid { get; set; } = 0;
     public int CostumeId { get; set; } = 0;
@@ -37,7 +90,58 @@ public class CharacterModel
     public int Skill2Lvl { get; set; } = 1;
     public int Grade { get; set; } = 0;
     public bool IsMainForce { get; set; } = false;
+    public int NameCode { get; set; }
+    public int BondLevel { get; set; } = 1;
+    public int BondLevelExp { get; set; }
+    public bool Favorite { get; set; }
+    public int TotalCounseledCount { get; set; }
+    public List<int> CompletedDialogs { get; set; } = [];
+    public List<int> FlushableWatchedDialogIds { get; set; } = [];
+    public List<int> ObtainedRewardLevels { get; set; } = [];
+    public OriginalRareType RareType { get; set; }
+    public CounselDialogCompleteRewardStatus RewardStatus { get; set; }
+
+    [ForeignKey(nameof(UserId))]
+    public virtual GameUser User { get; set; }
+    public ulong UserId { get; set; }
 }
+
+
+
+public class CurrencyModel
+{
+    public int Id { get; set; }
+    public ulong GameUserId { get; set; }
+    [ForeignKey(nameof(GameUserId))]
+    public virtual GameUser GameUser { get; set; } = null!;
+
+    public CurrencyType Type { get; set; }
+    public long Amount { get; set; }
+}
+
+public class QuestProgress
+{
+    public int Id { get; set; }
+    public ulong GameUserId { get; set; }
+    [ForeignKey(nameof(GameUserId))]
+    public virtual GameUser GameUser { get; set; } = null!;
+    public int QuestId { get; set; }
+    public bool IsRewardRecieved { get; set; }
+}
+
+public class ClearedTutorial
+{
+    public int Id { get; set; }
+    public ulong GameUserId { get; set; }
+    [ForeignKey(nameof(GameUserId))]
+    public virtual GameUser GameUser { get; set; } = null!;
+
+    public int GroupId { get; set; }
+    public int TutorialId { get; set; }
+    public int Version { get; set; }
+}
+
+
 public class MainQuestData
 {
     public int TableId { get; set; } = 0;

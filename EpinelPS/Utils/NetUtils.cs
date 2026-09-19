@@ -372,13 +372,13 @@ public class NetUtils
         return res;
     }
 
-    private static NetWholeTeamSlot? LookupCharacter(User user, long csn, int slot)
+    private static NetWholeTeamSlot? LookupCharacter(GameUser user, long csn, int slot)
     {
         if (csn == 0) return new() { Slot = slot };
 
         NetWholeTeamSlot result = new();
 
-        CharacterModel? c = user.GetCharacterBySerialNumber(csn);
+        CharacterModel? c = user.Characters.Where(x=>x.Csn == csn).FirstOrDefault();
         if (c == null) return new() { Slot = slot };
 
         return new NetWholeTeamSlot()
@@ -392,7 +392,7 @@ public class NetUtils
         };
     }
 
-    internal static NetWholeUserTeamData GetDisplayedTeam(User user)
+    internal static NetWholeUserTeamData GetDisplayedTeam(GameUser user)
     {
         NetWholeUserTeamData result = new() { TeamNumber = 1, Type = 2 };
 
