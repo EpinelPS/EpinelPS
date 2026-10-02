@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer.Shop;
 using EpinelPS.Utils;
@@ -21,17 +21,58 @@ public class TTSEnter : LobbyMessage
         EventTTSManagerRecord_Raw? tutorial = GameData.Instance.EventTTSManagerTable.Values
             .Where(t => t.Id == req.EventTtsManagerTableId).FirstOrDefault();
 
-        List<int>? Unlocksong = GameData.Instance.EventTTSSongManagerTable.Values
+        int managerId = req.EventTtsManagerTableId > 0 ? req.EventTtsManagerTableId : 1;
+
+        List<int> Unlocksong = GameData.Instance.EventTTSSongManagerTable.Values
             .Select(x => x.Id)
             .ToList();
 
-        if (!user.TTSGameData.TryGetValue(req.EventTtsManagerTableId, out var ttsData))
+        List<int> allAlbumIds = GameData.Instance.TTSAlbumShopTable.Values
+            .Select(x => x.Id)
+            .Distinct()
+            .ToList();
+
+        // Always ensure baseline albums 1001, 1002, and 1003 (TTS Vol. 2) are present
+        foreach (int id in new[] { 1001, 1002, 1003 })
+        {
+            if (!allAlbumIds.Contains(id))
+                allAlbumIds.Add(id);
+        }
+
+        bool dbModified = false;
+        if (!user.TTSGameData.TryGetValue(managerId, out var ttsData))
         {
             ttsData = new TtsDatas();
             ttsData.UnlockSongId.AddRange(Unlocksong);
-            ttsData.PurchasedAlbumIds.AddRange([1001, 1002]);
+            ttsData.PurchasedAlbumIds.AddRange(allAlbumIds);
             IntMission(ref ttsData);
-            user.TTSGameData[req.EventTtsManagerTableId] = ttsData;
+            user.TTSGameData[managerId] = ttsData;
+            dbModified = true;
+        }
+        else
+        {
+            // For existing/old saves: ensure all albums (including Vol. 2 / 1003) and all songs are permanently unlocked
+            foreach (var albumId in allAlbumIds)
+            {
+                if (!ttsData.PurchasedAlbumIds.Contains(albumId))
+                {
+                    ttsData.PurchasedAlbumIds.Add(albumId);
+                    dbModified = true;
+                }
+            }
+            foreach (var songId in Unlocksong)
+            {
+                if (!ttsData.UnlockSongId.Contains(songId))
+                {
+                    ttsData.UnlockSongId.Add(songId);
+                    dbModified = true;
+                }
+            }
+        }
+
+        if (dbModified)
+        {
+            JsonDb.Save();
         }
 
         response.HasFinishedTutorial = ttsData.IsFinishTutorial;

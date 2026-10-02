@@ -72,6 +72,8 @@ public class SynchroOneClick : LobbyMessage
         foreach (KeyValuePair<CurrencyType, long> currency in user.Currency)
             response.Currencies.Add(new NetUserCurrencyData() { Type = (int)currency.Key, Value = currency.Value });
 
+        int maxCharLevel = user.GetMaxCharacterLevel();
+        user.AddTrigger(Trigger.CharacterLevelMax, maxCharLevel);
         user.AddTrigger(Trigger.CharacterLevelUpCount, response.Characters.Count);
         JsonDb.Save();
         await WriteDataAsync(response);

@@ -16,6 +16,8 @@ public class GetCharacterData : LobbyMessage
         ResGetCharacterData response = new();
         foreach (CharacterModel item in user.Characters)
         {
+            bool isSlotted = user.SynchroSlots.Any(x => x.CharacterSerialNumber == item.Csn && (!user.SynchroDeviceUpgraded || x.Slot > 5));
+            int sendLv = isSlotted ? item.Level : user.GetCharacterLevel(item.Csn, item.Level);
             response.Character.Add(new NetUserCharacterData()
             {
                 Default = new()
@@ -24,7 +26,7 @@ public class GetCharacterData : LobbyMessage
                     Skill1Lv = item.Skill1Lvl,
                     Skill2Lv = item.Skill2Lvl,
                     CostumeId = item.CostumeId,
-                    Lv = user.GetCharacterLevel(item.Csn, item.Level),
+                    Lv = sendLv,
                     Grade = item.Grade,
                     Tid = item.Tid,
                     UltiSkillLv = item.UltimateLevel

@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -58,6 +58,19 @@ public class DoLimitBreak : LobbyMessage
                 DbItemData bodyItem = user.Items.FirstOrDefault(i => i.Isn == req.Isn) ?? throw new NullReferenceException();
                 user.RemoveItemBySerialNumber(req.Isn, req.Count);
                 response.Items.Add(NetUtils.ToNet(bodyItem));
+
+                // Weekly mission milestone: Limit Break NIKKE
+                user.AddTrigger(Trigger.CharacterGradeUpCount, req.Count);
+
+                // Achievement milestones: Max limit break & core breaks
+                if (targetCharacter.Grade >= 2)
+                {
+                    user.AddTrigger(Trigger.CharacterGradeMax, Math.Min(targetCharacter.Grade, 3));
+                }
+                if (targetCharacter.Grade > 3)
+                {
+                    user.AddTrigger(Trigger.CharacterCore, targetCharacter.Grade - 3);
+                }
 
                 JsonDb.Save();
             }

@@ -1,3 +1,4 @@
+using EpinelPS.Data;
 using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Archive;
@@ -27,6 +28,14 @@ public class CompleteScenario : LobbyMessage
         {
             evt.CompletedScenarios.Add(scenid);
         }
+        // Also check if this completed scenario corresponds to an archive event quest
+        var matchingQuest = GameData.Instance.archiveEventQuestRecords.Values
+            .FirstOrDefault(q => q.EndScenarioId == scenid);
+        if (matchingQuest != null)
+        {
+            ArchiveEventQuestHelper.OnArchiveQuestCleared(user, matchingQuest.Id);
+        }
+
         JsonDb.Save();
         // Prepare and send the response
         ResCompleteArchiveScenario response = new();

@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -73,6 +73,9 @@ public class LevelUp : LobbyMessage
             }
         }
 
+        // Keep the achievement milestone updated with the highest character level achieved
+        int maxCharLevel = user.GetMaxCharacterLevel();
+        user.AddTrigger(Trigger.CharacterLevelMax, maxCharLevel);
         user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
         JsonDb.Save();
 

@@ -44,6 +44,9 @@ public class User
 
     // Game data
     public List<string> CompletedScenarios { get; set; } = [];
+    public List<string> BookmarkedScenarios { get; set; } = [];
+    public List<string> SideStoryBookmarks { get; set; } = [];
+    public List<string> SubQuestBookmarks { get; set; } = [];
     public Dictionary<string, FieldInfo> FieldInfo { get; set; } = []; // here for backwards compatibility
 
     public Dictionary<string, FieldInfoNew> FieldInfoNew { get; set; } = [];
@@ -96,6 +99,19 @@ public class User
     public int InfraCoreLvl { get; set; } = 1;
     public Dictionary<int, bool> InfraCoreRewardReceived { get; set; } = [];
     public UserPointData userPointData { get; set; } = new();
+    public int UserLevel
+    {
+        get => userPointData?.UserLevel ?? 1;
+        set
+        {
+            if (userPointData != null) userPointData.UserLevel = value;
+        }
+    }
+    public Dictionary<int, DateTime> MonthlySubscriptions { get; set; } = [];
+    public Dictionary<int, DateTime> MonthlySubscriptionLastClaimed { get; set; } = [];
+    public Dictionary<int, int> MonthlySubscriptionRemainingClaims { get; set; } = [];
+    public Dictionary<int, UserEventBoxGachaData> EventBoxGachaData { get; set; } = [];
+    public Dictionary<int, int> EventInAppShopBuyCounts { get; set; } = [];
     public DateTime LastLogin { get; set; } = DateTime.UtcNow;
     public DateTime BattleTime { get; set; } = DateTime.UtcNow;
 
@@ -150,6 +166,11 @@ public class User
     // Archive unlock state. These are persisted in db.json with the rest of the user.
     public List<int> UnlockedArchiveRecordIds { get; set; } = [];
     public List<int> UnlockedArchiveEventQuestIds { get; set; } = [];
+    public int ActivatedArchiveEventQuestId { get; set; } = 0;
+    public List<int> ClearedArchiveEventQuestIds { get; set; } = [];
+    public List<int> ClearedArchiveEventQuestStageIds { get; set; } = [];
+    public List<int> ReceivedArchiveEventQuestRewardIds { get; set; } = [];
+    public List<int> ClaimedArchiveEventClearRewardIds { get; set; } = [];
 
     public Dictionary<int, NormalShopState> NormalShopStates { get; set; } = []; // key: shop category    
     public List<NetPlaySodaEachGameInfo> ArcadePlaySodaInfoList { get; set; } = [];
@@ -164,6 +185,10 @@ public class User
     public Dictionary<int, int> GachaSelectupChoices { get; set; } = [];
 
     public bool DailyDiscountUsed { get; set; } = false;
+    [Newtonsoft.Json.JsonIgnore]
+    public bool NeedsTriggerSyncRestart { get; set; } = false;
+    [Newtonsoft.Json.JsonIgnore]
+    public long LastMissionReconciledTicks { get; set; } = 0;
 
     // solo raid data
     public Dictionary<int, SoloRaidInfo> SoloRaidData = []; // key: raidId
@@ -227,7 +252,7 @@ public class User
         {
             Type = type,
             ConditionId = conditionId,
-            CreatedAt = DateTime.UtcNow.AddHours(9).Ticks,
+            CreatedAt = DateTime.UtcNow.Ticks,
             Value = value
         };
 
@@ -287,27 +312,43 @@ public class User
         }
     }
 
+    [Newtonsoft.Json.JsonIgnore]
+    private int _maxIsn = -1;
+    [Newtonsoft.Json.JsonIgnore]
+    private int _maxCsn = -1;
+
     public int GenerateUniqueItemId()
     {
-        var num = Rng.RandomId();
-
-        while (Items.Any(x => x.Isn == num))
+        if (_maxIsn < 0)
         {
-            num = Rng.RandomId();
+            int currentMax = 0;
+            if (Items != null && Items.Count > 0)
+            {
+                foreach (var item in Items)
+                {
+                    if (item.Isn > currentMax && item.Isn <= int.MaxValue) currentMax = (int)item.Isn;
+                }
+            }
+            _maxIsn = Math.Max(currentMax, 1000);
         }
-
-        return num;
+        return Interlocked.Increment(ref _maxIsn);
     }
+
     public int GenerateUniqueCharacterId()
     {
-        var num = Rng.RandomId();
-
-        while (Characters.Any(x => x.Csn == num))
+        if (_maxCsn < 0)
         {
-            num = Rng.RandomId();
+            int currentMax = 0;
+            if (Characters != null && Characters.Count > 0)
+            {
+                foreach (var character in Characters)
+                {
+                    if (character.Csn > currentMax) currentMax = character.Csn;
+                }
+            }
+            _maxCsn = Math.Max(currentMax, 1000);
         }
-
-        return num;
+        return Interlocked.Increment(ref _maxCsn);
     }
     public bool IsStageCompleted(int Id)
     {
@@ -338,52 +379,49 @@ public class User
     }
     public bool SubtractCurrency(CurrencyType type, long val)
     {
+        if (val <= 0) return true;
+
         if (type == CurrencyType.FreeCash)
         {
-            if (Currency.ContainsKey(type))
-            {
-                if (Currency[type] < val)
-                {
-                    long diff = val - Currency[type];
-                    if (Currency.ContainsKey(CurrencyType.ChargeCash))
-                    {
-                        if (Currency[CurrencyType.ChargeCash] > diff)
-                        {
-                            Currency[type] = 0;
-                            Currency[CurrencyType.ChargeCash] -= diff;
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        if (Currency.ContainsKey(type)) Currency[type] -= val;
-        else return false;
+            long free = Currency.TryGetValue(CurrencyType.FreeCash, out long f) ? f : 0;
+            long paid = Currency.TryGetValue(CurrencyType.ChargeCash, out long p) ? p : 0;
+            if (free + paid < val) return false;
 
-        if (Currency[type] < 0)
-        {
-            Currency[type] += val;
-            return false;
+            long deductFree = Math.Min(free, val);
+            long deductPaid = val - deductFree;
+
+            Currency[CurrencyType.FreeCash] = free - deductFree;
+            if (deductPaid > 0)
+            {
+                Currency[CurrencyType.ChargeCash] = paid - deductPaid;
+            }
+            return true;
         }
-        return true;
+
+        if (Currency.TryGetValue(type, out long current))
+        {
+            if (current < val) return false;
+            Currency[type] = current - val;
+            return true;
+        }
+
+        return false;
     }
+
     public bool CanSubtractCurrency(CurrencyType type, long val)
     {
-        if (Currency.ContainsKey(type))
+        if (val <= 0) return true;
+
+        if (type == CurrencyType.FreeCash)
         {
-            if (Currency[type] >= val) return true;
-            else return false;
+            long free = Currency.TryGetValue(CurrencyType.FreeCash, out long f) ? f : 0;
+            long paid = Currency.TryGetValue(CurrencyType.ChargeCash, out long p) ? p : 0;
+            return (free + paid) >= val;
         }
-        else
-        {
-            if (val == 0) return true;
-            else return false;
-        }
+
+        return Currency.TryGetValue(type, out long current) && current >= val;
     }
+
 
     public bool HasCharacter(int c)
     {
@@ -429,16 +467,16 @@ public class User
         return Characters.Where(x => x.Csn == value).FirstOrDefault();
     }
 
-    internal bool GetSynchro(long csn)
+    public bool GetSynchro(long csn)
     {
         return SynchroSlots.Where(x => x.CharacterSerialNumber == csn).Any();
     }
-    internal int GetCharacterLevel(int csn)
+    public int GetCharacterLevel(long csn)
     {
         var c = GetCharacterBySerialNumber(csn) ?? throw new Exception("failed to lookup character");
         return GetCharacterLevel(csn, c.Level);
     }
-    internal int GetCharacterLevel(int csn, int characterLevel)
+    public int GetCharacterLevel(long csn, int characterLevel)
     {
         foreach (var item in SynchroSlots)
         {
@@ -447,9 +485,17 @@ public class User
                 return GetSynchroLevel();
             }
         }
+        if (SynchroDeviceUpgraded)
+        {
+            var highestLevelCharacters = Characters.OrderByDescending(x => x.Level).Take(5);
+            if (highestLevelCharacters.Any(x => x.Csn == csn))
+            {
+                return Math.Max(characterLevel, GetSynchroLevel());
+            }
+        }
         return characterLevel;
     }
-    internal int GetSynchroLevel()
+    public int GetSynchroLevel()
     {
         if (SynchroDeviceUpgraded)
             return SynchroDeviceLevel;
@@ -464,6 +510,21 @@ public class User
         {
             return 1;
         }
+    }
+
+    /// <summary>
+    /// Returns the maximum character level across all owned NIKKEs and Synchro device.
+    /// Used for level-based achievements and mission milestones.
+    /// </summary>
+    public int GetMaxCharacterLevel()
+    {
+        int maxLevel = 1;
+        if (Characters.Count > 0)
+        {
+            maxLevel = Math.Max(maxLevel, Characters.Max(c => c.Level));
+        }
+        maxLevel = Math.Max(maxLevel, GetSynchroLevel());
+        return maxLevel;
     }
 
     internal int GetMaxAttractiveLevel(int nameCode)
@@ -550,7 +611,7 @@ public class User
     {
         var nowLocal = DateTime.UtcNow;
 
-        // Compute the last reset threshold (most recent 2 PM before or at nowLocal)
+        // Compute the last reset threshold (most recent reset hour before or at nowLocal)
         DateTime todayResetTime = new(
             nowLocal.Year,
             nowLocal.Month,
@@ -563,7 +624,7 @@ public class User
             todayResetTime = todayResetTime.AddDays(-1);
         }
 
-        // If user's last reset was before the last scheduled 2 PM, they need reset
+        // If user's last reset was before the last scheduled reset hour, they need reset
         return LastReset < todayResetTime;
     }
 
@@ -571,18 +632,18 @@ public class User
     {
         var nowLocal = DateTime.UtcNow;
 
-        // Calculate the most recent Tuesday reset time
+        // Calculate the most recent Sunday reset time (matches official NIKKE weekly reset: Monday 05:00:00 KST / Sunday 20:00:00 UTC)
         DayOfWeek currentDay = nowLocal.DayOfWeek;
-        int daysSinceTuesday = ((int)currentDay - (int)DayOfWeek.Tuesday + 7) % 7;
+        int daysSinceSunday = ((int)currentDay - (int)DayOfWeek.Sunday + 7) % 7;
 
-        // Get the date of the most recent Tuesday
-        DateTime thisTuesday = nowLocal.Date.AddDays(-daysSinceTuesday);
+        // Get the date of the most recent Sunday
+        DateTime thisSunday = nowLocal.Date.AddDays(-daysSinceSunday);
 
         // Compute the weekly reset time
         DateTime weeklyResetTime = new(
-            thisTuesday.Year,
-            thisTuesday.Month,
-            thisTuesday.Day,
+            thisSunday.Year,
+            thisSunday.Month,
+            thisSunday.Day,
             JsonDb.Instance.ResetHourUtcTime, 0, 0
         );
 
@@ -592,7 +653,7 @@ public class User
             weeklyResetTime = weeklyResetTime.AddDays(-7);
         }
 
-        // If user's last reset was before the last scheduled 2 PM, they need reset
+        // If user's last reset was before the last scheduled reset, they need reset
         return LastWeeklyReset < weeklyResetTime;
     }
 
@@ -610,17 +671,17 @@ public class User
     public void ResetDataIfNeeded()
     {
         bool needsSave = false;
-        if (InfraCoreExp > 0)
+        var infracore = GameData.Instance?.GetInfracoreGrade(InfraCoreLvl);
+        if (GameData.Instance != null && InfraCoreExp > 0)
         {
             int correctLvl = GameData.Instance.GetInfraCoreLev(InfraCoreExp);
             if (InfraCoreLvl < correctLvl)
             {
                 InfraCoreLvl = correctLvl;
+                infracore = GameData.Instance.GetInfracoreGrade(InfraCoreLvl);
                 needsSave = true;
             }
         }
-
-        var infracore = GameData.Instance.GetInfracoreGrade(InfraCoreLvl);
 
 
         // Check weekly reset
@@ -629,18 +690,15 @@ public class User
             Logging.WriteLine("Resetting weekly user data...", LogType.Warning);
 
             LastWeeklyReset = DateTime.UtcNow;
-            var currentSeasonData = ResetableData.SimRoomData.CurrentSeasonData;
-            currentSeasonData.LatestOption = new();
-            ResetableData = new()
+
+            // Reset weekly mission points and completed weekly missions list for a fresh week
+            WeeklyResetableData = new();
+
+            // Refresh Simulation Room seasonal options while preserving current difficulty and chapter
+            if (ResetableData?.SimRoomData?.CurrentSeasonData != null)
             {
-                SimRoomData = new()
-                {
-                    // Retain old LegacyBuffs data and currentSeason data
-                    CurrentDifficulty = ResetableData.SimRoomData.CurrentDifficulty,
-                    CurrentChapter = ResetableData.SimRoomData.CurrentChapter,
-                    CurrentSeasonData = currentSeasonData,
-                }
-            };
+                ResetableData.SimRoomData.CurrentSeasonData.LatestOption = new();
+            }
 
             // Weekly stamina reset: base 2 + InfraCore bonus (FL[4] = StaminaMaxCount)
             if (infracore != null)
@@ -667,8 +725,9 @@ public class User
             };
 
             DispatchResetCount = 0;
-            ResetableData.DispatchCount = GetDispatchCount() + infracore.FunctionList[1].Function;
-            ResetableData.DailyCounselCount[1] = 3 + infracore.FunctionList[2].Function;
+            ResetableData.DispatchCount = GetDispatchCount() + (infracore != null ? infracore.FunctionList[1].Function : 0);
+            ResetableData.DailyCounselCount[1] = 3 + (infracore != null ? infracore.FunctionList[2].Function : 0);
+            ResetableData.InterceptionTickets = JsonDb.Instance?.MaxInterceptionCount ?? 3;
             GachaDailyFreePulls.Clear();
             DailyDiscountUsed = false;
 
@@ -729,6 +788,11 @@ public class User
         if (bannerID == premiumbanner)
         {
             AddTrigger(Trigger.GachaPremium, pullCount);
+        }
+        else if (bannerID == 4)
+        {
+            // New Commander Special Recruitment one-time challenge
+            AddTrigger(Trigger.FirstPaidGachaLegacy, 1);
         }
 
         if (GachaBannerMaxPulls.ContainsKey(bannerID))
@@ -793,3 +857,10 @@ public class MessengerRepairAuditEntry
     public string Note { get; set; } = "";
     public NetMessage Message { get; set; } = new();
 }
+
+public class UserEventBoxGachaData
+{
+    public int GachaCount { get; set; }
+    public List<int> RewardOrders { get; set; } = [];
+}
+

@@ -37,27 +37,23 @@ public class FinishSubquest : LobbyMessage
             if (conversationRecordUser.State == 2)
             {
                 // already claimed, don't grant the reward again
-                // Ensure all messages in this conversation stay marked as claimed (State = 2)
-                if (subQuestEntry.Value != null && !string.IsNullOrEmpty(subQuestEntry.Value.EndMessengerConversationId))
-                {
-                    foreach (var msg in user.MessengerData.Where(x => x.ConversationId == subQuestEntry.Value.EndMessengerConversationId))
-                    {
-                        msg.State = 2;
-                    }
-                    JsonDb.Save();
-                }
                 await WriteDataAsync(response);
                 return;
             }
-            conversationRecordUser.State = 2; // mark as claimed
+            conversationRecordUser.State = 2; // mark reward as claimed
         }
 
-        // Mark all messages in this end conversation as State = 2 (claimed/completed)
+        // Ensure reward messages in this end conversation are marked as claimed (State = 2)
+        // Normal text messages remain State = 0 so the player can view and step through dialog
         if (subQuestEntry.Value != null && !string.IsNullOrEmpty(subQuestEntry.Value.EndMessengerConversationId))
         {
             foreach (var msg in user.MessengerData.Where(x => x.ConversationId == subQuestEntry.Value.EndMessengerConversationId))
             {
-                msg.State = 2;
+                if (GameData.Instance.Messages.TryGetValue(msg.MessageId, out var rec) &&
+                    (rec.MessageType == MessengerMessageType.Reward || rec.RewardId != 0))
+                {
+                    msg.State = 2;
+                }
             }
         }
 
@@ -68,6 +64,23 @@ public class FinishSubquest : LobbyMessage
                 user.AddTrigger(subQuestEntry.Value.ClearTrigger, subQuestEntry.Value.ClearConditionValue, subQuestEntry.Value.ClearConditionId);
             }
             user.AddTrigger(Trigger.SubQuestClear, 1, req.SubQuestId);
+
+            // Mark associated substages as completed in user.FieldInfoNew across all trigger types
+            int condId = subQuestEntry.Value.ClearConditionId;
+            if (condId > 0)
+            {
+                foreach (CampaignStageRecord stage in GameData.Instance.StageDataRecords.Values)
+                {
+                    if ((stage.GroupId != 0 && stage.GroupId == condId) || stage.Id == condId)
+                    {
+                        string stageMapId = GameData.Instance.GetMapIdFromChapter(stage.ChapterId, stage.ChapterMod);
+                        if (!user.FieldInfoNew.ContainsKey(stageMapId))
+                            user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
+                        if (!user.FieldInfoNew[stageMapId].CompletedStages.Contains(stage.Id))
+                            user.FieldInfoNew[stageMapId].CompletedStages.Add(stage.Id);
+                    }
+                }
+            }
         }
 
         if (rewardId != 0)

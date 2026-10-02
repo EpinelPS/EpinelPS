@@ -55,16 +55,32 @@ public class NetUtils
 
     internal static NetUserItemData UserItemDataToNet(DbItemData item)
     {
+        int position = item.Position;
+        int level = item.Level;
+        if (GameData.Instance.GetItemSubType(item.ItemType) == ItemSubType.HarmonyCube)
+        {
+            if (position == 0)
+            {
+                position = GetHarmonyCubePosition(item.ItemType);
+                item.Position = position;
+            }
+            if (level == 0)
+            {
+                level = 1;
+                item.Level = level;
+            }
+        }
+
         return new NetUserItemData()
         {
             Count = item.Count,
             Tid = item.ItemType,
             Csn = item.Csn,
-            Lv = item.Level,
+            Lv = level,
             Exp = item.Exp,
             Corporation = item.Corp,
             Isn = item.Isn,
-            Position = item.Position
+            Position = position
         };
     }
 
@@ -82,26 +98,69 @@ public class NetUtils
 
     public static List<NetUserItemData> GetUserItems(User user)
     {
+        RewardUtils.SanitizeEquipmentItems(user);
         List<NetUserItemData> ret = [];
-        Dictionary<int, NetUserItemData> itemDictionary = [];
-
+        Dictionary<int, NetUserItemData> stackableDictionary = [];
         foreach (DbItemData? item in user.Items.ToList())
         {
-            if (item.Csn == 0)
+            if (item == null) continue;
+
+            var subType = GameData.Instance.GetItemSubType(item.ItemType);
+            bool isUnique = subType == ItemSubType.HarmonyCube || GameData.Instance.ItemEquipTable.ContainsKey(item.ItemType);
+
+            if (isUnique || item.Csn != 0)
             {
-                if (itemDictionary.TryGetValue(item.ItemType, out NetUserItemData? value))
-                {
-                    value.Count++;
-                }
-                else
-                {
-                    itemDictionary[item.ItemType] = UserItemDataToNet(item);
-                }
+                ret.Add(UserItemDataToNet(item));
             }
             else
             {
-                itemDictionary[item.ItemType] = UserItemDataToNet(item);
+                if (stackableDictionary.TryGetValue(item.ItemType, out NetUserItemData? value))
+                {
+                    value.Count += item.Count;
+                }
+                else
+                {
+                    stackableDictionary[item.ItemType] = UserItemDataToNet(item);
+                }
             }
+        }
+
+        ret.AddRange(stackableDictionary.Values);
+        return ret;
+    }
+
+    public static List<NetUserHarmonyCubeData> GetUserHarmonyCubes(User user)
+    {
+        List<NetUserHarmonyCubeData> ret = [];
+        List<DbItemData> harmonyCubes = user.Items.Where(item =>
+            GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
+
+        foreach (DbItemData harmonyCube in harmonyCubes)
+        {
+            if (harmonyCube.Position == 0)
+            {
+                harmonyCube.Position = GetHarmonyCubePosition(harmonyCube.ItemType);
+            }
+            if (harmonyCube.Level == 0)
+            {
+                harmonyCube.Level = 1;
+            }
+
+            NetUserHarmonyCubeData netHarmonyCube = new()
+            {
+                Isn = harmonyCube.Isn,
+                Tid = harmonyCube.ItemType,
+                Lv = harmonyCube.Level,
+            };
+
+            netHarmonyCube.CsnList.AddRange(harmonyCube.CsnList);
+
+            if (harmonyCube.Csn > 0 && !harmonyCube.CsnList.Contains(harmonyCube.Csn))
+            {
+                netHarmonyCube.CsnList.Add(harmonyCube.Csn);
+            }
+
+            ret.Add(netHarmonyCube);
         }
 
         return ret;

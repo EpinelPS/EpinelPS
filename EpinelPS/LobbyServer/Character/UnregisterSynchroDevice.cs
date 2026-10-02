@@ -12,6 +12,12 @@ public class UnregisterSynchroDevice : LobbyMessage
         User user = GetUser();
 
         ResSynchroUnregist response = new();
+        if (user.SynchroDeviceUpgraded && req.Slot <= 5)
+        {
+            Logging.WriteLine("Cannot unregister locked standard characters (slots 1-5) from enhanced synchro device", LogType.Warning);
+            await WriteDataAsync(response);
+            return;
+        }
 
         foreach (SynchroSlot item in user.SynchroSlots)
         {

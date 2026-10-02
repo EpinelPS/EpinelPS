@@ -6,12 +6,12 @@ namespace EpinelPS.Utils;
 // Calculate rewards for various messages
 public class RewardUtils
 {
-    public static NetRewardData RegisterRewardsForUser(User user, int rewardId)
+    public static NetRewardData RegisterRewardsForUser(User user, int rewardId, bool rollPercentages = false)
     {
         RewardRecord rewardData = GameData.Instance.GetRewardTableEntry(rewardId) ?? throw new Exception($"unknown reward Id {rewardId}");
-        return RegisterRewardsForUser(user, rewardData);
+        return RegisterRewardsForUser(user, rewardData, rollPercentages);
     }
-    public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData)
+    public static NetRewardData RegisterRewardsForUser(User user, RewardRecord rewardData, bool rollPercentages = false)
     {
         NetRewardData ret = new()
         {
@@ -71,11 +71,13 @@ public class RewardUtils
         {
             if (item.RewardType != RewardType.None)
             {
-                if (item.RewardPercent != 1000000)
+                if (rollPercentages && item.RewardPercent > 0 && item.RewardPercent < 1000000)
                 {
-                    Logging.WriteLine("WARNING: ignoring percent: " + item.RewardPercent / 10000.0 + ", item will be added anyways", LogType.Warning);
+                    if (Rng.Next(0, 1000000) >= item.RewardPercent)
+                    {
+                        continue;
+                    }
                 }
-
                 AddSingleObject(user, ref ret, item.RewardId, item.RewardType, item.RewardValue);
             }
         }
@@ -243,10 +245,40 @@ public class RewardUtils
 
 
 
-            // Check if user already has said item. If it is level 1, increase item count.
-            DbItemData? existingItem = user.Items.FirstOrDefault(x => x.ItemType == rewardId && x.Level == 0 && x.Corp == corpId);
+            SanitizeEquipmentItems(user);
+            ItemSubType itemSubType = GameData.Instance.GetItemSubType(rewardId);
+            bool isEquipment = rewardType.ToString().StartsWith("Equipment") || GameData.Instance.ItemEquipTable.ContainsKey(rewardId);
+            bool isHarmonyCube = itemSubType == ItemSubType.HarmonyCube || GameData.Instance.ItemHarmonyCubeTable.ContainsKey(rewardId);
+            bool isUnique = isEquipment || isHarmonyCube;
 
-            if (existingItem != null && !rewardType.ToString().StartsWith("Equipment"))
+            // Check if user already has said item. Non-equipment and non-harmony-cube items should stack.
+            DbItemData? existingItem = isUnique
+                ? null
+                : user.Items.FirstOrDefault(x => x.ItemType == rewardId);
+
+            if (isEquipment)
+            {
+                int level = 0; // Default to 0
+
+                for (int i = 0; i < rewardCount; i++)
+                {
+                    int id = user.GenerateUniqueItemId();
+                    var newItem = new DbItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = 1, Corp = corpId };
+                    user.Items.Add(newItem);
+
+                    ret.Item.Add(new NetItemData()
+                    {
+                        Count = 1,
+                        Tid = rewardId,
+                        Corporation = corpId,
+                        Isn = id
+                    });
+
+                    // Tell the client the new amount of this item
+                    ret.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
+                }
+            }
+            else if (existingItem != null && !isUnique)
             {
                 existingItem.Count += rewardCount;
 
@@ -259,64 +291,28 @@ public class RewardUtils
                 });
 
                 // Tell the client the new amount of this item
-                ret.UserItems.Add(new NetUserItemData()
-                {
-                    Isn = existingItem.Isn,
-                    Tid = existingItem.ItemType,
-                    Count = existingItem.Count,
-                    Corporation = existingItem.Corp
-                });
-            }
-            else if (rewardType.ToString().StartsWith("Equipment"))
-            {
-
-                Console.WriteLine($"[UseBundleBox] װ����Ʒ Id{rewardId} ��������װ����");
-
-                int level = 0; // Default to 0
-                ItemSubType itemSubType = GameData.Instance.GetItemSubType(rewardId);
-
-                // Check if Harmony Cube set level to 1
-                if (itemSubType == ItemSubType.HarmonyCube)
-                {
-                    level = 1;
-                }
-
-                for (int i = 0; i < rewardCount; i++)
-                {
-                    int id = user.GenerateUniqueItemId();
-                    var newItem = new DbItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = 1, Corp = corpId };
-                    user.Items.Add(newItem);
-
-                    ret.Item.Add(new NetItemData()
-                    {
-                        Count = 1,
-                        Tid = rewardId,
-                        Corporation = corpId
-                    });
-
-                    // Tell the client the new amount of this item
-                    ret.UserItems.Add(new NetUserItemData()
-                    {
-                        Isn = newItem.Isn,
-                        Tid = newItem.ItemType,
-                        Count = newItem.Count,
-                        Corporation = newItem.Corp
-                    });
-                }
-
+                ret.UserItems.Add(NetUtils.UserItemDataToNet(existingItem));
             }
             else
             {
                 int id = user.GenerateUniqueItemId();
                 int level = 0; // Default to 0
-                ItemSubType itemSubType = GameData.Instance.GetItemSubType(rewardId);
+                int position = 0;
+                int exp = 0;
 
-                // Check if Harmony Cube set level to 1
-                if (itemSubType == ItemSubType.HarmonyCube)
+                // Check if Harmony Cube set level to 1 and position to location ID
+                if (isHarmonyCube)
                 {
                     level = 1;
+                    position = NetUtils.GetHarmonyCubePosition(rewardId);
                 }
-                var newItem = new DbItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = 0, Count = rewardCount, Corp = corpId };
+                else if (GameData.Instance.itemMaterialTable.ContainsKey(rewardId))
+                {
+                    level = 1;
+                    exp = 1;
+                }
+
+                var newItem = new DbItemData() { ItemType = rewardId, Isn = id, Level = level, Exp = exp, Count = rewardCount, Corp = corpId, Position = position };
                 user.Items.Add(newItem);
 
                 ret.Item.Add(new NetItemData()
@@ -327,13 +323,7 @@ public class RewardUtils
                 });
 
                 // Tell the client the new amount of this item
-                ret.UserItems.Add(new NetUserItemData()
-                {
-                    Isn = newItem.Isn,
-                    Tid = newItem.ItemType,
-                    Count = newItem.Count,
-                    Corporation = newItem.Corp
-                });
+                ret.UserItems.Add(NetUtils.UserItemDataToNet(newItem));
             }
         }
         else if (rewardType == RewardType.Memorial)
@@ -686,6 +676,28 @@ public class RewardUtils
     }
 
 
+    public static void SanitizeEquipmentItems(User user)
+    {
+        var stackedEquip = user.Items.Where(i => i.Count > 1 && GameData.Instance.ItemEquipTable.ContainsKey(i.ItemType)).ToList();
+        foreach (var item in stackedEquip)
+        {
+            int extraCount = item.Count - 1;
+            item.Count = 1;
+            for (int i = 0; i < extraCount; i++)
+            {
+                user.Items.Add(new DbItemData
+                {
+                    Isn = user.GenerateUniqueItemId(),
+                    ItemType = item.ItemType,
+                    Level = item.Level,
+                    Exp = item.Exp,
+                    Corp = item.Corp,
+                    Count = 1,
+                    Position = item.Position
+                });
+            }
+        }
+    }
 
 
 

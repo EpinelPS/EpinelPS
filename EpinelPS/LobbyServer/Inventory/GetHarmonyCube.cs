@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Inventory;
 
@@ -12,33 +13,7 @@ public class GetHarmonyCube : LobbyMessage
 
         ResGetHarmonyCube response = new();
 
-        List<DbItemData> harmonyCubes = user.Items.Where(item =>
-            GameData.Instance.ItemHarmonyCubeTable.ContainsKey(item.ItemType)).ToList();
-
-        foreach (DbItemData harmonyCube in harmonyCubes)
-        {
-            if (GameData.Instance.ItemHarmonyCubeTable.TryGetValue(harmonyCube.ItemType, out ItemHarmonyCubeRecord? harmonyCubeData))
-            {
-                NetUserHarmonyCubeData netHarmonyCube = new()
-                {
-                    Isn = harmonyCube.Isn,
-                    Tid = harmonyCube.ItemType,
-                    Lv = harmonyCube.Level
-                };
-
-                foreach (long csn in harmonyCube.CsnList)
-                {
-                    netHarmonyCube.CsnList.Add(csn);
-                }
-
-                if (harmonyCube.Csn > 0 && !harmonyCube.CsnList.Contains(harmonyCube.Csn))
-                {
-                    netHarmonyCube.CsnList.Add(harmonyCube.Csn);
-                }
-
-                response.HarmonyCubes.Add(netHarmonyCube);
-            }
-        }
+        response.HarmonyCubes.AddRange(NetUtils.GetUserHarmonyCubes(user));
 
 
         await WriteDataAsync(response);

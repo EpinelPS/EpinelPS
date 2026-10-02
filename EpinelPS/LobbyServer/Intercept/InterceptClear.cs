@@ -11,15 +11,23 @@ public class ClearInterceptData : LobbyMessage
         ReqClearIntercept req = await ReadData<ReqClearIntercept>();
         User user = GetUser();
 
-        if (user.ResetableData.InterceptionTickets == 0)
+        if (user.ResetableData.InterceptionTickets <= 0)
         {
             Logging.WriteLine("Attempted to clear interception when 0 tickets remain", LogType.WarningAntiCheat);
-
+        }
+        else
+        {
+            user.ResetableData.InterceptionTickets--;
         }
 
         InterceptionClearResult sRes = InterceptionHelper.Clear(user, req.Intercept, req.InterceptId, req.Damage);
 
-        user.ResetableData.InterceptionTickets--;
+        // Record daily damage for quick battles
+        if (!user.ResetableData.InterceptDailyClearData.TryGetValue(req.InterceptId, out long currentMax) || req.Damage > currentMax)
+        {
+            user.ResetableData.InterceptDailyClearData[req.InterceptId] = req.Damage;
+        }
+
         ResClearIntercept response = new()
         {
             Intercept = req.Intercept,

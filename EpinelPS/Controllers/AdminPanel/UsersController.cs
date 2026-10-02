@@ -14,7 +14,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     private readonly ILogger<UsersController> _logger = logger;
     private readonly GameContext _db = dbContext;
     private readonly MessengerAdminService _messengerAdmin = messengerAdminService;
-    private static readonly MD5 sha = MD5.Create();
     private readonly Dictionary<string, Dictionary<int, double>> _overloadOptions = new Dictionary<string, Dictionary<int, double>>
     {
         ["EleDmg"] = new Dictionary<int, double>
@@ -518,7 +517,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         // TODO: use bcrypt
         SdkUser? user = _db.SdkUsers.Find(id);
         if (user == null) return NotFound();
-        user.PasswordHash = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower();
+        user.PasswordHash = Convert.ToHexString(MD5.HashData(Encoding.ASCII.GetBytes(newPw))).ToLowerInvariant();
         _db.SaveChanges();
 
         return View(new ChangeUserPasswordModel()

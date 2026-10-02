@@ -162,6 +162,7 @@
       "skipStages": "스테이지 건너뛰기",
       "characters": "캐릭터:",
       "addAllChars": "모든 캐릭터 추가",
+      "addDevChars": "개발자/만우절 캐릭터 추가",
       "addChar": "캐릭터 추가",
       "setCharLevels": "캐릭터 레벨 설정",
       "setSkillLevels": "스킬 레벨 설정",

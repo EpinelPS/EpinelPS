@@ -1,5 +1,5 @@
 {
-"StaticDataMpk": {
+  "StaticDataMpk": {
     "Url": "https://cloud.nikke-kr.com/prdenv/152-c871522546/staticdata/data/qa-260917-09c/566822/mpk/StaticData.pack",
     "Version": "data/qa-260917-09c/566822",
     "Salt1": "ML6i+8Z7V6/lhjAqa0a8akI8yGyvJbxbzBjNvdXklf4=",
@@ -11,5 +11,7 @@
   "GameMaxVer": "160.0.2",
   "EnablePurchaseSimulation": true,
   "ArchiveUnlockAll": false,
-  "TargetVersion": "152.8.13"
+  "TargetVersion": "152.8.13",
+  "SoloRaidMode": "Latest",
+  "SoloRaidFixedId": 0
 }

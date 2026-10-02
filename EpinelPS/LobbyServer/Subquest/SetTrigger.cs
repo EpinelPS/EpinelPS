@@ -16,9 +16,10 @@ public class SetTrigger : LobbyMessage
         if (!GameData.Instance.Subquests.TryGetValue(req.SubquestId, out SubQuestRecord? record))
             throw new Exception("no such subquest: " + req.SubquestId);
 
-        user.AddTrigger(record.ClearTrigger, record.ClearConditionValue, record.ClearConditionId);
-        user.AddTrigger(Trigger.SubQuestClear, 1, req.SubquestId); // TODO move elsewhere?
-
+        if (record.ClearTrigger != Trigger.None)
+        {
+            user.AddTrigger(record.ClearTrigger, record.ClearConditionValue, record.ClearConditionId);
+        }
 
         JsonDb.Save();
 

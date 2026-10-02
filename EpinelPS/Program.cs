@@ -6,6 +6,7 @@ using EpinelPS.Networking;
 using EpinelPS.Services;
 using EpinelPS.Utils;
 using EpinelPS.LobbyServer.Stage;
+using EpinelPS.LobbyServer.Mission;
 using log4net.Config;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
@@ -48,12 +49,19 @@ internal class Program
             await GameData.CreateAsync();
             foreach (var user in JsonDb.Instance.Users)
             {
+                // Purge any cursed/broken characters (like Belorta Alt) or clone duplicates from past shenanigans
+                AdminCommands.SanitizeUserCharacters(user);
+                RewardUtils.SanitizeEquipmentItems(user);
                 if (user.LastNormalStageCleared >= 6000002)
                 {
                     ClearStage.EnsureDefaultCharacters(user);
                 }
                 ClearStage.ReconcileMainQuests(user, logToConsole: false);
+                ClearStage.ReconcileSubquestStages(user);
+                MissionReconciler.ReconcileAll(user, logToConsole: false);
                 MessengerMessageCreator.CreateAllEligibleOpeners(user, logToConsole: false);
+                // Restock Union Chips (GuildCoin) to at least 100,000 on every server restart
+                user.Currency[CurrencyType.GuildCoin] = Math.Max(user.GetCurrencyVal(CurrencyType.GuildCoin), 100000);
             }
 
             Console.WriteLine("Initializing database");
@@ -284,5 +292,4 @@ internal class Program
     {
         return AppDomain.CurrentDomain.BaseDirectory + "cache/" + path;
     }
-
 }

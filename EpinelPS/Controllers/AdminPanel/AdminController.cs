@@ -1,4 +1,4 @@
-﻿using EpinelPS.Database;
+using EpinelPS.Database;
 using EpinelPS.Data;
 using EpinelPS.Models.Admin;
 using EpinelPS.Utils;
@@ -80,6 +80,14 @@ public class AdminController(ILogger<AdminController> logger) : Controller
         }
 
         return Redirect("/admin/Events");
+    }
+
+    [Route("SoloRaid")]
+    public IActionResult SoloRaid()
+    {
+        if (!CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        return View();
     }
 
     [Route("Configuration")]

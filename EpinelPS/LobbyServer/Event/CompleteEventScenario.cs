@@ -1,4 +1,6 @@
-﻿using EpinelPS.Database;
+﻿﻿using EpinelPS.Data;
+using EpinelPS.Database;
+using EpinelPS.LobbyServer.Archive;
 
 namespace EpinelPS.LobbyServer.Event;
 
@@ -23,7 +25,13 @@ public class CompleteEventScenario : LobbyMessage
             evt.CompletedScenarios.Add(req.ScenarioId);
             user.EventInfo.Add(req.EventId, evt);
         }
-
+        // Also check if this completed scenario corresponds to an archive event quest
+        var matchingQuest = GameData.Instance.archiveEventQuestRecords.Values
+            .FirstOrDefault(q => q.EndScenarioId == req.ScenarioId);
+        if (matchingQuest != null)
+        {
+            ArchiveEventQuestHelper.OnArchiveQuestCleared(user, matchingQuest.Id);
+        }
         JsonDb.Save();
         ResSetEventScenarioComplete response = new();
 

@@ -1,4 +1,5 @@
-﻿using ASodium;
+﻿using System.Security.Cryptography;
+using ASodium;
 using EpinelPS.LobbyServer;
 using System.Buffers.Binary;
 using System.IO.Compression;
@@ -175,8 +176,7 @@ public class PacketDecryption
 
         // generate it
         byte[] nonce = new byte[24];
-        new Random().NextBytes(nonce);
-
+        RandomNumberGenerator.Fill(nonce);
         // write nonce bytes
         m.Write(nonce, 0, nonce.Length);
 

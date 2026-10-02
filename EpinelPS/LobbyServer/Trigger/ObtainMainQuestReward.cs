@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -22,9 +22,22 @@ public class ObtainMainQuestReward : LobbyMessage
             {
                 user.MainQuestData[item.Key] = true;
 
-                MainQuestRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key) ?? throw new Exception("failed to lookup quest Id " + item.Key);
-                RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.RewardId) ?? throw new Exception("failed to lookup reward Id " + questInfo.RewardId);
-                rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
+                MainQuestRecord? questInfo = GameData.Instance.GetMainQuestByTableId(item.Key);
+                if (questInfo == null)
+                {
+                    Logging.Warn($"[ObtainMainQuestReward] Failed to lookup quest Id {item.Key}");
+                    continue;
+                }
+
+                RewardRecord? reward = GameData.Instance.GetRewardTableEntry(questInfo.RewardId);
+                if (reward != null)
+                {
+                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, reward));
+                }
+                else
+                {
+                    Logging.Warn($"[ObtainMainQuestReward] Failed to lookup reward Id {questInfo.RewardId} for quest {item.Key}");
+                }
             }
         }
 

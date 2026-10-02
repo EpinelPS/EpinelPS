@@ -1,4 +1,5 @@
 using EpinelPS.Database;
+using EpinelPS.LobbyServer.Mission;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.TriggerController;
@@ -11,6 +12,14 @@ public class TriggerSync : LobbyMessage
         ReqSyncTrigger req = await ReadData<ReqSyncTrigger>();
         User user = GetUser();
 
+        long nowTicks = DateTime.UtcNow.Ticks;
+        // Reconcile milestones on login/reset (Seq == 0) or debounced to once every 30 seconds
+        // to eliminate repeated global lock contention and 11 SQLite query suites on polling ticks.
+        if (req.Seq == 0 || user.NeedsTriggerSyncRestart || (nowTicks - user.LastMissionReconciledTicks) > TimeSpan.FromSeconds(30).Ticks)
+        {
+            MissionReconciler.ReconcileAll(user);
+            user.LastMissionReconciledTicks = nowTicks;
+        }
         // This request is responsible for fetching a log for
         // daily, weekly, challenge mission completion.
         // This endpoint also returns the entire "history" for the account when 
@@ -24,17 +33,33 @@ public class TriggerSync : LobbyMessage
         ResSyncTrigger response = new();
         Logging.WriteLine($"[TriggerSync] User {user.ID} requested trigger sync from seq {req.Seq}", LogType.Debug);
 
+        var futureTriggers = GameContext.Triggers
+            .Where(x => x.UserId == user.ID && x.CreatedAt > nowTicks)
+            .ToList();
+
+        if (futureTriggers.Count > 0)
+        {
+            foreach (var ft in futureTriggers)
+            {
+                ft.CreatedAt = Math.Min(nowTicks, ft.CreatedAt - TimeSpan.FromHours(9).Ticks);
+            }
+            GameContext.SaveChanges();
+            user.NeedsTriggerSyncRestart = true;
+            Logging.WriteLine($"[TriggerSync] Corrected {futureTriggers.Count} future-dated trigger timestamps for user {user.ID}", LogType.Info);
+        }
+
         long maxId = GameContext.Triggers
             .Where(x => x.UserId == user.ID)
             .Select(x => (long?)x.Id)
             .Max() ?? 0;
 
         long effectiveSeq = req.Seq;
-        if (effectiveSeq > maxId)
+        if (user.NeedsTriggerSyncRestart || effectiveSeq > maxId)
         {
-            // The client's cached sequence is ahead of the database (e.g. after trigger cleanup or save restore).
+            // The client's cached sequence is ahead of the database or triggers were sanitized.
             // Request the client to restart trigger sync from 0.
-            Logging.WriteLine($"[TriggerSync] Client seq ({req.Seq}) > maxId ({maxId}) for user {user.ID}; requesting restart from 0", LogType.Info);
+            user.NeedsTriggerSyncRestart = false;
+            Logging.WriteLine($"[TriggerSync] Trigger resync needed (seq={req.Seq}, maxId={maxId}) for user {user.ID}; requesting restart from 0", LogType.Info);
             response.Restart = true;
             effectiveSeq = 0;
         }

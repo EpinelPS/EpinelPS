@@ -183,4 +183,28 @@ public class LevelInfiniteControlller : Controller
 
         return "{\"msg\":\"success\",\"ret\":0,\"seq\":\"" + seq + "\"}";
     }
+
+    [HttpPost, HttpGet]
+    [Route("account_delete/{action=query}")]
+    public IActionResult HandleAccountDelete(string action, [FromQuery] string? seq)
+    {
+        string s = seq ?? "0";
+        return Content("{\"del_account_info\":\"{\\\"ret\\\":0,\\\"msg\\\":\\\"\\\",\\\"status\\\":0,\\\"created_at\\\":\\\"0\\\",\\\"target_destroy_at\\\":\\\"0\\\",\\\"destroyed_at\\\":\\\"0\\\",\\\"err_code\\\":0,\\\"seq\\\":\\\"" + s + "\\\"}\",\"del_account_status\":0,\"del_li_account_status\":0,\"status\":0,\"ret\":0,\"msg\":\"success\",\"seq\":\"" + s + "\",\"data\":{\"del_account_status\":0,\"status\":0}}", "application/json");
+    }
+
+    [HttpPost, HttpGet]
+    [Route("account/delete/{action=query}")]
+    public IActionResult HandleAccountDeleteAlt(string action, [FromQuery] string? seq)
+    {
+        string s = seq ?? "0";
+        return Content("{\"del_account_info\":\"{\\\"ret\\\":0,\\\"msg\\\":\\\"\\\",\\\"status\\\":0,\\\"created_at\\\":\\\"0\\\",\\\"target_destroy_at\\\":\\\"0\\\",\\\"destroyed_at\\\":\\\"0\\\",\\\"err_code\\\":0,\\\"seq\\\":\\\"" + s + "\\\"}\",\"del_account_status\":0,\"del_li_account_status\":0,\"status\":0,\"ret\":0,\"msg\":\"success\",\"seq\":\"" + s + "\",\"data\":{\"del_account_status\":0,\"status\":0}}", "application/json");
+    }
+
+    [HttpPost, HttpGet]
+    [Route("dsr/{action=query}")]
+    public IActionResult HandleDsr(string action, [FromQuery] string? seq)
+    {
+        string s = seq ?? "0";
+        return Content("{\"del_account_status\":0,\"status\":0,\"ret\":0,\"msg\":\"success\",\"seq\":\"" + s + "\",\"data\":{\"del_account_status\":0,\"status\":0}}", "application/json");
+    }
 }

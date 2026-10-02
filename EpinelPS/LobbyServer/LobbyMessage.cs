@@ -11,15 +11,54 @@ namespace EpinelPS.LobbyServer;
 /// </summary>
 public abstract class LobbyMessage
 {
-    protected HttpContext? ctx;
-    protected ulong UserId;
-    public GameContext GameContext = null!;
+    private sealed class LobbyCallContext
+    {
+        public HttpContext? HttpContext;
+        public ulong UserId;
+        public GameContext? GameContext;
+    }
+
+    private static readonly AsyncLocal<LobbyCallContext> _currentContext = new();
+
+    protected HttpContext ctx
+    {
+        get => _currentContext.Value?.HttpContext ?? throw new InvalidOperationException("No active HttpContext in LobbyMessage");
+        set
+        {
+            var c = _currentContext.Value ??= new();
+            c.HttpContext = value;
+        }
+    }
+
+    protected ulong UserId
+    {
+        get => _currentContext.Value?.UserId ?? 0;
+        set
+        {
+            var c = _currentContext.Value ??= new();
+            c.UserId = value;
+        }
+    }
+
+    public GameContext GameContext
+    {
+        get => _currentContext.Value?.GameContext ?? throw new InvalidOperationException("No active GameContext in LobbyMessage");
+        set
+        {
+            var c = _currentContext.Value ??= new();
+            c.GameContext = value;
+        }
+    }
 
     public async Task HandleAsync(HttpContext ctx)
     {
-        UserId = 0;
-        this.ctx = ctx;
-        GameContext = ctx.RequestServices.GetRequiredService<GameContext>();
+        var callContext = new LobbyCallContext
+        {
+            HttpContext = ctx,
+            UserId = 0,
+            GameContext = ctx.RequestServices.GetRequiredService<GameContext>()
+        };
+        _currentContext.Value = callContext;
         await HandleAsync();
     }
     protected abstract Task HandleAsync();
@@ -27,9 +66,12 @@ public abstract class LobbyMessage
 
     private static void PrintMessage<T>(T data) where T : IMessage, new()
     {
-        string? str = (string?)data.GetType().InvokeMember("ToString", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.InvokeMethod, null, data, null);
-        if (str != null)
-            Logging.WriteLine(str, LogType.Debug);
+        if (Logging.IsDebugEnabled)
+        {
+            string? str = data.ToString();
+            if (!string.IsNullOrEmpty(str))
+                Logging.WriteLine(str, LogType.Debug);
+        }
     }
     protected async Task WriteDataAsync<T>(T data) where T : IMessage, new()
     {

@@ -162,6 +162,7 @@
       "skipStages": "ステージスキップ",
       "characters": "キャラクター:",
       "addAllChars": "すべてのキャラクターを追加",
+      "addDevChars": "開発者/エイプリルフールキャラクターを追加",
       "addChar": "キャラクター追加",
       "setCharLevels": "キャラクターレベル設定",
       "setSkillLevels": "スキルレベル設定",

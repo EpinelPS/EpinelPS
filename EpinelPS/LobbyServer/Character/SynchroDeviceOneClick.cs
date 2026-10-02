@@ -43,6 +43,10 @@ public class SynchroDeviceOneClick : LobbyMessage
                 user.SubtractCurrency(CurrencyType.CharacterExp2, totalExp2);
                 user.SynchroDeviceLevel = lv;
                 user.SynchroDeviceUpgraded = true;
+                foreach (CharacterModel c in user.Characters.OrderByDescending(x => x.Level).Take(5))
+                {
+                    c.Level = Math.Max(c.Level, user.SynchroDeviceLevel);
+                }
                 JsonDb.Save();
             }
         }

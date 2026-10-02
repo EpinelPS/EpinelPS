@@ -1,0 +1,278 @@
+@{
+    ViewData["Title"] = "Solo Raid Boss";
+}
+
+<div class="adminui-dashboard">
+    @* Top Bar *@
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="/admin/dashboard" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> <span>Back</span>
+            </a>
+        </div>
+        <h1 class="display-4 mb-0" style="font-size: 1.8rem;">
+            <i class="fas fa-dragon me-2" style="color: var(--adminui-danger);"></i>Solo Raid Boss Configuration
+        </h1>
+        <div>
+            <button id="saveBtn" type="button" class="btn btn-primary px-4" onclick="saveSoloRaid()">
+                <i class="fas fa-save me-2"></i><span>Save Configuration</span>
+            </button>
+        </div>
+    </div>
+
+    @* Alert Message *@
+    <div id="alertBox" class="alert py-2 mb-3" style="display: none;"></div>
+
+    @* Current Status Card *@
+    <div class="card mb-4">
+        <div class="card-header py-2" style="background: #333336; color: #fff;">
+            <i class="fas fa-info-circle me-2"></i><strong>Current Status</strong>
+        </div>
+        <div class="card-body py-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <span class="text-muted d-block small">Active Boss</span>
+                    <h4 class="mb-0" id="currentBossName">
+                        <span class="spinner-border spinner-border-sm me-2"></span>Loading...
+                    </h4>
+                </div>
+                <div class="col-md-4">
+                    <span class="text-muted d-block small">Current Mode</span>
+                    <h5 class="mb-0" id="currentModeText">-</h5>
+                </div>
+                <div class="col-md-4">
+                    <span class="text-muted d-block small">Raid ID</span>
+                    <h5 class="mb-0" id="currentRaidIdText">-</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Mode Selector Card *@
+    <div class="card mb-4">
+        <div class="card-header py-2" style="background: #333336; color: #fff;">
+            <i class="fas fa-sliders-h me-2"></i><strong>Select Rotation Mode</strong>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="form-check p-3 rounded" style="background: #2b2b2e; border: 1px solid #444;">
+                        <input class="form-check-input" type="radio" name="raidMode" id="modeLatest" value="Latest" onchange="onModeChange()">
+                        <label class="form-check-label ms-2" for="modeLatest" style="cursor: pointer;">
+                            <strong class="d-block text-light">Latest (Recommended)</strong>
+                            <small class="text-muted">Always serves the newest boss added in the current game update.</small>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check p-3 rounded" style="background: #2b2b2e; border: 1px solid #444;">
+                        <input class="form-check-input" type="radio" name="raidMode" id="modeFixed" value="Fixed" onchange="onModeChange()">
+                        <label class="form-check-label ms-2" for="modeFixed" style="cursor: pointer;">
+                            <strong class="d-block text-light">Fixed Boss</strong>
+                            <small class="text-muted">Lock Solo Raid to a specific boss selected from the list below.</small>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check p-3 rounded" style="background: #2b2b2e; border: 1px solid #444;">
+                        <input class="form-check-input" type="radio" name="raidMode" id="modeAutoCycle" value="AutoCycle" onchange="onModeChange()">
+                        <label class="form-check-label ms-2" for="modeAutoCycle" style="cursor: pointer;">
+                            <strong class="d-block text-light">AutoCycle</strong>
+                            <small class="text-muted">Automatically rotates weekly across all available bosses.</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Boss Selection Table *@
+    <div class="card" style="margin-bottom: 80px;">
+        <div class="card-header d-flex justify-content-between align-items-center py-2" style="background: #333336; color: #fff;">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i><span>Available Bosses</span>
+                <small class="text-muted ms-2" id="bossCountText"></small>
+            </h5>
+            <div class="d-flex gap-2 align-items-center">
+                <input type="text" id="searchBox" class="form-control form-control-sm"
+                       placeholder="Filter boss name or ID..." oninput="filterBosses()" style="width: 250px;" />
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
+                <table class="table table-hover mb-0" id="bossTable" style="border-radius: 0;">
+                    <thead style="background-color: #3d3d3f; color: #e0e0e0; position: sticky; top: 0; z-index: 2;">
+                        <tr>
+                            <th style="width: 60px; text-align: center; border-bottom: 1px solid #555;">Select</th>
+                            <th style="width: 140px; border-bottom: 1px solid #555;">Raid ID</th>
+                            <th style="border-bottom: 1px solid #555;">Boss Name</th>
+                            <th style="width: 120px; text-align: center; border-bottom: 1px solid #555;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bossTbody">
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                <span class="spinner-border spinner-border-sm me-2"></span>Loading available bosses...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let allBosses = [];
+let selectedFixedId = 0;
+let currentMode = "Latest";
+
+async function loadSoloRaid() {
+    try {
+        const res = await fetch('/adminapi/soloRaid');
+        if (!res.ok) {
+            showAlert('Failed to load Solo Raid configuration.', 'danger');
+            return;
+        }
+        const data = await res.json();
+        currentMode = data.mode || "Latest";
+        selectedFixedId = data.fixedId || data.activeId;
+        allBosses = data.bosses || [];
+
+        // Update status
+        document.getElementById('currentBossName').innerHTML = `<span class="badge bg-danger me-2"><i class="fas fa-skull"></i></span>` + escapeHtml(data.activeName);
+        document.getElementById('currentModeText').textContent = data.mode;
+        document.getElementById('currentRaidIdText').textContent = data.activeId;
+        document.getElementById('bossCountText').textContent = `(${allBosses.length} total)`;
+
+        // Set radio
+        if (currentMode === "AutoCycle") {
+            document.getElementById('modeAutoCycle').checked = true;
+        } else if (currentMode === "Fixed") {
+            document.getElementById('modeFixed').checked = true;
+        } else {
+            document.getElementById('modeLatest').checked = true;
+        }
+
+        renderBossTable(allBosses);
+    } catch (err) {
+        showAlert('Network error while loading Solo Raid data.', 'danger');
+    }
+}
+
+function renderBossTable(bosses) {
+    const tbody = document.getElementById('bossTbody');
+    if (bosses.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">No bosses matched your search.</td></tr>';
+        return;
+    }
+
+    let html = '';
+    for (const b of bosses) {
+        const isChecked = (b.id === selectedFixedId);
+        const activeBadge = b.isActive
+            ? '<span class="badge bg-success"><i class="fas fa-check me-1"></i>ACTIVE</span>'
+            : '';
+
+        html += `
+        <tr class="boss-row ${isChecked ? 'table-active' : ''}" style="cursor: pointer;" onclick="selectBossRow(${b.id})">
+            <td class="text-center">
+                <input class="form-check-input" type="radio" name="bossRadio" id="radio_${b.id}" value="${b.id}"
+                       ${isChecked ? 'checked' : ''} onchange="onRadioChange(${b.id})">
+            </td>
+            <td><code>${b.id}</code></td>
+            <td><strong>${escapeHtml(b.name)}</strong></td>
+            <td class="text-center">${activeBadge}</td>
+        </tr>`;
+    }
+    tbody.innerHTML = html;
+}
+
+function selectBossRow(id) {
+    selectedFixedId = id;
+    const radio = document.getElementById(`radio_${id}`);
+    if (radio) radio.checked = true;
+
+    // Automatically switch to Fixed mode when clicking a specific boss
+    document.getElementById('modeFixed').checked = true;
+    currentMode = "Fixed";
+
+    // Update row highlight
+    document.querySelectorAll('.boss-row').forEach(row => row.classList.remove('table-active'));
+    if (radio) radio.closest('tr')?.classList.add('table-active');
+}
+
+function onRadioChange(id) {
+    selectedFixedId = id;
+    document.getElementById('modeFixed').checked = true;
+    currentMode = "Fixed";
+}
+
+function onModeChange() {
+    const radios = document.getElementsByName('raidMode');
+    for (const r of radios) {
+        if (r.checked) currentMode = r.value;
+    }
+}
+
+function filterBosses() {
+    const q = (document.getElementById('searchBox').value || '').trim().toLowerCase();
+    if (!q) {
+        renderBossTable(allBosses);
+        return;
+    }
+    const filtered = allBosses.filter(b =>
+        b.name.toLowerCase().includes(q) || String(b.id).includes(q)
+    );
+    renderBossTable(filtered);
+}
+
+async function saveSoloRaid() {
+    const btn = document.getElementById('saveBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+
+    onModeChange();
+
+    const payload = {
+        mode: currentMode,
+        fixedId: selectedFixedId
+    };
+
+    try {
+        const res = await fetch('/adminapi/soloRaid', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (res.ok && data.ok) {
+            showAlert(`<strong>Success!</strong> ${escapeHtml(data.message)} - Changes will take effect when players open Solo Raid.`, 'success');
+            await loadSoloRaid();
+        } else {
+            showAlert(`<strong>Error:</strong> ${escapeHtml(data.error || 'Failed to save configuration.')}`, 'danger');
+        }
+    } catch (err) {
+        showAlert('Network error while saving Solo Raid configuration.', 'danger');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save me-2"></i><span>Save Configuration</span>';
+    }
+}
+
+function showAlert(html, type) {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.className = `alert alert-${type} py-2 mb-3`;
+    alertBox.innerHTML = html;
+    alertBox.style.display = 'block';
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+document.addEventListener('DOMContentLoaded', loadSoloRaid);
+</script>

@@ -35,6 +35,12 @@ public class BuyProduct : LobbyMessage
         response.Product.BuyCount = purchase.BuyCount;
         GrantProduct(user, ref response, purchase.Product, purchase.Quantity);
 
+        // Daily (10019), Weekly (20006), and Achievement: Buy item from General Shop
+        if (req.ShopCategory == (int)ShopCategoryType.ShopNormal || req.ShopCategory == 1)
+        {
+            user.AddTrigger(Trigger.MainShopBuy, quantity);
+        }
+
         JsonDb.Save();
         await WriteDataAsync(response);
     }

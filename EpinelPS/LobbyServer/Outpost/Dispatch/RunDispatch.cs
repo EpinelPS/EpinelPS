@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -47,8 +47,10 @@ public class RunDispatch : LobbyMessage
             StartAt = startTime.Ticks
         });
 
+        // Daily mission 10011 (Send 3 dispatches) and Weekly mission 20005 (Send 10 dispatches)
+        user.AddTrigger(Trigger.SendDispatch, 1);
+
         JsonDb.Save();
-        // TODO
         await WriteDataAsync(response);
     }
 }

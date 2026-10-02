@@ -1,4 +1,4 @@
-﻿using EpinelPS.Database;
+using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Jukebox;
 
@@ -16,11 +16,13 @@ public class SetTableId : LobbyMessage
         {
             user.CommanderMusic.TableId = req.JukeboxTableId;
             user.CommanderMusic.Type = NetJukeboxBgmType.JukeboxTableId;
+            user.CommanderMusic.IsShuffle = false;
         }
         else if (req.Location == NetJukeboxLocation.Lobby)
         {
             user.LobbyMusic.TableId = req.JukeboxTableId;
             user.LobbyMusic.Type = NetJukeboxBgmType.JukeboxTableId;
+            user.LobbyMusic.IsShuffle = false;
         }
         JsonDb.Save();
 

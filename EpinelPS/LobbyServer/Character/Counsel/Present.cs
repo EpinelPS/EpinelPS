@@ -93,6 +93,16 @@ public class Present : LobbyMessage
 
         response.Items.AddRange(NetUtils.GetUserItems(user));
 
+        // Weekly mission milestone 20010: Give gifts to NIKKEs
+        int totalItemsGiven = req.Items.Sum(x => x.Count);
+        if (totalItemsGiven > 0)
+        {
+            user.AddTrigger(Trigger.CharacterAttractivePresent, totalItemsGiven);
+        }
+
+        // Achievement milestones: Reach bond / attractive level
+        user.AddTrigger(Trigger.CharacterAttractiveLevelMax, bondInfo.Lv, 0);
+
         JsonDb.Save();
 
         await WriteDataAsync(response);

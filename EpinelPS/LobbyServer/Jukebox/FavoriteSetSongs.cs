@@ -24,7 +24,6 @@ public class SetJukeboxFavoriteSongs : LobbyMessage
             if (setting.Type == NetJukeboxBgmType.JukeboxFavorite)
             {
                 response.JukeboxBgm.Add(JukeboxUtils.BuildCurrentBgm(user, location));
-                break;
             }
         }
 

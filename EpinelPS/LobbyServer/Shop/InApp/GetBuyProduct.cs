@@ -5,11 +5,10 @@ public class GetBuyProduct : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqGetInAppShopBuyProduct req = await ReadData<ReqGetInAppShopBuyProduct>();
-        User user = GetUser();
+        _ = await ReadData<ReqGetInAppShopBuyProduct>();
         await WriteDataAsync(new ResGetInAppShopBuyProduct
         {
-            Reward = InAppPurchaseHelper.TakePendingReward(user.ID, req.ProductId),
+            Reward = new NetRewardData { IsEmptyReward = true, PassPoint = new NetPassPointData() },
             PurchasePointResult = new NetInAppShopPurchasePointAcquireResult(),
         });
     }

@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.LobbyUser;
@@ -15,6 +15,10 @@ public class GetMail : LobbyMessage
         {
             foreach (var item in user.MailDatas.Values)
             {
+                if (item.Nickname == "Cash Shop" && item.Sender == 100)
+                {
+                    item.Sender = 1;
+                }
                 response.Mail.Add(item);
             }
         }

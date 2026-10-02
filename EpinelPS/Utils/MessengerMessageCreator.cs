@@ -125,7 +125,7 @@ public static class MessengerMessageCreator
                 continue;
 
             // Prerequisite check: If BeforeSubQuestId > 0, it must be completed
-            if (subQuest.BeforeSubQuestId > 0)
+            if (!user.SubQuestData.ContainsKey(subQuest.Id) && subQuest.BeforeSubQuestId > 0)
             {
                 if (!user.SubQuestData.TryGetValue(subQuest.BeforeSubQuestId, out bool prevDone) || !prevDone)
                     continue;
@@ -137,7 +137,8 @@ public static class MessengerMessageCreator
                 continue;
 
             // Condition triggers check (e.g. CampaignClear of required stage)
-            if (!MessengerTriggerUtils.IsTriggerListSatisfied(user, subQuest.TriggerList))
+            // If already enrolled in SubQuestData, proceed to create opener dialog
+            if (!user.SubQuestData.ContainsKey(subQuest.Id) && !MessengerTriggerUtils.IsTriggerListSatisfied(user, subQuest.TriggerList))
                 continue;
 
             KeyValuePair<string, MessengerDialogRecord> opener = GameData.Instance.Messages.FirstOrDefault(item =>
@@ -237,7 +238,10 @@ public static class MessengerMessageCreator
             item.Value.ConversationId == condition.Tid && item.Value.IsOpener);
         if (opener.Value == null)
         {
-            Logging.WriteLine($"[Messenger] Opener is missing from static data: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Warning, logToConsole);
+            // Shift Up's static data occasionally contains dialog sets (like Blanc m_ex_blanc_01 and Noir m_ex_noir_01)
+            // that completely lack any line flagged with IsOpener: true.
+            // This is a benign client data quirk; demoted to Debug to spare the console from strobe-light yellow panic.
+            Logging.WriteLine($"[Messenger] Opener is missing from static data: user={user.ID}, MessengerCondition={condition.Id}, Tid={condition.Tid}", LogType.Debug, logToConsole);
             return false;
         }
 

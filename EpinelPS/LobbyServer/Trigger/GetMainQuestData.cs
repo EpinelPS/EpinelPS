@@ -1,3 +1,5 @@
+using EpinelPS.LobbyServer.Mission;
+
 namespace EpinelPS.LobbyServer.TriggerController;
 
 [GameRequest("/Trigger/GetMainQuestData")]
@@ -7,6 +9,7 @@ public class GetMainQuestData : LobbyMessage
     {
         ReqGetMainQuestData req = await ReadData<ReqGetMainQuestData>();
         User user = GetUser();
+        MissionReconciler.ReconcileAll(user);
 
         ResGetMainQuestData response = new();
         foreach (KeyValuePair<int, bool> item in user.MainQuestData)

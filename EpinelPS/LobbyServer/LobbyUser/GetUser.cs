@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 
@@ -22,6 +22,26 @@ public class GetUser : LobbyMessage
         response.OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs };
         response.OutpostBattleLevel = user.OutpostBattleLevel;
         response.IsSimple = req.IsSimple;
+        // Auto-affiliate with Counters union (GSN 10001) so the Union Shop is unlocked for all players without manual edits
+        long gsn = user.Guild?.guildId ?? 0;
+        if (gsn <= 0)
+        {
+            gsn = 10001;
+            user.Guild ??= new GuildData();
+            user.Guild.guildId = 10001;
+            user.Guild.LeaveAt = 0;
+            JsonDb.Save();
+        }
+        response.Gsn = gsn;
+
+        // Automatically ensure player has Union Chips (GuildCoin) for the Union Shop (at least 100,000)
+        const long defaultUnionChips = 100000;
+        if (user.GetCurrencyVal(CurrencyType.GuildCoin) < defaultUnionChips)
+        {
+            user.Currency[CurrencyType.GuildCoin] = defaultUnionChips;
+            JsonDb.Save();
+        }
+
 
         foreach (KeyValuePair<CurrencyType, long> item in user.Currency)
         {
@@ -45,8 +65,8 @@ public class GetUser : LobbyMessage
             });
         }
 
-        response.CommanderRoomJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom };
-        response.LobbyJukeboxBgm = new NetJukeboxBgm() { JukeboxTableId = user.LobbyMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.Lobby };
+        response.CommanderRoomJukeboxBgm = JukeboxUtils.BuildCurrentBgm(user, NetJukeboxLocation.CommanderRoom);
+        response.LobbyJukeboxBgm = JukeboxUtils.BuildCurrentBgm(user, NetJukeboxLocation.Lobby);
 
         await WriteDataAsync(response);
     }

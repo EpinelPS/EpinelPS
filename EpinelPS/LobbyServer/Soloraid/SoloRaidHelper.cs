@@ -487,20 +487,73 @@ public class SoloRaidHelper
         raidData.TrialCount = 0;
     }
 
+    private static readonly DateTime SoloRaidEpoch = new(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+    /// <summary>
+    /// Gets all valid solo raid IDs that have associated presets in SoloRaidPresetTable.
+    /// </summary>
+    public static List<int> GetValidRaidIds()
+    {
+        var validRaids = GameData.Instance.SoloRaidManagerTable.Values
+            .Where(m => GameData.Instance.SoloRaidPresetTable.Values.Any(p => p.PresetGroupId == m.MonsterPreset))
+            .Select(m => m.Id)
+            .OrderBy(id => id)
+            .ToList();
+
+        if (validRaids.Count > 0) return validRaids;
+
+        return GameData.Instance.SoloRaidManagerTable.Keys.OrderBy(id => id).ToList();
+    }
+
+    /// <summary>
+    /// Gets the boss/wave name for a given solo raid ID.
+    /// </summary>
+    public static string GetBossName(int raidId)
+    {
+        if (GameData.Instance.SoloRaidManagerTable.TryGetValue(raidId, out var manager))
+        {
+            var preset = GameData.Instance.SoloRaidPresetTable.Values
+                .FirstOrDefault(p => p.PresetGroupId == manager.MonsterPreset && !string.IsNullOrEmpty(p.WaveName));
+            if (preset != null && !string.IsNullOrWhiteSpace(preset.WaveName))
+                return preset.WaveName;
+        }
+        return $"Solo Raid #{raidId}";
+    }
+
     /// <summary>
     /// Gets the solo raid period data
     /// </summary>
     /// <returns></returns>
     public static NetSoloRaidPeriodData GetSoloRaidPeriod()
     {
-        DateTime utcNow = DateTime.UtcNow.Date;
+        string mode = GameConfig.Root.SoloRaidMode ?? "Latest";
+        DateTime utcNow = DateTime.UtcNow;
+
+        if (mode.Equals("AutoCycle", StringComparison.OrdinalIgnoreCase))
+        {
+            TimeSpan elapsed = utcNow - SoloRaidEpoch;
+            int weekIndex = Math.Max(0, (int)(elapsed.TotalDays / 7));
+            DateTime cycleStart = SoloRaidEpoch.AddDays(weekIndex * 7);
+            DateTime cycleEnd = cycleStart.AddDays(7);
+
+            return new NetSoloRaidPeriodData
+            {
+                VisibleDate = cycleStart.AddDays(-1).Ticks,
+                StartDate = cycleStart.Ticks,
+                EndDate = cycleEnd.Ticks,
+                DisableDate = cycleEnd.AddDays(1).Ticks,
+                SettleDate = cycleEnd.AddDays(3).Ticks,
+            };
+        }
+
+        DateTime today = utcNow.Date;
         return new NetSoloRaidPeriodData
         {
-            VisibleDate = utcNow.AddDays(-10).Ticks,
-            StartDate = utcNow.AddDays(-5).Ticks,
-            EndDate = utcNow.AddDays(5).Ticks,
-            DisableDate = utcNow.AddDays(10).Ticks,
-            SettleDate = utcNow.AddDays(15).Ticks,
+            VisibleDate = today.AddDays(-7).Ticks,
+            StartDate = today.AddDays(-3).Ticks,
+            EndDate = today.AddDays(7).Ticks,
+            DisableDate = today.AddDays(10).Ticks,
+            SettleDate = today.AddDays(14).Ticks,
         };
     }
 
@@ -521,6 +574,29 @@ public class SoloRaidHelper
 
     public static int GetRaidId()
     {
-        return GameData.Instance.SoloRaidManagerTable.Keys.Max();
+        var validRaids = GetValidRaidIds();
+        if (validRaids.Count == 0) return 0;
+
+        string mode = GameConfig.Root.SoloRaidMode ?? "Latest";
+
+        if (mode.Equals("Fixed", StringComparison.OrdinalIgnoreCase))
+        {
+            int fixedId = GameConfig.Root.SoloRaidFixedId;
+            if (fixedId > 0 && validRaids.Contains(fixedId))
+                return fixedId;
+        }
+        else if (mode.Equals("Latest", StringComparison.OrdinalIgnoreCase))
+        {
+            return validRaids.Last();
+        }
+        else if (mode.Equals("AutoCycle", StringComparison.OrdinalIgnoreCase))
+        {
+            TimeSpan elapsed = DateTime.UtcNow - SoloRaidEpoch;
+            int weekIndex = Math.Max(0, (int)(elapsed.TotalDays / 7));
+            int selectedIndex = weekIndex % validRaids.Count;
+            return validRaids[selectedIndex];
+        }
+
+        return validRaids.Last();
     }
 }

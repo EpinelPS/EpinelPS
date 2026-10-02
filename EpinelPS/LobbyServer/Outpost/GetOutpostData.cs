@@ -1,6 +1,7 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using EpinelPS.LobbyServer.Archive;
 namespace EpinelPS.LobbyServer.Outpost;
 
 [GameRequest("/outpost/getoutpostdata")]
@@ -29,7 +30,7 @@ public class GetOutpostData : LobbyMessage
         ResGetOutpostData response = new()
         {
             OutpostBattleLevel = user.OutpostBattleLevel,
-            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new() { Type = NetJukeboxBgmType.JukeboxTableId, JukeboxTableId = user.CommanderMusic.TableId } }
+            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = JukeboxUtils.BuildCurrentBgm(user, NetJukeboxLocation.CommanderRoom) }
         };
 
         // TODO: do not hard code this!
@@ -79,10 +80,62 @@ public class GetOutpostData : LobbyMessage
             JsonDb.Save();
         }
 
+        InjectVirtualEventQuestBuilding(user, response.Data);
+
         response.TimeRewardBuffs.AddRange(NetUtils.GetOutpostTimeReward(user));
         response.ConditionTriggerTidList.AddRange(user.ClearedOutpostScenarioIds);
 
         // TODO
         await WriteDataAsync(response);
+    }
+
+    public static int GetActiveEventQuestTargetBuildingId(User user)
+    {
+        if (user.ActivatedArchiveEventQuestId == 0) return 0;
+        int managerId = ArchiveEventQuestHelper.ResolveManagerId(user.ActivatedArchiveEventQuestId);
+        if (managerId == 0) return 0;
+
+        var currentQuest = ArchiveEventQuestHelper.GetCurrentActiveQuest(user, managerId);
+        if (currentQuest != null && currentQuest.ConditionType == Category.OutpostSelect && currentQuest.ConditionValue > 0)
+        {
+            return currentQuest.ConditionValue;
+        }
+
+        return 0;
+    }
+
+    public static void InjectVirtualEventQuestBuilding(User user, ICollection<NetUserOutpostData> responseBuildings)
+    {
+        int targetBuildingId = GetActiveEventQuestTargetBuildingId(user);
+        if (targetBuildingId <= 0) return;
+
+        if (user.OutpostBuildings == null)
+        {
+            user.OutpostBuildings = [];
+        }
+
+        if (user.OutpostBuildings.Any(b => b.BuildingId == targetBuildingId))
+        {
+            return;
+        }
+
+        int virtualSlot = Enumerable.Range(11, 27)
+            .FirstOrDefault(s => user.OutpostBuildings.All(b => b.SlotId != s) && responseBuildings.All(b => b.SlotId != s), 11);
+
+        var newBuilding = new NetUserOutpostData
+        {
+            SlotId = virtualSlot,
+            BuildingId = targetBuildingId,
+            IsDone = true,
+            StartAt = 638549982076760660,
+            CompleteAt = 638549982076760660
+        };
+
+        user.OutpostBuildings.Add(newBuilding);
+        if (!responseBuildings.Any(b => b.SlotId == newBuilding.SlotId))
+        {
+            responseBuildings.Add(newBuilding);
+        }
+        JsonDb.Save();
     }
 }

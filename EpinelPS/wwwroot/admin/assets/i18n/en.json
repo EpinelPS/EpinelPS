@@ -167,6 +167,7 @@
       "skipStages": "Skip Stages",
       "characters": "Characters:",
       "addAllChars": "Add All Characters",
+      "addDevChars": "Add Dev Characters",
       "addChar": "Add Character",
       "setCharLevels": "Set Character Levels",
       "setSkillLevels": "Set Skill Levels",

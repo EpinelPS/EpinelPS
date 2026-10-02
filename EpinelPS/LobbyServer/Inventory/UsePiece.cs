@@ -139,7 +139,8 @@ public class UsePiece : LobbyMessage
             // eligible openers after the new character and its triggers exist.
             MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
-            user.AddTrigger(Trigger.GachaCharacter, 0, 0);
+            // Daily 10002, Weekly 20001, and Recruitment achievements
+            user.AddTrigger(Trigger.GachaCharacter, 1, 0);
         }
 
         reward.Currency.Add(new NetCurrencyData() { Type = (int)CurrencyType.DissolutionPoint, Value = totalBodyLabels });

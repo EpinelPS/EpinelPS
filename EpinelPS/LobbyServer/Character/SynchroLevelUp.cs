@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Character;
@@ -31,6 +31,10 @@ public class SynchroLevelUp : LobbyMessage
             user.SubtractCurrency(CurrencyType.CharacterExp, requiredBattleData);
             user.SubtractCurrency(CurrencyType.CharacterExp2, requiredCoreDust);
             user.SynchroDeviceLevel++;
+            foreach (CharacterModel c in user.Characters.OrderByDescending(x => x.Level).Take(5))
+            {
+                c.Level = Math.Max(c.Level, user.SynchroDeviceLevel);
+            }
         }
         else
         {
@@ -46,6 +50,9 @@ public class SynchroLevelUp : LobbyMessage
         }
         response.SynchroLv = user.SynchroDeviceLevel;
 
+        // Update max level achievement milestones when Synchro Device increases
+        int maxCharLevel = user.GetMaxCharacterLevel();
+        user.AddTrigger(Trigger.CharacterLevelMax, maxCharLevel);
         user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
 
         JsonDb.Save();

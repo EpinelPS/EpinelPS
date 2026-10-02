@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 using Org.BouncyCastle.Asn1.Pkcs;
@@ -36,6 +36,11 @@ public class AllObtain : LobbyMessage
                 }
             }
 
+        }
+
+        if (!user.MailDatas.Values.Any(m => m.State == 1 && m.HasReward))
+        {
+            user.Badges.RemoveAll(b => b.BadgeContent == BadgeContents.Mailbox || b.BadgeContent == BadgeContents.MailboxMessage);
         }
 
         response.Reward = ret;

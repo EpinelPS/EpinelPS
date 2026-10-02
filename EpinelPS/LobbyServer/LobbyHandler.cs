@@ -15,20 +15,16 @@ public static class LobbyHandler
     {
         foreach (System.Type type in typeof(LobbyMessage).Assembly.GetTypes())
         {
-            if (type.GetCustomAttributes(typeof(GameRequestAttribute), true).Length > 0)
+            var attribs = type.GetCustomAttributes(typeof(GameRequestAttribute), true);
+            if (attribs.Length > 0)
             {
-                GameRequestAttribute? attrib = (GameRequestAttribute?)Attribute.GetCustomAttribute(type, typeof(GameRequestAttribute));
-                if (attrib == null)
-                {
-                    Logging.WriteLine("WARNING: Failed to get attribute for " + type.FullName, LogType.Warning);
-                    continue;
-                }
-
-
                 object? instance = Activator.CreateInstance(type);
                 if (instance is LobbyMessage handler)
                 {
-                    Handlers.Add(attrib.Url, handler);
+                    foreach (GameRequestAttribute attrib in attribs.Cast<GameRequestAttribute>())
+                    {
+                        Handlers[attrib.Url] = handler;
+                    }
                 }
                 else
                 {
@@ -69,12 +65,9 @@ public static class LobbyHandler
             }
         }
 
-        foreach (KeyValuePair<string, LobbyMessage> item in Handlers)
+        if (!Handlers.TryGetValue(path, out handler))
         {
-            if (path == item.Key)
-            {
-                handler = item.Value;
-            }
+            handler = Handlers.FirstOrDefault(x => string.Equals(x.Key, path, StringComparison.OrdinalIgnoreCase)).Value;
         }
 
         if (handler == null)
