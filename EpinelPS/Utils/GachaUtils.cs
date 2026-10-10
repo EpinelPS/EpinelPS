@@ -1,7 +1,7 @@
-﻿
-using EpinelPS.Data;
+﻿using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
+using EpinelPS.LobbyServer.Event;
 using Org.BouncyCastle.Ocsp;
 
 namespace EpinelPS.Utils;
@@ -28,7 +28,7 @@ public class GachaUtils
 
         List<CharacterRecord> selectedCharacters = [];
 
-        if (user.sickpulls) // Left this in for backward compatibility with previous code.
+        if (user.sickpulls && gachaType.Type != GachaPremiumType.GachaFriend) // Left this in for backward compatibility with previous code. The friend banner handles sickpulls in SelectRandomCharacter.
         {
             // Remove the .Values part since it's already a list.
             // Group by NameCode to treat same NameCode as one character 
@@ -42,7 +42,7 @@ public class GachaUtils
         {
             if (numberOfPulls != 10)
             {
-                Logging.WriteLine("[SelectRandomCharacter] Tutorial Gacha Banners must have 10 pulls",LogType.Error);
+                Logging.WriteLine("[SelectRandomCharacter] Tutorial Gacha Banners must have 10 pulls", LogType.Error);
                 throw new ArgumentException("Tutorial Gacha Banners must have 10 pulls");
             }
 
@@ -84,6 +84,190 @@ public class GachaUtils
     }
 
 
+    /// <summary>
+    /// Overall SSR chance on the friend banner (0.13 = 13%). Only raised, never lowered.
+    /// </summary>
+    private const double LimitedSsrRate = 0.055;
+
+    /// <summary>
+    /// Same as LimitedSsrRate but when user.sickpulls is on. Ignores the normal rate (1.0 = every pull is SSR).
+    /// </summary>
+    private const double LimitedSsrRateSickPulls = 1.0;
+
+    private static readonly Dictionary<OriginalRareType, HashSet<int>> standardPools = [];
+    private static readonly Dictionary<int, bool> limitedBannerCache = [];
+
+    /// <summary>
+    /// Units the standard banner can give at this rarity (for SSR: the wishlistable units).
+    /// </summary>
+    private static HashSet<int> GetStandardPool(OriginalRareType rare)
+    {
+        if (standardPools.TryGetValue(rare, out var cached)) return cached;
+
+        var data = GameData.Instance;
+        var standardBanner = data.gachaTypes.Values.FirstOrDefault(g => g.Type == GachaPremiumType.GachaPremium);
+
+        HashSet<int> pool = [];
+        if (standardBanner != null)
+        {
+            pool = data.GachaGradeProb.Values
+                .Where(p => p.GroupId == standardBanner.GradeProbId && p.Rare == rare)
+                .SelectMany(p => data.GachaListProb.Values.Where(l => l.GroupId == p.GachaListId).Select(l => l.GachaId))
+                .ToHashSet();
+        }
+
+        standardPools[rare] = pool;
+        return pool;
+    }
+
+    /// <summary>
+    /// Limited unit = not part of the standard pool of its own rarity.
+    /// </summary>
+    private static bool IsLimitedUnit(int characterId)
+    {
+        return GameData.Instance.CharacterTable.TryGetValue(characterId, out var ch)
+               && !GetStandardPool(ch.OriginalRare).Contains(characterId);
+    }
+
+    /// <summary>
+    /// A pickup banner is limited when one of its rate-up units (any rarity) is a limited unit.
+    /// The banner type alone cannot tell, permanent and limited banners are both pickup.
+    /// </summary>
+    private static bool IsLimitedBanner(GachaTypeRecord gachaType)
+    {
+        if (limitedBannerCache.TryGetValue(gachaType.Id, out bool cached)) return cached;
+
+        bool limited = gachaType.Type == GachaPremiumType.GachaPickup
+            && gachaType.PickupCharGroupId != 0
+            && GameData.Instance.GachaListProb.Values
+                .Where(l => l.GroupId == gachaType.PickupCharGroupId
+                            && (l.GachaSubType is GachaSubType.PickupCharacter or GachaSubType.LimitedCharacter))
+                .Any(l => IsLimitedUnit(l.GachaId));
+
+        limitedBannerCache[gachaType.Id] = limited;
+        return limited;
+    }
+    
+    /// <summary>
+    /// Rate-up units of the currently active event banners, unordered.
+    /// </summary>
+    public static HashSet<int> GetActiveRateUpIds(User user) => [.. GetActiveRateUpIdsOrdered(user)];
+
+    /// <summary>
+    /// Rate-up units of the currently active event banners, in display order:
+    /// newest event first (highest pickup gacha event id), and inside an event pickup units before selectup units.
+    /// Chain: banner event -> child events -> shared banner resource table -> pickup gacha event -> GachaType.PickupCharGroupId -> GachaListProb.GroupId
+    /// Selectup banners use GachaSelectupListTable (all choices, not the user's pick).
+    /// </summary>
+    public static List<int> GetActiveRateUpIdsOrdered(User user)
+    {
+        var data = GameData.Instance;
+        var eventManagers = data.eventManagers.Values;
+        var perBanner = new List<(int EventKey, List<int> Units)>();
+
+        foreach (var banner in EventHelper.GetLobbyPrivateBannerData(user))
+        {
+            var resourceTables = eventManagers
+                .Where(em => (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId)
+                             && em.EventBannerResourceTable != null
+                             && em.EventBannerResourceTable.StartsWith("event_"))
+                .Select(em => em.EventBannerResourceTable)
+                .ToHashSet();
+
+            var gachaEventIds = eventManagers
+                .Where(em => em.EventSystemType == EventSystemType.PickupGachaEvent
+                             && em.EventBannerResourceTable != null
+                             && resourceTables.Contains(em.EventBannerResourceTable))
+                .Select(em => em.Id)
+                .ToHashSet();
+
+            var units = new List<int>();
+            foreach (var gacha in data.gachaTypes.Values
+                         .Where(g => gachaEventIds.Contains(g.EventId))
+                         .OrderBy(g => g.Type == GachaPremiumType.GachaSelectup ? 1 : 0) // pickup first, then selectup
+                         .ThenBy(g => g.Id))
+            {
+                if (gacha.Type == GachaPremiumType.GachaSelectup)
+                {
+                    units.AddRange(data.GachaSelectupListTable.Values
+                        .Where(s => s.GachaTypeId == gacha.Id)
+                        .OrderBy(s => s.Id)
+                        .Select(s => s.CharacterId));
+                }
+                else if (gacha.Type == GachaPremiumType.GachaPickup && gacha.PickupCharGroupId != 0)
+                {
+                    units.AddRange(data.GachaListProb.Values
+                        .Where(l => l.GroupId == gacha.PickupCharGroupId && l.GachaSubType == GachaSubType.PickupCharacter)
+                        .OrderBy(l => l.Id)
+                        .Select(l => l.GachaId));
+                }
+            }
+
+            perBanner.Add((gachaEventIds.Count == 0 ? 0 : gachaEventIds.Max(), units));
+        }
+
+        var result = new List<int>();
+        var seen = new HashSet<int>();
+        foreach (var entry in perBanner.OrderByDescending(b => b.EventKey)) // newest event first
+            foreach (var id in entry.Units)
+                if (seen.Add(id))
+                    result.Add(id);
+        return result;
+    }
+
+    private static Dictionary<int, GachaListProbRecord>? limitedUnitRows;
+
+    /// <summary>
+    /// Every unit that appears as rate-up/limited in the gacha lists and is outside the standard pool of its rarity.
+    /// One row per unit, keeps the rate-up weight. Computed once.
+    /// </summary>
+    private static Dictionary<int, GachaListProbRecord> GetAllLimitedUnitRows()
+    {
+        return limitedUnitRows ??= GameData.Instance.GachaListProb.Values
+            .Where(r => r.GachaType == GachaCategory.Character
+                        && (r.GachaSubType is GachaSubType.PickupCharacter or GachaSubType.LimitedCharacter)
+                        && IsLimitedUnit(r.GachaId))
+            .GroupBy(r => r.GachaId)
+            .ToDictionary(g => g.Key, g => g.First());
+    }
+
+    /// <summary>
+    /// Candidates for the limited pool of the given rarity:
+    /// all limited units (outside the standard pool) plus the rate-up units of the active event banners (even permanent ones).
+    /// Keys and Ids are negative so they can never collide with real GachaListProb record ids.
+    /// </summary>
+    private static Dictionary<int, GachaListProbRecord> GetLimitedCandidates(User user, OriginalRareType rare, int defaultProb)
+    {
+        var data = GameData.Instance;
+        var result = new Dictionary<int, GachaListProbRecord>();
+        var limitedRows = GetAllLimitedUnitRows();
+
+        var ids = new HashSet<int>(limitedRows.Keys);
+        ids.UnionWith(GetActiveRateUpIds(user));
+
+        foreach (var id in ids)
+        {
+            if (!data.CharacterTable.TryGetValue(id, out var ch) || ch.OriginalRare != rare)
+                continue;
+
+            limitedRows.TryGetValue(id, out var row);
+            row ??= data.GachaListProb.Values.FirstOrDefault(r =>
+                r.GachaId == id && r.GachaType == GachaCategory.Character &&
+                (r.GachaSubType is GachaSubType.PickupCharacter or GachaSubType.LimitedCharacter));
+
+            result[-id] = new GachaListProbRecord
+            {
+                Id = -id,
+                GroupId = row?.GroupId ?? 0,
+                GachaType = GachaCategory.Character,
+                GachaSubType = GachaSubType.None,
+                GachaId = id,
+                Prob = row?.Prob ?? defaultProb,
+            };
+        }
+        return result;
+    }
+
     private static CharacterRecord SelectRandomCharacter(GachaTypeRecord gachaType, List<CharacterRecord> wishlistCharacters, User user)
     {
 
@@ -91,8 +275,36 @@ public class GachaUtils
         // This table holds a link to premade lists for each grade and banner. No need to check each character type individually
         Dictionary<int, GachaGradeProbRecord> gradeProbs = GameData.Instance.GachaGradeProb.Where(p => p.Value.GroupId == gachaType.GradeProbId).OrderBy(p => p.Value.Prob).ToDictionary();
 
+        // Limited mode: friend banner only. Every other banner keeps its original behavior.
+        bool limitedMode = gachaType.Type == GachaPremiumType.GachaFriend;
+        var limitedSsr = limitedMode ? GetLimitedCandidates(user, OriginalRareType.SSR, 100) : [];
+
         // Build a probability table for the grades
-        int maxProb = gradeProbs.Sum(p => p.Value.Prob);
+        Dictionary<int, int> gradeWeights = gradeProbs.Values.ToDictionary(g => g.Id, g => g.Prob);
+        int baseTotal = gradeWeights.Values.Sum();
+
+        if (limitedSsr.Count > 0)
+        {
+            // Raise the overall SSR chance to LimitedSsrRate. SSR rows keep their split (rate-up vs rest), R/SR keep theirs.
+            int ssrSum = gradeProbs.Values.Where(g => g.Rare == OriginalRareType.SSR).Sum(g => g.Prob);
+            int otherSum = baseTotal - ssrSum;
+            double ssrRate = user.sickpulls ? LimitedSsrRateSickPulls : LimitedSsrRate;
+            double targetSsr = ssrRate * baseTotal;
+
+            if (ssrSum > 0 && otherSum > 0 && targetSsr > ssrSum)
+            {
+                double ssrFactor = targetSsr / ssrSum;
+                double otherFactor = (baseTotal - targetSsr) / otherSum;
+                foreach (var g in gradeProbs.Values)
+                {
+                    int w = (int)Math.Round(g.Prob * (g.Rare == OriginalRareType.SSR ? ssrFactor : otherFactor));
+                    // At 100% the non-SSR grades drop to zero, otherwise every grade keeps a minimum weight
+                    gradeWeights[g.Id] = ssrRate >= 1.0 ? (g.Rare == OriginalRareType.SSR ? Math.Max(1, w) : 0) : Math.Max(1, w);
+                }
+            }
+        }
+
+        int maxProb = gradeWeights.Values.Sum();
 
         Dictionary<int, (int minProbInc, int maxProbEx)> gradeProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();
 
@@ -100,8 +312,8 @@ public class GachaUtils
 
         foreach (GachaGradeProbRecord gradeProb in gradeProbs.Values)
         {
-            gradeProbsTable.Add(gradeProb.Id, new(curVal, curVal + gradeProb.Prob));
-            curVal += gradeProb.Prob;
+            gradeProbsTable.Add(gradeProb.Id, new(curVal, curVal + gradeWeights[gradeProb.Id]));
+            curVal += gradeWeights[gradeProb.Id];
         }
 
         // Now do the roll for the grades
@@ -133,6 +345,28 @@ public class GachaUtils
             charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).ToDictionary();
         }
 
+        // Limited handling: friend banner only.
+        // SSR roll only gives limited units (rate-up units of active banners outside the standard pool).
+        // SR keeps its normal list and additionally gets limited SR units. R is untouched.
+        bool normalList = charProbs.Values.All(r => r.GachaType == GachaCategory.Character && r.GachaSubType == GachaSubType.None);
+
+        if (limitedMode && normalList)
+        {
+            if (selectedGrade.Rare == OriginalRareType.SSR)
+            {
+                if (limitedSsr.Count > 0)
+                    charProbs = limitedSsr;
+                else
+                    Logging.WriteLine($"[SelectRandomCharacter] No limited SSR units on active banners for gacha {gachaType.Id}, using the normal list.");
+            }
+            else if (selectedGrade.Rare == OriginalRareType.SR)
+            {
+                int avg = charProbs.Count == 0 ? 100 : Math.Max(1, (int)charProbs.Values.Average(r => r.Prob));
+                foreach (var kv in GetLimitedCandidates(user, OriginalRareType.SR, avg))
+                    charProbs.TryAdd(kv.Key, kv.Value);
+            }
+        }
+
         int maxCharProb = 0;
 
         Dictionary<int, (int minProbInc, int maxProbEx)> charProbsTable = new Dictionary<int, (int minProbInc, int maxProbEx)>();
@@ -159,7 +393,8 @@ public class GachaUtils
                 {
                     characterID = GameData.Instance.GachaSelectupListTable[user.GachaSelectupChoices[gachaType.Id]].CharacterId;
                 }
-                catch {
+                catch
+                {
                     Logging.WriteLine("[SelectRandomCharacter] Could not get the character from the selectup choice");
                 }
                 break;
@@ -194,7 +429,7 @@ public class GachaUtils
             Logging.WriteLine($"Using wishlisted characters.");
             int[] ids = wishlistCharacters.Select(c => c.Id).ToArray();
             charProbs = GameData.Instance.GachaListProb.Where(g => g.Value.GroupId == selectedGrade.GachaListId).Where(g => ids.Contains(g.Value.GachaId)).ToDictionary();
-    }
+        }
         // Otherwise, proceed with regular gacha list
         else
         {
