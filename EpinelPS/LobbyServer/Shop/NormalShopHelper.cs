@@ -304,62 +304,6 @@ public static class NormalShopHelper
 
         state.ProductIdsByOrder = next;
     }
-
-    private static HashSet<int> GetActiveRateUpIds(User user)
-    {
-        var ids = new HashSet<int>();
-        var data = GameData.Instance;
-        var eventManagers = data.eventManagers.Values;
-
-        foreach (var banner in EventHelper.GetLobbyPrivateBannerData(user))
-        {
-            // Same matching EventHelper uses: banner event -> child events -> shared banner resource table -> pickup gacha events
-            var resourceTables = eventManagers
-                .Where(em => (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId)
-                             && em.EventBannerResourceTable != null
-                             && em.EventBannerResourceTable.StartsWith("event_"))
-                .Select(em => em.EventBannerResourceTable)
-                .ToHashSet();
-
-            var gachaEventIds = eventManagers
-                .Where(em => em.EventSystemType == EventSystemType.PickupGachaEvent
-                             && em.EventBannerResourceTable != null
-                             && resourceTables.Contains(em.EventBannerResourceTable))
-                .Select(em => em.Id)
-                .ToHashSet();
-
-            // TEMP debug: remove once the pinned units show up
-            Console.WriteLine($"[MileageShop] banner {banner.EventId}: {resourceTables.Count} resource tables, gacha events: {(gachaEventIds.Count == 0 ? "(none)" : string.Join(", ", gachaEventIds))}");
-
-            foreach (var gacha in data.gachaTypes.Values.Where(g =>
-                         gachaEventIds.Contains(g.EventId) &&
-                         g.Type is not (GachaPremiumType.GachaPremium
-                                     or GachaPremiumType.GachaCustomize
-                                     or GachaPremiumType.GachaTutorial)))
-            {
-                foreach (var grade in data.GachaGradeProb.Values.Where(p =>
-                             p.GroupId == gacha.GradeProbId
-                             && p.Rare == OriginalRareType.SSR
-                             && (p.CustomizeListId == 0 || p.CustomizeListId == p.GachaListId)))
-                {
-                    foreach (var entry in data.GachaListProb.Values.Where(l => l.GroupId == grade.GachaListId))
-                    {
-                        if (entry.GachaType is GachaCategory.WishlistNormal or GachaCategory.WishlistOverspec)
-                            continue;
-
-                        if (entry.GachaType == GachaCategory.GachaSelectup)
-                            ids.UnionWith(data.GachaSelectupListTable.Values
-                                .Where(s => s.GachaTypeId == gacha.Id)
-                                .Select(s => s.CharacterId));
-                        else if (entry.GachaSubType == GachaSubType.PickupCharacter)
-                            ids.Add(entry.GachaId);
-                    }
-                }
-            }
-        }
-        return ids;
-    }
-
     private static List<ContentsShopProductRecord> GetPinnedProducts(User user, ContentsShopRecord shop)
     {
         if ((int)shop.ShopCategory != MileageCategory) return [];

@@ -41,6 +41,7 @@ public class BuyProduct : LobbyMessage
 
     private void GrantProduct(User user, ref ResShopBuyProduct response, ContentsShopProductRecord product, int quantity)
     {
+        Console.WriteLine($"Bought: {product.GoodsType}");
         int totalValue = product.GoodsValue * quantity;
 
         if (product.GoodsType == RewardType.Currency)
@@ -77,10 +78,47 @@ public class BuyProduct : LobbyMessage
         }
         else if (product.GoodsType == RewardType.Character)
         {
-            var reward = new NetRewardData();
-            RewardUtils.AddSingleObject(user, ref reward, product.GoodsId, RewardType.Character, quantity);
-            response.Product.Character.Add(reward.Character);
-            response.Product.UserCharacters.AddRange(reward.UserCharacters);
+            try
+            {
+                var reward = new NetRewardData();
+                RewardUtils.AddSingleObject(user, ref reward, product.GoodsId, RewardType.Character, quantity);
+                response.Product.Character.Add(reward.Character);
+                response.Product.UserCharacters.AddRange(reward.UserCharacters);
+
+                // For Spare bodies
+                if (reward.UserItems.Count > 0)
+                {
+                    foreach (var spareItem in reward.Item)
+                    {
+                        response.Item = new NetUserItemData
+                        {
+                            Isn = spareItem.Isn,
+                            Tid = spareItem.Tid,
+                            Count = spareItem.Count,
+                            Corporation = spareItem.Corporation
+                        };
+                        response.Product.Item.AddRange(reward.Item);
+                        response.Product.UserItems.AddRange(reward.UserItems);
+                        response.Result = ShopBuyProductResult.Success;
+                        Console.WriteLine("Got: {0}", spareItem.Tid);
+                    }
+                }
+                // In case user gets body labels
+                if (reward.Currency.Count > 0)
+                {
+                    foreach (var currency in reward.Currency)
+                    {
+                        response.Currencies.Add(new NetUserCurrencyData
+                        {
+                            Type = currency.Type,
+                            Value = user.GetCurrencyVal((CurrencyType)currency.Type),
+                        });
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Buy Unit Ex: {0}", ex.Message);
+            }
         }
         else if (product.GoodsType == RewardType.LiveWallpaper)
         {
