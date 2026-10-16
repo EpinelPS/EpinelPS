@@ -70,6 +70,32 @@ public static class DateTimeHelper
     }
 
     /// <summary>
+    /// Length of a "week" in hours. Weekly content resets every this many hours.
+    /// </summary>
+    public const int WeeklyCycleHours = 7;
+
+    private static readonly DateTime CycleEpoch = new(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+    /// <summary>
+    /// Index of the current weekly cycle (number of completed 7-hour blocks since the epoch).
+    /// </summary>
+    public static long GetWeeklyCycleIndex()
+    {
+        long hoursSinceEpoch = (long)Math.Floor((DateTime.UtcNow - CycleEpoch).TotalHours);
+        return Math.Max(0, hoursSinceEpoch / WeeklyCycleHours);
+    }
+
+    /// <summary>
+    /// Start (UTC) of the current weekly cycle.
+    /// </summary>
+    public static DateTime GetWeeklyCycleStart() => CycleEpoch.AddHours(GetWeeklyCycleIndex() * WeeklyCycleHours);
+
+    /// <summary>
+    /// Start (UTC) of the next weekly cycle, i.e. the next weekly reset.
+    /// </summary>
+    public static DateTime GetNextWeeklyCycleStart() => GetWeeklyCycleStart().AddHours(WeeklyCycleHours);
+
+    /// <summary>
     /// Get the current time and timezone object for a specified timezone
     /// </summary>
     /// <param name="timeZoneId">Time zone ID, such as "China Standard Time"、"Eastern Standard Time"、"UTC"</param>

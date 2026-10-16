@@ -609,52 +609,30 @@ public class User
 
     private bool ShouldResetUser()
     {
-        var nowLocal = DateTime.UtcNow;
+        // Daily content now runs on a one-hour cycle: reset whenever the top of the hour has passed since the last reset
+        DateTime thisHour = HourlyCycleStart();
+        return LastReset < thisHour;
+    }
 
-        // Compute the last reset threshold (most recent reset hour before or at nowLocal)
-        DateTime todayResetTime = new(
-            nowLocal.Year,
-            nowLocal.Month,
-            nowLocal.Day,
-            JsonDb.Instance.ResetHourUtcTime, 0, 0
-        );
+    public static DateTime HourlyCycleStart()
+    {
+        DateTime now = DateTime.UtcNow;
+        return new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc);
+    }
 
-        if (nowLocal < todayResetTime)
-        {
-            todayResetTime = todayResetTime.AddDays(-1);
-        }
-
-        // If user's last reset was before the last scheduled reset hour, they need reset
-        return LastReset < todayResetTime;
+    /// <summary>
+    /// Identifier of the current one-hour cycle (yyyyMMddHH), used in place of the date for daily content.
+    /// </summary>
+    public int GetHourlyCycleKey()
+    {
+        DateTime now = DateTime.UtcNow;
+        return now.Year * 1000000 + now.Month * 10000 + now.Day * 100 + now.Hour;
     }
 
     private bool ShouldResetWeekly()
     {
-        var nowLocal = DateTime.UtcNow;
-
-        // Calculate the most recent Sunday reset time (matches official NIKKE weekly reset: Monday 05:00:00 KST / Sunday 20:00:00 UTC)
-        DayOfWeek currentDay = nowLocal.DayOfWeek;
-        int daysSinceSunday = ((int)currentDay - (int)DayOfWeek.Sunday + 7) % 7;
-
-        // Get the date of the most recent Sunday
-        DateTime thisSunday = nowLocal.Date.AddDays(-daysSinceSunday);
-
-        // Compute the weekly reset time
-        DateTime weeklyResetTime = new(
-            thisSunday.Year,
-            thisSunday.Month,
-            thisSunday.Day,
-            JsonDb.Instance.ResetHourUtcTime, 0, 0
-        );
-
-        // If nowLocal is before the weekly reset time, subtract a week
-        if (nowLocal < weeklyResetTime)
-        {
-            weeklyResetTime = weeklyResetTime.AddDays(-7);
-        }
-
-        // If user's last reset was before the last scheduled reset, they need reset
-        return LastWeeklyReset < weeklyResetTime;
+        // A "week" is now DateTimeHelper.WeeklyCycleHours (7) hours long, aligned to a fixed epoch.
+        return LastWeeklyReset < DateTimeHelper.GetWeeklyCycleStart();
     }
 
     /*public void ResetDataIfNeeded()
@@ -742,9 +720,8 @@ public class User
     }
     public int GetDateDay()
     {
-        // +4 每天4点重新计算 yyyyMMdd
-        DateTime dateTime = DateTime.UtcNow.AddHours(4);
-        return dateTime.Year * 10000 + dateTime.Month * 100 + dateTime.Day;
+        // "Day" is now a one-hour cycle (yyyyMMddHH). Used by event dailies, solo raid and similar content.
+        return GetHourlyCycleKey();
     }
 
     public int GetDispatchCount()

@@ -25,7 +25,7 @@ public class RunDispatchList : LobbyMessage
             {
                 dispatchData.IsRun = 1;
                 dispatchData.StartAt = startTime.Ticks;
-                dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks;
+                dispatchData.EndAt = startTime.Ticks;
                 //dispatchData.EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks;
             }
 
@@ -33,7 +33,7 @@ public class RunDispatchList : LobbyMessage
             {
                 DispatchGroupId = dispatch.DispatchGradeId,
                 IsRun = true,
-                EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks,
+                EndAt = startTime.Ticks,
                 //EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks,
                 SelectSlotId = item.SelectSlotId,
                 SelectTid = item.Tid,

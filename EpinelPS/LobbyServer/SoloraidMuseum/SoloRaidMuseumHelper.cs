@@ -40,13 +40,13 @@ internal static class SoloRaidMuseumHelper
         }
 
         var now = DateTime.UtcNow;
-        var weekStart = now.Date.AddDays(-(((int)now.DayOfWeek + 6) % 7));
+        var weekStart = DateTimeHelper.GetWeeklyCycleStart();
         response.WeeklyBuff = new NetSoloRaidMuseumWeeklyBuff
         {
             CurrentMuseumWeeklyBuffGroupTableId = GameData.Instance.MuseumWeeklyBuffGroupTable.Keys.DefaultIfEmpty().Max(),
             WeeklyBuffStartDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart, DateTimeKind.Utc)),
-            WeeklyBuffEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddDays(7), DateTimeKind.Utc)),
-            WeeklyBuffSeasonEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddDays(7), DateTimeKind.Utc)),
+            WeeklyBuffEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddHours(DateTimeHelper.WeeklyCycleHours), DateTimeKind.Utc)),
+            WeeklyBuffSeasonEndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(weekStart.AddHours(DateTimeHelper.WeeklyCycleHours), DateTimeKind.Utc)),
         };
         return response;
     }

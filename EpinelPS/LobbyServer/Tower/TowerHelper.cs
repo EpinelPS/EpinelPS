@@ -49,12 +49,6 @@ public class TowerHelper
 
         user.TowerProgress[record.Type] = record.Floor;
 
-        if (record.Type is not CorporationTowerType.ALL)
-        {
-            user.ResetableData.TowerCount.TryAdd(record.Type, 0);
-            user.ResetableData.TowerCount[record.Type] += 1;
-        }
-
         user.AddTrigger(TowerClearTriggers[record.Type], 1, towerId);
 
         RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(record.RewardId)
@@ -119,12 +113,6 @@ public class TowerHelper
         }
 
         user.TowerProgress[record.Type] = record.Floor;
-
-        if (record.Type is not CorporationTowerType.ALL)
-        {
-            user.ResetableData.TowerCount.TryAdd(record.Type, 0);
-            user.ResetableData.TowerCount[record.Type] += totalFloorsCleared;
-        }
 
         Console.WriteLine($"Total floors cleared: {totalFloorsCleared}");
 

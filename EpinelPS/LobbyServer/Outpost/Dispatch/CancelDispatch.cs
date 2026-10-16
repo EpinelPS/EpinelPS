@@ -23,7 +23,7 @@ public class CancelDispatch : LobbyMessage
         {
             dispatchData.IsRun = 0;
             dispatchData.StartAt = startTime.Ticks;
-            dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks;
+            dispatchData.EndAt = startTime.Ticks;
         }
 
         user.SelectableDispatchData.RemoveAll(cs => cs.SelectTid == req.Tid);

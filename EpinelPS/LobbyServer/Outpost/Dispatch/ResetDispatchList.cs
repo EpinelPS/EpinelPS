@@ -50,7 +50,7 @@ public class ResetDispatchList : LobbyMessage
                     Tid = dispatchtable[randomNumber].Id,
                     IsRun = 0,
                     StartAt = startTime.Ticks,
-                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
+                    EndAt = startTime.Ticks
                 };
 
                 user.UserDispatchData.dispatchDatas.Add(netUserDispatch);

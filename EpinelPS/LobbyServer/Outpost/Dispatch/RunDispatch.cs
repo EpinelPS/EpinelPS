@@ -24,7 +24,7 @@ public class RunDispatch : LobbyMessage
             Tid = req.Tid,
             IsRun = 1,
             StartAt = startTime.Ticks,
-            EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks
+            EndAt = startTime.Ticks
         };
 
         var dispatchData = user.UserDispatchData.dispatchDatas.FirstOrDefault(x => x.Tid == req.Tid);
@@ -32,7 +32,7 @@ public class RunDispatch : LobbyMessage
         {
             dispatchData.IsRun = 1; 
             dispatchData.StartAt = startTime.Ticks;
-            dispatchData.EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks;
+            dispatchData.EndAt = startTime.Ticks;
             //dispatchData.EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks;
         }
 
@@ -40,7 +40,7 @@ public class RunDispatch : LobbyMessage
         {
             DispatchGroupId = dispatch.DispatchGradeId,
             IsRun = true,
-            EndAt = startTime.AddMinutes(dispatch.TimeMin).Ticks,
+            EndAt = startTime.Ticks,
             //EndAt = startTime.AddSeconds(dispatch.TimeMin).Ticks,
             SelectSlotId = req.SelectSlotId,
             SelectTid = req.Tid,

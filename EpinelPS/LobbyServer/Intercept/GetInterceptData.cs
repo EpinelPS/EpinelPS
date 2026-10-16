@@ -10,6 +10,7 @@ public class GetInterceptData : LobbyMessage
     {
         _ = await ReadData<ReqGetInterceptData>();
         var user = GetUser();
+        user.ResetDataIfNeeded();
 
         int specialId = GetCurrentSpecialInterceptionId();
         ResGetInterceptData response = new()
@@ -30,15 +31,17 @@ public class GetInterceptData : LobbyMessage
         if (specialBosses.Count == 0) return 1;
 
         // Align with official daily reset time (JsonDb.Instance.ResetHourUtcTime = 20:00 UTC / 05:00 KST)
-        int resetHour = JsonDb.Instance.ResetHourUtcTime;
-        DateTime inGameDate = DateTime.UtcNow.AddHours(-resetHour).Date;
+        // Daily content now runs on a one-hour cycle, so the boss rotates every hour.
+        DateTime inGameDate = DateTime.UtcNow.Date;
+        int hourlyOffset = DateTime.UtcNow.Hour;
 
         // Continuous epoch counter from official NIKKE launch (Nov 4, 2022) to avoid leap-year discontinuities
         DateTime epoch = new(2022, 11, 4);
         int daysSinceLaunch = (inGameDate - epoch).Days;
         if (daysSinceLaunch < 0) daysSinceLaunch = 0;
 
-        int specialIndex = daysSinceLaunch % specialBosses.Count;
+        int cycleSinceLaunch = daysSinceLaunch * 24 + hourlyOffset;
+        int specialIndex = cycleSinceLaunch % specialBosses.Count;
         return specialBosses[specialIndex].Id;
     }
 }

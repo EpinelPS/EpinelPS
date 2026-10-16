@@ -23,15 +23,8 @@ public class GetTowerData : LobbyMessage
             user.ResetableData.TowerCount = towers;
         }
 
-        // Tower Schedules
-        var towerSchedules = new Dictionary<CorporationTowerType, NetSchedule>
-        {
-            [CorporationTowerType.ELYSION] = new() { DayOfWeek = new() { DayOfWeeks = { 1, 4, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
-            [CorporationTowerType.MISSILIS] = new() { DayOfWeek = new() { DayOfWeeks = { 2, 5, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
-            [CorporationTowerType.TETRA] = new() { DayOfWeek = new() { DayOfWeeks = { 0, 3, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
-            [CorporationTowerType.OVERSPEC] = new() { DayOfWeek = new() { DayOfWeeks = { 2, 6 }, StartTime = 720000000000, Duration = 863990000000 } },
-            [CorporationTowerType.ALL] = new() { AllTime = new() }
-        };
+        // Tower Schedules: every tower is open all day, every day
+        var allTimeSchedule = () => new NetSchedule { AllTime = new() };
 
         // Tower Data
         List<NetTowerData> towerData = [];
@@ -39,11 +32,12 @@ public class GetTowerData : LobbyMessage
         {
             towers.TryGetValue(towerType, out int count);
 
+            // Always open, and the clear counter is never consumed (always shows full)
             towerData.Add(towerType == CorporationTowerType.ALL
                 ? new NetTowerData { Type = (int)towerType }
-                : new NetTowerData { Type = (int)towerType, RemainCount = Math.Max(0, 3 - count) });
+                : new NetTowerData { Type = (int)towerType, RemainCount = 3 });
 
-            towerData.Last().Schedules.Add(towerSchedules[towerType]);
+            towerData.Last().Schedules.Add(allTimeSchedule());
         }
 
         if (user.TowerProgress.ContainsKey(0)) user.TowerProgress.Remove(0);

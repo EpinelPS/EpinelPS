@@ -531,10 +531,8 @@ public class SoloRaidHelper
 
         if (mode.Equals("AutoCycle", StringComparison.OrdinalIgnoreCase))
         {
-            TimeSpan elapsed = utcNow - SoloRaidEpoch;
-            int weekIndex = Math.Max(0, (int)(elapsed.TotalDays / 7));
-            DateTime cycleStart = SoloRaidEpoch.AddDays(weekIndex * 7);
-            DateTime cycleEnd = cycleStart.AddDays(7);
+            DateTime cycleStart = DateTimeHelper.GetWeeklyCycleStart();
+            DateTime cycleEnd = DateTimeHelper.GetNextWeeklyCycleStart();
 
             return new NetSoloRaidPeriodData
             {
@@ -591,8 +589,7 @@ public class SoloRaidHelper
         }
         else if (mode.Equals("AutoCycle", StringComparison.OrdinalIgnoreCase))
         {
-            TimeSpan elapsed = DateTime.UtcNow - SoloRaidEpoch;
-            int weekIndex = Math.Max(0, (int)(elapsed.TotalDays / 7));
+            int weekIndex = (int)DateTimeHelper.GetWeeklyCycleIndex();
             int selectedIndex = weekIndex % validRaids.Count;
             return validRaids[selectedIndex];
         }

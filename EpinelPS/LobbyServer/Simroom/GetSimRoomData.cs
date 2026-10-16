@@ -11,6 +11,7 @@ public class GetSimRoomData : LobbyMessage
     {
         await ReadData<ReqGetSimRoom>();
         User user = GetUser();
+        user.ResetDataIfNeeded();
 
         // ResGetSimRoom Fields 
         //   SimRoomStatus Status
@@ -38,10 +39,10 @@ public class GetSimRoomData : LobbyMessage
         {
             Status = SimRoomStatus.Ready,
             CurrentDifficulty = CurrentDifficulty,
-            // NextRenewAt: Resets at 2 AM daily
-            NextRenewAt = DateTimeHelper.GetNextDayAtTime("China Standard Time", 2).Ticks,
-            // NextLegacyBuffResetDate: Resets at 2 AM every Tuesday
-            NextLegacyBuffResetDate = DateTimeHelper.GetNextWeekdayAtTime("China Standard Time", DayOfWeek.Tuesday, 2).ToTimestamp(),
+            // NextRenewAt: renews at the top of every hour
+            NextRenewAt = User.HourlyCycleStart().AddHours(1).Ticks,
+            // NextLegacyBuffResetDate: resets with the weekly cycle (every 7 hours)
+            NextLegacyBuffResetDate = DateTimeHelper.GetNextWeeklyCycleStart().ToTimestamp(),
             IsSimpleModeSkipEnabled = user.ResetableData.SimRoomData.IsSimpleModeSkipEnabled,
             LastPlayedChapter = new NetSimRoomChapterInfo()
             {

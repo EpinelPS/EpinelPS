@@ -512,9 +512,9 @@ public static class AzxHelper
 
     private static int GetDateDay()
     {
-        // +4 每天4点重新计算
-        DateTime dateTime = DateTime.UtcNow.AddHours(4);
-        return dateTime.Year * 10000 + dateTime.Month * 100 + dateTime.Day;
+        // One-hour "day" cycle (yyyyMMddHH), matches User.GetDateDay()
+        DateTime dateTime = DateTime.UtcNow;
+        return dateTime.Year * 1000000 + dateTime.Month * 10000 + dateTime.Day * 100 + dateTime.Hour;
     }
 
     private static void AddAchievementMission(ref ResGetMiniGameAzxData response, int missionId, int progress, bool isReceived)

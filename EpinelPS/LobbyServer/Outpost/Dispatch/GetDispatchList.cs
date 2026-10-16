@@ -14,6 +14,7 @@ public class GetDispatchList : LobbyMessage
         ResGetDispatchList response = new();
 
         User user = GetUser();
+        user.ResetDataIfNeeded();
         DispatchHelper.SyncDispatchLevel(user);
 
         List<DispatchBoardData> dispatch = GameData.Instance.DispatchBoardTable.Values
@@ -27,7 +28,7 @@ public class GetDispatchList : LobbyMessage
             .FirstOrDefault();
 
         DateTime startTime = DateTime.UtcNow;
-        int dateDay = user.GetDateDay();
+        int dateDay = user.GetHourlyCycleKey();
 
         if (user.UserDispatchData.Today != dateDay)
         {
@@ -59,7 +60,7 @@ public class GetDispatchList : LobbyMessage
                     Tid = dispatchtable[randomNumber].Id,
                     IsRun = 0,
                     StartAt = startTime.Ticks,
-                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
+                    EndAt = startTime.Ticks
                     //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
                 };
 
@@ -88,7 +89,7 @@ public class GetDispatchList : LobbyMessage
                         Tid = dispatchtable[randomNumber].Id,
                         IsRun = 0,
                         StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
+                        EndAt = startTime.Ticks
                         //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
                     };
                     user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
@@ -117,7 +118,7 @@ public class GetDispatchList : LobbyMessage
                         Tid = dispatchtable[randomNumber].Id,
                         IsRun = 0,
                         StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
+                        EndAt = startTime.Ticks
                         //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
                     };
                     user.UserDispatchData.dispatchDatas.Add(netUserDispatch);

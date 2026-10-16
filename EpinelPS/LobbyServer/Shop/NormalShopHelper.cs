@@ -94,6 +94,10 @@ public static class NormalShopHelper
         if (shop.RenewType == RenewType.None)
             return 0;
 
+        // Daily-renewing shops now renew every hour
+        if (shop.RenewType == RenewType.AutoDay)
+            return new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).Ticks;
+
         return now.Date.Ticks;
     }
 
@@ -103,6 +107,9 @@ public static class NormalShopHelper
         // period` makes every product-list response different and causes the
         // client to immediately request /shop/productlist again in a loop.
         // Use a stable UTC boundary instead.
+        if (shop.RenewType == RenewType.AutoDay)
+            return new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(1).Ticks;
+
         var days = shop.RenewType switch
         {
             RenewType.AutoDay => Math.Max(1, shop.RenewValue),
