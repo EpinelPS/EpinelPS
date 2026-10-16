@@ -24,6 +24,11 @@ public class GameConfigRoot
     /// this is only for displaying the target version in admin console or cli
     /// </summary>
     public string TargetVersion { get; set; } = "";
+    /// <summary>
+    /// Optional custom path to ffmpeg executable for cutscene video optimization.
+    /// If null or empty, automatically resolves from system PATH, WinGet packages, or local tools/ directory.
+    /// </summary>
+    public string? FfmpegPath { get; set; }
 }
 
 public class StaticData
