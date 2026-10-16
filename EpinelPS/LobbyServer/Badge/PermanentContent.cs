@@ -1,3 +1,5 @@
+using EpinelPS.LobbyServer.Soloraid;
+
 namespace EpinelPS.LobbyServer.Badge;
 
 [GameRequest("/badge/permanentcontent")]
@@ -15,7 +17,9 @@ public class PermanentContent : LobbyMessage
         response.ChampionArenaBadgeData.NextSchedule = new();
         response.ChampionArenaBadgeData.ChampionArenaContentsState = ChampionArenaContentsState.SeasonClosed;
         response.ChampionArenaBadgeData.CurrentOrLastSeasonStartAt = new();
-        // TODO
+        int raidId = SoloRaidHelper.GetRaidId();
+        var soloRaidData = SoloRaidHelper.GetSoloRaidData(user, raidId);
+        response.TodaySoloRaidNormalPlayCount = soloRaidData?.RaidOpenCount ?? 0;
 
         await WriteDataAsync(response);
     }

@@ -8,11 +8,10 @@ public class GetInterceptData : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqGetInterceptData req = await ReadData<ReqGetInterceptData>();
+        _ = await ReadData<ReqGetInterceptData>();
         var user = GetUser();
 
-        int specialId = GetCurrentInterceptionIds();
-
+        int specialId = GetCurrentSpecialInterceptionId();
         ResGetInterceptData response = new()
         {
             NormalInterceptGroup = 1,
@@ -24,16 +23,22 @@ public class GetInterceptData : LobbyMessage
         await WriteDataAsync(response);
     }
 
-    private int GetCurrentInterceptionIds()
+    public static int GetCurrentSpecialInterceptionId()
     {
         var specialTable = GameData.Instance.InterceptSpecial;
         var specialBosses = specialTable.Values.Where(x => x.Group == 1).OrderBy(x => x.Order).ToList();
+        if (specialBosses.Count == 0) return 1;
 
-        var dayOfYear = DateTime.UtcNow.DayOfYear;
-        var specialIndex = dayOfYear % specialBosses.Count;
+        // Align with official daily reset time (JsonDb.Instance.ResetHourUtcTime = 20:00 UTC / 05:00 KST)
+        int resetHour = JsonDb.Instance.ResetHourUtcTime;
+        DateTime inGameDate = DateTime.UtcNow.AddHours(-resetHour).Date;
 
-        var specialId = specialBosses[specialIndex].Id;
-        return specialId;
+        // Continuous epoch counter from official NIKKE launch (Nov 4, 2022) to avoid leap-year discontinuities
+        DateTime epoch = new(2022, 11, 4);
+        int daysSinceLaunch = (inGameDate - epoch).Days;
+        if (daysSinceLaunch < 0) daysSinceLaunch = 0;
 
+        int specialIndex = daysSinceLaunch % specialBosses.Count;
+        return specialBosses[specialIndex].Id;
     }
 }

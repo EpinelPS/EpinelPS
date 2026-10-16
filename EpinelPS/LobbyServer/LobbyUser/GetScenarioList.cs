@@ -8,15 +8,16 @@ public class GetScenarioList : LobbyMessage
         ReqGetScenarioList req = await ReadData<ReqGetScenarioList>();
         User user = GetUser();
 
-        // todo what are bookmark scenarios?
-
-        // this returns a list of scenarios that user has completed
+        // this returns a list of scenarios that user has completed and bookmarked
         ResGetScenarioList response = new();
         foreach (string item in user.CompletedScenarios)
         {
             response.ScenarioList.Add(item);
         }
-
+        foreach (string item in user.BookmarkedScenarios)
+        {
+            response.BookmarkScenarioList.Add(item);
+        }
         await WriteDataAsync(response);
     }
 }

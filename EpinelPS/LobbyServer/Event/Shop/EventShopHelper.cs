@@ -153,12 +153,19 @@ public static class EventShopHelper
             CurrencyType currencyType = (CurrencyType)key;
             user.SubtractCurrency(currencyType, totalCurrencyPrice[key]);
             response.Currencies.Add(new NetUserCurrencyData() { Type = key, Value = user.GetCurrencyVal(currencyType) });
+            if (currencyType == CurrencyType.FreeCash)
+            {
+                response.Currencies.Add(new NetUserCurrencyData() { Type = (int)CurrencyType.ChargeCash, Value = user.GetCurrencyVal(CurrencyType.ChargeCash) });
+            }
         }
         foreach (int tid in totalItemPrice.Keys)
         {
             var item = user.Items.FirstOrDefault(i => i.ItemType == tid);
-            user.RemoveItemBySerialNumber(item.Isn, totalItemPrice[tid]);
-            response.Items.Add(new NetUserItemData() { Tid = tid, Count = user.Items.FirstOrDefault(i => i.ItemType == tid).Count, Isn = item.Isn });
+            if (item != null)
+            {
+                user.RemoveItemBySerialNumber(item.Isn, totalItemPrice[tid]);
+                response.Items.Add(new NetUserItemData() { Tid = tid, Count = user.Items.FirstOrDefault(i => i.ItemType == tid)?.Count ?? 0, Isn = item.Isn });
+            }
         }
     }
 
@@ -184,9 +191,11 @@ public static class EventShopHelper
         Logging.WriteLine($"totalCurrencyPrice: {JsonConvert.SerializeObject(totalCurrencyPrices)}", LogType.Debug);
         foreach (int currencyType in totalCurrencyPrices.Keys)
         {
-            var userCurrency = user.Currency.FirstOrDefault(x => x.Key == (CurrencyType)currencyType).Value;
-            if (userCurrency < totalCurrencyPrices[currencyType])
+            if (!user.CanSubtractCurrency((CurrencyType)currencyType, totalCurrencyPrices[currencyType]))
             {
+                long userCurrency = (CurrencyType)currencyType == CurrencyType.FreeCash
+                    ? user.GetCurrencyVal(CurrencyType.FreeCash) + user.GetCurrencyVal(CurrencyType.ChargeCash)
+                    : user.GetCurrencyVal((CurrencyType)currencyType);
                 Logging.WriteLine($"Insufficient funds: Have {userCurrency}, need {totalCurrencyPrices[currencyType]}");
                 return false;
             }
@@ -210,14 +219,52 @@ public static class EventShopHelper
     {
         if (eventId <= 0) return 0;
 
+        var contentsShopTable = GameData.Instance.ContentsShopTable;
+
         if (GameData.Instance.eventManagers.TryGetValue(eventId, out var eventRecord))
         {
-            if (eventRecord.EventShortcutId is not null && eventRecord.EventShortcutId != "")
+            // 1. Direct check: if eventRecord.EventShortcutId is a valid ContentsShopTable ID
+            if (int.TryParse(eventRecord.EventShortcutId, out int shortcutId) && contentsShopTable.ContainsKey(shortcutId))
             {
-                return Convert.ToInt32(eventRecord.EventShortcutId);
+                return shortcutId;
+            }
+
+            // 2. Child ShopEvent check (common for FieldHubEvents like 80900 Neverland, 81400 Beauty Full Shot, 81200 Last Kingdom)
+            var childShopEvent = GameData.Instance.eventManagers.Values.FirstOrDefault(e =>
+                (e.ParentsEventId == eventId || e.SetField == eventId) && e.EventSystemType == EventSystemType.ShopEvent);
+            if (childShopEvent != null && int.TryParse(childShopEvent.EventShortcutId, out int childShortcutId) && contentsShopTable.ContainsKey(childShortcutId))
+            {
+                return childShortcutId;
+            }
+
+            // 3. Parent event's shop check (if this is a child event whose parent has a ShopEvent)
+            if (eventRecord.ParentsEventId > 0)
+            {
+                var parentShopEvent = GameData.Instance.eventManagers.Values.FirstOrDefault(e =>
+                    (e.ParentsEventId == eventRecord.ParentsEventId || e.SetField == eventRecord.ParentsEventId) && e.EventSystemType == EventSystemType.ShopEvent);
+                if (parentShopEvent != null && int.TryParse(parentShopEvent.EventShortcutId, out int parentShortcutId) && contentsShopTable.ContainsKey(parentShortcutId))
+                {
+                    return parentShortcutId;
+                }
             }
         }
-        log.Warn($"EventManager not found for EventId: {eventId}");
+
+        // 4. Standard formula: 9000000 + (eventId % 1000) * 100 + 1 (e.g. 40120 -> 9012001, 40105 -> 9010501)
+        int formulaShopId = 9000000 + (eventId % 1000) * 100 + 1;
+        if (contentsShopTable.ContainsKey(formulaShopId))
+        {
+            return formulaShopId;
+        }
+
+        // 5. Bundle lookup: BundleId == 90000 + (eventId % 1000)
+        int bundleId = 90000 + (eventId % 1000);
+        var shopByBundle = contentsShopTable.Values.FirstOrDefault(s => s.BundleId == bundleId);
+        if (shopByBundle != null)
+        {
+            return shopByBundle.Id;
+        }
+
+        log.Warn($"Event shop not found for EventId: {eventId}");
         return 0;
     }
 
@@ -284,26 +331,31 @@ public static class EventShopHelper
 
     public static bool UpdateCurrency(User user, int priceId, int priceValue, int quantity, ref ResEventShopBuyProduct response)
     {
-        long totalPrice = priceValue * quantity;
-        if (!user.Currency.TryGetValue((CurrencyType)priceId, out var currentAmount))
+        long totalPrice = (long)priceValue * quantity;
+        CurrencyType currencyType = (CurrencyType)priceId;
+        if (!user.CanSubtractCurrency(currencyType, totalPrice))
         {
+            long currentAmount = currencyType == CurrencyType.FreeCash
+                ? user.GetCurrencyVal(CurrencyType.FreeCash) + user.GetCurrencyVal(CurrencyType.ChargeCash)
+                : user.GetCurrencyVal(currencyType);
             Logging.WriteLine($"Insufficient funds: Have {currentAmount}, need {totalPrice}");
             return false;
         }
 
-        if (currentAmount < totalPrice)
-        {
-            Logging.WriteLine($"Insufficient funds: Have {currentAmount}, need {totalPrice}");
-            return false;
-        }
-        CurrencyType currencyType = (CurrencyType)priceId; // Assuming PriceId maps directly to CurrencyType
-        long newAmount = currentAmount - totalPrice; // calculate new amount
-        user.Currency[currencyType] = newAmount; // update user currency
-        response.Currencies.Add(new NetUserCurrencyData // Update response currency
+        user.SubtractCurrency(currencyType, totalPrice);
+        response.Currencies.Add(new NetUserCurrencyData
         {
             Type = (int)currencyType,
-            Value = newAmount
+            Value = user.GetCurrencyVal(currencyType)
         });
+        if (currencyType == CurrencyType.FreeCash)
+        {
+            response.Currencies.Add(new NetUserCurrencyData
+            {
+                Type = (int)CurrencyType.ChargeCash,
+                Value = user.GetCurrencyVal(CurrencyType.ChargeCash)
+            });
+        }
         return true;
     }
 

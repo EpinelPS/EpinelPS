@@ -31,18 +31,14 @@ public class ProceedMsg : LobbyMessage
             user.SubQuestData.TryGetValue(subQuest.Id, out bool done) && done;
 
         int state;
-        if (isSubQuestDone)
+        if (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0)
         {
-            // Subquest reward has already been claimed: maintain completed state (State = 2)
-            // so the client knows this commission dialog is finished and does not re-pop the "Completed" banner.
-            state = 2;
-        }
-        else if (msgToSave.Value.Value.MessageType == MessengerMessageType.Reward || msgToSave.Value.Value.RewardId != 0)
-        {
-            state = 1;
+            // Subquest reward messages: if already claimed (isSubQuestDone), maintain State = 2; else State = 1 (ready to claim)
+            state = isSubQuestDone ? 2 : 1;
         }
         else
         {
+            // Normal dialog messages always use State = 0 so players can view and step through conversations
             state = 0;
         }
 

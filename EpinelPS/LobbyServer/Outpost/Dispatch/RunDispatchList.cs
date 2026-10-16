@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Utils;
 namespace EpinelPS.LobbyServer.Outpost;
@@ -42,6 +42,13 @@ public class RunDispatchList : LobbyMessage
 
             response.SuccessTidList.Add(item.Tid);
         }
+
+        // Daily mission 10011 (Send 3 dispatches) and Weekly mission 20005 (Send 10 dispatches)
+        if (response.SuccessTidList.Count > 0)
+        {
+            user.AddTrigger(Trigger.SendDispatch, response.SuccessTidList.Count);
+        }
+
         JsonDb.Save();
         await WriteDataAsync(response);
     }

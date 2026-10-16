@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using EpinelPS.Data;
 
 namespace EpinelPS.LobbyServer.Tower;
@@ -12,12 +12,15 @@ public class GetTowerData : LobbyMessage
         ResGetTowerData response = new();
         User user = GetUser();
 
-        Dictionary<CorporationTowerType, int>? towers = user.ResetableData.TowerCount;
+        user.ResetableData ??= new();
+        user.ResetableData.TowerCount ??= Enum.GetValues<CorporationTowerType>().ToDictionary(t => t, _ => 0);
+
+        Dictionary<CorporationTowerType, int> towers = user.ResetableData.TowerCount;
         if (towers.Count == 0)
         {
             towers = Enum.GetValues<CorporationTowerType>()
-            .Cast<CorporationTowerType>()
-            .ToDictionary(t => t, t => 0);
+                .ToDictionary(t => t, _ => 0);
+            user.ResetableData.TowerCount = towers;
         }
 
         // Tower Schedules
@@ -38,7 +41,7 @@ public class GetTowerData : LobbyMessage
 
             towerData.Add(towerType == CorporationTowerType.ALL
                 ? new NetTowerData { Type = (int)towerType }
-                : new NetTowerData { Type = (int)towerType, RemainCount = 3 - count });
+                : new NetTowerData { Type = (int)towerType, RemainCount = Math.Max(0, 3 - count) });
 
             towerData.Last().Schedules.Add(towerSchedules[towerType]);
         }

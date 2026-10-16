@@ -30,6 +30,12 @@ public class DeleteJukeboxPlaylist : LobbyMessage
                 }
             }
 
+            // remove deleted playlist references from wallpaper playlists
+            if (user.WallpaperPlaylistList.Any(wp => wp.PlaylistUId == req.JukeboxPlaylistUid))
+            {
+                user.WallpaperPlaylistList = [.. user.WallpaperPlaylistList.Where(wp => wp.PlaylistUId != req.JukeboxPlaylistUid)];
+            }
+
             JsonDb.Save();
         }
 

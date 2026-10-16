@@ -1,6 +1,7 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Interfaces;
+using EpinelPS.LobbyServer.Mission;
 using EpinelPS.Utils;
 using Microsoft.EntityFrameworkCore;
 using Google.Protobuf;
@@ -24,6 +25,7 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
     /// <param name="req"></param>
     /// <returns></returns>
     [Route("/v1/logout")]
+    [Route("/v1/auth/logout")]
     [HttpPost]
     public ActionResult<ResLogout> Logout([FromBodyProtobuf] ReqLogout req)
     {
@@ -121,6 +123,7 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
         };
 
         user.ResetDataIfNeeded();
+        MissionReconciler.ReconcileAll(user);
 
         return response;
     }

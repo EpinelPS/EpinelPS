@@ -37,7 +37,11 @@ public class EnterFinishSubquest : LobbyMessage
         {
             foreach (var msg in user.MessengerData.Where(message => message.ConversationId == opener.Value.EndMessengerConversationId))
             {
-                msg.State = 2;
+                if (GameData.Instance.Messages.TryGetValue(msg.MessageId, out var rec) &&
+                    (rec.MessageType == MessengerMessageType.Reward || rec.RewardId != 0))
+                {
+                    msg.State = 2;
+                }
             }
         }
 
@@ -48,8 +52,11 @@ public class EnterFinishSubquest : LobbyMessage
 
         if (existingMessage != null)
         {
-            if (isCompleted)
+            if (isCompleted && GameData.Instance.Messages.TryGetValue(existingMessage.MessageId, out var rec) &&
+                (rec.MessageType == MessengerMessageType.Reward || rec.RewardId != 0))
+            {
                 existingMessage.State = 2;
+            }
             response.Message = existingMessage;
         }
         else

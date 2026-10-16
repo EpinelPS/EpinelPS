@@ -27,7 +27,6 @@ public class SetJukeboxPlaylist : LobbyMessage
                 if (setting.Type == NetJukeboxBgmType.JukeboxPlaylist && setting.TableId == req.JukeboxPlaylistUid)
                 {
                     response.JukeboxBgm.Add(JukeboxUtils.BuildCurrentBgm(user, location));
-                    break;
                 }
             }
         }

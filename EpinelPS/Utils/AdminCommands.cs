@@ -63,16 +63,14 @@ public class AdminCommands
     }
     public static RunCmdResponse CompleteAllStages(ulong userId)
     {
-        // Find max chapter number
-        var chapters = GameData.Instance.ChapterCampaignData.Values;
-        int maxChapter = chapters.Max(c => c.Chapter);
+        // Find max chapter number that actually has valid normal main stages
+        var validChapters = GameData.Instance.ChapterCampaignData.Values
+            .Where(c => GetNormalMainStages(c.Chapter).Count > 0)
+            .ToList();
 
-        // Find max stage count for that chapter (main stages)
-        // GetStageIdsForChapter uses a zero-based chapter index, while the
-        // campaign table and admin command use the user-facing one-based
-        // chapter number.
+        int maxChapter = validChapters.Count > 0 ? validChapters.Max(c => c.Chapter) : 32;
+
         int maxStage = GetNormalMainStages(maxChapter).Count;
-
         if (maxStage == 0) maxStage = 1;
 
         return CompleteStage(userId, $"{maxChapter}-{maxStage}");
@@ -364,6 +362,14 @@ public class AdminCommands
             .OrderBy(stage => stage.Id)];
     }
 
+    public static List<CampaignStageRecord> GetHardMainStages(int campaignChapter)
+    {
+        return [.. GameData.Instance.GetStageIdsForChapter(campaignChapter, false)
+            .Select(stageId => GameData.Instance.GetStageData(stageId)
+                ?? throw new Exception("failed to find stage " + stageId))
+            .OrderBy(stage => stage.Id)];
+    }
+
 
     /// <summary>
     /// Cheat: enroll every subquest and create its starting Messenger opener.
@@ -405,12 +411,142 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    /// <summary>
+    /// Blessed dev royalty, April Fools combat gods, and test lab relics.
+    /// Shift Up hid them in the basement, but players can summon them via the dedicated 'add-dev-characters' command.
+    /// </summary>
+    public static readonly HashSet<int> DevCharacterWhitelist =
+    [
+        190101,  // Shifty (April Fools 2023 - desk worker turned lethal battlefield operative)
+        290701,  // Shifty Mecha (April Fools 2024 - colossal armored Shifty)
+        299301,  // Syuen (April Fools 2024 - Missilis CEO taking matters into her own gremlin hands)
+        261001,  // Shifty Alt (dev testing variant with combat data)
+        2500601, // Rare Dorothy (ResId 5006, NameCode 1027 - cyan sketch doodle from Shift Up's internal testing lab)
+        399901   // Marian (the one true prologue Marian before tragedy struck)
+    ];
+
+    /// <summary>
+    /// Permanent engine battle dummies and cutscene clones.
+    /// Shift Up created these strictly for scripted sequences and tutorial battles.
+    /// They have amputated skillsets or duplicate identities and are never legitimate playable characters.
+    /// </summary>
+    public static readonly HashSet<int> BrokenCharacterBlacklist =
+    [
+        300198, 300199, // Rapi dummy tutorial battle clones with amputated skillsets
+        300598, 300599, // Anis dummy tutorial battle clones
+        399902, 399903, 399904 // Extra prologue cutscene Marians spawned by the duplicate dimension
+    ];
+
+    /// <summary>
+    /// Evaluates dynamically whether a character is an officially released, playable Nikke
+    /// in the loaded static data (must be visible in client with standard base GradeCore 1, 101, or 201).
+    /// 
+    /// Dynamic & Future-Proof:
+    /// As long as Belorta Witch (or any future unreleased Alter) is unreleased in static data, this returns false.
+    /// The moment Shift Up ships the Halloween update or future patches with official client assets and marks her IsVisible: true,
+    /// this dynamically returns true — allowing her to seamlessly appear in AddAllCharacters and protecting her from being purged!
+    /// </summary>
+    public static bool IsReleasedPlayableCharacter(int nameCode)
+    {
+        return GameData.Instance.CharacterTable.Values.Any(c =>
+            c.NameCode == nameCode &&
+            c.IsVisible &&
+            (c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201));
+    }
+
+    /// <summary>
+    /// Exorcises corrupted entities, unreleased ghosts, and clone armies from the user's roster.
+    /// Vaporizes unreleased entities lacking client assets (like Belorta Pumpkin Witch currently)
+    /// across all core ranks, strips their cursed bond records, and deduplicates identical NameCodes.
+    /// 
+    /// Note:
+    /// - Whitelisted dev characters (Shifty, Syuen, Rare Dorothy) are preserved.
+    /// - Future Alters: When Belorta SSR or any future character is officially released in game updates,
+    ///   IsReleasedPlayableCharacter(nameCode) automatically becomes true, so they will NEVER be purged once released!
+    /// </summary>
+    public static int SanitizeUserCharacters(User user)
+    {
+        int removedCount = 0;
+
+        // 1. Banish strictly blacklisted permanent engine dummies into the abyss
+        removedCount += user.Characters.RemoveAll(c => BrokenCharacterBlacklist.Contains(c.Tid));
+
+        // 2. Banish unreleased / unfinished ghost entities that have no released playable form in the game
+        // (unless intentionally whitelisted dev/novelty units like Shifty/Syuen/Rare Dorothy)
+        removedCount += user.Characters.RemoveAll(c =>
+        {
+            if (DevCharacterWhitelist.Contains(c.Tid)) return false;
+            if (!GameData.Instance.CharacterTable.TryGetValue(c.Tid, out var rec)) return true; // Invalid ID
+            return !IsReleasedPlayableCharacter(rec.NameCode);
+        });
+
+        // 3. Terminate the clone wars: ensure only one character exists per NameCode
+        var groupedByNameCode = user.Characters
+            .GroupBy(c => GameData.Instance.CharacterTable.TryGetValue(c.Tid, out var rec) ? rec.NameCode : 0)
+            .Where(g => g.Key != 0 && g.Count() > 1)
+            .ToList();
+
+        foreach (var group in groupedByNameCode)
+        {
+            // The Highlander rule: There can be only one. Keep whitelisted/highest level/grade survivor.
+            var keeper = group
+                .OrderByDescending(c => DevCharacterWhitelist.Contains(c.Tid))
+                .ThenByDescending(c => c.Level)
+                .ThenByDescending(c => c.Grade)
+                .First();
+
+            foreach (var dupe in group.Where(c => c != keeper).ToList())
+            {
+                user.Characters.Remove(dupe);
+                removedCount++;
+            }
+        }
+
+        // 4. Cleanse bonds for unreleased ghosts and deduplicate BondInfo so no Nikke has split personality disorder
+        user.BondInfo.RemoveAll(b => !IsReleasedPlayableCharacter(b.NameCode) && !DevCharacterWhitelist.Any(id => GameData.Instance.CharacterTable.TryGetValue(id, out var r) && r.NameCode == b.NameCode));
+
+        var duplicateBonds = user.BondInfo
+            .GroupBy(b => b.NameCode)
+            .Where(g => g.Count() > 1)
+            .ToList();
+
+        foreach (var group in duplicateBonds)
+        {
+            var keeperBond = group.OrderByDescending(b => b.Lv).First();
+            user.BondInfo.RemoveAll(b => b.NameCode == group.Key && b != keeperBond);
+        }
+
+        if (removedCount > 0)
+        {
+            Logging.WriteLine($"[Sanitizer] Banished {removedCount} cursed/duplicate character(s) from user {user.ID}'s roster.", LogType.Info);
+            JsonDb.Save();
+        }
+
+        return removedCount;
+    }
+
+    /// <summary>
+    /// Option A: Grants all normal, standard release characters (SSR base grade 1, SR base grade 101, R base grade 201).
+    /// Dev characters, April Fools units, and test lab doodles are excluded to keep the standard roster 100% clean and stable.
+    /// 
+    /// Dynamic & Future-Proof:
+    /// Unreleased prototypes (like Halloween Belorta SSR right now) are automatically hidden because IsVisible is false.
+    /// The moment the game is updated for Halloween or future events and Shift Up officially releases them (IsVisible: true),
+    /// they will immediately appear in AddAllCharacters without requiring any manual code changes!
+    /// </summary>
     public static RunCmdResponse AddAllCharacters(User user)
     {
-        // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201
+        // Cleanse any pre-existing cursed inventory baggage first
+        SanitizeUserCharacters(user);
+
+        // Visible release characters only (SSR base grade 1, SR base grade 101, R base grade 201).
+        // Dev characters (Shifty/Syuen/Rare Dorothy) are excluded (summoned via AddDevCharacters).
         List<CharacterRecord> allCharacters = [.. GameData.Instance.CharacterTable.Values
-            .GroupBy(c => c.NameCode)  // Group by NameCode to treat same NameCode as one character                     3999 = marian
-            .SelectMany(g => g.Where(c => c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201 || c.NameCode == 3999))];
+            .Where(c => !BrokenCharacterBlacklist.Contains(c.Id))
+            .Where(c => !DevCharacterWhitelist.Contains(c.Id))
+            .Where(c => c.IsVisible && (c.GradeCoreId == 1 || c.GradeCoreId == 101 || c.GradeCoreId == 201))
+            .GroupBy(c => c.NameCode)
+            .Select(g => g.First())];
 
         foreach (CharacterRecord? character in allCharacters)
         {
@@ -428,7 +564,10 @@ public class AdminCommands
                     UltimateLevel = 1
                 });
 
-                user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
+                if (!user.BondInfo.Any(b => b.NameCode == character.NameCode))
+                {
+                    user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
+                }
                 user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
                 user.AddTrigger(Trigger.ObtainCharacterNew, 1, 0);
                 if (character.OriginalRare == OriginalRareType.SSR)
@@ -440,6 +579,54 @@ public class AdminCommands
         // itself is gated by an already-completed campaign/event trigger.
         MessengerMessageCreator.CreateAllEligibleOpeners(user);
 
+        JsonDb.Save();
+
+        return RunCmdResponse.OK;
+    }
+
+    /// <summary>
+    /// Summons the clandestine dev squad: April Fools combat gods (Shifty, Mecha Shifty, Syuen, Shifty Alt),
+    /// the legendary cyan sketch Rare Dorothy, and prologue Marian.
+    /// Unreleased/broken abominations like Belorta Pumpkin Witch are strictly excluded from this ritual.
+    /// </summary>
+    public static RunCmdResponse AddDevCharacters(User user)
+    {
+        // Cleanse any cursed residue first (Belorta Witch etc.)
+        SanitizeUserCharacters(user);
+
+        List<CharacterRecord> devCharacters = [.. GameData.Instance.CharacterTable.Values
+            .Where(c => DevCharacterWhitelist.Contains(c.Id))
+            .GroupBy(c => c.NameCode)
+            .Select(g => g.First())];
+
+        foreach (CharacterRecord? character in devCharacters)
+        {
+            if (!user.HasCharacter(character.Id))
+            {
+                user.Characters.Add(new CharacterModel()
+                {
+                    CostumeId = 0,
+                    Csn = user.GenerateUniqueCharacterId(),
+                    Grade = 0,
+                    Level = 1,
+                    Skill1Lvl = 1,
+                    Skill2Lvl = 1,
+                    Tid = character.Id,
+                    UltimateLevel = 1
+                });
+
+                if (!user.BondInfo.Any(b => b.NameCode == character.NameCode))
+                {
+                    user.BondInfo.Add(new() { NameCode = character.NameCode, Lv = 1 });
+                }
+                user.AddTrigger(Trigger.ObtainCharacter, 1, character.NameCode);
+                user.AddTrigger(Trigger.ObtainCharacterNew, 1, 0);
+                if (character.OriginalRare == OriginalRareType.SSR)
+                    user.AddTrigger(Trigger.ObtainCharacterSSR, 1);
+            }
+        }
+
+        MessengerMessageCreator.CreateAllEligibleOpeners(user);
         JsonDb.Save();
 
         return RunCmdResponse.OK;
@@ -764,6 +951,8 @@ public class AdminCommands
         {
             character.Level = level;
         }
+        user.AddTrigger(Trigger.CharacterLevelMax, level);
+        user.AddTrigger(Trigger.CharacterLevelUpCount, 1);
         Console.WriteLine("Set all characters' level to " + level);
         JsonDb.Save();
         return RunCmdResponse.OK;

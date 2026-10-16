@@ -13,9 +13,16 @@ public class MoveBuilding : LobbyMessage
         NetUserOutpostData? src = user.OutpostBuildings.FirstOrDefault(x => x.SlotId == req.SrcPositionId);
         NetUserOutpostData? dst = user.OutpostBuildings.FirstOrDefault(x => x.SlotId == req.DstPositionId);
 
-        if (src != null && dst != null)
+        if (src != null)
         {
-            (src.SlotId, dst.SlotId) = (dst.SlotId, src.SlotId);
+            if (dst != null)
+            {
+                (src.SlotId, dst.SlotId) = (dst.SlotId, src.SlotId);
+            }
+            else
+            {
+                src.SlotId = req.DstPositionId;
+            }
             JsonDb.Save();
         }
 

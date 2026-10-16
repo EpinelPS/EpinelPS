@@ -40,6 +40,13 @@ public class BuyMultipleProduct : LobbyMessage
             GrantProduct(user, ref response, purchase.Product, purchase.Quantity);
         }
 
+        // Daily (10019), Weekly (20006), and Achievement: Buy item from General Shop
+        if (req.ShopCategory == (int)ShopCategoryType.ShopNormal || req.ShopCategory == 1)
+        {
+            int totalQuantity = purchased.Sum(p => p.Quantity);
+            user.AddTrigger(Trigger.MainShopBuy, totalQuantity);
+        }
+
         JsonDb.Save();
         await WriteDataAsync(response);
     }

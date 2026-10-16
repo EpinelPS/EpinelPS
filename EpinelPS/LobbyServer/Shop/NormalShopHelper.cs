@@ -189,6 +189,14 @@ public static class NormalShopHelper
                 Type = cost.Key,
                 Value = user.GetCurrencyVal((CurrencyType)cost.Key),
             });
+            if ((CurrencyType)cost.Key == CurrencyType.FreeCash)
+            {
+                currencies.Add(new NetUserCurrencyData
+                {
+                    Type = (int)CurrencyType.ChargeCash,
+                    Value = user.GetCurrencyVal(CurrencyType.ChargeCash),
+                });
+            }
         }
 
         foreach (var cost in itemCosts)

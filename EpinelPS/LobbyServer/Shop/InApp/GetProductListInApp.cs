@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Models;
 
 namespace EpinelPS.LobbyServer.Shop.InApp;
 
@@ -49,6 +50,30 @@ public class GetProductList : LobbyMessage
                 Id = 10001,
                 StartDate = now.Date.Ticks,
                 EndDate = now.Date.AddDays(2).Ticks,
+            });
+        }
+
+        User user = GetUser();
+        var sessionClaims = InAppPurchaseHelper.GetSessionClaimedPackages(user.ID);
+        foreach (var (listTid, claimInfo) in sessionClaims)
+        {
+            response.BuyDataList.Add(new NetInAppShopBuyData
+            {
+                ProductType = claimInfo.ProductType,
+                ShopTid = claimInfo.ShopTid,
+                BuyCount = claimInfo.BuyCount,
+                ListTid = listTid,
+            });
+        }
+
+        foreach (var (shopTid, count) in user.EventInAppShopBuyCounts)
+        {
+            response.BuyDataList.Add(new NetInAppShopBuyData
+            {
+                ProductType = (int)ProductType.EventInAppShop,
+                ShopTid = shopTid,
+                BuyCount = count,
+                ListTid = shopTid,
             });
         }
 

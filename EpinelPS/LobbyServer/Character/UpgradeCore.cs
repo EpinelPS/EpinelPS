@@ -60,10 +60,15 @@ public class CoreUpgrade : LobbyMessage
                 user.RemoveItemBySerialNumber(req.Isn, req.Count);
                 response.Items.Add(NetUtils.ToNet(bodyItem));
 
-                if (newCharacter.GradeCoreId == 103 || newCharacter.GradeCoreId == 11 || newCharacter.GradeCoreId == 201)
-                {
-                    user.AddTrigger(Trigger.CharacterGradeMax, 1);
-                }
+                // Weekly mission milestone: Limit Break / Core Upgrade NIKKE
+                user.AddTrigger(Trigger.CharacterGradeUpCount, req.Count);
+
+                // Max limit break (3-star) achievement
+                user.AddTrigger(Trigger.CharacterGradeMax, 3);
+
+                // Core break milestone achievement (Core 1..7)
+                int coreLevel = targetCharacter.Grade > 3 ? targetCharacter.Grade - 3 : req.Count;
+                user.AddTrigger(Trigger.CharacterCore, Math.Min(coreLevel, 7));
 
                 JsonDb.Save();
             }

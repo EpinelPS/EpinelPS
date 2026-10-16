@@ -79,6 +79,13 @@ public class DoCounsel : LobbyMessage
             };
         }
 
+        // Daily mission (10012) and Weekly mission (20009): Advise / Counsel NIKKE
+        user.AddTrigger(Trigger.CharacterCounsel, 1);
+
+        // Achievement milestones: Reach bond / attractive level
+        int currentLv = response.Attractive?.Lv ?? 1;
+        user.AddTrigger(Trigger.CharacterAttractiveLevelMax, currentLv, 0);
+
         JsonDb.Save();
 
         await WriteDataAsync(response);

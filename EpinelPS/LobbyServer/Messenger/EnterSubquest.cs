@@ -17,6 +17,7 @@ public class EnterSubquest : LobbyMessage
         if (opener.Value == null)
         {
             Logging.Warn($"Subquest {req.SubQuestId} not found.");
+            await WriteDataAsync(response);
             return;
         }
 
@@ -35,6 +36,7 @@ public class EnterSubquest : LobbyMessage
         if (conversation.Value == null)
         {
             Logging.Warn($"Subquest {req.SubQuestId} not found.");
+            await WriteDataAsync(response);
             return;
         }
 

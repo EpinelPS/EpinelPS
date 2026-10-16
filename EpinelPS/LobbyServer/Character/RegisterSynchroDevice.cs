@@ -11,6 +11,13 @@ public class RegisterSynchroDevice : LobbyMessage
         User user = GetUser();
         CharacterModel? targetCharacter = user.GetCharacterBySerialNumber(req.Csn) ?? throw new Exception("target character does not exist");
         ResSynchroRegister response = new();
+        if (user.SynchroDeviceUpgraded && req.Slot <= 5)
+        {
+            Console.WriteLine("Cannot replace locked standard character in enhanced synchro device");
+            await WriteDataAsync(response);
+            return;
+        }
+
         foreach (SynchroSlot item in user.SynchroSlots)
         {
             if (item.Slot == req.Slot)
@@ -28,13 +35,13 @@ public class RegisterSynchroDevice : LobbyMessage
                         Csn = item.CharacterSerialNumber,
                         CostumeId = targetCharacter.CostumeId,
                         Grade = targetCharacter.Grade,
-                        Lv = user.GetSynchroLevel(),
+                        Lv = targetCharacter.Level,
                         Skill1Lv = targetCharacter.Skill1Lvl,
                         Skill2Lv = targetCharacter.Skill2Lvl,
                         Tid = targetCharacter.Tid,
                         UltiSkillLv = targetCharacter.UltimateLevel
                     };
-                    response.Slot = new NetSynchroSlot() { AvailableRegisterAt = item.AvailableAt, Csn = item.CharacterSerialNumber, Slot = item.Slot };
+                    response.Slot = new NetSynchroSlot() { AvailableRegisterAt = item.AvailableAt != 0 ? item.AvailableAt : 1, Csn = item.CharacterSerialNumber, Slot = item.Slot };
                 }
             }
         }

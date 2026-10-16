@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.TriggerController;
@@ -15,7 +15,10 @@ public class FinishMainQuest : LobbyMessage
 
         var completedQuest = GameData.Instance.GetMainQuestByTableId(req.Tid) ?? throw new Exception("Quest not found");
 
-        user.AddTrigger(Trigger.CampaignClear, 1, completedQuest.ConditionId[0].ConditionId);
+        if (completedQuest.ConditionId != null && completedQuest.ConditionId.Count > 0)
+        {
+            user.AddTrigger(Trigger.CampaignClear, 1, completedQuest.ConditionId[0].ConditionId);
+        }
         user.AddTrigger(Trigger.MainQuestClear, 1, completedQuest.Id);
 
         JsonDb.Save();

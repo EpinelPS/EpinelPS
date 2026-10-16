@@ -167,6 +167,7 @@
       "skipStages": "跳过关卡",
       "characters": "角色:",
       "addAllChars": "添加所有角色",
+      "addDevChars": "添加开发者/愚人节角色",
       "addChar": "添加角色",
       "setCharLevels": "设置角色等级",
       "setSkillLevels": "设置技能等级",

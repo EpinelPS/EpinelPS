@@ -23,6 +23,10 @@ public class ClearTacticAcademyLesson : LobbyMessage
             user.SubtractCurrency((CurrencyType)x.CurrencyId, x.CurrencyValue);
 
             user.CompletedTacticAcademyLessons.Add(req.LessonTid);
+            if (req.LessonTid == 9004)
+            {
+                user.AddTrigger(Trigger.TacticAcademyFinish94, 1);
+            }
 
             ProcessLessonReward(user, x);
 

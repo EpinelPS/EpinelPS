@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Mission;
+namespace EpinelPS.LobbyServer.Mission;
 
 [GameRequest("/mission/getrewarded/all")]
 public class GetAllRewards : LobbyMessage
@@ -7,6 +7,10 @@ public class GetAllRewards : LobbyMessage
     {
         ReqGetRewardedData req = await ReadData<ReqGetRewardedData>();
         User user = GetUser();
+
+        // Ensure daily and weekly reset timestamps are honored before returning claimed lists
+        user.ResetDataIfNeeded();
+        MissionReconciler.ReconcileAll(user);
 
         ResGetRewardedData response = new();
 

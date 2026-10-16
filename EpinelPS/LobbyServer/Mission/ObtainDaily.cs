@@ -26,25 +26,35 @@ public class ObtainDaily : LobbyMessage
                 continue;
             }
 
-            if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key)) throw new Exception("unknown TID");
+            if (!GameData.Instance.TriggerTable.TryGetValue(item, out TriggerRecord? key))
+            {
+                Logging.Warn($"[ObtainDaily] Unknown daily mission TID: {item}");
+                continue;
+            }
 
             user.ResetableData.CompletedDailyMissions.Add(item);
 
             if (key.RewardId != 0)
             {
-                // Actual reward
-                RewardRecord rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId) ?? throw new Exception("unable to lookup reward");
-                rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
+                // Milestone chest with direct rewards
+                RewardRecord? rewardRecord = GameData.Instance.GetRewardTableEntry(key.RewardId);
+                if (rewardRecord != null)
+                {
+                    rewards.Add(RewardUtils.RegisterRewardsForUser(user, rewardRecord));
+                }
             }
             else
             {
-                // Point reward
+                // Daily task granting mission points
                 total_points += key.PointValue;
             }
         }
 
-        user.AddTrigger(Trigger.PointRewardDaily, total_points);
-        user.ResetableData.DailyMissionPoints += total_points;
+        if (total_points > 0)
+        {
+            user.AddTrigger(Trigger.PointRewardDaily, total_points);
+            user.ResetableData.DailyMissionPoints += total_points;
+        }
 
         response.Reward = NetUtils.MergeRewards(rewards, user);
         response.EventBonusReward = new() { PassPoint = new() };

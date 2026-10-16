@@ -1,4 +1,4 @@
-﻿using EpinelPS.Data;
+using EpinelPS.Data;
 using EpinelPS.LobbyServer.Event;
 using EpinelPS.Utils;
 using log4net;
@@ -30,10 +30,20 @@ public class GetActiveEventPassData : LobbyMessage
         }
 
         List<int> passIds = [];
+        var allEventManagers = GameData.Instance.eventManagers.Values.ToList();
         foreach (var banner in lobbyPrivateBanners)
         {
-            passIds.AddRange(GameData.Instance.eventManagers.Values.Where(em => em.SetField == banner.EventId && em.EventSystemType == EventSystemType.EventPass).Select(em => em.Id));
+            passIds.AddRange(allEventManagers.Where(em => (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId) && em.EventSystemType == EventSystemType.EventPass).Select(em => em.Id));
         }
+
+        // Safeguard: Only return passes whose EventId is in the active event list sent to the client.
+        // If an event pass is returned whose EventId is not in ResGetEventList, the client's EventPassData.get_IsExpire()
+        // crashes with NullReferenceException because this.Event is null, breaking the lobby Home view!
+        var activeEventList = new ResGetEventList();
+        EventHelper.AddEvents(user, ref activeEventList);
+        var activeEventIds = activeEventList.EventList.Select(e => e.Id).ToHashSet();
+
+        passIds = passIds.Where(activeEventIds.Contains).Distinct().ToList();
         log.Debug($"Active event pass IDs from banners: {JsonConvert.SerializeObject(passIds)}");
         if (passIds.Count == 0)
         {

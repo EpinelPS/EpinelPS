@@ -1,4 +1,4 @@
-﻿using EpinelPS.Database;
+using EpinelPS.Database;
 
 namespace EpinelPS.LobbyServer.Badge;
 
@@ -12,9 +12,14 @@ public class DeleteBadge : LobbyMessage
 
         ResDeleteBadge response = new();
 
+        bool hasUnclaimedMail = user.MailDatas.Values.Any(m => m.State == 1 && m.HasReward);
+
         foreach (long badgeId in req.BadgeSeqList)
         {
-            user.Badges.RemoveAll(x => x.Seq == badgeId);
+            // Protect Mailbox badge: If the player still has unclaimed reward mail, do NOT delete the Mailbox badge!
+            // This prevents client automatic badge acknowledgment from extinguishing the red dot
+            // while rewards are still uncollected.
+            user.Badges.RemoveAll(x => x.Seq == badgeId && (x.BadgeContent != BadgeContents.Mailbox || !hasUnclaimedMail));
         }
 
         JsonDb.Save();

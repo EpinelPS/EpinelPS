@@ -80,6 +80,7 @@ public class EquipmentAwakeningData
 public class EventData
 {
     public List<string> CompletedScenarios { get; set; } = [];
+    public List<string> BookmarkedScenarios { get; set; } = [];
     public List<int> ClearedStages { get; set; } = []; // List of cleared stage IDs
     public int Diff { get; set; } = 0; // Default value for Diff
     public int LastStage { get; set; } = 0; // Default value for LastStage
@@ -280,12 +281,13 @@ public class ResetableData
     public Dictionary<CorporationTowerType, int> TowerCount { get; set; } = System.Enum.GetValues<CorporationTowerType>().ToDictionary(t => t, _ => 0);
     public Dictionary<int, int> DailyCounselCount { get; set; } = [];
     public int DispatchCount { get; set; } = 0;
-
+    public Dictionary<int, long> InterceptDailyClearData { get; set; } = [];
 }
 public class WeeklyResetableData
 {
     public List<int> CompletedWeeklyMissions { get; set; } = [];
     public int WeeklyMissionPoints { get; set; }
+    public Dictionary<int, long> InterceptAnomalousClearData { get; set; } = [];
 }
 public class OutpostBuffs
 {
@@ -375,6 +377,17 @@ public class BadgeModel
     public NetBadge ToNet()
     {
         return new NetBadge()
+        {
+            BadgeContent = BadgeContent,
+            BadgeGuid = ByteString.CopyFrom(new Guid(BadgeGuid).ToByteArray()),
+            Location = Location,
+            Seq = Seq
+        };
+    }
+
+    public NetUniqueBadge ToUniqueNet()
+    {
+        return new NetUniqueBadge()
         {
             BadgeContent = BadgeContent,
             BadgeGuid = ByteString.CopyFrom(new Guid(BadgeGuid).ToByteArray()),
@@ -574,6 +587,7 @@ public class MiniGameScenarios
 {
     public int ArcadeId { get; set; }
     public List<string> CompletedScenarios { get; set; } = [];
+    public List<string> BookmarkedScenarios { get; set; } = [];
 
 }
 

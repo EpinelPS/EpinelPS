@@ -13,6 +13,11 @@ public class SynchroRegisterOneClick : LobbyMessage
 
         foreach (NetOneClickSlot oneClickSlot in req.Slots)
         {
+            if (user.SynchroDeviceUpgraded && oneClickSlot.Slot <= 5)
+            {
+                continue;
+            }
+
             foreach (SynchroSlot slot in user.SynchroSlots)
             {
                 if (slot.Slot == oneClickSlot.Slot)
@@ -30,7 +35,7 @@ public class SynchroRegisterOneClick : LobbyMessage
 
         foreach (SynchroSlot slot in user.SynchroSlots)
         {
-            response.Slots.Add(new NetSynchroSlot() { Slot = slot.Slot, AvailableRegisterAt = 1, Csn = slot.CharacterSerialNumber });
+            response.Slots.Add(new NetSynchroSlot() { Slot = slot.Slot, AvailableRegisterAt = slot.AvailableAt != 0 ? slot.AvailableAt : 1, Csn = slot.CharacterSerialNumber });
         }
 
         foreach (SynchroSlot slot in user.SynchroSlots)
@@ -43,7 +48,7 @@ public class SynchroRegisterOneClick : LobbyMessage
                 Csn = character.Csn,
                 CostumeId = character.CostumeId,
                 Grade = character.Grade,
-                Lv = user.GetSynchroLevel(),
+                Lv = character.Level,
                 Skill1Lv = character.Skill1Lvl,
                 Skill2Lv = character.Skill2Lvl,
                 Tid = character.Tid,

@@ -1,3 +1,5 @@
+using System.Buffers;
+using System.Runtime.InteropServices;
 using EpinelPS.Utils;
 using ICSharpCode.SharpZipLib.Zip;
 using MemoryPack;
@@ -6,6 +8,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace EpinelPS.Data;
 
@@ -29,6 +32,15 @@ public class GameData
     private int currentFile;
 
     public readonly Dictionary<string, FieldMapRecord> MapData = [];
+    public readonly Dictionary<string, NetJupiterProductInfo> JupiterProductCache = [];
+    public readonly Dictionary<int, List<ArchiveEventQuestRecord_Raw>> ArchiveEventQuestsByManager = [];
+    public readonly Dictionary<int, List<EventQuestStageRecord>> EventQuestStagesByArchiveManager = [];
+
+    public IReadOnlyList<ArchiveEventQuestRecord_Raw> GetArchiveEventQuestsForManager(int managerId) =>
+        ArchiveEventQuestsByManager.TryGetValue(managerId, out var list) ? list : [];
+
+    public IReadOnlyList<EventQuestStageRecord> GetEventQuestStagesForArchiveManager(int managerId) =>
+        EventQuestStagesByArchiveManager.TryGetValue(managerId, out var list) ? list : [];
 
     //ArchiveEvent
     [LoadRecord("ArchiveEventDungeonTable.json", "Id")]
@@ -180,8 +192,16 @@ public class GameData
 
     [LoadRecord("ArchiveEventQuestTable.json", "Id")]
     public readonly Dictionary<int, ArchiveEventQuestRecord_Raw> archiveEventQuestRecords = [];
+    [LoadRecord("EventQuestTable.json", "Id")]
+    public readonly Dictionary<int, EventQuestRecord> EventQuestTable = [];
     [LoadRecord("ArchiveMessengerConditionTable.json", "Id")]
     public readonly Dictionary<int, ArchiveMessengerConditionRecord> archiveMessengerConditionRecords = [];
+
+    [LoadRecord("ArchiveEventQuestManagerTable.json", "Id")]
+    public readonly Dictionary<int, ArchiveEventQuestManagerRecord_Raw> archiveEventQuestManagerRecords = [];
+
+    [LoadRecord("EventQuestStageTable.json", "Id")]
+    public readonly Dictionary<int, EventQuestStageRecord> eventQuestStageRecords = [];
 
     [LoadRecord("CharacterStatTable.json", "Id")]
     public readonly Dictionary<int, CharacterStatRecord> characterStatTable = [];
@@ -226,6 +246,32 @@ public class GameData
 
     [LoadRecord("PassCostumeShopTable.json", "Id")]
     public readonly Dictionary<int, PassCostumeShopRecord_Raw> PassCostumeShopTable = [];
+
+    [LoadRecord("MonthlyAmountTable.json", "Id")]
+    public readonly Dictionary<int, MonthlyAmountRecord> MonthlyAmountTable = [];
+
+    [LoadRecord("MailSenderTable.json", "Id")]
+    public readonly Dictionary<int, MailSenderRecord> MailSenderTable = [];
+
+    // EventBoxGacha tables
+    [LoadRecord("EventBoxGachaTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaRecord> EventBoxGachaTable = [];
+
+    [LoadRecord("EventBoxGachaPriceTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaPriceRecord> EventBoxGachaPriceTable = [];
+
+    [LoadRecord("EventBoxGachaProbTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaProbRecord> EventBoxGachaProbTable = [];
+
+    [LoadRecord("EventBoxGachaRewardTable.json", "Id")]
+    public readonly Dictionary<int, EventBoxGachaRewardRecord> EventBoxGachaRewardTable = [];
+
+    // EventInAppShop tables
+    [LoadRecord("EventInAppShopTable.json", "Id")]
+    public readonly Dictionary<int, EventInAppShopRecord> EventInAppShopTable = [];
+
+    [LoadRecord("EventInAppShopProductTable.json", "Id")]
+    public readonly Dictionary<int, EventInAppShopProductRecord> EventInAppShopProductTable = [];
 
     [LoadRecord("TowerTable.json", "Id")]
     public readonly Dictionary<int, TowerRecord> towerTable = [];
@@ -272,6 +318,12 @@ public class GameData
 
     [LoadRecord("InterceptSpecialTable.json", "Id")]
     public readonly Dictionary<int, InterceptSpecialRecord> InterceptSpecial = [];
+
+    [LoadRecord("InterceptAnomalousTable.json", "Id")]
+    public readonly Dictionary<int, InterceptAnomalousRecord_Raw> InterceptAnomalous = [];
+
+    [LoadRecord("InterceptAnomalousManagerTable.json", "Id")]
+    public readonly Dictionary<int, InterceptAnomalousManagerRecord_Raw> InterceptAnomalousManager = [];
 
     [LoadRecord("ConditionRewardTable.json", "Id")]
     public readonly Dictionary<int, ConditionRewardRecord> ConditionRewards = [];
@@ -803,7 +855,7 @@ public class GameData
 
     public static void DoTransformation(byte[] key, byte[] salt, Stream inputStream, Stream outputStream)
     {
-        SymmetricAlgorithm aes = Aes.Create();
+        using SymmetricAlgorithm aes = Aes.Create();
         aes.Mode = CipherMode.ECB;
         aes.Padding = PaddingMode.None;
 
@@ -817,44 +869,58 @@ public class GameData
         }
 
         byte[] counter = (byte[])salt.Clone();
-
-        Queue<byte> xorMask = new();
-
         byte[] zeroIv = new byte[blockSize];
-        ICryptoTransform counterEncryptor = aes.CreateEncryptor(key, zeroIv);
+        using ICryptoTransform counterEncryptor = aes.CreateEncryptor(key, zeroIv);
 
-        int b;
-        while ((b = inputStream.ReadByte()) != -1)
+        const int bufferSize = 65536;
+        byte[] buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+        byte[] keystream = ArrayPool<byte>.Shared.Rent(bufferSize);
+
+        try
         {
-            if (xorMask.Count == 0)
+            int bytesRead;
+            while ((bytesRead = inputStream.Read(buffer, 0, bufferSize)) > 0)
             {
-                byte[] counterModeBlock = new byte[blockSize];
-
-                counterEncryptor.TransformBlock(
-                    counter, 0, counter.Length, counterModeBlock, 0);
-
-                for (int i2 = counter.Length - 1; i2 >= 0; i2--)
+                int fullBlocks = (bytesRead + blockSize - 1) / blockSize;
+                for (int b = 0; b < fullBlocks; b++)
                 {
-                    if (++counter[i2] != 0)
+                    counterEncryptor.TransformBlock(counter, 0, blockSize, keystream, b * blockSize);
+                    for (int i2 = blockSize - 1; i2 >= 0; i2--)
                     {
-                        break;
+                        if (++counter[i2] != 0)
+                        {
+                            break;
+                        }
                     }
                 }
 
-                foreach (byte b2 in counterModeBlock)
+                int ulongCount = bytesRead / 8;
+                Span<ulong> bufWords = MemoryMarshal.Cast<byte, ulong>(buffer.AsSpan(0, ulongCount * 8));
+                ReadOnlySpan<ulong> keyWords = MemoryMarshal.Cast<byte, ulong>(keystream.AsSpan(0, ulongCount * 8));
+                for (int i = 0; i < ulongCount; i++)
                 {
-                    xorMask.Enqueue(b2);
+                    bufWords[i] ^= keyWords[i];
                 }
-            }
 
-            byte mask = xorMask.Dequeue();
-            outputStream.WriteByte((byte)(((byte)b) ^ mask));
+                for (int i = ulongCount * 8; i < bytesRead; i++)
+                {
+                    buffer[i] ^= keystream[i];
+                }
+
+                outputStream.Write(buffer, 0, bytesRead);
+            }
+        }
+        finally
+        {
+            ArrayPool<byte>.Shared.Return(buffer);
+            ArrayPool<byte>.Shared.Return(keystream);
         }
     }
 
     public static async Task Load()
     {
         string? targetFile2 = await AssetDownloadUtil.DownloadOrGetFileAsync(GameConfig.Root.StaticDataMpk.Url, CancellationToken.None) ?? throw new Exception("static data download fail");
+        await StaticDataPatcher.TryPatchAsync(targetFile2, GameConfig.Root.StaticDataMpk);
         _instance = new(targetFile2);
     }
     #endregion
@@ -911,6 +977,42 @@ public class GameData
 
         // sanity checks
         if (QuestDataRecords.Count == 0) throw new Exception("QuestDataRecords should not be empty");
+
+        BuildOptimizedLookups();
+    }
+
+    private void BuildOptimizedLookups()
+    {
+        JupiterProductCache.Clear();
+        foreach (var (key, record) in mediasProductTable)
+        {
+            if (string.IsNullOrEmpty(record.Cost)) continue;
+            string normalizedCost = record.Cost.Replace(',', '.');
+            if (decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
+            {
+                long microPrice = (long)(price * 1000000);
+                JupiterProductCache[key] = new NetJupiterProductInfo
+                {
+                    CurrencyCode = "USD",
+                    CurrencySymbol = "$",
+                    MicroPrice = microPrice,
+                    Price = record.Cost,
+                    ProductId = key
+                };
+            }
+        }
+
+        ArchiveEventQuestsByManager.Clear();
+        foreach (var group in archiveEventQuestRecords.Values.GroupBy(q => q.EventQuestManagerId))
+        {
+            ArchiveEventQuestsByManager[group.Key] = group.OrderBy(q => q.Id).ToList();
+        }
+
+        EventQuestStagesByArchiveManager.Clear();
+        foreach (var group in eventQuestStageRecords.Values.GroupBy(s => s.ArchiveEventQuestManagerId))
+        {
+            EventQuestStagesByArchiveManager[group.Key] = group.OrderBy(s => s.Id).ToList();
+        }
     }
 
     public MainQuestRecord? GetMainQuestForStageClearCondition(int stage)
@@ -1035,14 +1137,25 @@ public class GameData
         {
             return equipRecord.ItemSubType;
         }
-
         // Check if it's a harmony cube item
         if (ItemHarmonyCubeTable.TryGetValue(itemType, out ItemHarmonyCubeRecord? harmonyCubeRecord))
         {
             return harmonyCubeRecord.ItemSubType;
         }
 
-        // Return null if item type not found
+        // Check if it's a material item (e.g. Custom Module)
+        if (itemMaterialTable.TryGetValue(itemType, out ItemMaterialRecord? materialRecord))
+        {
+            return materialRecord.ItemSubType;
+        }
+
+        // Check if it's a consumable item
+        if (ConsumableItems.TryGetValue(itemType, out ItemConsumeRecord? consumeRecord))
+        {
+            return consumeRecord.ItemSubType;
+        }
+
+        // Return none if item type not found
         return ItemSubType.None;
     }
 

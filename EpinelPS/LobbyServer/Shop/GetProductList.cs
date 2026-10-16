@@ -14,31 +14,10 @@ public class GetProductList : LobbyMessage
         ResGetJupiterProductList response = new();
         foreach (string? item in x.ProductIdList)
         {
-            IEnumerable<KeyValuePair<string, MidasProductRecord>> product = GameData.Instance.mediasProductTable.Where(x => x.Key == item);
-
-            if (product.Any())
+            if (item == null) continue;
+            if (GameData.Instance.JupiterProductCache.TryGetValue(item, out NetJupiterProductInfo? cached))
             {
-                MidasProductRecord? record = product.FirstOrDefault().Value;
-                if (record != null)
-                {
-                    string normalizedCost = record.Cost.Replace(',', '.');
-
-                    if (!decimal.TryParse(normalizedCost, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal price))
-                    {
-                        Logging.WriteLine($"Failed to parse '{record.Cost}' (normalized as '{normalizedCost}'). Cash shop will not work properly.", LogType.Error);
-                        continue;
-                    }
-
-                    long microPrice = (long)(price * 1000000);
-                    response.ProductInfoList.Add(new NetJupiterProductInfo
-                    {
-                        CurrencyCode = "USD",
-                        CurrencySymbol = "$",
-                        MicroPrice = microPrice,
-                        Price = record.Cost,
-                        ProductId = item
-                    });
-                }
+                response.ProductInfoList.Add(cached);
             }
             else
             {

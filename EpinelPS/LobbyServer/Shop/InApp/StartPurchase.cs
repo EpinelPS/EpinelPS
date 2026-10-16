@@ -7,7 +7,8 @@ public class StartPurchase : LobbyMessage
     {
         ReqStartPurchase req = await ReadData<ReqStartPurchase>();
         User user = GetUser();
-        bool success = InAppPurchaseHelper.TrySimulatePurchase(user, req.ProductId, req.ExtraData, out _);
+        var midas = InAppPurchaseHelper.FindMidasProduct(req.ProductId);
+        bool success = midas != null && midas.IsActive;
 
         var response = new ResStartPurchase
         {

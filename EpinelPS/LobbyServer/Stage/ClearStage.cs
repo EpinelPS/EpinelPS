@@ -150,7 +150,8 @@ public class ClearStage : LobbyMessage
         if (!user.FieldInfoNew.ContainsKey(stageMapId))
             user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
 
-        user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
+        if (!user.FieldInfoNew[stageMapId].CompletedStages.Contains(StageId))
+            user.FieldInfoNew[stageMapId].CompletedStages.Add(StageId);
 
         // Subquests like Tetra Connect require clearing every stage of a stage
         // group, the client waits for this trigger to play the ending scenario.
@@ -393,6 +394,39 @@ public class ClearStage : LobbyMessage
         catch (Exception ex)
         {
             Logging.Warn($"Failed to reconcile ChapterClear triggers for user {user.ID}: {ex.Message}");
+        }
+    }
+
+    public static void ReconcileSubquestStages(User user)
+    {
+        try
+        {
+            foreach (KeyValuePair<int, bool> subQuest in user.SubQuestData)
+            {
+                if (!subQuest.Value) continue;
+
+                if (GameData.Instance.Subquests.TryGetValue(subQuest.Key, out SubQuestRecord? subQuestRecord))
+                {
+                    int condId = subQuestRecord.ClearConditionId;
+                    if (condId <= 0) continue;
+
+                    foreach (CampaignStageRecord stage in GameData.Instance.StageDataRecords.Values)
+                    {
+                        if ((stage.GroupId != 0 && stage.GroupId == condId) || stage.Id == condId)
+                        {
+                            string stageMapId = GameData.Instance.GetMapIdFromChapter(stage.ChapterId, stage.ChapterMod);
+                            if (!user.FieldInfoNew.ContainsKey(stageMapId))
+                                user.FieldInfoNew.Add(stageMapId, new FieldInfoNew());
+                            if (!user.FieldInfoNew[stageMapId].CompletedStages.Contains(stage.Id))
+                                user.FieldInfoNew[stageMapId].CompletedStages.Add(stage.Id);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logging.Warn($"Failed to reconcile subquest stages for user {user.ID}: {ex.Message}");
         }
     }
 }

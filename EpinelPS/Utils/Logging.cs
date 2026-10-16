@@ -7,6 +7,10 @@ public static class Logging
 {
     private static LogType LogLevel = LogType.Info;
     private static readonly ILog log = LogManager.GetLogger(typeof(Logging));
+    private static readonly object _consoleLock = new();
+
+    public static bool IsDebugEnabled => LogLevel <= LogType.Debug;
+
     public static void SetOutputLevel(LogType level)
     {
         LogLevel = level;
@@ -17,10 +21,8 @@ public static class Logging
     }
     public static void WriteLine(string msg, LogType level = LogType.Info, bool toConsole = true)
     {
-        ConsoleColor originalFG = Console.ForegroundColor;
-        Console.ForegroundColor = GetColorForLevel(level);
-
-        // todo write to some file
+        if (level == LogType.Debug && !IsDebugEnabled && !log.IsDebugEnabled)
+            return;
         switch (level)
         {
             case LogType.Debug:
@@ -44,10 +46,15 @@ public static class Logging
         }
 
         if (toConsole && LogLevel <= level)
-            Console.WriteLine(msg);
-
-        Console.ForegroundColor = originalFG;
-
+        {
+            lock (_consoleLock)
+            {
+                ConsoleColor originalFG = Console.ForegroundColor;
+                Console.ForegroundColor = GetColorForLevel(level);
+                Console.WriteLine(msg);
+                Console.ForegroundColor = originalFG;
+            }
+        }
     }
 
 

@@ -2,6 +2,7 @@ using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.Interfaces;
 using EpinelPS.Utils;
+using EpinelPS.LobbyServer.Outpost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,7 +46,7 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
             OutpostBattleLevel = user.OutpostBattleLevel,
             OutpostBattleTime = new NetOutpostBattleTime() { MaxBattleTime = 864000000000, MaxOverBattleTime = 12096000000000, BattleTime = battleTimeMs },
 
-            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = new NetJukeboxBgm() { JukeboxTableId = user.CommanderMusic.TableId, Type = NetJukeboxBgmType.JukeboxTableId, Location = NetJukeboxLocation.CommanderRoom } }
+            Jukeboxv2 = new NetUserJukeboxDataV2() { CommandBgm = JukeboxUtils.BuildCurrentBgm(user, NetJukeboxLocation.CommanderRoom) }
         };
 
         response.Jukeboxv2.JukeboxTableIds.AddRange(JukeboxUtils.GetUnlockedSongs(user));
@@ -59,13 +60,17 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
 
         foreach (CharacterModel item in user.Characters)
         {
-            response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = user.GetCharacterLevel(item.Csn, item.Level), Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel }, IsSynchro = user.GetSynchro(item.Csn) });
+            bool isSlotted = user.SynchroSlots.Any(x => x.CharacterSerialNumber == item.Csn && (!user.SynchroDeviceUpgraded || x.Slot > 5));
+            int sendLv = isSlotted ? item.Level : user.GetCharacterLevel(item.Csn, item.Level);
+            response.Character.Add(new NetUserCharacterData() { Default = new() { Csn = item.Csn, Skill1Lv = item.Skill1Lvl, Skill2Lv = item.Skill2Lvl, CostumeId = item.CostumeId, Lv = sendLv, Grade = item.Grade, Tid = item.Tid, UltiSkillLv = item.UltimateLevel }, IsSynchro = user.GetSynchro(item.Csn) });
         }
 
         foreach (NetUserItemData item in NetUtils.GetUserItems(user))
         {
             response.Items.Add(item);
         }
+        response.HarmonyCubes.AddRange(NetUtils.GetUserHarmonyCubes(user));
+
 
         // Add squad data if there are characters
         if (user.Characters.Count > 0)
@@ -124,6 +129,8 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
             JsonDb.Save();
         }
 
+        GetOutpostData.InjectVirtualEventQuestBuilding(user, response.Outposts);
+
         response.LastClearedNormalMainStageId = user.LastNormalStageCleared;
         response.LastClearedStoryStageId = user.LastStoryStageCleared;
         response.LastClearedHardMainStageId = user.LastHardStageCleared;
@@ -134,6 +141,17 @@ public class LobbyController(IUserService UserService, GameContext db) : Control
         response.OwnedLobbyDecoBackgroundIdList.AddRange(user.LobbyDecoBackgroundList);
 
         response.ClearLessons.AddRange(user.CompletedTacticAcademyLessons);
+
+        response.WallpaperList.AddRange(user.WallpaperList);
+        response.WallpaperPlaylistList.AddRange(user.WallpaperPlaylistList.Where(wp => user.PlayLists.Any(p => p.JukeboxPlaylistUid == wp.PlaylistUId)));
+        response.WallpaperJukeboxList.AddRange(user.WallpaperJukeboxList);
+        response.WallpaperBackgroundList.AddRange(user.WallpaperBackground);
+        response.WallpaperFavoriteList.AddRange(user.WallpaperFavoriteList);
+        response.Playlists.AddRange(user.PlayLists);
+        if (user.FavoriteSongs != null)
+        {
+            response.FavoriteSongs = user.FavoriteSongs;
+        }
 
         return response;
     }

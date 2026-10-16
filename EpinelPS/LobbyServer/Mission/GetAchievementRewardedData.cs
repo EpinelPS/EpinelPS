@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Mission;
+namespace EpinelPS.LobbyServer.Mission;
 
 [GameRequest("/mission/getrewarded/achievement")]
 public class GetAchievementRewardedData : LobbyMessage
@@ -7,6 +7,7 @@ public class GetAchievementRewardedData : LobbyMessage
     {
         await ReadData<ReqGetAchievementRewardedData>();
         User user = GetUser();
+        MissionReconciler.ReconcileAll(user);
 
         ResGetAchievementRewardedData response = new();
         response.Ids.AddRange(user.CompletedAchievements);

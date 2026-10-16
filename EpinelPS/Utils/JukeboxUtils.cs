@@ -56,14 +56,14 @@ public static class JukeboxUtils
                 else
                 {
                     bgm.Type = NetJukeboxBgmType.JukeboxTableId;
-                    bgm.JukeboxTableId = setting.TableId;
+                    bgm.JukeboxTableId = location == NetJukeboxLocation.Lobby ? 2 : 5;
                 }
                 break;
             case NetJukeboxBgmType.JukeboxFavorite:
-                bgm.JukeboxFavorite = user.FavoriteSongs;
+                bgm.JukeboxFavorite = user.FavoriteSongs ?? new NetJukeboxFavorite();
                 break;
             default:
-                bgm.JukeboxTableId = setting.TableId;
+                bgm.JukeboxTableId = setting.TableId != 0 ? setting.TableId : (location == NetJukeboxLocation.Lobby ? 2 : 5);
                 break;
         }
         return bgm;

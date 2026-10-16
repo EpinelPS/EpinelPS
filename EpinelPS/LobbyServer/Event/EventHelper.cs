@@ -43,6 +43,7 @@ public class EventHelper
         List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
         log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
         AddEvents(ref response, dailyMissionEvents);
+
     }
 
     public static void AddJoinedEvents(User user, ref ResGetJoinedEvent response)
@@ -79,6 +80,7 @@ public class EventHelper
         List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
         log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
         AddJoinedEvents(ref response, dailyMissionEvents);
+
     }
 
     private static List<NetEventData> GetEventData(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers)
@@ -118,60 +120,80 @@ public class EventHelper
         return events;
     }
 
+    public static string? ResolveTargetDatedBannerResourceTable(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers)
+    {
+        // Check main event first
+        var mainEvent = eventManagers.FirstOrDefault(em => em.Id == banner.EventId);
+        if (mainEvent != null && IsValidDatedEventTable(mainEvent.EventBannerResourceTable))
+        {
+            return mainEvent.EventBannerResourceTable;
+        }
+
+        // Check child events for a dated event table
+        var candidate = eventManagers.FirstOrDefault(em =>
+            (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId)
+            && IsValidDatedEventTable(em.EventBannerResourceTable));
+
+        return candidate?.EventBannerResourceTable;
+    }
+
+    private static bool IsValidDatedEventTable(string? table)
+    {
+        if (string.IsNullOrEmpty(table)) return false;
+        // Exclude event_old (shared historical bucket for legacy events)
+        if (table == "event_old") return false;
+        return System.Text.RegularExpressions.Regex.IsMatch(table, @"^event_\d{6}$");
+    }
+
     private static List<NetEventData> GetEventDataBySystemTypes(LobbyPrivateBannerRecord banner, List<EventManagerRecord> eventManagers, List<EventSystemType> systemTypes)
     {
         List<NetEventData> events = [];
-        // Find all event banner resource tables associated with this banner's EventId
-        List<string> eventBannerResourceTables = [.. eventManagers.Where(em =>
-            (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId)
-            && em.EventBannerResourceTable.StartsWith("event_")).Select(em => em.EventBannerResourceTable)];
-        eventBannerResourceTables = [.. eventBannerResourceTables.Distinct()];
-        log.Debug($"Banner EventId: {banner.EventId} has {eventBannerResourceTables.Count} associated event banner resource tables: {JsonConvert.SerializeObject(eventBannerResourceTables)}");
-        if (eventBannerResourceTables.Count == 0)
+        string? targetDatedTable = ResolveTargetDatedBannerResourceTable(banner, eventManagers);
+
+        List<EventManagerRecord> matchedEvents;
+        if (!string.IsNullOrEmpty(targetDatedTable))
         {
-            Logging.WriteLine($"No associated event banner resource tables found for Banner EventId: {banner.EventId}", LogType.Warning);
+            matchedEvents = eventManagers.Where(em =>
+                em.EventBannerResourceTable == targetDatedTable
+                && systemTypes.Contains(em.EventSystemType)).ToList();
+            log.Debug($"Banner EventId: {banner.EventId} resolved dated table '{targetDatedTable}' with {matchedEvents.Count} events");
+        }
+        else
+        {
+            // For FieldHubEvents (Neverland, Beauty Full Shot) or events without a valid dated table,
+            // strictly confine to direct child events and never search globally across event_old.
+            matchedEvents = eventManagers.Where(em =>
+                (em.SetField == banner.EventId || em.ParentsEventId == banner.EventId)
+                && systemTypes.Contains(em.EventSystemType)).ToList();
+            log.Debug($"Banner EventId: {banner.EventId} has {matchedEvents.Count} direct child events matching system types");
+        }
+
+        if (matchedEvents.Count == 0)
+        {
+            Logging.WriteLine($"No events found for Banner EventId: {banner.EventId} matching system types", LogType.Warning);
             return events;
         }
 
-        // Find all events matching the banner resource tables and specified system types
-        var gachaEvents = eventManagers.Where(em =>
-        eventBannerResourceTables.Contains(em.EventBannerResourceTable)
-        && systemTypes.Contains(em.EventSystemType)).ToList();
-        log.Debug($"Found {gachaEvents.Count} gacha events from banner resource tables: {JsonConvert.SerializeObject(gachaEvents)}");
-        if (gachaEvents.Count == 0)
-        {
-            Logging.WriteLine($"No gacha events found for Banner EventId: {banner.EventId}", LogType.Warning);
-            return events;
-        }
-
-        // Add each gacha event to the list
-        foreach (var gachaEvent in gachaEvents)
+        // Add each event to the list
+        foreach (var gachaEvent in matchedEvents)
         {
             events.Add(new NetEventData()
             {
                 Id = gachaEvent.Id,
                 EventSystemType = (int)gachaEvent.EventSystemType,
-                // EventStartDate = banner.StartDate.Ticks,
-                // EventVisibleDate = banner.StartDate.Ticks,
-                // EventDisableDate = banner.EndDate.Ticks,
-                // EventEndDate = banner.EndDate.Ticks
             });
 
             // We also need to check if there is a step payback event attached to the gacha
-           foreach(var gachaBanner in GameData.Instance.gachaTypes.Where(g => g.Value.EventId == gachaEvent.Id))
+            foreach (var gachaBanner in GameData.Instance.gachaTypes.Where(g => g.Value.EventId == gachaEvent.Id))
             {
-                // We have the gacha, now check for a payback table
-                foreach(var payback in GameData.Instance.GachaPaybackRecords.Where( p => p.Value.GachaId == gachaBanner.Value.Id)){
-
-                    // Get the type from the evevent manager table
-                    if (GameData.Instance.eventManagers.ContainsKey(payback.Value.EventId)){
-
-                        var ev = GameData.Instance.eventManagers[payback.Value.EventId];
-
+                foreach (var payback in GameData.Instance.GachaPaybackRecords.Where(p => p.Value.GachaId == gachaBanner.Value.Id))
+                {
+                    if (GameData.Instance.eventManagers.TryGetValue(payback.Value.EventId, out var ev))
+                    {
                         events.Add(new NetEventData()
                         {
                             Id = ev.Id,
-                            EventSystemType = (int) ev.EventSystemType
+                            EventSystemType = (int)ev.EventSystemType
                         });
                     }
                 }
@@ -244,7 +266,6 @@ public class EventHelper
     {
         foreach (var eventData in eventDatas)
         {
-            // if (eventData.Id == 70115) continue;
             // Avoid adding duplicate events
             if (!response.EventList.Any(e => e.Id == eventData.Id))
             {
@@ -277,9 +298,8 @@ public class EventHelper
                 if (eventData.EventEndDate == 0) eventData.EventEndDate = DateTime.UtcNow.AddDays(30).Ticks;
                 response.EventWithJoinData.Add(new NetEventWithJoinData()
                 {
-
                     EventData = eventData,
-                    JoinAt = 0
+                    JoinAt = eventData.EventStartDate
                 });
             }
             else
@@ -310,8 +330,8 @@ public class EventHelper
             {
                 Id = dailyEvent.Id,
                 EventSystemType = (int)dailyEvent.EventSystemType,
-                EventStartDate = DateTime.UtcNow.Ticks,
-                EventVisibleDate = DateTime.UtcNow.Ticks,
+                EventStartDate = DateTime.UtcNow.AddDays(-21).Ticks,
+                EventVisibleDate = DateTime.UtcNow.AddDays(-21).Ticks,
                 EventDisableDate = DateTime.UtcNow.AddDays(30).Ticks,
                 EventEndDate = DateTime.UtcNow.AddDays(30).Ticks
             });

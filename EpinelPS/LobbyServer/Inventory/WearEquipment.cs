@@ -1,4 +1,4 @@
-﻿using EpinelPS.Database;
+using EpinelPS.Database;
 using EpinelPS.Utils;
 
 namespace EpinelPS.LobbyServer.Inventory;
@@ -16,12 +16,12 @@ public class WearEquipment : LobbyMessage
         int pos = NetUtils.GetItemPos(user, req.Isn);
 
         // unequip old item
-
         foreach (DbItemData item in user.Items.ToArray())
         {
-            if (item.Csn == req.Csn && item.Position == pos)
+            if (item.Csn == req.Csn && item.Position == pos && item.Isn != req.Isn)
             {
                 item.Csn = 0;
+                response.Items.Add(NetUtils.ToNet(item));
             }
         }
 
