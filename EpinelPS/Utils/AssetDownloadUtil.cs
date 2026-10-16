@@ -10,7 +10,7 @@ public class AssetDownloadUtil
     private static string? CloudIp;
     public static async Task<string?> DownloadOrGetFileAsync(string url, CancellationToken cancellationToken)
     {
-        string rawUrl = url.Replace("https://cloud.nikke-kr.com/", "").Replace("https://global-lobby.nikke-kr.com/", "").TrimStart('/');
+        string rawUrl = url.Replace("https://cloud.nikke-kr.com/", "");
         string targetFile = Program.GetCachePathForPath(rawUrl);
         string? targetDir = Path.GetDirectoryName(targetFile);
         if (targetDir == null)
@@ -41,39 +41,8 @@ public class AssetDownloadUtil
             }
             else
             {
-                bool fallbackSuccess = false;
-                if (response.StatusCode == HttpStatusCode.NotFound && rawUrl.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase))
-                {
-                    string withoutExt = rawUrl[..^4];
-                    string[] variations = [$"{withoutExt}_en.mp4", $"{withoutExt}_ja.mp4", $"{withoutExt}_ko.mp4"];
-                    foreach (string variation in variations)
-                    {
-                        Uri candidateUri = new("https://" + CloudIp + "/" + variation);
-                        using HttpRequestMessage candidateRequest = new(HttpMethod.Get, candidateUri);
-                        candidateRequest.Headers.TryAddWithoutValidation("host", "cloud.nikke-kr.com");
-                        using HttpResponseMessage candidateResponse = await AssetDownloader.SendAsync(candidateRequest, cancellationToken);
-                        if (candidateResponse.StatusCode == HttpStatusCode.OK)
-                        {
-                            if (!File.Exists(targetFile))
-                            {
-                                using FileStream fss = new(targetFile, FileMode.CreateNew);
-                                await candidateResponse.Content.CopyToAsync(fss, cancellationToken);
-
-                                fss.Close();
-                            }
-
-                            Logging.WriteLine($"Successfully downloaded fallback video candidate {variation} for {url}", LogType.Info);
-                            fallbackSuccess = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!fallbackSuccess)
-                {
-                    Console.WriteLine("Failed to download " + url + " with status code " + response.StatusCode);
-                    return null;
-                }
+                Console.WriteLine("Failed to download " + url + " with status code " + response.StatusCode);
+                return null;
             }
         }
 
@@ -87,11 +56,9 @@ public class AssetDownloadUtil
         if (targetFile != null)
         {
             string? contentType = null;
-            if (targetFile.EndsWith("mp4", StringComparison.OrdinalIgnoreCase))
-            {
+            if (targetFile.EndsWith("mp4"))
                 contentType = "video/mp4";
-                targetFile = await CutsceneOptimizer.OptimizeVideoAsync(targetFile, context.RequestAborted);
-            }
+
             await Results.Stream(new FileStream(targetFile, FileMode.Open, FileAccess.Read, FileShare.Read), contentType: contentType, enableRangeProcessing: true).ExecuteAsync(context);
         }
         else

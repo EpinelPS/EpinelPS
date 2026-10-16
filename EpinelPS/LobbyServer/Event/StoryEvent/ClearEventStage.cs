@@ -14,12 +14,6 @@ public class ClearEventStage : LobbyMessage
         ResClearEventStage response = new();
 
         int difficultId = 0;
-        if (GameData.Instance.EventDungeonStageTable.TryGetValue(req.StageId, out var stageRec))
-        {
-            var diff = GameData.Instance.EventDungeonDifficultTable.Values.FirstOrDefault(d => d.StageGroup == stageRec.Group);
-            if (diff != null) difficultId = diff.Id;
-        }
-
         NetRewardData reward = new();
         NetRewardData bonusReward = new();
         ClearEventStageHelper.ClearStage(user, req.StageId, ref reward, ref bonusReward, req.BattleResult, 1); // always clearCount = 1 for normal clear
@@ -35,7 +29,7 @@ public class ClearEventStage : LobbyMessage
         }
         else
         {
-            user.EventInfo.Add(req.EventId, new EventData() { LastStage = req.StageId, ClearedStages = [req.StageId], Diff = difficultId });
+            user.EventInfo.Add(req.EventId, new EventData() { LastStage = req.StageId, ClearedStages = [req.StageId] });
         }
         user.AddTrigger(Trigger.EventStageClear, 1, req.StageId);
         user.AddTrigger(Trigger.EventDungeonStageClear, 1, req.EventId);
