@@ -1005,9 +1005,6 @@ public class AdminCommands
         }
 
         GameConfig.Root.ResourceBaseURL = resources.BaseUrl;
-        if (resources.DataPackVersionMap.TryGetValue(GameConfig.Root.TargetVersion, out var dataPackVersion)
-            || resources.DataPackVersionMap.TryGetValue(resources.Version, out dataPackVersion))
-            GameConfig.Root.ResourceDataPackVersion = dataPackVersion;
         GameConfig.Root.StaticDataMpk.Salt1 = staticData2.Salt1.ToBase64();
         GameConfig.Root.StaticDataMpk.Salt2 = staticData2.Salt2.ToBase64();
         GameConfig.Root.StaticDataMpk.Version = staticData2.Version;
