@@ -107,7 +107,7 @@ public class ServerSwitcher
 
     public static async Task<ServerSwitchResult> SaveCfg(bool useOffical, string ip, bool offlineMode)
     {
-        string CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.pem");
+        string CAcert = await File.ReadAllTextAsync(AppDomain.CurrentDomain.BaseDirectory + "myCA.cer");
         string sodiumLib = AppDomain.CurrentDomain.BaseDirectory + "sodium.dll";
 
         bool supported = true;
