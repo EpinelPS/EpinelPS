@@ -45,12 +45,17 @@ public class AuthController(IUserService UserService, GameContext db) : Controll
     {
         var response = new ResAuth();
         var sdkUser = NetUtils.GetUser(req.Token, HttpContext).Item1;
-        if (sdkUser == null) return Problem(type: NetUtils.InvalidSessionErrorType);
+        if (sdkUser == null)
+        {
+            Logging.WriteLine("Invalid session!!", LogType.Error);
+            return Problem(type: NetUtils.InvalidSessionErrorType);
+        }
 
         var UserId = sdkUser.ID;
         User? user = JsonDb.GetUser(UserId);
         if (user == null)
         {
+            Logging.WriteLine("Invalid user data!!", LogType.Error);
             return Problem(type: NetUtils.InvalidSessionErrorType);
         }
 
