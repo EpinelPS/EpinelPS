@@ -1,12 +1,13 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
 using EpinelPS.LobbyServer.Stage;
+using EpinelPS.LobbyServer.Tower;
 using EpinelPS.Models.Admin;
 using Google.Protobuf;
+using Microsoft.Data.Sqlite;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text.Json;
-using EpinelPS.LobbyServer.Tower;
 
 namespace EpinelPS.Utils;
 
@@ -973,7 +974,56 @@ public class AdminCommands
         }
         return RunCmdResponse.OK;
     }
-    
+
+    public static RunCmdResponse AddLocaleFiles(string path)
+    {
+        int filesAdded = 0;
+        path = path.Trim().Trim('"');
+        Console.WriteLine($"Checking provided path for required locale files\n{path}", LogType.Info);
+
+        if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path) && Directory.GetFiles(path).Length > 0)
+        {
+            foreach (var file in Directory.GetFiles(path))
+            {
+                string cs = $"Data Source={file};Mode=ReadWrite;";
+                try
+                {
+                    using SqliteConnection con = new (cs);
+                    con.Open();
+                    using SqliteCommand cmd = con.CreateCommand();
+                    cmd.CommandText = "PRAGMA integrity_check";
+                    string? result = cmd.ExecuteScalar() as string;
+                    cmd.CommandText = "SELECT name FROM sqlite_schema WHERE type='table' AND name LIKE '%Locale_%' AND name NOT LIKE 'sqlite_%' ORDER BY name;";
+                    result = cmd.ExecuteScalar() as string;
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        if (!Directory.Exists(Path.Combine(AppContext.BaseDirectory, "cache", "local-locale")))
+                            Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "cache", "local-locale"));
+                        var dir = Path.Combine(AppContext.BaseDirectory, "cache", "local-locale");
+                        var newName = $"{result}.lsc";
+                        File.Copy(file, $"{dir}\\{newName}", true);
+                        Console.WriteLine($"{newName} added successfully!");
+                        filesAdded++;
+                    }
+                }
+                catch (SqliteException ex) when (ex.SqliteErrorCode == 26)
+                {
+                    Console.WriteLine($"{file}: not ok");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{file}: not ok");
+                }
+            }
+        }
+        else
+        {
+            return new RunCmdResponse() { error = "Not locale file(s) found in provided path" };
+        }
+        if (filesAdded < 1) return new RunCmdResponse() { error = "Not locale file(s) found in provided path" };
+        return RunCmdResponse.OK;
+    }
+
     internal static async Task<RunCmdResponse> UpdateResources()
     {
         Logging.WriteLine("updating static data and resource info...", LogType.Info);

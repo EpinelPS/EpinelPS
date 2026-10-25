@@ -5,7 +5,7 @@ class adminuiI18n {
   constructor() {
     this.supportedLanguages = ['zh', 'en', 'ja', 'ko'];
     this.languageNames = {'zh': '简体中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어'};
-    this.currentLang = localStorage.getItem('adminui_lang') || this.detectBrowserLanguage() || 'zh';
+    this.currentLang = localStorage.getItem('adminui_lang') || this.detectBrowserLanguage() || 'en';
     this.resources = {
     };
     this.isApplyingLanguage = false;

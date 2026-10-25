@@ -304,8 +304,10 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
             })
             .ToList();
 
-    private static string LookupRealName(string nameLocalkey)
+    public static string LookupRealName(string nameLocalkey)
     {
+        var localized = LocaleNameResolver.Resolve(nameLocalkey, RequestLanguage.Value);
+        if (!string.Equals(localized, nameLocalkey, StringComparison.Ordinal)) return localized;
         return RealNameOrCleaned(nameLocalkey ?? "");
     }
 

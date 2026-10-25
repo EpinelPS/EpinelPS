@@ -179,7 +179,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
 
                         return new CharacterGearModel
                         {
-                            SquadName = charData.Squad,
+                            CharacterName = AdminApiController.LookupRealName(charData.NameLocalkey) ?? "#7",
                             CharacterCsn = u.Csn,
                             CharacterTid = u.Tid,
                             CharacterLevel = u.Level,
