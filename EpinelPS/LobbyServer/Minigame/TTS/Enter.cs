@@ -39,7 +39,7 @@ public class TTSEnter : LobbyMessage
         var missionList = MiniGameHelper.ToProtoDict<int, NetMiniGameTtsMissionData, MiniGameTtsMissionData>(ttsData.MissionData);
         response.MissionDataList.AddRange(missionList.Values);
         //response.NewBadgeEventTtsSongManagerTableIds.AddRange(ttsData.BadgeSongId);
-        //response.NewUnlockedEventTtsSongManagerTableIds.AddRange(ttsData.UnlockSongId);
+        response.NewUnlockedEventTtsSongManagerTableIds.AddRange(ttsData.UnlockSongId);
         response.PlayCount = ttsData.AllPlayCount;
         response.PurchasedAlbumIds.AddRange(ttsData.PurchasedAlbumIds);
         response.ServerTimeStamp = Timestamp.FromDateTime(DateTime.UtcNow);
@@ -47,8 +47,7 @@ public class TTSEnter : LobbyMessage
         response.SongPlayDataList.AddRange(songPlayList);
         response.TotalPlayTime = ttsData.TotalPlayTime;
         response.AvailableEventTtsSongManagerTableIds.AddRange(ttsData.UnlockSongId);
-        response.AlbumRedDotCutoffDateFromNewProductPopUp = ttsData.NewProductPopUp;
-        response.AlbumRedDotCutoffDateFromShop = ttsData.DateFromShop;
+        //response.AlbumRedDotCutoffDateFromShop = ttsData.DateFromShop;
         response.HasSelectProceedOnExpertAlertPopUp = true;
         EventTTSProductNoticeManagerRecord_Raw? noticeid = GameData.Instance.EventTTSProductNoticeManagerTable.Values
             .Where(x => x.NoticeDate.AddDays(1) > DateTime.Now).FirstOrDefault();

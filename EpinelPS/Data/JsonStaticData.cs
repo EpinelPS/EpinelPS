@@ -412,6 +412,7 @@ public partial class ArenaChampionRecord
 	public int BettingRewardId;
 	public string? BettingRewardMailKey;
 	public int TeamCount;
+	public int ReplayFailTime;
 }
 
 [MemoryPackable]
@@ -479,6 +480,14 @@ public partial class ArenaRewardRecord
 	public int DailyRewardId;
 	public int SeasonRewardId;
 	public int WinRewardValue;
+}
+
+[MemoryPackable]
+public partial class ArkResourceChangeRecord_Raw
+{
+	public int Id;
+	public ContentsOpen ChangeCondition;
+	public string? UiResource;
 }
 
 [MemoryPackable]
@@ -722,6 +731,29 @@ public partial class BonusRewardCharacterRecord
 	public int Order;
 	public int CharacterNameCode;
 	public int BonusPercent;
+}
+
+[MemoryPackable]
+public partial class BoostBuffRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public BoostBuffConditionType ConditionType;
+	public int ConditionId;
+	public int ConditionValue;
+}
+
+[MemoryPackable]
+public partial class BoostManagerRecord_Raw
+{
+	public int Id;
+	public int RequiredLevel;
+	public int Order;
+	public int BuffGroupId;
+	public BoostManagerRewardPopupType RewardPopupType;
+	public string? NameLocaleKey;
+	public string? DescriptionLocaleKey;
+	public string? ResourceId;
 }
 
 [MemoryPackable]
@@ -1021,6 +1053,7 @@ public partial class CharacterRecord
 	public bool IsVisible;
 	public bool PrismIsActive;
 	public bool IsDetailClose;
+	public int CharacterBgId;
 }
 
 [MemoryPackable]
@@ -1046,7 +1079,7 @@ public partial class CharacterShotRecord
 	public ShotTimingType ShotTiming;
 	public int MaxAmmo;
 	public int MaintainFireStance;
-	public int UptypeFireTiming;
+	public int FireTiming;
 	public int ReloadTime;
 	public int ReloadBullet;
 	public int ReloadStartAmmo;
@@ -1057,6 +1090,8 @@ public partial class CharacterShotRecord
 	public int BurstEnergyPershot;
 	public int TargetBurstEnergyPershot;
 	public int Penetration;
+	public int BoxWidth;
+	public int BoxHeight;
 	public int SpotFirstDelay;
 	public int SpotLastDelay;
 	public int StartAccuracyCircleScale;
@@ -1084,6 +1119,8 @@ public partial class CharacterShotRecord
 	public CameraShakeType ShakeType;
 	public int ShakeWeight;
 	public string? AimPrefab;
+	public PreferTargetType PreferTargetArena;
+	public PreferTargetconditionType PreferTargetConditionArena;
 }
 
 [MemoryPackable]
@@ -1121,6 +1158,8 @@ public partial class CharacterSkillRecord
 	public string? ResourceName;
 	public int ShakeId;
 	public string? Icon;
+	public PreferTargetType PreferTargetArena;
+	public PreferTargetconditionType PreferTargetConditionArena;
 }
 
 [MemoryPackable]
@@ -1197,6 +1236,31 @@ public partial class CollectionItemSkillLevelData
 public partial class CollectionSkillGroupData
 {
 	public int CollectionSkillId;
+}
+
+[MemoryPackable]
+public partial class ComeBackPackageListRecord_Raw
+{
+	public int Id;
+	public int ListGroup;
+	public int PackageOrder;
+	public int PackageGroupId;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ProductResourceId;
+	public ShopBuyLimitType BuyLimitType;
+	public bool IsLimit;
+	public int BuyLimitCount;
+	public bool IsActive;
+	public int MidasProductId;
+}
+
+[MemoryPackable]
+public partial class ComeBackPackageShopRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int ComebackPackageListGroup;
 }
 
 [MemoryPackable]
@@ -4284,6 +4348,80 @@ public partial class EventDiceTileLocaleRecord
 	public string? SlotType;
 	public string? NameLocalkey;
 	public string? DescriptionLocalkey;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackBoardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int SlotId;
+	public int NextSlotId;
+	public EventDiceTrackEventType EventType;
+	public string? SlotResource;
+	public string? IconResource;
+	public int FunctionValue;
+	public int RandomId;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackFinishRewardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int ClearTimes;
+	public bool IsRepeat;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackLocaleRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public EventDiceTrackEventType SlotType;
+	public int SlotValue;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public int EventItemId;
+	public int EventItemCount;
+	public int EventSpecialItemId;
+	public int BoardId;
+	public int DailyRewardValue;
+	public int MissionGroupId;
+	public int DiceSelectGauge;
+	public string? UiPrefab;
+	public string? BgColor;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackMissionRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int Order;
+	public EventDiceTrackMissionCondition MissionCondition;
+	public int MissionConditionId;
+	public int MissionConditionValue;
+	public string? DescriptionLocalkey;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventDiceTrackRandomRewardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int RewardId;
+	public int RewardWeight;
 }
 
 [MemoryPackable]
@@ -8684,6 +8822,7 @@ public partial class EventStoryRecord
 	public int DiceId;
 	public string? UiPrefab1;
 	public string? UiPrefab2;
+	public bool UiPrefabInteractive;
 	public string? ChallengeMonsterResource;
 }
 
@@ -8730,6 +8869,29 @@ public partial class EventTTSProductNoticeManagerRecord_Raw
 	public int Id;
 	public DateTime NoticeDate;
 	public string? BannerImage;
+}
+
+[MemoryPackable]
+public partial class EventTTSRankCalcSettingsRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public int Min;
+	public int Max;
+	public double CalcValueA;
+	public double CalcValueB;
+}
+
+[MemoryPackable]
+public partial class EventTTSRankSettingsRecord_Raw
+{
+	public int Id;
+	public string? Desc;
+	public bool HideRank;
+	public string? NameLocale;
+	public string? ResourceId;
+	public int Min;
+	public int Max;
 }
 
 [MemoryPackable]
@@ -8795,6 +8957,10 @@ public partial class EventTTSSongManagerRecord_Raw
 	public string? HardPatternResourceId;
 	public int ExpertLevel;
 	public string? ExpertPatternResourceId;
+	public int CasualRatio;
+	public int NormalRatio;
+	public int HardRatio;
+	public int ExpertRatio;
 	public int UnlockConditionPlaycount;
 	public DateTime UnlockConditionDate;
 }
@@ -8833,6 +8999,164 @@ public partial class EventTTSTutorialRecord_Raw
 public partial class EventTargetSpawnerData
 {
 	public string? PositionId;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusEventPageRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public int RouteId;
+	public string? ResourceName;
+	public string? ScenarioLocalkey;
+	public bool IsBgmTenssionUp;
+	public EventTextAdvPlusPageType PageType;
+	public int SelectOptionGroupId;
+	public int GetLootItemId;
+	public bool IsGoToFirstSelectPage;
+	public int NextPageId;
+	public bool IsUsePageChangeFadeInOut;
+	public EventTextAdvPlusEndingType EndingType;
+	public int EndingNum;
+	public string? EndingSubTitleLocalkey;
+	public string? EndingHintLocalkey;
+	public int EndingAlbumReward;
+	public EventTextAdvPlusEventSceneType EventSceneType;
+	public string? EventSceneResource;
+	public string? EventSceneSound;
+	public string? PlayBgm;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusFirstSelectRecord_Raw
+{
+	public int Id;
+	public int RouteId;
+	public int ManagerId;
+	public string? FirstSelectLocalkey;
+	public string? FirstSelectDescriptionLocalkey;
+	public int NextPageId;
+	public bool IsUseOpenCondition;
+	public DateTime TimeCondition;
+	public int EndingCondition;
+	public int ItemCondition;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusLootItemRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int ManagerId;
+	public string? IconResource;
+	public string? ItemNameLocalkey;
+	public string? ItemDescriptionLocalkey;
+	public string? LootItemInventoryLocalkey01;
+	public string? LootItemInventoryLocalkey02;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusManagerRecord_Raw
+{
+	public int Id;
+	public int EventId;
+	public bool IsArchiveEvent;
+	public string? UiPrefab;
+	public int RouteSelectGroupId;
+	public string? RouteSelectMapResource;
+	public int RewardGroupId;
+	public string? FirstEnterScenarioGroupId;
+	public int MinigameHelpTipId;
+	public int StatusHpMax;
+	public int StatusHpDefault;
+	public string? StatusHpName;
+	public string? StatusHpIcon;
+	public int StatusHpAlertTiming;
+	public int StatusFoodDefault;
+	public string? StatusFoodName;
+	public string? StatusFoodIcon;
+	public int StatusErosionMax;
+	public int StatusErosionEnterPoint;
+	public string? StatusErosionName;
+	public string? StatusErosionIcon;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusProgressRewardRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int RouteId;
+	public int ManagerId;
+	public int Order;
+	public int RewardGoal;
+	public int RewardId;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusRouteRecord_Raw
+{
+	public int Id;
+	public int RouteGroupId;
+	public int ManagerId;
+	public int RouteOrder;
+	public string? RouteNameLocalkey;
+	public string? RouteDescriptionLocalkey;
+	public EventTextAdventurePlusHUDTheme HudTheme;
+	public string? RouteHeaderLocalkey;
+	public EventTextAdventurePlusRouteUnlockType RouteUnlockType;
+	public string? RouteUnlockValue;
+	public bool IsHidden;
+	public string? FirstSelectMapResource;
+	public string? FirstSelectMapDescription;
+	public bool IsErosionStatusOn;
+	public int StatusErosionDefault;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusSelectOptionRecord_Raw
+{
+	public int Id;
+	public int GroupId;
+	public int ManagerId;
+	public string? SelectionLocalkey;
+	public EventTextAdvPlusSelectionOpenType OpenConditionType;
+	public int OpenConditionValue;
+	public bool IsUseOpenConditionHint;
+	public string? OpenConditionHintLocalkey;
+	public bool IsHidden;
+	public int HpChange;
+	public int FoodChange;
+	public int ErosionChange;
+	public EventTextAdvPlusEventSceneType EventSceneType;
+	public string? EventSceneResource;
+	public string? EventSceneResourceAlbumName;
+	public string? EventSceneSound;
+	public int ResourceOrder;
+	public int PageId;
+	public int DeathPageId;
+	public int ErosionPageId;
+	public string? SoundEffect;
+	public string? SetFilter;
+	public int SetFilterTimelineFrame;
+	public bool IsDeleteFilter;
+	public bool IsUseCensoredText;
+	public bool IsDummySelectOption;
+	public double SetOpacity;
+	public bool IsLoopSelectOption;
+}
+
+[MemoryPackable]
+public partial class EventTextAdvPlusSpecialIntroRecord_Raw
+{
+	public int Id;
+	public int ManagerId;
+	public int Order;
+	public EventTextAdvPlusSpecialIntroSequenceActiveType SpecialIntroActiveType;
+	public int SpecialIntroActiveValue;
+	public EventTextAdvPlusSpecialIntroSequenceType SpecialIntroType;
+	public string? SpecialIntroValue;
+	public EventTextAdvPlusSpecialIntroSequencePlayMode SpecialIntroPlayMode;
 }
 
 [MemoryPackable]
@@ -9741,6 +10065,7 @@ public partial class FieldItemRecord
 	public string? FielditemCelebrateFx;
 	public ObtainContentsType ObtainContents;
 	public int ObtainLocation;
+	public int ObtainEpisode;
 	public FieldItemObtainDifficulty Difficulty;
 	public string? ObtainScenario;
 	public bool IsFinalReward;
@@ -9750,6 +10075,7 @@ public partial class FieldItemRecord
 	public bool IsArchiveFieldItem;
 	public int SpawnConditionStage;
 	public int StoryEventId;
+	public int SpawnConditionEventStage;
 	public int SpawnConditionItem;
 	public int SpawnConditionInteractionActionTrigger;
 	public int SpawnDelayInteractionActionTrigger;
@@ -11385,6 +11711,38 @@ public partial class LoadingTipRecord
 }
 
 [MemoryPackable]
+public partial class LobbyCharacterBackgroundRecord_Raw
+{
+	public int Id;
+	public string? SiResourceId;
+	public string? ResourceId;
+}
+
+[MemoryPackable]
+public partial class LobbyCinematicTimelineControlRecord_Raw
+{
+	public int Id;
+	public int CinematicTimelineId;
+	public LobbyCinematicTimelineStartConditionType TimelineStartConditionType;
+	public int TimelineStartConditionValue;
+	public int GoTo;
+	public int TimelineStartDelay;
+	public int TimelineStartFrame;
+	public int TimelineEndFrame;
+	public bool IsLoopAction;
+	public bool TouchInput;
+	public bool UseTransition;
+}
+
+[MemoryPackable]
+public partial class LobbyCinematicTimelineRecord_Raw
+{
+	public int Id;
+	public string? SdLobbyResourceId;
+	public string? TimelineAsset;
+}
+
+[MemoryPackable]
 public partial class LobbyDecoBackgroundRecord_Raw
 {
 	public int Id;
@@ -11436,6 +11794,7 @@ public partial class LocaleNickNameListRecord_Raw
 	public string? De;
 	public string? Th;
 	public string? Fr;
+	public string? Es;
 }
 
 [MemoryPackable]
@@ -11625,6 +11984,7 @@ public partial class MemorialMemoryRecord
 	public int MemorialMemorySeriesId;
 	public string? MemorialMemoryResource;
 	public bool IsUseObtainScenario;
+	public bool IsHidden;
 }
 
 [MemoryPackable]
@@ -12388,6 +12748,7 @@ public partial class OutpostMapChangeSchedulerRecord_Raw
 {
 	public int Id;
 	public string? Desc;
+	public bool SetFieldSurface;
 	public string? ResourceId;
 	public int SkinGroupId;
 	public bool IsDefault;
@@ -12973,6 +13334,35 @@ public partial class SDCharacterAnimationRecord
 	public string? NameLocalkey;
 	public SDCharacterAnimationShortName AnimationName;
 	public int VoiceCategory;
+}
+
+[MemoryPackable]
+public partial class SDLobbyBGMRecord_Raw
+{
+	public int Id;
+	public string? AmbientIdle;
+	public string? BgmIdle;
+	public string? BgmIdleDry;
+	public string? BgmTouch;
+}
+
+[MemoryPackable]
+public partial class SDLobbyRecord_Raw
+{
+	public int Id;
+	public string? NameLocalkey;
+	public string? DescriptionLocalkey;
+	public string? ShopDescLocalkey;
+	public int Order;
+	public string? SdLobbyResourceId;
+	public string? SdLobbyArtMap;
+	public string? MiVerticalResourceId;
+	public string? MiResourceId;
+	public string? SiResourceId;
+	public int DefaultBgmId;
+	public bool HasFixedBgm;
+	public bool UseBgmSyncCheck;
+	public bool IsSecret;
 }
 
 [MemoryPackable]
@@ -13950,7 +14340,6 @@ public partial class SoloRaidRankingRecord
 	public int GrantValueMin;
 	public int GrantValueMax;
 	public int RewardId;
-	public bool IsRecording;
 }
 
 [MemoryPackable]
@@ -14263,7 +14652,6 @@ public partial class TowerRecord
 	public int DynamicObjectStageLv;
 	public int StandardBattlePower;
 	public int StageStatIncreaseGroupId;
-	public bool IsUseQuickBattle;
 	public bool SpotAutocontrol;
 	public string? FieldMonsterId;
 	public string? Bg;
@@ -14284,9 +14672,11 @@ public partial class TrailMarkerEventRecord_Raw
 	public int Id;
 	public int EventId;
 	public string? ResourceId;
+	public string? DecoUiId;
 	public string? EventDescription;
 	public int MainQuestId;
 	public int RewardId;
+	public int BonusRewardId;
 }
 
 [MemoryPackable]
@@ -14295,6 +14685,7 @@ public partial class TransformationRecord
 	public int Id;
 	public int ResourceId;
 	public int NumberOfStep;
+	public bool ChangeSpine;
 }
 
 [MemoryPackable]
@@ -14421,7 +14812,6 @@ public partial class UnionRaidRankingTierRecord
 	public int GrantValueMin;
 	public int GrantValueMax;
 	public int RewardId;
-	public bool IsRecording;
 }
 
 [MemoryPackable]
@@ -14812,7 +15202,8 @@ public enum RewardType : int
 	ProfileRandomBox = 45,
 	UserTitle = 46,
 	LobbyDecoBackground = 47,
-	Album = 48
+	Album = 48,
+	SDLobby = 49
 }
 
 public enum EnterScenarioType : int
@@ -14958,7 +15349,10 @@ public enum EventSystemType : int
 	CE009MiniGame = 62,
 	TrailMarkerEvent = 63,
 	EventPunchMiniGame = 64,
-	ComeBackUserEventEmpty = 66
+	EventTextAdvPlus = 65,
+	ComeBackUserEventEmpty = 66,
+	DiceTrack = 67,
+	ComeBackUserEvent2 = 69
 }
 
 public enum Category : int
@@ -15128,7 +15522,8 @@ public enum ThemeType : int
 	Surface = 33,
 	MotherwhaleField = 34,
 	WhiteArkcity = 35,
-	Skyfall = 36
+	Skyfall = 36,
+	Finale = 37
 }
 
 public enum ThemeTimeType : int
@@ -15142,6 +15537,101 @@ public enum ThemeTimeType : int
 	Missilis = 6,
 	Tetra = 7,
 	Pilgrim = 8
+}
+
+public enum ContentsOpen : int
+{
+	None = 0,
+	Tower = 1,
+	Shop = 2,
+	Collection = 3,
+	Summon = 4,
+	Outpost = 5,
+	ArkSector = 6,
+	LostSector = 7,
+	Guild = 8,
+	GuildShop = 9,
+	ArenaShop = 10,
+	Arena = 11,
+	SpecialArena = 12,
+	ChampionArena = 13,
+	CompanyTower = 14,
+	Ranking = 15,
+	Album = 16,
+	Chatting = 17,
+	HarmonyCube = 18,
+	TrainingRoom = 19,
+	CustomizeGacha = 20,
+	ContentsOpenSynchroDevice = 21,
+	ContentsOpenRecycleRoom = 22,
+	ContentsOpenTacticAcademy = 23,
+	Raid = 24,
+	InterceptNormalLevel2 = 25,
+	InterceptSpecial = 26,
+	EmergencyQuest = 27,
+	Lobby = 28,
+	Mission = 29,
+	SpotBurstGauge = 30,
+	SpotBattleRetreat = 31,
+	SpotAutoControl = 32,
+	Friend = 33,
+	Mail = 34,
+	Messenger = 35,
+	Inventory = 36,
+	SubMenu = 37,
+	NikkeLevelUp = 38,
+	NikkeGradeUp = 39,
+	NikkeEquip = 40,
+	NikkeCube = 41,
+	Event = 42,
+	SpotGoHome = 43,
+	NikkeSkillLevelUp = 44,
+	LibraryCostume = 45,
+	MyLobby = 46,
+	CompanyGacha = 47,
+	FriendPointGacha = 48,
+	CampaignHard = 49,
+	OutpostBattle = 50,
+	LobbyOutpostBattle = 51,
+	DispatchBoard = 52,
+	SubQuest = 53,
+	SummonWishList = 54,
+	ShortcutCounseling = 55,
+	Nikke = 56,
+	PartySet = 57,
+	ShortcutStageDefeatBtn = 58,
+	GachaPremium = 59,
+	SimulationRoom = 60,
+	UnionRaid = 61,
+	InterceptNormalLevel1 = 62,
+	CashShop = 63,
+	AwakenEquipmentOptionRoll = 64,
+	AwakenEquipmentOptionFix = 65,
+	Liberate = 66,
+	LiberateSearch = 67,
+	SoloRaid = 68,
+	GachaPickup = 69,
+	GachaCharge = 70,
+	GachaStepup = 71,
+	SimulationRoomOC = 72,
+	SupportCharacter = 73,
+	ArenaQuickBattle = 74,
+	SpecialArenaQuickBattle = 75,
+	SideStory = 76,
+	FavoriteItem = 77,
+	InterceptAnomalous = 78,
+	ShopTrade = 79,
+	Arcade = 80,
+	SimulationRoomSimple = 81,
+	CampaignQuickBattle = 82,
+	SoloRaidMuseum = 83,
+	CampaignStory = 84,
+	SimulationRoomSimpleRewardOnly = 85,
+	SubMenuFolder = 86,
+	CashShopNewbiePackage = 87,
+	Boost = 88,
+	SurfaceArk = 90,
+	SurfaceOutpost = 91
 }
 
 public enum AssistSquadType : int
@@ -15277,7 +15767,8 @@ public enum BGMTriggerEventType : int
 	TargetAppear = 3,
 	ChangePhase2 = 4,
 	ChangePhase3 = 5,
-	StageStart = 6
+	StageStart = 6,
+	MainQuestClear = 7
 }
 
 public enum EventNKSDialogConditionTypeData : int
@@ -15316,6 +15807,18 @@ public enum BannerPrintType : int
 	PrintEventTime = 1,
 	PrintNone = 2,
 	UndeterminedEnd = 3
+}
+
+public enum BoostBuffConditionType : int
+{
+	AutoChargeCount = 0,
+	SimulationRoomOcReward = 1
+}
+
+public enum BoostManagerRewardPopupType : int
+{
+	None = 0,
+	SimulationRoomOcReward = 1
 }
 
 public enum BotCategory : int
@@ -15569,7 +16072,8 @@ public enum Trigger : int
 	EventMiniGameFARRewardCheck = 164,
 	EventIslandBreakerRewardCheck = 165,
 	EventMiniGameCE009RewardCheck = 166,
-	EventThreeCompanyRumbleRewardCheck = 167
+	EventThreeCompanyRumbleRewardCheck = 167,
+	EventTextAdventurePlusClear = 168
 }
 
 public enum ChapterMod : int
@@ -15839,7 +16343,8 @@ public enum FireType : int
 	StickyProjectileDirect = 17,
 	ObjectCreateToDecoy = 18,
 	MechaShiftyShot = 19,
-	ProjectileCurveV2 = 20
+	ProjectileCurveV2 = 20,
+	InstantBox = 21
 }
 
 public enum AttackType : int
@@ -15927,7 +16432,9 @@ public enum PreferTargetType : int
 	HaveDebuff = 51,
 	HaveBuff = 52,
 	NearAim = 53,
-	LongInitChargeTime = 54
+	LongInitChargeTime = 54,
+	SlotOrder = 55,
+	ReverseSlotOrder = 56
 }
 
 public enum PreferTargetconditionType : int
@@ -16056,98 +16563,6 @@ public enum RewardConditionType : int
 	DamageDoneToTargetMonster = 2
 }
 
-public enum ContentsOpen : int
-{
-	None = 0,
-	Tower = 1,
-	Shop = 2,
-	Collection = 3,
-	Summon = 4,
-	Outpost = 5,
-	ArkSector = 6,
-	LostSector = 7,
-	Guild = 8,
-	GuildShop = 9,
-	ArenaShop = 10,
-	Arena = 11,
-	SpecialArena = 12,
-	ChampionArena = 13,
-	CompanyTower = 14,
-	Ranking = 15,
-	Album = 16,
-	Chatting = 17,
-	HarmonyCube = 18,
-	TrainingRoom = 19,
-	CustomizeGacha = 20,
-	ContentsOpenSynchroDevice = 21,
-	ContentsOpenRecycleRoom = 22,
-	ContentsOpenTacticAcademy = 23,
-	Raid = 24,
-	InterceptNormalLevel2 = 25,
-	InterceptSpecial = 26,
-	EmergencyQuest = 27,
-	Lobby = 28,
-	Mission = 29,
-	SpotBurstGauge = 30,
-	SpotBattleRetreat = 31,
-	SpotAutoControl = 32,
-	Friend = 33,
-	Mail = 34,
-	Messenger = 35,
-	Inventory = 36,
-	SubMenu = 37,
-	NikkeLevelUp = 38,
-	NikkeGradeUp = 39,
-	NikkeEquip = 40,
-	NikkeCube = 41,
-	Event = 42,
-	SpotGoHome = 43,
-	NikkeSkillLevelUp = 44,
-	LibraryCostume = 45,
-	MyLobby = 46,
-	CompanyGacha = 47,
-	FriendPointGacha = 48,
-	CampaignHard = 49,
-	OutpostBattle = 50,
-	LobbyOutpostBattle = 51,
-	DispatchBoard = 52,
-	SubQuest = 53,
-	SummonWishList = 54,
-	ShortcutCounseling = 55,
-	Nikke = 56,
-	PartySet = 57,
-	ShortcutStageDefeatBtn = 58,
-	GachaPremium = 59,
-	SimulationRoom = 60,
-	UnionRaid = 61,
-	InterceptNormalLevel1 = 62,
-	CashShop = 63,
-	AwakenEquipmentOptionRoll = 64,
-	AwakenEquipmentOptionFix = 65,
-	Liberate = 66,
-	LiberateSearch = 67,
-	SoloRaid = 68,
-	GachaPickup = 69,
-	GachaCharge = 70,
-	GachaStepup = 71,
-	SimulationRoomOC = 72,
-	SupportCharacter = 73,
-	ArenaQuickBattle = 74,
-	SpecialArenaQuickBattle = 75,
-	SideStory = 76,
-	FavoriteItem = 77,
-	InterceptAnomalous = 78,
-	ShopTrade = 79,
-	Arcade = 80,
-	SimulationRoomSimple = 81,
-	CampaignQuickBattle = 82,
-	SoloRaidMuseum = 83,
-	CampaignStory = 84,
-	SimulationRoomSimpleRewardOnly = 85,
-	SubMenuFolder = 86,
-	CashShopNewbiePackage = 87
-}
-
 public enum ContentsOpenCondition : int
 {
 	None = 0,
@@ -16159,7 +16574,8 @@ public enum ContentsOpenCondition : int
 	MaxGachaCount = 6,
 	MaxGachaPremiumCount = 7,
 	PlayTutorialGacha = 8,
-	SimulationRoomClear = 9
+	SimulationRoomClear = 9,
+	SynchroDeviceAmplification = 10
 }
 
 public enum PriceType : int
@@ -16230,6 +16646,7 @@ public enum CurrencyType : int
 	CharCE007Ticket = 5402,
 	CharSelect01Ticket = 5501,
 	CharSelect02Ticket = 5502,
+	CharSelect03Ticket = 5503,
 	CharGuaranteed01Ticket = 5601,
 	ArenaTicket = 6001,
 	_2nd_Arena_Ticket = 6002,
@@ -17220,6 +17637,28 @@ public enum DiceEventEventType : int
 	PoorCondition = 5,
 	Start = 6,
 	GoTo = 7
+}
+
+public enum EventDiceTrackEventType : int
+{
+	Start = 0,
+	GoTo = 1,
+	Fever = 2,
+	Random = 3,
+	Item = 4
+}
+
+public enum EventDiceTrackMissionCondition : int
+{
+	EventStageClear = 0,
+	ObtainCharacter = 1,
+	CharacterSkill1Level = 2,
+	CharacterSkill2Level = 3,
+	CharacterskillBurstLevel = 4,
+	CharacterAttractiveLevel = 5,
+	CharacterEquipCollection = 6,
+	CharacterCollectionItemLevel = 7,
+	CharacterEquipItemOverload = 8
 }
 
 public enum EventDragonDungeonRunCharacterUnlockType : int
@@ -19077,6 +19516,74 @@ public enum EventTTSTutorialPlayConditionType : int
 	None = 11
 }
 
+public enum EventTextAdvPlusPageType : int
+{
+	SelectPage = 0,
+	ResultPage = 1,
+	EndingPage = 2
+}
+
+public enum EventTextAdvPlusEndingType : int
+{
+	None = 0,
+	DEATH = 1,
+	TRUEENDING = 2,
+	HIDDEN = 3,
+	EROSION = 4
+}
+
+public enum EventTextAdvPlusEventSceneType : int
+{
+	None = 0,
+	ImageScene = 1,
+	EffectScene = 2,
+	BlackOut = 3
+}
+
+public enum EventTextAdventurePlusHUDTheme : int
+{
+	Marian = 0,
+	Commander = 1,
+	Erosion = 2
+}
+
+public enum EventTextAdventurePlusRouteUnlockType : int
+{
+	None = 0,
+	Date = 1,
+	Item = 2
+}
+
+public enum EventTextAdvPlusSelectionOpenType : int
+{
+	None = 0,
+	LootItem = 1,
+	Food = 2,
+	Ending = 3,
+	Erosion = 4
+}
+
+public enum EventTextAdvPlusSpecialIntroSequenceActiveType : int
+{
+	GamePlayTime = 0,
+	Ending = 1
+}
+
+public enum EventTextAdvPlusSpecialIntroSequenceType : int
+{
+	GamePlayTimeChange = 0,
+	Text = 1,
+	GlitchedNumber = 2,
+	Marian = 3
+}
+
+public enum EventTextAdvPlusSpecialIntroSequencePlayMode : int
+{
+	Once = 0,
+	Always = 1,
+	ForcedOnce = 2
+}
+
 public enum EventTextAdventurePageType : int
 {
 	None = 0,
@@ -19526,7 +20033,8 @@ public enum FieldInteractionActionTriggerFieldType : int
 	None = 0,
 	Campaign = 1,
 	LostSector = 2,
-	Event = 3
+	Event = 3,
+	Campaign2 = 4
 }
 
 public enum FieldInteractionActionTriggerFieldDifficultyType : int
@@ -19606,7 +20114,8 @@ public enum FieldTriggerFieldType : int
 	None = 0,
 	Campaign = 1,
 	LostSector = 2,
-	Event = 3
+	Event = 3,
+	Campaign2 = 4
 }
 
 public enum FishGroupType : int
@@ -19896,7 +20405,9 @@ public enum FunctionType : int
 	CoreDamage = 217,
 	AddFunctionTimer = 218,
 	DefenceRatio = 219,
-	DmgReductionDebuffDecrease = 220
+	DmgReductionDebuffDecrease = 220,
+	Exposure = 221,
+	Nonexposure = 222
 }
 
 public enum FunctionStandardType : int
@@ -20096,7 +20607,9 @@ public enum StatusTriggerType : int
 	IsCheckTeamBurstNextStepExSelf = 70,
 	IsNotCheckTeamBurstNextStepExSelf = 71,
 	IsCheckMonsterUnder = 72,
-	IsActiveMonsterCore = 73
+	IsActiveMonsterCore = 73,
+	IsCheckTeamDeadNumUp = 74,
+	IsCheckTeamDeadNumUnder = 75
 }
 
 public enum FunctionKeepingType : int
@@ -20312,7 +20825,8 @@ public enum ProductType : int
 	PassCostumeShop = 13,
 	TTSAlbumShop = 14,
 	LoginPackageShop = 15,
-	OnepagePackageShop = 16
+	OnepagePackageShop = 16,
+	ComeBackPackageShop = 17
 }
 
 public enum InAppShopPurchasePointRewardType : int
@@ -20699,6 +21213,14 @@ public enum Condition_type : int
 	Character = 1,
 	Costume = 2,
 	FavoriteItem = 3
+}
+
+public enum LobbyCinematicTimelineStartConditionType : int
+{
+	None = 0,
+	AfterSpawn = 1,
+	AfterCinematic = 2,
+	Touch = 3
 }
 
 public enum login_event_reward_type : int
@@ -21263,7 +21785,8 @@ public enum ProductOfferPopupType : int
 {
 	None = 0,
 	InAppShop = 1,
-	Gacha = 2
+	Gacha = 2,
+	NewbiePackage = 3
 }
 
 public enum ObjectType : int
