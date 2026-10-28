@@ -39,10 +39,11 @@ public class SystemController(IUserService db) : Controller
     public ActionResult<ResStaticDataPackInfoMpk> GetStaticData([FromBodyProtobuf] ReqStaticDataPackInfoMpk req)
     {
         StaticData data = GameConfig.Root.StaticDataMpk;
+        string serveUrl = data.Url.Replace("https://cloud.nikke-kr.com/", "https://global-lobby.nikke-kr.com/");
 
         return new ResStaticDataPackInfoMpk()
         {
-            Url = data.Url,
+            Url = serveUrl,
             Version = data.Version,
             Size = GameData.Instance.MpkSize,
             Sha256Sum = ByteString.CopyFrom(GameData.Instance.MpkHash),
