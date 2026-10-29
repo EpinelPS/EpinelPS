@@ -92,6 +92,7 @@ public class User
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
     public Dictionary<int, bool> SubQuestData { get; set; } = [];
+    public Dictionary<int, bool> EventQuestData { get; set; } = [];
     public int InfraCoreExp { get; set; } = 0;
     public int InfraCoreLvl { get; set; } = 1;
     public Dictionary<int, bool> InfraCoreRewardReceived { get; set; } = [];
