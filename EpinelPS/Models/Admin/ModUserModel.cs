@@ -47,7 +47,7 @@ public class ModUserCurrencyModel
 
 public class CharacterGearModel
 {
-    public Squad SquadName { get; set; }
+    public string CharacterName { get; set; }
     public int CharacterCsn { get; set; } = 0;
     public int CharacterTid { get; set; } = 0;
     public int CharacterLevel { get; set; } = 0;

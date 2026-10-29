@@ -1,6 +1,8 @@
 using EpinelPS.Data;
 using EpinelPS.Database;
+using EpinelPS.LobbyServer.Event;
 using EpinelPS.Utils;
+using System.Text.Json;
 
 namespace EpinelPS.LobbyServer.Shop;
 
@@ -8,6 +10,11 @@ public static class NormalShopHelper
 {
     public sealed record PurchaseRequest(int ProductId, int Order, int Quantity);
     public sealed record PurchasedProduct(ContentsShopProductRecord Product, int Order, int Quantity, int BuyCount);
+
+    private const int MileageCategory = 8;
+    private static bool IsRateUpRow(ContentsShopProductRecord p) =>
+        p.GoodsType == RewardType.Character && p.IsLimit && p.BuyLimitCount == 11;
+    private static bool IsCharacterRow(ContentsShopProductRecord p) => p.GoodsType == RewardType.Character;
 
     public static List<NetShopProductData> GetAllShopData(User user)
     {
@@ -43,6 +50,7 @@ public static class NormalShopHelper
     {
         var now = DateTime.UtcNow;
         var category = (int)shop.ShopCategory;
+        bool isMileage = category == MileageCategory;
         bool manualReroll = reroll;
         if (!user.NormalShopStates.TryGetValue(category, out var state))
         {
@@ -50,12 +58,22 @@ public static class NormalShopHelper
             user.NormalShopStates[category] = state;
             reroll = true;
         }
+        state.PinnedBuyCounts ??= [];
+        if (isMileage)
+        {
+            var products = state.ProductIdsByOrder
+                .Where(x => GameData.Instance.ContentsShopProductTable.TryGetValue(x.Value, out var sp) && IsCharacterRow(sp))
+                .Select(x => x.Key)
+                .ToList();
+            products.ForEach(p => state.ProductIdsByOrder.Remove(p));
+        }
 
         bool automaticRenewal = state.NextRenewAt > 0 && state.NextRenewAt <= now.Ticks;
         if (reroll || automaticRenewal || state.ProductIdsByOrder.Count == 0)
         {
             RollProducts(shop, state, reroll && state.ProductIdsByOrder.Count > 0);
             state.BuyCountsByOrder.Clear();
+            if (automaticRenewal) state.PinnedBuyCounts.Clear();
             state.RenewAt = GetRenewAt(shop, now);
             state.NextRenewAt = GetNextRenewAt(shop, now);
             if (manualReroll && !automaticRenewal)
@@ -76,7 +94,6 @@ public static class NormalShopHelper
         {
             if (!GameData.Instance.ContentsShopProductTable.TryGetValue(selection.Value, out var product))
                 continue;
-
             result.List.Add(new NetShopProductInfoData
             {
                 Order = product.ProductOrder,
@@ -85,15 +102,26 @@ public static class NormalShopHelper
                 BuyCount = state.BuyCountsByOrder.GetValueOrDefault(product.ProductOrder),
             });
         }
+        if (isMileage)
+        {
+            GetPinnedProducts(user, shop).ForEach(p =>
+                {
+                    result.List.Add(new NetShopProductInfoData
+                    {
+                        Order = p.ProductOrder,
+                        ProductId = p.Id,
+                        BuyLimitCount = p.BuyLimitCount,
+                        BuyCount = state.PinnedBuyCounts.GetValueOrDefault(p.Id),
+                    });
+                });
+        }
 
         return result;
     }
 
     private static long GetRenewAt(ContentsShopRecord shop, DateTime now)
     {
-        if (shop.RenewType == RenewType.None)
-            return 0;
-
+        if (shop.RenewType == RenewType.None) return 0;
         return now.Date.Ticks;
     }
 
@@ -134,6 +162,12 @@ public static class NormalShopHelper
                 return false;
         }
 
+        // Characters are only valid through the pinned list
+        if (shopCategory == MileageCategory &&
+            GameData.Instance.ContentsShopProductTable.TryGetValue(productId, out var characterCheck) &&
+            IsCharacterRow(characterCheck))
+            return false;
+
         return GameData.Instance.ContentsShopProductTable.TryGetValue(productId, out product);
     }
 
@@ -151,9 +185,23 @@ public static class NormalShopHelper
         if (requests.Count == 0 || requests.Any(x => x.Quantity <= 0))
             return false;
 
-        var resolved = new List<(PurchaseRequest Request, ContentsShopProductRecord Product, NormalShopState State)>();
+        var resolved = new List<(PurchaseRequest Request, ContentsShopProductRecord Product, NormalShopState State, bool Pinned)>();
         foreach (var request in requests)
         {
+            // Active banner rate-up units (Mileage shop only)
+            if (TryGetPinnedProduct(user, shopCategory, request.ProductId, out var pinnedProduct) && pinnedProduct != null)
+            {
+                _ = GetShopData(user, shopCategory); // makes sure state exists and the daily reset ran
+                var pinnedState = user.NormalShopStates[shopCategory];
+                pinnedState.PinnedBuyCounts ??= [];
+                int pinnedCount = pinnedState.PinnedBuyCounts.GetValueOrDefault(pinnedProduct.Id);
+                if (pinnedCount + request.Quantity > pinnedProduct.BuyLimitCount)
+                    return false;
+
+                resolved.Add((request with { Order = pinnedProduct.ProductOrder }, pinnedProduct, pinnedState, true));
+                continue;
+            }
+
             if (!TryGetSelectedProduct(user, shopCategory, request.Order, request.ProductId, out var product, out var state) ||
                 product == null || state == null)
                 return false;
@@ -164,7 +212,7 @@ public static class NormalShopHelper
             if (product.IsLimit && currentBuyCount + normalizedRequest.Quantity > product.BuyLimitCount)
                 return false;
 
-            resolved.Add((normalizedRequest, product, state));
+            resolved.Add((normalizedRequest, product, state, false));
         }
 
         var currencyCosts = resolved
@@ -200,9 +248,19 @@ public static class NormalShopHelper
 
         foreach (var entry in resolved)
         {
-            AddBuyCount(entry.State, entry.Request.Order, entry.Request.Quantity);
-            purchased.Add(new PurchasedProduct(entry.Product, entry.Request.Order, entry.Request.Quantity,
-                entry.State.BuyCountsByOrder[entry.Request.Order]));
+            int newCount;
+            if (entry.Pinned)
+            {
+                newCount = entry.State.PinnedBuyCounts.GetValueOrDefault(entry.Product.Id) + entry.Request.Quantity;
+                entry.State.PinnedBuyCounts[entry.Product.Id] = newCount;
+            }
+            else
+            {
+                AddBuyCount(entry.State, entry.Request.Order, entry.Request.Quantity);
+                newCount = entry.State.BuyCountsByOrder[entry.Request.Order];
+            }
+
+            purchased.Add(new PurchasedProduct(entry.Product, entry.Request.Order, entry.Request.Quantity, newCount));
         }
 
         return true;
@@ -213,9 +271,12 @@ public static class NormalShopHelper
         var previous = state.ProductIdsByOrder;
         var next = new Dictionary<int, int>();
 
-        foreach (var group in GameData.Instance.ContentsShopProductTable.Values
-                     .Where(p => p.BundleId == shop.BundleId)
-                     .GroupBy(p => p.ProductOrder))
+        var rows = GameData.Instance.ContentsShopProductTable.Values
+            .Where(p => p.BundleId == shop.BundleId);
+        if ((int)shop.ShopCategory == MileageCategory)
+            rows = rows.Where(p => !IsCharacterRow(p)); // characters come only from the pinned rate-up list
+
+        foreach (var group in rows.GroupBy(p => p.ProductOrder))
         {
             var candidates = group.ToList();
             if (avoidPrevious && candidates.Count > 1 && previous.TryGetValue(group.Key, out int previousId))
@@ -234,11 +295,7 @@ public static class NormalShopHelper
                 foreach (var candidate in candidates)
                 {
                     roll -= Math.Max(0, candidate.ProductProb);
-                    if (roll < 0)
-                    {
-                        selected = candidate;
-                        break;
-                    }
+                    if (roll < 0) { selected = candidate; break; }
                 }
             }
 
@@ -246,5 +303,36 @@ public static class NormalShopHelper
         }
 
         state.ProductIdsByOrder = next;
+    }
+    private static List<ContentsShopProductRecord> GetPinnedProducts(User user, ContentsShopRecord shop)
+    {
+        if ((int)shop.ShopCategory != MileageCategory) return [];
+
+        var ordered = GachaUtils.GetActiveRateUpIdsOrdered(user);
+        if (ordered.Count == 0) return [];
+
+        var rank = new Dictionary<int, int>();
+        for (int i = 0; i < ordered.Count; i++) rank[ordered[i]] = i;
+
+        return GameData.Instance.ContentsShopProductTable.Values
+            .Where(p => p.BundleId == shop.BundleId && IsRateUpRow(p) && rank.ContainsKey(p.GoodsId))
+            .GroupBy(p => p.GoodsId)
+            .Select(g => g.OrderBy(p => p.ProductOrder).ThenBy(p => p.Id).First())
+            .OrderBy(p => rank[p.GoodsId])
+            .ToList();
+    }
+
+    private static bool TryGetPinnedProduct(User user, int shopCategory, int productId,
+        out ContentsShopProductRecord? product)
+    {
+        product = null;
+        if (shopCategory != MileageCategory) return false;
+
+        var shop = GameData.Instance.ContentsShopTable.Values.FirstOrDefault(s =>
+            s.ShopType == ShopType.MainShop && (int)s.ShopCategory == shopCategory);
+        if (shop == null) return false;
+
+        product = GetPinnedProducts(user, shop).FirstOrDefault(p => p.Id == productId);
+        return product != null;
     }
 }

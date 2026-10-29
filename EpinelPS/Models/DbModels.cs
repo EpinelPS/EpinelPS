@@ -161,6 +161,7 @@ public class NormalShopState
     public long NextRenewAt { get; set; }
     public Dictionary<int, int> ProductIdsByOrder { get; set; } = [];
     public Dictionary<int, int> BuyCountsByOrder { get; set; } = [];
+    public Dictionary<int, int> PinnedBuyCounts { get; set; } = [];
 }
 
 public class SynchroSlot
