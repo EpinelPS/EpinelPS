@@ -16,6 +16,11 @@ public class ClearStage : LobbyMessage
 
         Console.WriteLine($"Stage " + req.StageId + " completed, result is " + req.BattleResult);
 
+        // Same as EnterStage: the clear result also reports the used team, so record it here too
+        // in case the player finished a stage that was entered before this build.
+        if (req.TeamNumber >= 1)
+            user.SetLastContentsTeamNumber(1, req.TeamNumber);
+
         // TODO: check if user has already cleared this stage
         if (req.BattleResult == 1)
         {
