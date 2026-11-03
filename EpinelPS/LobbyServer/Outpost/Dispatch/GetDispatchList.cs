@@ -7,6 +7,10 @@ namespace EpinelPS.LobbyServer.Outpost.Dispatch;
 [GameRequest("/outpost/dispatch/get")]
 public class GetDispatchList : LobbyMessage
 {
+    // The board panel renders 11 slots. Anything above that makes the whole list render blank,
+    // so the response must never exceed this.
+    private const int MaxBoardSlots = 11;
+
     protected override async Task HandleAsync()
     {
         ReqGetDispatchList req = await ReadData<ReqGetDispatchList>();
@@ -32,7 +36,11 @@ public class GetDispatchList : LobbyMessage
         DateTime startTime = DateTime.UtcNow;
         int dateDay = user.GetDateDay();
 
-        if (user.UserDispatchData.Today != dateDay)
+        // Saves created by an older build can already hold more entries than the panel can render
+        // (the daily quota of 12 was used as the number of entries to generate, plus the collection
+        // and favourite boards). Those lists are replayed as-is on every later request that day, so
+        // the board stays blank until the next daily reset. Rebuild them instead of serving them.
+        if (user.UserDispatchData.Today != dateDay || !StoredListIsUsable(user))
         {
             user.UserDispatchData.Today = dateDay;
             user.UserDispatchData.dispatchDatas = new();
@@ -159,6 +167,14 @@ public class GetDispatchList : LobbyMessage
             response.DispatchList.AddRange(user.UserDispatchData.dispatchDatas);
         }
 
+        // Hard cap. Board levels can raise DispatchMax, and the panel still only has 11 slots.
+        while (response.DispatchList.Count > MaxBoardSlots)
+        {
+            NetUserDispatchData extra = response.DispatchList[response.DispatchList.Count - 1];
+            response.DispatchList.RemoveAt(response.DispatchList.Count - 1);
+            user.UserDispatchData.dispatchDatas.Remove(extra);
+        }
+
         // SelectableDispatchList is deliberately not sent to the client.
         // The panel header ("dispatch board X/11") shows DispatchList.Count + SelectableDispatchList.Count.
         // With nothing running the count is 6/11, but as soon as dispatches are in progress the extra
@@ -172,5 +188,27 @@ public class GetDispatchList : LobbyMessage
         JsonDb.Save();
         // TODO
         await WriteDataAsync(response);
+    }
+
+    /// <summary>
+    /// Whether the entries stored for today can be served to the client as they are.
+    /// The panel has 11 slots, the client keys the list by DispatchGroupId (so a group may only
+    /// appear once) and every Tid must still exist in the dispatch table.
+    /// </summary>
+    private static bool StoredListIsUsable(User user)
+    {
+        List<NetUserDispatchData> stored = user.UserDispatchData.dispatchDatas;
+        if (stored == null || stored.Count == 0) return false;
+        if (stored.Count > MaxBoardSlots) return false;
+
+        HashSet<int> groups = new();
+        foreach (NetUserDispatchData entry in stored)
+        {
+            DispatchRecord? record = GameData.Instance.DispatchTable.GetValueOrDefault(entry.Tid);
+            if (record == null) return false;
+            if (!groups.Add(record.DispatchGroup)) return false;
+        }
+
+        return true;
     }
 }
