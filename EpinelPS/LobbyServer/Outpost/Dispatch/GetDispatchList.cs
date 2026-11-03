@@ -16,9 +16,12 @@ public class GetDispatchList : LobbyMessage
         User user = GetUser();
         DispatchHelper.SyncDispatchLevel(user);
 
-        List<DispatchBoardData> dispatch = GameData.Instance.DispatchBoardTable.Values
+        // Normal dispatches (Type 1): keep the whole board record, because the number of entries to
+        // generate comes from DispatchMax and not from the daily quota in ResetableData.DispatchCount.
+        DispatchBoardRecord? dispatchNormal = GameData.Instance.DispatchBoardTable.Values
             .Where(x => x.DispatchType == DispatchType.Dispatch && x.DispatchBoardLv == user.DispatchLv)
-            .FirstOrDefault().DispatchList;
+            .FirstOrDefault();
+        List<DispatchBoardData> dispatch = dispatchNormal?.DispatchList ?? new List<DispatchBoardData>();
         DispatchBoardRecord? dispatchcol = GameData.Instance.DispatchBoardTable.Values
             .Where(x => x.DispatchType == DispatchType.DispatchCollection &&
                         x.DispatchBoardLv == user.DispatchCollectionLv).FirstOrDefault();
@@ -37,10 +40,16 @@ public class GetDispatchList : LobbyMessage
             user.SelectableDispatchData = new();
             user.DispatchResetCount = 0;
 
-            //记录已选中的任务
             List<DispatchRecord> availableDispatchTable = new List<DispatchRecord>();
+            // The client keys its dispatch list by DispatchGroupId, so a group may only appear once.
+            // Duplicate keys made NKUserDispatchData.UpdateListModelData index out of range.
+            HashSet<int> usedGroupIds = new HashSet<int>();
 
-            for (int i = 0; i < user.ResetableData.DispatchCount; i++)
+            // Normal dispatches: DispatchMax (always 3) entries, not ResetableData.DispatchCount.
+            // DispatchCount is the daily reset quota (12) and using it produced a large number of
+            // duplicate groups.
+            int normalMax = dispatchNormal?.DispatchMax ?? 0;
+            for (int i = 0; i < normalMax; i++)
             {
                 DispatchBoardData groudid = DispatchHelper.SelectItemByProbability(dispatch, x => x.DispatchProb);
 
@@ -48,19 +57,27 @@ public class GetDispatchList : LobbyMessage
                 List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
                     .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
 
-                // 从dispatchtable中移除已选择的Tid
-                dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id)).ToList();
+                // Drop already picked Tids and groups that are already in use: group ids must stay unique.
+                dispatchtable = dispatchtable
+                    .Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                    .Where(x => !usedGroupIds.Contains(x.DispatchGroup))
+                    .ToList();
+
+                // No candidate left for this group, skip it instead of indexing an empty list.
+                if (dispatchtable.Count == 0)
+                    continue;
 
                 int randomNumber = random.Next(0, dispatchtable.Count);
 
-                availableDispatchTable.Add(dispatchtable[randomNumber]);
+                DispatchRecord chosen = dispatchtable[randomNumber];
+                availableDispatchTable.Add(chosen);
+                usedGroupIds.Add(chosen.DispatchGroup);
                 NetUserDispatchData netUserDispatch = new NetUserDispatchData
                 {
-                    Tid = dispatchtable[randomNumber].Id,
+                    Tid = chosen.Id,
                     IsRun = 0,
                     StartAt = startTime.Ticks,
-                    EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                    //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
+                    EndAt = startTime.AddMinutes(chosen.TimeMin).Ticks
                 };
 
                 user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
@@ -77,19 +94,25 @@ public class GetDispatchList : LobbyMessage
                     List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
                         .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
 
-                    // 从dispatchtable中移除已选择的Tid
-                    dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                    // Drop already picked Tids and groups that are already in use: group ids must stay unique.
+                    dispatchtable = dispatchtable
+                        .Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                        .Where(x => !usedGroupIds.Contains(x.DispatchGroup))
                         .ToList();
 
+                    if (dispatchtable.Count == 0)
+                        continue;
+
                     int randomNumber = random.Next(0, dispatchtable.Count);
-                    availableDispatchTable.Add(dispatchtable[randomNumber]);
+                    DispatchRecord chosen = dispatchtable[randomNumber];
+                    availableDispatchTable.Add(chosen);
+                    usedGroupIds.Add(chosen.DispatchGroup);
                     NetUserDispatchData netUserDispatch = new NetUserDispatchData
                     {
-                        Tid = dispatchtable[randomNumber].Id,
+                        Tid = chosen.Id,
                         IsRun = 0,
                         StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                        //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
+                        EndAt = startTime.AddMinutes(chosen.TimeMin).Ticks
                     };
                     user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
                     response.DispatchList.Add(netUserDispatch);
@@ -106,19 +129,25 @@ public class GetDispatchList : LobbyMessage
                     List<DispatchRecord> dispatchtable = GameData.Instance.DispatchTable.Values
                         .Where(x => x.DispatchGroup == groudid.DispatchGroup).ToList();
 
-                    // 从dispatchtable中移除已选择的Tid
-                    dispatchtable = dispatchtable.Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                    // Drop already picked Tids and groups that are already in use: group ids must stay unique.
+                    dispatchtable = dispatchtable
+                        .Where(x => !availableDispatchTable.Any(d => d.Id == x.Id))
+                        .Where(x => !usedGroupIds.Contains(x.DispatchGroup))
                         .ToList();
 
+                    if (dispatchtable.Count == 0)
+                        continue;
+
                     int randomNumber = random.Next(0, dispatchtable.Count);
-                    availableDispatchTable.Add(dispatchtable[randomNumber]);
+                    DispatchRecord chosen = dispatchtable[randomNumber];
+                    availableDispatchTable.Add(chosen);
+                    usedGroupIds.Add(chosen.DispatchGroup);
                     NetUserDispatchData netUserDispatch = new NetUserDispatchData
                     {
-                        Tid = dispatchtable[randomNumber].Id,
+                        Tid = chosen.Id,
                         IsRun = 0,
                         StartAt = startTime.Ticks,
-                        EndAt = startTime.AddMinutes(dispatchtable[randomNumber].TimeMin).Ticks
-                        //EndAt = startTime.AddSeconds(dispatchtable[randomNumber].TimeMin).Ticks
+                        EndAt = startTime.AddMinutes(chosen.TimeMin).Ticks
                     };
                     user.UserDispatchData.dispatchDatas.Add(netUserDispatch);
                     response.DispatchList.Add(netUserDispatch);
@@ -130,10 +159,16 @@ public class GetDispatchList : LobbyMessage
             response.DispatchList.AddRange(user.UserDispatchData.dispatchDatas);
         }
 
-        List<NetSelectableDispatchData> dontdispatcht = user.SelectableDispatchData.Where(x => user.DispatchClearList.Contains(x.SelectTid)).ToList();
-
+        // SelectableDispatchList is deliberately not sent to the client.
+        // The panel header ("dispatch board X/11") shows DispatchList.Count + SelectableDispatchList.Count.
+        // With nothing running the count is 6/11, but as soon as dispatches are in progress the extra
+        // slot entries push it to 12/11, which is past the 11 slots the panel can render and the whole
+        // list renders blank (all cards disappear, only the title and the countdowns remain).
+        // The entries in DispatchList already carry IsRun / StartAt / EndAt, which is everything the
+        // client needs to show a running dispatch with its countdown, so the slots are only kept in the
+        // save (RunDispatch / ObtainDispatchReward still work off the Tid).
         response.DispatchResetCount = user.DispatchResetCount;
-        //response.SelectableDispatchList.AddRange(dontdispatcht);
+        Console.WriteLine($"[dispatch] sent {response.DispatchList.Count} dispatch entries (selectable slots withheld)");
         JsonDb.Save();
         // TODO
         await WriteDataAsync(response);
