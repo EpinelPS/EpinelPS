@@ -1,4 +1,5 @@
 ﻿namespace EpinelPS.LobbyServer.Team;
+using EpinelPS.Utils;
 
 [GameRequest("/team/support-character/list-used-count")]
 public class ListSupportCharacterCount : LobbyMessage
@@ -12,7 +13,7 @@ public class ListSupportCharacterCount : LobbyMessage
         // TODO: Limit temportary participation
         foreach (int item in req.TeamTypeList)
         {
-            Console.WriteLine("support character used: " + item);
+            Logging.WriteLine("support character used: " + item, LogType.Debug);
         }
         await WriteDataAsync(response);
     }

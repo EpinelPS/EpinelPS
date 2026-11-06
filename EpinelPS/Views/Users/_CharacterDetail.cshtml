@@ -1,0 +1,120 @@
+@using EpinelPS.Models.Admin
+@model EpinelPS.Models.Admin.ModUserCharacterDetailModel
+
+<form asp-action="ModifyGear" asp-route-id="@Model.UserId" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div>
+            <h4 class="mb-1">
+                @Model.Character.Name
+                <small class="text-muted">@Model.Character.Tid</small>
+                @if (Model.Character.IsSynchro)
+                {
+                    <span class="badge bg-warning text-dark ms-2" title="同步器等级">同步</span>
+                }
+            </h4>
+            <span class="text-muted small">
+                @Model.Character.Manufacturer · LV@(Model.Character.Level) · 品级 @Model.Character.Rarity · @Model.Character.Tags ·
+                技能 1/2/3 @Model.Character.Skill1 / @Model.Character.Skill2 / @Model.Character.BurstSkill · 突破 @Model.Character.BreakCount ·
+                装备 @Model.Gears.Count 件
+            </span>
+        </div>
+        <button type="submit" name="submitType" value="saveCharacter_@Model.Character.Csn" class="btn btn-info btn-sm">
+            <i class="fas fa-save me-2"></i> 保存该角色
+        </button>
+    </div>
+
+    @if (!Model.Gears.Any())
+    {
+        <div class="alert alert-info">该角色没有已觉醒的装备</div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var gear in Model.Gears)
+            {
+                <div class="col-6 col-md">
+                    <div class="card h-100 bg-dark">
+                        <div class="card-body d-flex flex-column">
+                            <input type="hidden" name="GearUpdates[@gear.GearIsn].CharacterId" value="@Model.Character.Csn" />
+                            <input type="hidden" name="GearUpdates[@gear.GearIsn].GearId" value="@gear.GearIsn" />
+
+                            <h6 class="card-title mb-1">@gear.GearType</h6>
+                            <p class="text-muted small mb-3">@gear.GearName</p>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6">Level:</label>
+                                <input type="number" class="form-control form-control-sm fw-bold fs-6"
+                                       name="GearUpdates[@gear.GearIsn].Level" value="@gear.GearLevel" min="0" max="5" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6">Option 1:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option1"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option1Id)">
+                                    <option value="0">No Option</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6">Option 2:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option2"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option2Id)">
+                                    <option value="0">No Option</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label mb-1 fw-bold fs-6">Option 3:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option3"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option3Id)">
+                                    <option value="0">No Option</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" name="submitType" value="updateGear_@gear.GearIsn" class="btn btn-primary w-100 mt-auto p-2">
+                                Update Gear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Items.Any())
+    {
+        <h5 class="mt-4 mb-2">道具列表</h5>
+        <div class="table-responsive">
+            <table class="table table-sm table-dark table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>道具 ID</th>
+                        <th>等级</th>
+                        <th>数量</th>
+                        <th>强化经验</th>
+                        <th>位置</th>
+                        <th>已觉醒</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items.OrderByDescending(i => i.Level).ThenBy(i => i.ItemType))
+                    {
+                        <tr>
+                            <td>@item.ItemType</td>
+                            <td>@item.Level</td>
+                            <td>@item.Count</td>
+                            <td>@item.Exp</td>
+                            <td>@item.Position</td>
+                            <td>@(Model.Gears.Any(g => g.GearIsn == item.Isn) ? "是" : "")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</form>

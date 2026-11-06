@@ -138,6 +138,11 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         // This works regardless of the database provider's cascade configuration.
         List<TriggerModelNew> triggerRows = _db.Triggers.Where(trigger => trigger.UserId == id).ToList();
         _db.Triggers.RemoveRange(triggerRows);
+
+        // Same for the character toggle rows
+        List<CharacterToggleModel> toggleRows = _db.CharacterToggles.Where(toggle => toggle.UserId == id).ToList();
+        _db.CharacterToggles.RemoveRange(toggleRows);
+
         _db.Users.Remove(gameUser);
         _db.SdkUsers.Remove(sdkUser);
         _db.SaveChanges();
@@ -148,7 +153,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         return RedirectToAction(nameof(Index));
     }
 
-    public List<CharacterGearModel> OverloadedGear = [];
     [Route("Modify/{id}")]
     public IActionResult Modify(ulong id)
     {
@@ -165,59 +169,6 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         var gameUser = _db.Users.Find(id);
         if (gameUser == null) return NotFound();
 
-        if (user.EquipmentAwakenings.Count != 0)
-        {
-            var gearDictionary = user.EquipmentAwakenings.ToDictionary(a => a.Isn, a => a);
-
-            OverloadedGear =
-            [
-                .. user.Characters
-                    .Where(u => user.Items.Any(i => i.Csn == u.Csn && gearDictionary.ContainsKey(i.Isn)))
-                    .Select(u =>
-                    {
-                        var charData = GameData.Instance.CharacterTable.Values.FirstOrDefault(c => c.Id == u.Tid);
-
-                        return new CharacterGearModel
-                        {
-                            CharacterName = AdminApiController.LookupRealName(charData.NameLocalkey) ?? "#7",
-                            CharacterCsn = u.Csn,
-                            CharacterTid = u.Tid,
-                            CharacterLevel = u.Level,
-                            Manufacturer = charData?.CorporationSubType == CorporationSubType.OVERSPEC
-                                ? charData.CorporationSubType.ToString()
-                                : charData?.Corporation.ToString() ?? "Unknown",
-                            Skill1 = u.Skill1Lvl,
-                            Skill2 = u.Skill2Lvl,
-                            BurstSkill = u.UltimateLevel,
-                            Gears =
-                            [
-                                .. user.Items
-                                    .Where(i => i.Csn == u.Csn && gearDictionary.ContainsKey(i.Isn))
-                                    .Select(i => new GearModel
-                                    {
-                                        GearIsn = i.Isn,
-                                        GearType = i.ItemType.ToString().StartsWith("31")
-                                            ? "Head"
-                                            : i.ItemType.ToString().StartsWith("32")
-                                                ? "Body"
-                                                : i.ItemType.ToString().StartsWith("33")
-                                                    ? "Arm"
-                                                    : i.ItemType.ToString().StartsWith("34")
-                                                        ? "Leg"
-                                                        : "Unknown",
-                                        GearLevel = i.Level,
-                                        Option1Id = gearDictionary[i.Isn].Option.Option1Id,
-                                        Option1Lock = gearDictionary[i.Isn].Option.Option1Lock,
-                                        Option2Id = gearDictionary[i.Isn].Option.Option2Id,
-                                        Option2Lock = gearDictionary[i.Isn].Option.Option2Lock,
-                                        Option3Id = gearDictionary[i.Isn].Option.Option3Id,
-                                        Option3Lock = gearDictionary[i.Isn].Option.Option3Lock
-                                    })
-                            ]
-                        };
-                    })
-            ];
-        }
         return View(
             new ModUserModel()
             {
@@ -227,14 +178,199 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
                 sickpulls = user.sickpulls,
                 Username = sdkUser.Email ?? "Unknown username",
                 ID = user.ID,
-                OverloadedGear = OverloadedGear.Count > 0 ? OverloadedGear : [],
+                Characters = BuildCharacterList(user),
                 OverloadOptions = _overloadOptions
             }
         );
     }
 
+    /// <summary>
+    /// Builds the character list of the user. The gear detail is loaded on demand
+    /// by CharacterDetail so that the page stays small.
+    /// </summary>
+    private static List<ModUserCharacterModel> BuildCharacterList(User user)
+    {
+        Dictionary<long, EquipmentAwakeningData> gearDictionary = BuildGearDictionary(user);
+        Dictionary<long, List<DbItemData>> itemsByCsn = user.Items
+            .GroupBy(i => i.Csn)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        List<ModUserCharacterModel> characters = [];
+
+        foreach (CharacterModel character in user.Characters)
+        {
+            CharacterRecord? charData = GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var record) ? record : null;
+
+            int gearCount = itemsByCsn.TryGetValue(character.Csn, out List<DbItemData>? items)
+                ? items.Count(i => gearDictionary.ContainsKey(i.Isn))
+                : 0;
+
+            characters.Add(new ModUserCharacterModel()
+            {
+                Csn = character.Csn,
+                Tid = character.Tid,
+                Name = AdminApiController.LookupRealName(charData?.NameLocalkey ?? ""),
+                Manufacturer = charData?.CorporationSubType == CorporationSubType.OVERSPEC
+                    ? charData.CorporationSubType.ToString()
+                    : charData?.Corporation.ToString() ?? "Unknown",
+                Level = user.GetCharacterLevel(character.Csn, character.Level),
+                IsSynchro = user.GetSynchro(character.Csn),
+                Skill1 = character.Skill1Lvl,
+                Skill2 = character.Skill2Lvl,
+                BurstSkill = character.UltimateLevel,
+                Grade = character.Grade,
+                BreakCount = GetBreakCount(character.Grade),
+                Rarity = charData?.OriginalRare.ToString() ?? "Unknown",
+                ElementName = GetElementName(charData),
+                WeaponType = GetWeaponType(charData),
+                GearCount = gearCount
+            });
+        }
+
+        return characters
+            .OrderBy(c => c.Manufacturer)
+            .ThenBy(c => c.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Converts the stored GradeCoreId into the number of limit breaks.
+    /// SR uses 101..103, SSR uses 1..11 and R cannot be limit broken.
+    /// </summary>
+    private static int GetBreakCount(int grade)
+    {
+        if (grade >= 101 && grade <= 103) return grade - 100;
+        if (grade >= 1 && grade <= 11) return grade;
+        return 0;
+    }
+
+    /// <summary>
+    /// Returns the localized element name (code) of a character.
+    /// </summary>
+    private static string GetElementName(CharacterRecord? charData)
+    {
+        if (charData?.ElementId is not { Length: > 0 }) return "";
+        if (!GameData.Instance.ElementTable.TryGetValue(charData.ElementId[0], out ElementRecord? element)) return "";
+        return AdminApiController.LookupRealName(element.ElementNameLocalekey ?? "");
+    }
+
+    /// <summary>
+    /// Returns the weapon type of a character.
+    /// </summary>
+    private static string GetWeaponType(CharacterRecord? charData)
+    {
+        if (charData == null) return "";
+        if (!GameData.Instance.CharacterShotTable.TryGetValue(charData.ShotId, out CharacterShotRecord? shot)) return "";
+        return shot.WeaponType == WeaponType.None ? "" : shot.WeaponType.ToString();
+    }
+
+    /// <summary>
+    /// Returns the gear detail of a single character for the modify page modal.
+    /// </summary>
+    [Route("CharacterDetail/{id}")]
+    public IActionResult CharacterDetail(ulong id, int csn)
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
+
+        User? user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
+        if (user == null) return NotFound();
+
+        CharacterModel? character = user.Characters.FirstOrDefault(c => c.Csn == csn);
+        if (character == null) return NotFound();
+
+        Dictionary<long, EquipmentAwakeningData> gearDictionary = BuildGearDictionary(user);
+        List<DbItemData> items = user.Items.Where(i => i.Csn == csn).ToList();
+        List<DbItemData> gearItems = items.Where(i => gearDictionary.ContainsKey(i.Isn)).ToList();
+
+        CharacterRecord? charData = GameData.Instance.CharacterTable.TryGetValue(character.Tid, out var record) ? record : null;
+
+        ModUserCharacterDetailModel model = new()
+        {
+            UserId = id,
+            OverloadOptions = _overloadOptions,
+            Character = new ModUserCharacterModel()
+            {
+                Csn = character.Csn,
+                Tid = character.Tid,
+                Name = AdminApiController.LookupRealName(charData?.NameLocalkey ?? ""),
+                Manufacturer = charData?.CorporationSubType == CorporationSubType.OVERSPEC
+                    ? charData.CorporationSubType.ToString()
+                    : charData?.Corporation.ToString() ?? "Unknown",
+                Level = user.GetCharacterLevel(character.Csn, character.Level),
+                IsSynchro = user.GetSynchro(character.Csn),
+                Skill1 = character.Skill1Lvl,
+                Skill2 = character.Skill2Lvl,
+                BurstSkill = character.UltimateLevel,
+                Grade = character.Grade,
+                BreakCount = GetBreakCount(character.Grade),
+                Rarity = charData?.OriginalRare.ToString() ?? "Unknown",
+                ElementName = GetElementName(charData),
+                WeaponType = GetWeaponType(charData),
+                GearCount = gearItems.Count
+            },
+            Items = items,
+            Gears =
+            [
+                .. gearItems.Select(gear => new GearModel()
+                {
+                    GearIsn = gear.Isn,
+                    GearName = GetGearName(gear.ItemType),
+                    GearType = GetGearType(gear.ItemType),
+                    GearLevel = gear.Level,
+                    Option1Id = gearDictionary[gear.Isn].Option.Option1Id,
+                    Option1Lock = gearDictionary[gear.Isn].Option.Option1Lock,
+                    Option2Id = gearDictionary[gear.Isn].Option.Option2Id,
+                    Option2Lock = gearDictionary[gear.Isn].Option.Option2Lock,
+                    Option3Id = gearDictionary[gear.Isn].Option.Option3Id,
+                    Option3Lock = gearDictionary[gear.Isn].Option.Option3Lock
+                })
+            ]
+        };
+
+        return PartialView("_CharacterDetail", model);
+    }
+
+    /// <summary>
+    /// Awakening rows can exist multiple times for the same item, the newest one wins.
+    /// </summary>
+    private static Dictionary<long, EquipmentAwakeningData> BuildGearDictionary(User user)
+    {
+        return user.EquipmentAwakenings
+            .GroupBy(a => a.Isn)
+            .ToDictionary(g => g.Key, g => g.OrderByDescending(a => a.IsNewData).First());
+    }
+
+    /// <summary>
+    /// Returns the gear slot of an item, for example Head or Body.
+    /// </summary>
+    private static string GetGearType(int itemType)
+    {
+        return GameData.Instance.GetItemSubType(itemType) switch
+        {
+            ItemSubType.ModuleA => "Head",
+            ItemSubType.ModuleB => "Body",
+            ItemSubType.ModuleC => "Arm",
+            ItemSubType.ModuleD => "Leg",
+            _ => "Unknown"
+        };
+    }
+
+    /// <summary>
+    /// Returns the localized name of an item.
+    /// </summary>
+    private static string GetGearName(int itemType)
+    {
+        if (GameData.Instance.ItemEquipTable.TryGetValue(itemType, out var equip))
+        {
+            return AdminApiController.LookupRealName(equip.NameLocalkey ?? "");
+        }
+
+        return "";
+    }
+
     [Route("ModifyGear/{id}"), ActionName("ModifyGear")]
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult ModifyGear(
     ulong id,
     [FromForm] string submitType,
@@ -275,6 +411,9 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
                     gearUpdate.Option1, gearUpdate.Option2, gearUpdate.Option3);
             }
         }
+
+        // Persist the gear changes, they are only kept in memory otherwise
+        JsonDb.Save();
 
         return RedirectToAction("Modify", new { id = id });
     }

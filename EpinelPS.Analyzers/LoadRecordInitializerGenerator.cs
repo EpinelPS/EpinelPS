@@ -47,6 +47,10 @@ public class LoadRecordInitializerGenerator : IIncrementalGenerator
 
         foreach (AttributeData attr in symbol.GetAttributes())
         {
+            // Match by attribute type, not just by the number of constructor arguments, so that any
+            // other attribute applied to the field cannot silently suppress table generation.
+            if (attr.AttributeClass?.Name is not "LoadRecordAttribute" && attr.AttributeClass?.Name is not "LoadRecord")
+                continue;
 
             if (attr.ConstructorArguments.Length == 2)
             {

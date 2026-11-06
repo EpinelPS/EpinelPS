@@ -985,34 +985,42 @@ public class AdminCommands
         {
             foreach (var file in Directory.GetFiles(path))
             {
-                string cs = $"Data Source={file};Mode=ReadWrite;";
+                // Only locale database files are relevant, skip everything else
+                if (!file.EndsWith(".lsc", StringComparison.OrdinalIgnoreCase) &&
+                    !file.EndsWith(".db", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                string cs = $"Data Source={file};Mode=ReadOnly;Pooling=False;";
                 try
                 {
                     using SqliteConnection con = new (cs);
                     con.Open();
                     using SqliteCommand cmd = con.CreateCommand();
-                    cmd.CommandText = "PRAGMA integrity_check";
-                    string? result = cmd.ExecuteScalar() as string;
                     cmd.CommandText = "SELECT name FROM sqlite_schema WHERE type='table' AND name LIKE '%Locale_%' AND name NOT LIKE 'sqlite_%' ORDER BY name;";
-                    result = cmd.ExecuteScalar() as string;
+                    string? result = cmd.ExecuteScalar() as string;
                     if (!string.IsNullOrWhiteSpace(result))
                     {
-                        if (!Directory.Exists(Path.Combine(AppContext.BaseDirectory, "cache", "local-locale")))
-                            Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "cache", "local-locale"));
                         var dir = Path.Combine(AppContext.BaseDirectory, "cache", "local-locale");
+                        Directory.CreateDirectory(dir);
                         var newName = $"{result}.lsc";
-                        File.Copy(file, $"{dir}\\{newName}", true);
+                        File.Copy(file, Path.Combine(dir, newName), true);
                         Console.WriteLine($"{newName} added successfully!");
                         filesAdded++;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{Path.GetFileName(file)}: skipped, no locale table found");
                     }
                 }
                 catch (SqliteException ex) when (ex.SqliteErrorCode == 26)
                 {
-                    Console.WriteLine($"{file}: not ok");
+                    Console.WriteLine($"{Path.GetFileName(file)}: skipped, not a plain sqlite file (encrypted?)");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"{file}: not ok");
+                    Console.WriteLine($"{Path.GetFileName(file)}: not ok ({ex.Message})");
                 }
             }
         }

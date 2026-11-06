@@ -17,6 +17,32 @@ namespace EpinelPS.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.9");
 
+            modelBuilder.Entity("EpinelPS.Models.CharacterToggleModel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Csn")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Toggle")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<ulong>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Csn", "Type")
+                        .IsUnique();
+
+                    b.ToTable("CharacterToggles");
+                });
+
             modelBuilder.Entity("EpinelPS.Models.GameUser", b =>
                 {
                     b.Property<ulong>("ID")
@@ -99,6 +125,17 @@ namespace EpinelPS.Migrations
                     b.ToTable("Triggers");
                 });
 
+            modelBuilder.Entity("EpinelPS.Models.CharacterToggleModel", b =>
+                {
+                    b.HasOne("EpinelPS.Models.GameUser", "User")
+                        .WithMany("CharacterToggles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EpinelPS.Models.TriggerModelNew", b =>
                 {
                     b.HasOne("EpinelPS.Models.GameUser", "User")
@@ -112,6 +149,8 @@ namespace EpinelPS.Migrations
 
             modelBuilder.Entity("EpinelPS.Models.GameUser", b =>
                 {
+                    b.Navigation("CharacterToggles");
+
                     b.Navigation("Triggers");
                 });
 #pragma warning restore 612, 618

@@ -10,4 +10,5 @@ public class GameUser
     public string Description { get; set; } = "";
     public DateTime LastAction { get; set;}
     public ICollection<TriggerModelNew> Triggers { get; set; } = new List<TriggerModelNew>();
+    public ICollection<CharacterToggleModel> CharacterToggles { get; set; } = new List<CharacterToggleModel>();
 }

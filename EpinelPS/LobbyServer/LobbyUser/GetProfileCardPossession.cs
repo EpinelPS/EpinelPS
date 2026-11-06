@@ -7,30 +7,24 @@ public class GetProfileCardPossession : LobbyMessage
 {
     protected override async Task HandleAsync()
     {
-        ReqProfileCardObjectList req = await ReadData<ReqProfileCardObjectList>();
-        var user = GetUser();
+        await ReadData<ReqProfileCardObjectList>();
+
         ResProfileCardObjectList response = new();
 
-        var pcoTable = GameData.Instance.ProfileCardObjectTable.Values.ToList();
-        var rareCards = pcoTable.Where(x => x.GradeType == ProfileCardObjectGradeType.R)
-                .Select(c => c.Id).ToList();
-
-        user.ProfileCardsData.AddRange(rareCards.Except(user.ProfileCardsData));
-        user.ProfileCardsData.ForEach(c =>
+        foreach (var card in GameData.Instance.ProfileCardObjectTable.Values)
         {
-            GameData.Instance.ProfileCardObjectTable.TryGetValue(c, out var card);
             switch (card.ObjectType)
             {
                 case ObjectType.BackGround:
-                    response.BackgroundIds.Add(c);
+                    response.BackgroundIds.Add(card.Id);
                     break;
                 case ObjectType.Sticker:
-                    response.StickerIds.Add(c);
+                    response.StickerIds.Add(card.Id);
                     break;
                 default:
                     break;
             }
-        });
+        }
 
         await WriteDataAsync(response);
     }

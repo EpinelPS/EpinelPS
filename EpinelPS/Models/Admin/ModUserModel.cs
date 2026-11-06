@@ -13,13 +13,22 @@ public class ModUserModel
     public bool IsBanned { get; set; }
     public ulong ID { get; set; }
     public List<CharacterGearModel> OverloadedGear { get; set; } = [];
+    public List<ModUserCharacterModel> Characters { get; set; } = new();
     public Dictionary<string, Dictionary<int, double>> OverloadOptions { get; set; } = new();
 
     public List<SelectListItem> GetOverloadSelectList(int? selectedId = null)
     {
+        return BuildOverloadSelectList(OverloadOptions, selectedId);
+    }
+
+    /// <summary>
+    /// Builds the option list of the overload option selects.
+    /// </summary>
+    public static List<SelectListItem> BuildOverloadSelectList(Dictionary<string, Dictionary<int, double>> overloadOptions, int? selectedId = null)
+    {
         var items = new List<SelectListItem>();
 
-        foreach (var group in OverloadOptions.OrderBy(x => x.Key
+        foreach (var group in overloadOptions.OrderBy(x => x.Key
         ))
         {
             foreach (var effect in group.Value.OrderBy(x => x.Key))
@@ -61,6 +70,7 @@ public class CharacterGearModel
 public class GearModel
 {
     public long GearIsn { get; set; }
+    public string GearName { get; set; } = "";
     public string GearType { get; set; }
     public int GearLevel { get; set; }
     public int Option1Id { get; set; }
@@ -79,4 +89,39 @@ public class GearUpdateModel
     public int Option1 { get; set; }
     public int Option2 { get; set; }
     public int Option3 { get; set; }
+}
+
+/// <summary>
+/// Lightweight row of the character list shown on the modify user page.
+/// </summary>
+public class ModUserCharacterModel
+{
+    public int Csn { get; set; }
+    public int Tid { get; set; }
+    public string Name { get; set; } = "";
+    public string Manufacturer { get; set; } = "";
+    public int Level { get; set; }
+    public bool IsSynchro { get; set; }
+    public int Skill1 { get; set; }
+    public int Skill2 { get; set; }
+    public int BurstSkill { get; set; }
+    public int Grade { get; set; }
+    public int BreakCount { get; set; }
+    public string Rarity { get; set; } = "";
+    public string ElementName { get; set; } = "";
+    public string WeaponType { get; set; } = "";
+    public string Tags => string.Join(" · ", new[] { ElementName, WeaponType }.Where(x => !string.IsNullOrEmpty(x)));
+    public int GearCount { get; set; }
+}
+
+/// <summary>
+/// Detail of a single character, loaded on demand into the modify page modal.
+/// </summary>
+public class ModUserCharacterDetailModel
+{
+    public ulong UserId { get; set; }
+    public ModUserCharacterModel Character { get; set; } = new();
+    public List<GearModel> Gears { get; set; } = new();
+    public List<DbItemData> Items { get; set; } = new();
+    public Dictionary<string, Dictionary<int, double>> OverloadOptions { get; set; } = new();
 }
