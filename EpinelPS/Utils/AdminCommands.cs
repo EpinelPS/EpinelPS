@@ -406,6 +406,18 @@ public class AdminCommands
         return RunCmdResponse.OK;
     }
 
+    public static RunCmdResponse UnlockAllCounselLogs(User user)
+    {
+        var data = GameData.Instance;
+        if (data.CharacterTable.Count == 0 || data.AttractiveCounselTable.Count == 0)
+            return new RunCmdResponse { error = "Character or counsel static data is unavailable. No progress was changed." };
+
+        var result = CounselProgressHelper.UnlockAll(user, data.CharacterTable, data.AttractiveCounselTable);
+        Logging.WriteLine($"[Admin] UnlockAllCounselLogs user={user.ID}, Characters={result.UpdatedCharacters}, Entries={result.AddedEntries}", LogType.Warning);
+        JsonDb.Save();
+        return RunCmdResponse.OK;
+    }
+
     public static RunCmdResponse AddAllCharacters(User user)
     {
         // Group characters by NameCode and always add those with GradeCoreId == 11, 103, and include GradeCoreId == 201

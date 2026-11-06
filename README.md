@@ -33,5 +33,11 @@ For more information, please join our [Discord Server](https://discord.gg/Ztt6Y9
 > [!Note]
 > Before updating the game, make sure to switch back to the official server to ensure that the game is properly patched.
 
+### Unlocking counsel logs
+
+In the admin panel, click **Users → Modify → Characters → Unlock All Counsel Logs**. This updates only the selected account's owned characters that have counsel entries in the loaded static data. Exit the game before using it and sign in again afterward to refresh cached progress.
+
+The same operation is available as `unlock-all-counsel-logs` in the server CLI after selecting a user. It adds missing counsel IDs and raises the counsel count when necessary; repeated use is safe. Existing bond levels, experience, favorites, daily availability, and reward-claim status are preserved. It does not grant collection rewards, add characters, or automatically unlock characters obtained later; run it again after obtaining them. No static data pack or `gamecommon.json` changes are needed.
+
 ## What is implemented or missing?
 See the todo list at https://github.com/orgs/EpinelPS/projects/1 and https://github.com/EpinelPS/EpinelPS/issues

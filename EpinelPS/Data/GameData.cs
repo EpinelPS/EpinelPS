@@ -236,6 +236,9 @@ public class GameData
     [LoadRecord("InfraCoreGradeTable.json", "Id")]
     public readonly Dictionary<int, InfraCoreGradeRecord> InfracoreTable = [];
 
+    [LoadRecord("AttractiveCounselTable.json", "Id")]
+    public readonly Dictionary<int, AttractiveCounselRecord> AttractiveCounselTable = [];
+
     [LoadRecord("AttractiveCounselCharacterTable.json", "NameCode")]
     public readonly Dictionary<int, AttractiveCounselCharacterRecord_Raw> AttractiveCounselCharacterTable = [];
 
