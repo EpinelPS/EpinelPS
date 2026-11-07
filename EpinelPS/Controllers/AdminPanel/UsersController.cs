@@ -1,6 +1,7 @@
 using EpinelPS.Database;
 using EpinelPS.Models.Admin;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Cryptography;
 using System.Text;
 using EpinelPS.Data;
@@ -15,6 +16,15 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     private readonly GameContext _db = dbContext;
     private readonly MessengerAdminService _messengerAdmin = messengerAdminService;
     private static readonly MD5 sha = MD5.Create();
+
+    /// <summary>
+    /// Applies the browser language to name lookups on the admin user pages.
+    /// </summary>
+    public override void OnActionExecuting(ActionExecutingContext context)
+    {
+        AdminApiController.SetRequestLanguage(AdminApiController.LanguageFromRequest(context.HttpContext) ?? "zh-CN");
+        base.OnActionExecuting(context);
+    }
     private readonly Dictionary<string, Dictionary<int, double>> _overloadOptions = new Dictionary<string, Dictionary<int, double>>
     {
         ["EleDmg"] = new Dictionary<int, double>

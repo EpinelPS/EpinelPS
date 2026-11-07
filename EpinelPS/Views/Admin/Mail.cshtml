@@ -552,8 +552,10 @@
         var datalist = document.getElementById(listId);
         if (!datalist) return;
 
-        // Fetch items from API
-        fetch('/adminapi/searchGameData?type=' + type + '&q=&lang=' + encodeURIComponent(localStorage.getItem('adminui_lang') || 'en'))
+        // Send the language chosen in the admin UI back so item names match the interface.
+        var uiLang = localStorage.getItem('adminui_lang');
+        var langQuery = uiLang ? '&lang=' + encodeURIComponent(uiLang) : '';
+        fetch('/adminapi/searchGameData?type=' + type + '&q=' + langQuery)
             .then(function (r) { return r.json(); })
             .then(function (items) {
                 datalist.innerHTML = '';
@@ -729,6 +731,10 @@
                     var typeObj = rewardTypeOptions.find(function(r) { return r.value == opt.value; });
                     if (typeObj) opt.textContent = typeObj.label;
                 });
+                // Reload the item list so its names follow the new language.
+                var row = sel.closest('tr');
+                var type = parseInt(sel.value);
+                if (row && type) loadItems(type, row);
             });
         });
     });

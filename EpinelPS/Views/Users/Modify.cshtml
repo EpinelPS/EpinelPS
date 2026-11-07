@@ -64,8 +64,8 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary" data-i18n="common.save">
-                                <i class="fas fa-save me-2"></i> 保存
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i> <span data-i18n="common.save">保存</span>
                             </button>
                         </div>
                     </form>
@@ -166,23 +166,23 @@
     <div class="container-fluid mt-3">
         <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
             <input type="text" id="charFilter" class="form-control" style="max-width:320px"
-                   placeholder="搜索角色名 / TID" />
+                   placeholder="搜索角色名 / TID" data-i18n-placeholder="users.modify.charFilterPlaceholder" />
             <select id="corpFilter" class="form-select" style="max-width:240px">
-                <option value="">全部厂商</option>
+                <option value="" data-i18n="users.modify.allManufacturers">全部厂商</option>
                 @foreach (var corp in Model.Characters.Select(c => c.Manufacturer).Distinct().OrderBy(x => x))
                 {
                     <option value="@corp">@corp</option>
                 }
             </select>
             <select id="elementFilter" class="form-select" style="max-width:160px">
-                <option value="">全部代码</option>
+                <option value="" data-i18n="users.modify.allElements">全部代码</option>
                 @foreach (var element in Model.Characters.Select(c => c.ElementName).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
                 {
                     <option value="@element">@element</option>
                 }
             </select>
             <select id="weaponFilter" class="form-select" style="max-width:160px">
-                <option value="">全部武器</option>
+                <option value="" data-i18n="users.modify.allWeapons">全部武器</option>
                 @foreach (var weapon in Model.Characters.Select(c => c.WeaponType).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
                 {
                     <option value="@weapon">@weapon</option>
@@ -190,7 +190,7 @@
             </select>
             <div class="form-check form-switch mb-0 ms-2">
                 <input class="form-check-input" type="checkbox" id="nameDisplayToggle" />
-                <label class="form-check-label" for="nameDisplayToggle">Show <span id="nameDisplayLabel">Name</span></label>
+                <label class="form-check-label" for="nameDisplayToggle"><span data-i18n="users.modify.show">Show</span> <span id="nameDisplayLabel">Name</span></label>
             </div>
             <div class="ms-auto text-muted small" id="charCount"></div>
         </div>
@@ -199,13 +199,13 @@
             <table class="table table-dark table-hover align-middle mb-0" id="charTable">
                 <thead>
                     <tr>
-                        <th style="width:40%">角色</th>
-                        <th>等级</th>
-                        <th>技能 1 / 2 / 3</th>
-                        <th>品级</th>
-                        <th>突破</th>
-                        <th>装备数</th>
-                        <th style="width:120px"></th>
+                        <th style="width:40%" data-i18n="users.modify.colCharacter">角色</th>
+                        <th data-i18n="users.modify.colLevel">等级</th>
+                        <th data-i18n="users.modify.colSkills">技能 1 / 2 / 3</th>
+                        <th data-i18n="users.modify.colRarity">品级</th>
+                        <th data-i18n="users.modify.colBreaks">突破</th>
+                        <th data-i18n="users.modify.colGearCount">装备数</th>
+                        <th style="width:150px"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -224,7 +224,7 @@
                                 LV@(character.Level)
                                 @if (character.IsSynchro)
                                 {
-                                    <span class="badge bg-warning text-dark ms-1" title="同步器等级">同步</span>
+                                    <span class="badge bg-warning text-dark ms-1" data-i18n="users.modify.synchro" data-i18n-title="users.modify.synchroTooltip" title="同步器等级">同步</span>
                                 }
                             </td>
                             <td>@character.Skill1 / @character.Skill2 / @character.BurstSkill</td>
@@ -241,10 +241,10 @@
                                 }
                             </td>
                             <td>
-                                <button type="button" class="btn btn-accent btn-sm js-load-detail"
+                                <button type="button" class="btn btn-accent btn-sm js-load-detail text-nowrap"
                                         data-csn="@character.Csn"
                                         data-url="@Url.Action("CharacterDetail", new { id = Model.ID })">
-                                    <i class="fas fa-tools me-1"></i> 查看/编辑
+                                    <i class="fas fa-tools me-1"></i> <span data-i18n="users.modify.viewEdit">查看/编辑</span>
                                 </button>
                             </td>
                         </tr>
@@ -258,7 +258,7 @@
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="gearModalTitle">角色详情</h5>
+                    <h5 class="modal-title" id="gearModalTitle"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="gearModalBody">
@@ -280,6 +280,10 @@
             const modalBody = document.getElementById("gearModalBody");
             const modalTitle = document.getElementById("gearModalTitle");
             let modal = null;
+            function tr(key, params, fallback) {
+                return (window.i18n && typeof window.i18n.t === "function")
+                    ? window.i18n.t(key, params) : fallback;
+            }
 
             function applyFilter() {
                 const query = (filterInput.value || "").trim().toLowerCase();
@@ -290,6 +294,7 @@
                 let total = 0;
 
                 document.querySelectorAll("#charTable tbody tr").forEach(function (row) {
+                    if (row.id === "charTableEmpty") return;
                     total++;
                     const name = (row.dataset.name || "").toLowerCase();
                     const tid = row.dataset.tid || "";
@@ -302,7 +307,23 @@
                     if (show) visible++;
                 });
 
-                countLabel.textContent = visible === total ? total + " 个角色" : visible + " / " + total + " 个角色";
+                const tbody = document.querySelector("#charTable tbody");
+                let emptyRow = document.getElementById("charTableEmpty");
+                if (visible === 0 && total > 0) {
+                    if (!emptyRow) {
+                        emptyRow = document.createElement("tr");
+                        emptyRow.id = "charTableEmpty";
+                        emptyRow.innerHTML = '<td colspan="7" class="text-center text-muted py-4" data-i18n="users.modify.noResults">'
+                            + tr("users.modify.noResults", {}, "没有匹配的角色") + '</td>';
+                        tbody.appendChild(emptyRow);
+                    }
+                } else if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                countLabel.textContent = visible === total
+                    ? tr("users.modify.charCount", { count: total }, total + " 个角色")
+                    : tr("users.modify.charCountFiltered", { visible: visible, total: total }, visible + " / " + total + " 个角色");
             }
 
             filterInput.addEventListener("input", applyFilter);
@@ -310,6 +331,7 @@
             elementSelect.addEventListener("change", applyFilter);
             weaponSelect.addEventListener("change", applyFilter);
             applyFilter();
+            window.addEventListener("adminui:i18n-ready", applyFilter);
 
             document.querySelectorAll(".js-load-detail").forEach(function (button) {
                 button.addEventListener("click", async function () {
@@ -322,7 +344,7 @@
 
                     const response = await fetch(button.dataset.url + "?csn=" + encodeURIComponent(csn));
                     if (!response.ok) {
-                        modalBody.innerHTML = "<div class=\"alert alert-danger\">Failed to load character detail.</div>";
+                        modalBody.innerHTML = '<div class="alert alert-danger">' + tr("users.modify.loadFailed", {}, "Failed to load character detail.") + '</div>';
                     } else {
                         modalBody.innerHTML = await response.text();
                     }
@@ -334,10 +356,22 @@
                 });
             });
         })();
+
+        // Character names are rendered on the server, so a language switch needs a fresh page
+        // request for the cookie to take effect.
+        window.addEventListener('adminui:languageChanged', function () {
+            location.reload();
+        });
     </script>
 </div>
 
 <style>
+    /* _Layout footer is fixed; reserve space so the table is not covered. */
+    .adminui-dashboard { padding-bottom: 80px; }
+
+    /* Keep the translated headers and badges on a single line. */
+    #charTable th, #charTable td { white-space: nowrap; }
+
     /* adminui风格卡片标题 */
     .card-header {
         background-color: var(--adminui-primary);
@@ -474,7 +508,8 @@
         });
 
         function updateNameDisplay(showTid) {
-            nameLabel.textContent = showTid ? 'TID' : 'Name';
+            nameLabel.textContent = showTid ? 'TID'
+                : ((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('users.modify.name') : 'Name');
             characterNames.forEach(el => {
                 const name = el.getAttribute('data-name');
                 const characterTid = el.getAttribute('data-character-tid');
@@ -484,6 +519,11 @@
                 el.setAttribute('title', showTid ? name : characterTid);
             });
         }
+
+        // The i18n script loads after this inline script, refresh the label once it is ready.
+        window.addEventListener('adminui:i18n-ready', function () {
+            updateNameDisplay(nameToggle.checked);
+        });
 
         // --- Collapse state handling ---
         const collapsedCards = JSON.parse(localStorage.getItem('collapsedCards') || '{}');

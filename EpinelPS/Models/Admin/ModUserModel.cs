@@ -1,4 +1,5 @@
 using EpinelPS.Data;
+using EpinelPS.Controllers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EpinelPS.Models.Admin;
@@ -16,6 +17,34 @@ public class ModUserModel
     public List<ModUserCharacterModel> Characters { get; set; } = new();
     public Dictionary<string, Dictionary<int, double>> OverloadOptions { get; set; } = new();
 
+    /// <summary>
+    /// Display names of the overload option categories, ordered as zh-CN, en, ja, ko.
+    /// </summary>
+    private static readonly Dictionary<string, string[]> OverloadOptionNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["EleDmg"] = ["优越代码伤害", "Elemental Damage", "属性ダメージ", "속성 피해"],
+        ["Hit"] = ["命中率", "Accuracy", "命中率", "명중률"],
+        ["Ammo"] = ["最大装弹数", "Max Ammo", "最大装弾数", "최대 장탄수"],
+        ["Atk"] = ["攻击力", "Attack", "攻撃力", "공격력"],
+        ["ChgDmg"] = ["蓄力伤害", "Charge Damage", "チャージダメージ", "차지 데미지"],
+        ["ChgSpd"] = ["蓄力速度", "Charge Speed", "チャージ速度", "차지 속도"],
+        ["Crit"] = ["暴击率", "Crit Rate", "クリティカル率", "치명타 확률"],
+        ["CritDmg"] = ["暴击伤害", "Crit Damage", "クリティカルダメージ", "치명타 데미지"],
+        ["Def"] = ["防御力", "Defense", "防御力", "방어력"]
+    };
+
+    /// <summary>
+    /// Gets the column of the overload option names for the current admin language.
+    /// </summary>
+    private static int LanguageIndex()
+    {
+        var language = AdminApiController.CurrentLanguage.ToLowerInvariant();
+        if (language.StartsWith("ja")) return 2;
+        if (language.StartsWith("ko")) return 3;
+        if (language.StartsWith("en")) return 1;
+        return 0;
+    }
+
     public List<SelectListItem> GetOverloadSelectList(int? selectedId = null)
     {
         return BuildOverloadSelectList(OverloadOptions, selectedId);
@@ -28,15 +57,17 @@ public class ModUserModel
     {
         var items = new List<SelectListItem>();
 
-        foreach (var group in overloadOptions.OrderBy(x => x.Key
-        ))
+        int index = LanguageIndex();
+        foreach (var group in overloadOptions.OrderBy(x => x.Key))
         {
+            string groupName = OverloadOptionNames.TryGetValue(group.Key, out string[]? names) ? names[index] : group.Key;
+
             foreach (var effect in group.Value.OrderBy(x => x.Key))
             {
                 items.Add(new SelectListItem
                 {
                     Value = effect.Key.ToString(),
-                    Text = $"{group.Key} | {effect.Key} | {effect.Value}",
+                    Text = $"{groupName} | {effect.Key} | {effect.Value}",
                     Selected = effect.Key == selectedId
                 });
             }
