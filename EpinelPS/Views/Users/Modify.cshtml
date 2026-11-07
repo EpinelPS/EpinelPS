@@ -259,7 +259,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="gearModalTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="gearModalBody">
                     <div class="text-center p-5"><div class="spinner-border"></div></div>
@@ -314,16 +314,17 @@
                         emptyRow = document.createElement("tr");
                         emptyRow.id = "charTableEmpty";
                         emptyRow.innerHTML = '<td colspan="7" class="text-center text-muted py-4" data-i18n="users.modify.noResults">'
-                            + tr("users.modify.noResults", {}, "没有匹配的角色") + '</td>';
+                            + tr("users.modify.noResults", {}, "No matching characters") + '</td>';
                         tbody.appendChild(emptyRow);
                     }
                 } else if (emptyRow) {
                     emptyRow.remove();
                 }
 
+                // Dynamic counts cannot use data-i18n, so resolve them through i18n.t.
                 countLabel.textContent = visible === total
-                    ? tr("users.modify.charCount", { count: total }, total + " 个角色")
-                    : tr("users.modify.charCountFiltered", { visible: visible, total: total }, visible + " / " + total + " 个角色");
+                    ? tr("users.modify.charCount", { count: total }, total + " characters")
+                    : tr("users.modify.charCountFiltered", { visible: visible, total: total }, visible + " / " + total + " characters");
             }
 
             filterInput.addEventListener("input", applyFilter);
@@ -332,6 +333,7 @@
             weaponSelect.addEventListener("change", applyFilter);
             applyFilter();
             window.addEventListener("adminui:i18n-ready", applyFilter);
+            document.addEventListener("DOMContentLoaded", applyFilter);
 
             document.querySelectorAll(".js-load-detail").forEach(function (button) {
                 button.addEventListener("click", async function () {
@@ -371,6 +373,15 @@
 
     /* Keep the translated headers and badges on a single line. */
     #charTable th, #charTable td { white-space: nowrap; }
+
+    /* Keep the gear editor on the admin dark theme. */
+    #gearModal .modal-content {
+        background-color: var(--adminui-gray-dark);
+        color: var(--adminui-light);
+    }
+    #gearModal .modal-header { border-bottom-color: var(--adminui-gray); }
+    #gearModal .modal-footer { border-top-color: var(--adminui-gray); }
+    #gearModal .text-muted { color: var(--adminui-gray-light); }
 
     /* adminui风格卡片标题 */
     .card-header {
