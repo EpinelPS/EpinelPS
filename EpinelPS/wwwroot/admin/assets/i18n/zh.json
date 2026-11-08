@@ -196,6 +196,7 @@
       "colCharacter": "角色",
       "colLevel": "等级",
       "colSkills": "技能 1 / 2 / 3",
+      "skillsLabel": "技能",
       "colRarity": "品级",
       "colBreaks": "突破",
       "colGearCount": "装备数",

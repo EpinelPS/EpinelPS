@@ -195,6 +195,7 @@
       "colCharacter": "Character",
       "colLevel": "Level",
       "colSkills": "Skills 1 / 2 / 3",
+      "skillsLabel": "Skills",
       "colRarity": "Rarity",
       "colBreaks": "Limit Break",
       "colGearCount": "Gear",

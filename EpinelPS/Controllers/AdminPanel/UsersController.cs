@@ -384,8 +384,13 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     public IActionResult ModifyGear(
     ulong id,
     [FromForm] string submitType,
-    [FromForm] Dictionary<long, GearUpdateModel> gearUpdates)
+    [FromForm] Dictionary<long, GearUpdateModel> gearUpdates,
+    [FromForm] int? skill1,
+    [FromForm] int? skill2,
+    [FromForm] int? burstSkill)
     {
+        gearUpdates ??= new Dictionary<long, GearUpdateModel>();
+
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
         var user = JsonDb.Instance.Users.FirstOrDefault(x => x.ID == id);
         if (user == null) return NotFound();
@@ -395,7 +400,8 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         var gameUser = _db.Users.Find(id);
         if (gameUser == null) return NotFound();
 
-        if (gearUpdates.Count == 0)return RedirectToAction("Modify", new { id = id });
+        if (gearUpdates.Count == 0 && skill1 is null && skill2 is null && burstSkill is null)
+            return RedirectToAction("Modify", new { id = id });
 
         if (submitType == "saveAll")
         {
@@ -407,9 +413,21 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         }
         else if (submitType.StartsWith("saveCharacter_"))
         {
-            foreach (var gearUpdate in gearUpdates.Values.Where(g => g.CharacterId == ulong.Parse(submitType.Replace("saveCharacter_", ""))))
+            int csn = int.Parse(submitType.Replace("saveCharacter_", ""));
+            foreach (var gearUpdate in gearUpdates.Values.Where(g => g.CharacterId == (ulong)csn))
             {
                 UpdateGear(user, gearUpdate.GearId, gearUpdate.Level, gearUpdate.Option1, gearUpdate.Option2, gearUpdate.Option3);
+            }
+
+            if (skill1 is not null || skill2 is not null || burstSkill is not null)
+            {
+                var character = user.Characters.FirstOrDefault(c => c.Csn == csn);
+                if (character != null)
+                {
+                    if (skill1 is not null) character.Skill1Lvl = Math.Clamp(skill1.Value, 1, 10);
+                    if (skill2 is not null) character.Skill2Lvl = Math.Clamp(skill2.Value, 1, 10);
+                    if (burstSkill is not null) character.UltimateLevel = Math.Clamp(burstSkill.Value, 1, 10);
+                }
             }
         }
         else if (submitType.StartsWith("updateGear_"))

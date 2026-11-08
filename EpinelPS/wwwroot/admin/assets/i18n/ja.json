@@ -187,6 +187,7 @@
       "colCharacter": "キャラクター",
       "colLevel": "レベル",
       "colSkills": "スキル 1 / 2 / 3",
+      "skillsLabel": "スキル",
       "colRarity": "レア度",
       "colBreaks": "限界突破",
       "colGearCount": "装備数",
