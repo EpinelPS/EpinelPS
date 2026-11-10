@@ -199,6 +199,7 @@
       "historyTitle": "修复历史"
     },
     "password": {
+      "saved": "密码已保存，下次登录请使用新密码。",
       "title": "修改密码",
       "changeButton": "修改密码",
       "backToList": "返回列表",
