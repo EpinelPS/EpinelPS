@@ -13,12 +13,6 @@ public class EventHelper
     public static void AddEvents(User user, ref ResGetEventList response)
     {
         List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData(user);
-        if (lobbyPrivateBanners.Count == 0)
-        {
-            // No active lobby private banners
-            Logging.WriteLine("No active lobby private banners found.", LogType.Warning);
-            return;
-        }
 
         var eventManagers = GameData.Instance.eventManagers.Values.ToList();
         foreach (var banner in lobbyPrivateBanners)
@@ -48,12 +42,6 @@ public class EventHelper
     public static void AddJoinedEvents(User user, ref ResGetJoinedEvent response)
     {
         List<LobbyPrivateBannerRecord> lobbyPrivateBanners = GetLobbyPrivateBannerData(user);
-        if (lobbyPrivateBanners.Count == 0)
-        {
-            // No active lobby private banners
-            Logging.WriteLine("No active lobby private banners found.", LogType.Warning);
-            return;
-        }
 
         var eventManagers = GameData.Instance.eventManagers.Values.ToList();
         foreach (var banner in lobbyPrivateBanners)
@@ -230,11 +218,8 @@ public class EventHelper
         {
             lobbyPrivateBanners = [.. lobbyPrivateBannerRecords.Where(b => JsonDb.Instance.ActiveEventBannerIds.Contains(b.Id))];
         }
-        // Priority 3: fallback to the latest event
-        if (lobbyPrivateBanners.Count == 0)
-        {
-            lobbyPrivateBanners.Add(lobbyPrivateBannerRecords.Last());
-        }
+        // Static data may include future events whose client assets are not available.
+        // Leave optional events disabled unless explicitly selected by the user or admin.
         Logging.WriteLine($"Found {lobbyPrivateBanners.Count} active lobby private banners.", LogType.Debug);
         log.Debug($"Active lobby private banners: {JsonConvert.SerializeObject(lobbyPrivateBanners)}");
         return lobbyPrivateBanners;
