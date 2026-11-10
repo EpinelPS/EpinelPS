@@ -95,6 +95,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
     {
         if (!AdminController.CheckAuth(HttpContext)) return Redirect("/admin/");
 
+        ViewData["GameNicknames"] = _db.Users.ToDictionary(u => u.ID, u => u.Nickname);
         return View(_db.SdkUsers);
     }
 
