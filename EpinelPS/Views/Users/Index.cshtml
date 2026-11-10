@@ -74,7 +74,7 @@
                                 </div>
                             </td>
                             <td class="align-middle">
-                                @Html.DisplayFor(modelItem => item.PlayerName)
+                                @((ViewData["GameNicknames"] as Dictionary<ulong, string?>)?.GetValueOrDefault(item.ID) ?? item.PlayerName)
                             </td>
                             <td class="align-middle">
                                 @if (item.IsAdmin) {
