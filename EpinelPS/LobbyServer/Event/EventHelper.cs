@@ -39,6 +39,8 @@ public class EventHelper
             log.Debug($"Banner EventId: {banner.EventId} has {challengeEvents.Count} associated challenge events: {JsonConvert.SerializeObject(challengeEvents)}");
             AddEvents(ref response, challengeEvents);
         }
+        // add event quest (side story) events
+        AddEvents(ref response, GetEventQuestEventData(eventManagers));
         // add daily mission events
         List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
         log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
@@ -75,6 +77,8 @@ public class EventHelper
             log.Debug($"Banner EventId: {banner.EventId} has {challengeEvents.Count} associated challenge events: {JsonConvert.SerializeObject(challengeEvents)}");
             AddJoinedEvents(ref response, challengeEvents);
         }
+        // add event quest (side story) events
+        AddJoinedEvents(ref response, GetEventQuestEventData(eventManagers));
         // add daily mission events
         List<NetEventData> dailyMissionEvents = GetDailyMissionEventData(eventManagers);
         log.Debug($"Found {dailyMissionEvents.Count} associated daily mission events: {JsonConvert.SerializeObject(dailyMissionEvents)}");
@@ -176,6 +180,26 @@ public class EventHelper
                     }
                 }
             }
+        }
+        return events;
+    }
+
+    /// <summary>
+    /// Event quest events (EventSystemType.EventQuest, e.g. 130011 "Most Beautiful Maid") are permanent and are not
+    /// linked to any lobby banner (ParentsEventId/SetField are 0), so they never show up via the banner lookup.
+    /// Only the latest one is returned, so older side stories do not all replay at once.
+    /// </summary>
+    private static List<NetEventData> GetEventQuestEventData(List<EventManagerRecord> eventManagers)
+    {
+        List<NetEventData> events = [];
+        var latest = eventManagers.Where(em => em.EventSystemType == EventSystemType.EventQuest).OrderByDescending(em => em.Id).FirstOrDefault();
+        if (latest != null)
+        {
+            events.Add(new NetEventData()
+            {
+                Id = latest.Id,
+                EventSystemType = (int)latest.EventSystemType
+            });
         }
         return events;
     }
