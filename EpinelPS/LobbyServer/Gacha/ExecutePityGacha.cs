@@ -70,24 +70,28 @@ public class ExecutePityGacha : LobbyMessage
                 gacha.Tid = characterData.Id;
 
                 // Check if we can add upgrade item
+                // Grade holds the limit break counter in its lower two digits (SR maxes out at 3,
+                // SSR at 11), so compare Grade % 100 instead of the raw value. Once a character is
+                // fully limit broken no spare body is handed out and the pull is converted into
+                // dissolution points below.
                 if (characterData.OriginalRare == OriginalRareType.SR)
                 {
-                    if (existingItem != null && character.Grade + existingItem.Count <= 1)
+                    if (existingItem != null && (character.Grade % 100) + existingItem.Count < 3)
                     {
                         increase_item = true;
                     }
-                    else if (existingItem == null && character.Grade <= 1)
+                    else if (existingItem == null && (character.Grade % 100) < 3)
                     {
                         increase_item = true;
                     }
                 }
                 else if (characterData.OriginalRare == OriginalRareType.SSR)
                 {
-                    if (existingItem != null && character.Grade + existingItem.Count <= 10)
+                    if (existingItem != null && character.Grade + existingItem.Count < 11)
                     {
                         increase_item = true;
                     }
-                    else if (existingItem == null && character.Grade <= 10)
+                    else if (existingItem == null && character.Grade < 11)
                     {
                         increase_item = true;
                     }
@@ -152,8 +156,8 @@ public class ExecutePityGacha : LobbyMessage
                 else
                 {
                     gacha.CurrencyValue = characterData.OriginalRare == OriginalRareType.SSR ? 6000 : (characterData.OriginalRare == OriginalRareType.SR ? 200 : 150);
-                    user.AddCurrency(CurrencyType.DissolutionPoint, gacha.CurrencyValue);
 
+                    // Only accumulate here, the total is credited once at the end of the handler.
                     totalBodyLabels += (int)gacha.CurrencyValue;
                 }
             }
