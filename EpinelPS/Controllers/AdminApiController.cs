@@ -279,6 +279,57 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
         return RunCmdResponse.OK;
     }
 
+    [HttpGet("cutscenes")]
+    public IActionResult GetCutscenes()
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+
+        bool ffmpegOk = CutsceneOptimizer.IsFfmpegAvailable(out string? ffmpegPath);
+        string cacheDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache");
+        int totalMp4 = 0;
+        int optimized = 0;
+        int unoptimized = 0;
+
+        if (Directory.Exists(cacheDir))
+        {
+            var files = Directory.EnumerateFiles(cacheDir, "*.mp4", SearchOption.AllDirectories)
+                .Where(f => !f.EndsWith(".tmp.mp4", StringComparison.OrdinalIgnoreCase) && !f.EndsWith(".orig", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            totalMp4 = files.Count;
+            optimized = files.Count(f => System.IO.File.Exists(f + ".optimized"));
+            unoptimized = totalMp4 - optimized;
+        }
+
+        return Ok(new
+        {
+            ffmpegAvailable = ffmpegOk,
+            ffmpegPath = ffmpegPath ?? "",
+            totalVideos = totalMp4,
+            optimizedVideos = optimized,
+            pendingVideos = unoptimized
+        });
+    }
+
+    [HttpPost("cutscenes/optimize")]
+    public async Task<IActionResult> OptimizeCutscenes()
+    {
+        if (!AdminController.CheckAuth(HttpContext)) return Unauthorized();
+
+        if (!CutsceneOptimizer.IsFfmpegAvailable(out _))
+        {
+            return BadRequest(new { error = "FFmpeg is not available on the server. Please install FFmpeg or set FfmpegPath in gameconfig.json." });
+        }
+
+        var (opt, skipped, failed) = await CutsceneOptimizer.OptimizeAllCachedVideosAsync();
+        return Ok(new
+        {
+            ok = true,
+            optimized = opt,
+            skipped,
+            failed,
+            message = $"Optimization complete: {opt} optimized, {skipped} already optimized, {failed} failed."
+        });
+    }
     private static SoloRaidMuseumLogModel ToMuseumLogModel(SoloRaidMuseumLogData log) => new()
     {
         TeamNumber = log.TeamNumber,

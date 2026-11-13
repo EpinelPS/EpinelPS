@@ -210,14 +210,52 @@ public static class EventShopHelper
     {
         if (eventId <= 0) return 0;
 
+        var contentsShopTable = GameData.Instance.ContentsShopTable;
+
         if (GameData.Instance.eventManagers.TryGetValue(eventId, out var eventRecord))
         {
-            if (eventRecord.EventShortcutId is not null && eventRecord.EventShortcutId != "")
+            // 1. Direct check: if eventRecord.EventShortcutId is a valid ContentsShopTable ID
+            if (int.TryParse(eventRecord.EventShortcutId, out int shortcutId) && contentsShopTable.ContainsKey(shortcutId))
             {
-                return Convert.ToInt32(eventRecord.EventShortcutId);
+                return shortcutId;
+            }
+
+            // 2. Child ShopEvent check (common for FieldHubEvents like 80900 Neverland, 81400 Beauty Full Shot, 81200 Last Kingdom)
+            var childShopEvent = GameData.Instance.eventManagers.Values.FirstOrDefault(e =>
+                (e.ParentsEventId == eventId || e.SetField == eventId) && e.EventSystemType == EventSystemType.ShopEvent);
+            if (childShopEvent != null && int.TryParse(childShopEvent.EventShortcutId, out int childShortcutId) && contentsShopTable.ContainsKey(childShortcutId))
+            {
+                return childShortcutId;
+            }
+
+            // 3. Parent event's shop check (if this is a child event whose parent has a ShopEvent)
+            if (eventRecord.ParentsEventId > 0)
+            {
+                var parentShopEvent = GameData.Instance.eventManagers.Values.FirstOrDefault(e =>
+                    (e.ParentsEventId == eventRecord.ParentsEventId || e.SetField == eventRecord.ParentsEventId) && e.EventSystemType == EventSystemType.ShopEvent);
+                if (parentShopEvent != null && int.TryParse(parentShopEvent.EventShortcutId, out int parentShortcutId) && contentsShopTable.ContainsKey(parentShortcutId))
+                {
+                    return parentShortcutId;
+                }
             }
         }
-        log.Warn($"EventManager not found for EventId: {eventId}");
+
+        // 4. Standard formula: 9000000 + (eventId % 1000) * 100 + 1 (e.g. 40120 -> 9012001, 40105 -> 9010501)
+        int formulaShopId = 9000000 + (eventId % 1000) * 100 + 1;
+        if (contentsShopTable.ContainsKey(formulaShopId))
+        {
+            return formulaShopId;
+        }
+
+        // 5. Bundle lookup: BundleId == 90000 + (eventId % 1000)
+        int bundleId = 90000 + (eventId % 1000);
+        var shopByBundle = contentsShopTable.Values.FirstOrDefault(s => s.BundleId == bundleId);
+        if (shopByBundle != null)
+        {
+            return shopByBundle.Id;
+        }
+
+        log.Warn($"Event shop not found for EventId: {eventId}");
         return 0;
     }
 
