@@ -64,8 +64,8 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary" data-i18n="common.save">
-                                <i class="fas fa-save me-2"></i> 保存
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i> <span data-i18n="common.save">保存</span>
                             </button>
                         </div>
                     </form>
@@ -164,143 +164,225 @@
     </div>
 
     <div class="container-fluid mt-3">
-        @if (!Model.OverloadedGear.Any())
-        {
-            <div class="alert alert-info">No overloaded gear found.</div>
-        }
-        else
-        {
-            <!-- Main form wrapping everything -->
-            <form asp-action="ModifyGear" asp-route-id="@Model.ID" method="post" id="mainForm">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h1 class="mb-0">Modify Overload Gear</h1>
-                    <div class="d-flex align-items-center gap-3">
-                        <!-- Toggle for name display -->
-                        <div class="form-check form-switch mb-0">
-                            <input class="form-check-input" type="checkbox" id="nameDisplayToggle" />
-                            <label class="form-check-label" for="nameDisplayToggle">
-                                Show <span id="nameDisplayLabel">Name</span>
-                            </label>
-                        </div>
-                        <button type="submit" name="submitType" value="saveAll" class="btn btn-info">Save All</button>
-                    </div>
-                </div>
-
-                @foreach (var corp in Model.OverloadedGear
-                                              .GroupBy(c => c.Manufacturer)
-                                              .OrderBy(x => x.Key))
+        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+            <input type="text" id="charFilter" class="form-control" style="max-width:320px"
+                   placeholder="搜索角色名 / TID" data-i18n-placeholder="users.modify.charFilterPlaceholder" />
+            <select id="corpFilter" class="form-select" style="max-width:240px">
+                <option value="" data-i18n="users.modify.allManufacturers">全部厂商</option>
+                @foreach (var corp in Model.Characters.Select(c => c.Manufacturer).Distinct().OrderBy(x => x))
                 {
-                    <div class="col-lg-12 mb-4">
-                        <div class="card">
-                            <div class="card-header p-2" id="heading-@corp.Key">
-                                <button class="btn btn-link w-100 d-flex justify-content-between align-items-center text-decoration-none border-0 shadow-none"
-                                        type="button" data-bs-toggle="collapse" data-bs-target="#@corp.Key" aria-expanded="true"
-                                        aria-controls="@corp.Key">
-                                    <h3 class="mb-0">@(corp.Key == "OVERSPEC" ? "PILGRIM/OVERSPEC" : corp.Key)</h3>
-                                    <i class="bi bi-chevron-down"></i>
-                                </button>
-                            </div>
-                            <div id="@corp.Key" class="collapse show" aria-labelledby="heading-@corp.Key">
-                                <div class="card-body">
-                                    @foreach (var character in corp.OrderBy(c => c.CharacterName))
-                                    {
-                                        <div class="col-lg-12 mb-4">
-                                            <div class="card">
-                                                <div class="card-header bg-black">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="d-inline-flex mb-0 me-3 flex-grow-1">
-                                                            <h2 class="mb-0 me-3 character-name"
-                                                                data-name="@character.CharacterName"
-                                                                data-character-tid="@character.CharacterTid"
-                                                                data-toggle="tooltip"
-                                                                title="@character.CharacterTid"
-                                                                style="max-width:20ch;white-space: nowrap !important;
-                                                                text-overflow: ellipsis !important;
-                                                                overflow: hidden !important;">
-                                                                @character.CharacterName
-                                                            </h2>
-                                                            <button type="submit" name="submitType"
-                                                                    value="saveCharacter_@character.CharacterCsn"
-                                                                    class="btn btn-info btn-sm" style="font-size:12pt;">
-                                                                Save
-                                                            </button>
-                                                        </div>
-                                                        <div class="d-flex align-items-stretch gap-1">
-                                                            <h3 class="mb-0">LV@(character.CharacterLevel)</h3>
-                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
-                                                            <h3 class="mb-0">Skill 1: LV@(character.Skill1)</h3>
-                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
-                                                            <h3 class="mb-0">Skill 2: LV@(character.Skill2)</h3>
-                                                            <div class="vr w opacity-75" style="width:2.5px;"></div>
-                                                            <h3 class="mb-0">Burst Skill: LV@(character.BurstSkill)</h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="row g-3">
-                                                        @foreach (var gear in character.Gears)
-                                                        {
-                                                            <div class="col-6 col-md">
-                                                                <div class="card h-100 bg-dark">
-                                                                    <div class="card-body d-flex flex-column">
-                                                                        <!-- Hidden fields for identification -->
-                                                                        <input type="hidden" name="GearUpdates[@gear.GearIsn].CharacterId" value="@character.CharacterCsn" />
-                                                                        <input type="hidden" name="GearUpdates[@gear.GearIsn].GearId" value="@gear.GearIsn" />
-
-                                                                        <h2 class="card-title mb-3">@gear.GearType</h2>
-
-                                                                        <div class="mb-2">
-                                                                            <label class="form-label mb-1 fw-bold fs-6">Level:</label>
-                                                                            <input type="number"
-                                                                                   class="form-control form-control-sm fw-bold fs-6"
-                                                                                   name="GearUpdates[@gear.GearIsn].Level" value="@gear.GearLevel" min="0" max="5" />
-                                                                        </div>
-
-                                                                        <div class="mb-2">
-                                                                            <label class="form-label mb-1 fw-bold fs-6">Option 1:</label>
-                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
-                                                                                    name="GearUpdates[@gear.GearIsn].Option1" asp-items="Model.GetOverloadSelectList(gear.Option1Id)">
-                                                                                <option value="0">No Option</option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <div class="mb-2">
-                                                                            <label class="form-label mb-1">Option 2:</label>
-                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
-                                                                                    name="GearUpdates[@gear.GearIsn].Option2" asp-items="Model.GetOverloadSelectList(gear.Option2Id)">
-                                                                                <option value="0">No Option</option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label mb-1">Option 3:</label>
-                                                                            <select class="form-select form-select-sm fw-bold fs-6 p-2"
-                                                                                    name="GearUpdates[@gear.GearIsn].Option3" asp-items="Model.GetOverloadSelectList(gear.Option3Id)">
-                                                                                <option value="0">No Option</option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <button type="submit" name="submitType" value="updateGear_@gear.GearIsn" class="btn btn-primary w-100 mt-auto p-2">Update Gear</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <option value="@corp">@corp</option>
                 }
-            </form>
-        }
+            </select>
+            <select id="elementFilter" class="form-select" style="max-width:160px">
+                <option value="" data-i18n="users.modify.allElements">全部代码</option>
+                @foreach (var element in Model.Characters.Select(c => c.ElementName).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
+                {
+                    <option value="@element">@element</option>
+                }
+            </select>
+            <select id="weaponFilter" class="form-select" style="max-width:160px">
+                <option value="" data-i18n="users.modify.allWeapons">全部武器</option>
+                @foreach (var weapon in Model.Characters.Select(c => c.WeaponType).Where(x => !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x))
+                {
+                    <option value="@weapon">@weapon</option>
+                }
+            </select>
+            <div class="form-check form-switch mb-0 ms-2">
+                <input class="form-check-input" type="checkbox" id="nameDisplayToggle" />
+                <label class="form-check-label" for="nameDisplayToggle"><span data-i18n="users.modify.show">Show</span> <span id="nameDisplayLabel">Name</span></label>
+            </div>
+            <div class="ms-auto text-muted small" id="charCount"></div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" id="charTable">
+                <thead>
+                    <tr>
+                        <th style="width:40%" data-i18n="users.modify.colCharacter">角色</th>
+                        <th data-i18n="users.modify.colLevel">等级</th>
+                        <th data-i18n="users.modify.colSkills">技能 1 / 2 / 3</th>
+                        <th data-i18n="users.modify.colRarity">品级</th>
+                        <th data-i18n="users.modify.colBreaks">突破</th>
+                        <th data-i18n="users.modify.colGearCount">装备数</th>
+                        <th style="width:150px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var character in Model.Characters)
+                    {
+                        <tr data-csn="@character.Csn" data-name="@character.Name" data-tid="@character.Tid" data-corp="@character.Manufacturer" data-element="@character.ElementName" data-weapon="@character.WeaponType">
+                            <td>
+                                <span class="text-muted small me-2">@character.Tid</span>
+                                <span class="character-name" data-name="@character.Name" data-character-tid="@character.Tid">@character.Name</span>
+                                @if (!string.IsNullOrEmpty(character.Tags))
+                                {
+                                    <span class="text-muted small ms-2">@character.Tags</span>
+                                }
+                            </td>
+                            <td>
+                                LV@(character.Level)
+                                @if (character.IsSynchro)
+                                {
+                                    <span class="badge bg-warning text-dark ms-1" data-i18n="users.modify.synchro" data-i18n-title="users.modify.synchroTooltip" title="同步器等级">同步</span>
+                                }
+                            </td>
+                            <td>@character.Skill1 / @character.Skill2 / @character.BurstSkill</td>
+                            <td>@character.Rarity</td>
+                            <td>@character.BreakCount</td>
+                            <td>
+                                @if (character.GearCount > 0)
+                                {
+                                    <span class="badge bg-info">@character.GearCount</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">0</span>
+                                }
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-accent btn-sm js-load-detail text-nowrap"
+                                        data-csn="@character.Csn"
+                                        data-url="@Url.Action("CharacterDetail", new { id = Model.ID })">
+                                    <i class="fas fa-tools me-1"></i> <span data-i18n="users.modify.viewEdit">查看/编辑</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <div class="modal fade" id="gearModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gearModalTitle"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="gearModalBody">
+                    <div class="text-center p-5"><div class="spinner-border"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character list filter and lazy loaded character detail modal
+        (function () {
+            const filterInput = document.getElementById("charFilter");
+            const corpSelect = document.getElementById("corpFilter");
+            const elementSelect = document.getElementById("elementFilter");
+            const weaponSelect = document.getElementById("weaponFilter");
+            const countLabel = document.getElementById("charCount");
+            const modalEl = document.getElementById("gearModal");
+            const modalBody = document.getElementById("gearModalBody");
+            const modalTitle = document.getElementById("gearModalTitle");
+            let modal = null;
+            function tr(key, params, fallback) {
+                return (window.i18n && typeof window.i18n.t === "function")
+                    ? window.i18n.t(key, params) : fallback;
+            }
+
+            function applyFilter() {
+                const query = (filterInput.value || "").trim().toLowerCase();
+                const corp = corpSelect.value;
+                const element = elementSelect.value;
+                const weapon = weaponSelect.value;
+                let visible = 0;
+                let total = 0;
+
+                document.querySelectorAll("#charTable tbody tr").forEach(function (row) {
+                    if (row.id === "charTableEmpty") return;
+                    total++;
+                    const name = (row.dataset.name || "").toLowerCase();
+                    const tid = row.dataset.tid || "";
+                    const matchQuery = !query || name.includes(query) || tid.includes(query);
+                    const matchCorp = !corp || row.dataset.corp === corp;
+                    const matchElement = !element || row.dataset.element === element;
+                    const matchWeapon = !weapon || row.dataset.weapon === weapon;
+                    const show = matchQuery && matchCorp && matchElement && matchWeapon;
+                    row.style.display = show ? "" : "none";
+                    if (show) visible++;
+                });
+
+                const tbody = document.querySelector("#charTable tbody");
+                let emptyRow = document.getElementById("charTableEmpty");
+                if (visible === 0 && total > 0) {
+                    if (!emptyRow) {
+                        emptyRow = document.createElement("tr");
+                        emptyRow.id = "charTableEmpty";
+                        emptyRow.innerHTML = '<td colspan="7" class="text-center text-muted py-4" data-i18n="users.modify.noResults">'
+                            + tr("users.modify.noResults", {}, "No matching characters") + '</td>';
+                        tbody.appendChild(emptyRow);
+                    }
+                } else if (emptyRow) {
+                    emptyRow.remove();
+                }
+
+                // Dynamic counts cannot use data-i18n, so resolve them through i18n.t.
+                countLabel.textContent = visible === total
+                    ? tr("users.modify.charCount", { count: total }, total + " characters")
+                    : tr("users.modify.charCountFiltered", { visible: visible, total: total }, visible + " / " + total + " characters");
+            }
+
+            filterInput.addEventListener("input", applyFilter);
+            corpSelect.addEventListener("change", applyFilter);
+            elementSelect.addEventListener("change", applyFilter);
+            weaponSelect.addEventListener("change", applyFilter);
+            applyFilter();
+            window.addEventListener("adminui:i18n-ready", applyFilter);
+            document.addEventListener("DOMContentLoaded", applyFilter);
+
+            document.querySelectorAll(".js-load-detail").forEach(function (button) {
+                button.addEventListener("click", async function () {
+                    const csn = button.dataset.csn;
+                    const row = button.closest("tr");
+                    const nameCell = row.querySelector(".character-name");
+
+                    modalTitle.textContent = nameCell ? nameCell.textContent : "";
+                    modalBody.innerHTML = "<div class=\"text-center p-5\"><div class=\"spinner-border\"></div></div>";
+
+                    const response = await fetch(button.dataset.url + "?csn=" + encodeURIComponent(csn));
+                    if (!response.ok) {
+                        modalBody.innerHTML = '<div class="alert alert-danger">' + tr("users.modify.loadFailed", {}, "Failed to load character detail.") + '</div>';
+                    } else {
+                        modalBody.innerHTML = await response.text();
+                    }
+
+                    if (!modal) {
+                        modal = new bootstrap.Modal(modalEl);
+                    }
+                    modal.show();
+                });
+            });
+        })();
+
+        // Character names are rendered on the server, so a language switch needs a fresh page
+        // request for the cookie to take effect.
+        window.addEventListener('adminui:languageChanged', function () {
+            location.reload();
+        });
+    </script>
 </div>
 
 <style>
+    /* _Layout footer is fixed; reserve space so the table is not covered. */
+    .adminui-dashboard { padding-bottom: 80px; }
+
+    /* Keep the translated headers and badges on a single line. */
+    #charTable th, #charTable td { white-space: nowrap; }
+
+    /* Keep the gear editor on the admin dark theme. */
+    #gearModal .modal-content {
+        background-color: var(--adminui-gray-dark);
+        color: var(--adminui-light);
+    }
+    #gearModal .modal-header { border-bottom-color: var(--adminui-gray); }
+    #gearModal .modal-footer { border-top-color: var(--adminui-gray); }
+    #gearModal .text-muted { color: var(--adminui-gray-light); }
+
     /* adminui风格卡片标题 */
     .card-header {
         background-color: var(--adminui-primary);
@@ -437,15 +519,22 @@
         });
 
         function updateNameDisplay(showTid) {
-            nameLabel.textContent = showTid ? 'TID' : 'Name';
+            nameLabel.textContent = showTid ? 'TID'
+                : ((window.i18n && typeof window.i18n.t === 'function') ? window.i18n.t('users.modify.name') : 'Name');
             characterNames.forEach(el => {
                 const name = el.getAttribute('data-name');
                 const characterTid = el.getAttribute('data-character-tid');
-                el.textContent = showTid ? characterTid : name;
+                // The TID is always visible in front, so hide the name instead of repeating the TID
+                el.style.display = showTid ? 'none' : '';
                 // Update tooltip title to the opposite value
                 el.setAttribute('title', showTid ? name : characterTid);
             });
         }
+
+        // The i18n script loads after this inline script, refresh the label once it is ready.
+        window.addEventListener('adminui:i18n-ready', function () {
+            updateNameDisplay(nameToggle.checked);
+        });
 
         // --- Collapse state handling ---
         const collapsedCards = JSON.parse(localStorage.getItem('collapsedCards') || '{}');

@@ -209,7 +209,7 @@ public class RewardUtils
     public static void AddSingleObject(User user, ref NetRewardData ret, int rewardId, RewardType rewardType, int rewardCount)
     {
         if (rewardType == RewardType.None) return;
-        Logging.WriteLine($"[DEBUG]��������{rewardType}", LogType.Info);
+        Logging.WriteLine($"Adding reward: {rewardId}, {rewardType}", LogType.Debug, false);
         if (rewardType == RewardType.Currency)
         {
             AddSingleCurrencyObject(user, ref ret, (CurrencyType)rewardId, rewardCount);
