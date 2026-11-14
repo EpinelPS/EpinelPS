@@ -1,11 +1,11 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
 // EpinelPS管理控制台API通用工具函数
 
 function runCmd(cmdName, cb, p1, p2)
 {
-    fetch("/adminapi/RunCmd", {
+    return fetch("/adminapi/RunCmd", {
         method: "POST",
         body: JSON.stringify({
           cmdName: cmdName,
@@ -26,7 +26,7 @@ function runCmd(cmdName, cb, p1, p2)
 
 function runSimpleCmd(cmdName, p1, p2)
 {
-  runCmd(cmdName, function(json){
+  return runCmd(cmdName, function(json){
     if (json.ok)
       alert("Operation completed");
     else
@@ -39,4 +39,13 @@ function runSimpleCmdWithPr(cmdName, p1, p2Title)
   let p2 = prompt(p2Title);
   if (p2 === undefined || p2 == null || p2 == "") return;
   runSimpleCmd(cmdName, p1, p2);
+}
+
+function unlockCounselLogs(button, userId)
+{
+  if (button.disabled) return;
+
+  button.disabled = true;
+  return runSimpleCmd('unlock-all-counsel-logs', userId)
+    .finally(() => { button.disabled = false; });
 }
