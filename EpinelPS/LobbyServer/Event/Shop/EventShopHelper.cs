@@ -210,14 +210,22 @@ public static class EventShopHelper
     {
         if (eventId <= 0) return 0;
 
-        if (GameData.Instance.eventManagers.TryGetValue(eventId, out var eventRecord))
+        // Story-event shortcuts identify UI/contents entries, not shops (e.g. 15004).
+        // The story table provides the explicit ContentsShopTable foreign key.
+        var story = GameData.Instance.EventStoryTable.Values
+            .FirstOrDefault(x => x.EventId == eventId && x.ContentsShopId > 0);
+        if (story != null) return story.ContentsShopId;
+
+        // Field events expose a separate ShopEvent whose shortcut is the shop ID.
+        if (GameData.Instance.eventManagers.TryGetValue(eventId, out var eventRecord)
+            && eventRecord.EventSystemType == EventSystemType.ShopEvent
+            && int.TryParse(eventRecord.EventShortcutId, out var shopId)
+            && shopId > 0)
         {
-            if (eventRecord.EventShortcutId is not null && eventRecord.EventShortcutId != "")
-            {
-                return Convert.ToInt32(eventRecord.EventShortcutId);
-            }
+            return shopId;
         }
-        log.Warn($"EventManager not found for EventId: {eventId}");
+
+        log.Warn($"No event shop mapping found for EventId: {eventId}");
         return 0;
     }
 
