@@ -1,4 +1,4 @@
-﻿namespace EpinelPS.LobbyServer.Archive;
+namespace EpinelPS.LobbyServer.Archive;
 
 [GameRequest("/archive/minigame/getdata")]
 public class GetMinigameData : LobbyMessage
@@ -9,7 +9,7 @@ public class GetMinigameData : LobbyMessage
 
         ResGetArchiveMiniGameData response = new()
         {
-            Json = ""
+            Json = "{}"
         };
         // TODO
 
