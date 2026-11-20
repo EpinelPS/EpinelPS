@@ -9,7 +9,7 @@ Communication for this project takes place in our [Discord Server](https://disco
 The goal of this project is to have similar behavior to the official server, while also adding features such as an option to enable higher pull rates. 
 
 ## AI use
-AI tools may be used to help with some parts with  development, but contributors are expected to understand the code they submit. Low-quality, obviously AI-generated pull requests with little or no review are discouraged. AI should be used as a tool not to do everything for you.
+Since this is a hobby project of mine made just for fun, AI use is strictly forbidden. Any AI generated pull request will be closed without review. You must be able to explain what every line of code does. Communications such as pull requests, issues, and commit descriptions written by AI are also prohibited (translations are excluded from this rule).
 
 ## Code style
 
