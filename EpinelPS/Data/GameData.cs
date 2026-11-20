@@ -91,6 +91,12 @@ public class GameData
     [LoadRecord("CharacterTable.json", "Id")]
     public readonly Dictionary<int, CharacterRecord> CharacterTable = [];
 
+    [LoadRecord("CharacterShotTable.json", "Id")]
+    public readonly Dictionary<int, CharacterShotRecord> CharacterShotTable = [];
+
+    [LoadRecord("ElementTable.json", "Id")]
+    public readonly Dictionary<int, ElementRecord> ElementTable = [];
+
     [LoadRecord("ContentsTutorialTable.json", "Id")]
     public readonly Dictionary<int, ContentsTutorialRecord> TutorialTable = [];
     [LoadRecord("ItemEquipTable.json", "Id")]

@@ -7,6 +7,7 @@ using EpinelPS.Utils;
 using EpinelPS.Commands.Core;
 using EpinelPS.Commands.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Paseto;
 using Paseto.Builder;
@@ -17,12 +18,73 @@ namespace EpinelPS.Controllers;
 
 [Route("adminapi")]
 [ApiController]
-public class AdminApiController(GameContext DbContext) : ControllerBase
+public class AdminApiController(GameContext DbContext) : ControllerBase, IActionFilter
 {
     private static readonly AsyncLocal<string?> RequestLanguage = new();
     private readonly GameContext dbContext = DbContext;
     private readonly CommandRegistry registry = new();
     private static readonly MD5 md5 = MD5.Create();
+
+    /// <summary>
+    /// Sets the display language used by LookupRealName for the current admin request.
+    /// </summary>
+    public static void SetRequestLanguage(string? language) => RequestLanguage.Value = language;
+
+    /// <summary>
+    /// Gets the display language resolved for the current admin request.
+    /// </summary>
+    public static string CurrentLanguage => RequestLanguage.Value ?? "zh-CN";
+
+    /// <summary>
+    /// Resolves the display language for an admin request.
+    /// The language chosen in the admin UI is mirrored into a cookie so that server rendered
+    /// pages can use it too; the Accept-Language header is the fallback.
+    /// </summary>
+    public static string? LanguageFromRequest(HttpContext context)
+    {
+        var mapped = MapLanguage(context.Request.Cookies["adminui_lang"]);
+        if (mapped is not null) return mapped;
+
+        var accepted = context.Request.GetTypedHeaders().AcceptLanguage;
+        if (accepted is null) return null;
+
+        foreach (var entry in accepted.OrderByDescending(x => x.Quality ?? 1.0))
+        {
+            mapped = MapLanguage(entry.Value.ToString());
+            if (mapped is not null) return mapped;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Maps a language tag to a locale column of the language tables.
+    /// </summary>
+    private static string? MapLanguage(string? tag)
+    {
+        var value = tag?.Trim().ToLowerInvariant() ?? "";
+        if (value.StartsWith("zh-cn") || value.StartsWith("zh-hans") || value == "zh") return "zh-CN";
+        if (value.StartsWith("zh-tw") || value.StartsWith("zh-hk") || value.StartsWith("zh-hant")) return "zh-TW";
+        if (value.StartsWith("ja")) return "ja";
+        if (value.StartsWith("ko")) return "ko";
+        if (value.StartsWith("de")) return "de";
+        if (value.StartsWith("th")) return "th";
+        if (value.StartsWith("fr")) return "fr";
+        if (value.StartsWith("en")) return "en";
+        return null;
+    }
+
+    /// <summary>
+    /// Applies the resolved language to every admin API request.
+    /// </summary>
+    public void OnActionExecuting(ActionExecutingContext context)
+    {
+        SetRequestLanguage(LanguageFromRequest(context.HttpContext) ?? "zh-CN");
+    }
+
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+    }
 
     [HttpPost]
     [Route("login")]
@@ -315,7 +377,8 @@ public class AdminApiController(GameContext DbContext) : ControllerBase
     [Route("searchGameData")]
     public IActionResult SearchGameData([FromQuery] int type, [FromQuery] string? q, [FromQuery] string? lang)
     {
-        RequestLanguage.Value = lang;
+        // An explicit query parameter overrides the browser language.
+        if (!string.IsNullOrWhiteSpace(lang)) SetRequestLanguage(lang);
         var results = new List<object>();
         var query = q?.Trim().ToLowerInvariant() ?? "";
 

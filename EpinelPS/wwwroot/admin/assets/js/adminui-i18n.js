@@ -23,7 +23,6 @@ class adminuiI18n {
       this.applyLanguage();
       this.registerEventListeners();
       this.renderLanguageSwitcher();
-      window.dispatchEvent(new CustomEvent('adminui:i18n-ready'));
     } catch (error) {
       console.error('初始化失败:', error);
       this.fallbackToDefaultLanguage();
@@ -43,11 +42,15 @@ class adminuiI18n {
     }
   }
 
+  // Keep the language choice in one place. The cookie lets server rendered pages use it too.
+  setStoredLanguage(lang) {
+    try { localStorage.setItem('adminui_lang', lang); } catch (e) {}
+    document.cookie = 'adminui_lang=' + encodeURIComponent(lang) + '; path=/; max-age=31536000; SameSite=Lax';
+  }
+
   fallbackToDefaultLanguage() {
     this.currentLang = 'en';
-    try {
-      localStorage.setItem('adminui_lang', this.currentLang);
-    } catch (e) {}
+    this.setStoredLanguage(this.currentLang);
     this.applyLanguage();
   }
 
@@ -82,9 +85,7 @@ class adminuiI18n {
       // 当前语言未加载成功，回退到英文
       console.warn(`当前语言 ${this.currentLang} 加载失败，回退到英文`);
       this.currentLang = 'en';
-      try {
-        localStorage.setItem('adminui_lang', 'en');
-      } catch (e) {}
+      this.setStoredLanguage('en');
     }
   }
 
@@ -119,7 +120,7 @@ class adminuiI18n {
       }
 
       this.currentLang = lang;
-      localStorage.setItem('adminui_lang', lang);
+      this.setStoredLanguage(lang);
       this.applyLanguage();
       this.updateLanguageSwitcher();
       window.dispatchEvent(new CustomEvent('adminui:languageChanged', {detail: {lang}}));
@@ -355,3 +356,5 @@ class adminuiI18n {
 
 // 实例化
 window.i18n = new adminuiI18n();
+// Notify listeners only after the instance is available on window.
+window.dispatchEvent(new CustomEvent('adminui:i18n-ready'));

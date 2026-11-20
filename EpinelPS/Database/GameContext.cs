@@ -21,6 +21,11 @@ public class GameContext : DbContext
     public DbSet<TriggerModelNew> Triggers { get; set; }
 
     /// <summary>
+    /// Contains per-character display toggle information
+    /// </summary>
+    public DbSet<CharacterToggleModel> CharacterToggles { get; set; }
+
+    /// <summary>
     /// GameContext instance. Should only be used in console thread.
     /// Long-lived, set once at startup via <see cref="SetInstance"/> - do NOT set this from
     /// the constructor, as DI creates short-lived scoped instances per request that get
@@ -36,6 +41,16 @@ public class GameContext : DbContext
     public static DbContextOptions<GameContext>? Options { get; private set; }
     public GameContext(DbContextOptions<GameContext> options) : base(options)
     {
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // A character can only have a single row per toggle category
+        modelBuilder.Entity<CharacterToggleModel>()
+            .HasIndex(x => new { x.UserId, x.Csn, x.Type })
+            .IsUnique();
     }
 
     public static void InitializeOptions(string connectionString, string? connectionType)

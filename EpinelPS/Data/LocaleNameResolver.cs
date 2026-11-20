@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using EpinelPS.Utils;
 
 namespace EpinelPS.Data;
 
@@ -17,7 +16,7 @@ public static class LocaleNameResolver
         var colon = localKey.IndexOf(':');
         if (colon > 0) { table = localKey[..colon]; key = localKey[(colon + 1)..]; }
         EnsureLoaded(table);
-        var lang = language?.ToLowerInvariant() switch { "zh" or "zh-cn" => "zh-CN", "zhtw" or "zh-tw" => "zh-TW", "ko" => "ko", "ja" => "ja", "de" => "de", "th" => "th", "fr" => "fr", _ => "en" };
+        var lang = language?.ToLowerInvariant() switch { "zh" or "zh-cn" => "zh-CN", "zhtw" or "zh-tw" => "zh-TW", "ko" => "ko", "ja" => "ja", "de" => "de", "th" => "th", "fr" => "fr", "en" => "en", _ => "zh-CN" };
         if (!Tables.TryGetValue(table + "|" + lang, out var rows) || !rows.TryGetValue(key, out var value))
             return localKey;
         return value;

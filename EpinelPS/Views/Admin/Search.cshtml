@@ -86,7 +86,11 @@
 
         tbody.innerHTML = '<tr><td colspan="3" class="text-center" style="color: #888; padding: 2rem;">' + i18n.t('search.searching') + '</td></tr>';
 
-        fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q) + '&lang=' + encodeURIComponent(localStorage.getItem('adminui_lang') || 'en'))
+        // Send the language chosen in the admin UI back so game data names match the interface.
+        // When nothing was chosen, the server falls back to the Accept-Language header.
+        var uiLang = localStorage.getItem('adminui_lang');
+        var langQuery = uiLang ? '&lang=' + encodeURIComponent(uiLang) : '';
+        fetch('/adminapi/searchGameData?type=' + type + '&q=' + encodeURIComponent(q) + langQuery)
             .then(function (r) { return r.json(); })
             .then(function (items) {
                 document.getElementById('resultCount').textContent = i18n.t('search.resultsCount', { count: items.length });
@@ -203,4 +207,7 @@
 
     // Auto-search on page load (shows all characters by default)
     document.addEventListener('DOMContentLoaded', doSearch);
+
+    // Re-query when the interface language changes, so names follow the switcher.
+    window.addEventListener('adminui:languageChanged', doSearch);
 </script>

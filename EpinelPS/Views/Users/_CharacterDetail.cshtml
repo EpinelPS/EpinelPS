@@ -1,0 +1,148 @@
+@using EpinelPS.Models.Admin
+@model EpinelPS.Models.Admin.ModUserCharacterDetailModel
+
+<form asp-action="ModifyGear" asp-route-id="@Model.UserId" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div>
+            <h4 class="mb-1">
+                @Model.Character.Name
+                <small class="text-muted">@Model.Character.Tid</small>
+                @if (Model.Character.IsSynchro)
+                {
+                    <span class="badge bg-warning text-dark ms-2" data-i18n="users.modify.synchro" data-i18n-title="users.modify.synchroTooltip" title="同步器等级">同步</span>
+                }
+            </h4>
+            <span class="text-muted small">
+                @Model.Character.Manufacturer · LV@(Model.Character.Level) · <span data-i18n="users.modify.colRarity">品级</span> @Model.Character.Rarity · @Model.Character.Tags ·
+                <span data-i18n="users.modify.colSkills">技能 1/2/3</span> @Model.Character.Skill1 / @Model.Character.Skill2 / @Model.Character.BurstSkill · <span data-i18n="users.modify.colBreaks">突破</span> @Model.Character.BreakCount ·
+                <span data-i18n="users.modify.colGearCount">装备数</span> @Model.Gears.Count
+            </span>
+        </div>
+        <button type="submit" name="submitType" value="saveCharacter_@Model.Character.Csn" class="btn btn-info btn-sm">
+            <i class="fas fa-save me-2"></i> <span data-i18n="users.modify.saveCharacter">保存该角色</span>
+        </button>
+    </div>
+
+    <div class="card bg-dark border-secondary mb-3">
+        <div class="card-body py-2">
+            <div class="d-flex align-items-center flex-wrap gap-3">
+                <span class="fw-bold text-nowrap" data-i18n="users.modify.skillsLabel">技能</span>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="skill1Input" class="text-nowrap mb-0 small">skill1:</label>
+                    <input id="skill1Input" type="number" name="skill1" value="@Model.Character.Skill1" min="1" max="10"
+                           class="form-control form-control-sm fw-bold" style="width:4.5rem" />
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="skill2Input" class="text-nowrap mb-0 small">skill2:</label>
+                    <input id="skill2Input" type="number" name="skill2" value="@Model.Character.Skill2" min="1" max="10"
+                           class="form-control form-control-sm fw-bold" style="width:4.5rem" />
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="burstSkillInput" class="text-nowrap mb-0 small">burstSkill:</label>
+                    <input id="burstSkillInput" type="number" name="burstSkill" value="@Model.Character.BurstSkill" min="1" max="10"
+                           class="form-control form-control-sm fw-bold" style="width:4.5rem" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Gears.Any())
+    {
+        <div class="alert alert-info" data-i18n="users.modify.noAwakenedGear">该角色没有已觉醒的装备</div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var gear in Model.Gears)
+            {
+                <div class="col-6 col-md">
+                    <div class="card h-100 bg-dark">
+                        <div class="card-body d-flex flex-column">
+                            <input type="hidden" name="GearUpdates[@gear.GearIsn].CharacterId" value="@Model.Character.Csn" />
+                            <input type="hidden" name="GearUpdates[@gear.GearIsn].GearId" value="@gear.GearIsn" />
+
+                            <h6 class="card-title mb-1">@gear.GearType</h6>
+                            <p class="text-muted small mb-3">@gear.GearName</p>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6"><span data-i18n="users.modify.colLevel">等级</span>:</label>
+                                <input type="number" class="form-control form-control-sm fw-bold fs-6"
+                                       name="GearUpdates[@gear.GearIsn].Level" value="@gear.GearLevel" min="0" max="5" />
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6"><span data-i18n="users.modify.option">选项</span> 1:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option1"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option1Id)">
+                                    <option value="0" data-i18n="users.modify.noOption">No Option</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label mb-1 fw-bold fs-6"><span data-i18n="users.modify.option">选项</span> 2:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option2"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option2Id)">
+                                    <option value="0" data-i18n="users.modify.noOption">No Option</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label mb-1 fw-bold fs-6"><span data-i18n="users.modify.option">选项</span> 3:</label>
+                                <select class="form-select form-select-sm fw-bold fs-6 p-2"
+                                        name="GearUpdates[@gear.GearIsn].Option3"
+                                        asp-items="@ModUserModel.BuildOverloadSelectList(Model.OverloadOptions, gear.Option3Id)">
+                                    <option value="0" data-i18n="users.modify.noOption">No Option</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" name="submitType" value="updateGear_@gear.GearIsn" class="btn btn-primary w-100 mt-auto p-2">
+                                <span data-i18n="users.modify.updateGear">更新装备</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Items.Any())
+    {
+        <h5 class="mt-4 mb-2" data-i18n="users.modify.itemList">道具列表</h5>
+        <div class="table-responsive">
+            <table class="table table-sm table-dark table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th data-i18n="users.modify.colItemId">道具 ID</th>
+                        <th data-i18n="users.modify.colLevel">等级</th>
+                        <th data-i18n="users.modify.colQuantity">数量</th>
+                        <th data-i18n="users.modify.colEnhanceExp">强化经验</th>
+                        <th data-i18n="users.modify.colPosition">位置</th>
+                        <th data-i18n="users.modify.colAwakened">已觉醒</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items.OrderByDescending(i => i.Level).ThenBy(i => i.ItemType))
+                    {
+                        <tr>
+                            <td>@item.ItemType</td>
+                            <td>@item.Level</td>
+                            <td>@item.Count</td>
+                            <td>@item.Exp</td>
+                            <td>@item.Position</td>
+                            <td>
+                                @if (Model.Gears.Any(g => g.GearIsn == item.Isn))
+                                {
+                                    <span data-i18n="users.modify.yes">是</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</form>

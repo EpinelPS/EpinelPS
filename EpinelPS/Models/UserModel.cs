@@ -220,7 +220,7 @@ public class User
     public List<int> ProfileCardsData { get; set; } = [];
     public ProfileCardDecorationLayout ProfileCardDecoration { get; set; } = new();
     
-    public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0, bool logToConsole = true)
+    public TriggerModelNew AddTrigger(Trigger type, int value, int conditionId = 0, bool logToConsole = false)
     {
         using var ctx = GameContext.CreateNew();
         TriggerModelNew t = new()
