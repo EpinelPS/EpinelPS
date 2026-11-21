@@ -1,3 +1,5 @@
+using EpinelPS.Utils;
+
 namespace EpinelPS.LobbyServer.Character.Counsel;
 
 [GameRequest("/character/attractive/check")]
@@ -8,9 +10,11 @@ public class CheckCharacterCounsel : LobbyMessage
         ReqCounseledBefore req = await ReadData<ReqCounseledBefore>();
         User user = GetUser();
 
-        ResCounseledBefore response = new();
+        ResCounseledBefore response = new()
+        {
+            IsCounseledBefore = CounselProgressHelper.HasCounseledBefore(user, req.CounselTid)
+        };
 
-        // TODO: Validate response from real server and pull info from user info
         await WriteDataAsync(response);
     }
 }

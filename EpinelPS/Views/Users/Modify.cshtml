@@ -109,6 +109,9 @@
                             <button class="btn btn-accent" onclick="runSimpleCmd('add-all-collections', '@Model.ID')">
                                 <i class="fas fa-gem me-2"></i> <span data-i18n="users.modify.addAllCollections">添加所有收藏品</span>
                             </button>
+                            <button type="button" class="btn btn-accent" onclick="unlockCounselLogs(this, '@Model.ID')">
+                                <i class="fas fa-book-open me-2"></i> <span data-i18n="users.modify.unlockCounselLogs">一键解锁咨询日志</span>
+                            </button>
                             <button class="btn btn-accent" onclick="runSimpleCmdWithPr('add-character', '@Model.ID', 'Enter character ID. Wrong ID may cause game not to boot.')">
                                 <i class="fas fa-user-plus me-2"></i> <span data-i18n="users.modify.addChar">添加角色</span>
                             </button>
