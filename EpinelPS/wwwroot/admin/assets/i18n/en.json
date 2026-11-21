@@ -197,6 +197,7 @@
       "historyTitle": "Repair History"
     },
     "password": {
+      "saved": "Password saved. Use the new password next time you log in.",
       "title": "Change Password",
       "changeButton": "Change Password",
       "backToList": "Back to List",

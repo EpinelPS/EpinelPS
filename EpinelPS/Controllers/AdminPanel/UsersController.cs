@@ -509,7 +509,7 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
             return NotFound();
         }
 
-        string? newPw = Request.Form["PasswordHash"];
+        string? newPw = Request.Form["Password"];
         if (string.IsNullOrEmpty(newPw))
         {
             return BadRequest();
@@ -521,11 +521,8 @@ public class UsersController(ILogger<UsersController> logger, GameContext dbCont
         user.PasswordHash = Convert.ToHexString(sha.ComputeHash(Encoding.ASCII.GetBytes(newPw))).ToLower();
         _db.SaveChanges();
 
-        return View(new ChangeUserPasswordModel()
-        {
-            Email = user.Email,
-            ID = user.ID
-        });
+        TempData["PasswordSuccess"] = true;
+        return RedirectToAction(nameof(SetPassword), new { id });
     }
     [Route("GetUsersList")]
     public IActionResult GetUsersList()
