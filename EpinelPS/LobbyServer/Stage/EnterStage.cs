@@ -28,6 +28,11 @@ public class EnterStage : LobbyMessage
 
         user.AddTrigger(Trigger.CampaignStart, 1, req.StageId);
 
+        // The client reports the team it actually used when entering a stage; the lobby does not
+        // tell the server when the player switches teams, so this is where we remember it.
+        if (req.TeamNumber >= 1)
+            user.SetLastContentsTeamNumber(1, req.TeamNumber);
+
         JsonDb.Save();
 
         await WriteDataAsync(response);

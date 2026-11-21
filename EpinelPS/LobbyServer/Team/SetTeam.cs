@@ -43,13 +43,21 @@ public class SetTeam : LobbyMessage
             return;
         }
 
-        // Add team data to user data
-        int contentsId = req.ContentsId + 1; // Default to 1 if not provided
+        // Add team data to user data.
+        // This endpoint is also called when the player merely selects another team in the lobby.
+        // In that case ContentsId carries the selected team number while Teams only holds the team
+        // that was edited (and is often empty). The previous implementation ignored ContentsId and
+        // stored Max(TeamNumber), so the selection was silently replaced by the highest team index
+        // and the lobby fell back to team 1 after every restart.
+        int contentsId = user.UserTeams.TryGetValue(req.Type, out NetUserTeamData? previousTeamData)
+                         && previousTeamData.LastContentsTeamNumber > 0
+            ? previousTeamData.LastContentsTeamNumber
+            : 1;
 
-        if (req.Teams.Count != 0)
-        {
-            contentsId = req.Teams.Select(x => x.TeamNumber).Max(x => x);
-        }
+        if (req.ContentsId >= 1 && req.ContentsId <= 60)
+            contentsId = req.ContentsId;
+        else if (req.Teams.Count != 0)
+            contentsId = req.Teams.Select(x => x.TeamNumber).Max();
 
         NetUserTeamData teamData = new() { LastContentsTeamNumber = contentsId, Type = req.Type };
 

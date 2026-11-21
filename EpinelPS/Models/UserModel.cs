@@ -90,6 +90,21 @@ public class User
     public Dictionary<long, NetUserMailData> MailDatas { get; set; } = [];       
 
     public Dictionary<int, NetUserTeamData> UserTeams { get; set; } = [];
+
+    /// <summary>
+    /// Stores the team the player used last for the given team type.
+    /// Switching teams in the lobby is handled entirely client-side, so the only place where the
+    /// server learns about the active team is ReqEnterStage / ReqClearStage, which both carry
+    /// TeamNumber. Writing it back here lets the lobby restore the last used team after a restart.
+    /// </summary>
+    public void SetLastContentsTeamNumber(int type, int teamNumber)
+    {
+        if (teamNumber < 1) return;
+        if (!UserTeams.TryGetValue(type, out NetUserTeamData? teamData)) return;
+        if (teamData.Teams.All(t => t.TeamNumber != teamNumber)) return;
+        if (teamData.LastContentsTeamNumber == teamNumber) return;
+        teamData.LastContentsTeamNumber = teamNumber;
+    }
     public Dictionary<int, bool> MainQuestData { get; set; } = [];
     public Dictionary<int, bool> SubQuestData { get; set; } = [];
     public int InfraCoreExp { get; set; } = 0;
